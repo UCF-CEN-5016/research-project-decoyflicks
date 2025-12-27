@@ -1,0 +1,36 @@
+TITLE
+Keras 'ops' module import error in neural machine translation example
+
+SYMPTOMS
+• ImportError: `cannot import name 'ops' from 'keras'`
+• Error message: `ImportError: cannot import name 'ops' from 'keras' (/usr/local/lib/python3.10/dist-packages/keras/__init__.py)`
+• Behavior: The example fails to run, stopping execution at the point of the `from keras import ops` line.
+
+EXPECTED BEHAVIOR
+The code should successfully execute and import all required modules, allowing the neural machine translation example to be run without any errors. The user should be able to proceed with running the provided example on Google Colab.
+
+REPRODUCTION STEPS
+1. Open a new notebook in Google Colab.
+2. Copy and paste the following code into the first cell:
+```python
+import os
+
+os.environ["KERAS_BACKEND"] = "tensorflow"
+
+import pathlib
+import random
+import string
+import re
+import numpy as np
+
+import tensorflow.data as tf_data
+import tensorflow.strings as tf_strings
+
+import keras
+from keras import layers
+from keras import ops  # This line causes the error
+from keras.layers import TextVectorization
+```
+3. Run the cell.
+
+Note: The issue is not with the code itself but rather a problem with an incorrect import statement. The `ops` module is not part of Keras, and it seems there might be confusion with another library or package that provides similar functionality.

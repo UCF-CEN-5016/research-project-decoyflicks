@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, tensorflow, and random",
+    "Set the random seed for reproducibility using random.seed(42)",
+    "Define constants: BATCH_SIZE = 64, MIN_STRING_LEN = 512, SEQ_LEN = 128, EMBED_DIM = 256, FEED_FORWARD_DIM = 128, NUM_HEADS = 3, NUM_LAYERS = 2, VOCAB_SIZE = 5000, EPOCHS = 5, NUM_TOKENS_TO_GENERATE = 80",
+    "Download the SimpleBooks dataset using keras.utils.get_file and extract it",
+    "Load the training dataset using tf_data.TextLineDataset and filter out lines shorter than MIN_STRING_LEN, then batch and shuffle it",
+    "Load the validation dataset similarly to the training dataset",
+    "Train a WordPieceTokenizer on the training dataset with a vocabulary size of VOCAB_SIZE and reserved tokens [\"[PAD]\", \"[UNK]\", \"[BOS]\"]",
+    "Initialize the WordPieceTokenizer with the trained vocabulary and sequence length SEQ_LEN",
+    "Define a StartEndPacker layer with sequence length SEQ_LEN and start value as the tokenizer token ID for \"[BOS]\"",
+    "Define a preprocess function that tokenizes inputs, packs them with StartEndPacker, and returns features and labels",
+    "Map the preprocess function to the training and validation datasets",
+    "Build a Keras model with an input layer, TokenAndPositionEmbedding layer, multiple TransformerDecoder layers, and a Dense output layer",
+    "Compile the model with SparseCategoricalCrossentropy loss and Perplexity metric",
+    "Train the model using model.fit with the training and validation datasets for EPOCHS",
+    "Create a prompt_tokens variable initialized with the StartEndPacker output for an empty string",
+    "Define a next function that takes prompt, cache, and index, and returns logits from the model",
+    "Create an instance of keras_nlp.samplers.GreedySampler",
+    "Call the GreedySampler instance with next function, prompt_tokens, and index=1",
+    "Capture the output_tokens from the GreedySampler call",
+    "Verify that the TypeError occurs by checking if the error message contains 'unexpected keyword argument 'end_token_id''"
+]
+```

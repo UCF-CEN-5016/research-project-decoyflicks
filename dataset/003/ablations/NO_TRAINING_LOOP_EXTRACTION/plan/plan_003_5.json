@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the TensorFlow Model Garden repository using the command: 'import tensorflow as tf' and 'from official.projects.mosaic.modeling import mosaic_model'",
+    "Set the TensorFlow version to 2.x by running '!pip install tensorflow==2.x.x' (replace 'x.x' with the latest 2.x version available)",
+    "Downgrade the protobuf package to version 3.20 using the command: '!pip install protobuf==3.20'",
+    "Import the object detection utilities by running: 'from object_detection.utils import config_util' and 'from object_detection.utils import colab_utils'",
+    "Define a dummy input shape for the model, e.g., 'input_shape = (1, 256, 256, 3)' for a single image of size 256x256 with 3 color channels",
+    "Create a dummy input tensor using TensorFlow: 'dummy_input = tf.zeros(input_shape)'",
+    "Attempt to import the model builder by running: 'from object_detection.builders import model_builder'",
+    "Verify that the AttributeError occurs by wrapping the import statement in a try-except block and printing the error message: 'try: model_builder; except AttributeError as e: print(e)'",
+    "Check the TensorFlow version by running: 'print(tf.__version__)' to ensure it is compatible with the model garden version",
+    "Confirm that the error message contains 'AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'' by asserting the error message in the except block"
+]
+```

@@ -1,0 +1,17 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the latest version of Keras by running the command: !pip install keras",
+    "Import the necessary libraries by adding the following code: import keras; import keras_cv; import tensorflow as tf",
+    "Attempt to run the Fine-tuning Stable Diffusion example by copying the code from the provided link into a code cell.",
+    "Execute the code cell to run the example.",
+    "Observe the output for any ImportError messages.",
+    "Verify that the error message contains: ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Check the version of Keras installed by running the command: !pip show keras and confirm it is not 2.12.0.",
+    "To reproduce the bug, ensure that the Keras version is higher than 2.12.0, such as 3.0.0 or later.",
+    "Run the command: !pip install keras==3.0.0 to ensure the version is set to a known buggy version.",
+    "Re-run the Fine-tuning Stable Diffusion example code cell to confirm the ImportError occurs again.",
+    "Take note of the specific line in the error traceback that indicates the failure to import 'data_utils'.",
+    "Document the exact error message and the version of Keras that caused the issue for further analysis."
+]
+```

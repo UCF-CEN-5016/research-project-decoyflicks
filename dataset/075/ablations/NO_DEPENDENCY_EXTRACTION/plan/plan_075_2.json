@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the autotuning directory using 'cd DeepSpeedExamples/training/autotuning/hf/gpt2-xl/'",
+    "Create a new directory for testing using 'mkdir ~/test && cd ~/test'",
+    "Install the Hugging Face Transformers library using 'pip install git+https://github.com/huggingface/transformers.git'",
+    "Install DeepSpeed using 'pip install deepspeed'",
+    "Create a new shell script file named 'test_tune.sh' using 'touch test_tune.sh'",
+    "Open 'test_tune.sh' in a text editor and copy the contents from 'autotuning/hf/gpt2-xl/test_tune.sh' from the DeepSpeedExamples repository",
+    "Set the environment variable HF_PATH to the parent directory using 'export HF_PATH=../'",
+    "Set the number of GPUs to 6 using 'export NGPUS=6'",
+    "Make the script executable using 'chmod +x test_tune.sh'",
+    "Run the script with the tune command using './test_tune.sh tune'",
+    "Observe the output logs for the error message 'ParquetConfig.__init__() got an unexpected keyword argument 'token' after the script execution",
+    "Verify that the error occurs consistently by running the script multiple times with the same command",
+    "Check the installed versions of DeepSpeed and Transformers using 'pip show deepspeed' and 'pip show transformers' to ensure compatibility",
+    "Confirm that the environment is set up correctly by checking the CUDA version with 'nvcc --version' and ensuring it matches the installed GPU drivers",
+    "Log the complete error traceback to a file for further analysis using 'echo \"$(date) - Error: $(tail -n 20 autotuning_exps/logs/*.log)\" >> error_log.txt'"
+]
+```

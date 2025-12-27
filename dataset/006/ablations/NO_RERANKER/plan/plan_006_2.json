@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official repository: 'official.modeling.optimization.optimizer_factory' and 'official.modeling.optimization.configs'",
+    "Set the model name to 'efficientdet_d1_coco17_tpu-32'",
+    "Define a batch size of 8 and image dimensions of 512x512 for the custom dataset",
+    "Prepare a custom dataset with at least 100 images, ensuring they are labeled correctly for object detection tasks",
+    "Create a TensorFlow dataset from the custom dataset using tf.data.Dataset.from_tensor_slices()",
+    "Define a simple data preprocessing function to resize images to (512, 512) and normalize pixel values to [0, 1]",
+    "Apply the preprocessing function to the dataset and batch it with the defined batch size",
+    "Import the 'model_main_tf2.py' script from the official TensorFlow models repository",
+    "Set the training configuration parameters, including learning rate of 0.001 and optimizer type as 'adam'",
+    "Compile the model using model.compile() with the loss argument set to 'categorical_crossentropy'",
+    "Start training the model using model.fit() with the prepared dataset and specify epochs as 10",
+    "During training, monitor the console output for warnings related to gradients",
+    "Assert that the warning 'Gradients do not exist for variables...' appears in the console output",
+    "Log the specific variables mentioned in the warning to verify they match the reported variables in the bug report",
+    "Check the model summary to ensure that the layers corresponding to the variables in the warning are present",
+    "Validate that the loss value does not decrease during training, indicating that gradients are not being computed"
+]
+```

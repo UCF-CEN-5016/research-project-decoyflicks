@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: fairseq, torch, and any other dependencies required for the model.",
+    "Set the DATA_ROOT variable to the path where the dataset is located, e.g., DATA_ROOT = '/root/autodl-tmp/FormattingData/DATA_ROOT'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech_to_speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the task.",
+    "Define the command to run fairseq-generate with the following parameters: --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml, --task speech_to_speech, --target-is-code, --target-code-size 100, --vocoder code_hifigan, --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt, --gen-subset test, --max-tokens 50000, --beam 10, --max-len-a 1, --results-path /root/autodl-tmp/results.",
+    "Execute the fairseq-generate command in the terminal to start the generation process.",
+    "Monitor the output for any error messages, specifically looking for 'Key input_feat_per_channel is not in struct'.",
+    "If the error occurs, capture the full stack trace and any relevant logs to confirm the bug.",
+    "Validate that the model's architecture includes the input_feat_per_channel key in its expected structure by inspecting the model definition.",
+    "Check the configuration file to ensure that all required parameters are correctly defined and match the model's expectations.",
+    "Re-run the fairseq-generate command with different configurations (e.g., varying target-code-size or max-tokens) to see if the bug persists under different conditions."
+]
+```

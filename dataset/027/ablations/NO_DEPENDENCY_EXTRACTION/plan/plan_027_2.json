@@ -1,0 +1,21 @@
+```json
+[
+    "Clone the PyTorch tutorials repository from GitHub using 'git clone https://github.com/pytorch/tutorials.git'",
+    "Navigate to the 'beginner_source' directory using 'cd tutorials/beginner_source'",
+    "Open the 'dcgan_faces_tutorial.py' file in a text editor",
+    "Locate the section of the code where the image size is defined, typically around line 188",
+    "Change the image size from 64 to 128 by modifying the relevant parameters in the dataset loading section",
+    "Update the generator and discriminator model architectures to accommodate the new image size of 128x128",
+    "In the generator, ensure the output layer is modified to output images of shape (batch_size, 3, 128, 128)",
+    "In the discriminator, ensure the input layer is modified to accept images of shape (batch_size, 3, 128, 128)",
+    "Set the batch size to 64 in the data loader to ensure sufficient data is processed during training",
+    "Run the modified 'dcgan_faces_tutorial.py' script using 'python dcgan_faces_tutorial.py'",
+    "Observe the console output for the 'Starting Training Loop...' message",
+    "Wait for the training loop to begin and monitor for any errors",
+    "When the error occurs, note the traceback message indicating a mismatch in tensor sizes",
+    "Verify the error message states 'Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200]))'",
+    "Record the dimensions of the input and target tensors from the error message for further analysis",
+    "Confirm that the input tensor size of 3200 is unexpected given the batch size and image dimensions",
+    "Take note of the specific line in the code where the error occurs, which is related to the loss calculation"
+]
+```

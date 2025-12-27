@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: import pandas as pd, import tensorflow as tf, from tensorflow import keras, import tensorflow_decision_forests as tfdf",
+    "Define the base path for the dataset: BASE_PATH = 'https://kdd.ics.uci.edu/databases/census-income/census-income'",
+    "Load the training data from the UCI Machine Learning Repository: train_data = pd.read_csv(f'{BASE_PATH}.data.gz', header=None)",
+    "Load the test data from the UCI Machine Learning Repository: test_data = pd.read_csv(f'{BASE_PATH}.test.gz', header=None)",
+    "Define the target column name: TARGET_COLUMN_NAME = 'income_level'",
+    "Define the target labels: TARGET_LABELS = [' - 50000.', ' 50000+.']",
+    "Prepare the data by mapping target labels to integers: train_data[TARGET_COLUMN_NAME] = train_data[TARGET_COLUMN_NAME].map(TARGET_LABELS.index)",
+    "Prepare the test data similarly: test_data[TARGET_COLUMN_NAME] = test_data[TARGET_COLUMN_NAME].map(TARGET_LABELS.index)",
+    "Convert categorical features to string type for both train and test data",
+    "Define the model parameters: NUM_TREES = 250, MAX_DEPTH = 5, MIN_EXAMPLES = 6, SUBSAMPLE = 0.65, VALIDATION_RATIO = 0.1",
+    "Create a Gradient Boosted Trees model: gbt_model = tfdf.keras.GradientBoostedTreesModel(num_trees=NUM_TREES, max_depth=MAX_DEPTH, min_examples=MIN_EXAMPLES, subsample=SUBSAMPLE, validation_ratio=VALIDATION_RATIO, task=tfdf.keras.Task.CLASSIFICATION)",
+    "Compile the model with metrics: gbt_model.compile(metrics=[keras.metrics.BinaryAccuracy(name='accuracy')])",
+    "Convert the training data to a TensorFlow dataset: train_dataset = tfdf.keras.pd_dataframe_to_tf_dataset(train_data, label=TARGET_COLUMN_NAME)",
+    "Convert the test data to a TensorFlow dataset: test_dataset = tfdf.keras.pd_dataframe_to_tf_dataset(test_data, label=TARGET_COLUMN_NAME)",
+    "Fit the model using the training dataset and the test dataset as validation data: model.fit(train_dataset, epochs=20, validation_data=test_dataset)",
+    "Run the model training and observe the output",
+    "Verify that the model's evaluation on the test dataset is overly optimistic by checking the accuracy reported",
+    "Assert that the accuracy on the test dataset is significantly higher than expected for unseen data"
+]
+```

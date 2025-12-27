@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the inception module from inception_test.py",
+    "Define a batch size of 5 and image dimensions of 299x299",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call inception_v3 function with num_classes=1000",
+    "Verify output contains NaN values in loss calculation",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold"
+]
+```
+

@@ -1,0 +1,20 @@
+```json
+[
+    "Install fairseq version 0.12.2 using pip with the command 'pip install fairseq==0.12.2'",
+    "Install PyTorch version 2.1.0 with CUDA 11.8 support using the command 'pip install torch==2.1.0+cu118 torchvision==0.15.0+cu118 torchaudio==2.1.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html'",
+    "Ensure Python version 3.8 is being used by checking with the command 'python --version'",
+    "Create a directory named 'assets' and place the pre-trained Hubert model file 'hubert_base.pt' inside 'assets/hubert/'",
+    "Create a tensor file 'feats.pt' with random data of shape (1, 80, 300) using the command 'torch.save(torch.randn(1, 80, 300), \"./feats.pt\")'",
+    "Create a tensor file 'padding_mask.pt' with random binary data of shape (1, 300) using the command 'torch.save(torch.randint(0, 2, (1, 300), dtype=torch.bool), \"./padding_mask.pt\")'",
+    "Import necessary libraries: 'from fairseq import checkpoint_utils' and 'import torch'",
+    "Load the Hubert model using the command 'hubert,_,_ = checkpoint_utils.load_model_ensemble_and_task([\"./assets/hubert/hubert_base.pt\"], suffix=\"\")'",
+    "Access the first model from the loaded ensemble with 'hubert_model = hubert[0]'",
+    "Convert the model to half precision using 'hubert_model = hubert_model.half()'",
+    "Define a class 'HuberAdapter' that inherits from 'torch.nn.Module' and implements a forward method that calls 'self.model.extract_features()'",
+    "Instantiate the HuberAdapter with 'adapter = HuberAdapter(hubert_model)'",
+    "Prepare input tensors by loading 'feats' and 'padding_mask' using 'feats = torch.load(\"./feats.pt\")' and 'padding_mask = torch.load(\"./padding_mask.pt\")'",
+    "Export the model to ONNX format using 'torch.onnx.export(adapter, (feats.cuda(), padding_mask.cuda()), \"hubert.onnx\", input_names=[\"feats\",\"padding_mask\"], output_names=[\"logits\",\"mask\"], dynamic_axes={\"feats\": {0: \"seq\"}, \"padding_mask\": {0: \"seq\"}})'",
+    "Run the export command and observe the output for the error 'AttributeError: 'Tensor' object has no attribute 'is_integer''",
+    "Verify that the error occurs by checking the console output for the specific AttributeError message"
+]
+```

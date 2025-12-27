@@ -1,0 +1,18 @@
+TITLE  
+Inconsistent Masking in Actor Loss Calculation
+
+SYMPTOMS  
+• The mask used in the actor loss calculation excludes the "eos" token, which contains important reward information.  
+• The line `action_mask[:, start:]` filters out the "eos" token instead of including it.  
+• The user suggests that the mask should be `action_mask[:, start-1: -1]` to include the "eos" token.  
+• There is confusion regarding the impact of this masking on the calculation of the actor loss.
+
+EXPECTED BEHAVIOR  
+The actor loss calculation should properly include the "eos" token in the mask, allowing its associated ground reward from the Reward Model to influence the loss. The mask should be structured to ensure that all relevant tokens, including "eos", are considered in the loss computation.
+
+REPRODUCTION STEPS  
+1. Implement the actor loss calculation using the current masking approach: `action_mask[:, start:]`.  
+2. Observe the output of the actor loss calculation and note the exclusion of the "eos" token.  
+3. Modify the masking approach to `action_mask[:, start-1: -1]`.  
+4. Re-run the actor loss calculation and compare the results, focusing on the inclusion of the "eos" token and its effect on the loss.  
+5. Analyze the differences in loss values and evaluate the impact on the training process.

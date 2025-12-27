@@ -1,0 +1,17 @@
+[
+    "Import Keras and other necessary libraries from the pointnet.py file",
+    "Download and prepare the disaster-related tweets dataset from Kaggle",
+    "Shuffle the dataset to ensure randomness in data splitting",
+    "Drop unnecessary columns 'id', 'keyword', and 'location' from the dataframe",
+    "Split the shuffled dataset into training (90%) and testing (10%) sets using a random state of 42",
+    "Create a function `create_dataset` that takes a dataframe, converts it into a `tf.data.Dataset`, batches it with size 100, and prefetches data automatically",
+    "Use the `create_dataset` function to create training (`train_ds`) and testing (`test_ds`) datasets from the split dataframes",
+    "Define the input shape for the model as (None, ) to handle variable-length text inputs",
+    "Create a Universal Sentence Encoder layer using TensorFlow Hub with the specified URL",
+    "Build `model_1` by creating an input layer of type tf.string and passing it through the preprocessor consisting of the Universal Sentence Encoder layer",
+    "Define `model_2` directly using the Gradient Boosted Trees model from Tensorflow Decision Forests (TF-DF)",
+    "Compile both models with metrics 'Accuracy', 'Recall', 'Precision', and 'AUC'",
+    "Train `model_1` and `model_2` on the training dataset (`train_ds`) without specifying epochs, as TF-DF trains exactly one epoch of the dataset",
+    "Evaluate both models on the testing dataset (`test_ds`) and capture the results in a dictionary format to return precision, recall, and other metrics"
+]
+

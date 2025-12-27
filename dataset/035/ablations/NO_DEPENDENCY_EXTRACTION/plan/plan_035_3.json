@@ -1,0 +1,27 @@
+```json
+[
+    "Clone the repository from GitHub using 'git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git'",
+    "Navigate to the directory 'labml_nn/transformers/rope/'",
+    "Open the file '__init__.py' in a code editor",
+    "Locate line 226 where 'rotary_pe = RotaryPositionalEmbeddings(3)' is defined",
+    "Change the line to 'rotary_pe = RotaryPositionalEmbeddings(4)' to reproduce the bug",
+    "Navigate to the directory 'labml_nn/transformers/retro/'",
+    "Open the file 'train.py' in a code editor",
+    "Ensure the following imports are present: 'import torch', 'from labml_nn.transformers.retro import model as retro', 'from labml_nn.transformers.retro.dataset import Dataset'",
+    "Prepare the Tiny Shakespeare dataset by downloading it from 'https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt' and saving it as 'tiny_shakespeare.txt' in the appropriate data path",
+    "Create a Retro dataset by creating a JSON file 'retro_train_dataset.json' with the required structure for the dataset",
+    "Define a batch size of 4 and a chunk length of 16",
+    "Instantiate the TextFileDataset with the path to 'tiny_shakespeare.txt'",
+    "Instantiate the Dataset with the path to 'retro_train_dataset.json' and the TextFileDataset",
+    "Create a DataLoader with the Dataset, batch size of 4, and RandomSampler",
+    "Define model parameters: d_model = 128, d_ff = 512, n_heads = 16, d_k = 16",
+    "Create the nearest neighbor encoder with parameters: chunk_len = 16, 6, {3}, d_model = 128, n_heads = 16, d_k = 16, d_ff = 512",
+    "Create the RetroModel with parameters: tds.n_tokens, d_model = 128, 6, {3, 5}, chunk_len = 16, n_heads = 16, d_k = 16, d_ff = 512, encoder=nearest_neighbor_encoder",
+    "Move the model to the device using 'model.to(device)' where device is set to 'torch.device('cuda:0')'",
+    "Create an optimizer using Noam with parameters: model.parameters(), lr=1., d_model=d_model, warmup=2000",
+    "Instantiate the Trainer class with parameters: device, model, train_dl, optimizer",
+    "Run the training loop for 1 epoch to trigger the bug",
+    "Capture the output and check for any runtime errors or exceptions",
+    "Assert that an error occurs related to the mismatch in expected features due to the incorrect number of features in RotaryPositionalEmbeddings"
+]
+```

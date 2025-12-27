@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 2 and image dimensions of 224x224 with 3 channels (RGB)",
+    "Create random input data with shape (batch_size, channels, height, width) = (2, 3, 224, 224)",
+    "Instantiate the RegionViT model with default parameters: dim=(64, 128, 256, 512), depth=(2, 2, 8, 2), window_size=7, num_classes=1000, tokenize_local_3_conv=True, local_patch_size=4, use_peg=False, attn_dropout=0., ff_dropout=0., channels=3",
+    "Pass the random input data through the model by calling the forward method: output = model(input_data)",
+    "Check the shape of the output tensor to ensure it matches expected dimensions: assert output.shape == (2, 1000)",
+    "Verify that the LayerNorm in the local_encoder is applied incorrectly by checking the input shape before LayerNorm: assert local_tokens.shape[1] == 64",
+    "Assert that the LayerNorm is applied over the wrong dimension by checking if the input to LayerNorm is not in the expected shape of (batch_size, channels) or (batch_size, channels, height, width)",
+    "Print a message indicating the LayerNorm dimension mismatch if the assertion fails"
+]
+```

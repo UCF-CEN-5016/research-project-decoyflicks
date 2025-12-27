@@ -1,0 +1,14 @@
+[
+  "Start a new Python environment or Colab notebook with Python 3.10 or later.",
+  "Install the latest versions of TensorFlow and Keras by running `pip install tensorflow keras` without specifying versions.",
+  "Install keras-cv from the official GitHub repository using `pip install -q git+https://github.com/keras-team/keras-cv.git`.",
+  "Import required modules: tensorflow as tf, keras from tensorflow, keras_cv, matplotlib.pyplot as plt, numpy as np, and math.",
+  "Attempt to import `data_utils` from `keras.utils` by running `from keras.utils import data_utils`.",
+  "Observe and capture the ImportError: `cannot import name 'data_utils' from 'keras.utils'` triggered during import.",
+  "Verify that the error traceback includes the file path `/usr/local/lib/python3.10/dist-packages/keras/utils/__init__.py` and references the keras_cv/models/weights.py module attempting the import.",
+  "Confirm that this ImportError occurs immediately upon importing keras_cv or running any keras_cv model code that triggers this import.",
+  "Document the exact error message and traceback to verify reproducibility.",
+  "Optionally, run `pip show keras` to confirm the installed Keras version is the latest (e.g., 2.13.x) which lacks `data_utils` in `keras.utils`.",
+  "Ensure no other code is executed that could mask or bypass the import error.",
+  "Stop after confirming the ImportError reproducibly occurs in this environment with the latest keras and keras-cv versions."
+]

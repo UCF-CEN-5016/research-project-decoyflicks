@@ -1,0 +1,80 @@
+TITLE
+Caching Frequency Calculation Leads to RuntimeError During Backward Pass
+
+SYMPTOMS
+• `RuntimeError: Trying to backward through the graph a second time (or directly access saved tensors after they have already been freed)`
+• The error occurs during the second `loss.backward()` call in training, specifically when trying to read cached frequency data.
+
+EXPECTED BEHAVIOR
+The model should be able to compute and cache the rotary embedding frequencies correctly without encountering errors. The cached frequencies should be properly reused on subsequent passes if conditions allow, allowing for efficient computation.
+
+REPRODUCTION STEPS
+1. Initialize a model using the rotary embedding library.
+2. Enable `autocast` with `enabled = True` in the `forward()` method to leverage mixed precision training.
+3. Implement caching logic as shown below:
+```python
+@autocast(enabled = True)
+def forward(
+self,
+t: Tensor,
+seq_len = None,
+offset = 0
+):
+should_cache = (
+not self.learned_freq and \
+exists(seq_len) and \
+self.freqs_for != 'pixel'
+)
+
+if (
+should_cache and \
+exists(self.cached_freqs) and \
+(offset + seq_len) <= self.cached_freqs.shape[0]
+):
+return self.cached_freqs[offset:(offset + seq_len)]
+
+freqs = self.freqs
+
+freqs = einsum('..., f -> ... f', t.type(freqs.dtype), freqs)
+freqs = repeat(freqs, '... n -> ... (n r)', r = 2)
+
+if should_cache:
+self.tmp_store('cached_freqs', freqs)
+
+return freqs
+```
+4. Train the model for at least two iterations.
+5. During the second iteration, call `loss.backward()` to trigger the error.
+
+Note: The issue might be resolved by commenting out the caching logic and always computing frequencies in each forward pass as you have already observed:
+```python
+@autocast(enabled = False)
+def forward(
+self,
+t: Tensor,
+seq_len = None,
+offset = 0
+):
+# should_cache = (
+#     not self.learned_freq and \
+#     exists(seq_len) and \
+#     self.freqs_for != 'pixel'
+# )
+
+# if (
+#     should_cache and \
+#     exists(self.cached_freqs) and \
+#     (offset + seq_len) <= self.cached_freqs.shape[0]
+# ):
+#     return self.cached_freqs[offset:(offset + seq_len)]
+
+freqs = self.freqs
+
+freqs = einsum('..., f -> ... f', t.type(freqs.dtype), freqs)
+freqs = repeat(freqs, '... n -> ... (n r)', r = 2)
+
+# if should_cache:
+#     self.tmp_store('cached_freqs', freqs)
+
+return freqs
+```

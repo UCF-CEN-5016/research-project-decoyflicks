@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision.transforms, torchvision.datasets, torch.nn, torch.optim, and torch.utils.data",
+    "Set the image size to 128x128 and define a batch size of 64",
+    "Define a transformation pipeline using torchvision.transforms to resize images to (128, 128) and normalize them",
+    "Load the CelebA dataset using torchvision.datasets.CelebA with the defined transformation and set download=True",
+    "Create a DataLoader for the CelebA dataset with batch_size=64 and shuffle=True",
+    "Define the Generator and Discriminator classes for the DCGAN, ensuring the input dimensions are compatible with 128x128 images",
+    "In the Generator class, adjust the output layer to produce images of size (128, 128, 3)",
+    "In the Discriminator class, adjust the input layer to accept images of size (128, 128, 3)",
+    "Initialize the models: generator = Generator() and discriminator = Discriminator()",
+    "Define the loss function as torch.nn.BCELoss()",
+    "Set the optimizer for both models using torch.optim.Adam with learning rate 0.0002 and beta values (0.5, 0.999)",
+    "Start the training loop for a specified number of epochs (e.g., 5)",
+    "Within the training loop, iterate over the DataLoader to get batches of real images",
+    "Generate random noise as input for the generator with shape (batch_size, 100)",
+    "Pass the noise through the generator to create fake images",
+    "Pass the real images through the discriminator and store the output",
+    "Pass the fake images through the discriminator and store the output",
+    "Calculate the discriminator loss using the outputs from real and fake images",
+    "Calculate the generator loss using the output from the discriminator for the fake images",
+    "Perform backpropagation for both models and update their weights",
+    "Run the training loop and monitor for the ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200]))",
+    "Log the shapes of the outputs from the discriminator and the labels to verify the mismatch in sizes"
+]
+```

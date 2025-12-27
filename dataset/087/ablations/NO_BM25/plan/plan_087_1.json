@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, einx, and any other required modules from x_transformers",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 2 and sequence length of 10",
+    "Define the dimensions for the model: dim = 64, heads = 8, and max_pos = 16",
+    "Create random input data for the query tensor with shape (batch_size, sequence_length, dim)",
+    "Create random input data for the context tensor with shape (batch_size, sequence_length, dim)",
+    "Create random position tensors pos_i and pos_j with shape (batch_size, sequence_length, 1) and (batch_size, sequence_length, 1) respectively",
+    "Instantiate the Attention class with parameters: dim=dim, heads=heads, flash=True, and causal=True",
+    "Call the forward method of the Attention instance with the following parameters: x (query tensor), context (context tensor), attn_mask=None, rel_pos=None, attn_bias=None, pos=pos_i",
+    "Capture the output of the forward method call",
+    "Check the output shape to ensure it matches expected dimensions: (batch_size, sequence_length, dim)",
+    "Verify that the output does not contain NaN values",
+    "Check if the attention bias is being computed correctly by inspecting the internal state of the Attention instance, specifically the bias tensor",
+    "Assert that the bias tensor has the expected shape of (batch_size, heads, sequence_length, sequence_length) when using custom positions",
+    "Log any discrepancies in the bias tensor shape or values to confirm the bug is present"
+]
+```

@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import torch, import deepspeed, import os",
+    "Set the environment variable for distributed training: os.environ['WORLD_SIZE'] = '2' and os.environ['RANK'] = '0'",
+    "Define a batch size of 8 and model dimensions for GPT-3: model_dim = 2.7e9",
+    "Initialize the PyTorch distributed process group: torch.distributed.init_process_group(backend='nccl', init_method='env://')",
+    "Create a dummy input tensor with shape (batch_size, sequence_length, model_dim): input_tensor = torch.randn(8, 1024, 256)",
+    "Define a simple model that uses DeepSpeed: model = deepspeed.initialize(model=MyModel(), config='ds_config.json')",
+    "Set the global memory buffer to None to simulate uninitialized state: _GLOBAL_MEMORY_BUFFER = None",
+    "Call the function that triggers the all_reduce operation: output = model(input_tensor)",
+    "Capture the output and any exceptions: try: output = model(input_tensor) except Exception as e: print(e)",
+    "Verify that the exception message contains 'AttributeError: 'NoneType' object has no attribute 'all_reduce''",
+    "Check the rank of the process: assert torch.distributed.get_rank() == 0",
+    "Ensure that the distributed environment is correctly set up: assert torch.distributed.is_initialized() is True"
+]
+```

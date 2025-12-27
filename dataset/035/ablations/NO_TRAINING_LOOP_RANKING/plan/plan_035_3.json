@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the repository from GitHub using the command: git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git",
+    "Navigate to the directory containing the RoPE file: cd annotated_deep_learning_paper_implementations/labml_nn/transformers/rope",
+    "Open the __init__.py file in a code editor and locate line 226, which contains the code: rotary_pe = RotaryPositionalEmbeddings(3)",
+    "Change the line to: rotary_pe = RotaryPositionalEmbeddings(4) to simulate the intended bug scenario.",
+    "Install the required dependencies by running: pip install -r requirements.txt",
+    "Create a new Python script in the same directory to test the code, e.g., test_rope_bug.py",
+    "In test_rope_bug.py, import necessary modules: import torch, from labml_nn.transformers.rope import RotaryPositionalEmbeddings",
+    "Define a variable for the number of features: num_features = 4",
+    "Create a tensor to simulate input data with shape (1, num_features): input_data = torch.randn(1, num_features)",
+    "Instantiate the RotaryPositionalEmbeddings with 4 features: rotary_pe = RotaryPositionalEmbeddings(num_features)",
+    "Call the forward method of rotary_pe with the input_data: output = rotary_pe(input_data)",
+    "Run the script using the command: python test_rope_bug.py",
+    "Observe the output for any errors or exceptions that indicate a mismatch in expected dimensions or features.",
+    "Validate that an error occurs, specifically checking for dimension mismatch errors related to the input tensor and the expected input of the RotaryPositionalEmbeddings.",
+    "Log the error message to confirm the bug is reproduced, ensuring it indicates the issue with the number of features."
+]
+```

@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.optim",
+    "Define a batch size of 8 and input dimensions of (10, 512) for src and tgt sequences",
+    "Create random input tensors for src and tgt with shapes (batch_size, 10, 512)",
+    "Instantiate the Encoder and Decoder classes with appropriate parameters, ensuring encoder.to_logits.weight is included",
+    "Wrap the encoder and decoder in the XTransformer class, setting tie_token_emb to True",
+    "Define a learning rate of 0.001 and create an optimizer for the model parameters",
+    "Set the model to training mode using model.train()",
+    "Run a training loop for 5 epochs, where in each epoch:",
+    "    Perform a forward pass with the src and tgt tensors",
+    "    Compute the loss using a suitable loss function (e.g., CrossEntropyLoss)",
+    "    Call optimizer.zero_grad() to clear previous gradients",
+    "    Call loss.backward() to compute gradients",
+    "    Call optimizer.step() to update model parameters",
+    "After training, check the value of encoder.to_logits.weight before and after the training loop",
+    "Assert that the value of encoder.to_logits.weight has not changed after training",
+    "Print a message indicating that the weight did not update, confirming the bug"
+]
+```

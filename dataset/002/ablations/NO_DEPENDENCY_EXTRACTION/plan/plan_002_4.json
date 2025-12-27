@@ -1,0 +1,18 @@
+```json
+[
+    "Set up a Debian 12 environment with Miniforge3 and install TensorFlow 2.x using 'conda install tensorflow'",
+    "Install the TensorFlow Object Detection API by cloning the repository and installing dependencies as per the official installation guide",
+    "Navigate to the object_detection directory and ensure the 'models/centernet_mobilenetv2fp' directory exists with a valid 'pipeline.config' file",
+    "Create a Python script named 'model_main_tf2.py' that includes the necessary imports: 'import tensorflow as tf' and 'from object_detection import model_lib'",
+    "Define the model directory path as 'models/centernet_mobilenetv2fp' and the pipeline config path as 'models/centernet_mobilenetv2fp/pipeline.config'",
+    "Set up the command line argument parsing in 'model_main_tf2.py' to accept '--model_dir' and '--pipeline_config_path'",
+    "In 'model_main_tf2.py', call 'model_lib.train' with the parsed arguments to initiate model training",
+    "Ensure the 'exporter.py' file is located at '/home/server/miniforge3/envs/ML/lib/python3.9/site-packages/object_detection/exporter.py'",
+    "Modify 'exporter.py' to include the line 'from tensorflow.contrib.quantize.python import graph_matcher' to simulate the import error",
+    "Run the command 'python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config'",
+    "Capture the output of the command execution to verify if the error 'ModuleNotFoundError: No module named 'tensorflow.conrtib'' occurs",
+    "Check the Python version using 'python --version' to ensure it is 3.9 as specified in the environment setup",
+    "Confirm that TensorFlow 2.x is installed by running 'python -c 'import tensorflow as tf; print(tf.__version__)' and ensure it outputs a version starting with '2.'",
+    "Validate that the error message specifically mentions 'tensorflow.contrib.quantize.python' to confirm the bug is reproduced"
+]
+```

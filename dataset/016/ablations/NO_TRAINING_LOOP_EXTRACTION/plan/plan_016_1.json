@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository.",
+    "Set the environment variables for DATA_DIR and MODEL_DIR to point to the appropriate directories containing the ImageNet dataset and model checkpoints.",
+    "Activate the conda environment with TensorFlow 2.11.0 installed.",
+    "Define the worker hosts in the gpu.yaml and gpu1.yaml configuration files with the correct IP addresses and ports for both nodes.",
+    "Set the distribution strategy to 'multi_worker_mirrored' in both configuration files.",
+    "Set num_gpus to 2 in both configuration files.",
+    "Set task_index to 0 in gpu.yaml and 1 in gpu1.yaml.",
+    "On gpu1, run the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml",
+    "On gpu2, run the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml",
+    "Monitor the training logs on both nodes to capture throughput metrics during execution.",
+    "Record the throughput for single GPU execution and for multi-GPU execution on a single node to establish a baseline.",
+    "Compare the throughput metrics from multi-node execution to the single node execution to verify that scaling does not occur.",
+    "Check for any error messages or warnings in the logs that may indicate issues with the multi-worker setup.",
+    "Validate that the same batch size is used across both nodes to ensure a fair comparison.",
+    "Ensure that the GPUs on both nodes are being utilized by monitoring GPU usage with a tool like nvidia-smi during training.",
+    "Assert that the throughput for multi-node execution is equal to or less than the throughput of a single GPU execution."
+]
+```

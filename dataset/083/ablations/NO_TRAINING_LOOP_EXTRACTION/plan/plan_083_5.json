@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, einsum from torch, rearrange and repeat from einops",
+    "Define image size as 224 and patch size as 16",
+    "Set number of classes to 10, dimension (dim) to 512, depth to 6, heads to 8, mlp_dim to 2048, and channels to 3",
+    "Create a LocalViT instance with the defined parameters: LocalViT(image_size=224, patch_size=16, num_classes=10, dim=512, depth=6, heads=8, mlp_dim=2048, channels=3)",
+    "Define a batch size of 4",
+    "Generate random input data with shape (batch_size, channels, image_size, image_size) using torch.randn(batch_size, channels, image_size, image_size)",
+    "Pass the generated input data through the LocalViT model instance to get the output: output = model(input_data)",
+    "Check the shape of the output to ensure it matches expected dimensions: assert output.shape == (batch_size, num_classes)",
+    "Introduce a bug by modifying the FeedForward class to incorrectly handle the input dimensions, e.g., change the rearrange line to 'x = rearrange(x, 'b (h w) c -> b c h w', h = h, w = w + 1)'",
+    "Run the model again with the modified FeedForward class and capture any exceptions or errors",
+    "Verify that an error occurs during the forward pass, indicating a dimension mismatch or similar issue",
+    "Log the error message to confirm the bug is reproducible"
+]
+```

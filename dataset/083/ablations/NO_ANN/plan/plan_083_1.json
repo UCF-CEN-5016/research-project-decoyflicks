@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 8 and image dimensions of 224x224",
+    "Set patch size to 16 and number of classes to 10",
+    "Create a random input tensor with shape (batch_size, 3, height, width) where height and width are 224",
+    "Instantiate the ViT model with parameters: image_size=(224, 224), patch_size=16, num_classes=10, dim=512, depth=6, heads=8, mlp_dim=2048, dropout=0.1, emb_dropout=0.1",
+    "Pass the random input tensor through the model to get the output logits",
+    "Check the shape of the output logits to ensure it is (batch_size, num_classes)",
+    "Set the model to training mode to enable dropout layers",
+    "Define a loss function using CrossEntropyLoss",
+    "Create a random target tensor with shape (batch_size) containing class indices from 0 to num_classes-1",
+    "Calculate the loss using the output logits and the target tensor",
+    "Assert that the loss is a finite value (not NaN or Inf)",
+    "Modify the dropout probability to a high value (e.g., 0.9) in the ViT model",
+    "Re-run the forward pass with the same random input tensor",
+    "Check if the output logits contain NaN values after applying high dropout",
+    "Log the output values to verify if any are NaN",
+    "Assert that at least one value in the output logits is NaN"
+]
+```

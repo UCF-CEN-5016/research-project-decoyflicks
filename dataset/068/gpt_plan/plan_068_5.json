@@ -1,0 +1,19 @@
+[
+    "Import TensorFlow (tf), TensorFlow Datasets (tfds), and Keras modules (keras, layers) required for model building and training",
+    "Import matplotlib functions (figure, subplot, imshow, axis, tight_layout, show, close) for image visualization",
+    "Set fixed batch size to 4 for training and validation datasets to match the error shape dimensions",
+    "Set image size to 64x64 and ensure dataset images are resized accordingly",
+    "Load the COCO or a compatible object detection dataset (e.g., 'coco/2017' or 'coco/2017', 'train' split) using tfds.load with shuffle_files=True",
+    "Preprocess dataset by normalizing images and preparing bounding boxes and class labels with fixed batch size 4; ensure bounding boxes vary between batches to mimic real detection data",
+    "Batch the dataset with batch_size=4 and drop_remainder=True to enforce consistent batch shapes",
+    "Instantiate the YOLOv8 model from keras_cv.models.YOLOv8 with default parameters and input_shape=(64,64,3)",
+    "Compile the YOLOv8 model with an appropriate optimizer (e.g., Adam) and detection losses as in the example",
+    "Define the training dataset iterator and validation dataset iterator with batch size 4 and proper preprocessing to output bounding boxes and labels compatible with YOLOv8 expectations",
+    "Start training the YOLOv8 model with yolo.fit for 3 epochs on the training dataset and validation dataset, passing a callback EvaluateCOCOMetricsCallback or equivalent that computes COCO metrics at epoch end",
+    "Monitor training output through the first epoch until the loss prints approximately as 'loss: 21.5977 - box_loss: 2.6112 - class_loss: 18.9865', matching the error log",
+    "Observe that upon epoch 1 completion, an UnknownError occurs during the EvaluateCOCOMetricsCallback's metrics.result(force=True) call",
+    "Verify the stack trace reports InvalidArgumentError in tf.concat operation with mismatched shape dimensions on axis=1, specifically shape[0] = [4,2,4] vs shape[1] = [4,1,4]",
+    "Assert that the error is reproducible consistently when running this training script on Colab Pro or equivalent environment with TensorFlow 2.x and KerasCV installed",
+    "Confirm that the error occurs during the metric evaluation step after the first epoch of training and not earlier during loss computation or forward passes",
+    "Optionally, print shapes of ground truth boxes passed to the metric callback to verify the dimension mismatch causing the concat failure"
+]

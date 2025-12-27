@@ -1,0 +1,39 @@
+TITLE  
+Image segmentation with U-Net-like architecture fails during dataset creation
+
+SYMPTOMS  
+• The code fails to execute properly when creating the datasets for image segmentation.  
+• The error occurs in both Google Colab and local machine environments.  
+• The following error message is encountered:  
+```
+TypeError: Exception encountered when calling layer 'random_choice' (type RandomChoice).
+...
+branches[0] output: {'images': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity:0' shape=(160, 160, 3) dtype=float32>, 'segmentation_masks': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0' shape=(160, 160, 1) dtype=float32>}
+...
+Error details:
+Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types
+```
+• The segmentation masks are reported with different data types (`float32` and `int64`), leading to a type mismatch error.
+
+EXPECTED BEHAVIOR  
+The code should successfully create the augmented training and validation datasets without any errors, allowing the U-Net-like architecture to run for image segmentation tasks.
+
+REPRODUCTION STEPS  
+1. Set up the environment with the necessary libraries, including KerasCV and TensorFlow.  
+2. Run the code snippet provided in the original bug report to create the datasets:  
+   ```python
+   augmented_train_ds = (
+       train_ds.shuffle(BATCH_SIZE * 2)
+       .map(augment_fn, num_parallel_calls=AUTOTUNE)
+       .batch(BATCH_SIZE)
+       .map(unpackage_inputs)
+       .prefetch(buffer_size=tf.data.AUTOTUNE)
+   )
+   resized_val_ds = (
+       val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE)
+       .batch(BATCH_SIZE)
+       .map(unpackage_inputs)
+       .prefetch(buffer_size=tf.data.AUTOTUNE)
+   )
+   ```
+3. Observe the error that occurs during the execution of the dataset creation.

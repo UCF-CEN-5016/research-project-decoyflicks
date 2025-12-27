@@ -1,0 +1,44 @@
+{
+  "bug_report": "012",
+  "module": {
+    "module": "official/legacy/transformer",
+    "files": [
+      {
+        "path": "official/legacy/transformer/transformer_main_test.py",
+        "snippets": [
+          {
+            "lines": "182-189",
+            "code": "  def test_eval(self):\n    if context.num_gpus() >= 2:\n      self.skipTest('No need to test 2+ GPUs without a distribution strategy.')\n    if 'test_xla' in sys.argv[0]:\n      self.skipTest('TODO(xla): Make this test faster under XLA.')\n    self._prepare_files_and_flags()\n    t = transformer_main.TransformerTask(FLAGS)\n    t.eval()"
+          },
+          {
+            "lines": "129-139",
+            "code": "  def test_train_fp16(self):\n    FLAGS.distribution_strategy = 'one_device'\n    FLAGS.dtype = 'fp16'\n    t = transformer_main.TransformerTask(FLAGS)\n    t.train()\n\n  def test_train_2_gpu(self):\n    if context.num_gpus() < 2:\n      self.skipTest(\n          '{} GPUs are not available for this test. {} GPUs are available'\n          .format(2, context.num_gpus()))\n    FLAGS.distribution_strategy = 'mirrored'\n    FLAGS.num_gpus = 2\n    FLAGS.param_set = 'base'\n    t = transformer_main.TransformerTask(FLAGS)\n    t.train()\n\n  def test_train_2_gpu_fp16(self):\n    if context.num_gpus() < 2:\n      self.skipTest(\n          '{} GPUs are not available for this test. {} GPUs are available'\n          .format(2, context.num_gpus()))\n    FLAGS.distribution_strategy = 'mirrored'\n    FLAGS.num_gpus = 2\n    FLAGS.param_set = 'base'\n    FLAGS.dtype = 'fp16'\n    t = transformer_main.TransformerTask(FLAGS)\n    t.train()"
+          },
+          {
+            "lines": "78-82",
+            "code": "  def tearDown(self):  # pylint: disable=g-missing-super-call\n    tf.compat.v2.keras.mixed_precision.set_global_policy(self.orig_policy)\n\n  def _assert_exists(self, filepath):\n    self.assertTrue(os.path.exists(filepath))\n\n  def test_train_no_dist_strat(self):\n    if context.num_gpus() >= 2:\n      self.skipTest('No need to test 2+ GPUs without a distribution strategy.')\n    t = transformer_main.TransformerTask(FLAGS)\n    t.train()"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/legacy/transformer/transformer_main_test.py",
+      "snippets": [
+        {
+          "lines": "182-189",
+          "code": "  def test_eval(self):\n    if context.num_gpus() >= 2:\n      self.skipTest('No need to test 2+ GPUs without a distribution strategy.')\n    if 'test_xla' in sys.argv[0]:\n      self.skipTest('TODO(xla): Make this test faster under XLA.')\n    self._prepare_files_and_flags()\n    t = transformer_main.TransformerTask(FLAGS)\n    t.eval()"
+        },
+        {
+          "lines": "129-139",
+          "code": "  def test_train_fp16(self):\n    FLAGS.distribution_strategy = 'one_device'\n    FLAGS.dtype = 'fp16'\n    t = transformer_main.TransformerTask(FLAGS)\n    t.train()\n\n  def test_train_2_gpu(self):\n    if context.num_gpus() < 2:\n      self.skipTest(\n          '{} GPUs are not available for this test. {} GPUs are available'\n          .format(2, context.num_gpus()))\n    FLAGS.distribution_strategy = 'mirrored'\n    FLAGS.num_gpus = 2\n    FLAGS.param_set = 'base'\n    t = transformer_main.TransformerTask(FLAGS)\n    t.train()\n\n  def test_train_2_gpu_fp16(self):\n    if context.num_gpus() < 2:\n      self.skipTest(\n          '{} GPUs are not available for this test. {} GPUs are available'\n          .format(2, context.num_gpus()))\n    FLAGS.distribution_strategy = 'mirrored'\n    FLAGS.num_gpus = 2\n    FLAGS.param_set = 'base'\n    FLAGS.dtype = 'fp16'\n    t = transformer_main.TransformerTask(FLAGS)\n    t.train()"
+        },
+        {
+          "lines": "78-82",
+          "code": "  def tearDown(self):  # pylint: disable=g-missing-super-call\n    tf.compat.v2.keras.mixed_precision.set_global_policy(self.orig_policy)\n\n  def _assert_exists(self, filepath):\n    self.assertTrue(os.path.exists(filepath))\n\n  def test_train_no_dist_strat(self):\n    if context.num_gpus() >= 2:\n      self.skipTest('No need to test 2+ GPUs without a distribution strategy.')\n    t = transformer_main.TransformerTask(FLAGS)\n    t.train()"
+        }
+      ]
+    }
+  ]
+}

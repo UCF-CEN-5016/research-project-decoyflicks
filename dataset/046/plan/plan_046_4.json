@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries including argparse, collections, fairseq, json, logging, pathlib, torch and contextlib.",
+    "Define a batch size of 32 and vocabulary sizes for both source and target languages as 10000.",
+    "Prepare training data by creating synthetic LanguagePairDataset instances for source and target language data, each with the specified vocab size.",
+    "Create NoisingDataset instances from the LanguagePairDatasets to simulate noise in the input data.",
+    "Prepend special tokens '<mask>' and '__lang__' (where 'lang' is a placeholder for source or target language) using PrependTokenDataset.",
+    "RoundRobinZipDatasets these datasets together to create a combined dataset.",
+    "Initialize a SequenceGenerator instance with a dummy model that has embedding dimensions of 512.",
+    "Set up evaluation parameters including eval_bool for BLEU and PPL calculations, and specify the use of '<mask>' token.",
+    "Create a function to extend embeddings in the model when new tokens are added to the dictionary. Call this function with the extended dictionary.",
+    "Define a training loop that iterates over the combined dataset for 10 epochs, updating the model parameters using dummy optimizer steps.",
+    "During each epoch, monitor the loss calculation for NaN values, specifically checking if the 'bt_loss' or 'dae_loss' contains NaNs.",
+    "Assert at least one of the losses during the training loop contains NaN values to verify the bug occurs."
+]
+```
+

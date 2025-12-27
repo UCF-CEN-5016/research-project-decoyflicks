@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Model Garden modules: tensorflow_models and official.vision.tasks.maskrcnn",
+    "Set the Python environment to use Python 3.10 or higher",
+    "Install TensorFlow version 2.x and TensorFlow Model Garden using pip: pip install tensorflow tensorflow-models-official",
+    "Import the absl logging module to capture logs: from absl import logging",
+    "Define a batch size of 4 and image dimensions of 1024x1024 for the Mask R-CNN model",
+    "Create a random uniform input tensor for images with shape (batch_size, height, width, channels) = (4, 1024, 1024, 3)",
+    "Create a random tensor for labels with shape (batch_size, num_instances, 5) where num_instances = 10, representing bounding boxes (x1, y1, x2, y2, class_id)",
+    "Define a configuration for the Mask R-CNN model, including input size, number of classes, and other parameters as per the official documentation",
+    "Instantiate the MaskRCNNTask class from the official.vision.tasks.maskrcnn module with the defined configuration",
+    "Call the build_model method of the MaskRCNNTask instance to create the model",
+    "Create a dummy input shape tensor with shape (4, 1024, 1024, 3) and a dummy image shape tensor with shape (4, 2) to simulate input data",
+    "Attempt to call the model with the dummy input data and image shape, expecting it to process the data without errors",
+    "Capture the ImportError that occurs when trying to import tensorflow_models, specifically looking for the undefined symbol error related to absl",
+    "Log the error message to verify that the ImportError is raised as expected",
+    "Assert that the error message contains the text 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E' to confirm the specific bug is reproduced"
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import torch, import os, import sys",
+    "Set the environment variable for CUDA: os.environ['CUDA_VISIBLE_DEVICES'] = '0'",
+    "Define the training parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10",
+    "Prepare the command to run the training script: command = f'python ../main.py --brats --brats22_model --scheduler --learning_rate {learning_rate} --epochs {epochs} --fold {fold} --gpus {gpus} --task {task} --nfolds {nfolds} --save_ckpt'",
+    "Ensure the requirements.txt is installed: run 'pip install -r requirements.txt'",
+    "Check the installed version of PyTorch: assert torch.__version__ == '2.2.0+cu121'",
+    "Check if the GPU is available: assert torch.cuda.is_available() == True",
+    "Run the training command: os.system(command)",
+    "Capture the output of the training command to check for errors: output = os.popen(command).read()",
+    "Verify if the output contains the string 'MisconfigurationException': assert 'MisconfigurationException' in output",
+    "Check the specific error message for lr_scheduler: assert 'CosineAnnealingWarmRestarts' in output",
+    "Log the output for debugging: print(output)",
+    "Ensure that the script is executed in a WSL2 environment: assert 'WSL2' in sys.platform",
+    "Confirm that the GPU memory usage is monitored during execution: assert torch.cuda.memory_allocated() > 0"
+]
+```

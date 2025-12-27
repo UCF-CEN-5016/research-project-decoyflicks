@@ -1,0 +1,17 @@
+TITLE  
+NaNs Propagation After Rotating Queries and Keys in Transformer Model
+
+SYMPTOMS  
+• K contains a small fraction of NaN values after the call to rotary_emb.rotate_queries_and_keys(Q, K).  
+• The presence of NaNs in K leads to NaN values in the loss calculation during training.  
+• The model fails to converge due to the propagation of NaNs through the transformer architecture.  
+
+EXPECTED BEHAVIOR  
+The rotation of queries and keys should not introduce any NaN values, and the loss should be a valid numerical value, allowing the model to train without interruptions or convergence issues.
+
+REPRODUCTION STEPS  
+1. Initialize the transformer model and input tensors Q and K.  
+2. Call the function rotary_emb.rotate_queries_and_keys(Q, K).  
+3. Inspect the tensor K for NaN values after the function call.  
+4. Proceed with the training loop and monitor the loss value for NaNs.  
+5. Confirm that NaNs propagate through the model and affect the loss calculation.

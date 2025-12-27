@@ -1,0 +1,20 @@
+TITLE  
+Incompatibility of Output and Target Sizes When Modifying DCGAN Image Dimensions
+
+SYMPTOMS  
+• Attempting to change the image size from 64x64 to 128x128 in the DCGAN code results in a runtime error.  
+• The following error message is displayed:  
+```
+ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200])) is deprecated. Please ensure they have the same size.
+```  
+• The origin of the output size (3200) is unclear and not documented in the current codebase.
+
+EXPECTED BEHAVIOR  
+When modifying the image size in the DCGAN example, the model should be able to process the new dimensions without errors, and the output size should match the target size.
+
+REPRODUCTION STEPS  
+1. Clone the DCGAN example repository from PyTorch.  
+2. Open the `dcgan_faces_tutorial.py` file and locate the image size parameter.  
+3. Change the image size from 64x64 to 128x128.  
+4. Run the training loop.  
+5. Observe the error that occurs during the execution.

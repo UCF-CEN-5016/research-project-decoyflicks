@@ -1,0 +1,30 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, and nltk",
+    "Set the Keras version to 2.15 and ensure TensorFlow is compatible with it",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40, TEST_BATCH_SIZE = 1",
+    "Load the English and Spanish tokenizers from data_preprocessing module",
+    "Load the test pairs from data_preprocessing module",
+    "Define the transformer model from the model module",
+    "Create a function decode_sequences(input_sentences) to handle the decoding process",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Define a nested function next_fn(prompt, cache, index) that takes a prompt and returns logits, hidden_states, and cache",
+    "In next_fn, call the transformer model with encoder_input_tokens and prompt, and extract logits for the given index",
+    "Set hidden_states to None in next_fn",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Prepare test_eng_texts and test_spa_texts from test_pairs",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through each input_sentence in test_eng_texts",
+    "Inside the loop, call decode_sequences with the current input_sentence",
+    "Convert the output of decode_sequences to a numpy array and decode it to a UTF-8 string",
+    "Clean the translated string by removing special tokens [PAD], [START], and [END]",
+    "Split the cleaned translated string into a list of words",
+    "Calculate the BLEU score using nltk's modified_precision function with the reference and candidate translations",
+    "Append the calculated BLEU score to bleu_score list",
+    "Print the mean of the bleu_score list to verify the output",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Check the output logs for any errors or warnings related to tensor shapes or GPU memory",
+    "Assert that a segmentation fault occurs during the execution of the script"
+]
+```

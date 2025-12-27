@@ -1,0 +1,21 @@
+TITLE
+Parameter `encoder.to_logits.weight` Not Being Updated in Distributed Data Parallel (DDP) Context
+
+SYMPTOMS
+• The parameter `encoder.to_logits.weight` is not updating during training.
+• Problems arise when running the model with DDP, as this parameter does not appear to be part of the forward pass.
+
+EXPECTED BEHAVIOR
+• During training, all parameters, including `encoder.to_logits.weight`, should update properly and contribute to gradient computations.
+• When using DDP, the parameter updates should behave correctly without any issues.
+
+REPRODUCTION STEPS
+1. Clone the repository from https://gist.github.com/guillaumeguy/ff96c1f337d99109a6ab2666a896ad3c.
+2. Install necessary dependencies as specified in the README or setup file of the repository.
+3. Run the training script with DDP enabled, for example:
+```bash
+python -m torch.distributed.launch --nproc_per_node=2 train.py
+```
+4. Observe that the `encoder.to_logits.weight` parameter does not update during training.
+
+Additional Notes: The issue might be related to how parameters are registered or handled within the distributed setup, potentially requiring changes in how weights are initialized or accessed in a DDP context.

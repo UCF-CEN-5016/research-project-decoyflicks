@@ -1,0 +1,18 @@
+```json
+[
+    "Set up a Debian 12 environment with Miniforge3 and install TensorFlow 2.x using 'conda install tensorflow=2.x'",
+    "Install the Object Detection API by cloning the TensorFlow models repository: 'git clone https://github.com/tensorflow/models.git'",
+    "Navigate to the Object Detection directory: 'cd models/research'",
+    "Install the required dependencies for the Object Detection API using 'pip install -r requirements.txt'",
+    "Ensure that the Object Detection API is properly installed by running 'python setup.py build' and 'python setup.py install'",
+    "Create a directory structure for the model: 'mkdir -p models/centernet_mobilenetv2fp'",
+    "Create a sample 'pipeline.config' file in 'models/centernet_mobilenetv2fp/' with the following content: 'model { ... } train_config { ... } train_input_reader { ... } eval_input_reader { ... }'",
+    "Create a Python script named 'model_main_tf2.py' in the current directory with the following content: 'import tensorflow as tf; from object_detection import model_lib; model_lib.train(...)'",
+    "In 'model_main_tf2.py', set the model_dir to 'models/centernet_mobilenetv2fp' and pipeline_config_path to 'models/centernet_mobilenetv2fp/pipeline.config'",
+    "Add the following import statement in 'exporter.py': 'from tensorflow.contrib.quantize.python import graph_matcher'",
+    "Run the training script using the command: 'python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config'",
+    "Observe the output for the error message: 'ModuleNotFoundError: No module named 'tensorflow.conrtib'",
+    "Verify that the error occurs specifically due to the import statement in 'exporter.py' by commenting it out and rerunning the training script",
+    "Confirm that the error does not occur when the import statement is commented out, indicating that the issue is related to the missing module"
+]
+```

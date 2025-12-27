@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the inception module from inception/inception/image_processing.py",
+    "Set the TensorFlow flags: batch_size to 32, image_size to 299, num_preprocess_threads to 4, and num_readers to 4",
+    "Prepare the MNIST dataset by loading it using TensorFlow's tf.keras.datasets.mnist.load_data()",
+    "Preprocess the MNIST images to match the expected input size of 299x299 by resizing them using tf.image.resize_images()",
+    "Normalize the MNIST images to the range [-1, 1] by applying the transformation: image = (image / 255.0) * 2.0 - 1.0",
+    "Create a TensorFlow dataset from the preprocessed MNIST images and labels using tf.data.Dataset.from_tensor_slices()",
+    "Batch the dataset with a batch size of 32 using the .batch() method",
+    "Define a simple spatial transform network model using TensorFlow's Keras API, ensuring it includes layers that could lead to instability",
+    "Compile the model with a loss function that is sensitive to numerical stability, such as sparse_categorical_crossentropy, and an optimizer like Adam",
+    "Train the model on the MNIST dataset for a number of epochs (e.g., 10) while monitoring the loss value",
+    "During training, check for NaN values in the loss by adding a callback that asserts loss is not NaN after each epoch",
+    "Monitor GPU memory usage using a tool like nvidia-smi to observe memory consumption during training",
+    "Assert that GPU memory usage exceeds 10GB during the training process, indicating potential inefficiencies"
+]
+```

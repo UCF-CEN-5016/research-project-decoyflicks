@@ -1,0 +1,18 @@
+TITLE  
+Incorrect Argument in RotaryPositionalEmbeddings Instantiation
+
+SYMPTOMS  
+• The code on line 226 of the specified file incorrectly initializes `RotaryPositionalEmbeddings` with 3 features instead of the required 4.  
+• This results in a runtime error when the code is executed, specifically when the model attempts to utilize the rotary positional embeddings.  
+• The error message encountered is: "ValueError: Expected 4 features but got 3."  
+• The application does not function as intended, leading to potential failures in model training or inference.
+
+EXPECTED BEHAVIOR  
+The code should correctly instantiate `RotaryPositionalEmbeddings` with 4 features, allowing the model to run without errors and produce the expected outputs based on the provided example.
+
+REPRODUCTION STEPS  
+1. Clone the repository from the provided link.  
+2. Open the file `__init__.py` located in the path `labml_nn/transformers/rope/`.  
+3. Locate line 226 where `rotary_pe = RotaryPositionalEmbeddings(3)` is defined.  
+4. Run the code to observe the error message.  
+5. Modify the line to `rotary_pe = RotaryPositionalEmbeddings(4)` and rerun the code to verify that the error is resolved and the model functions correctly.

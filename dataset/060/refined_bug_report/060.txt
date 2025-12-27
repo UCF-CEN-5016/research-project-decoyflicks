@@ -1,0 +1,34 @@
+TITLE
+U-Net-like image segmentation model fails during dataset creation due to type mismatch in TensorFlow operations.
+
+SYMPTOMS
+• Error encountered on creating the datasets.
+• Specific error message mentions `TypeError` and `TensorFlow` switch case issues.
+• Detailed error trace highlights a mismatch between the return types of branches in `tf.switch_case`.
+
+EXPECTED BEHAVIOR
+When running the code to create training and validation datasets, the operations should successfully shuffle, map augmentations, batch, unpack inputs, and prefetch data without any type mismatches.
+
+REPRODUCTION STEPS
+1. Open the provided Jupyter notebook or Colab environment.
+2. Execute the cells up to where `train_ds` and `val_ds` are defined.
+3. Define `augment_fn`, `unpackage_inputs`, and other required functions (if not already done).
+4. Run the following code cell:
+```python
+augmented_train_ds = (
+train_ds.shuffle(BATCH_SIZE * 2)
+.map(augment_fn, num_parallel_calls=AUTOTUNE)
+.batch(BATCH_SIZE)
+.map(unpackage_inputs)
+.prefetch(buffer_size=tf.data.AUTOTUNE)
+)
+resized_val_ds = (
+val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE)
+.batch(BATCH_SIZE)
+.map(unpackage_inputs)
+.prefetch(buffer_size=tf.data.AUTOTUNE)
+)
+```
+5. Observe the error that arises during dataset creation.
+
+Note: Ensure all necessary libraries and dependencies are correctly installed and imported.

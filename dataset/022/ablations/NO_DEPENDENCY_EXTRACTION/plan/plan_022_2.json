@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.modeling.optimization",
+    "Define a batch size of 32 and input dimensions of (224, 224, 3) for image data",
+    "Create random uniform input data with shape (batch_size, height, width, channels) using tf.random.uniform",
+    "Set the optimizer type to 'adam' and define a learning rate of 0.001",
+    "Create a parameter dictionary for the optimizer configuration with 'optimizer' type as 'adam' and 'learning_rate' as constant",
+    "Instantiate the OptimizationConfig class with the parameter dictionary",
+    "Create an instance of the OptimizerFactory class using the OptimizationConfig instance",
+    "Build the learning rate using the optimizer factory's build_learning_rate method",
+    "Build the optimizer using the optimizer factory's build_optimizer method with the learning rate",
+    "Define a simple model using tf.keras.Sequential with a Conv2D layer and a Dense layer",
+    "Compile the model with the optimizer created earlier",
+    "Generate random labels for the input data with shape (batch_size, num_classes) using tf.random.uniform",
+    "Train the model for 1 epoch using model.fit with the input data and labels",
+    "Check the value of the standard deviation used in RandAugment by accessing the relevant attribute in the optimizer",
+    "Assert that the standard deviation is either 0 or 1, indicating the bug is present",
+    "Log the optimizer configuration to verify the parameters used during training"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import torch and the necessary modules from fairseq",
+    "Define a batch size of 2 and input dimensions of (10, 10) for the multi-headed attention layer",
+    "Create a dummy input tensor with shape (batch_size, seq_length, embed_dim) using torch.randn(batch_size, 10, 10)",
+    "Instantiate the RelPositionMultiHeadedAttention class from fairseq with parameters: num_heads=2, embed_dim=10, and kdim=10",
+    "Modify the initialization of the bias parameters (u, v) in the RelPositionMultiHeadedAttention class to use torch.Tensor(10, 10) instead of torch.zeros(10, 10)",
+    "Run a forward pass through the attention layer with the dummy input tensor",
+    "Capture the output of the attention layer",
+    "Check if the output contains NaN values by asserting torch.isnan(output).any() is True",
+    "Print the output tensor to verify its contents and confirm the presence of NaN values",
+    "Log the execution time of the forward pass to observe any performance issues"
+]
+```

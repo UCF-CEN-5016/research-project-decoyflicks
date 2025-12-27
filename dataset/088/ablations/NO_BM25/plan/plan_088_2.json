@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the module containing the align_right function.",
+    "Define a batch size of 4 and an embedding dimension of 16.",
+    "Create a random tensor x with shape (batch_size, sequence_length) filled with integers representing token indices, e.g., torch.randint(0, num_tokens, (batch_size, 10)).",
+    "Create a random tensor y with shape (batch_size, sequence_length) filled with integers representing token indices, e.g., torch.randint(0, num_tokens, (batch_size, 10)).",
+    "Instantiate the model class that contains the align_right function, passing num_tokens and dim as parameters.",
+    "Define a pad_id value, e.g., pad_id = 0, to be used for padding.",
+    "Call the forward method of the model with x and y as inputs.",
+    "Check the implementation of the align_right function to ensure it calls F.pad with value=0 instead of using the pad_id parameter.",
+    "Assert that the output of the forward method does not reflect the expected behavior when pad_id is used, e.g., check if padding does not occur correctly.",
+    "Print the output tensor to verify that the padding value is not equal to pad_id, indicating the bug."
+]
+```

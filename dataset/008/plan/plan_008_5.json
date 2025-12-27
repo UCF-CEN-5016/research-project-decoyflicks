@@ -1,0 +1,16 @@
+```json
+[
+    "Install TensorFlow version 2.13.0 and Python version 3.10.12 on Google Colab",
+    "Download the Faster R-CNN Inception ResNet V2 640x640 model from http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_inception_resnet_v2_640x640_coco17_tpu-8.tar.gz",
+    "Extract the downloaded model files to a local directory",
+    "Import necessary modules including TensorFlow, Keras, and the Faster R-CNN related modules from the official TensorFlow models repository",
+    "Load the pre-trained Faster R-CNN Inception ResNet V2 640x640 model using the appropriate function or method provided by the official library",
+    "Prepare a trivial dataset consisting of random images and corresponding labels. Ensure the images are of size 640x640 with three color channels (RGB)",
+    "Set up a simple data generator function that yields batches of the prepared data. Use a batch size of 1 for simplicity",
+    "Compile the pre-trained model using an optimizer, loss function, and any other necessary parameters. Ensure compatibility with TensorFlow 2.13.0",
+    "Use the compiled model to fit the prepared dataset using the `fit` method. Set the number of epochs to a reasonable value (e.g., 1) for demonstration purposes",
+    "During the fitting process, monitor the output for any error messages or exceptions related to TensorFlow versions or compatibility issues",
+    "Assert that the error message contains the phrase 'Value error is not supported for tf2 version' indicating the bug occurs during model training"
+]
+```
+

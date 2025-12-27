@@ -1,0 +1,20 @@
+```json
+[
+    "Set up a Python environment with PyTorch version 2.0.1+cu117 and CUDA available for GPU support.",
+    "Clone the 'vision_transformer' repository from GitHub using the specified commit hash.",
+    "Navigate to the 'vision_transformer/main.py' file within the cloned repository.",
+    "Identify and note the current value of `num_classes` in the argument parser (currently set to 16 for CIFAR10).",
+    "In a separate Python script, import the necessary modules from the 'torch', 'torch.nn', 'torchvision', and other dependencies listed as imports.",
+    "Define specific values for key parameters such as `batch_size`, `patch_size`, `latent_size`, `num_channels`, `num_heads`, `num_encoders`, `dropout`, `img_size`, and `epochs` (e.g., `batch_size = 4`, `patch_size = 16`, etc.).",
+    "Create a CIFAR10 dataset transform using 'Compose' to include resizing and conversion to tensor operations.",
+    "Load the CIFAR10 training and validation datasets with the specified transformations and batch sizes.",
+    "Initialize an instance of the `ViT` class with the default arguments, including `num_classes` set to 16.",
+    "Create an optimizer (e.g., Adam) and a loss criterion (CrossEntropyLoss).",
+    " Instantiate the `TrainEval` class with the model, data loaders, optimizer, criterion, and device (GPU if available).",
+    "Call the `train()` method on the `TrainEval` instance to execute the training process.",
+    "Monitor the training process during execution. Pay attention to the loss values calculated during training.",
+    "Assert that the initial loss value is close to a large number, indicating an issue with model initialization or hyperparameters.",
+    "Verify that the GPU memory usage is within expected limits and does not increase significantly during the training phase."
+]
+```
+

@@ -1,0 +1,28 @@
+{
+  "bug_report": "089",
+  "module": {
+    "module": "tests",
+    "files": [
+      {
+        "path": "tests/test_x_transformers.py",
+        "snippets": [
+          {
+            "lines": "119-134",
+            "code": "def test_adaptive_layernorm():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            use_adaptive_layernorm = True,\n            use_adaptive_layerscale = True\n        )\n    )\n\n    x = torch.randint(0, 256, (2, 1024))\n    condition = torch.randn(2, 768)\n\n    model(x, condition = condition)\n\ndef test_adaptive_rmsnorm():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            use_adaptive_rmsnorm = True,\n            adaptive_condition_mlp = True\n        )\n    )\n\n    x = torch.randint(0, 256, (2, 1024))\n    condition = torch.randn(2, 768)\n\n    model(x, condition = condition)\n\ndef test_attn_softclamp_logits():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            attn_softclamp_logits = True,\n        )\n    )\n\n    x = torch.randint(0, 256, (1, 1024))\n\n    model(x)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "tests/test_x_transformers.py",
+      "snippets": [
+        {
+          "lines": "119-134",
+          "code": "def test_adaptive_layernorm():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            use_adaptive_layernorm = True,\n            use_adaptive_layerscale = True\n        )\n    )\n\n    x = torch.randint(0, 256, (2, 1024))\n    condition = torch.randn(2, 768)\n\n    model(x, condition = condition)\n\ndef test_adaptive_rmsnorm():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            use_adaptive_rmsnorm = True,\n            adaptive_condition_mlp = True\n        )\n    )\n\n    x = torch.randint(0, 256, (2, 1024))\n    condition = torch.randn(2, 768)\n\n    model(x, condition = condition)\n\ndef test_attn_softclamp_logits():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            attn_softclamp_logits = True,\n        )\n    )\n\n    x = torch.randint(0, 256, (1, 1024))\n\n    model(x)"
+        }
+      ]
+    }
+  ]
+}

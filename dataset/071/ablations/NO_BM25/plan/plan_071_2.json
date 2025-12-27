@@ -1,0 +1,21 @@
+```json
+[
+    "Ensure Python version is 3.12.3 by running 'python --version'",
+    "Create a new virtual environment using 'python -m venv venv'",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows",
+    "Install the required libraries from the requirements file using 'pip install -r requirements.txt'",
+    "Verify that the 'transformers' library is installed by running 'pip show transformers'",
+    "Check the installed version of 'transformers' using 'pip show transformers' and ensure it is compatible with DeepSpeed",
+    "Import the necessary modules in a new Python script: 'import argparse', 'import deepspeed', 'from transformers import ...'",
+    "Create a script named 'e2e_rlhf.py' with the following content:",
+    "Define the main function and include the argument parser with the following parameters: '--actor-model', '--reward-model', '--deployment-type'",
+    "Set default values for '--actor-model' to 'facebook/opt-1.3b', '--reward-model' to 'facebook/opt-350m', and '--deployment-type' to 'single_gpu'",
+    "Add the line 'import deepspeed' in the script to ensure the module is referenced",
+    "Run the script using the command 'python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu'",
+    "Capture the output of the script execution to check for errors",
+    "Verify that the output contains 'ModuleNotFoundError: No module named 'transformers.deepspeed''",
+    "Check the installed packages in the virtual environment using 'pip freeze' to confirm 'transformers' and 'deepspeed' are listed",
+    "Ensure that the 'transformers' library version supports DeepSpeed by checking the official documentation",
+    "If the error occurs, log the complete error message and the output of 'pip freeze' for further analysis"
+]
+```

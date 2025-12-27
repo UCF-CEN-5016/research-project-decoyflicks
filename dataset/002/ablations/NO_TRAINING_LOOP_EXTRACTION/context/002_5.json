@@ -1,0 +1,11 @@
+{
+  "bug_report": "002",
+  "rank": 5,
+  "score": 0.9753607511520386,
+  "main_file": {
+    "path": "research/object_detection/model_hparams.py",
+    "content": "# Copyright 2017 The TensorFlow Authors. All Rights Reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n# ==============================================================================\n\"\"\"Hyperparameters for the object detection model in TF.learn.\n\nThis file consolidates and documents the hyperparameters used by the model.\n\"\"\"\n\nfrom __future__ import absolute_import\nfrom __future__ import division\nfrom __future__ import print_function\n\n# pylint: disable=g-import-not-at-top\ntry:\n  from tensorflow.contrib import training as contrib_training\nexcept ImportError:\n  # TF 2.0 doesn't ship with contrib.\n  pass\n# pylint: enable=g-import-not-at-top\n\n\ndef create_hparams(hparams_overrides=None):\n  \"\"\"Returns hyperparameters, including any flag value overrides.\n\n  Args:\n    hparams_overrides: Optional hparams overrides, represented as a\n      string containing comma-separated hparam_name=value pairs.\n\n  Returns:\n    The hyperparameters as a tf.HParams object.\n  \"\"\"\n  hparams = contrib_training.HParams(\n      # Whether a fine tuning checkpoint (provided in the pipeline config)\n      # should be loaded for training.\n      load_pretrained=True)\n  # Override any of the preceding hyperparameter values.\n  if hparams_overrides:\n    hparams = hparams.parse(hparams_overrides)\n  return hparams\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

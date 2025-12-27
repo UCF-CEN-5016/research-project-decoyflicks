@@ -1,0 +1,18 @@
+TITLE  
+NaN Encountered in `cdist()` Due to Float Precision Overflow  
+
+SYMPTOMS  
+• NaN values are produced in the output of the `cdist()` function.  
+• Error message: "nan encountered in `cdist()`".  
+• The distance computation can yield negative values due to float precision issues, resulting in unexpected NaN outputs.  
+
+EXPECTED BEHAVIOR  
+The `cdist()` function should compute distances without producing NaN values, ensuring all computed distances are non-negative. The distances should be calculated correctly without overflow or underflow issues.  
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries and the `cdist()` function from the vector quantization module.  
+2. Prepare two tensors `x` and `y` with values that could lead to float precision overflow during distance computation.  
+3. Call the `cdist()` function with the prepared tensors.  
+4. Observe the output for any NaN values or error messages.  
+5. Implement `torch.clamp(..., min=0)` on the distance computation to prevent negative values and re-run the test.  
+6. Confirm that the output no longer contains NaN values.

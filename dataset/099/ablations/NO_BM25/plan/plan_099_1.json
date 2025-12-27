@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the RotaryEmbedding class from rotary_embedding_torch/rotary_embedding_torch.py",
+    "Set the device to 'cuda' to utilize GPU for training",
+    "Define a batch size of 8 and sequence length of 128",
+    "Create random input tensors for queries (q) and keys (k) with shape (batch_size, seq_length, embedding_dim) where embedding_dim is set to 64",
+    "Instantiate the RotaryEmbedding class with parameters: dim=64, learned_freq=True, use_xpos=True, and cache_if_possible=True",
+    "Set the model to training mode by calling model.train()",
+    "Define a loss function, e.g., torch.nn.MSELoss(), and an optimizer, e.g., torch.optim.Adam(model.parameters(), lr=1e-3)",
+    "Perform a forward pass by calling the rotate_queries_and_keys method with the input tensors q and k",
+    "Calculate the loss using the output from the forward pass and a target tensor of the same shape filled with random values",
+    "Call optimizer.zero_grad() to clear previous gradients",
+    "Call loss.backward() to compute gradients",
+    "Check for NaN values in the loss by asserting torch.isnan(loss).any()",
+    "If NaN values are detected, print 'NaN loss detected during training'",
+    "Monitor GPU memory usage during execution to ensure it is within expected limits",
+    "Log the loss value after each iteration to observe the behavior over time"
+]
+```

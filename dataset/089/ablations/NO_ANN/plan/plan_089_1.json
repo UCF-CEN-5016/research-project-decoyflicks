@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from the x_transformers package.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define the following parameters: dim = 64, heads = 8, kv_heads = 4, dim_head = 16, and batch_size = 2.",
+    "Create a random input tensor with shape (batch_size, sequence_length, dim) using torch.randn(batch_size, 10, dim).",
+    "Instantiate the Attention class with parameters: dim=dim, heads=heads, kv_heads=kv_heads, qk_norm=True.",
+    "Call the forward method of the Attention instance with the input tensor and no additional parameters.",
+    "Capture the output of the forward method.",
+    "Create a mask tensor with shape (batch_size, sequence_length) filled with True values using torch.ones(batch_size, 10, dtype=torch.bool).",
+    "Call the forward method of the Attention instance again, this time passing the mask tensor as an argument.",
+    "Capture the output of the second forward call.",
+    "Assert that the outputs from the two forward calls are not equal to verify the conflict between qk_norm and kv_heads.",
+    "Print the shapes of the outputs to confirm they are as expected: output1.shape should be (batch_size, 10, dim) and output2.shape should also be (batch_size, 10, dim).",
+    "Log any discrepancies in the output values to identify the nature of the conflict."
+]
+```

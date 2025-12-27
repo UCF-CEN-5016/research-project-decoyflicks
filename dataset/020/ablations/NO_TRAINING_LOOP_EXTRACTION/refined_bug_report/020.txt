@@ -1,0 +1,36 @@
+**TITLE**  
+Compatibility issue between tf-models-official==2.12.0 and Python 3.8 causing TypeError during training evaluation.
+
+**SYMPTOMS**  
+• Encountered a `TypeError` when attempting to run the training and evaluation of the model.  
+• Error message:  
+  ```
+  TypeError: in user code:
+      File "/usr/local/lib/python3.8/dist-packages/official/core/base_trainer.py", line 442, in eval_step  *
+          return passthrough_logs | logs
+      TypeError: unsupported operand type(s) for |: 'dict' and 'dict'
+  ```  
+• The issue arises specifically during the execution of the `run_experiment` function.
+
+**EXPECTED BEHAVIOR**  
+When the software functions correctly, the model should train and evaluate without any errors, returning the training and evaluation logs as expected.
+
+**REPRODUCTION STEPS**  
+1. Follow the Object Detection with Model Garden tutorial: [Object Detection Tutorial](https://www.tensorflow.org/tfmodels/vision/object_detection).  
+2. Execute the following code snippet:  
+   ```python
+   model, eval_logs = tfm.core.train_lib.run_experiment(
+       distribution_strategy=distribution_strategy,
+       task=task,
+       mode='train_and_eval',
+       params=exp_config,
+       model_dir=model_dir,
+       run_post_eval=True)
+   ```  
+3. Observe the error message related to the unsupported operand types during the evaluation step.
+
+**ADDITIONAL CONTEXT**  
+• The issue appears to be related to the compatibility between `tf-models-official==2.12.0` and `Python==3.8`.  
+• The error may stem from the use of the `|` operator for merging dictionaries, which is not supported in Python versions prior to 3.9.  
+• My environment is based on the Docker image `tensorflow/tensorflow:2.12.0-gpu-jupyter`.  
+• For further diagnosis, refer to this [Stack Overflow link](https://stackoverflow.com/questions/62498581/typeerror-when-merging-dictionaries-unsupported-operand-types-for-dict-a).

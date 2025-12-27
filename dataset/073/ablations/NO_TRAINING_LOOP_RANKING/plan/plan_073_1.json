@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Ensure that PyTorch and DeepSpeed are installed with the correct versions compatible with your CUDA version",
+    "Create a new Python script named 'test_deepspeed_domino.py'",
+    "Import necessary libraries in 'test_deepspeed_domino.py': 'import torch', 'import deepspeed', 'from domino.optimizer.optimizer import MixedPrecisionOptimizer'",
+    "Define a batch size of 2 and model dimensions for GPT-3 with 2.7 billion parameters",
+    "Set the model parallelism parameters: 'tensor_model_parallel_size = 2' and 'pipeline_model_parallel_size = 2'",
+    "Create a dummy model with 2.7 billion parameters using 'torch.nn.Module' and initialize it with random weights",
+    "Wrap the model with DeepSpeed using 'model = deepspeed.initialize(model=model, model_parameters=model.parameters())[0]'",
+    "Create a dummy input tensor with shape (batch_size, sequence_length, embedding_dim) where sequence_length is 1024 and embedding_dim is 2048",
+    "Define a dummy optimizer using 'optimizer = MixedPrecisionOptimizer(optimizer=torch.optim.Adam(model.parameters()), clip_grad=1.0, log_num_zeros_in_grad=True, params_have_main_grad=True, use_contiguous_buffers_in_local_ddp=False, fp16=True, bf16=False, params_dtype=torch.float32, grad_scaler=None, models=[model])'",
+    "Run the training loop for one iteration: 'for epoch in range(1): optimizer.zero_grad(); outputs = model(dummy_input); loss = outputs.sum(); loss.backward(); optimizer.step()'",
+    "Execute the script using 'bash pretrain_gpt3_2.7b.sh'",
+    "Monitor the output for the error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce' to confirm the bug occurs",
+    "Check the initialization of the 'cdb' object in the optimizer to ensure it is not set to None before the all_reduce call"
+]
+```

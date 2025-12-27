@@ -1,0 +1,18 @@
+Uninitialised bias parameters in RelPositionMultiHeadedAttention
+
+## 🐛 Bug
+
+The (u, v) bias terms in the MHA layer with relative position encodings are defined using `torch.Tensor`s:
+https://github.com/facebookresearch/fairseq/blob/4fe8583396191c22011350248119db98ec1b5cb8/fairseq/modules/espnet_multihead_attention.py#L127-L128
+
+Since `torch.Tensor` creates an un-initialised tensor, its use results in non-deterministic behaviour, poor initialisation, and nans if you have an unlucky init:
+```python
+>>>import torch
+>>> torch.Tensor(1, 1).sum()
+tensor(0.)
+>>> torch.Tensor(10, 10).sum()
+tensor(4.9312e-38)
+>>> torch.Tensor(100, 100).sum()
+tensor(nan)
+```
+Section 3.3 of the referenced paper [Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context](https://arxiv.org/pdf/1901.02860.pdf) does not specify the initialisation for the bias terms. Since `torch.Tensor` is typically populated with zeros, setting the initialisation to `torch.zeros` should provide a fix that is close to the intended behaviour.

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, NumPy, and Matplotlib",
+    "Set the TensorFlow version to 2.10.0 by running '!pip install tensorflow==2.10.0'",
+    "Import the object detection utilities from TensorFlow Model Garden: 'from object_detection.utils import ops as utils_ops'",
+    "Define a batch size of 1 and image dimensions of 640x640",
+    "Load a sample image and preprocess it to have shape (1, height, width, 3) using NumPy",
+    "Create a dummy detection output dictionary with keys: 'detection_boxes', 'detection_scores', 'detection_classes', and 'num_detections'",
+    "Set 'detection_boxes' to a random tensor of shape (1, 10, 4) representing 10 bounding boxes",
+    "Set 'detection_scores' to a random tensor of shape (1, 10) with values between 0 and 1 representing confidence scores",
+    "Set 'detection_classes' to a random integer tensor of shape (1, 10) representing class indices",
+    "Set 'num_detections' to a tensor with value 10, indicating the number of detections",
+    "Call the function 'utils_ops.reframe_box_masks_to_image_masks' with parameters: detection_masks (None), detection_boxes, image_height (640), image_width (640)",
+    "Capture the output of the function call and check for any exceptions",
+    "Verify that a TypeError is raised with the message 'Got an unexpected keyword argument 'box_ind''",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, matplotlib, numpy, and random",
+    "Set the random seed for reproducibility using keras.utils.set_random_seed(42)",
+    "Define configuration parameters: image_size = 72, patch_size = 8, batch_size = 2048",
+    "Load the CIFAR-10 dataset using keras.datasets.cifar10.load_data()",
+    "Slice the training data to use the first 40,000 samples for training and the rest for validation",
+    "Normalize the training and validation images by dividing by 255.0 to scale pixel values to [0, 1)",
+    "Define a function to create a random image from the training dataset: image = x_train[np.random.choice(range(x_train.shape[0]))]",
+    "Create a figure using plt.figure(figsize=(4, 4)) to display the random image",
+    "Display the random image using plt.imshow(image.astype('uint8')) and plt.axis('off')",
+    "Resize the random image to (image_size, image_size) using ops.image.resize with dtype='float32'",
+    "Convert the resized image to a tensor using ops.convert_to_tensor([image])",
+    "Instantiate the Patches layer with the defined patch_size",
+    "Call the Patches layer with the resized image tensor and store the result in patches",
+    "Print the image size, patch size, patches per image, and elements per patch for debugging",
+    "Create a subplot grid to visualize the patches using plt.subplot with dimensions based on the number of patches",
+    "Iterate over the patches and reshape each patch to (patch_size, patch_size, 3) for visualization",
+    "Display each patch using plt.imshow and plt.axis('off')",
+    "Run the code cell to trigger the InvalidArgumentError when calling Patches.call()",
+    "Capture the error message and verify it matches the expected InvalidArgumentError regarding tensor types"
+]
+```

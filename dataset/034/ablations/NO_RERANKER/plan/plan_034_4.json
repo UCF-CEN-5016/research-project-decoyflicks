@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, argparse, and the model from modeling.py",
+    "Define a batch size of 12 and set the learning rate to 3e-5",
+    "Set the seed for random number generators to 42 for reproducibility",
+    "Create a command-line argument parser using argparse to accept parameters for the model, dataset path, and other configurations",
+    "Add arguments to the parser for output directory, dataset path, model name, learning rate, batch size, and other necessary parameters",
+    "Set the model name to 'BERT_LARGE' and specify the path to the pre-trained model weights as '/home/bert_large/bert_large_qa.pt'",
+    "Set the dataset path to '/home/bert_large/squad/v1.1' and the vocabulary path to 'vocab/vocab'",
+    "Prepare a dummy input tensor with shape (batch_size, sequence_length, embedding_dim) where sequence_length is 512 and embedding_dim is 1024",
+    "Call the model's forward method with the dummy input tensor to trigger the gelu function",
+    "In the gelu function, ensure that the 'approximate' argument is set to True (which is a boolean) instead of a string",
+    "Run the script using the command: bash scripts/run_squad.sh /home/bert_large/bert_large_qa.pt 0.2 12 3e-5 0.1 tf32 1 42 /home/bert_large/squad/v1.1 vocab/vocab results/SQuAD train bert_configs/large.json",
+    "Capture the output and check for the TypeError: gelu(): argument 'approximate' must be str, not bool",
+    "Log the error message to verify that the bug has occurred"
+]
+```

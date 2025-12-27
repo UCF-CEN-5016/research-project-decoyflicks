@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the tensorflow_models module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Check TensorFlow version using 'print(tf.version.VERSION)' to ensure it is 2.x",
+    "Define a batch size of 32 and input dimensions of [None, 1152] (assuming 1152 is the sum of feature sizes from the task configuration)",
+    "Create a random input tensor with shape (batch_size, num_frames, num_features) where num_frames is set to 10 and num_features is 1152",
+    "Create a random labels tensor with shape (batch_size, num_classes) where num_classes is set to 386 (assuming this is the number of classes for the YT8M task)",
+    "Create a random tensor for num_frames with shape (batch_size,) and fill it with the value 10",
+    "Define a mock task configuration that includes 'train_data' with 'feature_sizes' set to [1152] and 'num_classes' set to 386",
+    "Instantiate the YT8MTask class from the official.projects.yt8m.tasks.yt8m_task module using the mock task configuration",
+    "Call the build_model method of the YT8MTask instance to create the model",
+    "Prepare a mock input dictionary with keys 'video_matrix', 'labels', and 'num_frames' using the created input tensors",
+    "Call the train_step method of the YT8MTask instance with the mock input dictionary, the created model, and a dummy optimizer (e.g., tf.keras.optimizers.Adam())",
+    "Capture the output logs from the train_step method",
+    "Verify that the output logs do not contain any NaN values in the loss calculation",
+    "Check for ImportError by attempting to import 'tensorflow_text' and assert that it raises an ImportError",
+    "Log the ImportError message to confirm it matches the expected error message regarding 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Ensure that the environment is set up with Python 3.10 and TensorFlow 2.x installed via pip"
+]
+```

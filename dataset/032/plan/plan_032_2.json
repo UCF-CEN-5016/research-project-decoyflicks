@@ -1,0 +1,18 @@
+```json
+[
+    "Import sklearn and BayesianGaussianMixture from sklearn.mixture",
+    "Import torch, zeros, and cat from torch",
+    "Create a batch size of 100 and dimensions of height=28 and width=28 for the input data",
+    "Generate random uniform input data with shape (batch_size, height, width)",
+    "Define metadata including categorical variables with specific categories and mappings",
+    "Prepare the input data by encoding categorical variables using one-hot encoding and scaling numerical variables",
+    "Fit a BayesianGaussianMixture model to the prepared input data with n_components=5",
+    "Transform the input data using the fitted BayesianGaussianMixture model",
+    "Inverse transform the transformed data back to the original format",
+    "Compare the inverse transformed data to the original input data to identify discrepancies",
+    "Assert that there are no NaN values in the inverse transformed data",
+    "Monitor memory usage during the transformation process",
+    "Verify that memory usage is within expected limits"
+]
+```
+

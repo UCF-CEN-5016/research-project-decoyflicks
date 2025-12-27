@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and necessary modules: import tensorflow as tf and from tensorflow.keras import layers",
+    "Define constants: BATCH_SIZE = 32, AUTOTUNE = tf.data.AUTOTUNE, IMAGE_HEIGHT = 160, IMAGE_WIDTH = 160, CHANNELS = 1",
+    "Create a synthetic dataset: x_train = tf.random.uniform((100, IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS), minval=0, maxval=1, dtype=tf.float32) and y_train = tf.random.uniform((100,), minval=0, maxval=2, dtype=tf.int32)",
+    "Create a tf.data.Dataset from the synthetic data: train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train))",
+    "Define the augment_fn function: def augment_fn(image, label): return image, label",
+    "Define the unpackage_inputs function: def unpackage_inputs(inputs): return inputs",
+    "Create the augmented_train_ds pipeline: augmented_train_ds = (train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE))",
+    "Run the pipeline: for images, labels in augmented_train_ds.take(1): pass",
+    "Capture and print any errors that occur during the execution of the pipeline",
+    "Verify the error message contains 'different types' and check the tensor shapes and data types in the error message"
+]
+```

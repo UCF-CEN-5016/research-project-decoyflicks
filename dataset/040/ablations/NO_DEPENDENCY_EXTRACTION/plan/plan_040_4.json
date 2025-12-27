@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and MultiHeadAttention from labml_nn.transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 32 and input dimensions of (batch_size, seq_len, d_model) where seq_len=128 and d_model=512",
+    "Create random input data with shape (32, 128, 512) using torch.randn",
+    "Initialize the MultiHeadAttention module with parameters: n_heads=8, d_model=512, and dropout=0.1",
+    "Create a random tensor for attention weights with shape (32, 8, 128, 128) using torch.randn",
+    "Perform the attention calculation using the einsum function with the attention weights and input data",
+    "Apply softmax on the attention weights along the incorrect axis (dim=1) to simulate the bug",
+    "Extract the output from the attention calculation",
+    "Print the output shape to verify it matches expected dimensions (should be (32, 128, 512))",
+    "Check for NaN values in the output tensor using torch.isnan and assert that any NaN values are present",
+    "Log the attention weights to verify their values before and after softmax operation",
+    "Run the model on a small dataset (CIFAR-10) to ensure the bug is reproducible during training",
+    "Monitor the training loss to confirm it behaves unexpectedly due to the bug in attention calculation",
+    "Assert that the training loss does not decrease as expected, indicating a potential issue with the attention mechanism"
+]
+```

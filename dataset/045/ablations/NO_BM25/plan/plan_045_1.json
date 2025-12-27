@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, fairseq, and any other required modules.",
+    "Set the DATA_ROOT variable to the path where the dataset is located, e.g., DATA_ROOT = '/path/to/dataset'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the following content:\n  - extractor_mode: 'default'\n  - encoder_layers: 12\n  - encoder_embed_dim: 768\n  - conv_feature_layers: '[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]'\n  - quantize_input: false\n  - final_dim: 768\n  - dropout_input: 0.1\n  - mask_prob: 0.65\n  - mask_length: 10\n  - num_negatives: 100\n  - crop_seq_to_multiple: 1",
+    "Download or prepare a pre-trained model and save it as /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt.",
+    "Set the target code size to 100 and vocoder to 'code_hifigan'.",
+    "Define a batch size of 32 and set max_tokens to 50000.",
+    "Run the fairseq-generate command with the following parameters:\n  fairseq-generate $DATA_ROOT \\\n    --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml \\\n    --task speech_to_speech \\\n    --target-is-code \\\n    --target-code-size 100 \\\n    --vocoder code_hifigan \\\n    --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt \\\n    --gen-subset test \\\n    --max-tokens 50000 \\\n    --beam 10 \\\n    --max-len-a 1 \\\n    --results-path /root/autodl-tmp/results",
+    "Monitor the console output for any error messages related to the key 'input_feat_per_channel'.",
+    "Assert that the error message 'Key 'input_feat_per_channel' is not in struct' is present in the output.",
+    "Check the structure of the model configuration to ensure that 'input_feat_per_channel' is not defined.",
+    "Validate that the model is being loaded correctly and that the expected parameters are being passed."
+]
+```

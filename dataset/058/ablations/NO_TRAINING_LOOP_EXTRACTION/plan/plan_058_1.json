@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, and matplotlib",
+    "Define a batch size of 2 and set the number of classes to 80",
+    "Create a function to preprocess the dataset similar to the COCO dataset structure, ensuring it includes images and bounding boxes",
+    "Load a custom dataset structured like COCO, ensuring it has images and corresponding bounding boxes in the format [xmin, ymin, xmax, ymax]",
+    "Create a tf.data.Dataset object for the training dataset using the custom dataset, applying the preprocessing function",
+    "Create a tf.data.Dataset object for the validation dataset using the custom dataset, applying the same preprocessing function",
+    "Define the model parameters: set learning rates and learning rate boundaries for the optimizer",
+    "Initialize the RetinaNet model with a ResNet50 backbone and compile it with a custom loss function",
+    "Set up callbacks for model checkpointing during training",
+    "Call model.fit with the training dataset, taking 20 samples, and validation dataset, taking 20 samples, for 1 epoch",
+    "Monitor the training process for any errors during the fit call",
+    "Capture the output error message during model.fit execution to verify the InvalidArgumentError occurs",
+    "Check the shape of the input data being fed into the model to ensure it matches the expected dimensions",
+    "Assert that the error message contains 'InvalidArgumentError' and specifically check for 'GatherV2_1' in the traceback"
+]
+```

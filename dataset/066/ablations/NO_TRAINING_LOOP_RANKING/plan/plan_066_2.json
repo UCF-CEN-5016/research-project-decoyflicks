@@ -1,0 +1,31 @@
+```json
+[
+    "Import necessary modules: keras, tensorflow, tensorflow_datasets, and matplotlib",
+    "Set the environment variable for Keras backend to 'tensorflow'",
+    "Define hyperparameters: set unlabeled_dataset_size to 100000, labeled_dataset_size to 5000, image_channels to 3, num_epochs to 20, batch_size to 525, width to 128, and temperature to 0.1",
+    "Define the function prepare_dataset() to load the STL-10 dataset with specified batch sizes for labeled and unlabeled data",
+    "Inside prepare_dataset(), calculate steps_per_epoch as (unlabeled_dataset_size + labeled_dataset_size) // batch_size",
+    "Calculate unlabeled_batch_size as unlabeled_dataset_size // steps_per_epoch and labeled_batch_size as labeled_dataset_size // steps_per_epoch",
+    "Load the unlabeled dataset using tfds.load() with split='unlabelled' and batch it with unlabeled_batch_size",
+    "Load the labeled dataset using tfds.load() with split='train' and batch it with labeled_batch_size",
+    "Zip the labeled and unlabeled datasets together using tf.data.Dataset.zip()",
+    "Return the train_dataset, labeled_train_dataset, and test_dataset from prepare_dataset()",
+    "Call prepare_dataset() to initialize train_dataset, labeled_train_dataset, and test_dataset",
+    "Define the function get_encoder() to create a Sequential model with Conv2D layers and a Flatten layer",
+    "Define the function get_augmenter() to create a Sequential model for image augmentation with RandomFlip, RandomTranslation, and RandomZoom layers",
+    "Define the ContrastiveModel class that inherits from keras.Model, initializing the encoder and projection head",
+    "Implement the train_step() method in ContrastiveModel to process both labeled and unlabeled images",
+    "In train_step(), concatenate unlabeled_images and labeled_images along axis 0",
+    "Apply contrastive augmentations to the concatenated images twice to create augmented_images_1 and augmented_images_2",
+    "Call the encoder on augmented_images_1 and augmented_images_2 to get features_1 and features_2",
+    "Pass features_1 and features_2 through the projection head to get projections_1 and projections_2",
+    "Define the contrastive_loss() method to compute the InfoNCE loss between projections_1 and projections_2",
+    "Compile the ContrastiveModel with Adam optimizers for both contrastive and probe optimizers",
+    "Fit the pretraining_model on train_dataset for num_epochs and validate on test_dataset",
+    "Check the output of the training process for any warnings or errors related to unused variables",
+    "Locate the variable level2_dau_2 in the code and verify it is not used in the selective_kernel_feature_fusion function call",
+    "Assert that the variable level2_dau_2 is not referenced in the code after its declaration",
+    "Verify that the selective_kernel_feature_fusion function is called with level3_dau_2 instead of level2_dau_2",
+    "Log the output of the training process to confirm the presence of the unused variable warning"
+]
+```

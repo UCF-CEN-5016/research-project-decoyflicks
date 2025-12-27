@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow, Keras, and TensorFlow Datasets modules: 'import tensorflow as tf', 'from keras import layers, models', 'import tensorflow_datasets as tfds'",
+    "Set the following constants: NUM_CLASSES = 4, INPUT_HEIGHT = 224, INPUT_WIDTH = 224, BATCH_SIZE = 32, AUTOTUNE = tf.data.AUTOTUNE",
+    "Load the Oxford Pets dataset using TensorFlow Datasets with the following command: '(train_ds, valid_ds, test_ds) = tfds.load(\"oxford_iiit_pet\", split=[\"train[:85%]\", \"train[85%:]\", \"test\"], batch_size=BATCH_SIZE, shuffle_files=True)'",
+    "Define a function 'unpack_resize_data' that takes a dataset section and resizes the image and segmentation mask to (INPUT_HEIGHT, INPUT_WIDTH) using 'keras.layers.Resizing'",
+    "Map the 'unpack_resize_data' function to the training dataset: 'train_ds = train_ds.map(unpack_resize_data, num_parallel_calls=AUTOTUNE)'",
+    "Define an augmentation function 'augment_fn' that applies random transformations to the images and masks, ensuring it returns tensors of the same shape but different types (e.g., float32 for images and int64 for masks)",
+    "Shuffle the training dataset with a buffer size of BATCH_SIZE * 2, then apply the augment_fn, batch the dataset with BATCH_SIZE, and unpackage inputs using the following code: 'augmented_train_ds = (train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)'",
+    "Run the code to create 'augmented_train_ds' and monitor for errors during execution",
+    "Capture the error message that states: 'Tensor(..., shape=(160, 160, 1), dtype=float32) and Tensor(..., shape=(160, 160, 1), dtype=int64) have different types'",
+    "Verify that the error occurs consistently by running the dataset preparation and augmentation steps multiple times"
+]
+```

@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the provided code snippet",
+    "Define a batch size of 100 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Initialize a TestRunner object with the defined model and datasets",
+    "Call the train_and_evaluate method on the Controller object with parameters train_steps=10, eval_steps=2, and eval_interval=6",
+    "Monitor the evaluation output for NaN values in loss calculation",
+    "Assert that at least one of the evaluations returns a NaN value in the 'eval_loss' key"
+]
+```
+

@@ -1,0 +1,27 @@
+TITLE
+Sparse Categorical Cross-Entropy Loss Applied with Extra Dimension Causing Issues
+
+SYMPTOMS
+• The model trained poorly for the specific use case.
+• Incorrect application of `SparseCategoricalCrossentropy` loss function due to an extra dimension in label format.
+• Potential error messages or behaviors not specified but likely related to model training issues.
+
+EXPECTED BEHAVIOR
+• The model should train effectively with the correct labels and loss function application.
+• The output shape of the network's predictions should match the expected input dimensions for `SparseCategoricalCrossentropy`.
+
+REPRODUCTION STEPS
+1. Clone the repository from [this link](https://github.com/keras-team/keras-io).
+2. Navigate to the file located at [this path](https://github.com/keras-team/keras-io/blob/master/examples/vision/oxford_pets_image_segmentation.py#L96).
+3. Identify where the labels are being prepared for training, specifically around line 96.
+4. Notice that the label preparation includes an extra dimension, as indicated in the bug report.
+5. Follow the code to see how `SparseCategoricalCrossentropy` is applied during model compilation (around line 99).
+6. Run the training process and observe poor performance of the model.
+
+For reference:
+- The incorrect label format: Labels are currently prepared with an additional dimension, e.g., `(batch_size, height, width, num_classes)`.
+- Corrected label format: Remove the extra dimension to make it `(batch_size, height * width, num_classes)` or directly handle 2D labels if applicable.
+
+To resolve this issue:
+1. Modify line 96 to remove the last dimension from the labels.
+2. Ensure that the model's output layer has the appropriate shape to match the label format expected by `SparseCategoricalCrossentropy`.

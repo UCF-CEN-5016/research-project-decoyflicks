@@ -1,0 +1,18 @@
+TITLE  
+Unexpected 100% accuracy on training dataset in ViT model
+
+SYMPTOMS  
+• The accuracy rate reaches 100% in the first epoch of training.  
+• Loss values decrease to near zero, indicating potential overfitting.  
+• Validation accuracy also reaches 100%, which is unusual for most datasets.  
+• Training logs show consistent performance with no variation in accuracy across epochs.  
+
+EXPECTED BEHAVIOR  
+The model should achieve a reasonable accuracy rate that reflects its ability to generalize to unseen data, rather than achieving a perfect score on the training dataset. The loss should decrease gradually, and validation accuracy should not reach 100%.
+
+REPRODUCTION STEPS  
+1. Set up the environment and install required libraries.  
+2. Use the provided code snippet to initialize the Linformer and ViT model with the specified parameters.  
+3. Train the model on the example dataset.  
+4. Observe the training and validation accuracy and loss metrics after each epoch.  
+5. Note any discrepancies or unexpected results in the output logs.

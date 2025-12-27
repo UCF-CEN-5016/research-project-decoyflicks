@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the official model garden library: 'import tensorflow as tf' and 'from official import tf_modeling as tfm'",
+    "Set Python version to 3.8 in the environment to match the reported issue.",
+    "Pull the Docker image for TensorFlow 2.12.0 with GPU support: 'docker pull tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Run the Docker container with the command: 'docker run --gpus all -it --rm tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Install the official models library version 2.12.0 inside the Docker container: 'pip install tf-models-official==2.12.0'",
+    "Import necessary libraries: 'from official.vision import model_lib' and 'from official.core import train_lib'",
+    "Define a distribution strategy: 'distribution_strategy = tf.distribute.MirroredStrategy()'",
+    "Create a configuration dictionary 'exp_config' with necessary parameters for training, including 'model_config', 'train_config', and 'eval_config'.",
+    "Set 'model_dir' to a valid directory path for saving model checkpoints, e.g., 'model_dir = '/tmp/model_dir'",
+    "Create a task object for the model: 'task = model_lib.Task(model_config=exp_config['model'], train_config=exp_config['train'], eval_config=exp_config['eval'])'",
+    "Call the training and evaluation function: 'model, eval_logs = tfm.core.train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)'",
+    "Capture the output and error logs during the execution of the training and evaluation function.",
+    "Verify that the output contains the error message: 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict''",
+    "Check the line number in the error message to confirm it originates from 'official/core/base_trainer.py' at line 442."
+]
+```

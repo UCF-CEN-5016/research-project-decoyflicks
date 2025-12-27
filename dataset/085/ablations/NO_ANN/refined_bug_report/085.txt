@@ -1,0 +1,18 @@
+TITLE  
+Issue with MAE Code in README.md
+
+SYMPTOMS  
+• The code snippet `tokens = tokens + self.encoder.pos_embedding[:, 1:(num_patches + 1)` is missing a closing bracket.  
+• The program fails to execute due to a syntax error.  
+• The specific error message encountered is: "SyntaxError: unexpected EOF while parsing".  
+• The output does not produce the expected token embeddings.
+
+EXPECTED BEHAVIOR  
+The code should correctly compute the token embeddings by properly adding the positional embeddings to the tokens without any syntax errors.
+
+REPRODUCTION STEPS  
+1. Open the README.md file for the MAE project.  
+2. Locate the code snippet provided for token generation.  
+3. Attempt to run the code as it is written.  
+4. Observe the resulting error message in the console.  
+5. Verify that adding the missing closing bracket resolves the issue.

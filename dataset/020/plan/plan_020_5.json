@@ -1,0 +1,16 @@
+[
+    "Clone the TensorFlow Models repository from https://github.com/tensorflow/models.git at commit hash 6342b68a9e5ec0d66486f7cc1e9a7d7c5a43f5a0",
+    "Checkout the branch or tag associated with TensorFlow Models version 2.12.0",
+    "Ensure Python version is 3.8 and pip version is up to date by running `python --version` and `pip install --upgrade pip`",
+    "Install required dependencies from requirements.txt, including tensorflow==2.12.0 and other necessary packages listed in the bug report",
+    "Create a new directory for your project and navigate into it",
+    "Set up a virtual environment with Python 3.8 by running `python -m venv tf-models-env` and activate it (`source tf-models-env/bin/activate` on Linux/Mac or `.\\tf-models-env\\Scripts\\activate` on Windows)",
+    "Copy the `train.py` file from https://github.com/tensorflow/models/blob/6342b68a9e5ec0d66486f7cc1e9a7d7c5a43f5a0/recommendation/ranking/train.py into your project directory",
+    "Set up a configuration file (e.g., `config.yaml`) for the training task, ensuring it includes settings appropriate for TensorFlow 2.12.0 and Python 3.8",
+    "Create a dummy dataset generator function to simulate the input data for model training and evaluation. The function should return dummy data with shapes that match what is expected by the model specified in `config.yaml`",
+    "Initialize the necessary components for training, such as distribution strategy, task object, and model, following the setup steps provided in `train.py`",
+    "Run the `train_and_eval` experiment using the `run_experiment` function from `train_lib`, passing in the dummy dataset generator and other required parameters. Ensure that the `mode='train_and_eval'` parameter is set",
+    "Monitor the output of the experiment for any errors or exceptions, particularly focusing on the line where `passthrough_logs | logs` occurs within the `eval_step` method",
+    "Assert that a `TypeError: unsupported operand type(s) for |: 'dict' and 'dict'` error occurs during the execution of the training and evaluation process"
+]
+

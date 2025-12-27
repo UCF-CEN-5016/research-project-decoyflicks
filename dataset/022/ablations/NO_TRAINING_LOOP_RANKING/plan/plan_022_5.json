@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the LAMB optimizer from official.modeling.optimization",
+    "Set the random seed for reproducibility using np.random.seed(42)",
+    "Define a learning rate of 0.001 and weight decay of 0.01",
+    "Create a numpy array for variable 'var0' with values [1.0, 2.0] and dtype as float32",
+    "Create a numpy array for variable 'var1' with values [3.0, 4.0] and dtype as float32",
+    "Create a numpy array for gradients 'grads0' with values [0.1, 0.1] and dtype as float32",
+    "Create a numpy array for gradients 'grads1' with values [0.01, 0.01] and dtype as float32",
+    "Initialize two TensorFlow Variables 'var0' and 'var1' using the numpy arrays created earlier",
+    "Initialize the LAMB optimizer with learning_rate=0.001, weight_decay_rate=0.01",
+    "Run a loop for 3 iterations to apply gradients using the LAMB optimizer",
+    "In each iteration, call 'opt.apply_gradients' with a zip of gradients and variables",
+    "After applying gradients, assert that the updated values of 'var0' and 'var1' are as expected",
+    "Check the internal state of the LAMB optimizer to ensure that the weight decay is applied",
+    "Verify that the standard deviation used in the LAMB update is either 0 or 1 by inspecting the update calculation",
+    "Log the values of the updates to confirm that the standard deviation is not being modified correctly",
+    "Assert that the update values are not changing as expected due to the incorrect standard deviation handling"
+]
+```

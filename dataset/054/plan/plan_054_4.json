@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow and Keras layers from the required modules",
+    "Set KERAS_BACKEND to 'tensorflow'",
+    "Define a batch size of 128 and image dimensions of 28x28",
+    "Load the MNIST dataset from keras.datasets.mnist.load_data()",
+    "Scale images to the [0, 1] range by dividing them by 255.0",
+    "Expand the dimensions of x_train and x_test to match (batch_size, height, width, channels)",
+    "Convert class vectors y_train and y_test to binary class matrices using keras.utils.to_categorical() with num_classes=10",
+    "Create a sequential model using keras.Sequential()",
+    "Add StandardizedConv2DWithCall layer with 32 filters, kernel size (3, 3), activation 'relu' and input shape (28, 28, 1)",
+    "Add MaxPooling2D layer with pool size (2, 2)",
+    "Add StandardizedConv2DWithOverride layer with 64 filters, kernel size (3, 3), activation 'relu'",
+    "Add MaxPooling2D layer with pool size (2, 2)",
+    "Flatten the output of the previous layers",
+    "Add a Dropout layer with dropout rate 0.5",
+    "Add a Dense layer with num_classes=10 and activation 'softmax'",
+    "Compile the model using keras.model.compile() with loss='categorical_crossentropy', optimizer='adam' and metrics=['accuracy']",
+    "Create a train_dataset by combining x_train, y_train into a TensorFlow Dataset object with batch_size=128",
+    "Create a test_dataset by combining x_test, y_test into a TensorFlow Dataset object with batch_size=128",
+    "Train the model using model.fit(train_dataset, epochs=5, validation_data=test_dataset)",
+    "Verify that the performance on the test set is overly optimistic and does not generalize well to unseen data"
+]
+```
+

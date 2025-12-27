@@ -1,0 +1,24 @@
+```json
+[
+    "Import TensorFlow and Keras from their respective libraries",
+    "Set the random seed to 42 for reproducibility",
+    "Load the MNIST dataset using `tf.keras.datasets.mnist`",
+    "Split the MNIST data into training and testing sets with a test size of 0.2",
+    "Normalize the input images by dividing them by 255.0",
+    "Define the number of classes as 10",
+    "Create a simple sequential model using Keras",
+    "Add a Flatten layer to convert the 2D images into 1D arrays",
+    "Add a Dense layer with 128 units and ReLU activation function",
+    "Add another Dense layer with the specified number of classes and softmax activation function",
+    "Compile the model with 'adam' optimizer, 'sparse_categorical_crossentropy' loss function, and 'accuracy' metric",
+    "Train the model on the training data for 5 epochs",
+    "Evaluate the model on the testing data to get initial performance metrics",
+    "Create a new instance of the same sequential model with the same configuration",
+    "Clear any previous state or cache that might affect reproducibility (e.g., clearing variables, resetting graphs)",
+    "Train the newly created model on the training data for 5 epochs again",
+    "Evaluate the model on the testing data to observe if the bug is reproduced",
+    "Monitor memory usage during the training process of both models using a profiling tool like TensorFlow Profiler or Keras callbacks",
+    "Assert that the performance metrics (accuracy) are identical between the two trained models"
+]
+```
+

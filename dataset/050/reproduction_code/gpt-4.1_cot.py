@@ -1,0 +1,1 @@
+batch_size = real_images.shape[0]

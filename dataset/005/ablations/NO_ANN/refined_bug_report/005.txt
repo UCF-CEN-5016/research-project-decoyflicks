@@ -1,0 +1,29 @@
+TITLE  
+ImportError when importing 'tensor' from TensorFlow
+
+SYMPTOMS  
+• The user encounters an `ImportError` when trying to import 'tensor' from 'tensorflow.python.framework'.  
+• The full error message includes:  
+  ```
+  ImportError: cannot import name 'tensor' from 'tensorflow.python.framework' (D:\project\mobilenet_v4\venv\lib\site-packages\tensorflow\python\framework\__init__.py)
+  ```  
+• A warning is displayed about the inability to load the dynamic library 'cudart64_110.dll', stating:  
+  ```
+  Could not load dynamic library 'cudart64_110.dll'; dlerror: cudart64_110.dll not found
+  ```  
+• The test fails with the message: "FAILED (errors=1)" after running the mobilenet_test.py file.
+
+EXPECTED BEHAVIOR  
+The script should successfully run the mobilenet_test.py file without any import errors, allowing the user to dump a checkpoint or h5 file of the MobileNetV4 model.
+
+REPRODUCTION STEPS  
+1. Create a new virtual environment.  
+2. Install the official TensorFlow models using:  
+   ```
+   pip3 install tf-models-official
+   ```  
+3. Copy and run the mobilenet_test.py file.  
+4. Observe the error during execution.  
+
+ADDITIONAL QUERY  
+The user is also asking for guidance on how to correctly dump the ONNX model of MobileNetV4, as they cannot find relevant samples or documentation.

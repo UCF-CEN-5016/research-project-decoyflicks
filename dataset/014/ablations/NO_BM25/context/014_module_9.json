@@ -1,0 +1,36 @@
+{
+  "bug_report": "014",
+  "module": {
+    "module": "official/projects/videoglue/datasets",
+    "files": [
+      {
+        "path": "official/projects/videoglue/datasets/video_classification_test.py",
+        "snippets": [
+          {
+            "lines": "104-119",
+            "code": "  def test_video_classification_randaug(self):\n    create_fake_tfse_sstable()\n    dataset_cls = video_classification.VideoClassificationBaseFactory(\n        subset='train')\n    configs = {\n        'is_training': True,\n        'num_frames': 4,\n        'one_hot_label': True,\n        'randaug_params': common_cfg.RandAugment().as_dict(),\n    }\n    dataset_cls.configure(**configs)\n    ds = dataset_cls.make_dataset(shuffle=False, batch_size=2)\n    ds_iter = iter(ds)\n    data = next(ds_iter)\n    self.assertAllEqual(data['label'].shape, [2, 400])\n    self.assertAllEqual(data['image'].shape, [2, 4, 224, 224, 3])\n\n  def test_video_classification_autoaug(self):\n    create_fake_tfse_sstable()\n    dataset_cls = video_classification.VideoClassificationBaseFactory(\n        subset='train')\n    configs = {\n        'is_training': True,\n        'num_frames': 4,\n        'one_hot_label': True,\n        'autoaug_params': common_cfg.AutoAugment().as_dict(),\n    }\n    dataset_cls.configure(**configs)\n    ds = dataset_cls.make_dataset(shuffle=False, batch_size=2)\n    ds_iter = iter(ds)\n    data = next(ds_iter)\n    self.assertAllEqual(data['label'].shape, [2, 400])\n    self.assertAllEqual(data['image'].shape, [2, 4, 224, 224, 3])\n\n  def test_video_classification_mixup_cutmix(self):\n    create_fake_tfse_sstable()\n    dataset_cls = video_classification.VideoClassificationBaseFactory(\n        subset='train')\n    configs = {\n        'is_training': True,\n        'num_frames': 4,\n        'one_hot_label': True,\n        'mixup_cutmix_params': common_cfg.MixupAndCutmix().as_dict(),\n    }\n    dataset_cls.configure(**configs)\n    ds = dataset_cls.make_dataset(shuffle=False, batch_size=2)\n    ds_iter = iter(ds)\n    data = next(ds_iter)\n    self.assertAllEqual(data['label'].shape, [2, 400])\n    self.assertAllEqual(data['image'].shape, [2, 4, 224, 224, 3])"
+          },
+          {
+            "lines": "121-140",
+            "code": "  def test_video_classification_sample_segments(self):\n    create_fake_tfse_sstable()\n    dataset_cls = video_classification.VideoClassificationBaseFactory(\n        subset='train')\n    configs = {\n        'is_training': False,\n        'num_frames': 5,\n        'temporal_stride': 1,\n        'sample_from_segments': True,\n        'one_hot_label': True,\n        'mixup_cutmix_params': common_cfg.MixupAndCutmix().as_dict(),\n    }\n    dataset_cls.configure(**configs)\n    ds = dataset_cls.make_dataset(shuffle=False, batch_size=1)\n    ds_iter = iter(ds)\n    data = next(ds_iter)\n    self.assertAllEqual(data['label'].shape, [1, 400])\n    self.assertAllEqual(data['image'].shape, [1, 5, 224, 224, 3])\n    average_image = tf.reduce_mean(data['image'] * 255., axis=[2, 3, 4])\n    self.assertAllEqual(average_image[0].numpy(), [2.0, 7.0, 12.0, 16.0, 21.0])"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/projects/videoglue/datasets/video_classification_test.py",
+      "snippets": [
+        {
+          "lines": "104-119",
+          "code": "  def test_video_classification_randaug(self):\n    create_fake_tfse_sstable()\n    dataset_cls = video_classification.VideoClassificationBaseFactory(\n        subset='train')\n    configs = {\n        'is_training': True,\n        'num_frames': 4,\n        'one_hot_label': True,\n        'randaug_params': common_cfg.RandAugment().as_dict(),\n    }\n    dataset_cls.configure(**configs)\n    ds = dataset_cls.make_dataset(shuffle=False, batch_size=2)\n    ds_iter = iter(ds)\n    data = next(ds_iter)\n    self.assertAllEqual(data['label'].shape, [2, 400])\n    self.assertAllEqual(data['image'].shape, [2, 4, 224, 224, 3])\n\n  def test_video_classification_autoaug(self):\n    create_fake_tfse_sstable()\n    dataset_cls = video_classification.VideoClassificationBaseFactory(\n        subset='train')\n    configs = {\n        'is_training': True,\n        'num_frames': 4,\n        'one_hot_label': True,\n        'autoaug_params': common_cfg.AutoAugment().as_dict(),\n    }\n    dataset_cls.configure(**configs)\n    ds = dataset_cls.make_dataset(shuffle=False, batch_size=2)\n    ds_iter = iter(ds)\n    data = next(ds_iter)\n    self.assertAllEqual(data['label'].shape, [2, 400])\n    self.assertAllEqual(data['image'].shape, [2, 4, 224, 224, 3])\n\n  def test_video_classification_mixup_cutmix(self):\n    create_fake_tfse_sstable()\n    dataset_cls = video_classification.VideoClassificationBaseFactory(\n        subset='train')\n    configs = {\n        'is_training': True,\n        'num_frames': 4,\n        'one_hot_label': True,\n        'mixup_cutmix_params': common_cfg.MixupAndCutmix().as_dict(),\n    }\n    dataset_cls.configure(**configs)\n    ds = dataset_cls.make_dataset(shuffle=False, batch_size=2)\n    ds_iter = iter(ds)\n    data = next(ds_iter)\n    self.assertAllEqual(data['label'].shape, [2, 400])\n    self.assertAllEqual(data['image'].shape, [2, 4, 224, 224, 3])"
+        },
+        {
+          "lines": "121-140",
+          "code": "  def test_video_classification_sample_segments(self):\n    create_fake_tfse_sstable()\n    dataset_cls = video_classification.VideoClassificationBaseFactory(\n        subset='train')\n    configs = {\n        'is_training': False,\n        'num_frames': 5,\n        'temporal_stride': 1,\n        'sample_from_segments': True,\n        'one_hot_label': True,\n        'mixup_cutmix_params': common_cfg.MixupAndCutmix().as_dict(),\n    }\n    dataset_cls.configure(**configs)\n    ds = dataset_cls.make_dataset(shuffle=False, batch_size=1)\n    ds_iter = iter(ds)\n    data = next(ds_iter)\n    self.assertAllEqual(data['label'].shape, [1, 400])\n    self.assertAllEqual(data['image'].shape, [1, 5, 224, 224, 3])\n    average_image = tf.reduce_mean(data['image'] * 255., axis=[2, 3, 4])\n    self.assertAllEqual(average_image[0].numpy(), [2.0, 7.0, 12.0, 16.0, 21.0])"
+        }
+      ]
+    }
+  ]
+}

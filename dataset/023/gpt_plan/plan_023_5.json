@@ -1,0 +1,16 @@
+[
+  "Clone the TensorFlow models repository from https://github.com/tensorflow/models.git",
+  "Ensure Python 3.8+ environment with TensorFlow 2.12 installed via pip (e.g., pip install tensorflow==2.12)",
+  "Navigate to the 'docs/vision' directory inside the cloned repository",
+  "Open the 'object_detection.ipynb' notebook in a Jupyter or Colab environment",
+  "Run all notebook cells sequentially up to the cell labeled 'Import required libraries from tensorflow models as image below', which attempts to import the object_detection module and its dependencies",
+  "Observe the import error or failure in this step, typically due to missing or misconfigured dependencies in the object_detection library",
+  "Specifically, verify that the import failure occurs when the notebook executes lines similar to 'from object_detection.utils import config_util' or 'from object_detection.utils import visualization_utils as vis_util'",
+  "Prepare a minimal test Python script to reproduce the import failure outside the notebook context by attempting 'import object_detection.utils' after setting PYTHONPATH to the root of the cloned models repository",
+  "In the test script, assert that executing 'import object_detection.utils' raises an ImportError or ModuleNotFoundError",
+  "Document the exact error message text and stack trace produced during the import failure",
+  "Verify that required protobuf files are compiled and that the PYTHONPATH environment variable includes the 'models/research' and 'models/research/slim' directories as per the setup instructions",
+  "Attempt to run 'python3 -m pip install -r requirements.txt' inside the 'models/research' directory to ensure dependencies are installed, then rerun the notebook import cell to confirm the bug reproduces",
+  "Capture logs or error outputs from the notebook or script that confirm the import failure persists despite the above steps",
+  "Conclude the reproduction by asserting that the notebook import cell fails with the captured ImportError, preventing further execution"
+]

@@ -1,0 +1,168 @@
+{
+  "bug_report": "043",
+  "rank": 3,
+  "score": 0.17572402954101562,
+  "main_file": {
+    "path": "examples/emotion_conversion/emotion_models/pitch_predictor.py",
+    "content": "import logging\nimport os\nimport random\nimport sys\nfrom collections import defaultdict\n\nimport hydra\nimport numpy as np\nimport torch\nimport torch.nn as nn\nimport torch.nn.functional as F\nfrom einops import rearrange\nfrom einops.layers.torch import Rearrange\nfrom scipy.io.wavfile import read\nfrom scipy.ndimage import gaussian_filter1d\nfrom torch.utils.data import DataLoader, Dataset\nfrom tqdm import tqdm\n\ndir_path = os.path.dirname(__file__)\nresynth_path = os.path.dirname(dir_path) + \"/speech-resynthesis\"\nsys.path.append(resynth_path)\nfrom dataset import parse_speaker, parse_style\nfrom .utils import F0Stat\n\nMAX_WAV_VALUE = 32768.0\nlogger = logging.getLogger(__name__)\n\n\ndef quantize_f0(speaker_to_f0, nbins, normalize, log):\n    f0_all = []\n    for speaker, f0 in speaker_to_f0.items():\n        f0 = f0.raw_data\n        if log:\n            f0 = f0.log()\n        mean = speaker_to_f0[speaker].mean_log if log else speaker_to_f0[speaker].mean\n        std = speaker_to_f0[speaker].std_log if log else speaker_to_f0[speaker].std\n        if normalize == \"mean\":\n            f0 = f0 - mean\n        elif normalize == \"meanstd\":\n            f0 = (f0 - mean) / std\n        f0_all.extend(f0.tolist())\n\n    hist, bin_x = np.histogram(f0_all, 100000)\n    cum_hist = np.cumsum(hist) / len(f0_all) * 100\n\n    bin_offset = []\n    bin_size = 100 / nbins\n    threshold = bin_size\n    for i in range(nbins - 1):\n        index = (np.abs(cum_hist - threshold)).argmin()\n        bin_offset.append(bin_x[index])\n        threshold += bin_size\n    bins = np.array(bin_offset)\n    bins = torch.FloatTensor(bins)\n\n    return bins\n\n\ndef save_ckpt(model, path, model_class, f0_min, f0_max, f0_bins, speaker_stats):\n    ckpt = {\n        \"state_dict\": model.state_dict(),\n        \"padding_token\": model.padding_token,\n        \"model_class\": model_class,\n        \"speaker_stats\": speaker_stats,\n        \"f0_min\": f0_min,\n        \"f0_max\": f0_max,\n        \"f0_bins\": f0_bins,\n    }\n    torch.save(ckpt, path)\n\n\ndef load_ckpt(path):\n    ckpt = torch.load(path)\n    ckpt[\"model_class\"][\"_target_\"] = \"emotion_models.pitch_predictor.CnnPredictor\"\n    model = hydra.utils.instantiate(ckpt[\"model_class\"])\n    model.load_state_dict(ckpt[\"state_dict\"])\n    model.setup_f0_stats(\n        ckpt[\"f0_min\"],\n        ckpt[\"f0_max\"],\n        ckpt[\"f0_bins\"],\n        ckpt[\"speaker_stats\"],\n    )\n    return model\n\n\ndef freq2bin(f0, f0_min, f0_max, bins):\n    f0 = f0.clone()\n    f0[f0 < f0_min] = f0_min\n    f0[f0 > f0_max] = f0_max\n    f0 = torch.bucketize(f0, bins)\n    return f0\n\n\ndef bin2freq(x, f0_min, f0_max, bins, mode):\n    n_bins = len(bins) + 1\n    assert x.shape[-1] == n_bins\n    bins = torch.cat([torch.tensor([f0_min]), bins]).to(x.device)\n    if mode == \"mean\":\n        f0 = (x * bins).sum(-1, keepdims=True) / x.sum(-1, keepdims=True)\n    elif mode == \"argmax\":\n        idx = F.one_hot(x.argmax(-1), num_classes=n_bins)\n        f0 = (idx * bins).sum(-1, keepdims=True)\n    else:\n        raise NotImplementedError()\n    return f0[..., 0]\n\n\ndef load_wav(full_path):\n    sampling_rate, data = read(full_path)\n    return data, sampling_rate\n\n\ndef l1_loss(input, target):\n    return F.l1_loss(input=input.float(), target=target.float(), reduce=False)\n\n\ndef l2_loss(input, target):\n    return F.mse_loss(input=input.float(), target=target.float(), reduce=False)\n\n\nclass Collator:\n    def __init__(self, padding_idx):\n        self.padding_idx = padding_idx\n\n    def __call__(self, batch):\n        tokens = [item[0] for item in batch]\n        lengths = [len(item) for item in tokens]\n        tokens = torch.nn.utils.rnn.pad_sequence(\n            tokens, batch_first=True, padding_value=self.padding_idx\n        )\n        f0 = [item[1] for item in batch]\n        f0 = torch.nn.utils.rnn.pad_sequence(\n            f0, batch_first=True, padding_value=self.padding_idx\n        )\n        f0_raw = [item[2] for item in batch]\n        f0_raw = torch.nn.utils.rnn.pad_sequence(\n            f0_raw, batch_first=True, padding_value=self.padding_idx\n        )\n        spk = [item[3] for item in batch]\n        spk = torch.LongTensor(spk)\n        gst = [item[4] for item in batch]\n        gst = torch.LongTensor(gst)\n        mask = tokens != self.padding_idx\n        return tokens, f0, f0_raw, spk, gst, mask, lengths\n\n\nclass CnnPredictor(nn.Module):\n    def __init__(\n        self,\n        n_tokens,\n        emb_dim,\n        channels,\n        kernel,\n        dropout,\n        n_layers,\n        spk_emb,\n        gst_emb,\n        n_bins,\n        f0_pred,\n        f0_log,\n        f0_norm,\n    ):\n        super(CnnPredictor, self).__init__()\n        self.n_tokens = n_tokens\n        self.emb_dim = emb_dim\n        self.f0_log = f0_log\n        self.f0_pred = f0_pred\n        self.padding_token = n_tokens\n        self.f0_norm = f0_norm\n        # add 1 extra embedding for padding token, set the padding index to be the last token\n        # (tokens from the clustering start at index 0)\n        self.token_emb = nn.Embedding(\n            n_tokens + 1, emb_dim, padding_idx=self.padding_token\n        )\n\n        self.spk_emb = spk_emb\n        self.gst_emb = nn.Embedding(20, gst_emb)\n        self.setup = False\n\n        feats = emb_dim + gst_emb\n        # feats = emb_dim + gst_emb + (256 if spk_emb else 0)\n        layers = [\n            nn.Sequential(\n                Rearrange(\"b t c -> b c t\"),\n                nn.Conv1d(\n                    feats, channels, kernel_size=kernel, padding=(kernel - 1) // 2\n                ),\n                Rearrange(\"b c t -> b t c\"),\n                nn.ReLU(),\n                nn.LayerNorm(channels),\n                nn.Dropout(dropout),\n            )\n        ]\n        for _ in range(n_layers - 1):\n            layers += [\n                nn.Sequential(\n                    Rearrange(\"b t c -> b c t\"),\n                    nn.Conv1d(\n                        channels,\n                        channels,\n                        kernel_size=kernel,\n                        padding=(kernel - 1) // 2,\n                    ),\n                    Rearrange(\"b c t -> b t c\"),\n                    nn.ReLU(),\n                    nn.LayerNorm(channels),\n                    nn.Dropout(dropout),\n                )\n            ]\n        self.conv_layer = nn.ModuleList(layers)\n        self.proj = nn.Linear(channels, n_bins)\n\n    def forward(self, x, gst=None):\n        x = self.token_emb(x)\n        feats = [x]\n\n        if gst is not None:\n            gst = self.gst_emb(gst)\n            gst = rearrange(gst, \"b c -> b c 1\")\n            gst = F.interpolate(gst, x.shape[1])\n            gst = rearrange(gst, \"b c t -> b t c\")\n            feats.append(gst)\n\n        x = torch.cat(feats, dim=-1)\n\n        for i, conv in enumerate(self.conv_layer):\n            if i != 0:\n                x = conv(x) + x\n            else:\n                x = conv(x)\n\n        x = self.proj(x)\n        x = x.squeeze(-1)\n\n        if self.f0_pred == \"mean\":\n            x = torch.sigmoid(x)\n        elif self.f0_pred == \"argmax\":\n            x = torch.softmax(x, dim=-1)\n        else:\n            raise NotImplementedError\n        return x\n\n    def setup_f0_stats(self, f0_min, f0_max, f0_bins, speaker_stats):\n        self.f0_min = f0_min\n        self.f0_max = f0_max\n        self.f0_bins = f0_bins\n        self.speaker_stats = speaker_stats\n        self.setup = True\n\n    def inference(self, x, spk_id=None, gst=None):\n        assert (\n            self.setup == True\n        ), \"make sure that `setup_f0_stats` was called before inference!\"\n        probs = self(x, gst)\n        f0 = bin2freq(probs, self.f0_min, self.f0_max, self.f0_bins, self.f0_pred)\n        for i in range(f0.shape[0]):\n            mean = (\n                self.speaker_stats[spk_id[i].item()].mean_log\n                if self.f0_log\n                else self.speaker_stats[spk_id[i].item()].mean\n            )\n            std = (\n                self.speaker_stats[spk_id[i].item()].std_log\n                if self.f0_log\n                else self.speaker_stats[spk_id[i].item()].std\n            )\n            if self.f0_norm == \"mean\":\n                f0[i] = f0[i] + mean\n            if self.f0_norm == \"meanstd\":\n                f0[i] = (f0[i] * std) + mean\n        if self.f0_log:\n            f0 = f0.exp()\n        return f0\n\n\nclass PitchDataset(Dataset):\n    def __init__(\n        self,\n        tsv_path,\n        km_path,\n        substring,\n        spk,\n        spk2id,\n        gst,\n        gst2id,\n        f0_bins,\n        f0_bin_type,\n        f0_smoothing,\n        f0_norm,\n        f0_log,\n    ):\n        lines = open(tsv_path, \"r\").readlines()\n        self.root, self.tsv = lines[0], lines[1:]\n        self.root = self.root.strip()\n        self.km = open(km_path, \"r\").readlines()\n        print(f\"loaded {len(self.km)} files\")\n\n        self.spk = spk\n        self.spk2id = spk2id\n        self.gst = gst\n        self.gst2id = gst2id\n\n        self.f0_bins = f0_bins\n        self.f0_smoothing = f0_smoothing\n        self.f0_norm = f0_norm\n        self.f0_log = f0_log\n\n        if substring != \"\":\n            tsv, km = [], []\n            for tsv_line, km_line in zip(self.tsv, self.km):\n                if substring.lower() in tsv_line.lower():\n                    tsv.append(tsv_line)\n                    km.append(km_line)\n            self.tsv, self.km = tsv, km\n            print(f\"after filtering: {len(self.km)} files\")\n\n        self.speaker_stats = self._compute_f0_stats()\n        self.f0_min, self.f0_max = self._compute_f0_minmax()\n        if f0_bin_type == \"adaptive\":\n            self.f0_bins = quantize_f0(\n                self.speaker_stats, self.f0_bins, self.f0_norm, self.f0_log\n            )\n        elif f0_bin_type == \"uniform\":\n            self.f0_bins = torch.linspace(self.f0_min, self.f0_max, self.f0_bins + 1)[\n                1:-1\n            ]\n        else:\n            raise NotImplementedError\n        print(f\"f0 min: {self.f0_min}, f0 max: {self.f0_max}\")\n        print(f\"bins: {self.f0_bins} (shape: {self.f0_bins.shape})\")\n\n    def __len__(self):\n        return len(self.km)\n\n    def _load_f0(self, tsv_line):\n        tsv_line = tsv_line.split(\"\\t\")[0]\n        f0 = self.root + \"/\" + tsv_line.replace(\".wav\", \".yaapt.f0.npy\")\n        f0 = np.load(f0)\n        f0 = torch.FloatTensor(f0)\n        return f0\n\n    def _preprocess_f0(self, f0, spk):\n        mask = f0 != -999999  # process all frames\n        # mask = (f0 != 0)  # only process voiced frames\n        mean = (\n            self.speaker_stats[spk].mean_log\n            if self.f0_log\n            else self.speaker_stats[spk].mean\n        )\n        std = (\n            self.speaker_stats[spk].std_log\n            if self.f0_log\n            else self.speaker_stats[spk].std\n        )\n        if self.f0_log:\n            f0[f0 == 0] = 1e-5\n            f0[mask] = f0[mask].log()\n        if self.f0_norm == \"mean\":\n            f0[mask] = f0[mask] - mean\n        if self.f0_norm == \"meanstd\":\n            f0[mask] = (f0[mask] - mean) / std\n        return f0\n\n    def _compute_f0_minmax(self):\n        f0_min, f0_max = float(\"inf\"), -float(\"inf\")\n        for tsv_line in tqdm(self.tsv, desc=\"computing f0 minmax\"):\n            spk = self.spk2id[parse_speaker(tsv_line, self.spk)]\n            f0 = self._load_f0(tsv_line)\n            f0 = self._preprocess_f0(f0, spk)\n            f0_min = min(f0_min, f0.min().item())\n            f0_max = max(f0_max, f0.max().item())\n        return f0_min, f0_max\n\n    def _compute_f0_stats(self):\n        from functools import partial\n\n        speaker_stats = defaultdict(partial(F0Stat, True))\n        for tsv_line in tqdm(self.tsv, desc=\"computing speaker stats\"):\n            spk = self.spk2id[parse_speaker(tsv_line, self.spk)]\n            f0 = self._load_f0(tsv_line)\n            mask = f0 != 0\n            f0 = f0[mask]  # compute stats only on voiced parts\n            speaker_stats[spk].update(f0)\n        return speaker_stats\n\n    def __getitem__(self, i):\n        x = self.km[i]\n        x = x.split(\" \")\n        x = list(map(int, x))\n        x = torch.LongTensor(x)\n\n        gst = parse_style(self.tsv[i], self.gst)\n        gst = self.gst2id[gst]\n        spk = parse_speaker(self.tsv[i], self.spk)\n        spk = self.spk2id[spk]\n\n        f0_raw = self._load_f0(self.tsv[i])\n        f0 = self._preprocess_f0(f0_raw.clone(), spk)\n\n        f0 = F.interpolate(f0.unsqueeze(0).unsqueeze(0), x.shape[0])[0, 0]\n        f0_raw = F.interpolate(f0_raw.unsqueeze(0).unsqueeze(0), x.shape[0])[0, 0]\n\n        f0 = freq2bin(f0, f0_min=self.f0_min, f0_max=self.f0_max, bins=self.f0_bins)\n        f0 = F.one_hot(f0.long(), num_classes=len(self.f0_bins) + 1).float()\n        if self.f0_smoothing > 0:\n            f0 = torch.tensor(\n                gaussian_filter1d(f0.float().numpy(), sigma=self.f0_smoothing)\n            )\n        return x, f0, f0_raw, spk, gst\n\n\ndef train(cfg):\n    device = \"cuda:0\"\n    # add 1 extra embedding for padding token, set the padding index to be the last token\n    # (tokens from the clustering start at index 0)\n    padding_token = cfg.n_tokens\n    collate_fn = Collator(padding_idx=padding_token)\n    train_ds = PitchDataset(\n        cfg.train_tsv,\n        cfg.train_km,\n        substring=cfg.substring,\n        spk=cfg.spk,\n        spk2id=cfg.spk2id,\n        gst=cfg.gst,\n        gst2id=cfg.gst2id,\n        f0_bins=cfg.f0_bins,\n        f0_bin_type=cfg.f0_bin_type,\n        f0_smoothing=cfg.f0_smoothing,\n        f0_norm=cfg.f0_norm,\n        f0_log=cfg.f0_log,\n    )\n    valid_ds = PitchDataset(\n        cfg.valid_tsv,\n        cfg.valid_km,\n        substring=cfg.substring,\n        spk=cfg.spk,\n        spk2id=cfg.spk2id,\n        gst=cfg.gst,\n        gst2id=cfg.gst2id,\n        f0_bins=cfg.f0_bins,\n        f0_bin_type=cfg.f0_bin_type,\n        f0_smoothing=cfg.f0_smoothing,\n        f0_norm=cfg.f0_norm,\n        f0_log=cfg.f0_log,\n    )\n    train_dl = DataLoader(\n        train_ds,\n        num_workers=0,\n        batch_size=cfg.batch_size,\n        shuffle=True,\n        collate_fn=collate_fn,\n    )\n    valid_dl = DataLoader(\n        valid_ds, num_workers=0, batch_size=16, shuffle=False, collate_fn=collate_fn\n    )\n\n    f0_min = train_ds.f0_min\n    f0_max = train_ds.f0_max\n    f0_bins = train_ds.f0_bins\n    speaker_stats = train_ds.speaker_stats\n\n    model = hydra.utils.instantiate(cfg[\"model\"]).to(device)\n    model.setup_f0_stats(f0_min, f0_max, f0_bins, speaker_stats)\n\n    optimizer = hydra.utils.instantiate(cfg.optimizer, model.parameters())\n\n    best_loss = float(\"inf\")\n    for epoch in range(cfg.epochs):\n        train_loss, train_l2_loss, train_l2_voiced_loss = run_epoch(\n            model, train_dl, optimizer, device, cfg, mode=\"train\"\n        )\n        valid_loss, valid_l2_loss, valid_l2_voiced_loss = run_epoch(\n            model, valid_dl, None, device, cfg, mode=\"valid\"\n        )\n        print(\n            f\"[epoch {epoch}] train loss: {train_loss:.3f}, l2 loss: {train_l2_loss:.3f}, l2 voiced loss: {train_l2_voiced_loss:.3f}\"\n        )\n        print(\n            f\"[epoch {epoch}] valid loss: {valid_loss:.3f}, l2 loss: {valid_l2_loss:.3f}, l2 voiced loss: {valid_l2_voiced_loss:.3f}\"\n        )\n        if valid_l2_voiced_loss < best_loss:\n            path = f\"{os.getcwd()}/pitch_predictor.ckpt\"\n            save_ckpt(model, path, cfg[\"model\"], f0_min, f0_max, f0_bins, speaker_stats)\n            best_loss = valid_l2_voiced_loss\n            print(f\"saved checkpoint: {path}\")\n        print(f\"[epoch {epoch}] best loss: {best_loss:.3f}\")\n\n\ndef run_epoch(model, loader, optimizer, device, cfg, mode):\n    if mode == \"train\":\n        model.train()\n    else:\n        model.eval()\n\n    epoch_loss = 0\n    l1 = 0\n    l1_voiced = 0\n    for x, f0_bin, f0_raw, spk_id, gst, mask, _ in tqdm(loader):\n        x, f0_bin, f0_raw, spk_id, gst, mask = (\n            x.to(device),\n            f0_bin.to(device),\n            f0_raw.to(device),\n            spk_id.to(device),\n            gst.to(device),\n            mask.to(device),\n        )\n        b, t, n_bins = f0_bin.shape\n        yhat = model(x, gst)\n        nonzero_mask = (f0_raw != 0).logical_and(mask)\n        yhat_raw = model.inference(x, spk_id, gst)\n        expanded_mask = mask.unsqueeze(-1).expand(-1, -1, n_bins)\n        if cfg.f0_pred == \"mean\":\n            loss = F.binary_cross_entropy(\n                yhat[expanded_mask], f0_bin[expanded_mask]\n            ).mean()\n        elif cfg.f0_pred == \"argmax\":\n            loss = F.cross_entropy(\n                rearrange(yhat, \"b t d -> (b t) d\"),\n                rearrange(f0_bin.argmax(-1), \"b t -> (b t)\"),\n                reduce=False,\n            )\n            loss = rearrange(loss, \"(b t) -> b t\", b=b, t=t)\n            loss = (loss * mask).sum() / mask.float().sum()\n        else:\n            raise NotImplementedError\n        l1 += F.l1_loss(yhat_raw[mask], f0_raw[mask]).item()\n        l1_voiced += F.l1_loss(yhat_raw[nonzero_mask], f0_raw[nonzero_mask]).item()\n        epoch_loss += loss.item()\n\n        if mode == \"train\":\n            loss.backward()\n            nn.utils.clip_grad_norm_(model.parameters(), 1.0)\n            optimizer.step()\n\n    print(f\"{mode} example    y: {f0_bin.argmax(-1)[0, 50:60].tolist()}\")\n    print(f\"{mode} example yhat: {yhat.argmax(-1)[0, 50:60].tolist()}\")\n    print(f\"{mode} example    y: {f0_raw[0, 50:60].round().tolist()}\")\n    print(f\"{mode} example yhat: {yhat_raw[0, 50:60].round().tolist()}\")\n    return epoch_loss / len(loader), l1 / len(loader), l1_voiced / len(loader)\n\n\n@hydra.main(config_path=dir_path, config_name=\"pitch_predictor.yaml\")\ndef main(cfg):\n    np.random.seed(1)\n    random.seed(1)\n    torch.manual_seed(1)\n    from hydra.core.hydra_config import HydraConfig\n\n    overrides = {\n        x.split(\"=\")[0]: x.split(\"=\")[1]\n        for x in HydraConfig.get().overrides.task\n        if \"/\" not in x\n    }\n    print(f\"{cfg}\")\n    train(cfg)\n\n\nif __name__ == \"__main__\":\n    main()\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "collections",
+      "function": "defaultdict"
+    },
+    {
+      "module": "dataset",
+      "function": "parse_speaker"
+    },
+    {
+      "module": "dataset",
+      "function": "parse_style"
+    },
+    {
+      "module": "einops",
+      "function": "Rearrange"
+    },
+    {
+      "module": "einops",
+      "function": "rearrange"
+    },
+    {
+      "module": "functools",
+      "function": "partial"
+    },
+    {
+      "module": "hydra",
+      "function": "get"
+    },
+    {
+      "module": "hydra",
+      "function": "main"
+    },
+    {
+      "module": "logging",
+      "function": "getLogger"
+    },
+    {
+      "module": "random",
+      "function": "seed"
+    },
+    {
+      "module": "scipy",
+      "function": "gaussian_filter1d"
+    },
+    {
+      "module": "scipy",
+      "function": "read"
+    },
+    {
+      "module": "torch",
+      "function": "Conv1d"
+    },
+    {
+      "module": "torch",
+      "function": "DataLoader"
+    },
+    {
+      "module": "torch",
+      "function": "Dropout"
+    },
+    {
+      "module": "torch",
+      "function": "Embedding"
+    },
+    {
+      "module": "torch",
+      "function": "FloatTensor"
+    },
+    {
+      "module": "torch",
+      "function": "LayerNorm"
+    },
+    {
+      "module": "torch",
+      "function": "Linear"
+    },
+    {
+      "module": "torch",
+      "function": "LongTensor"
+    },
+    {
+      "module": "torch",
+      "function": "ModuleList"
+    },
+    {
+      "module": "torch",
+      "function": "ReLU"
+    },
+    {
+      "module": "torch",
+      "function": "Sequential"
+    },
+    {
+      "module": "torch",
+      "function": "binary_cross_entropy"
+    },
+    {
+      "module": "torch",
+      "function": "bucketize"
+    },
+    {
+      "module": "torch",
+      "function": "cat"
+    },
+    {
+      "module": "torch",
+      "function": "cross_entropy"
+    },
+    {
+      "module": "torch",
+      "function": "interpolate"
+    },
+    {
+      "module": "torch",
+      "function": "l1_loss"
+    },
+    {
+      "module": "torch",
+      "function": "linspace"
+    },
+    {
+      "module": "torch",
+      "function": "load"
+    },
+    {
+      "module": "torch",
+      "function": "manual_seed"
+    },
+    {
+      "module": "torch",
+      "function": "mse_loss"
+    },
+    {
+      "module": "torch",
+      "function": "one_hot"
+    },
+    {
+      "module": "torch",
+      "function": "save"
+    },
+    {
+      "module": "torch",
+      "function": "sigmoid"
+    },
+    {
+      "module": "torch",
+      "function": "softmax"
+    },
+    {
+      "module": "torch",
+      "function": "tensor"
+    },
+    {
+      "module": "tqdm",
+      "function": "tqdm"
+    }
+  ]
+}

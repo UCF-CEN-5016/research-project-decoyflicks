@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import keras, import numpy as np, import tensorflow as tf",
+    "Set the random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Define the input shape for the model: input_shape = (28, 28, 1)",
+    "Load the MNIST dataset: (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()",
+    "Preprocess the data: Scale images to the [0, 1] range: x_train = x_train.astype('float32') / 255, x_test = x_test.astype('float32') / 255",
+    "Expand dimensions of the training and test data: x_train = np.expand_dims(x_train, -1), x_test = np.expand_dims(x_test, -1)",
+    "Convert class vectors to binary class matrices: y_train = keras.utils.to_categorical(y_train, num_classes=10), y_test = keras.utils.to_categorical(y_test, num_classes=10)",
+    "Define the model architecture using Sequential: model = keras.Sequential([...]) with layers including StandardizedConv2DWithCall and StandardizedConv2DWithOverride",
+    "Compile the model with loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy']",
+    "Set the batch size to 128 and number of epochs to 20: batch_size = 128, epochs = 20",
+    "Fit the model using the training dataset and the test dataset as validation data: model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(x_test, y_test))",
+    "Monitor the training process and check for overly optimistic validation accuracy",
+    "Assert that the validation accuracy is significantly higher than expected for unseen data"
+]
+```

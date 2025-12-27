@@ -1,0 +1,50 @@
+AttributeError while running keras-resnet50-eager/graph.
+
+# Prerequisites
+
+Please answer the following questions for yourself before submitting an issue.
+
+- [x] I am using the latest TensorFlow Model Garden release and TensorFlow 2.
+- [x] I am reporting the issue to the correct repository. (Model Garden official or research directory)
+- [x] I checked to make sure that this issue has not been filed already.
+
+## 1. The entire URL of the file you are using
+
+https://github.com/tensorflow/models/blob/master/official/legacy/image_classification/classifier_trainer.py
+
+## 2. Describe the bug
+
+`AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'. Did you mean: 'optimizer_v2'?`
+From the error, the script is trying to access Optimizer in `tf_keras.optimizers.legacy` but `tf_keras.optimizers.legacy` does not contain `Optimizer.py` https://github.com/keras-team/tf-keras/tree/master/tf_keras/optimizers/legacy
+
+## 3. Steps to reproduce
+`python3 classifier_trainer.py --mode=train_and_eval  --model_type=resnet  --dataset=imagenet --data_dir=/dir_to_imagnet_data`
+
+## 4. Expected behavior
+
+We will see AttributeError as above. 
+## 5. Additional context
+
+File "/workspace/official/modeling/optimization/ema_optimizer.py", line 51, in <module>
+    class ExponentialMovingAverage(tf_keras.optimizers.legacy.Optimizer):
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'. Did you mean: 'optimizer_v2'?
+## 6. System information
+
+- OS Platform and Distribution (e.g., Linux Ubuntu 16.04): Linux
+- TensorFlow version (use command below): tf-nightly-cpu 2.16.0.dev20231103, tf-keras 2.16.0
+- Python version: 3.11.6
+- GCC/Compiler version (if compiling from source): Clang 17
+
+<!-- 
+Collect system information using our environment capture script.
+https://github.com/tensorflow/tensorflow/tree/master/tools/tf_env_collect.sh
+
+You can also obtain the TensorFlow version with:
+
+1. TensorFlow 1.0
+`python -c "import tensorflow as tf; print(tf.GIT_VERSION, tf.VERSION)"`
+
+2. TensorFlow 2.0
+`python -c "import tensorflow as tf; print(tf.version.GIT_VERSION, tf.version.VERSION)"`
+-->

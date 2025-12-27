@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and the GaussianDiffusion class from classifier_free_guidance.py",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 4 and a tensor of betas with shape (4, 1) filled with random values using torch.rand",
+    "Instantiate the GaussianDiffusion class with the betas tensor as an argument",
+    "Call the offset_noise_strength method on the GaussianDiffusion instance without defining the device property",
+    "Capture the exception raised when offset_noise_strength is called due to the missing device property",
+    "Verify that the exception message indicates a failure related to the device attribute",
+    "Log the exception to confirm that it is related to the missing device property in the GaussianDiffusion class",
+    "Check the version of the library by printing the __version__ variable from denoising_diffusion_pytorch/version.py to ensure it is '1.9.1'",
+    "Assert that the exception type is as expected (e.g., AttributeError) when calling offset_noise_strength"
+]
+```

@@ -1,0 +1,25 @@
+TITLE  
+Bug in Rotary Positional Embedding Implementation
+
+SYMPTOMS  
+• A tensor operation exception occurs during execution.  
+• The error message displayed is:  
+  `RuntimeError: The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3`  
+• Positional encodings are applied only to a partial set of features, leading to a mismatch in tensor dimensions during multiplication.
+
+EXPECTED BEHAVIOR  
+When the software functions correctly, the rotary positional embeddings should be applied to all features without causing tensor dimension mismatches, allowing for successful execution of the tensor operations.
+
+REPRODUCTION STEPS  
+1. Copy the original code that includes the problematic line:  
+   ```py  
+   x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])  
+   ```  
+2. Run the code with an input tensor `x` that has a shape where the last dimension is 4.  
+3. Observe the runtime error related to tensor size mismatch.  
+4. Modify the code to use the proposed fix:  
+   ```py  
+   x_rope = ((x_rope * self.cos_cached[:x.shape[0], :, :, :self.d]) +  
+              (neg_half_x * self.sin_cached[:x.shape[0], :, :, :self.d]))  
+   ```  
+5. Execute the modified code and verify that it runs without errors.

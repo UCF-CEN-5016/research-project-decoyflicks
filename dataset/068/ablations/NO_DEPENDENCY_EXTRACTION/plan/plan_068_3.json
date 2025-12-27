@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, Keras, and KerasCV",
+    "Set the environment variable for Keras backend to 'tensorflow'",
+    "Define a batch size of 32 and image dimensions of (224, 224)",
+    "Load the Oxford Flowers 102 dataset using TensorFlow Datasets (tfds.load)",
+    "Prepare the training and validation datasets with the following steps: shuffle, map to resize images, and one-hot encode labels",
+    "Define a function to apply RandAugment with parameters: value_range=(0, 255), augmentations_per_image=3, magnitude=0.3, magnitude_stddev=0.2, rate=1.0",
+    "Map the RandAugment function to the training dataset",
+    "Define a function to apply CutMix and MixUp augmentations",
+    "Map the CutMix and MixUp function to the training dataset",
+    "Define a preprocessing function to cast images to float32",
+    "Apply the preprocessing function to the training dataset",
+    "Create a model using KerasCV's ImageClassifier with preset 'efficientnetv2_s' and compile it with CategoricalCrossentropy loss and SGD optimizer",
+    "Fit the model on the training dataset for 1 epoch with validation data set to the test dataset",
+    "Monitor the training process and capture the output logs",
+    "Verify that the training process raises an UnknownError during the first epoch",
+    "Check the error message for InvalidArgumentError related to ConcatOp dimensions mismatch"
+]
+```

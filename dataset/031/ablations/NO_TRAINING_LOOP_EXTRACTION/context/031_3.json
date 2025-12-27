@@ -1,0 +1,34 @@
+{
+  "bug_report": "031",
+  "rank": 3,
+  "score": 0.9273158311843872,
+  "main_file": {
+    "path": "Tools/PyTorch/TimeSeriesPredictionPlatform/training/ema.py",
+    "content": "# Copyright 2021-2022 NVIDIA Corporation\n\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n\n#     http://www.apache.org/licenses/LICENSE-2.0\n\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\n# Copyright 2019 Ross Wightman\n\n#    Licensed under the Apache License, Version 2.0 (the \"License\");\n#    you may not use this file except in compliance with the License.\n#    You may obtain a copy of the License at\n\n#        http://www.apache.org/licenses/LICENSE-2.0\n\n#    Unless required by applicable law or agreed to in writing, software\n#    distributed under the License is distributed on an \"AS IS\" BASIS,\n#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#    See the License for the specific language governing permissions and\n#    limitations under the License.\n\"\"\"\nExponential Moving Average (EMA) of model updates\n\"\"\"\n\nimport logging\nfrom copy import deepcopy\n\nimport torch\nimport torch.nn as nn\n\n_logger = logging.getLogger(__name__)\n\n\nclass ModelEmaV2(nn.Module):\n    \"\"\" Model Exponential Moving Average V2\n\n    Keep a moving average of everything in the model state_dict (parameters and buffers).\n    V2 of this module is simpler, it does not match params/buffers based on name but simply\n    iterates in order. It works with torchscript (JIT of full model).\n\n    \"\"\"\n\n    def __init__(self, model, decay=0.999, device=None):\n        super(ModelEmaV2, self).__init__()\n        # make a copy of the model for accumulating moving average of weights\n        self.module = deepcopy(model)\n        self.module.eval()\n        self.decay = decay\n        self.device = device  # perform ema on different device from model if set\n        if self.device is not None:\n            self.module.to(device=device)\n\n    def update(self, model):\n        update_fn = lambda ema_v, model_v: self.decay * ema_v + (1.0 - self.decay) * model_v\n        with torch.no_grad():\n            for ema_v, model_v in zip(self.module.state_dict().values(), model.state_dict().values()):\n                if self.device is not None:\n                    model_v = model_v.to(device=self.device)\n                ema_v.copy_(update_fn(ema_v, model_v))\n\n    def set(self, model):\n        with torch.no_grad():\n            for ema_v, model_v in zip(self.module.state_dict().values(), model.state_dict().values()):\n                if self.device is not None:\n                    model_v = model_v.to(device=self.device)\n                ema_v.copy_(model_v)\n\n    def forward(self, x):\n        return self.module(x)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "Tools/PyTorch/TimeSeriesPredictionPlatform/training/ema.py",
+      "snippets": [
+        {
+          "lines": "60-66",
+          "code": "class ModelEmaV2(nn.Module):\n    \"\"\" Model Exponential Moving Average V2\n\n    Keep a moving average of everything in the model state_dict (parameters and buffers).\n    V2 of this module is simpler, it does not match params/buffers based on name but simply\n    iterates in order. It works with torchscript (JIT of full model).\n\n    \"\"\"\n\n    def __init__(self, model, decay=0.999, device=None):\n        super(ModelEmaV2, self).__init__()\n        # make a copy of the model for accumulating moving average of weights\n        self.module = deepcopy(model)\n        self.module.eval()\n        self.decay = decay\n        self.device = device  # perform ema on different device from model if set\n        if self.device is not None:\n            self.module.to(device=device)\n\n    def update(self, model):\n        update_fn = lambda ema_v, model_v: self.decay * ema_v + (1.0 - self.decay) * model_v\n        with torch.no_grad():\n            for ema_v, model_v in zip(self.module.state_dict().values(), model.state_dict().values()):\n                if self.device is not None:\n                    model_v = model_v.to(device=self.device)\n                ema_v.copy_(update_fn(ema_v, model_v))\n\n    def set(self, model):\n        with torch.no_grad():\n            for ema_v, model_v in zip(self.module.state_dict().values(), model.state_dict().values()):\n                if self.device is not None:\n                    model_v = model_v.to(device=self.device)\n                ema_v.copy_(model_v)\n\n    def forward(self, x):\n        return self.module(x)\n\n    def __init__(self, model, decay=0.999, device=None):\n        super(ModelEmaV2, self).__init__()\n        # make a copy of the model for accumulating moving average of weights\n        self.module = deepcopy(model)\n        self.module.eval()\n        self.decay = decay\n        self.device = device  # perform ema on different device from model if set\n        if self.device is not None:\n            self.module.to(device=device)\n\n    def update(self, model):\n        update_fn = lambda ema_v, model_v: self.decay * ema_v + (1.0 - self.decay) * model_v\n        with torch.no_grad():\n            for ema_v, model_v in zip(self.module.state_dict().values(), model.state_dict().values()):\n                if self.device is not None:\n                    model_v = model_v.to(device=self.device)\n                ema_v.copy_(update_fn(ema_v, model_v))"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "copy",
+      "function": "deepcopy"
+    },
+    {
+      "module": "logging",
+      "function": "getLogger"
+    },
+    {
+      "module": "torch",
+      "function": "no_grad"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and einops",
+    "Define a batch size of 5 and set the input dimensions to (5, 3, 224, 224) for a standard image size",
+    "Create random input data with shape (5, 3, 224, 224) using torch.randn",
+    "Instantiate the MobileViT model with appropriate parameters: image_size=(224, 224), dims=(128, 256, 512), channels=(16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192), num_classes=10",
+    "Set the model to training mode by calling model.train()",
+    "Define a loss function, e.g., nn.CrossEntropyLoss()",
+    "Create random target labels with shape (5,) using torch.randint(0, 10, (5,)) to match num_classes",
+    "Perform a forward pass by calling output = model(input_data)",
+    "Calculate the loss by calling loss = loss_function(output, target_labels)",
+    "Perform a backward pass by calling loss.backward()",
+    "Capture the gradients of the model parameters after the backward pass",
+    "Check the shape of the gradients for the first parameter using assert statement: assert gradients[0].shape == (expected_shape), where expected_shape is derived from the model architecture",
+    "Print the gradients to verify their values and shapes",
+    "If an error occurs during the backward pass, capture the exception and print the error message to confirm the bug"
+]
+```

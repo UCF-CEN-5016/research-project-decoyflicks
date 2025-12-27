@@ -1,0 +1,17 @@
+TITLE  
+Issue in `cross_vit.py` file in the `vit_pytorch` repository
+
+SYMPTOMS  
+• The code in `cross_vit.py` contains a logical error that leads to incorrect model behavior.  
+• Error message: "TypeError: 'NoneType' object is not subscriptable" appears when trying to run the model.  
+• The output of the model does not match the expected dimensions, leading to further downstream errors in processing.
+
+EXPECTED BEHAVIOR  
+The `cross_vit.py` file should execute without errors, and the model should produce outputs with the correct dimensions as specified in the documentation.
+
+REPRODUCTION STEPS  
+1. Clone the `vit_pytorch` repository from GitHub.  
+2. Navigate to the `cross_vit.py` file in the repository.  
+3. Run the model using a sample input tensor as specified in the README.  
+4. Observe the error messages and the unexpected output dimensions.  
+5. Review the code for logical inconsistencies or typos that may be causing the issue.

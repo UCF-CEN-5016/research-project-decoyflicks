@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch and rotary_embedding_torch",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define the dimensions for the rotary embedding: set dim = 64",
+    "Create an instance of the RotaryEmbedding class with use_xpos=True and other parameters: rotary_emb = RotaryEmbedding(dim=dim, use_xpos=True)",
+    "Define a batch size of 8 and sequence length of 16: set batch_size = 8, seq_len = 16",
+    "Create random input tensors for queries and keys: Q = torch.randn(batch_size, seq_len, dim).to(device), K = torch.randn(batch_size, seq_len, dim).to(device)",
+    "Call the rotate_queries_and_keys method with Q and K: rotated_Q, rotated_K = rotary_emb.rotate_queries_and_keys(Q, K)",
+    "Check for NaN values in the rotated_K tensor: assert not torch.isnan(rotated_K).any(), 'rotated_K contains NaN values'",
+    "If the assertion fails, print the NaN values in rotated_K: print(rotated_K[torch.isnan(rotated_K)])",
+    "Perform a forward pass through the transformer model using the rotated queries and keys: output = transformer_model(rotated_Q, rotated_K)",
+    "Calculate the loss based on the output: loss = loss_function(output, target)",
+    "Check for NaN values in the loss: assert not torch.isnan(loss).any(), 'Loss contains NaN values'",
+    "If the assertion fails, print the NaN value of the loss: print(loss)"
+]
+```

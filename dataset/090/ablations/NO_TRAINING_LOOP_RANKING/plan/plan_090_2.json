@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.optim",
+    "Define a batch size of 8 and input dimensions of (10, 512) for src and tgt sequences",
+    "Create random input tensors for src and tgt with shapes (batch_size, seq_length, embedding_dim) where embedding_dim = 512",
+    "Instantiate the Encoder/Decoder model from the x_transformers library with appropriate parameters: dim=512, tie_token_emb=False, ignore_index=-100, pad_value=0, cross_attn_tokens_dropout=0.1",
+    "Set the model to training mode by calling model.train()",
+    "Define an optimizer, e.g., torch.optim.Adam, with model.parameters() and a learning rate of 0.001",
+    "Run a training loop for 5 epochs, where in each epoch:",
+    "    a. Zero the gradients using optimizer.zero_grad()",
+    "    b. Call the model's forward method with src and tgt, capturing the output",
+    "    c. Calculate the loss using a suitable loss function, e.g., nn.CrossEntropyLoss()",
+    "    d. Call loss.backward() to compute gradients",
+    "    e. Update model parameters using optimizer.step()",
+    "Check the model's parameters after training to verify if encoder.to_logits.weight has been updated",
+    "Print the values of encoder.to_logits.weight before and after training to validate if they remain unchanged",
+    "Assert that the values of encoder.to_logits.weight before and after training are equal, indicating the bug is present"
+]
+```

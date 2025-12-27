@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official.legacy.image_classification",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Set the number of classes to 1000 for the classification task",
+    "Create a random dataset with shape (batch_size, height, width, channels) = (32, 224, 224, 3) using tf.random.uniform",
+    "Define a model configuration with model_type set to 'efficientnet' and dataset set to 'imagenet'",
+    "Set the augmentation parameters, specifically set level_std to 0 and 1 in the configuration",
+    "Create a DatasetBuilder instance using the random dataset and the defined model configuration",
+    "Initialize the model using the get_models function with the efficientnet model",
+    "Compile the model with a SparseCategoricalCrossentropy loss function and an Adam optimizer",
+    "Fit the model on the random dataset for 1 epoch",
+    "During the fitting process, monitor the applied standard deviation of the RandAugment transformations",
+    "Assert that the standard deviation of the RandAugment applied during training is either 0 or 1",
+    "Log the output of the model training to verify the standard deviation values",
+    "If the standard deviation is always 1, the bug is confirmed"
+]
+```

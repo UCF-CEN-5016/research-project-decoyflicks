@@ -1,0 +1,24 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10.13",
+    "Activate the new conda environment using: conda activate test_env",
+    "Install TensorFlow using pip with the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode).",
+    "Create a new Jupyter Notebook in VSCode.",
+    "Import necessary libraries at the top of the notebook with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official import tf_models",
+    "Set the matplotlib backend to 'Agg' using the command: plt.switch_backend('Agg')",
+    "Download the notebook from the provided link: https://www.tensorflow.org/tfmodels/vision/image_classification and open it in VSCode.",
+    "Add the following lines of code to the notebook after the imports: plt.figure(); plt.plot([1, 2, 3], [1, 4, 9]); plt.show()",
+    "Run the cell containing the plot code to verify that it displays correctly before importing tensorflow_models.",
+    "Import the TensorFlow Model Garden with the command: from official import tf_models",
+    "Add another plot command after the import: plt.figure(); plt.plot([1, 2, 3], [1, 4, 9]); plt.show()",
+    "Run the cell containing the second plot command to verify that it does not display the plot.",
+    "Check the current matplotlib backend using: print(matplotlib.get_backend()) and assert that it is 'Agg'.",
+    "Attempt to change the backend to 'TkAgg' using: plt.switch_backend('TkAgg') after importing tensorflow_models.",
+    "Run the cell containing the plot command again to verify that it still does not display the plot.",
+    "Change the backend to 'TkAgg' before importing tensorflow_models and rerun the notebook to verify that the plot displays correctly."
+]
+```

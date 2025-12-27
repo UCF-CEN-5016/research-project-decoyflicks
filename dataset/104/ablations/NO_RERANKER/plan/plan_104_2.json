@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torch.utils.data, torchvision.datasets, torchvision.transforms, tqdm.auto",
+    "Set the learning rate to 3e-4 and the number of training iterations to 1000",
+    "Define levels as [8, 6, 5] to represent the target size for the FSQ module",
+    "Calculate num_codes as the product of levels, which should be 240",
+    "Set the random seed to 1234 for reproducibility",
+    "Determine the device as 'cuda' if available, otherwise 'cpu'",
+    "Define a SimpleFSQAutoEncoder class that inherits from nn.Module",
+    "In the __init__ method of SimpleFSQAutoEncoder, create a ModuleList with the following layers: Conv2d(1, 16, kernel_size=3, stride=1, padding=1), MaxPool2d(kernel_size=2, stride=2), GELU(), Conv2d(16, 32, kernel_size=3, stride=1, padding=1), MaxPool2d(kernel_size=2, stride=2), Conv2d(32, len(levels), kernel_size=1), FSQ(levels), Conv2d(len(levels), 32, kernel_size=3, stride=1, padding=1), Upsample(scale_factor=2, mode='nearest'), Conv2d(32, 16, kernel_size=3, stride=1, padding=1), GELU(), Upsample(scale_factor=2, mode='nearest'), Conv2d(16, 1, kernel_size=3, stride=1, padding=1)",
+    "Define the forward method to pass input through the layers and return the output and indices from the FSQ layer",
+    "Define a train function that takes a model, train_loader, and train_iterations as parameters",
+    "Inside the train function, create an iterate_dataset generator to yield batches of data from train_loader",
+    "In the training loop, zero the gradients, get a batch of data, and pass it through the model to get output and indices",
+    "Calculate the reconstruction loss as the mean absolute error between the output and input",
+    "Perform backpropagation and update the model parameters using AdamW optimizer",
+    "Create a transform pipeline using transforms.Compose to normalize the FashionMNIST dataset",
+    "Load the FashionMNIST dataset using DataLoader with batch_size=256 and shuffle=True",
+    "Print 'baseline' to indicate the start of the training process",
+    "Set the random seed using torch.random.manual_seed(seed)",
+    "Instantiate the SimpleFSQAutoEncoder with levels and move it to the specified device",
+    "Create an AdamW optimizer for the model parameters with the defined learning rate",
+    "Call the train function with the model, train_dataset, and train_iterations to start training",
+    "After training, check if the MLPs in ResidualVQ are initialized by inspecting the FSQ layer's parameters",
+    "Assert that the MLPs are initialized even when implicit_neural_codebook is set to False"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: fairseq, torch, and any other required modules.",
+    "Set the DATA_ROOT variable to the path of your dataset, e.g., DATA_ROOT='/root/autodl-tmp/FormattingData/DATA_ROOT'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech_to_speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the task.",
+    "Set the following parameters for the fairseq-generate command: target-is-code=True, target-code-size=100, vocoder='code_hifigan', max-tokens=50000, beam=10, max-len-a=1.",
+    "Run the fairseq-generate command with the following syntax: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Monitor the console output for any error messages related to the key 'input_feat_per_channel'.",
+    "If the error occurs, capture the full stack trace and any relevant logs to confirm the bug.",
+    "Verify that the model architecture is correctly set up to include the 'input_feat_per_channel' key in its structure.",
+    "Check the model's state_dict to ensure it does not contain the 'input_feat_per_channel' key, which should trigger the bug."
+]
+```

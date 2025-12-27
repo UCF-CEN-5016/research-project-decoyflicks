@@ -1,0 +1,19 @@
+TITLE  
+TypeError in LearnedGaussianDiffusion during DDIM Sampling
+
+SYMPTOMS  
+• When using the `LearnedGaussianDiffusion` class with DDIM sampling, a `TypeError` is raised.  
+• Error message: `TypeError: model_predictions() got multiple values for argument 'clip_x_start'`  
+• The issue arises due to a mismatch in the function signature of `model_predictions()` between the `GaussianDiffusion` and `LearnedGaussianDiffusion` classes.
+
+EXPECTED BEHAVIOR  
+The `model_predictions()` function should be called without raising a `TypeError`, allowing for successful DDIM sampling using the `LearnedGaussianDiffusion` class.
+
+REPRODUCTION STEPS  
+1. Instantiate the `LearnedGaussianDiffusion` class.  
+2. Call the `ddim_sample()` method on an instance of the `LearnedGaussianDiffusion` class.  
+3. Ensure that DDIM sampling is enabled.  
+4. Observe the raised `TypeError` during the sampling process.  
+
+SOLUTION  
+To resolve this issue, modify the call to `model_predictions()` in the `ddim_sample()` method of the `GaussianDiffusion` class to match the signature in the `LearnedGaussianDiffusion` class. Specifically, ensure that the `clip_x_start` argument is correctly passed or removed as necessary.

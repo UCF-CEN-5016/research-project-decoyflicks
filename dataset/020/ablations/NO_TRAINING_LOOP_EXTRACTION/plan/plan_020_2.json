@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the official model library: 'import tensorflow as tf' and 'from official import core, vision'",
+    "Set Python version to 3.8 in the Docker environment: 'FROM python:3.8'",
+    "Install TensorFlow Model Garden version 2.12.0: 'pip install tf-models-official==2.12.0'",
+    "Define a batch size of 8 and image dimensions of 640x640 for input data",
+    "Create random uniform input data with shape (batch_size, height, width, 3): 'inputs = tf.random.uniform((8, 640, 640, 3))'",
+    "Define a dummy distribution strategy: 'distribution_strategy = tf.distribute.get_strategy()'",
+    "Create a dummy task configuration: 'task = {}'",
+    "Create a dummy experiment configuration: 'exp_config = {}'",
+    "Set a model directory path: 'model_dir = \"/tmp/model_dir\"'",
+    "Call the run_experiment function with parameters: 'model, eval_logs = core.train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)'",
+    "Capture the output and error message during execution",
+    "Verify that the output contains the error message: 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict''",
+    "Log the error message to confirm the bug occurrence"
+]
+```

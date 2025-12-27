@@ -1,0 +1,22 @@
+TITLE  
+Retina Net Model Fit Error Due to Invalid Argument
+
+SYMPTOMS  
+• Encountered an `InvalidArgumentError` during model training.  
+• The error message indicates an issue with the `GatherV2_1` operation:  
+  ```
+  InvalidArgumentError: Graph execution error:
+  Detected at node retina_net_label_encoder_18/GatherV2_1 defined at (most recent call last):
+  ...
+  indices[3,63949] = 0 is not in [0, 0)
+  ```
+
+EXPECTED BEHAVIOR  
+The model should successfully train on the provided dataset without any errors, allowing for the completion of the specified number of epochs.
+
+REPRODUCTION STEPS  
+1. Prepare a custom dataset structured according to the guidelines in the Keras documentation: https://keras.io/guides/keras_cv/object_detection_keras_cv/.  
+2. Initialize the Retina Net model.  
+3. Call the `model.fit()` method with the training dataset (`train_ds.take(20)`) and validation dataset (`eval_ds.take(20)`).  
+4. Set the number of epochs to at least 1 and include the `EvaluateCOCOMetricsCallback(eval_ds.take(20))` callback.  
+5. Execute the script to reproduce the error.

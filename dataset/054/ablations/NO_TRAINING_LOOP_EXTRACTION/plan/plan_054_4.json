@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules from Keras: layers, Model, and Sequential",
+    "Set the random seed for reproducibility using numpy",
+    "Define input shape as (32, 32, 3) for CIFAR-100 images",
+    "Load CIFAR-100 dataset using keras.datasets.cifar100.load_data()",
+    "Split the dataset into training and testing sets: (x_train, y_train), (x_test, y_test)",
+    "Print the shapes of x_train and x_test to confirm they are (50000, 32, 32, 3) and (10000, 32, 32, 3) respectively",
+    "Define a batch size of 128 and number of epochs as 20",
+    "Create a simple model using Sequential with layers: Input, Dense, Dropout, and GlobalAveragePooling1D",
+    "Compile the model with Adam optimizer and SparseCategoricalCrossentropy loss",
+    "Fit the model using model.fit() with parameters: x=x_train, y=y_train, batch_size=128, epochs=20, validation_data=(x_test, y_test)",
+    "Monitor the training process and check the validation accuracy after each epoch",
+    "Print the validation accuracy after training to observe the performance on the test set",
+    "Assert that the validation accuracy is unusually high (e.g., above 90%) indicating potential overfitting",
+    "Evaluate the model on the test set using model.evaluate() with x_test and y_test",
+    "Print the test accuracy to compare with validation accuracy and confirm the bug"
+]
+```

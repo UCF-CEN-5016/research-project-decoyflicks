@@ -1,0 +1,5 @@
+Pad value not being used in `align_right` function
+
+It seems that the pad_id parameter is not being used in the `align_right` function when calling `F.pad(..., value=0). 
+
+https://github.com/lucidrains/x-transformers/blob/144d9ba84955139347e798ab025457b2d7adc314/x_transformers/autoregressive_wrapper.py#L51

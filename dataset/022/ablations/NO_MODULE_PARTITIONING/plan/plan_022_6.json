@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official models repository",
+    "Define a batch size of 4 and image dimensions of 512x512",
+    "Create random input data for box_outputs with shape (batch_size, num_boxes, num_classes * 4) where num_boxes=10 and num_classes=6",
+    "Create random input data for class_targets with shape (batch_size, num_boxes) where values are integers in the range [0, num_classes-1]",
+    "Create random input data for box_targets with shape (batch_size, num_boxes, 4) where each entry represents (left, right, top, bottom) coordinates",
+    "Instantiate the FastrcnnBoxLoss class with a parameter huber_loss_delta set to 0.1",
+    "Call the __call__ method of FastrcnnBoxLoss with box_outputs, class_targets, and box_targets as arguments",
+    "Capture the output of the box loss calculation",
+    "Print the box loss value to verify it is computed",
+    "Check if the standard deviation of the loss value is either 0 or 1 by asserting that the loss value is equal to 1",
+    "Log the output of the loss calculation to confirm the bug is present",
+    "Repeat the above steps with different random inputs to ensure consistency of the bug"
+]
+```

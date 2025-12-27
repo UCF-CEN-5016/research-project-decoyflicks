@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and the Keras layers module",
+    "Define a batch size of 64 and image dimensions of 32x32",
+    "Create random normal input data with shape (batch_size, height, width, 1)",
+    "Set up an AdaptiveDataAugmentation layer with default parameters",
+    "Call the AdaptiveDataAugmentation layer on the input data",
+    "Verify that the output contains NaN values in the forward pass",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold"
+]
+```
+

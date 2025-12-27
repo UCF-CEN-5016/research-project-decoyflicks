@@ -1,0 +1,33 @@
+```json
+[
+    "Import necessary libraries: import os, numpy as np, matplotlib.pyplot as plt, tensorflow as tf, keras, from keras import layers, from pathlib import Path",
+    "Set the environment variable for Keras backend: os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Define the path to the data directory: data_dir = Path('./captcha_images_v2/')",
+    "Download the captcha dataset using curl: curl -LO https://github.com/AakashKumarNain/CaptchaCracker/raw/master/captcha_images_v2.zip",
+    "Unzip the downloaded dataset: unzip -qq captcha_images_v2.zip",
+    "Get a sorted list of all images in the dataset: images = sorted(list(map(str, list(data_dir.glob('*.png')))))",
+    "Extract labels from the image filenames: labels = [img.split(os.path.sep)[-1].split('.png')[0] for img in images]",
+    "Define a batch size for training: batch_size = 16",
+    "Define desired image dimensions: img_width = 200, img_height = 50",
+    "Define a function to split the dataset into training and validation sets: def split_data(images, labels, train_size=0.9, shuffle=True)",
+    "Inside split_data function, calculate the total size of the dataset: size = len(images)",
+    "Inside split_data function, create an indices array and shuffle it if required: indices = np.arange(size), if shuffle: np.random.shuffle(indices)",
+    "Inside split_data function, calculate the number of training samples: train_samples = int(size * train_size)",
+    "Inside split_data function, split the images and labels into training and validation sets: x_train, y_train = images[indices[:train_samples]], labels[indices[:train_samples]], x_valid, y_valid = images[indices[train_samples:]], labels[indices[train_samples:]]",
+    "Call the split_data function to get training and validation datasets: x_train, x_valid, y_train, y_valid = split_data(np.array(images), np.array(labels))",
+    "Define a function to encode a single sample: def encode_single_sample(img_path, label)",
+    "Inside encode_single_sample function, read and preprocess the image: img = tf.io.read_file(img_path), img = tf.io.decode_png(img, channels=1), img = tf.image.convert_image_dtype(img, tf.float32), img = tf.image.resize(img, [img_height, img_width])",
+    "Inside encode_single_sample function, map the characters in the label to numbers: label = char_to_num(tf.strings.unicode_split(label, input_encoding='UTF-8'))",
+    "Create TensorFlow Dataset objects for training and validation: train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)), validation_dataset = tf.data.Dataset.from_tensor_slices((x_valid, y_valid))",
+    "Map the encode_single_sample function to the training dataset: train_dataset = train_dataset.map(encode_single_sample, num_parallel_calls=tf.data.AUTOTUNE).batch(batch_size).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Map the encode_single_sample function to the validation dataset: validation_dataset = validation_dataset.map(encode_single_sample, num_parallel_calls=tf.data.AUTOTUNE).batch(batch_size).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Define a function to build the model: def build_model()",
+    "Inside build_model function, define the model architecture using Keras layers: input_img = layers.Input(shape=(img_width, img_height, 1), name='image', dtype='float32'), labels = layers.Input(name='label', shape=(None,), dtype='float32')",
+    "Add layers to the model: x = layers.Conv2D(32, (3, 3), activation='relu', padding='same')(input_img), x = layers.MaxPooling2D((2, 2))(x), x = layers.Conv2D(64, (3, 3), activation='relu', padding='same')(x), x = layers.MaxPooling2D((2, 2))(x)",
+    "Add a CTC layer to the model: output = CTCLayer(name='ctc_loss')(labels, x)",
+    "Compile the model: model.compile(optimizer='adam')",
+    "Train the model using the training dataset and validation dataset: model.fit(train_dataset, epochs=20, validation_data=validation_dataset)",
+    "Verify that the validation dataset is actually the test dataset by checking the contents of validation_dataset against test_dataset",
+    "Assert that the model's performance metrics (e.g., accuracy) on the validation dataset are unrealistically high, indicating overfitting due to using the test set as validation"
+]
+```

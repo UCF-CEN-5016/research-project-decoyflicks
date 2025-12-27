@@ -1,0 +1,23 @@
+AttributeError: 'DataFrame' object has no attribute 'append'
+
+For masked_language_modeling.ipynb, there is the error.  My system is Python 3.10, TensorFlow 2.13 and pandas 2.03. 
+
+It reminds the warning:  FutureWarning: The frame.append method is deprecated and will be removed from pandas  in a future version. Use pandas.concat instead.
+
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+/tmp/ipykernel_97675/3156859266.py in ?()
+     27 
+     28 # FutureWarning: The frame.append method is deprecated and will be removed from pandas
+     29 # in a future version. Use pandas.concat instead.
+     30 # https://stackoverflow.com/questions/75956209/error-dataframe-object-has-no-attribute-append
+---> 31 all_data = train_df.append(test_df)
+
+~/miniconda3/envs/tf/lib/python3.10/site-packages/pandas/core/generic.py in ?(self, name)
+   5985             and name not in self._accessors
+   5986             and self._info_axis._can_hold_identifiers_and_holds_name(name)
+   5987         ):
+   5988             return self[name]
+-> 5989         return object.__getattribute__(self, name)
+
+AttributeError: 'DataFrame' object has no attribute 'append'

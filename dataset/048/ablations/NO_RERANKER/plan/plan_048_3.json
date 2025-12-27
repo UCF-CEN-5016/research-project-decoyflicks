@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, argparse, and any other dependencies required for align_and_segment.py",
+    "Set the audio file path to 'audio.wav' and the text file path to 'text.txt'",
+    "Create a text file 'text.txt' with 63 lines of text, ensuring the content is appropriate for forced alignment with the audio file",
+    "Set the language parameter to 'ful' and the output directory to 'output'",
+    "Set the uroman path to 'uroman/bin'",
+    "Prepare the command to run the script: 'python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin'",
+    "Ensure the audio file 'audio.wav' is in the correct format (e.g., WAV, mono, 16kHz sample rate) and located in the same directory as the script",
+    "Run the command in a terminal or command prompt to execute the align_and_segment.py script",
+    "Monitor the output for any messages indicating the progress of the alignment process",
+    "Wait for the script to reach the point where it attempts to concatenate tensors in the generate_emissions function",
+    "Verify that the RuntimeError occurs, specifically checking for the message: 'Sizes of tensors must match except in dimension 1. Expected size 1649 but got size 1799 for tensor number 1 in the list.'",
+    "Log the error message and the stack trace to confirm the bug has been reproduced",
+    "Check the dimensions of the tensors involved in the concatenation to validate the mismatch in sizes"
+]
+```

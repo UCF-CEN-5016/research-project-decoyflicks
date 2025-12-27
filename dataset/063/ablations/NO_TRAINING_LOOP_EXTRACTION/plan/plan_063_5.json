@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and necessary modules: keras, keras_cv, and tensorflow_datasets",
+    "Set the batch size to 32 and image dimensions to (160, 160, 3)",
+    "Define the augment_fn function that applies random augmentations to the input images",
+    "Define the unpackage_inputs function that processes the output of the dataset",
+    "Load the Oxford Pets dataset using tensorflow_datasets and split it into training and validation sets",
+    "Create a training dataset from the Oxford Pets dataset with the following parameters: shuffle with buffer size of BATCH_SIZE * 2, map augment_fn with num_parallel_calls set to tf.data.AUTOTUNE, batch with BATCH_SIZE, map unpackage_inputs, and prefetch with buffer size set to tf.data.AUTOTUNE",
+    "Define the BATCH_SIZE variable as 32",
+    "Define the AUTOTUNE variable as tf.data.AUTOTUNE",
+    "Run the following code to create the augmented training dataset: augmented_train_ds = (train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE))",
+    "Execute the code and observe the output for the error message regarding tensor type mismatch",
+    "Verify that the error message contains the specific details: 'Tensor shape=(160, 160, 1), dtype=float32 and Tensor shape=(160, 160, 1), dtype=int64 have different types'"
+]
+```

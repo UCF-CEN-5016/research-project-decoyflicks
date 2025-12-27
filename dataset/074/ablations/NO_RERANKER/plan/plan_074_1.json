@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: argparse, torch, DataLoader, RandomSampler, and DeepSpeedRLHFEngine from dschat.",
+    "Set the random seed for reproducibility using set_random_seed with a seed value of 42.",
+    "Define a batch size of 16 and sequence lengths for prompts and answers as 256.",
+    "Create a mock dataset that simulates the training data, ensuring it includes an 'eos' token in the rewards.",
+    "Initialize the tokenizer using load_hf_tokenizer with a model path of 'gpt2' and add the end-of-sequence token '<|endoftext|>'.",
+    "Create a DataLoader for the mock dataset with a batch size of 16 using RandomSampler.",
+    "Initialize the DeepSpeedRLHFEngine with actor_model_name_or_path set to 'gpt2', critic_model_name_or_path set to 'gpt2', and the tokenizer created earlier.",
+    "Generate a batch of experience using the trainer's generate_experience method with the mock prompt batch.",
+    "Call the train_rlhf method on the trainer with the generated experience to compute actor_loss and critic_loss.",
+    "Modify the action_mask to simulate the bug by using action_mask[:, start:] instead of action_mask[:, start-1:-1].",
+    "Capture the actor_loss value after the training step to verify the loss calculation.",
+    "Assert that the actor_loss does not include the ground reward from the 'eos' token by checking if it is less than expected when using the incorrect mask.",
+    "Log the actor_loss value to monitor if it changes when using the correct mask versus the incorrect mask.",
+    "Run the training loop for a single epoch to ensure the bug is consistently reproducible.",
+    "Verify that the actor_loss is incorrectly calculated by checking if it is significantly lower than expected when the 'eos' token is excluded."
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: import pandas as pd, import numpy as np, import matplotlib.pyplot as plt, import tensorflow as tf",
+    "Set a random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Create a sample DataFrame with a datetime column and a string column: df = pd.DataFrame({'date': ['01.01.2009 00:10:00', '01.01.2009 00:20:00'], 'value': ['10', '20']})",
+    "Convert the 'date' column to datetime format: df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y %H:%M:%S')",
+    "Add a numeric column to the DataFrame: df['numeric_value'] = [10.0, 20.0]",
+    "Define a function show_heatmap that takes a DataFrame as input and attempts to plot a heatmap of the correlation matrix: def show_heatmap(data): plt.matshow(data.corr()) plt.show()",
+    "Call the show_heatmap function with the DataFrame: show_heatmap(df)",
+    "Run the script using python3 timeseries_weather_forecasting.py",
+    "Observe the output for the ValueError: 'could not convert string to float: '01.01.2009 00:10:00''",
+    "Verify that the DataFrame contains a string in the 'value' column that cannot be converted to float"
+]
+```

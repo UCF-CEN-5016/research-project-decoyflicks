@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and the delg_model module from delg_model_test.py",
+    "Set the batch size to 2 and image dimensions to 321x321",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Initialize the DelG model with block3_strides=True and use_dim_reduction=True",
+    "Set the number of classes to 1000 and initialize classifiers for the model",
+    "Generate random labels for training with shape (batch_size,) and dtype tf.int64",
+    "Create an optimizer using SGD with a learning rate of 0.001 and momentum of 0.9",
+    "Define a SparseCategoricalCrossentropy loss object with from_logits=True and reduction=tf.keras.losses.Reduction.NONE",
+    "Use the global_and_local_forward_pass method to compute desc_prelogits, attn_prelogits, backbone_blocks, dim_expanded_features, and additional outputs from the model",
+    "Calculate desc_loss using compute_loss function on labels and desc_logits",
+    "Calculate attn_loss using compute_loss function on labels and attn_logits",
+    "Compute reconstruction_loss between block3 and dim_expanded_features using MSE",
+    "Summarize total_loss by adding desc_loss, attn_loss, and reconstruction_loss",
+    "Track the gradients of total_loss with respect to model.trainable_weights",
+    "Clip the gradients using tf.clip_by_global_norm with clip_norm=10.0",
+    "Apply the optimizer's apply_gradients method to update model trainable weights with clipped gradients",
+    "Monitor the value of validation_loss during training",
+    "Assert that the value of validation_loss is always zero"
+]
+```
+

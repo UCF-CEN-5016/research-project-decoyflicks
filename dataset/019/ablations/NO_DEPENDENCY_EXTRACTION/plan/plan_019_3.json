@@ -1,0 +1,21 @@
+```json
+[
+    "Install TensorFlow and TensorFlow Text using pip: `!pip install tensorflow tensorflow-text`",
+    "Import TensorFlow and TensorFlow Text in the script: `import tensorflow as tf` and `import tensorflow_text as tf_text`",
+    "Check the TensorFlow version to ensure it is 2.x: `print(tf.version.VERSION)`",
+    "Create a virtual environment to isolate dependencies: `python -m venv tf_env` and activate it",
+    "Install the latest version of TensorFlow Model Garden: `!pip install tf-models-official`",
+    "Import the TensorFlow Model Garden: `import tensorflow_models as tfm`",
+    "Create a simple model using TensorFlow Keras API: `model = tf.keras.Sequential([tf.keras.layers.Dense(10, activation='relu', input_shape=(None, 10))])`",
+    "Compile the model with an optimizer and loss function: `model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')`",
+    "Create dummy input data with shape (32, 10) and labels with shape (32,): `import numpy as np; x = np.random.rand(32, 10); y = np.random.randint(0, 10, size=(32,))`",
+    "Attempt to fit the model with the dummy data: `model.fit(x, y, epochs=1)`",
+    "Capture the output and check for ImportError: `try: import tensorflow_models as tfm; except ImportError as e: print(e)`",
+    "Verify that the ImportError message contains 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Log the full error traceback to confirm the source of the error",
+    "Check the installed versions of TensorFlow and TensorFlow Text: `!pip show tensorflow tensorflow-text`",
+    "Ensure that the TensorFlow Text version is compatible with the installed TensorFlow version",
+    "Run the environment capture script to collect system information: `!bash tf_env_collect.sh`",
+    "Review the collected system information for discrepancies in library versions or configurations"
+]
+```

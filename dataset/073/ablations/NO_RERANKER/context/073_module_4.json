@@ -1,0 +1,36 @@
+{
+  "bug_report": "073",
+  "module": {
+    "module": "training/DeepSpeed-Domino/domino",
+    "files": [
+      {
+        "path": "training/DeepSpeed-Domino/domino/parallel_state.py",
+        "snippets": [
+          {
+            "lines": "229-232",
+            "code": "def get_data_parallel_rank():\n    \"\"\"Return my rank for the data parallel group.\"\"\"\n    if torch.distributed.is_available() and torch.distributed.is_initialized():\n        return torch.distributed.get_rank(group=get_data_parallel_group())\n    else:\n        return 0\n\ndef _set_global_memory_buffer():\n    \"\"\"Initialize global buffer\"\"\"\n    global _GLOBAL_MEMORY_BUFFER\n    assert _GLOBAL_MEMORY_BUFFER is None, 'global memory buffer is already initialized'\n    _GLOBAL_MEMORY_BUFFER = GlobalMemoryBuffer()\n\ndef get_global_memory_buffer():\n    \"\"\"Return the global GlobalMemoryBuffer object\"\"\"\n    assert _GLOBAL_MEMORY_BUFFER is not None, 'global memory buffer is not initialized'\n    return _GLOBAL_MEMORY_BUFFER"
+          },
+          {
+            "lines": "206-211",
+            "code": "def get_tensor_model_parallel_src_rank():\n    \"\"\"Calculate the global rank corresponding to the first local rank\n    in the tensor model parallel group.\"\"\"\n    global_rank = torch.distributed.get_rank()\n    local_world_size = get_tensor_model_parallel_world_size()\n    return (global_rank // local_world_size) * local_world_size\n\ndef get_data_parallel_src_rank():\n    \"\"\"Calculate the global rank corresponding to the first local rank\n    in the data parallel group.\"\"\"\n    assert _DATA_PARALLEL_GLOBAL_RANKS is not None, \"Data parallel group is not initialized\"\n    return _DATA_PARALLEL_GLOBAL_RANKS[0]\n\ndef get_data_parallel_world_size():\n    \"\"\"Return world size for the data parallel group.\"\"\"\n    if torch.distributed.is_available() and torch.distributed.is_initialized():\n        return torch.distributed.get_world_size(group=get_data_parallel_group())\n    else:\n        return 0"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "training/DeepSpeed-Domino/domino/parallel_state.py",
+      "snippets": [
+        {
+          "lines": "229-232",
+          "code": "def get_data_parallel_rank():\n    \"\"\"Return my rank for the data parallel group.\"\"\"\n    if torch.distributed.is_available() and torch.distributed.is_initialized():\n        return torch.distributed.get_rank(group=get_data_parallel_group())\n    else:\n        return 0\n\ndef _set_global_memory_buffer():\n    \"\"\"Initialize global buffer\"\"\"\n    global _GLOBAL_MEMORY_BUFFER\n    assert _GLOBAL_MEMORY_BUFFER is None, 'global memory buffer is already initialized'\n    _GLOBAL_MEMORY_BUFFER = GlobalMemoryBuffer()\n\ndef get_global_memory_buffer():\n    \"\"\"Return the global GlobalMemoryBuffer object\"\"\"\n    assert _GLOBAL_MEMORY_BUFFER is not None, 'global memory buffer is not initialized'\n    return _GLOBAL_MEMORY_BUFFER"
+        },
+        {
+          "lines": "206-211",
+          "code": "def get_tensor_model_parallel_src_rank():\n    \"\"\"Calculate the global rank corresponding to the first local rank\n    in the tensor model parallel group.\"\"\"\n    global_rank = torch.distributed.get_rank()\n    local_world_size = get_tensor_model_parallel_world_size()\n    return (global_rank // local_world_size) * local_world_size\n\ndef get_data_parallel_src_rank():\n    \"\"\"Calculate the global rank corresponding to the first local rank\n    in the data parallel group.\"\"\"\n    assert _DATA_PARALLEL_GLOBAL_RANKS is not None, \"Data parallel group is not initialized\"\n    return _DATA_PARALLEL_GLOBAL_RANKS[0]\n\ndef get_data_parallel_world_size():\n    \"\"\"Return world size for the data parallel group.\"\"\"\n    if torch.distributed.is_available() and torch.distributed.is_initialized():\n        return torch.distributed.get_world_size(group=get_data_parallel_group())\n    else:\n        return 0"
+        }
+      ]
+    }
+  ]
+}

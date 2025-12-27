@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, numpy, matplotlib, and tensorflow_datasets",
+    "Set the runtime type in Google Colab to GPU for better performance",
+    "Define a batch size of 2 and set the number of epochs to 3 for training",
+    "Load the COCO2017 dataset using TensorFlow Datasets with the following command: (train_dataset, val_dataset), dataset_info = tfds.load('coco/2017', split=['train', 'validation'], with_info=True)",
+    "Define a preprocessing function that resizes images to a minimum side of 800 pixels and a maximum side of 1333 pixels, while also applying random horizontal flipping",
+    "Map the preprocessing function to the training dataset with train_dataset = train_dataset.map(preprocess_data, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Shuffle the training dataset with train_dataset = train_dataset.shuffle(8 * batch_size)",
+    "Pad the training dataset using train_dataset = train_dataset.padded_batch(batch_size=batch_size, padding_values=(0.0, 1e-8, -1), drop_remainder=True)",
+    "Map the label encoding function to the training dataset with train_dataset = train_dataset.map(label_encoder.encode_batch, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Set up the validation dataset similarly to the training dataset with val_dataset = val_dataset.map(preprocess_data, num_parallel_calls=tf.data.AUTOTUNE) and val_dataset = val_dataset.padded_batch(batch_size=1, padding_values=(0.0, 1e-8, -1), drop_remainder=True)",
+    "Define the model architecture using the RetinaNet class with a ResNet50 backbone and compile it with a loss function and optimizer",
+    "Set up a ModelCheckpoint callback to save the model weights during training",
+    "Train the model using model.fit with the training dataset for 3 epochs and validation dataset for 1 epoch, using the command: model.fit(train_dataset.take(100), validation_data=val_dataset.take(50), epochs=3, callbacks=callbacks_list, verbose=1)",
+    "Monitor the training process and look for the UnknownError during the first epoch, specifically after the line: 'metrics = self.metrics.result(force=True)'",
+    "Capture the full error traceback to verify the specific error message related to the InvalidArgumentError and the ConcatOp dimension mismatch",
+    "Assert that the error occurs during the training process, specifically after the first epoch, indicating a failure in the metrics calculation"
+]
+```

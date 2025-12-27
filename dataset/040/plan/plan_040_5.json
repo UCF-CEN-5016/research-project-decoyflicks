@@ -1,0 +1,25 @@
+```json
+[
+    "Clone the annotated_deep_learning_paper_implementations repository from GitHub",
+    "Navigate to the 'labml_nn/diffusion/ddpm/unet.py' file",
+    "Locate line 188 and confirm it reads: `attn = attn.softmax(dim=3)`",
+    "Locate line 190 and confirm it reads: `attn = attn.softmax(dim=2)`",
+    "Navigate to the 'labml_nn/optimizers/amsgrad.py' file",
+    "Ensure all import statements match those provided in the bug report",
+    "Create a Python script named 'bug_reproducer.py'",
+    "Define a function named 'reproduce_bug()' in 'bug_reproducer.py'",
+    "Within 'reproduce_bug()', create a CIFAR-10 dataset loader and ensure it is correctly configured",
+    "Load a pre-trained model that uses the DDPM UNet implementation from 'labml_nn/diffusion/ddpm/unet.py'",
+    "Initialize an AMSGrad optimizer as described in 'labml_nn/optimizers/amsgrad.py'",
+    "Set the batch size to 32",
+    "Define input data for the model with shape (batch_size, height, width, channels) where height=32, width=32, channels=3 and type=torch.float32",
+    "Pass the input data through the DDPM UNet model",
+    "Compute the loss using a predefined loss function compatible with the model output and ground truth labels from CIFAR-10",
+    "Call the AMSGrad optimizer's step method to perform an update",
+    "Assert that the computed loss is not NaN or Inf after the first update",
+    "Repeat steps 7-11 for multiple iterations (e.g., 10) to ensure consistency in reproduction",
+    "Monitor GPU memory usage during execution and assert it remains within expected limits",
+    "Run 'bug_reproducer.py' to execute the bug reproduction process"
+]
+```
+

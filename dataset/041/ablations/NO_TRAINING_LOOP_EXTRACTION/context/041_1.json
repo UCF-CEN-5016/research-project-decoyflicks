@@ -1,0 +1,11 @@
+{
+  "bug_report": "041",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "dalle_pytorch/version.py",
+    "content": "__version__ = '1.6.4'\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

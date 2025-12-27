@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary modules: torch, numpy, and the RewardModel from dschat.utils.model.reward_model",
+    "Define a batch size of 4 and sequence length of 10 for the input data",
+    "Create random input data for actor_log_prob with shape (batch_size, sequence_length, vocab_size) where vocab_size is 50",
+    "Create random input data for log_probs with shape (batch_size, sequence_length, vocab_size)",
+    "Create random input data for advantages with shape (batch_size, sequence_length)",
+    "Create a random action_mask with shape (batch_size, sequence_length) where values are 0 or 1",
+    "Set the start variable to 1 to simulate the filtering of the first token",
+    "Define the actor_loss_fn function to compute the loss using CrossEntropyLoss",
+    "Call the actor_loss_fn with actor_log_prob[:, start:], log_probs[:, start:], advantages, and action_mask[:, start:]",
+    "Capture the output of the actor_loss_fn to check for loss value",
+    "Print the loss value to verify if it is calculated correctly without the 'eos' token",
+    "Modify the action_mask to use action_mask[:, start-1:-1] and call the actor_loss_fn again",
+    "Capture the output of the actor_loss_fn with the modified mask to check for loss value",
+    "Print the new loss value to compare with the previous loss value",
+    "Assert that the loss value with the modified mask is different from the loss value with the original mask",
+    "Log the results to confirm that the 'eos' token's ground reward is not being considered in the original loss calculation"
+]
+```

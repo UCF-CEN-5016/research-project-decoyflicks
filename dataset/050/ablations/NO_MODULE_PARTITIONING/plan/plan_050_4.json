@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import tensorflow_datasets as tfds, from tensorflow import keras, from tensorflow.keras import layers, import matplotlib.pyplot as plt",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define hyperparameters: set num_epochs to 1, image_size to 64, batch_size to 128, learning_rate to 2e-4, and beta_1 to 0.5",
+    "Load the Caltech Birds dataset using tfds.load with split='train' and preprocess the images using a custom preprocess_image function",
+    "Define the preprocess_image function to normalize and resize images to (64, 64, 3)",
+    "Create a prepare_dataset function that loads the dataset, applies the preprocess_image function, shuffles, batches, and prefetches the data",
+    "Call prepare_dataset for 'train' split and assign it to train_dataset",
+    "Define the GAN_ADA class with methods for generator and discriminator architecture, compile method, and train_step method",
+    "Implement the get_generator function to create a generator model with input shape (noise_size,) and output shape (64, 64, 3)",
+    "Implement the get_discriminator function to create a discriminator model with input shape (64, 64, 3) and output shape (1,)",
+    "Instantiate the GAN_ADA model and compile it with Adam optimizers for both generator and discriminator",
+    "Attempt to fit the model using model.fit with train_dataset, epochs set to num_epochs, and validation_data set to None",
+    "During the fit process, assert that the training raises an AttributeError with the message 'list' object has no attribute 'shape'",
+    "Log the error message to confirm the occurrence of the bug"
+]
+```

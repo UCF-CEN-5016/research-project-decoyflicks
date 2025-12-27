@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from tensorflow_models and absl",
+    "Set the TensorFlow version to 2.x and ensure compatibility with the latest TensorFlow Model Garden release",
+    "Define a batch size of 8 and image dimensions of 640x640 for the YOLOv7 model",
+    "Create a random uniform input tensor with shape (batch_size, height, width, 3) where height and width are 640",
+    "Prepare a dummy label tensor with shape (batch_size, num_classes) where num_classes is set to 80 (for COCO dataset)",
+    "Import the YoloV7Task class from official.projects.yolo.tasks.yolov7",
+    "Instantiate the YoloV7Task class with a configuration dictionary that includes model parameters such as input_size=[640, 640], num_classes=80, and anchor_boxes",
+    "Call the build_model method of the YoloV7Task instance to create the model",
+    "Attempt to import tensorflow_models as tfm to trigger the ImportError",
+    "Capture the ImportError and check if the error message contains 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Log the error message to verify that the specific ImportError is raised",
+    "Assert that the ImportError is raised during the import of tensorflow_models",
+    "Verify that the environment is using Python 3.10 and TensorFlow 2.x",
+    "Check the installed version of tensorflow_text to ensure it matches the expected version that may cause the bug",
+    "Run the script in a clean virtual environment to isolate dependencies and confirm the bug persists"
+]
+```

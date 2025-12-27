@@ -1,0 +1,20 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n tf_env python=3.10.13",
+    "Activate the newly created conda environment using: conda activate tf_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open a Python interactive shell or Jupyter Notebook in the activated conda environment.",
+    "Import the necessary libraries by executing: import matplotlib.pyplot as plt and import tensorflow as tf",
+    "Check the current matplotlib backend by executing: print(plt.get_backend()) and note the output.",
+    "Import the TensorFlow Model Garden by executing: from official import tensorflow_models",
+    "Check the matplotlib backend again by executing: print(plt.get_backend()) and note the output to confirm it has changed.",
+    "Create a simple plot using matplotlib by executing: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Display the plot using: plt.show() and verify that the plot is displayed correctly.",
+    "Add additional lines of code to create another plot by executing: plt.plot([1, 2, 3], [1, 2, 3])",
+    "Attempt to display the second plot using: plt.show() and verify that the plot does not display.",
+    "Check the backend again after attempting to display the second plot by executing: print(plt.get_backend()) and note if it remains 'agg'.",
+    "Assert that the first plot displayed correctly while the second plot did not display, confirming the bug."
+]
+```

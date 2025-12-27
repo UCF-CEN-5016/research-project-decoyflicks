@@ -1,0 +1,13 @@
+```json
+[
+    "Import PyTorch and necessary libraries for handling tensors and neural networks",
+    "Define a batch size of 4 and image dimensions of 256x256",
+    "Create random uniform input data with shape (batch_size, height, width, channels) using torch.rand",
+    "Initialize the MPP class with transformer, patch_size=32, dim=768, output_channel_bits=3, channels=3, max_pixel_val=1.0, mask_prob=0.15, replace_prob=0.5, random_patch_prob=0.5, mean=None, std=None",
+    "Call the forward method of MPP class with the input data and kwargs={}",
+    "Verify that the output logits contain NaN values in some positions by checking if torch.isnan(logits).any().item() returns True",
+    "Monitor GPU memory usage during execution using torch.cuda.memory_summary or a similar tool",
+    "Assert that GPU memory usage exceeds an expected threshold to confirm the bug occurs"
+]
+```
+

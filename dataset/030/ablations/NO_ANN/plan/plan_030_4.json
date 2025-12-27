@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, pytorch_lightning, and nnUNet modules.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define a batch size of 2 and image dimensions of 128x128x128 (assuming 3D images for BraTS).",
+    "Create a synthetic dataset with 1125 training samples, 126 validation samples, and 1251 test samples using random tensors of shape (2, 1, 128, 128, 128) for input and random integers for labels.",
+    "Define a simple nnUNet model class that inherits from pytorch_lightning.LightningModule, ensuring to include an optimizer and a learning rate scheduler.",
+    "In the nnUNet model class, implement the training_step method to compute loss using CrossEntropyLoss.",
+    "In the nnUNet model class, implement the configure_optimizers method to return an optimizer (e.g., Adam) and a learning rate scheduler (e.g., CosineAnnealingWarmRestarts).",
+    "Instantiate the nnUNet model and set it to use GPU by calling model.cuda().",
+    "Create a DataLoader for the training and validation datasets with the defined batch size.",
+    "Instantiate a pytorch_lightning.Trainer with gpus=1 and max_epochs=10.",
+    "Run the training process by calling trainer.fit(model, train_dataloader, val_dataloader).",
+    "Capture the output and error messages during the training process.",
+    "Verify that the output contains the MisconfigurationException related to the lr_scheduler by checking for the string 'MisconfigurationException' in the output.",
+    "Assert that the error message includes the specific text about the lr scheduler not following PyTorch's LRScheduler API."
+]
+```

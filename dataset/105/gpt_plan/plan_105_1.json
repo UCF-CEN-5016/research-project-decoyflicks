@@ -1,0 +1,19 @@
+[
+  "Import torch, torch.nn, torch.nn.functional as F, torchvision.transforms, torchvision.datasets, torch.utils.data.DataLoader, tqdm.trange, and vector_quantize_pytorch.LFQ",
+  "Set random seed to 1234 with torch.random.manual_seed(1234) for reproducibility",
+  "Define constants: batch_size=256, codebook_size=256 (2**8), Z_CHANNELS=512, NUM_QUANTIZERS=2, and device='cuda' if torch.cuda.is_available() else 'cpu'",
+  "Define a transform pipeline for FashionMNIST with transforms.Compose including transforms.ToTensor() and transforms.Normalize(mean=(0.5,), std=(0.5,))",
+  "Load the FashionMNIST training dataset with torchvision.datasets.FashionMNIST using the defined transform, download=True, and train=True",
+  "Create a DataLoader from the dataset with batch_size=256, shuffle=True",
+  "Define a LFQAutoEncoder class with an encoder producing output channels equal to quantize_dim=log2(codebook_size)=8, using Conv2d, MaxPool2d, GELU, GroupNorm(4, 32, affine=False), and final Conv2d to quantize_dim channels",
+  "Instantiate LFQ inside LFQAutoEncoder with parameters: dim=8, num_quantizers=2, codebook_size=256, stochastic_sample_codes=True, shared_codebook=True, commitment_weight=1.0, kmeans_init=True, threshold_ema_dead_code=2, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1",
+  "Define the decoder of LFQAutoEncoder with Conv2d, Upsample(scale_factor=2, mode='nearest'), GELU, and final Conv2d to 1 channel output",
+  "Implement forward method to pass input through encoder, then quantize, then decoder, returning output clamped between -1 and 1, quantization indices, and entropy auxiliary loss",
+  "Initialize the model to device and set an AdamW optimizer with learning rate 3e-4",
+  "Create a training loop running for 1000 iterations, each iteration fetching a batch of shape (256, 1, 28, 28) from the DataLoader",
+  "In each iteration, zero optimizer gradients, run forward pass through the model, compute L1 reconstruction loss between output and input, add entropy auxiliary loss, call backward, and step optimizer",
+  "During training, monitor for RuntimeError with message about shape mismatch during self.embed.data[ind][mask] = sampled assignment from vector_quantize_pytorch.vector_quantize_pytorch.py within the LFQ forward pass",
+  "Specifically, expect error message: 'shape mismatch: value tensor of shape [9330, 512] cannot be broadcast to indexing result of shape [9331, 512]' occurring randomly during training iterations",
+  "Add assertion or try-except around model forward call to catch and print the exact shapes of tensors involved (e.g., sampled tensor shape and masked embed data shape) when the error occurs",
+  "Run the training script on a GPU-enabled multi-node or single-node environment to reproduce the bug as reported"
+]

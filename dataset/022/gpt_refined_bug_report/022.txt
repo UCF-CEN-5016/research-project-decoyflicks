@@ -1,0 +1,14 @@
+RandAugment magnitude standard deviation is either 0 or 1
+
+SYMPTOMS
+• The standard deviation applied to RandAugment magnitude is always either 0 or 1
+• This results in a lack of variability in augmentation magnitude when a non-default standard deviation is expected
+• No explicit error messages reported, but behavior indicates a potential coding logic flaw
+
+EXPECTED BEHAVIOR
+The RandAugment magnitude should incorporate the specified standard deviation (`level_std`) correctly, allowing the magnitude to vary according to the intended standard deviation rather than being fixed at 1 or 0.
+
+REPRODUCTION STEPS
+1. Use the RandAugment augmentation from the specified file in the TensorFlow models repository
+2. Set a non-zero `level_std` parameter for the magnitude standard deviation
+3. Observe that the applied magnitude standard deviation does not reflect the specified `level_std` and remains at 1 or 0

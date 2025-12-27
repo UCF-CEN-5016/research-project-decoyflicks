@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official object detection library",
+    "Set TensorFlow version to 2.13.0 and Python version to 3.10.12 in Google Colab environment",
+    "Download the Faster R-CNN Inception ResNet V2 pretrained model from the provided URL",
+    "Extract the downloaded model files to a directory in the Colab environment",
+    "Import the MeanAveragePrecisionCalculator class from official.projects.yt8m.eval_utils.mean_average_precision_calculator",
+    "Define a variable num_class with a value of 50 to represent the number of classes for the model",
+    "Create a random predictions array with shape (num_class, 1000) filled with values between 0 and 1",
+    "Create a random actuals array with shape (num_class, 1000) filled with binary values (0 or 1)",
+    "Instantiate the MeanAveragePrecisionCalculator with num_class=50",
+    "Call the accumulate method of the MeanAveragePrecisionCalculator with the predictions and actuals arrays",
+    "Verify that the ValueError is raised by wrapping the accumulate call in a try-except block",
+    "Assert that the exception message contains 'ValueError: An error occurred when num_class is not a positive integer' or similar relevant message",
+    "Print the exception message to confirm the error details"
+]
+```

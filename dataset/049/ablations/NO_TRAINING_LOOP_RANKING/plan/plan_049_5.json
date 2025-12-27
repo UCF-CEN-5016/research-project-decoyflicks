@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and fairseq modules",
+    "Define the dimensions for the bias parameters: u_bias_dim = 10, v_bias_dim = 10",
+    "Create a MultiHeadedAttention class that includes the uninitialized bias parameters using torch.Tensor",
+    "Initialize the bias parameters as follows: self.u_bias = torch.Tensor(u_bias_dim) and self.v_bias = torch.Tensor(v_bias_dim)",
+    "Create a forward method that uses the bias parameters in a computation, e.g., output = input + self.u_bias + self.v_bias",
+    "Set the input tensor shape to (batch_size, seq_length, embedding_dim) with batch_size = 2, seq_length = 5, embedding_dim = 10",
+    "Generate random input data with shape (2, 5, 10) using torch.randn",
+    "Instantiate the MultiHeadedAttention class",
+    "Call the forward method with the generated input data",
+    "Capture the output and check for NaN values using torch.isnan(output).any()",
+    "Assert that the output contains NaN values, indicating the presence of uninitialized bias parameters",
+    "Log the output tensor to verify its contents and confirm the presence of NaN values"
+]
+```

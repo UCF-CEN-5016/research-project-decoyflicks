@@ -1,0 +1,84 @@
+{
+  "bug_report": "031",
+  "rank": 5,
+  "score": 0.4588370621204376,
+  "main_file": {
+    "path": "PaddlePaddle/Classification/RN50v1.5/train.py",
+    "content": "# Copyright (c) 2022 NVIDIA Corporation.  All rights reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\nimport os\nimport logging\nimport paddle\nfrom paddle.distributed import fleet\nfrom paddle.static import sparsity\nfrom paddle.fluid.contrib.mixed_precision.fp16_utils import rewrite_program\nfrom paddle.fluid.contrib.mixed_precision.fp16_lists import AutoMixedPrecisionLists\nfrom dali import build_dataloader\nfrom utils.config import parse_args, print_args\nfrom utils.logger import setup_dllogger\nfrom utils.save_load import init_program, save_model\nfrom utils.affinity import set_cpu_affinity\nfrom utils.mode import Mode, RunScope\nimport program\n\n\nclass MetricSummary:\n    def __init__(self):\n        super().__init__()\n        self.metric_dict = None\n\n    def update(self, new_metrics):\n        if not self.is_updated:\n            self.metric_dict = dict()\n\n        for key in new_metrics:\n            if key in self.metric_dict:\n                # top1, top5 and ips are \"larger is better\"\n                if key in ['top1', 'top5', 'ips']:\n                    self.metric_dict[key] = new_metrics[key] if new_metrics[\n                        key] > self.metric_dict[key] else self.metric_dict[key]\n                # Others are \"Smaller is better\"\n                else:\n                    self.metric_dict[key] = new_metrics[key] if new_metrics[\n                        key] < self.metric_dict[key] else self.metric_dict[key]\n            else:\n                self.metric_dict[key] = new_metrics[key]\n\n    @property\n    def is_updated(self):\n        return self.metric_dict is not None\n\n\ndef main(args):\n    \"\"\"\n    A enterpoint to train and evaluate a ResNet50 model, which contains six steps.\n        1. Parse arguments from command line.\n        2. Initialize distributed training related setting, including CPU affinity.\n        3. Build dataloader via DALI.\n        4. Create training and evaluating Paddle.static.Program.\n        5. Load checkpoint or pretrained model if given.\n        6. Run program (train and evaluate with datasets, then save model if necessary).\n    \"\"\"\n    setup_dllogger(args.report_file)\n    if args.show_config:\n        print_args(args)\n\n    fleet.init(is_collective=True)\n    if args.enable_cpu_affinity:\n        set_cpu_affinity()\n\n    device = paddle.set_device('gpu')\n    startup_prog = paddle.static.Program()\n\n    train_dataloader = None\n    train_prog = None\n    optimizer = None\n    if args.run_scope in [RunScope.TRAIN_EVAL, RunScope.TRAIN_ONLY]:\n        train_dataloader = build_dataloader(args, Mode.TRAIN)\n        train_step_each_epoch = len(train_dataloader)\n        train_prog = paddle.static.Program()\n\n        train_fetchs, lr_scheduler, _, optimizer = program.build(\n            args,\n            train_prog,\n            startup_prog,\n            step_each_epoch=train_step_each_epoch,\n            is_train=True)\n\n    eval_dataloader = None\n    eval_prog = None\n    if args.run_scope in [RunScope.TRAIN_EVAL, RunScope.EVAL_ONLY]:\n        eval_dataloader = build_dataloader(args, Mode.EVAL)\n        eval_step_each_epoch = len(eval_dataloader)\n        eval_prog = paddle.static.Program()\n\n        eval_fetchs, _, _, _ = program.build(\n            args,\n            eval_prog,\n            startup_prog,\n            step_each_epoch=eval_step_each_epoch,\n            is_train=False)\n        # clone to prune some content which is irrelevant in eval_prog\n        eval_prog = eval_prog.clone(for_test=True)\n\n    exe = paddle.static.Executor(device)\n    exe.run(startup_prog)\n\n    init_program(\n        args,\n        exe=exe,\n        program=train_prog if train_prog is not None else eval_prog)\n\n    if args.amp:\n        if args.run_scope == RunScope.EVAL_ONLY:\n            rewrite_program(eval_prog, amp_lists=AutoMixedPrecisionLists())\n        else:\n            optimizer.amp_init(\n                device,\n                scope=paddle.static.global_scope(),\n                test_program=eval_prog,\n                use_fp16_test=True)\n\n    if args.asp and args.prune_model:\n        logging.info(\"Pruning model to 2:4 sparse pattern...\")\n        sparsity.prune_model(train_prog, mask_algo=args.mask_algo)\n        logging.info(\"Pruning model done.\")\n\n    if eval_prog is not None:\n        eval_prog = program.compile_prog(args, eval_prog, is_train=False)\n\n    train_summary = MetricSummary()\n    eval_summary = MetricSummary()\n    for epoch_id in range(args.start_epoch, args.epochs):\n        # Training\n        if train_prog is not None:\n            metric_summary = program.run(args, train_dataloader, exe,\n                                         train_prog, train_fetchs, epoch_id,\n                                         Mode.TRAIN, lr_scheduler)\n            train_summary.update(metric_summary)\n\n            # Save a checkpoint\n            if epoch_id % args.save_interval == 0:\n                model_path = os.path.join(args.output_dir,\n                                          args.model_arch_name)\n                save_model(train_prog, model_path, epoch_id, args.model_prefix)\n\n        # Evaluation\n        if (eval_prog is not None) and \\\n            (epoch_id % args.eval_interval == 0):\n            metric_summary = program.run(args, eval_dataloader, exe, eval_prog,\n                                         eval_fetchs, epoch_id, Mode.EVAL)\n            eval_summary.update(metric_summary)\n\n    if train_summary.is_updated:\n        program.log_info(tuple(), train_summary.metric_dict, Mode.TRAIN)\n    if eval_summary.is_updated:\n        program.log_info(tuple(), eval_summary.metric_dict, Mode.EVAL)\n\n\nif __name__ == '__main__':\n    paddle.enable_static()\n    main(parse_args())\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "dali",
+      "function": "build_dataloader"
+    },
+    {
+      "module": "logging",
+      "function": "info"
+    },
+    {
+      "module": "paddle",
+      "function": "AutoMixedPrecisionLists"
+    },
+    {
+      "module": "paddle",
+      "function": "enable_static"
+    },
+    {
+      "module": "paddle",
+      "function": "init"
+    },
+    {
+      "module": "paddle",
+      "function": "prune_model"
+    },
+    {
+      "module": "paddle",
+      "function": "rewrite_program"
+    },
+    {
+      "module": "paddle",
+      "function": "set_device"
+    },
+    {
+      "module": "program",
+      "function": "build"
+    },
+    {
+      "module": "program",
+      "function": "compile_prog"
+    },
+    {
+      "module": "program",
+      "function": "log_info"
+    },
+    {
+      "module": "program",
+      "function": "run"
+    },
+    {
+      "module": "utils",
+      "function": "init_program"
+    },
+    {
+      "module": "utils",
+      "function": "parse_args"
+    },
+    {
+      "module": "utils",
+      "function": "print_args"
+    },
+    {
+      "module": "utils",
+      "function": "save_model"
+    },
+    {
+      "module": "utils",
+      "function": "set_cpu_affinity"
+    },
+    {
+      "module": "utils",
+      "function": "setup_dllogger"
+    }
+  ]
+}

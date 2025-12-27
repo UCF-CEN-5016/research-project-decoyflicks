@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow and Keras modules: import tensorflow as tf and from keras import layers, models",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define the batch size as 64 and image dimensions as 256x256",
+    "Load the tf_flowers dataset using tfds.load with split=['train[:90%]', 'train[90%:]']",
+    "Define a preprocessing function that resizes images to (280, 280) and crops to (256, 256) for training",
+    "Define a function to prepare the dataset that shuffles, maps the preprocessing function, and batches the dataset",
+    "Prepare the training and validation datasets using the prepare_dataset function",
+    "Define a MobileViT model creation function with num_classes=5, ensuring the output layer uses softmax activation",
+    "Compile the model with Adam optimizer and CategoricalCrossentropy loss with label smoothing of 0.1",
+    "Call model.fit on the training dataset for 10 epochs, using validation_data as the validation dataset",
+    "During training, monitor for any exceptions or errors, specifically looking for OperatorNotAllowedInGraphError",
+    "If the error occurs, capture the stack trace and log the input shapes being passed to the model",
+    "After the fit call, prepare a sample input text for Named Entity Recognition: 'eu rejects german call to boycott british lamb'",
+    "Tokenize the sample input using the tokenize_and_convert_to_ids function",
+    "Reshape the tokenized input to have shape [1, -1]",
+    "Call ner_model.predict with the reshaped sample input and capture the output",
+    "Check if the output shape is as expected; if not, log the output shape and any errors encountered",
+    "Assert that the output from ner_model.predict raises an OperatorNotAllowedInGraphError"
+]
+```

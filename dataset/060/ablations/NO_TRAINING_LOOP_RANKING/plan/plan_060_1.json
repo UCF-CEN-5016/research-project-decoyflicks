@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow and KerasCV modules: 'import tensorflow as tf' and 'from keras_cv import layers'",
+    "Set the batch size: 'BATCH_SIZE = 32'",
+    "Define the AUTOTUNE variable: 'AUTOTUNE = tf.data.AUTOTUNE'",
+    "Create a function 'augment_fn' that takes an input dictionary and applies random augmentations to the 'images' and 'segmentation_masks' keys",
+    "Create a function 'unpackage_inputs' that takes an input dictionary and returns a tuple of (images, masks)",
+    "Create a function 'resize_fn' that resizes images and masks to (160, 160) using 'tf.image.resize'",
+    "Load the Oxford Pets dataset using 'tf.keras.utils.get_file' to download and extract the dataset",
+    "Create a training dataset 'train_ds' using 'tf.data.Dataset.from_tensor_slices' with images and masks from the training set",
+    "Create a validation dataset 'val_ds' using 'tf.data.Dataset.from_tensor_slices' with images and masks from the validation set",
+    "Shuffle the training dataset with 'train_ds.shuffle(BATCH_SIZE * 2)'",
+    "Map the 'augment_fn' to the training dataset with 'train_ds.map(augment_fn, num_parallel_calls=AUTOTUNE)'",
+    "Batch the training dataset with 'train_ds.batch(BATCH_SIZE)'",
+    "Map the 'unpackage_inputs' function to the training dataset with 'train_ds.map(unpackage_inputs)'",
+    "Prefetch the training dataset with 'train_ds.prefetch(buffer_size=tf.data.AUTOTUNE)'",
+    "Map the 'resize_fn' to the validation dataset with 'val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE)'",
+    "Batch the validation dataset with 'val_ds.batch(BATCH_SIZE)'",
+    "Map the 'unpackage_inputs' function to the validation dataset with 'val_ds.map(unpackage_inputs)'",
+    "Prefetch the validation dataset with 'val_ds.prefetch(buffer_size=tf.data.AUTOTUNE)'",
+    "Run the code cell that creates 'augmented_train_ds' and 'resized_val_ds'",
+    "Capture the error output when executing the code cell to verify the TypeError occurs",
+    "Check the error message for mismatched tensor types in the output of the augment function"
+]
+```

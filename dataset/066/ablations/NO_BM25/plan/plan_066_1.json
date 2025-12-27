@@ -1,0 +1,30 @@
+```json
+[
+    "Import necessary libraries: import os, import tensorflow as tf, from tensorflow import keras, import keras_cv, from keras_cv import visualization, from keras_cv import bounding_box, from tqdm.auto import tqdm, import xml.etree.ElementTree as ET",
+    "Define constants: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 5, GLOBAL_CLIPNORM = 10.0",
+    "Set paths for images and annotations: path_images = '/kaggle/input/dataset/data/images/', path_annot = '/kaggle/input/dataset/data/annotations/'",
+    "Get all XML file paths in path_annot and sort them: xml_files = sorted([os.path.join(path_annot, file_name) for file_name in os.listdir(path_annot) if file_name.endswith('.xml')])",
+    "Get all JPEG image file paths in path_images and sort them: jpg_files = sorted([os.path.join(path_images, file_name) for file_name in os.listdir(path_images) if file_name.endswith('.jpg')])",
+    "Define a function parse_annotation(xml_file) to read XML files and extract image paths, bounding boxes, and class IDs",
+    "Inside parse_annotation, use ET.parse(xml_file) to parse the XML and extract the image name and path",
+    "Iterate over each object in the XML file to extract bounding box coordinates and class labels, appending them to lists",
+    "Return image path, list of bounding boxes, and list of class IDs from parse_annotation",
+    "Initialize empty lists: image_paths = [], bbox = [], classes = []",
+    "Loop through xml_files and call parse_annotation for each file, appending results to image_paths, bbox, and classes",
+    "Create ragged tensors from bbox and classes: bbox = tf.ragged.constant(bbox), classes = tf.ragged.constant(classes), image_paths = tf.ragged.constant(image_paths)",
+    "Create a tf.data.Dataset from the tensors: data = tf.data.Dataset.from_tensor_slices((image_paths, classes, bbox))",
+    "Determine the number of validation samples: num_val = int(len(xml_files) * SPLIT_RATIO)",
+    "Split the dataset into train and validation sets: val_data = data.take(num_val), train_data = data.skip(num_val)",
+    "Define a function load_image(image_path) to read and decode images from the specified paths",
+    "Define a function load_dataset(image_path, classes, bbox) to load images and their corresponding bounding boxes",
+    "Create a data augmentation pipeline using keras_cv.layers, including RandomFlip, RandomShear, and JitteredResize",
+    "Create training dataset: train_ds = train_data.map(load_dataset, num_parallel_calls=tf.data.AUTOTUNE), train_ds = train_ds.shuffle(BATCH_SIZE * 4), train_ds = train_ds.ragged_batch(BATCH_SIZE, drop_remainder=True), train_ds = train_ds.map(augmenter, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Create validation dataset: val_ds = val_data.map(load_dataset, num_parallel_calls=tf.data.AUTOTUNE), val_ds = val_ds.shuffle(BATCH_SIZE * 4), val_ds = val_ds.ragged_batch(BATCH_SIZE, drop_remainder=True)",
+    "Define YOLOv8 model using keras_cv.models.YOLOV8Detector with num_classes set to the length of class_mapping, bounding_box_format set to 'xyxy', and a specified backbone",
+    "Compile the model with an optimizer and loss functions: optimizer = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE, global_clipnorm=GLOBAL_CLIPNORM), yolo.compile(optimizer=optimizer, classification_loss='binary_crossentropy', box_loss='ciou')",
+    "Train the model using yolo.fit with train_ds and val_ds for a specified number of epochs",
+    "After training, call visualize_detections to visualize predictions on the validation dataset",
+    "Check for the unused variable level2_dau_2 in the code and verify that it is not referenced in the selective_kernel_feature_fusion function call",
+    "Assert that the output of the model does not include level2_dau_2 in the function call, confirming the bug"
+]
+```

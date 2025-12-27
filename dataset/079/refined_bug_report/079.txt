@@ -1,0 +1,15 @@
+TITLE
+Incorrect LayerNorm Dimension in RegionViT
+
+SYMPTOMS
+• The current implementation of `LayerNorm` is not correctly normalizing the token embeddings.
+• No specific error messages are reported, but the normalization process may be incorrect due to mismatched dimensions.
+
+EXPECTED BEHAVIOR
+The `LayerNorm` should normalize across either the channels (if input is in channel-last format) or across both channels and spatial dimensions (`[C, H, W]`). This ensures consistent and accurate token embedding normalization throughout the RegionViT architecture.
+
+REPRODUCTION STEPS
+1. Clone the repository from https://github.com/lucidrains/vit-pytorch.
+2. Navigate to the file `vit_pytorch/regionvit.py`.
+3. Locate lines 212-221 where `LayerNorm` is implemented.
+4. Observe the current implementation and note any discrepancies in dimensions used for normalization.

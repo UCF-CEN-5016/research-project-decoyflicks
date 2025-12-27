@@ -1,0 +1,36 @@
+### TITLE
+TypeError: Unexpected keyword argument 'box_ind' during visualization in TensorFlow Model Garden
+
+### SYMPTOMS
+• The error message encountered is: `TypeError: Got an unexpected keyword argument 'box_ind'`.  
+• The visualization of images with labels fails to display as expected.  
+• The code execution in Google Colab results in the above error when attempting to visualize the results.  
+
+### EXPECTED BEHAVIOR
+When the code is executed correctly, the images should be displayed with their corresponding labels without any errors.
+
+### REPRODUCTION STEPS
+1. Open the provided Google Colab notebook: [TFHub_saved_model_inference.ipynb](https://colab.research.google.com/drive/1J_bIH_oeZeJ_VcF_xBm_yVaxYWEWdx6R?usp=sharing).
+2. Run the existing code cells sequentially.
+3. Observe the output when the code attempts to visualize the results.
+
+### ADDITIONAL CONTEXT
+- The logs indicate that the error occurs in the `reframe_box_masks_to_image_masks` function, specifically at the line where `box_ind` is passed as a keyword argument.
+- The TensorFlow version in use is `2.10.0` and the Python version is `3.7.15`.
+- A previous similar issue was reported in [#5056](https://github.com/tensorflow/models/issues/5056), although its relevance to the current problem is unclear.
+- The following TensorFlow packages are installed:
+  ```
+  tensorflow                      2.10.0
+  tensorflow-addons               0.18.0
+  tensorflow-datasets             4.6.0
+  tensorflow-estimator            2.10.0
+  tensorflow-gcs-config           2.9.1
+  tensorflow-hub                  0.12.0
+  tensorflow-io-gcs-filesystem    0.27.0
+  tensorflow-metadata             1.10.0
+  tensorflow-model-optimization   0.7.3
+  tensorflow-object-detection-api 0.1.1
+  tensorflow-probability          0.17.0
+  tensorflow-text-nightly         2.12.0.dev20221112
+  ```
+- Warnings regarding missing TensorRT libraries were also encountered, but they may not be directly related to the visualization issue.

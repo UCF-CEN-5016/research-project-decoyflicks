@@ -1,0 +1,24 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'test_env' with Python 3.10 using the command: conda create -n test_env python=3.10",
+    "Activate the new environment using: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install the TensorFlow Model Garden nightly version using pip with the command: pip install tf-models-nightly",
+    "Install Matplotlib using pip with the command: pip install matplotlib",
+    "Open a new Python script or Jupyter notebook in VSCode.",
+    "Import the necessary libraries at the top of the script: import matplotlib.pyplot as plt, import tensorflow as tf, from official.vision import model as tf_models",
+    "Set the Matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg')",
+    "Create a simple plot using Matplotlib with the following code: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Display the plot using plt.show() and verify that it works correctly before importing TensorFlow Model Garden.",
+    "Import the TensorFlow Model Garden with the command: from official.vision import model as tf_models",
+    "Attempt to create another plot using Matplotlib with the same code: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Call plt.show() again to display the second plot.",
+    "Verify that the second plot does not display, indicating that Matplotlib's pyplot is not working after importing TensorFlow Model Garden.",
+    "Check the current Matplotlib backend by adding the line: print(plt.get_backend()) and observe that it returns 'Agg'.",
+    "Attempt to change the backend to 'TkAgg' after importing TensorFlow Model Garden with the command: plt.switch_backend('TkAgg')",
+    "Create a new plot again and call plt.show() to verify if it displays correctly after changing the backend.",
+    "Confirm that the plot still does not display, indicating that the issue persists even after changing the backend."
+]
+```

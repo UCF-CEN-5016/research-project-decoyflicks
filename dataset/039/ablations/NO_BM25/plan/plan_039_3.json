@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn",
+    "Define a batch size of 4 and a sequence length of 3 with d_model set to 4",
+    "Create a random input tensor x with shape (batch_size, seq_len, n_heads, d_model) where n_heads is set to 1",
+    "Initialize the RotaryPositionalEmbeddings class with d=4 and base=10000",
+    "Call the forward method of RotaryPositionalEmbeddings with the input tensor x",
+    "In the forward method, extract the shape of x to get batch_size, seq_len, n_heads, d",
+    "Calculate d_2 as d // 2, which should be 2",
+    "Create a position index tensor seq_idx with values from 0 to seq_len-1",
+    "Calculate idx_theta using einsum with seq_idx and self.theta",
+    "Concatenate idx_theta to create idx_theta2 with shape (batch_size, seq_len, d)",
+    "Create neg_half_x by concatenating the last half of x with the first half, resulting in shape (batch_size, seq_len, n_heads, d)",
+    "Calculate rx using the formula: rx = (x * idx_theta2.cos()[None, :, None, :]) + (neg_half_x * idx_theta2.sin()[None, :, None, :])",
+    "Verify that the shape of rx is (batch_size, seq_len, n_heads, d)",
+    "Attempt to access self.cos_cached and self.sin_cached with incorrect slicing: self.cos_cached[:x.shape[0]] and self.sin_cached[:x.shape[0]]",
+    "Assert that a RuntimeError is raised due to mismatched tensor sizes in the operation",
+    "Log the error message to confirm it matches the expected RuntimeError"
+]
+```

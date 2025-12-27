@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras.backend as K, import keras.layers as KL, import keras.models as KM, import numpy as np, import os",
+    "Define the model directory: set MODEL_DIR = os.path.join(os.getcwd(), 'logs')",
+    "Define the COCO model path: set COCO_MODEL_PATH = os.path.join(MODEL_DIR, 'mask_rcnn_coco.h5')",
+    "Create a configuration class for Mask R-CNN: define a class Config with necessary attributes like NUM_CLASSES, IMAGES_PER_GPU, etc.",
+    "Instantiate the configuration: set config = Config()",
+    "Set the mode to inference: set mode = 'inference'",
+    "Create a Mask R-CNN model instance: set model = modellib.MaskRCNN(mode=mode, model_dir=MODEL_DIR, config=config)",
+    "Attempt to load weights: call model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Run the code in a Jupyter notebook cell to trigger the NotImplementedError",
+    "Capture the output and error message to verify that NotImplementedError is raised",
+    "Check the error message to confirm it states 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead.'"
+]
+```

@@ -1,0 +1,24 @@
+{
+  "bug_report": "039",
+  "rank": 5,
+  "score": 0.5186212062835693,
+  "main_file": {
+    "path": "labml_nn/transformers/feed_forward.py",
+    "content": "\"\"\"\n---\ntitle: Position-wise Feed-Forward Network (FFN)\nsummary: Documented reusable implementation of the position wise feedforward network.\n---\n\n# Position-wise Feed-Forward Network (FFN)\n\nThis is a [PyTorch](https://pytorch.org)  implementation\nof position-wise feedforward network used in transformer.\n\nFFN consists of two fully connected layers.\nNumber of dimensions in the hidden layer $d_{ff}$, is generally set to around\nfour times that of the token embedding $d_{model}$.\nSo it is sometime also called the expand-and-contract network.\n\nThere is an activation at the hidden layer, which is\nusually set to ReLU (Rectified Linear Unit) activation, $$\\max(0, x)$$\n\nThat is, the FFN function is,\n$$FFN(x, W_1, W_2, b_1, b_2) = \\max(0, x W_1 + b_1) W_2 + b_2$$\nwhere $W_1$, $W_2$, $b_1$ and $b_2$ are learnable parameters.\n\nSometimes the\nGELU (Gaussian Error Linear Unit) activation is also used instead of ReLU.\n$$x \\Phi(x)$$ where $\\Phi(x) = P(X \\le x), X \\sim \\mathcal{N}(0,1)$\n\n### Gated Linear Units\n\nThis is a generic implementation that supports different variants including\n[Gated Linear Units](https://papers.labml.ai/paper/2002.05202) (GLU).\nWe have also implemented experiments on these:\n\n* [experiment that uses `labml.configs`](glu_variants/experiment.html)\n* [simpler version from scratch](glu_variants/simple.html)\n\"\"\"\n\nimport torch\nfrom torch import nn as nn\n\nfrom labml_helpers.module import Module\n\n\nclass FeedForward(Module):\n    \"\"\"\n    ## FFN module\n    \"\"\"\n\n    def __init__(self, d_model: int, d_ff: int,\n                 dropout: float = 0.1,\n                 activation=nn.ReLU(),\n                 is_gated: bool = False,\n                 bias1: bool = True,\n                 bias2: bool = True,\n                 bias_gate: bool = True):\n        \"\"\"\n        * `d_model` is the number of features in a token embedding\n        * `d_ff` is the number of features in the hidden layer of the FFN\n        * `dropout` is dropout probability for the hidden layer\n        * `is_gated` specifies whether the hidden layer is gated\n        * `bias1` specified whether the first fully connected layer should have a learnable bias\n        * `bias2` specified whether the second fully connected layer should have a learnable bias\n        * `bias_gate` specified whether the fully connected layer for the gate should have a learnable bias\n        \"\"\"\n        super().__init__()\n        # Layer one parameterized by weight $W_1$ and bias $b_1$\n        self.layer1 = nn.Linear(d_model, d_ff, bias=bias1)\n        # Layer one parameterized by weight $W_1$ and bias $b_1$\n        self.layer2 = nn.Linear(d_ff, d_model, bias=bias2)\n        # Hidden layer dropout\n        self.dropout = nn.Dropout(dropout)\n        # Activation function $f$\n        self.activation = activation\n        # Whether there is a gate\n        self.is_gated = is_gated\n        if is_gated:\n            # If there is a gate the linear layer to transform inputs to\n            # be multiplied by the gate, parameterized by weight $V$ and bias $c$\n            self.linear_v = nn.Linear(d_model, d_ff, bias=bias_gate)\n\n    def forward(self, x: torch.Tensor):\n        # $f(x W_1 + b_1)$\n        g = self.activation(self.layer1(x))\n        # If gated, $f(x W_1 + b_1) \\otimes (x V + b) $\n        if self.is_gated:\n            x = g * self.linear_v(x)\n        # Otherwise\n        else:\n            x = g\n        # Apply dropout\n        x = self.dropout(x)\n        # $(f(x W_1 + b_1) \\otimes (x V + b)) W_2 + b_2$ or $f(x W_1 + b_1) W_2 + b_2$\n        # depending on whether it is gated\n        return self.layer2(x)\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "torch",
+      "function": "Dropout"
+    },
+    {
+      "module": "torch",
+      "function": "Linear"
+    },
+    {
+      "module": "torch",
+      "function": "ReLU"
+    }
+  ]
+}

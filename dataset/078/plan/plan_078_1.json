@@ -1,0 +1,12 @@
+```json
+[
+    "Import PyTorch and the ViT module from vit_pytorch/na_vit_nested_tensor_3d.py",
+    "Define a batch size of 1 and image dimensions of 256x256",
+    "Create random uniform input data with shape (batch_size, 3, height, width)",
+    "Initialize the ViT model with parameters: image_size=256, patch_size=32, num_classes=1000, dim=1024, depth=6, heads=16, mlp_dim=2048, dropout=0.1, emb_dropout=0.1",
+    "Forward propagate the input data through the ViT model to get predictions",
+    "Call the backward method on the predictions tensor",
+    "Verify if the gradient at index 0 of the first input tensor is a torch.LongTensor with shape [5,2] and contains values of 1 1024 repeated 5 times"
+]
+```
+

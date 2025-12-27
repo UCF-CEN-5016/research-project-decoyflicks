@@ -1,0 +1,45 @@
+TITLE  
+Bug in training model with images containing over 100 objects
+
+SYMPTOMS  
+• Model fails to converge when training on images with more than 100 objects per image.  
+• The following error occurs when attempting to set `pipeline_config.eval_input_reader.max_number_of_boxes = 500` using `pipeline_pb2.TrainEvalPipelineConfig()`:  
+  `AttributeError: 'google.protobuf.pyext._message.RepeatedCompositeContainer' object has no attribute 'max_number_of_boxes'`  
+• Without the specified configuration lines, the model only recognizes 100 bounding boxes per image, leading to poor accuracy (e.g., 0.04 after 270K training steps).  
+• The issue worsens with images containing higher object counts (close to 500).  
+
+EXPECTED BEHAVIOR  
+The model should successfully train and converge on images with more than 100 objects when the appropriate configuration settings are applied, allowing for accurate detection and classification of all objects within the images.
+
+REPRODUCTION STEPS  
+1. Import necessary libraries:  
+   ```python  
+   import tensorflow as tf  
+   from object_detection.utils import config_util  
+   from object_detection.protos import pipeline_pb2  
+   from google.protobuf import text_format  
+   ```  
+2. Set the path to the `pipeline.config` file:  
+   ```python  
+   configpath = # Path to pipeline.config file  
+   ```  
+3. Load the configuration from the pipeline file:  
+   ```python  
+   config = config_util.get_configs_from_pipeline_file(configpath)  
+   ```  
+4. Create an instance of `TrainEvalPipelineConfig`:  
+   ```python  
+   pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()  
+   ```  
+5. Read the pipeline configuration file:  
+   ```python  
+   with tf.io.gfile.GFile(configpath, "r") as f:  
+       proto_str = f.read()  
+       text_format.Merge(proto_str, pipeline_config)  
+   ```  
+6. Attempt to set `max_number_of_boxes` to 500:  
+   ```python  
+   pipeline_config.eval_input_reader.max_number_of_boxes = 500  
+   ```  
+7. Observe the error message generated.  
+8. Add the configuration lines directly to the `pipeline.config` file and retrain the model to confirm that it trains without errors.

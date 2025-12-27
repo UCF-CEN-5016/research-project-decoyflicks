@@ -1,0 +1,20 @@
+TITLE  
+Incorrect commit loss calculation due to reshaping of original_input in LFQ forward pass
+
+SYMPTOMS  
+• The `original_input` tensor is reshaped during the forward pass of `ResidualLFQ` when a `mask` is applied and `commitment_loss_weight` is set to 1.0 (or any value > 0).  
+• A shape mismatch occurs between the `quantized` tensor and the reshaped `original_input`, leading to incorrect computation of the commitment loss.  
+• User warning generated:  
+```
+.../python3.12/site-packages/vector_quantize_pytorch/lookup_free_quantization.py:401: UserWarning: Using a target size (torch.Size([2, 1851, 1, 14])) that is different to the input size (torch.Size([3700, 14])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+```
+
+EXPECTED BEHAVIOR  
+The commitment loss should be calculated correctly without any shape mismatch between the `original_input` and the `quantized` tensor, ensuring that both tensors have compatible dimensions.
+
+REPRODUCTION STEPS  
+1. Install `vector-quantize-pytorch` version 1.21.2.  
+2. Create an instance of `ResidualLFQ`.  
+3. Prepare a `mask` and set `commitment_loss_weight` to 1.0 (or any value > 0).  
+4. Call the `forward` method on the `ResidualLFQ` instance with the prepared inputs.  
+5. Observe the generated user warning and verify the shape mismatch between the tensors during the commitment loss calculation.

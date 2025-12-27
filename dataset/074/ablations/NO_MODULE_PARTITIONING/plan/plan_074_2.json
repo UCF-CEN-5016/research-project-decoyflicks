@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: argparse, deepspeed, torch, torch.nn, torch.nn.functional, torchvision, and torchvision.transforms",
+    "Define a batch size of 16 for training and set the number of epochs to 1 for quick testing",
+    "Create a CIFAR10 dataset using torchvision.datasets.CIFAR10 with root='./data', train=True, download=True, and apply normalization transforms",
+    "Define a simple neural network class 'Net' with two convolutional layers, two fully connected layers, and an optional Mixture of Experts (MoE) layer",
+    "Initialize the DeepSpeed distributed backend using deepspeed.init_distributed()",
+    "Create a DeepSpeed configuration dictionary with 'train_batch_size' set to 16 and 'zero_optimization' set to stage 0",
+    "Initialize the DeepSpeed engine with the model, parameters, training data, and the configuration dictionary",
+    "Define a CrossEntropyLoss criterion for loss calculation",
+    "Create a loop to iterate over the training data for one epoch, processing each batch of data",
+    "Within the loop, get the inputs and labels from the training data and move them to the appropriate device",
+    "Pass the inputs through the model to get the outputs",
+    "Calculate the loss using the criterion with outputs and labels",
+    "Create a mask tensor 'action_mask' with shape (batch_size, sequence_length) filled with ones, and set the last element of each row to zero to simulate filtering out the 'eos' token",
+    "Define 'start' as 1 to simulate the starting index for the loss calculation",
+    "Calculate actor loss using the formula: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:])",
+    "Log the calculated actor loss to observe its value",
+    "Modify the mask to 'action_mask[:, start-1:-1]' to include the 'eos' token and recalculate the actor loss",
+    "Log the new actor loss to compare with the previous loss",
+    "Assert that the actor loss with the modified mask is different from the original loss, indicating the bug is present"
+]
+```

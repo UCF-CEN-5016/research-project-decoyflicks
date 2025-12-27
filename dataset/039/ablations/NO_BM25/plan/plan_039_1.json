@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch and numpy",
+    "Define a batch size of 4 and sequence length of 3",
+    "Set the model dimension (d_model) to 8 and number of heads to 2",
+    "Create a random input tensor 'query' with shape (seq_len, batch_size, d_model) = (3, 4, 8)",
+    "Create a random input tensor 'key' with shape (seq_len, batch_size, d_model) = (3, 4, 8)",
+    "Create a random input tensor 'value' with shape (seq_len, batch_size, d_model) = (3, 4, 8)",
+    "Define a mask tensor with shape (seq_len, seq_len, batch_size) = (3, 3, 4) filled with ones",
+    "Instantiate the RotaryValuePEMultiHeadAttention class with heads=2, d_model=8, rope_percentage=0.5, and dropout_prob=0.0",
+    "Call the forward method of the instantiated class with query, key, value, and mask as inputs",
+    "Capture the output tensor from the forward method",
+    "Check the shape of the output tensor to ensure it matches expected dimensions",
+    "Verify that the output tensor does not contain NaN values",
+    "Modify the line in the ReverseRotaryPositionalEmbeddings class to use incorrect slicing: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) - (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Re-run the forward method with the modified code",
+    "Assert that a RuntimeError is raised with the message 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'"
+]
+```

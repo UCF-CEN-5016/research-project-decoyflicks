@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, DataLoader and RandomSampler from torch.utils.data, and the RetroModel from labml_nn.transformers.retro.model",
+    "Set the device to CUDA by defining device = torch.device('cuda:0')",
+    "Load the Tiny Shakespeare dataset using TextFileDataset from labml_helpers, specifying the path to the dataset and the data type as list",
+    "Define a chunk length of 16 and set hyperparameters: d_model = 128, d_ff = 512, n_heads = 16, d_k = 16",
+    "Create a DataLoader for the training dataset with a batch size of 4 and using RandomSampler with replacement",
+    "Initialize the NearestNeighborEncoder with parameters: chunk_len = 16, 6 layers, {3} as the set of layers, d_model = 128, n_heads = 16, d_k = 16, d_ff = 512",
+    "Create the RetroModel instance with parameters: number of tokens from the dataset, d_model = 128, 6 layers, {3, 5} as the set of layers, chunk_len = 16, n_heads = 16, d_k = 16, d_ff = 512, and the nearest_neighbor_encoder",
+    "Move the model to the device using model.to(device)",
+    "Create an optimizer using Noam with model.parameters(), lr=1.0, d_model=128, warmup=2000",
+    "Define a Trainer class that takes device, model, DataLoader, and optimizer as parameters",
+    "In the Trainer class, implement a call method that iterates through the DataLoader, moving src, tgt, and neighbors to the device",
+    "Perform a forward pass using the model with src and neighbors, and calculate the loss using CrossEntropyLoss",
+    "Initialize the Trainer instance with the device, model, DataLoader, and optimizer",
+    "Create a prompt string: prompt = 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Start an experiment using experiment.create(name='retro_small')",
+    "Run the training loop for 1 epoch, calling trainer() to perform training",
+    "After training, sample text from the prompt using the model and log the output",
+    "Check the output of the model for any unexpected behavior, specifically looking for issues related to the attention mechanism",
+    "Verify that the attention weights are computed incorrectly by checking the shape of the attention output and asserting that it does not match expected dimensions",
+    "Assert that the attention weights do not sum to 1 along the expected axis (axis 2) to confirm the bug in the softmax operation"
+]
+```

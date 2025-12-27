@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules from the fairseq library, including LanguagePairDataset, NoisingDataset, PrependTokenDataset, RoundRobinZipDatasets, SequenceGenerator, TransformEosLangPairDataset, build_tokenizer, eval_bool, get_perplexity, load_indexed_dataset, load_langpair_dataset, log_derived, log_scalar, register_task, split_paths and json.",
+    "Define a custom dataset class that inherits from LanguagePairDataset and includes NoisingDataset, PrependTokenDataset, RoundRobinZipDatasets, TransformEosLangPairDataset and SequenceGenerator. Initialize the dataset with specific arguments such as src_path, tgt_path, src_dict, tgt_dict, max_source_positions, max_target_positions, and other relevant parameters.",
+    "Create a tokenizer using build_tokenizer function and pass necessary arguments like 'sentencepiece' or another tokenizer type if available.",
+    "Set up the model by creating an instance of SequenceGenerator. Initialize it with appropriate arguments such as model, src_dict, tgt_dict, beam_size, max_len_a, max_len_b, stop_early, normalize_scores, len_penalty and other relevant parameters.",
+    "Prepare synthetic input data that includes source and target sequences along with their respective token indices. The batch size should be large enough to trigger the bug condition.",
+    "Invoke the model's generate method by passing the prepared input data as arguments. Ensure to pass necessary flags such as 'sample_break_mode', 'unnormalized', 'prefix_size' and other relevant parameters.",
+    "Capture the output of the generate method, which includes the generated sequences and their scores or probabilities.",
+    "Verify that the output contains unexpected values such as NaNs, infinities, or extremely large/small numbers. This can be done by checking the gradients of the model or specific elements in the output sequences.",
+    "Monitor system resources during the execution, specifically tracking GPU memory usage. Use tools like torch.cuda.memory_summary() to observe GPU memory consumption.",
+    "Assert that the GPU memory usage exceeds a predefined threshold, indicating a potential out-of-memory condition or excessive memory usage during the bug reproduction process."
+]
+```
+

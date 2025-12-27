@@ -1,0 +1,13 @@
+```json
+[
+    "Import torch and the necessary components from x_transformers",
+    "Define the batch size as 2 and the dimensions for the context as (2, 4, 1024)",
+    "Create a random input tensor 'i' with shape (2, 20) using torch.randint with values between 0 and 2048",
+    "Create a context tensor filled with random values with shape (2, 4, 1024) using torch.rand",
+    "Create a context mask tensor filled with all False values with shape (2, 4) using torch.zeros and dtype=torch.bool",
+    "Initialize the TransformerWrapper with num_tokens=2049, max_seq_len=500, and a Decoder with dim=1024, depth=24, heads=16, attn_dim_head=64, attn_flash=True, ff_no_bias=True, cross_attend=True",
+    "Call the decoder with the input tensor 'i', context tensor, and context_mask, and store the output in 'out'",
+    "Check if 'out' contains any NaN values using torch.isnan(out).any()",
+    "Assert that the output 'out' is all NaN by checking if torch.all(torch.isnan(out)) is True"
+]
+```

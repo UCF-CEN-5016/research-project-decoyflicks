@@ -1,0 +1,28 @@
+```json
+[
+    "Import TensorFlow and Keras modules: import tensorflow as tf and from keras import layers",
+    "Set the Keras backend to TensorFlow by executing os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Define a batch size of 64 for training and 4 for validation",
+    "Set the maximum target length for the text sequences to 200",
+    "Download the LJSpeech dataset using keras.utils.get_file and extract it to a local directory",
+    "Load the audio files and their corresponding transcriptions into a dictionary called id_to_text",
+    "Define a function get_data that filters audio files based on their transcription length (maxlen=50)",
+    "Call get_data to create a dataset of audio paths and transcription texts",
+    "Define a VectorizeChar class to convert characters to indices and initialize it with max_len=50",
+    "Create a TensorFlow dataset for text sequences using create_text_ds function",
+    "Define a path_to_audio function to read audio files and convert them to spectrograms",
+    "Create a TensorFlow dataset for audio data using create_audio_ds function",
+    "Combine audio and text datasets into a single TensorFlow dataset using create_tf_dataset function",
+    "Split the dataset into training (99%) and testing (1%) sets",
+    "Create a validation dataset from the test data using create_tf_dataset with batch size 4",
+    "Define a Transformer model class with appropriate layers and methods for training and inference",
+    "Instantiate the Transformer model with num_hid=200, num_head=2, num_feed_forward=400, target_maxlen=200, num_layers_enc=4, num_layers_dec=1, num_classes=34",
+    "Define a loss function using keras.losses.CategoricalCrossentropy with from_logits=True and label_smoothing=0.1",
+    "Define a learning rate schedule using CustomSchedule with specified parameters",
+    "Compile the model with the Adam optimizer and the defined loss function",
+    "Fit the model on the training dataset with validation data for 1 epoch",
+    "During model fitting, monitor for the OperatorNotAllowedInGraphError during the ner_model.fit call",
+    "Capture the output logs to verify the occurrence of the OperatorNotAllowedInGraphError",
+    "Assert that the error message contains 'Using a symbolic tf.Tensor as a Python bool is not allowed'"
+]
+```

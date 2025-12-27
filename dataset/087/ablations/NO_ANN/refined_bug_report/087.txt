@@ -1,0 +1,16 @@
+TITLE  
+Custom alibi position fails when using flash attention due to dimensionality mismatch
+
+SYMPTOMS  
+• The custom position alibi does not function correctly when `attn_flash=True`.  
+• The code fails to handle the attention bias being 4D when custom positions are provided.  
+• No specific error messages are reported, but the functionality does not operate as expected.
+
+EXPECTED BEHAVIOR  
+When the software is functioning correctly, setting `attn_flash=True` should allow the custom position alibi to work without any issues, properly accounting for the 4D attention bias when custom positions are utilized.
+
+REPRODUCTION STEPS  
+1. Set the `attn_flash` parameter to `True` in the attention configuration.  
+2. Pass in custom positions for attention.  
+3. Observe the behavior of the attention mechanism to identify the failure in processing the custom alibi position.  
+4. Review the implementation in the specified line of code to confirm the dimensionality mismatch.

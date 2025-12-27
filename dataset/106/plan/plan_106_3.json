@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules from the provided import dependencies",
+    "Set random seed to 1234 for reproducibility",
+    "Define batch size of 64",
+    "Define image dimensions of 28x28 (to match FashionMNIST images)",
+    "Create a dummy input tensor with shape (batch_size, channels=1, height=28, width=28) containing random values",
+    "Normalize the dummy input tensor using torchvision's Normalize function with mean [0.5] and std [0.5]",
+    "Load the FashionMNIST dataset from torchvision.datasets.FashionMNIST with root '~/data/fashion_mnist', train=True, download=True, transform=normalize_transform",
+    "Create a DataLoader for the FashionMNIST dataset with batch_size=64 and shuffle=True",
+    "Instantiate the LFQAutoEncoder model with codebook_size=256 (2^8), entropy_loss_weight=0.02, diversity_gamma=1.",
+    "Initialize the optimizer with AdamW, learning rate 3e-4",
+    "Call the train function with the model, train_loader, and train_iterations=1000",
+    "Verify that NaN values are encountered in the loss calculation during training by checking if any value in the loss tensor is nan after each iteration",
+    "Monitor GPU memory usage during the execution of the training loop",
+    "Assert that at least one element in the loss tensor becomes nan during the first 100 iterations to reproduce the bug"
+]
+```
+

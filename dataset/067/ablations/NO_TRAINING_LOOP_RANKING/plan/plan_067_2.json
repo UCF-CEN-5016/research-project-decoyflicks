@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import keras_nlp, import tensorflow_datasets as tfds, import time, import json",
+    "Set the Keras backend to 'tensorflow' by using os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Load the Reddit dataset using tfds.load('reddit_tifu', split='train', as_supervised=True)",
+    "Define a batch size of 32 for training data",
+    "Map the dataset to only include the document feature: train_ds = reddit_ds.map(lambda document, _: document).batch(32).cache().prefetch(tf.data.AUTOTUNE)",
+    "Take a subset of the dataset for training: train_ds = train_ds.take(500)",
+    "Define the number of epochs for training: num_epochs = 1",
+    "Set the learning rate using keras.optimizers.schedules.PolynomialDecay with initial learning rate of 5e-5",
+    "Define the loss function as SparseCategoricalCrossentropy with from_logits=True",
+    "Create the GPT-2 model using keras_nlp.models.GPT2CausalLM and the preprocessor from keras_nlp.models.GPT2CausalLMPreprocessor",
+    "Compile the model with the Adam optimizer, the defined loss function, and weighted metrics for accuracy",
+    "Fit the model on the training dataset using gpt2_lm.fit(train_ds, epochs=num_epochs)",
+    "After fitting, generate text using gpt2_lm.generate with a prompt 'I like basketball' and max_length=200",
+    "Print the generated output to observe the quality of the text",
+    "Verify the output quality is poor and does not reflect the expected style of Reddit posts",
+    "Check the shape of the labels used in training to confirm they have an extra dimension",
+    "Assert that the shape of the labels is incorrect by checking if the last dimension is greater than 1"
+]
+```

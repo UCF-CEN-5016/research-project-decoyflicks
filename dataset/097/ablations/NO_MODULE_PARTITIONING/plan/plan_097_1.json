@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, GaussianDiffusion from denoising_diffusion_pytorch.denoising_diffusion_pytorch",
+    "Set the device to 'cuda' if available, otherwise 'cpu': device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define a batch size of 16 and image dimensions of 64x64: batch_size = 16, image_size = 64",
+    "Create a random tensor for input images with shape (batch_size, 3, image_size, image_size): input_images = torch.randn(batch_size, 3, image_size, image_size, device=device)",
+    "Define a GaussianDiffusion model instance with parameters: model = GaussianDiffusion(model=None, image_size=image_size, timesteps=1000, offset_noise_strength=0.1)",
+    "Call the p_sample method of the GaussianDiffusion instance with input_images and a timestep of 0: output_images, x_start = model.p_sample(input_images, t=0)",
+    "Verify that the device property is accessed: device_used = model.device",
+    "Assert that device_used is not None: assert device_used is not None",
+    "Check if the model raises an error when calling offset_noise_strength without the device property defined: try: model.offset_noise_strength; except AttributeError as e: assert str(e) == \"'GaussianDiffusion' object has no attribute 'device'\""
+]
+```

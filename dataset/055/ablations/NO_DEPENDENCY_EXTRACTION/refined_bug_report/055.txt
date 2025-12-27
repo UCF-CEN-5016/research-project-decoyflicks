@@ -1,0 +1,21 @@
+### TITLE
+Segmentation fault in neural_machine_translation_with_keras_nlp example test script
+
+### SYMPTOMS
+• Segmentation fault occurs when running the test script after modifying the code to include BLEU score evaluation.
+• The segmentation fault happens inside the `GreedySampler()` after the `next_fn` returns one tensor, an empty tuple, and `None` for `hidden_states`.
+• Error message: 
+  ```
+  tensorflow.python.framework.errors_impl.InvalidArgumentError: Exception encountered when calling layer 'cross_attention' (type CachedMultiHeadAttention).
+  {{function_node __wrapped__Einsum_N_2_device_/job:localhost/replica:0/task:0/device:GPU:0}} Expected dimension 1 at axis 0 of the input shaped [64,40,8,32] but got dimension 64 [Op:Einsum] name:
+  ```
+
+### EXPECTED BEHAVIOR
+The test script should run without any segmentation faults, producing translated sentences and correctly calculating the BLEU score for the translations.
+
+### REPRODUCTION STEPS
+1. Clone the example repository from the Keras documentation: https://keras.io/examples/nlp/neural_machine_translation_with_keras_nlp/.
+2. Modify the example script to include BLEU score evaluation using NLTK after converting tensors to CPU.
+3. Ensure that the checkpoint saver is set up with only the directory name.
+4. Run the modified test script with the provided input sentences.
+5. Observe the segmentation fault occurring during execution.

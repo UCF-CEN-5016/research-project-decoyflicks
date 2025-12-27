@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries from the provided dependencies list",
+    "Define constants for batch size, dimensions, number of bins, and other hyperparameters used in the model",
+    "Create a synthetic dataset for training and validation that includes input sequences, target F0 bins, raw F0 values, speaker IDs, style IDs, and masks",
+    "Initialize an instance of the PitchPredictor model using the provided configuration parameters",
+    "Define a DataLoader to load the synthetic dataset in batches with appropriate collate functions for handling variable-length sequences",
+    "Set up a logging mechanism to capture debug information during training and validation",
+    "Implement the run_epoch function that performs forward passes, computes losses, and optionally backward passes for training mode",
+    "Capture the output of each epoch's training and validation loss, L1 loss, and L1 voiced loss in separate variables",
+    "Assert that at least one of the captured losses contains NaN values after a certain number of epochs to simulate the bug condition",
+    "Collect and plot GPU memory usage during the training loop to verify if it exceeds expected thresholds",
+    "Verify that the model parameters are not updating or remain constant as indicated by the bug description"
+]
+```
+

@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official.vision.tasks.retinanet",
+    "Define a batch size of 4 and image dimensions of 640x640",
+    "Create a mock dataset with 10 examples, each with shape (640, 640, 3) and corresponding labels",
+    "Define a function 'show_batch' that takes 'num_of_examples' as an argument but does not use it",
+    "Instantiate the RetinaNetTask class from official.vision.tasks.retinanet",
+    "Call the 'show_batch' function with num_of_examples set to 5",
+    "Verify that the 'num_of_examples' argument is not used within the 'show_batch' function",
+    "Check the output of the 'show_batch' function to ensure it does not reflect the num_of_examples parameter",
+    "Assert that the output of 'show_batch' does not change when varying num_of_examples"
+]
+```

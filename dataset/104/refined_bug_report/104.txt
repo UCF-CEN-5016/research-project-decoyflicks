@@ -1,0 +1,16 @@
+TITLE
+MLPs Always Initialized in ResidualVQ
+
+SYMPTOMS
+• The MLPs within the ResidualVQ module are initialized regardless of the `implicit_neural_codebook` parameter setting.
+• No error messages are explicitly mentioned, but there is an unexpected behavior where the initialization of MLPs occurs even when it shouldn't.
+
+EXPECTED BEHAVIOR
+When `implicit_neural_codebook=False`, the MLPs within the ResidualVQ module should not be initialized, allowing for a more controlled and potentially more efficient initialization process based on the specific use case.
+
+REPRODUCTION STEPS
+1. Clone or download the repository from the provided GitHub link.
+2. Navigate to the file `vector_quantize_pytorch/residual_vq.py`.
+3. Locate line 153 where the MLPs are being initialized.
+4. Set `implicit_neural_codebook=False` in your ResidualVQ instantiation but observe that the MLPs are still being initialized.
+5. Confirm this behavior by running a test or example code that demonstrates the initialization of MLPs even when `implicit_neural_codebook` is set to False.

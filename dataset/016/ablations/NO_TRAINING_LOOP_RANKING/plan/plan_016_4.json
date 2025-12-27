@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository.",
+    "Set the environment variable for PYTHONPATH to include the path to the TensorFlow Model Garden: export PYTHONPATH=\"$PYTHONPATH:/home/cdacapp1/scaling/models-master\".",
+    "Define the DATA_DIR variable to point to the ImageNet TF records: export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records.",
+    "Define the MODEL_DIR variable to point to the checkpoint directory: export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss.",
+    "Activate the conda environment for TensorFlow 2.11: source /home/apps/anaconda3/bin/activate && conda activate tf11.",
+    "Create a configuration file gpu.yaml for the first worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0.",
+    "Create a configuration file gpu1.yaml for the second worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1.",
+    "On the first GPU node (gpu1), navigate to the model directory: cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification.",
+    "Run the classifier_trainer.py script on the first GPU node with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml.",
+    "On the second GPU node (gpu2), navigate to the model directory: cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification.",
+    "Run the classifier_trainer.py script on the second GPU node with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml.",
+    "Monitor the training logs on both nodes to check the throughput of examples processed per second.",
+    "Verify that the throughput on the multi-worker setup does not exceed the throughput of a single GPU node, which is approximately 270 examples/sec.",
+    "Check for any error messages or warnings in the logs that may indicate issues with the multi-worker setup.",
+    "Assert that the throughput remains constant across both nodes, indicating that scaling is not occurring as expected."
+]
+```

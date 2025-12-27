@@ -1,0 +1,41 @@
+TITLE
+Multi-worker mirrored strategy not scaling across multiple nodes in TensorFlow 2
+
+SYMPTOMS
+• Throughput remains at approximately 270 examples/sec, which is the same as single GPU execution.
+• Expected increase in throughput when using multi-node setup is not observed.
+• No error messages reported during execution.
+
+EXPECTED BEHAVIOR
+• For a multi-worker mirrored strategy with TensorFlow 2.11 and two nodes each having two GPUs, the expected behavior would be an increase in overall throughput compared to single GPU execution due to parallel processing across multiple GPUs and nodes.
+
+REPRODUCTION STEPS
+1. Submit a job request for two nodes with the `--gres=gpu:2` flag on CentOS 7.
+2. Log into Node 1 (gpu1) and set up environment variables:
+```bash
+cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+source /home/apps/anaconda3/bin/activate && \
+conda activate tf11
+```
+3. Run the ResNet50 training script with `gpu.yaml` configuration:
+```bash
+python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR  --config_file=configs/examples/resnet/imagenet/gpu.yaml
+```
+4. Log into Node 2 (gpu2) and set up environment variables similarly:
+```bash
+cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+source /home/apps/anaconda3/bin/activate && \
+conda activate tf11
+```
+5. Run the ResNet50 training script with `gpu1.yaml` configuration:
+```bash
+python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR  --config_file=configs/examples/resnet/imagenet/gpu1.yaml
+```
+
+Note: Ensure that the worker hosts in `gpu.yaml` and `gpu1.yaml` are correctly set to communicate between nodes. The `worker_hosts` should include both IP addresses (e.g., `ip1:6655,ip2:6655`).

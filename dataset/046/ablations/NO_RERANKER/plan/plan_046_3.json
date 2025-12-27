@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, and any other required modules for the forced alignment script.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define the audio file path as 'audio.wav' and the text file path as 'text.txt'.",
+    "Create a dummy audio file 'audio.wav' with a sample rate of 16kHz and duration of 5 seconds, ensuring it contains valid audio data.",
+    "Create a corresponding text file 'text.txt' with a transcription that matches the audio content.",
+    "Set the language parameter to 'udm' and define the output directory as 'output'.",
+    "Set the path for the uroman binary as 'uroman/bin'.",
+    "Run the command: python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang udm --outdir output --uroman uroman/bin.",
+    "Capture the output and error messages from the command execution.",
+    "Check if the error message contains 'RuntimeError: log_probs must be 3-D (batch_size, input length, num classes)'.",
+    "Verify the shape of the log_probs tensor before the error occurs by adding print statements or logging in the relevant part of the code.",
+    "Assert that the log_probs tensor shape is not (batch_size, input length, num classes) to confirm the bug is reproduced."
+]
+```

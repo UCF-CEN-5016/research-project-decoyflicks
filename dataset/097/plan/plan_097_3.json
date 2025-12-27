@@ -1,0 +1,13 @@
+[
+    "Import necessary libraries from the provided dependencies list",
+    "Define constants for batch size (4), image size (128x128), and number of classes (1000)",
+    "Create a dummy dataset with random images and corresponding class labels using PyTorch's Dataset and DataLoader",
+    "Initialize an instance of the Unet model with specified dimensions and dimension multipliers",
+    "Set up the GaussianDiffusion model with the initialized Unet, image size, and timesteps",
+    "Define a classifier for conditional guidance with 1000 classes",
+    "Implement a dummy conditional function (classifier_cond_fn) that takes images, time steps, classifier, target class labels, and classifier scale as input",
+    "Sample images using the GaussianDiffusion instance, passing the dummy conditional function and guidance kwargs as arguments",
+    "Verify that the sampled_images tensor has the correct shape (4, 3, 128, 128)",
+    "Inspect the output of the sampled_images to check if it contains NaN values or any other unexpected behavior"
+]
+

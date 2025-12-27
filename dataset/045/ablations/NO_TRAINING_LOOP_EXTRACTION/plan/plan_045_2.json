@@ -1,0 +1,16 @@
+```json
+[
+    "Import the necessary libraries: fairseq, torch, and any other required modules.",
+    "Set the DATA_ROOT variable to the path where the dataset is located, e.g., DATA_ROOT='/root/autodl-tmp/FormattingData'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech_to_speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the fairseq version being used.",
+    "Set the target code size to 100 and ensure the vocoder 'code_hifigan' is correctly configured in the environment.",
+    "Define the command to run fairseq-generate with the following parameters: --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml, --task speech_to_speech, --target-is-code, --target-code-size 100, --vocoder code_hifigan, --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt, --gen-subset test, --max-tokens 50000, --beam 10, --max-len-a 1, --results-path /root/autodl-tmp/results.",
+    "Execute the fairseq-generate command in the terminal or script to start the generation process.",
+    "Monitor the output for any error messages, specifically looking for the error 'Key 'input_feat_per_channel' is not in struct'.",
+    "If the error occurs, capture the full stack trace and any additional context provided in the output.",
+    "Validate that the error consistently occurs by rerunning the command multiple times to ensure it is reproducible.",
+    "Check the version of fairseq being used to ensure it matches the expected version that may have introduced this bug.",
+    "Document the environment setup, including Python version, fairseq version, and any other dependencies to ensure reproducibility."
+]
+```

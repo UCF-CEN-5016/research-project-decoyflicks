@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and Orbit modules: 'import tensorflow as tf' and 'import orbit'",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Create a synthetic dataset using tf.data.Dataset.from_tensor_slices with random input data of shape (num_samples, height, width, channels) where num_samples = 1000, height = 224, width = 224, channels = 3",
+    "Create random labels for the dataset with shape (num_samples,) where num_samples = 1000, using tf.random.uniform with values in the range [0, 10]",
+    "Map the dataset to a dictionary format where the input data is keyed by 'image' and labels are keyed by 'label'",
+    "Batch the dataset with a batch size of 32 using .batch(32)",
+    "Define a simple Keras model using tf.keras.Sequential with layers: Conv2D(32, (3, 3), activation='relu', input_shape=(224, 224, 3)), Flatten(), Dense(10, activation='softmax')",
+    "Define a loss function using tf.keras.losses.SparseCategoricalCrossentropy()",
+    "Define an optimizer using tf.keras.optimizers.Adam()",
+    "Instantiate the SingleTaskTrainer class with the created dataset, label key as 'label', model, loss function, and optimizer",
+    "Call the train_loop_begin method of the SingleTaskTrainer instance to reset states",
+    "Call the train_step method of the SingleTaskTrainer instance with an iterator created from the dataset",
+    "Modify the augment.py file to introduce a bug by removing 'level_std*' from the line where standard deviation is calculated",
+    "Run the training step and monitor the output for the standard deviation value",
+    "Assert that the standard deviation value is either 0 or 1 after the training step",
+    "Log the output of the training step to verify the standard deviation behavior"
+]
+```

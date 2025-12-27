@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and necessary libraries for instance segmentation from TensorFlow Model Garden",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 8 and image dimensions of 640x640 for input images",
+    "Load a pre-trained instance segmentation model from TensorFlow Model Garden using tf.keras.applications",
+    "Prepare a synthetic dataset with 100 images, each containing random bounding boxes and masks for instance segmentation",
+    "Create a function to generate random bounding boxes and masks for the synthetic dataset",
+    "Ensure the bounding boxes are within the dimensions of the images and masks are binary (0 or 1)",
+    "Split the dataset into training (80 images) and validation (20 images) sets",
+    "Define the model's input shape as (None, 640, 640, 3) for images and (None, 100, 4) for bounding boxes",
+    "Compile the model with a loss function suitable for instance segmentation, such as tf.keras.losses.BinaryCrossentropy",
+    "Set the optimizer to tf.keras.optimizers.Adam with a learning rate of 0.001",
+    "Train the model using model.fit() with the training dataset for 10 epochs, validating on the validation dataset",
+    "During training, monitor the validation loss and ensure it is printed at the end of each epoch",
+    "Capture the output of the validation loss after each epoch and store it in a list",
+    "After training, assert that all values in the validation loss list are equal to 0.0",
+    "Print the validation loss list to confirm that it contains only zeros",
+    "Verify that the model's predictions on the validation set are not being evaluated correctly, leading to a validation loss of 0.0"
+]
+```

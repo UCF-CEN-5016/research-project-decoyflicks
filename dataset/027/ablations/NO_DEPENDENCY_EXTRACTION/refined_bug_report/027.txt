@@ -1,0 +1,19 @@
+TITLE  
+Issue with Image Size Modification in DCGAN Code
+
+SYMPTOMS  
+• Attempting to run the DCGAN example with a modified image size of 128x128 results in an error.  
+• Error message:  
+  ```
+  ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200])) is deprecated. Please ensure they have the same size.
+  ```  
+• The source of the unexpected input size (3200) is unclear.
+
+EXPECTED BEHAVIOR  
+When the image size is modified to 128x128, the DCGAN should train without errors, with the input and target sizes matching appropriately during the loss computation.
+
+REPRODUCTION STEPS  
+1. Clone the DCGAN example from the PyTorch tutorials repository.  
+2. Modify the image size parameter in the code from 64x64 to 128x128.  
+3. Run the training loop.  
+4. Observe the error message regarding mismatched input and target sizes.

@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and Keras modules from tensorflow.keras",
+    "Set the batch size to 32 and image dimensions to 224x224",
+    "Load the training data from 'drive/MyDrive/Dog Vision/train' directory using ImageDataGenerator with target size (224, 224)",
+    "Load the validation data from 'drive/MyDrive/Dog Vision/validation' directory using ImageDataGenerator with target size (224, 224)",
+    "Set NUM_EPOCHS to 100",
+    "Create an early_stopping callback with patience set to 10",
+    "Define a function `create_model()` that creates a MobileNetV2 model from TensorFlow Hub with input shape (224, 224, 3) and includes the classification head",
+    "Inside `train_model()`, initialize the model using `create_model()`",
+    "Create a TensorBoard callback for logging every epoch",
+    "Fit the model to the training data with x=train_data, epochs=NUM_EPOCHS, validation_data=val_data, validation_freq=1, and callbacks=[tensorboard, early_stopping]",
+    "Assert that during execution, an error occurs indicating 'Graph execution error' and a NOT_FOUND error related to missing image files (e.g., 'drive/MyDrive/Dog Vision/train/17e00d79ad69729522d8705e95939f01.jpg')"
+]
+```
+

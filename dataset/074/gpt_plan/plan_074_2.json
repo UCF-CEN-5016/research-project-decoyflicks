@@ -1,0 +1,21 @@
+[
+  "Import torch, numpy, and the necessary modules from transformers (RobertaConfig, RobertaModel), and the DeepSpeed get_accelerator function",
+  "Set a fixed random seed for torch, numpy, and random modules (e.g., torch.manual_seed(42), np.random.seed(0), random.seed(0)) to ensure reproducibility",
+  "Initialize a RobertaConfig with parameters matching those in create_model (hidden_size=256, num_attention_heads=8, num_hidden_layers=6, pad_token_id=1, bos_token_id=0, eos_token_id=2, vocab_size=50265, max_position_embeddings=514)",
+  "Instantiate a RobertaModel encoder using this configuration",
+  "Create a RobertaMLMModel instance using the RobertaConfig and RobertaModel encoder",
+  "Create dummy input tensors representing a batch of token sequences with batch_size=2 and seq_len=10, where the tokens include both regular tokens and an eos token (token id 2) placed near the end (e.g., tokens: [[0, 5, 10, 15, 20, 25, 30, 2, 1, 1], [0, 7, 12, 17, 22, 27, 32, 2, 1, 1]]), where 1 is pad_token_id",
+  "Create corresponding attention masks where attention_mask is 1 for tokens != pad_token_id and 0 otherwise",
+  "Create target token tensors (tgt_tokens) of the same shape, with some tokens masked (using mask_token_id which for RoBERTa is 50264) and including the eos token at the same position as in src_tokens",
+  "Define an action_mask tensor of shape (batch_size, seq_len), where tokens that should contribute to the loss are marked with 1, and tokens to be masked out are 0; ensure the eos token position is set to 1 (i.e., not masked out)",
+  "Set start index to 1 or 2 (choose start=1 for this test) to simulate the slicing in actor_loss calculation",
+  "Manually compute slices of actor_log_prob, log_probs, advantages, and action_mask tensors along dimension 1 using the bugged slicing: action_mask[:, start:] (so eos token is excluded if it falls before or at the start index)",
+  "Repeat the above but also compute slices using the proposed correct slicing: action_mask[:, start-1:-1], which includes the eos token",
+  "Call the actor_loss function (or a mock loss function simulating actor_loss_fn) with these sliced tensors and record the resulting loss values",
+  "Assert that when using the bugged slicing (action_mask[:, start:]), the eos token's contribution to the loss is filtered out (verify by checking that positions corresponding to eos token have zero mask or zero contribution in loss)",
+  "Assert that when using the corrected slicing (action_mask[:, start-1:-1]), the eos token's contribution is included (verify by checking non-zero mask values at eos position and contribution to loss)",
+  "Print or log the difference in loss values between the two slicing strategies to highlight the effect of masking out eos token",
+  "Optionally, verify that the ground reward associated with the eos token is missing in the loss when using the bugged slicing by comparing advantage or reward vectors aligned with the mask",
+  "Ensure all tensors are on CPU (or the same device) to avoid device mismatch errors during slicing and loss computation",
+  "Wrap the above steps in a test function or script that can be run standalone to reproduce the bug reliably"
+]

@@ -1,0 +1,28 @@
+{
+  "bug_report": "031",
+  "rank": 2,
+  "score": 0.9558728933334351,
+  "main_file": {
+    "path": "Tools/PyTorch/TimeSeriesPredictionPlatform/models/tft_pyt/triton/export_model.py",
+    "content": "import argparse\nimport logging\nimport os\nfrom pathlib import Path\n\nos.environ[\"TF_CPP_MIN_LOG_LEVEL\"] = \"2\"\nos.environ[\"TF_ENABLE_DEPRECATION_WARNINGS\"] = \"1\"\n\n# method from PEP-366 to support relative import in executed modules\nif __name__ == \"__main__\" and __package__ is None:\n    __package__ = Path(__file__).parent.name\n\nfrom .deployment_toolkit.args import ArgParserGenerator  # noqa: E402  module level import not at top of file\nfrom .deployment_toolkit.core import (  # noqa: E402  module level import not at top of file\n    DATALOADER_FN_NAME,\n    BaseLoader,\n    BaseSaver,\n    Format,\n    load_from_file,\n)\nfrom .deployment_toolkit.extensions import loaders, savers  # noqa: E402  module level import not at top of file\n\nLOGGER = logging.getLogger(\"export_model\")\n\nINPUT_MODEL_TYPES = [Format.TF_ESTIMATOR, Format.TF_KERAS, Format.PYT]\nOUTPUT_MODEL_TYPES = [Format.TF_SAVEDMODEL, Format.TS_TRACE, Format.TS_SCRIPT, Format.ONNX]\n\n\ndef _get_args():\n    parser = argparse.ArgumentParser(\n        description=\"Script for exporting models from supported frameworks.\", allow_abbrev=False\n    )\n    parser.add_argument(\"--input-path\", help=\"Path to input python module\", required=True)\n    parser.add_argument(\n        \"--input-type\", help=\"Input model type\", choices=[f.value for f in INPUT_MODEL_TYPES], required=True\n    )\n    parser.add_argument(\"--output-path\", help=\"Path to output model file\", required=True)\n    parser.add_argument(\n        \"--output-type\", help=\"Output model type\", choices=[f.value for f in OUTPUT_MODEL_TYPES], required=True\n    )\n    parser.add_argument(\"--dataloader\", help=\"Path to python module containing data loader\")\n    parser.add_argument(\"-v\", \"--verbose\", help=\"Verbose logs\", action=\"store_true\", default=False)\n    parser.add_argument(\n        \"--ignore-unknown-parameters\",\n        help=\"Ignore unknown parameters (argument often used in CI where set of arguments is constant)\",\n        action=\"store_true\",\n        default=False,\n    )\n\n    args, unparsed_args = parser.parse_known_args()\n\n    Loader: BaseLoader = loaders.get(args.input_type)\n    ArgParserGenerator(Loader, module_path=args.input_path).update_argparser(parser)\n\n    if args.input_type == Format.PYT.value and args.output_type == Format.ONNX.value:\n        saver_type = f\"{Format.PYT.value}--{Format.ONNX.value}\"\n    else:\n        saver_type = args.output_type\n    Saver: BaseSaver = savers.get(saver_type)\n    ArgParserGenerator(Saver).update_argparser(parser)\n\n    if args.dataloader is not None:\n        get_dataloader_fn = load_from_file(args.dataloader, label=\"dataloader\", target=DATALOADER_FN_NAME)\n        ArgParserGenerator(get_dataloader_fn).update_argparser(parser)\n\n    if args.ignore_unknown_parameters:\n        args, unknown_args = parser.parse_known_args()\n        LOGGER.warning(f\"Got additional args {unknown_args}\")\n    else:\n        args = parser.parse_args()\n    return args\n\n\ndef main():\n    args = _get_args()\n\n    log_level = logging.INFO if not args.verbose else logging.DEBUG\n    log_format = \"%(asctime)s %(levelname)s %(name)s %(message)s\"\n    logging.basicConfig(level=log_level, format=log_format)\n\n    LOGGER.info(\"args:\")\n    for key, value in vars(args).items():\n        LOGGER.info(f\"    {key} = {value}\")\n\n    dataloader_fn = None\n    if args.dataloader is not None:\n        get_dataloader_fn = load_from_file(args.dataloader, label=\"dataloader\", target=DATALOADER_FN_NAME)\n        dataloader_fn = ArgParserGenerator(get_dataloader_fn).from_args(args)\n\n    Loader: BaseLoader = loaders.get(args.input_type)\n    loader = ArgParserGenerator(Loader, module_path=args.input_path).from_args(args)\n    model = loader.load(args.input_path, dataloader_fn=dataloader_fn, output_type=args.output_type)\n\n    LOGGER.info(\"inputs: %s\", model.inputs)\n    LOGGER.info(\"outputs: %s\", model.outputs)\n\n    if args.input_type == Format.PYT.value and args.output_type == Format.ONNX.value:\n        saver_type = f\"{Format.PYT.value}--{Format.ONNX.value}\"\n    else:\n        saver_type = args.output_type\n    Saver: BaseSaver = savers.get(saver_type)\n    saver = ArgParserGenerator(Saver).from_args(args)\n    saver.save(model, args.output_path, dataloader_fn)\n\n\nif __name__ == \"__main__\":\n    main()\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "logging",
+      "function": "basicConfig"
+    },
+    {
+      "module": "logging",
+      "function": "getLogger"
+    },
+    {
+      "module": "pathlib",
+      "function": "Path"
+    }
+  ]
+}

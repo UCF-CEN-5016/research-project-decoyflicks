@@ -1,0 +1,27 @@
+```json
+[
+    "Import TensorFlow and the transformers library",
+    "Set the TensorFlow logging level to 'ERROR' to suppress warnings",
+    "Define a batch size of 16 and set max_sequence_length to 512",
+    "Initialize TPU using tf.distribute.cluster_resolver.TPUClusterResolver()",
+    "Connect to the TPU and initialize the TPU system using tf.tpu.experimental.initialize_tpu_system()",
+    "Set the distribution strategy to tf.distribute.TPUStrategy(tpu)",
+    "Load the tokenizer from 'tf-tpu/unigram-tokenizer-wikitext' using transformers.AutoTokenizer.from_pretrained()",
+    "Load the model configuration for 'roberta-base' using transformers.AutoConfig.from_pretrained()",
+    "Set the vocab_size of the model configuration to tokenizer.vocab_size",
+    "Prepare the training and evaluation dataset paths: train_dataset_path = 'gs://tf-tpu-training-resources/train' and eval_dataset_path = 'gs://tf-tpu-training-resources/validation'",
+    "Load the TFRecord shards for training and evaluation datasets using tf.io.gfile.glob()",
+    "Define a function count_samples(file_list) to count the number of training samples in the TFRecord files",
+    "Call count_samples(training_records) to get num_train_samples",
+    "Define a decode function decode_fn(example) to parse the TFRecord files",
+    "Define a masking utility using transformers.DataCollatorForLanguageModeling with mlm_probability set to 0.15",
+    "Define a function prepare_dataset() to create a tf.data.Dataset object from the TFRecord files",
+    "Prepare the training dataset by calling prepare_dataset() with training_records, decode_fn, mask_fn, batch_size, shuffle=True",
+    "Prepare the evaluation dataset by calling prepare_dataset() with eval_records, decode_fn, mask_fn, batch_size, shuffle=False",
+    "Initialize the model within strategy.scope() using transformers.TFAutoModelForMaskedLM.from_config(config)",
+    "Compile the model with an optimizer created using transformers.create_optimizer()",
+    "Call model.fit() with train_dataset and eval_dataset, setting epochs to 10",
+    "Capture the output of model.fit() to check for errors",
+    "Assert that the output contains 'OperatorNotAllowedInGraphError' indicating the bug has occurred"
+]
+```

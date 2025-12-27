@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, numpy, collections.Counter, and conlleval.evaluate",
+    "Define a batch size of 32 for training the NER model",
+    "Set the vocabulary size to 20000 and the number of tags to 10 (9 NER tags + 1 for padding)",
+    "Create a custom loss function class CustomNonPaddingTokenLoss that ignores padded tokens",
+    "Define the NERModel class with the following parameters: num_tags, vocab_size, maxlen=128, embed_dim=32, num_heads=2, ff_dim=32",
+    "Implement the TokenAndPositionEmbedding and TransformerBlock classes as described in the provided code",
+    "Load the CoNLL 2003 dataset using load_dataset from the datasets library",
+    "Export the CoNLL dataset to a tab-separated file format for training and validation",
+    "Create a tf.data.TextLineDataset for both training and validation datasets from the exported files",
+    "Define a map function map_record_to_training_data to process the dataset records into tokens and tags",
+    "Apply the map function to the training and validation datasets to prepare them for model training",
+    "Instantiate the NERModel with the defined parameters and compile it with the custom loss function",
+    "Fit the NERModel on the training dataset for 10 epochs",
+    "Prepare a sample input for inference by tokenizing and converting it to IDs using the lowercase_and_convert_to_ids function",
+    "Call the predict method on the NERModel with the sample input and store the output",
+    "Verify the output of the model by checking the shape of the predictions array",
+    "Assert that the predictions array has the expected shape of (1, maxlen) where maxlen is 128",
+    "Check if the variable level2_dau_2 is defined but not used in the model architecture",
+    "Verify that the selective_kernel_feature_fusion function is called with level3_dau_2 instead of level2_dau_2",
+    "Log the output of the model predictions to confirm the model runs without errors despite the unused variable"
+]
+```

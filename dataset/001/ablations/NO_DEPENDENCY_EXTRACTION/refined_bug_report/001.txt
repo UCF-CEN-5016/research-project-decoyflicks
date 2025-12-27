@@ -1,0 +1,23 @@
+TITLE  
+Loss function returns 'nan' during training of spatial transform network on MNIST example
+
+SYMPTOMS  
+• 'nan' loss observed during training after several epochs  
+• High GPU memory consumption, exceeding 10G on a Tesla K40 GPU  
+• Memory usage reported:  
+  ```
+  +-------------------------------+----------------------+----------------------+
+  | 1 Tesla K40c Off | 0000:03:00.0 Off | 0 |
+  | 29% 55C P0 93W / 235W | 11005MiB / 11519MiB | 57% Default |
+  +-------------------------------+----------------------+----------------------+
+  ```
+
+EXPECTED BEHAVIOR  
+The loss function should converge to a finite value during training, and GPU memory usage should be within reasonable limits for the model being trained.
+
+REPRODUCTION STEPS  
+1. Clone the repository containing the spatial transform network module.  
+2. Use the MNIST dataset as provided in the `cluster_example`.  
+3. Run the training script with the provided code.  
+4. Monitor the loss value during training for several epochs.  
+5. Check GPU memory usage during the training process.

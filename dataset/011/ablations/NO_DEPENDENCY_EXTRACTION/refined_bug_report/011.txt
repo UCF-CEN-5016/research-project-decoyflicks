@@ -1,0 +1,35 @@
+TITLE  
+RuntimeError: The loss value is NaN when training resnet_rs_imagenet on TensorFlow 2.6.0
+
+SYMPTOMS  
+• Encountered a `RuntimeError: The loss value is NaN after training loop` during training.  
+• The error occurs consistently after several training steps.  
+• The loss values printed during training include valid numbers initially but eventually become NaN.  
+• The training process is stopped prematurely due to the NaN loss value.
+
+EXPECTED BEHAVIOR  
+The model should train without errors, producing valid loss values throughout the training process, ultimately completing the specified number of training steps.
+
+REPRODUCTION STEPS  
+1. Pull the Docker image: `nvcr.io/nvidia/tensorflow:21.12-tf2-py3`.  
+2. Install the required Python packages as listed in the original report.  
+3. Checkout the TensorFlow Model Garden repository at version r2.6.0:  
+   ```bash
+   git checkout r2.6.0
+   ```  
+4. Navigate to the model directory:  
+   ```bash
+   cd official/vision/beta
+   ```  
+5. Set the necessary environment variables:  
+   ```bash
+   export PYTHONPATH=$(realpath ../../../):$PYTHONPATH
+   export TF_FORCE_GPU_ALLOW_GROWTH=true
+   ```  
+6. Execute the training command with specified parameters:  
+   ```bash
+   python train.py --experiment=resnet_rs_imagenet --mode=train_and_eval --model_dir=./results_resnet-rs50_tf2 --config_file=configs/experiments/image_classification/imagenet_resnetrs50_i160.yaml --params_override='runtime.enable_xla=False, runtime.num_gpus=1, runtime.mixed_precision_dtype=float16, runtime.distribution_strategy='one_device', task.train_data.input_path='/ppusw/datasets/vision/imagenet/tfrecords/train*', task.train_data.global_batch_size=2, task.train_data.dtype=float16, task.validation_data.input_path='/ppusw/datasets/vision/imagenet/tfrecords/valid*', task.validation_data.global_batch_size=2, task.validation_data.dtype=float16, trainer.train_steps=100, trainer.validation_steps=25000, trainer.validation_interval=640583, trainer.steps_per_loop=640583, trainer.summary_interval=640583, trainer.checkpoint_interval=640583, trainer.optimizer_config.ema='', trainer.optimizer_config.learning_rate.cosine.decay_steps=100, trainer.optimizer_config.warmup.linear.warmup_steps=0'
+   ```  
+7. Observe the training process and note when the NaN loss occurs.
+
+This structured format helps in clearly identifying the core issue, symptoms, expected behavior, and steps to reproduce the bug, making it easier for developers to understand and address the problem.

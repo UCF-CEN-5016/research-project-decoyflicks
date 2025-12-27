@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import os, import sys, import numpy as np, import imgaug, from mrcnn.config import Config, from mrcnn import model as modellib, utils, from pycocotools.coco import COCO",
+    "Set the ROOT_DIR variable to the absolute path of the project root directory: ROOT_DIR = os.path.abspath('../../')",
+    "Define the COCO_MODEL_PATH variable to point to the pre-trained weights file: COCO_MODEL_PATH = os.path.join(ROOT_DIR, 'mask_rcnn_coco.h5')",
+    "Define a configuration class CocoConfig that inherits from Config and set NUM_CLASSES to 1 + 80 (for COCO dataset)",
+    "Create an instance of the CocoConfig class: config = CocoConfig()",
+    "Set the model_dir variable to a temporary directory for model logs: model_dir = os.path.join(ROOT_DIR, 'logs')",
+    "Instantiate the MaskRCNN model in inference mode: model = modellib.MaskRCNN(mode='inference', model_dir=model_dir, config=config)",
+    "Call model.load_weights with COCO_MODEL_PATH and by_name=True: model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Run the code in a Jupyter notebook cell to trigger the NotImplementedError",
+    "Capture the output and error message to verify that the NotImplementedError is raised",
+    "Check the error message to confirm it states: 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead.'"
+]
+```

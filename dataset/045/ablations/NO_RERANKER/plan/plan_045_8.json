@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary libraries: fairseq, torch, and any other dependencies required for the speech_to_speech task.",
+    "Set the DATA_ROOT variable to the path where the dataset is located, e.g., DATA_ROOT = '/root/autodl-tmp/FormattingData/DATA_ROOT'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech_to_speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the task.",
+    "Define the following parameters for the fairseq-generate command: target-is-code=True, target-code-size=100, vocoder='code_hifigan', max-tokens=50000, beam=10, max-len-a=1.",
+    "Run the fairseq-generate command with the specified parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Monitor the console output for any error messages related to the key 'input_feat_per_channel' not being found in the struct.",
+    "Check the logs in the results directory at /root/autodl-tmp/results for any additional error details that may indicate the source of the bug.",
+    "Validate that the error message 'Key 'input_feat_per_channel' is not in struct' is present in the output, confirming the bug has been reproduced."
+]
+```

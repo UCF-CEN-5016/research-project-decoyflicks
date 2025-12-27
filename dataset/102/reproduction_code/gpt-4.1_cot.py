@@ -1,0 +1,1 @@
+should_quantize_dropout = self.training and self.quantize_dropout and not return_loss

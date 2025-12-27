@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: argparse, deepspeed, torch, torch.nn, torch.nn.functional, torchvision, torchvision.transforms",
+    "Define a batch size of 16 for training and set the number of epochs to 30",
+    "Create a CIFAR10 dataset using torchvision.datasets.CIFAR10 with root='./data', train=True, download=True, and apply normalization transforms",
+    "Initialize the DeepSpeed distributed backend using deepspeed.init_distributed()",
+    "Define a neural network class Net that includes convolutional layers, pooling layers, and fully connected layers, ensuring to include a Mixture of Experts (MoE) layer if args.moe is True",
+    "Instantiate the Net class with the appropriate arguments",
+    "Define a DeepSpeed configuration dictionary with parameters for optimizer, scheduler, and zero optimization",
+    "Initialize the DeepSpeed engine using deepspeed.initialize with the model, parameters, training data, and configuration",
+    "Prepare a dummy input tensor with shape (batch_size, 3, 32, 32) filled with random values to simulate CIFAR10 images",
+    "Prepare a dummy action mask tensor with shape (batch_size, sequence_length) where sequence_length is greater than the number of tokens, filled with ones",
+    "Prepare a dummy actor_log_prob tensor with shape (batch_size, sequence_length) filled with random values to simulate log probabilities of actions",
+    "Prepare a dummy log_probs tensor with shape (batch_size, sequence_length) filled with random values to simulate log probabilities of actions taken",
+    "Prepare a dummy advantages tensor with shape (batch_size, sequence_length) filled with random values to simulate advantages for actions taken",
+    "Set the start index to a value that will filter out the 'eos' token, e.g., start = sequence_length - 1",
+    "Calculate actor_loss using the provided formula: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:])",
+    "Print the calculated actor_loss to verify it is computed without errors",
+    "Modify the mask to use action_mask[:, start-1:-1] and recalculate actor_loss",
+    "Print the modified actor_loss to compare with the previous calculation",
+    "Assert that the actor_loss with the modified mask is different from the original actor_loss to confirm the bug is present"
+]
+```

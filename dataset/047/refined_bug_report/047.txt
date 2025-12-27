@@ -1,0 +1,26 @@
+### TITLE
+Incorrect Output Log Order in MMS ASR Inference for Multiple Audio Files
+
+### SYMPTOMS
+• The order of the output text from the ASR inference does not match the order of the input audio files.
+• The log messages indicating the inputs are processed out of sequence compared to their actual processing.
+
+### EXPECTED BEHAVIOR
+- When multiple audio files are passed as input, the ASR should process and return transcriptions in the same order as the input files.
+- The log messages indicating the inputs and their corresponding outputs should be aligned with the correct input sequence.
+
+### REPRODUCTION STEPS
+1. Run the command to perform ASR inference on multiple audio files:
+```bash
+python -u examples/mms/asr/infer/mms_infer.py \
+--model `pwd`/../fairseq_resource/mms1b_all.pt \
+--lang "eng" \
+--audio audio1.wav audio2.wav audio3.wav ... audio10.wav
+```
+2. Observe that the transcriptions in the text file do not match the order of the input audio files.
+3. Notice that the log messages showing the inputs and their corresponding outputs are also out of sequence.
+
+### Additional Context
+
+- The issue seems to be related to how the ASR model processes multiple audio files sequentially, leading to a mismatch between the expected and actual processing order.
+- This could be due to an error in the script handling the input list or how the inference process is being managed within the MMS framework.

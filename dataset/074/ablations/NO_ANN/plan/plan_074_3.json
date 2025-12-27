@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, deepspeed, and the required functions from dschat.utils and transformers.",
+    "Set the random seed for reproducibility using set_random_seed(1234).",
+    "Define a batch size of 16 and a maximum sequence length of 512.",
+    "Load a pretrained model using create_hf_model with model_name_or_path set to 'gpt2' or any other causal language model.",
+    "Prepare a dummy dataset with input sequences of length 512, ensuring that the last token is 'eos' (end of sequence) and has a corresponding ground reward.",
+    "Create a DataLoader for the dummy dataset with batch size 16.",
+    "Define action_mask as a tensor of shape (batch_size, sequence_length) with values set to 1 for all tokens except the last token (eos) which should be set to 0.",
+    "Define actor_log_prob and log_probs as tensors of shape (batch_size, sequence_length) filled with random values.",
+    "Define advantages as a tensor of shape (batch_size, sequence_length) filled with random values.",
+    "Set the start variable to 1 to simulate the scenario where the first token is masked out.",
+    "Calculate actor_loss using the provided formula: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]).",
+    "Print the calculated actor_loss to verify its value.",
+    "Modify the mask to action_mask[:, start-1:-1] and recalculate actor_loss.",
+    "Print the new actor_loss to compare with the previous value.",
+    "Assert that the actor_loss with the modified mask is different from the original actor_loss, indicating that the bug is present."
+]
+```

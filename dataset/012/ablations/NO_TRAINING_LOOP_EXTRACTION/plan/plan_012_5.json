@@ -1,0 +1,15 @@
+```json
+[
+    "Clone the TensorFlow models repository from GitHub using 'git clone https://github.com/tensorflow/models.git'",
+    "Navigate to the official legacy image classification directory using 'cd models/official/legacy/image_classification/'",
+    "Create a virtual environment using 'python3 -m venv tf_env' and activate it using 'source tf_env/bin/activate'",
+    "Install the required packages using 'pip install tensorflow==2.16.0 tf-nightly-cpu==2.16.0.dev20231103'",
+    "Import TensorFlow and the necessary modules in a new Python script: 'import tensorflow as tf' and 'from official.legacy.image_classification import classifier_trainer'",
+    "Set the data directory variable to a non-existent path: 'data_dir = /non_existent_imagenet_data/'",
+    "Run the classifier_trainer.py script with the following command: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --data_dir=/non_existent_imagenet_data/'",
+    "Observe the output for the AttributeError: 'module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'. Did you mean: 'optimizer_v2'?'",
+    "Verify that the error occurs specifically when trying to access 'tf_keras.optimizers.legacy.Optimizer' in the ExponentialMovingAverage class",
+    "Check the TensorFlow version by adding a print statement: 'print(tf.__version__)' to confirm it is 2.16.0",
+    "Ensure that the script is executed in an environment where the TensorFlow version is consistent with the bug report"
+]
+```

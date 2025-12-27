@@ -1,0 +1,35 @@
+TITLE  
+TypeError when merging dictionaries in tf-models-official==2.12.0 with Python 3.8
+
+SYMPTOMS  
+• Encountered a TypeError during the training and evaluation phase of the Object Detection tutorial.  
+• Error message:  
+  ```
+  TypeError: in user code:
+      File "/usr/local/lib/python3.8/dist-packages/official/core/base_trainer.py", line 442, in eval_step  *
+          return passthrough_logs | logs
+      TypeError: unsupported operand type(s) for |: 'dict' and 'dict'
+  ```  
+• The issue occurs specifically with the line of code attempting to merge two dictionaries using the `|` operator.
+
+EXPECTED BEHAVIOR  
+The training and evaluation process should execute without errors, merging the logs correctly and returning the expected output.
+
+REPRODUCTION STEPS  
+1. Follow the Object Detection with Model Garden tutorial: https://www.tensorflow.org/tfmodels/vision/object_detection.  
+2. Set up the environment using the Docker image: `tensorflow/tensorflow:2.12.0-gpu-jupyter`.  
+3. Run the following code to initiate training and evaluation:  
+   ```python
+   model, eval_logs = tfm.core.train_lib.run_experiment(
+       distribution_strategy=distribution_strategy,
+       task=task,
+       mode='train_and_eval',
+       params=exp_config,
+       model_dir=model_dir,
+       run_post_eval=True)
+   ```  
+4. Observe the error during execution.  
+
+ADDITIONAL CONTEXT  
+There may be compatibility issues between `tf-models-official==2.12.0` and `Python 3.8`, particularly regarding the use of the dictionary merge operator `|`. Further investigation is needed to verify compatibility or identify alternative solutions.  
+For reference, see: [Stack Overflow discussion on dictionary merging](https://stackoverflow.com/questions/62498581/typeerror-when-merging-dictionaries-unsupported-operand-types-for-dict-a).

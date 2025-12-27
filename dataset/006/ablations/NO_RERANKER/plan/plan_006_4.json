@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official EfficientDet repository.",
+    "Set the model name to 'efficientdet_d1_coco17_tpu-32'.",
+    "Define a batch size of 8 and image dimensions of 512x512.",
+    "Prepare a custom dataset with images of shape (batch_size, height, width, 3) and corresponding labels.",
+    "Create a TensorFlow dataset from the custom dataset using tf.data.Dataset.from_tensor_slices().",
+    "Shuffle the dataset and set the batch size using .batch(batch_size).",
+    "Instantiate the EfficientDet model using tf.keras.applications.EfficientDet with the specified model name.",
+    "Compile the model using model.compile() with an optimizer (e.g., Adam) and a loss function (e.g., 'categorical_crossentropy').",
+    "Ensure that the loss argument is provided in model.compile() to avoid the warning.",
+    "Train the model using model.fit() with the prepared dataset for a specified number of epochs (e.g., 10).",
+    "Monitor the training process for any warnings or errors, specifically looking for 'Gradients do not exist for variables...' warnings.",
+    "Log the output of the training process to capture the warning message.",
+    "Verify that the warning message includes the specified variables: ['stack_6/block_1/expand_bn/gamma:0', 'stack_6/block_1/expand_bn/beta:0', 'stack_6/block_1/depthwise_conv2d/depthwise_kernel:0', 'stack_6/block_1/depthwise_bn/gamma:0', 'stack_6/block_1/depthwise_bn/beta:0', 'stack_6/block_1/project_bn/gamma:0', 'stack_6/block_1/project_bn/beta:0', 'top_bn/gamma:0', 'top_bn/beta:0'].",
+    "Check the TensorFlow version to ensure it matches the version used when the code was last working correctly."
+]
+```

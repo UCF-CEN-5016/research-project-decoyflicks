@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository.",
+    "Set the environment variables for DATA_DIR and MODEL_DIR to point to the appropriate directories for training data and model checkpoints.",
+    "Activate the conda environment with TensorFlow 2.11.0 installed.",
+    "Define the number of nodes and GPUs per node: 2 nodes with 2 GPUs each.",
+    "Create a configuration file gpu.yaml for the first worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0.",
+    "Create a configuration file gpu1.yaml for the second worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1.",
+    "On the first GPU node (gpu1), navigate to the image classification directory and run the classifier_trainer.py script with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml.",
+    "On the second GPU node (gpu2), navigate to the image classification directory and run the classifier_trainer.py script with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml.",
+    "Ensure that both nodes are running the training process simultaneously.",
+    "Monitor the training logs on both nodes to check the throughput of examples processed per second.",
+    "Record the throughput values for both single GPU and multi-GPU configurations across nodes.",
+    "Verify that the throughput on multi-node setup does not exceed the throughput of a single GPU setup, indicating that scaling is not occurring.",
+    "Check for any error messages or warnings in the logs that may indicate issues with the multi-worker setup.",
+    "Validate that the environment is correctly set up with TensorFlow 2.11.0, CUDA 11.0, and the appropriate GPU drivers.",
+    "Confirm that the data being used is the same across both nodes to ensure consistency in training conditions."
+]
+```

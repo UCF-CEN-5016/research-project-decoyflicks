@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and the MixupAndCutmix module from tfm.vision.augment",
+    "Define a batch size of 1000",
+    "Create random input data with shape (batch_size, height=224, width=224, channels=3)",
+    "Call _sample_from_beta function with alpha=0.2 and beta=0.2, and shape=(batch_size)",
+    "Verify output of _sample_from_beta does not follow the correct beta distribution",
+    "Plot KDE of generated samples using seaborn to visualize the distribution",
+    "Compare with a correctly implemented beta distribution for validation",
+    "Assert the generated samples do not follow the expected beta distribution"
+]
+```
+

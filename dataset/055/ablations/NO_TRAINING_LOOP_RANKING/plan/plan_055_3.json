@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, and nltk",
+    "Set the Keras version to 2.15 and TensorFlow version to 2.11 or higher",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40 and TEST_BATCH_SIZE = 1",
+    "Load the English and Spanish tokenizers from data_preprocessing module",
+    "Load the test pairs from data_preprocessing module",
+    "Define the transformer model from the model module",
+    "Create a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Define a nested function next_fn(prompt, cache, index) that takes a prompt and returns logits, hidden_states, and cache",
+    "In next_fn, call the transformer model with encoder_input_tokens and prompt, and extract logits for the given index",
+    "Set hidden_states to None in next_fn",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Iterate over test_pairs to decode sequences for each English input sentence",
+    "For each decoded sequence, clean the output by removing special tokens and split into words",
+    "Calculate the BLEU score using nltk's modified_precision function for each translated sentence",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Check the output shapes of logits and cache in next_fn to ensure they match expected dimensions",
+    "Log the shapes of encoder_input_tokens, prompt, and logits before the segmentation fault occurs",
+    "Assert that the segmentation fault occurs specifically after the next_fn returns logits, an empty tuple, and None for hidden_states"
+]
+```

@@ -1,0 +1,10 @@
+Error when fitting the model
+
+I have an error when fitting the model as shown in the pic. 
+Can someone help me how to fix it or what is the issue ?
+
+<img width="1373" alt="code" src="https://github.com/keras-team/keras-io/assets/60826257/28f59c64-57fe-4f56-b8fb-e42cc69e10fd">
+<img width="1363" alt="error" src="https://github.com/keras-team/keras-io/assets/60826257/f0519092-3436-462d-b3fd-dd902184c5d4">
+
+
+Note: I installed the kerasCV by running this command (!pip install git+https://github.com/keras-team/keras-cv -q)

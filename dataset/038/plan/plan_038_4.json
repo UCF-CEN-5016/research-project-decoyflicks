@@ -1,0 +1,16 @@
+```json
+[
+    "Import the necessary modules from the specified dependencies, including labml and torch.nn",
+    "Define a batch size of 64 and feature dimensions for x (e.g., height=32, width=32, d=4)",
+    "Create random input data x with shape (batch_size, height, width, d)",
+    "Define the dimensions for cos_cached and sin_cached to match those in x (height=32, width=1, d=4)",
+    "Initialize cos_cached and sin_cached with random values of appropriate shape",
+    "Calculate neg_half_x as -0.5 * x",
+    "Call the rotary positional embedding statement with the given equation",
+    "Verify that an error occurs due to tensor size mismatch between x_rope and cos_cached/sin_cached",
+    "Check that only a partial set of features (e.g., last dimension of x) has positional encodings applied, while others do not",
+    "Monitor the runtime exception details for exact error message",
+    "Verify that error message contains 'RuntimeError: The size of tensor a (3) must match the size of tensor b (4)' at non-singleton dimension 3"
+]
+```
+

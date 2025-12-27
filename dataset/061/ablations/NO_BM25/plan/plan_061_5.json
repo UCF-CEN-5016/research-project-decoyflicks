@@ -1,0 +1,21 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running: !pip install -q git+https://github.com/keras-team/keras-cv.git",
+    "Install TensorFlow version 2.11.0 by running: !pip install -q tensorflow==2.11.0",
+    "Import necessary libraries by adding the following code: import keras_cv; import tensorflow as tf; from keras_cv.models.stable_diffusion import NoiseScheduler; from tensorflow import keras; import matplotlib.pyplot as plt",
+    "Create an instance of the StableDiffusion model by running: stable_diffusion = keras_cv.models.StableDiffusion()",
+    "Define a function to plot images by adding the following code: def plot_images(images): plt.figure(figsize=(20, 20)); for i in range(len(images)): ax = plt.subplot(1, len(images), i + 1); plt.imshow(images[i]); plt.axis('off')",
+    "Prepare a dataset of image URLs by defining a list: urls = ['https://i.imgur.com/VIedH1X.jpg', 'https://i.imgur.com/eBw13hE.png', 'https://i.imgur.com/oJ3rSg7.png', 'https://i.imgur.com/5mCL6Df.jpg', 'https://i.imgur.com/4Q6WWyI.jpg']",
+    "Define a function to assemble the image dataset by adding the following code: def assemble_image_dataset(urls): files = [tf.keras.utils.get_file(origin=url) for url in urls]; resize = keras.layers.Resizing(height=512, width=512, crop_to_aspect_ratio=True); images = [keras.utils.load_img(img) for img in files]; images = [keras.utils.img_to_array(img) for img in images]; images = np.array([resize(img) for img in images]); images = images / 127.5 - 1; return tf.data.Dataset.from_tensor_slices(images)",
+    "Call the assemble_image_dataset function with the URLs defined earlier: image_dataset = assemble_image_dataset(urls)",
+    "Define a placeholder token for the text dataset: placeholder_token = '<my-funny-cat-token>'",
+    "Define a function to assemble the text dataset by adding the following code: def assemble_text_dataset(prompts): prompts = [prompt.format(placeholder_token) for prompt in prompts]; embeddings = [stable_diffusion.tokenizer.encode(prompt) for prompt in prompts]; return tf.data.Dataset.from_tensor_slices(embeddings)",
+    "Create a list of prompts: prompts = ['a photo of a {}', 'a rendering of a {}', 'a cropped photo of the {}', 'the photo of a {}', 'a photo of a clean {}']",
+    "Call the assemble_text_dataset function with the prompts defined earlier: text_dataset = assemble_text_dataset(prompts)",
+    "Zip the image and text datasets together by running: dataset = tf.data.Dataset.zip((image_dataset, text_dataset))",
+    "Attempt to run the code by executing: for images, texts in dataset.take(1): print(images, texts)",
+    "Observe the output for any ImportError related to 'data_utils' when running the code, specifically: ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Verify that the error occurs consistently by re-running the code block multiple times to confirm the ImportError is reproducible."
+]
+```

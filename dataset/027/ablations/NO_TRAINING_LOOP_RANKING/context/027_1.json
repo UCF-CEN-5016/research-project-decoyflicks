@@ -1,0 +1,67 @@
+{
+  "bug_report": "027",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "distributed/rpc/rnn/main.py",
+    "content": "import os\n\nimport torch\nimport torch.distributed.autograd as dist_autograd\nimport torch.distributed.rpc as rpc\nimport torch.multiprocessing as mp\nimport torch.optim as optim\nfrom torch.distributed.optim import DistributedOptimizer\n\nimport rnn\n\n\ndef _run_trainer():\n    r\"\"\"\n    The trainer creates a distributed RNNModel and a DistributedOptimizer. Then,\n    it performs training using random input data.\n    \"\"\"\n    batch = 5\n    ntoken = 7\n    ninp = 2\n\n    nhid = 3\n    nindices = 6\n    nlayers = 4\n    hidden = (\n        torch.randn(nlayers, nindices, nhid),\n        torch.randn(nlayers, nindices, nhid)\n    )\n\n    model = rnn.RNNModel('ps', ntoken, ninp, nhid, nlayers)\n\n    # setup distributed optimizer\n    opt = DistributedOptimizer(\n        optim.SGD,\n        model.parameter_rrefs(),\n        lr=0.05,\n    )\n\n    criterion = torch.nn.CrossEntropyLoss()\n\n    def get_next_batch():\n        for _ in range(5):\n            data = torch.LongTensor(batch, nindices) % ntoken\n            target = torch.LongTensor(batch, ntoken) % nindices\n            yield data, target\n\n    # train for 10 iterations\n    for epoch in range(10):\n        # create distributed autograd context\n        for data, target in get_next_batch():\n            with dist_autograd.context() as context_id:\n                hidden[0].detach_()\n                hidden[1].detach_()\n                output, hidden = model(data, hidden)\n                loss = criterion(output, target)\n                # run distributed backward pass\n                dist_autograd.backward(context_id, [loss])\n                # run distributed optimizer\n                opt.step(context_id)\n                # not necessary to zero grads as each iteration creates a different\n                # distributed autograd context which hosts different grads\n        print(\"Training epoch {}\".format(epoch))\n\n\ndef run_worker(rank, world_size):\n    r\"\"\"\n    A wrapper function that initializes RPC, calls the function, and shuts down\n    RPC.\n    \"\"\"\n    os.environ['MASTER_ADDR'] = 'localhost'\n    os.environ['MASTER_PORT'] = '29500'\n    if rank == 1:\n        rpc.init_rpc(\"trainer\", rank=rank, world_size=world_size)\n        _run_trainer()\n    else:\n        rpc.init_rpc(\"ps\", rank=rank, world_size=world_size)\n        # parameter server does nothing\n        pass\n\n    # block until all rpcs finish\n    rpc.shutdown()\n\n\nif __name__ == \"__main__\":\n    world_size = 2\n    mp.spawn(run_worker, args=(world_size, ), nprocs=world_size, join=True)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "distributed/rpc/rnn/rnn.py",
+      "snippets": [
+        {
+          "lines": "71-104",
+          "code": "class EmbeddingTable(nn.Module):\n    r\"\"\"\n    Encoding layers of the RNNModel\n    \"\"\"\n    def __init__(self, ntoken, ninp, dropout):\n        super(EmbeddingTable, self).__init__()\n        self.drop = nn.Dropout(dropout)\n        self.encoder = nn.Embedding(ntoken, ninp)\n        if torch.cuda.is_available():\n            self.encoder = self.encoder.cuda()\n        nn.init.uniform_(self.encoder.weight, -0.1, 0.1)\n\n    def forward(self, input):\n        if torch.cuda.is_available():\n            input = input.cuda()\n        return self.drop(self.encoder(input)).cpu()\n\nclass Decoder(nn.Module):\n    r\"\"\"\n    Decoding layers of the RNNModel\n    \"\"\"\n    def __init__(self, ntoken, nhid, dropout):\n        super(Decoder, self).__init__()\n        self.drop = nn.Dropout(dropout)\n        self.decoder = nn.Linear(nhid, ntoken)\n        nn.init.zeros_(self.decoder.bias)\n        nn.init.uniform_(self.decoder.weight, -0.1, 0.1)\n\n    def forward(self, output):\n        return self.decoder(self.drop(output))\n\nclass RNNModel(nn.Module):\n    r\"\"\"\n    A distributed RNN model which puts embedding table and decoder parameters on\n    a remote parameter server, and locally holds parameters for the LSTM module.\n    The structure of the RNN model is borrowed from the word language model\n    example. See https://github.com/pytorch/examples/blob/main/word_language_model/model.py\n    \"\"\"\n    def __init__(self, ps, ntoken, ninp, nhid, nlayers, dropout=0.5):\n        super(RNNModel, self).__init__()\n\n        # setup embedding table remotely\n        self.emb_table_rref = rpc.remote(ps, EmbeddingTable, args=(ntoken, ninp, dropout))\n        # setup LSTM locally\n        self.rnn = nn.LSTM(ninp, nhid, nlayers, dropout=dropout)\n        # setup decoder remotely\n        self.decoder_rref = rpc.remote(ps, Decoder, args=(ntoken, nhid, dropout))\n\n    def forward(self, input, hidden):\n        # pass input to the remote embedding table and fetch emb tensor back\n        emb = _remote_method(EmbeddingTable.forward, self.emb_table_rref, input)\n        output, hidden = self.rnn(emb, hidden)\n        # pass output to the remote decoder and get the decoded output back\n        decoded = _remote_method(Decoder.forward, self.decoder_rref, output)\n        return decoded, hidden\n\n    def parameter_rrefs(self):\n        remote_params = []\n        # get RRefs of embedding table\n        remote_params.extend(_remote_method(_parameter_rrefs, self.emb_table_rref))\n        # create RRefs for local parameters\n        remote_params.extend(_parameter_rrefs(self.rnn))\n        # get RRefs of decoder\n        remote_params.extend(_remote_method(_parameter_rrefs, self.decoder_rref))\n        return remote_params"
+        }
+      ]
+    },
+    {
+      "file": "mnist_rnn/main.py",
+      "snippets": [
+        {
+          "lines": "23-40",
+          "code": "def main():\n    # Training settings\n    parser = argparse.ArgumentParser(description='PyTorch MNIST Example using RNN')\n    parser.add_argument('--batch-size', type=int, default=64, metavar='N',\n                        help='input batch size for training (default: 64)')\n    parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',\n                        help='input batch size for testing (default: 1000)')\n    parser.add_argument('--epochs', type=int, default=14, metavar='N',\n                        help='number of epochs to train (default: 14)')\n    parser.add_argument('--lr', type=float, default=0.1, metavar='LR',\n                        help='learning rate (default: 0.1)')\n    parser.add_argument('--gamma', type=float, default=0.7, metavar='M',\n                        help='learning rate step gamma (default: 0.7)')\n    parser.add_argument('--cuda', action='store_true', default=False,\n                        help='enables CUDA training')\n    parser.add_argument('--mps', action=\"store_true\", default=False,\n                        help=\"enables MPS training\")\n    parser.add_argument('--dry-run', action='store_true', default=False,\n                        help='quickly check a single pass')\n    parser.add_argument('--seed', type=int, default=1, metavar='S',\n                        help='random seed (default: 1)')\n    parser.add_argument('--log-interval', type=int, default=10, metavar='N',\n                        help='how many batches to wait before logging training status')\n    parser.add_argument('--save-model', action='store_true', default=False,\n                        help='for Saving the current Model')\n    args = parser.parse_args()\n\n    if args.cuda and not args.mps:\n        device = \"cuda\"\n    elif args.mps and not args.cuda:\n        device = \"mps\"\n    else:\n        device = \"cpu\"\n\n    device = torch.device(device)\n\n    torch.manual_seed(args.seed)\n\n    kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}\n    train_loader = torch.utils.data.DataLoader(\n        datasets.MNIST('../data', train=True, download=True,\n                       transform=transforms.Compose([\n                           transforms.ToTensor(),\n                           transforms.Normalize((0.1307,), (0.3081,))\n                       ])),\n        batch_size=args.batch_size, shuffle=True, **kwargs)\n    test_loader = torch.utils.data.DataLoader(\n        datasets.MNIST('../data', train=False, transform=transforms.Compose([\n            transforms.ToTensor(),\n            transforms.Normalize((0.1307,), (0.3081,))\n        ])),\n        batch_size=args.test_batch_size, shuffle=True, **kwargs)\n\n    model = Net().to(device)\n    optimizer = optim.Adadelta(model.parameters(), lr=args.lr)\n\n    scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)\n    for epoch in range(1, args.epochs + 1):\n        train(args, model, device, train_loader, optimizer, epoch)\n        test(args, model, device, test_loader)\n        scheduler.step()\n\n    if args.save_model:\n        torch.save(model.state_dict(), \"mnist_rnn.pt\")\n\n    def __init__(self):\n        super(Net, self).__init__()\n        self.rnn = nn.LSTM(input_size=28, hidden_size=64, batch_first=True)\n        self.batchnorm = nn.BatchNorm1d(64)\n        self.dropout1 = nn.Dropout2d(0.25)\n        self.dropout2 = nn.Dropout2d(0.5)\n        self.fc1 = nn.Linear(64, 32)\n        self.fc2 = nn.Linear(32, 10)\n\n    def forward(self, input):\n        # Shape of input is (batch_size,1, 28, 28)\n        # converting shape of input to (batch_size, 28, 28)\n        # as required by RNN when batch_first is set True\n        input = input.reshape(-1, 28, 28)\n        output, hidden = self.rnn(input)\n\n        # RNN output shape is (seq_len, batch, input_size)\n        # Get last output of RNN\n        output = output[:, -1, :]\n        output = self.batchnorm(output)\n        output = self.dropout1(output)\n        output = self.fc1(output)\n        output = F.relu(output)\n        output = self.dropout2(output)\n        output = self.fc2(output)\n        output = F.log_softmax(output, dim=1)\n        return output"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "rnn",
+      "function": "RNNModel"
+    },
+    {
+      "module": "torch",
+      "function": "DistributedOptimizer"
+    },
+    {
+      "module": "torch",
+      "function": "LongTensor"
+    },
+    {
+      "module": "torch",
+      "function": "backward"
+    },
+    {
+      "module": "torch",
+      "function": "context"
+    },
+    {
+      "module": "torch",
+      "function": "init_rpc"
+    },
+    {
+      "module": "torch",
+      "function": "randn"
+    },
+    {
+      "module": "torch",
+      "function": "shutdown"
+    },
+    {
+      "module": "torch",
+      "function": "spawn"
+    }
+  ]
+}

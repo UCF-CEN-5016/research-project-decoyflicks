@@ -1,0 +1,14 @@
+```json
+[
+    "Clone the models repository from GitHub to /content/models/research/delf",
+    "Navigate to the delf/python/examples directory using %cd /content/models/research/delf/delf/python/examples/",
+    "Install TensorFlow version 1.x by running !pip3 install tensorflow==1.15.0",
+    "Download and save a sample image file, e.g., 'sample_image.jpg', in the current directory",
+    "Create a list_images.txt file containing the path to the saved image, e.g., 'list_images.txt' content: '/content/sample_image.jpg'",
+    "Navigate back to the root of the models repository using %cd /content/models/research/delf",
+    "Run the extract_features.py script with the following command: !python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Monitor the output of the script to observe the ModuleNotFoundError related to 'delf.python.datasets'",
+    "Observe that the error occurs because the module 'delf.python.datasets' is not found during execution"
+]
+```
+

@@ -1,0 +1,38 @@
+converting NER model with transformer into tflite
+
+Hi,
+
+I followed the documents (https://keras.io/examples/nlp/ner_transformers/) to train the NER model.
+I've been trying to convert the trained model into tflite format, and facing the issue related to the dimension mismatch.
+
+I successfully converted and saved the model using the code below,
+```python
+new_model = keras.models.load_model('path_to_my_model', custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False)
+converter = tf.lite.TFLiteConverter.from_saved_model('path_to_my_model')
+tflite_model = converter.convert()
+
+# Save the TFLITE model
+with open('model.tflite', 'wb') as f:
+    f.write(tflite_model)
+```
+
+But when I try to make a prediction with the given sample_input, the model returns the dimension mismatch error.
+Below is the code used to predict with the test input.
+
+```python
+sample_input = tokenize_and_convert_to_ids(
+    "eu rejects german call to boycott british lamb"
+)
+input_index = interpreter.get_input_details()[0]["index"]
+output_index = interpreter.get_output_details()[0]["index"]
+interpreter.set_tensor(input_index, np.expand_dims(sample_input, axis=0))
+interpreter.invoke()
+prediction_mask = interpreter.get_tensor(output_index)
+```
+
+```
+ValueError: Cannot set tensor: Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0.
+```
+
+When I opened and saw the architecture of the saved tflite model,
+the input dimension was fixed to **int64[1,1]**

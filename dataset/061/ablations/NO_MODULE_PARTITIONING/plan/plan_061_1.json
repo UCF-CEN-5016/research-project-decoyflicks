@@ -1,0 +1,16 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running: !pip install keras==2.13.0 keras-cv tensorflow",
+    "Import TensorFlow and Keras by adding the following code: import tensorflow as tf; from tensorflow import keras; from keras_cv import models",
+    "Load the Fine-tuning Stable Diffusion example code from the Keras documentation by copying the code from the provided link.",
+    "Run the code to ensure it executes without any modifications.",
+    "Observe the output and note the ImportError: cannot import name 'data_utils' from 'keras.utils'.",
+    "Verify that the error occurs by checking the traceback in the output, confirming it points to the line: from keras.utils import data_utils.",
+    "Check the installed version of Keras by running: !pip show keras and confirm it shows version 2.13.0.",
+    "Change the Keras version to 2.12.0 by running: !pip install keras==2.12.0.",
+    "Re-run the Fine-tuning Stable Diffusion example code after changing the Keras version.",
+    "Confirm that the example runs without any errors after downgrading Keras to version 2.12.0.",
+    "Document the steps taken to reproduce the bug, including the specific Keras version that caused the error."
+]
+```

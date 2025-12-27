@@ -1,0 +1,37 @@
+TITLE
+Dimension Mismatch During TensorFlow Lite Conversion
+
+SYMPTOMS
+• Dimension mismatch error when making predictions with the TFLite model.
+• Error message: `ValueError: Cannot set tensor: Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0.`
+• Input dimension in the saved TFLite model is fixed to `int64[1,1]`.
+
+EXPECTED BEHAVIOR
+When making a prediction with the test input, the model should correctly process the input and return predictions without any dimension mismatch errors.
+
+REPRODUCTION STEPS
+1. Follow the documentation (https://keras.io/examples/nlp/ner_transformers/) to train an NER model using transformers.
+2. Save the trained Keras model with custom objects included.
+3. Convert the saved Keras model to TFLite format using the provided code snippet:
+```python
+new_model = keras.models.load_model('path_to_my_model', custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False)
+converter = tf.lite.TFLiteConverter.from_saved_model('path_to_my_model')
+tflite_model = converter.convert()
+
+# Save the TFLITE model
+with open('model.tflite', 'wb') as f:
+f.write(tflite_model)
+```
+4. Load and prepare the test input using the tokenizer and convert it to IDs.
+5. Use the following code to make predictions with the test input:
+```python
+sample_input = tokenize_and_convert_to_ids(
+"eu rejects german call to boycott british lamb"
+)
+input_index = interpreter.get_input_details()[0]["index"]
+output_index = interpreter.get_output_details()[0]["index"]
+interpreter.set_tensor(input_index, np.expand_dims(sample_input, axis=0))
+interpreter.invoke()
+prediction_mask = interpreter.get_tensor(output_index)
+```
+6. Observe the dimension mismatch error when invoking the `interpreter.invoke()` method.

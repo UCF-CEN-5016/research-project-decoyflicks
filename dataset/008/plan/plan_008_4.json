@@ -1,0 +1,17 @@
+```json
+[
+    "Install TensorFlow version 2.13.0 and Python 3.10.12 on Google Colab",
+    "Clone the TensorFlow Models repository from GitHub",
+    "Navigate to the 'research/delf/delf/python/training/model/' directory",
+    "Import the required modules: 'absl' for named_parameters, 'delf' for Delg",
+    "Set batch size to 2 and image dimensions to 321x321 as specified in the bug report",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using tf.random.uniform function with minval=-1.0 and maxval=1.0",
+    "Initialize a Delg model instance with block3_strides set to True and use_dim_reduction set to True",
+    "Call the init_classifiers method on the Delg model with num_classes set to 1000",
+    "Run a forward pass by calling build_call method on the Delg model with the random input data images",
+    "Assert that the global feature shape is (batch_size, 2048)",
+    "Assert that the attn_scores shape is (batch_size, feature_map_size, feature_map_size, 1)",
+    "Assert that the local_features shape is (batch_size, feature_map_size, feature_map_size, local_feature_dim)"
+]
+```
+

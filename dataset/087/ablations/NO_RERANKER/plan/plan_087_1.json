@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from the x_transformers package.",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'.",
+    "Define the following parameters for the Attention module: dim=512, heads=8, depth=6, causal=True, flash=True, and any other relevant parameters.",
+    "Create a random input tensor 'x' with shape (batch_size, seq_length, dim) where batch_size=2 and seq_length=10.",
+    "Create a random context tensor 'context' with the same shape as 'x'.",
+    "Create a random attention mask 'mask' with shape (batch_size, seq_length) filled with True values.",
+    "Instantiate the Attention class with the defined parameters.",
+    "Call the forward method of the Attention instance with the following parameters: x, context, mask, and set pos to a custom tensor of shape (batch_size, seq_length, 1) with values ranging from 0 to seq_length-1.",
+    "Capture the output of the forward method call.",
+    "Check the shape of the output tensor to ensure it matches the expected shape (batch_size, seq_length, dim).",
+    "Verify that the output tensor does not contain any NaN values.",
+    "Check if the attention bias (attn_bias) is being computed correctly by inspecting the intermediate values during the forward pass.",
+    "Assert that the attention bias tensor has the expected shape of (heads, seq_length, seq_length) when using custom positions.",
+    "Log any discrepancies in the shapes or values of the attention bias tensor to identify the source of the bug."
+]
+```

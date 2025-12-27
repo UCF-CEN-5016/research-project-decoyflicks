@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, Keras, NumPy, glob, and PIL",
+    "Set the image size to 256 and batch size to 16",
+    "Download the LoL Dataset using wget and unzip it to a directory named './lol_dataset/'",
+    "Define a function 'load_data' that reads an image file, decodes it as a PNG, resizes it to (256, 256), and normalizes pixel values to the range [0, 1]",
+    "Define a function 'data_generator' that creates a TensorFlow dataset from a list of low-light image file paths, applies 'load_data', and batches the dataset with a batch size of 16",
+    "Load 400 low-light images for training from './lol_dataset/our485/low/*' and 185 for validation from the same directory",
+    "Create training and validation datasets using 'data_generator'",
+    "Define a function 'build_dce_net' that constructs a CNN model with 7 convolutional layers and outputs 24 parameter maps using Tanh activation",
+    "Define a class 'ZeroDCE' that subclasses keras.Model and includes methods for compiling, training, and computing losses",
+    "In the 'ZeroDCE' class, implement a 'compute_losses' method that calculates total loss using multiple loss functions including illumination smoothness, spatial consistency, color constancy, and exposure loss",
+    "Instantiate the 'ZeroDCE' model and compile it with a learning rate of 1e-4",
+    "Fit the model on the training dataset for 100 epochs while validating on the validation dataset",
+    "During training, monitor the loss values and ensure they are not decreasing as expected, indicating poor performance",
+    "After training, assert that the total loss is above a certain threshold (e.g., 1.0) to confirm the model is not learning effectively",
+    "Check the output shape of the model to ensure it is (None, 256, 256, 24) and verify that the last dimension is not being handled correctly",
+    "Attempt to use SparseCategoricalCrossentropy loss with the output shape (None, 256, 256, 24) and assert that it raises an error or produces unexpected results"
+]
+```

@@ -1,0 +1,122 @@
+{
+  "bug_report": "028",
+  "rank": 5,
+  "score": 0.648286759853363,
+  "main_file": {
+    "path": "gcn/main.py",
+    "content": "import os\nimport time\nimport requests\nimport tarfile\nimport numpy as np\nimport argparse\n\nimport torch\nfrom torch import nn\nimport torch.nn.functional as F\nfrom torch.optim import Adam\n\n\nclass GraphConv(nn.Module):\n    \"\"\"\n        Graph Convolutional Layer described in \"Semi-Supervised Classification with Graph Convolutional Networks\".\n\n        Given an input feature representation for each node in a graph, the Graph Convolutional Layer aims to aggregate\n        information from the node's neighborhood to update its own representation. This is achieved by applying a graph\n        convolutional operation that combines the features of a node with the features of its neighboring nodes.\n\n        Mathematically, the Graph Convolutional Layer can be described as follows:\n\n            H' = f(D^(-1/2) * A * D^(-1/2) * H * W)\n\n        where:\n            H: Input feature matrix with shape (N, F_in), where N is the number of nodes and F_in is the number of \n                input features per node.\n            A: Adjacency matrix of the graph with shape (N, N), representing the relationships between nodes.\n            W: Learnable weight matrix with shape (F_in, F_out), where F_out is the number of output features per node.\n    \"\"\"\n    def __init__(self, input_dim, output_dim, use_bias=False):\n        super(GraphConv, self).__init__()\n\n        # Initialize the weight matrix W (in this case called `kernel`)\n        self.kernel = nn.Parameter(torch.Tensor(input_dim, output_dim))\n        nn.init.xavier_normal_(self.kernel) # Initialize the weights using Xavier initialization\n\n        # Initialize the bias (if use_bias is True)\n        self.bias = None\n        if use_bias:\n            self.bias = nn.Parameter(torch.Tensor(output_dim))\n            nn.init.zeros_(self.bias) # Initialize the bias to zeros\n\n    def forward(self, input_tensor, adj_mat):\n        \"\"\"\n        Performs a graph convolution operation.\n\n        Args:\n            input_tensor (torch.Tensor): Input tensor representing node features.\n            adj_mat (torch.Tensor): Adjacency matrix representing graph structure.\n\n        Returns:\n            torch.Tensor: Output tensor after the graph convolution operation.\n        \"\"\"\n\n        support = torch.mm(input_tensor, self.kernel) # Matrix multiplication between input and weight matrix\n        output = torch.spmm(adj_mat, support) # Sparse matrix multiplication between adjacency matrix and support\n        # Add the bias (if bias is not None)\n        if self.bias is not None:\n            output = output + self.bias\n\n        return output\n\n\nclass GCN(nn.Module):\n    \"\"\"\n    Graph Convolutional Network (GCN) as described in the paper `\"Semi-Supervised Classification with Graph \n    Convolutional Networks\" <https://arxiv.org/pdf/1609.02907.pdf>`.\n\n    The Graph Convolutional Network is a deep learning architecture designed for semi-supervised node \n    classification tasks on graph-structured data. It leverages the graph structure to learn node representations \n    by propagating information through the graph using graph convolutional layers.\n\n    The original implementation consists of two stacked graph convolutional layers. The ReLU activation function is \n    applied to the hidden representations, and the Softmax activation function is applied to the output representations.\n    \"\"\"\n    def __init__(self, input_dim, hidden_dim, output_dim, use_bias=True, dropout_p=0.1):\n        super(GCN, self).__init__()\n\n        # Define the Graph Convolution layers\n        self.gc1 = GraphConv(input_dim, hidden_dim, use_bias=use_bias)\n        self.gc2 = GraphConv(hidden_dim, output_dim, use_bias=use_bias)\n\n        # Define the dropout layer\n        self.dropout = nn.Dropout(dropout_p)\n\n    def forward(self, input_tensor, adj_mat):\n        \"\"\"\n        Performs forward pass of the Graph Convolutional Network (GCN).\n\n        Args:\n            input_tensor (torch.Tensor): Input node feature matrix with shape (N, input_dim), where N is the number of nodes\n                and input_dim is the number of input features per node.\n            adj_mat (torch.Tensor): Adjacency matrix of the graph with shape (N, N), representing the relationships between\n                nodes.\n\n        Returns:\n            torch.Tensor: Output tensor with shape (N, output_dim), representing the predicted class probabilities for each node.\n        \"\"\"\n\n        # Perform the first graph convolutional layer\n        x = self.gc1(input_tensor, adj_mat)\n        x = F.relu(x) # Apply ReLU activation function\n        x = self.dropout(x) # Apply dropout regularization\n\n        # Perform the second graph convolutional layer\n        x = self.gc2(x, adj_mat)\n\n        # Apply log-softmax activation function for classification\n        return F.log_softmax(x, dim=1)\n\n\ndef load_cora(path='./cora', device='cpu'):\n    \"\"\"\n    The graph convolutional operation rquires normalize the adjacency matrix: D^(-1/2) * A * D^(-1/2). This step \n    scales the adjacency matrix such that the features of neighboring nodes are weighted appropriately during \n    aggregation. The steps involved in the renormalization trick are as follows:\n        - Compute the degree matrix.\n        - Compute the inverse square root of the degree matrix.\n        - Multiply the inverse square root of the degree matrix with the adjacency matrix.\n    \"\"\"\n\n    # Set the paths to the data files\n    content_path = os.path.join(path, 'cora.content')\n    cites_path = os.path.join(path, 'cora.cites')\n\n    # Load data from files\n    content_tensor = np.genfromtxt(content_path, dtype=np.dtype(str))\n    cites_tensor = np.genfromtxt(cites_path, dtype=np.int32)\n\n    # Process features\n    features = torch.FloatTensor(content_tensor[:, 1:-1].astype(np.int32)) # Extract feature values\n    scale_vector = torch.sum(features, dim=1) # Compute sum of features for each node\n    scale_vector = 1 / scale_vector # Compute reciprocal of the sums\n    scale_vector[scale_vector == float('inf')] = 0 # Handle division by zero cases\n    scale_vector = torch.diag(scale_vector).to_sparse() # Convert the scale vector to a sparse diagonal matrix\n    features = scale_vector @ features # Scale the features using the scale vector\n\n    # Process labels\n    classes, labels = np.unique(content_tensor[:, -1], return_inverse=True) # Extract unique classes and map labels to indices\n    labels = torch.LongTensor(labels) # Convert labels to a tensor\n\n    # Process adjacency matrix\n    idx = content_tensor[:, 0].astype(np.int32) # Extract node indices\n    idx_map = {id: pos for pos, id in enumerate(idx)} # Create a dictionary to map indices to positions\n\n    # Map node indices to positions in the adjacency matrix\n    edges = np.array(\n        list(map(lambda edge: [idx_map[edge[0]], idx_map[edge[1]]], \n            cites_tensor)), dtype=np.int32)\n\n    V = len(idx) # Number of nodes\n    E = edges.shape[0] # Number of edges\n    adj_mat = torch.sparse_coo_tensor(edges.T, torch.ones(E), (V, V), dtype=torch.int64) # Create the initial adjacency matrix as a sparse tensor\n    adj_mat = torch.eye(V) + adj_mat # Add self-loops to the adjacency matrix\n\n    degree_mat = torch.sum(adj_mat, dim=1) # Compute the sum of each row in the adjacency matrix (degree matrix)\n    degree_mat = torch.sqrt(1 / degree_mat) # Compute the reciprocal square root of the degrees\n    degree_mat[degree_mat == float('inf')] = 0 # Handle division by zero cases\n    degree_mat = torch.diag(degree_mat).to_sparse() # Convert the degree matrix to a sparse diagonal matrix\n\n    adj_mat = degree_mat @ adj_mat @ degree_mat # Apply the renormalization trick\n\n    return features.to_sparse().to(device), labels.to(device), adj_mat.to_sparse().to(device)\n\n\ndef train_iter(epoch, model, optimizer, criterion, input, target, mask_train, mask_val, print_every=10):\n    start_t = time.time()\n    model.train()\n    optimizer.zero_grad()\n\n    # Forward pass\n    output = model(*input) \n    loss = criterion(output[mask_train], target[mask_train]) # Compute the loss using the training mask\n\n    loss.backward()\n    optimizer.step()\n\n    # Evaluate the model performance on training and validation sets\n    loss_train, acc_train = test(model, criterion, input, target, mask_train)\n    loss_val, acc_val = test(model, criterion, input, target, mask_val)\n\n    if epoch % print_every == 0:\n        # Print the training progress at specified intervals\n        print(f'Epoch: {epoch:04d} ({(time.time() - start_t):.4f}s) loss_train: {loss_train:.4f} acc_train: {acc_train:.4f} loss_val: {loss_val:.4f} acc_val: {acc_val:.4f}')\n\n\ndef test(model, criterion, input, target, mask):\n    model.eval()\n    with torch.no_grad():\n        output = model(*input)\n        output, target = output[mask], target[mask]\n\n        loss = criterion(output, target)\n        acc = (output.argmax(dim=1) == target).float().sum() / len(target)\n    return loss.item(), acc.item()\n\n\nif __name__ == '__main__':\n    device = 'cuda' if torch.cuda.is_available() else 'cpu'\n\n    parser = argparse.ArgumentParser(description='PyTorch Graph Convolutional Network')\n    parser.add_argument('--epochs', type=int, default=200,\n                        help='number of epochs to train (default: 200)')\n    parser.add_argument('--lr', type=float, default=0.01,\n                        help='learning rate (default: 0.01)')\n    parser.add_argument('--l2', type=float, default=5e-4,\n                        help='weight decay (default: 5e-4)')\n    parser.add_argument('--dropout-p', type=float, default=0.5,\n                        help='dropout probability (default: 0.5)')\n    parser.add_argument('--hidden-dim', type=int, default=16,\n                        help='dimension of the hidden representation (default: 16)')\n    parser.add_argument('--val-every', type=int, default=20,\n                        help='epochs to wait for print training and validation evaluation (default: 20)')\n    parser.add_argument('--include-bias', action='store_true', default=False,\n                        help='use bias term in convolutions (default: False)')\n    parser.add_argument('--no-cuda', action='store_true', default=False,\n                        help='disables CUDA training')\n    parser.add_argument('--no-mps', action='store_true', default=False,\n                        help='disables macOS GPU training')\n    parser.add_argument('--dry-run', action='store_true', default=False,\n                        help='quickly check a single pass')\n    parser.add_argument('--seed', type=int, default=42, metavar='S',\n                        help='random seed (default: 42)')\n    args = parser.parse_args()\n\n    use_cuda = not args.no_cuda and torch.cuda.is_available()\n    use_mps = not args.no_mps and torch.backends.mps.is_available()\n\n    torch.manual_seed(args.seed)\n\n    if use_cuda:\n        device = torch.device('cuda')\n    elif use_mps:\n        device = torch.device('mps')\n    else:\n        device = torch.device('cpu')\n    print(f'Using {device} device')\n\n    cora_url = 'https://linqs-data.soe.ucsc.edu/public/lbc/cora.tgz'\n    print('Downloading dataset...')\n    with requests.get(cora_url, stream=True) as tgz_file:\n        with tarfile.open(fileobj=tgz_file.raw, mode='r:gz') as tgz_object:\n            tgz_object.extractall()\n\n    print('Loading dataset...')\n    features, labels, adj_mat = load_cora(device=device)\n    idx = torch.randperm(len(labels)).to(device)\n    idx_test, idx_val, idx_train = idx[:1000], idx[1000:1500], idx[1500:]\n\n    gcn = GCN(features.shape[1], args.hidden_dim, labels.max().item() + 1,args.include_bias, args.dropout_p).to(device)\n    optimizer = Adam(gcn.parameters(), lr=args.lr, weight_decay=args.l2)\n    criterion = nn.NLLLoss()\n\n    for epoch in range(args.epochs):\n        train_iter(epoch + 1, gcn, optimizer, criterion, (features, adj_mat), labels, idx_train, idx_val, args.val_every)\n        if args.dry_run:\n            break\n\n    loss_test, acc_test = test(gcn, criterion, (features, adj_mat), labels, idx_test)\n    print(f'Test set results: loss {loss_test:.4f} accuracy {acc_test:.4f}')"
+  },
+  "module_snippets": [
+    {
+      "file": "gcn/main.py",
+      "snippets": [
+        {
+          "lines": "114-165",
+          "code": "class GraphConv(nn.Module):\n    \"\"\"\n        Graph Convolutional Layer described in \"Semi-Supervised Classification with Graph Convolutional Networks\".\n\n        Given an input feature representation for each node in a graph, the Graph Convolutional Layer aims to aggregate\n        information from the node's neighborhood to update its own representation. This is achieved by applying a graph\n        convolutional operation that combines the features of a node with the features of its neighboring nodes.\n\n        Mathematically, the Graph Convolutional Layer can be described as follows:\n\n            H' = f(D^(-1/2) * A * D^(-1/2) * H * W)\n\n        where:\n            H: Input feature matrix with shape (N, F_in), where N is the number of nodes and F_in is the number of \n                input features per node.\n            A: Adjacency matrix of the graph with shape (N, N), representing the relationships between nodes.\n            W: Learnable weight matrix with shape (F_in, F_out), where F_out is the number of output features per node.\n    \"\"\"\n    def __init__(self, input_dim, output_dim, use_bias=False):\n        super(GraphConv, self).__init__()\n\n        # Initialize the weight matrix W (in this case called `kernel`)\n        self.kernel = nn.Parameter(torch.Tensor(input_dim, output_dim))\n        nn.init.xavier_normal_(self.kernel) # Initialize the weights using Xavier initialization\n\n        # Initialize the bias (if use_bias is True)\n        self.bias = None\n        if use_bias:\n            self.bias = nn.Parameter(torch.Tensor(output_dim))\n            nn.init.zeros_(self.bias) # Initialize the bias to zeros\n\n    def forward(self, input_tensor, adj_mat):\n        \"\"\"\n        Performs a graph convolution operation.\n\n        Args:\n            input_tensor (torch.Tensor): Input tensor representing node features.\n            adj_mat (torch.Tensor): Adjacency matrix representing graph structure.\n\n        Returns:\n            torch.Tensor: Output tensor after the graph convolution operation.\n        \"\"\"\n\n        support = torch.mm(input_tensor, self.kernel) # Matrix multiplication between input and weight matrix\n        output = torch.spmm(adj_mat, support) # Sparse matrix multiplication between adjacency matrix and support\n        # Add the bias (if bias is not None)\n        if self.bias is not None:\n            output = output + self.bias\n\n        return output\n\nclass GCN(nn.Module):\n    \"\"\"\n    Graph Convolutional Network (GCN) as described in the paper `\"Semi-Supervised Classification with Graph \n    Convolutional Networks\" <https://arxiv.org/pdf/1609.02907.pdf>`.\n\n    The Graph Convolutional Network is a deep learning architecture designed for semi-supervised node \n    classification tasks on graph-structured data. It leverages the graph structure to learn node representations \n    by propagating information through the graph using graph convolutional layers.\n\n    The original implementation consists of two stacked graph convolutional layers. The ReLU activation function is \n    applied to the hidden representations, and the Softmax activation function is applied to the output representations.\n    \"\"\"\n    def __init__(self, input_dim, hidden_dim, output_dim, use_bias=True, dropout_p=0.1):\n        super(GCN, self).__init__()\n\n        # Define the Graph Convolution layers\n        self.gc1 = GraphConv(input_dim, hidden_dim, use_bias=use_bias)\n        self.gc2 = GraphConv(hidden_dim, output_dim, use_bias=use_bias)\n\n        # Define the dropout layer\n        self.dropout = nn.Dropout(dropout_p)\n\n    def forward(self, input_tensor, adj_mat):\n        \"\"\"\n        Performs forward pass of the Graph Convolutional Network (GCN).\n\n        Args:\n            input_tensor (torch.Tensor): Input node feature matrix with shape (N, input_dim), where N is the number of nodes\n                and input_dim is the number of input features per node.\n            adj_mat (torch.Tensor): Adjacency matrix of the graph with shape (N, N), representing the relationships between\n                nodes.\n\n        Returns:\n            torch.Tensor: Output tensor with shape (N, output_dim), representing the predicted class probabilities for each node.\n        \"\"\"\n\n        # Perform the first graph convolutional layer\n        x = self.gc1(input_tensor, adj_mat)\n        x = F.relu(x) # Apply ReLU activation function\n        x = self.dropout(x) # Apply dropout regularization\n\n        # Perform the second graph convolutional layer\n        x = self.gc2(x, adj_mat)\n\n        # Apply log-softmax activation function for classification\n        return F.log_softmax(x, dim=1)\n\ndef load_cora(path='./cora', device='cpu'):\n    \"\"\"\n    The graph convolutional operation rquires normalize the adjacency matrix: D^(-1/2) * A * D^(-1/2). This step \n    scales the adjacency matrix such that the features of neighboring nodes are weighted appropriately during \n    aggregation. The steps involved in the renormalization trick are as follows:\n        - Compute the degree matrix.\n        - Compute the inverse square root of the degree matrix.\n        - Multiply the inverse square root of the degree matrix with the adjacency matrix.\n    \"\"\"\n\n    # Set the paths to the data files\n    content_path = os.path.join(path, 'cora.content')\n    cites_path = os.path.join(path, 'cora.cites')\n\n    # Load data from files\n    content_tensor = np.genfromtxt(content_path, dtype=np.dtype(str))\n    cites_tensor = np.genfromtxt(cites_path, dtype=np.int32)\n\n    # Process features\n    features = torch.FloatTensor(content_tensor[:, 1:-1].astype(np.int32)) # Extract feature values\n    scale_vector = torch.sum(features, dim=1) # Compute sum of features for each node\n    scale_vector = 1 / scale_vector # Compute reciprocal of the sums\n    scale_vector[scale_vector == float('inf')] = 0 # Handle division by zero cases\n    scale_vector = torch.diag(scale_vector).to_sparse() # Convert the scale vector to a sparse diagonal matrix\n    features = scale_vector @ features # Scale the features using the scale vector\n\n    # Process labels\n    classes, labels = np.unique(content_tensor[:, -1], return_inverse=True) # Extract unique classes and map labels to indices\n    labels = torch.LongTensor(labels) # Convert labels to a tensor\n\n    # Process adjacency matrix\n    idx = content_tensor[:, 0].astype(np.int32) # Extract node indices\n    idx_map = {id: pos for pos, id in enumerate(idx)} # Create a dictionary to map indices to positions\n\n    # Map node indices to positions in the adjacency matrix\n    edges = np.array(\n        list(map(lambda edge: [idx_map[edge[0]], idx_map[edge[1]]], \n            cites_tensor)), dtype=np.int32)\n\n    V = len(idx) # Number of nodes\n    E = edges.shape[0] # Number of edges\n    adj_mat = torch.sparse_coo_tensor(edges.T, torch.ones(E), (V, V), dtype=torch.int64) # Create the initial adjacency matrix as a sparse tensor\n    adj_mat = torch.eye(V) + adj_mat # Add self-loops to the adjacency matrix\n\n    degree_mat = torch.sum(adj_mat, dim=1) # Compute the sum of each row in the adjacency matrix (degree matrix)\n    degree_mat = torch.sqrt(1 / degree_mat) # Compute the reciprocal square root of the degrees\n    degree_mat[degree_mat == float('inf')] = 0 # Handle division by zero cases\n    degree_mat = torch.diag(degree_mat).to_sparse() # Convert the degree matrix to a sparse diagonal matrix\n\n    adj_mat = degree_mat @ adj_mat @ degree_mat # Apply the renormalization trick\n\n    return features.to_sparse().to(device), labels.to(device), adj_mat.to_sparse().to(device)"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "requests",
+      "function": "get"
+    },
+    {
+      "module": "tarfile",
+      "function": "open"
+    },
+    {
+      "module": "time",
+      "function": "time"
+    },
+    {
+      "module": "torch",
+      "function": "Adam"
+    },
+    {
+      "module": "torch",
+      "function": "Dropout"
+    },
+    {
+      "module": "torch",
+      "function": "FloatTensor"
+    },
+    {
+      "module": "torch",
+      "function": "LongTensor"
+    },
+    {
+      "module": "torch",
+      "function": "NLLLoss"
+    },
+    {
+      "module": "torch",
+      "function": "Parameter"
+    },
+    {
+      "module": "torch",
+      "function": "Tensor"
+    },
+    {
+      "module": "torch",
+      "function": "device"
+    },
+    {
+      "module": "torch",
+      "function": "diag"
+    },
+    {
+      "module": "torch",
+      "function": "eye"
+    },
+    {
+      "module": "torch",
+      "function": "log_softmax"
+    },
+    {
+      "module": "torch",
+      "function": "manual_seed"
+    },
+    {
+      "module": "torch",
+      "function": "mm"
+    },
+    {
+      "module": "torch",
+      "function": "no_grad"
+    },
+    {
+      "module": "torch",
+      "function": "ones"
+    },
+    {
+      "module": "torch",
+      "function": "randperm"
+    },
+    {
+      "module": "torch",
+      "function": "relu"
+    },
+    {
+      "module": "torch",
+      "function": "sparse_coo_tensor"
+    },
+    {
+      "module": "torch",
+      "function": "spmm"
+    },
+    {
+      "module": "torch",
+      "function": "sqrt"
+    },
+    {
+      "module": "torch",
+      "function": "sum"
+    }
+  ]
+}

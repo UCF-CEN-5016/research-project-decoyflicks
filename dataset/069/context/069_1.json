@@ -1,0 +1,44 @@
+{
+  "bug_report": "069",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "examples/timeseries/timeseries_classification_from_scratch.py",
+    "content": "\"\"\"\nTitle: Timeseries classification from scratch\nAuthor: [hfawaz](https://github.com/hfawaz/)\nDate created: 2020/07/21\nLast modified: 2021/07/16\nDescription: Training a timeseries classifier from scratch on the FordA dataset from the UCR/UEA archive.\nAccelerator: GPU\n\"\"\"\n\"\"\"\n## Introduction\n\nThis example shows how to do timeseries classification from scratch, starting from raw\nCSV timeseries files on disk. We demonstrate the workflow on the FordA dataset from the\n[UCR/UEA archive](https://www.cs.ucr.edu/%7Eeamonn/time_series_data_2018/).\n\n\"\"\"\n\n\"\"\"\n## Setup\n\n\"\"\"\n\nfrom tensorflow import keras\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n\"\"\"\n## Load the data: the FordA dataset\n\n### Dataset description\n\nThe dataset we are using here is called FordA.\nThe data comes from the UCR archive.\nThe dataset contains 3601 training instances and another 1320 testing instances.\nEach timeseries corresponds to a measurement of engine noise captured by a motor sensor.\nFor this task, the goal is to automatically detect the presence of a specific issue with\nthe engine. The problem is a balanced binary classification task. The full description of\nthis dataset can be found [here](http://www.j-wichard.de/publications/FordPaper.pdf).\n\n### Read the TSV data\n\nWe will use the `FordA_TRAIN` file for training and the\n`FordA_TEST` file for testing. The simplicity of this dataset\nallows us to demonstrate effectively how to use ConvNets for timeseries classification.\nIn this file, the first column corresponds to the label.\n\"\"\"\n\n\ndef readucr(filename):\n    data = np.loadtxt(filename, delimiter=\"\\t\")\n    y = data[:, 0]\n    x = data[:, 1:]\n    return x, y.astype(int)\n\n\nroot_url = \"https://raw.githubusercontent.com/hfawaz/cd-diagram/master/FordA/\"\n\nx_train, y_train = readucr(root_url + \"FordA_TRAIN.tsv\")\nx_test, y_test = readucr(root_url + \"FordA_TEST.tsv\")\n\n\"\"\"\n## Visualize the data\n\nHere we visualize one timeseries example for each class in the dataset.\n\n\"\"\"\n\nclasses = np.unique(np.concatenate((y_train, y_test), axis=0))\n\nplt.figure()\nfor c in classes:\n    c_x_train = x_train[y_train == c]\n    plt.plot(c_x_train[0], label=\"class \" + str(c))\nplt.legend(loc=\"best\")\nplt.show()\nplt.close()\n\n\"\"\"\n## Standardize the data\n\nOur timeseries are already in a single length (500). However, their values are\nusually in various ranges. This is not ideal for a neural network;\nin general we should seek to make the input values normalized.\nFor this specific dataset, the data is already z-normalized: each timeseries sample\nhas a mean equal to zero and a standard deviation equal to one. This type of\nnormalization is very common for timeseries classification problems, see\n[Bagnall et al. (2016)](https://link.springer.com/article/10.1007/s10618-016-0483-9).\n\nNote that the timeseries data used here are univariate, meaning we only have one channel\nper timeseries example.\nWe will therefore transform the timeseries into a multivariate one with one channel\nusing a simple reshaping via numpy.\nThis will allow us to construct a model that is easily applicable to multivariate time\nseries.\n\"\"\"\n\nx_train = x_train.reshape((x_train.shape[0], x_train.shape[1], 1))\nx_test = x_test.reshape((x_test.shape[0], x_test.shape[1], 1))\n\n\"\"\"\nFinally, in order to use `sparse_categorical_crossentropy`, we will have to count\nthe number of classes beforehand.\n\"\"\"\n\nnum_classes = len(np.unique(y_train))\n\n\"\"\"\nNow we shuffle the training set because we will be using the `validation_split` option\nlater when training.\n\"\"\"\n\nidx = np.random.permutation(len(x_train))\nx_train = x_train[idx]\ny_train = y_train[idx]\n\n\"\"\"\nStandardize the labels to positive integers.\nThe expected labels will then be 0 and 1.\n\"\"\"\n\ny_train[y_train == -1] = 0\ny_test[y_test == -1] = 0\n\n\"\"\"\n## Build a model\n\nWe build a Fully Convolutional Neural Network originally proposed in\n[this paper](https://arxiv.org/abs/1611.06455).\nThe implementation is based on the TF 2 version provided\n[here](https://github.com/hfawaz/dl-4-tsc/).\nThe following hyperparameters (kernel_size, filters, the usage of BatchNorm) were found\nvia random search using [KerasTuner](https://github.com/keras-team/keras-tuner).\n\n\"\"\"\n\n\ndef make_model(input_shape):\n    input_layer = keras.layers.Input(input_shape)\n\n    conv1 = keras.layers.Conv1D(filters=64, kernel_size=3, padding=\"same\")(input_layer)\n    conv1 = keras.layers.BatchNormalization()(conv1)\n    conv1 = keras.layers.ReLU()(conv1)\n\n    conv2 = keras.layers.Conv1D(filters=64, kernel_size=3, padding=\"same\")(conv1)\n    conv2 = keras.layers.BatchNormalization()(conv2)\n    conv2 = keras.layers.ReLU()(conv2)\n\n    conv3 = keras.layers.Conv1D(filters=64, kernel_size=3, padding=\"same\")(conv2)\n    conv3 = keras.layers.BatchNormalization()(conv3)\n    conv3 = keras.layers.ReLU()(conv3)\n\n    gap = keras.layers.GlobalAveragePooling1D()(conv3)\n\n    output_layer = keras.layers.Dense(num_classes, activation=\"softmax\")(gap)\n\n    return keras.models.Model(inputs=input_layer, outputs=output_layer)\n\n\nmodel = make_model(input_shape=x_train.shape[1:])\nkeras.utils.plot_model(model, show_shapes=True)\n\n\"\"\"\n## Train the model\n\n\"\"\"\n\nepochs = 500\nbatch_size = 32\n\ncallbacks = [\n    keras.callbacks.ModelCheckpoint(\n        \"best_model.h5\", save_best_only=True, monitor=\"val_loss\"\n    ),\n    keras.callbacks.ReduceLROnPlateau(\n        monitor=\"val_loss\", factor=0.5, patience=20, min_lr=0.0001\n    ),\n    keras.callbacks.EarlyStopping(monitor=\"val_loss\", patience=50, verbose=1),\n]\nmodel.compile(\n    optimizer=\"adam\",\n    loss=\"sparse_categorical_crossentropy\",\n    metrics=[\"sparse_categorical_accuracy\"],\n)\nhistory = model.fit(\n    x_train,\n    y_train,\n    batch_size=batch_size,\n    epochs=epochs,\n    callbacks=callbacks,\n    validation_split=0.2,\n    verbose=1,\n)\n\n\"\"\"\n## Evaluate model on test data\n\"\"\"\n\nmodel = keras.models.load_model(\"best_model.h5\")\n\ntest_loss, test_acc = model.evaluate(x_test, y_test)\n\nprint(\"Test accuracy\", test_acc)\nprint(\"Test loss\", test_loss)\n\n\"\"\"\n## Plot the model's training and validation loss\n\"\"\"\n\nmetric = \"sparse_categorical_accuracy\"\nplt.figure()\nplt.plot(history.history[metric])\nplt.plot(history.history[\"val_\" + metric])\nplt.title(\"model \" + metric)\nplt.ylabel(metric, fontsize=\"large\")\nplt.xlabel(\"epoch\", fontsize=\"large\")\nplt.legend([\"train\", \"val\"], loc=\"best\")\nplt.show()\nplt.close()\n\n\"\"\"\nWe can see how the training accuracy reaches almost 0.95 after 100 epochs.\nHowever, by observing the validation accuracy we can see how the network still needs\ntraining until it reaches almost 0.97 for both the validation and the training accuracy\nafter 200 epochs. Beyond the 200th epoch, if we continue on training, the validation\naccuracy will start decreasing while the training accuracy will continue on increasing:\nthe model starts overfitting.\n\"\"\"\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "matplotlib",
+      "function": "close"
+    },
+    {
+      "module": "matplotlib",
+      "function": "figure"
+    },
+    {
+      "module": "matplotlib",
+      "function": "legend"
+    },
+    {
+      "module": "matplotlib",
+      "function": "plot"
+    },
+    {
+      "module": "matplotlib",
+      "function": "show"
+    },
+    {
+      "module": "matplotlib",
+      "function": "title"
+    },
+    {
+      "module": "matplotlib",
+      "function": "xlabel"
+    },
+    {
+      "module": "matplotlib",
+      "function": "ylabel"
+    }
+  ]
+}

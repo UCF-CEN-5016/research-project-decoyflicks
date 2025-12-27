@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules: 'import tensorflow as tf' and 'from official.recommendation.uplift import two_tower_uplift_model'",
+    "Set TensorFlow version to 2.13.0 by running 'tf.__version__'",
+    "Define a batch size of 5 and input dimensions for shared, control, and treatment features as (3, 1)",
+    "Create input data for shared_feature, control_feature, and treatment_feature using 'tf.ones' with specified dimensions: shared_feature = tf.ones((3, 1)), control_feature = tf.ones((3, 1)) * -2.0, treatment_feature = tf.ones((3, 1)) * 3.0",
+    "Define treatment indicator as a tensor: treatment = tf.constant([[1], [1], [0], [1], [1], [1], [0], [1], [0], [1]])",
+    "Create target output y using the formula: y = (shared_feature + treatment_feature) * treatment",
+    "Create a TensorFlow dataset from the input features and target output using 'tf.data.Dataset.from_tensor_slices' and batch it with .batch(5)",
+    "Instantiate the TwoTowerUpliftModel with treatment_indicator_feature_name set to 'is_treatment' and a simple uplift network",
+    "Compile the model using 'model.compile' with optimizer set to 'tf.keras.optimizers.SGD(0.1)' and loss set to 'true_logits_loss.TrueLogitsLoss(tf.keras.losses.mean_squared_error)'",
+    "Attempt to fit the model using 'model.fit(dataset, epochs=100)'",
+    "Capture the ValueError exception during model fitting by wrapping the fit call in a try-except block",
+    "Assert that the caught exception is of type ValueError and contains a message indicating that the treatment indicator is missing"
+]
+```

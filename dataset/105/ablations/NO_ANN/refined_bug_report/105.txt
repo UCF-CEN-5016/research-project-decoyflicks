@@ -1,0 +1,33 @@
+TITLE  
+Residual VQ Shape Mismatch Error During Training
+
+SYMPTOMS  
+• The error occurs randomly during training in a multinode setting.  
+• The following error message is displayed:  
+  ```
+  RuntimeError: shape mismatch: value tensor of shape [9330, 512] cannot be broadcast to indexing result of shape [9331, 512]
+  ```  
+• The issue arises when using the `ResidualVQ` class with specific parameters.
+
+EXPECTED BEHAVIOR  
+When the software functions correctly, the `ResidualVQ` should process the input data without throwing a shape mismatch error, allowing for seamless training in a multinode environment.
+
+REPRODUCTION STEPS  
+1. Initialize the `ResidualVQ` with the following parameters:  
+   ```python
+   ResidualVQ(
+       dim=Z_CHANNELS,  # 512
+       num_quantizers=NUM_QUANTIZERS,  # 2
+       codebook_size=CODEBOOK_SIZE,  # 16 * 1024
+       stochastic_sample_codes=True,
+       shared_codebook=True,
+       commitment_weight=1.0,
+       kmeans_init=True,
+       threshold_ema_dead_code=2,
+       quantize_dropout=True,
+       quantize_dropout_cutoff_index=1,
+       quantize_dropout_multiple_of=1,
+   )
+   ```
+2. Run the training process in a multinode setup.
+3. Monitor the training for the occurrence of the shape mismatch error.

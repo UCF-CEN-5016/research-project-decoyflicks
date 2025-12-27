@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torch.optim, torchvision.transforms, and torchvision.datasets",
+    "Set the image size to 128x128 by modifying the relevant data transformation parameters",
+    "Define a batch size of 64 for training and 1000 for testing",
+    "Load the CelebA dataset using torchvision.datasets.ImageFolder with the root directory pointing to the CelebA dataset and apply the transformation to resize images to 128x128",
+    "Create a DataLoader for the training set with batch size 64 and shuffle set to True",
+    "Create a DataLoader for the testing set with batch size 1000",
+    "Define a DCGAN generator and discriminator model with input dimensions adjusted for 128x128 images",
+    "Initialize the generator and discriminator models and move them to the appropriate device (CPU or GPU)",
+    "Define the loss function as binary cross-entropy using torch.nn.BCELoss",
+    "Set the optimizer for both generator and discriminator using torch.optim.Adam with learning rate 0.0002 and beta values (0.5, 0.999)",
+    "Start the training loop for a specified number of epochs (e.g., 25)",
+    "In each epoch, iterate over the training DataLoader, obtaining batches of real images and generating fake images using the generator",
+    "Calculate the discriminator loss for real images and fake images, ensuring to use the correct target sizes",
+    "Attempt to compute the loss for real images using the criterion, expecting a ValueError due to mismatched sizes",
+    "Capture the output of the training loop to verify that the error message contains 'Using a target size that is different to the input size is deprecated'",
+    "Log the shapes of the output from the discriminator and the labels to confirm the mismatch (e.g., output shape of [3200] and label shape of [128])",
+    "Assert that the ValueError is raised during the training loop when calculating the discriminator loss"
+]
+```

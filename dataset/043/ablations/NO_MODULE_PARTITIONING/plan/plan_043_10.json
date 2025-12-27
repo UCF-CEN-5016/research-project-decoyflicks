@@ -1,0 +1,18 @@
+```json
+[
+    "Clone the fairseq repository from GitHub using 'git clone https://github.com/pytorch/fairseq.git'",
+    "Change directory to the cloned fairseq repository using 'cd fairseq'",
+    "Install fairseq in editable mode using 'pip install --editable ./'. Ensure that the installation completes without errors.",
+    "Change directory to the examples/mms/tts folder using 'cd examples/mms/tts'",
+    "Create a test.wav file in the current directory. This can be a simple audio file in WAV format.",
+    "Create a text file named 'test.txt' in the current directory with the content 'Heute ist ein schöner Tag.'",
+    "Run the infer.py script with the following command: 'python infer.py --model-dir model/ --wav test.wav --txt \"Heute ist ein schöner Tag.\"'",
+    "Observe the output for any errors. Specifically, look for 'ModuleNotFoundError: No module named 'commons'".",
+    "If the error occurs, confirm that the 'commons' module is not present in the fairseq directory or its subdirectories.",
+    "Check the Python environment by running 'pip list' to ensure that all dependencies are installed correctly.",
+    "Verify the Python version by running 'python --version' to ensure it is 3.10 as specified in the environment details.",
+    "Check the PyTorch version by running 'import torch; print(torch.__version__)' to confirm it is 2.0.1.",
+    "Ensure that the current working directory is set to 'examples/mms/tts' before running the infer.py script.",
+    "If the error does not occur, modify the command to include an invalid model directory (e.g., 'python infer.py --model-dir invalid_model_dir --wav test.wav --txt \"Heute ist ein schöner Tag.\"' and check for the same error)."
+]
+```

@@ -1,0 +1,66 @@
+TITLE  
+TensorFlow 2 Multi-Worker Mirrored Strategy Not Scaling Across GPUs
+
+SYMPTOMS  
+• Throughput does not increase when using multi-node, multi-GPU setup.  
+• Single GPU execution achieves approximately 270 examples/sec.  
+• Dual GPU execution within a single node achieves approximately 700 examples/sec.  
+• Multi-node execution yields the same throughput as a single GPU, indicating no scaling.  
+• No error messages are reported, but the observed behavior does not match expectations.  
+
+EXPECTED BEHAVIOR  
+When configured correctly, the multi-worker mirrored strategy should scale throughput across multiple nodes, increasing the number of examples processed per second in proportion to the number of GPUs utilized.
+
+REPRODUCTION STEPS  
+1. Allocate resources on a cluster using the command:  
+   `salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive`  
+   
+2. On GPU node 1, execute the following commands:  
+   ```bash
+   cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+   export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+   export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+   export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+   source /home/apps/anaconda3/bin/activate && \
+   conda activate tf11
+   
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml
+   ```
+   Where `gpu.yaml` contains:
+   ```yaml
+   runtime:
+     distribution_strategy: 'multi_worker_mirrored'
+     worker_hosts: 'ip1:6655,ip2:6655'
+     num_gpus: 2
+     task_index: 0
+   ```
+
+3. On GPU node 2, execute the following commands:  
+   ```bash
+   cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+   export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+   export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+   export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+   source /home/apps/anaconda3/bin/activate && \
+   conda activate tf11
+   
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml
+   ```
+   Where `gpu1.yaml` contains:
+   ```yaml
+   runtime:
+     distribution_strategy: 'multi_worker_mirrored'
+     worker_hosts: 'ip1:6655,ip2:6655'
+     num_gpus: 2
+     task_index: 1
+   ```
+
+4. Monitor the throughput during execution to observe if scaling occurs across nodes.  
+
+SYSTEM INFORMATION  
+- OS Platform: CentOS 7  
+- TensorFlow Version: 2.11.0  
+- Python Version: 3.9.7  
+- CUDA Version: 11.0  
+- GPU Model: Tesla V100-SXM2 with 16 GB memory  
+- Driver Version: 450.51.05

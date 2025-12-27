@@ -1,0 +1,18 @@
+```json
+[
+    "Import the necessary libraries including TensorFlow and Matplotlib",
+    "Load the CelebA dataset from tensorflow_datasets with batch size of 16 and resolution of 32x32",
+    "Define a generator model with input shape (100,) and output shape (32, 32, 3) using transposed convolution layers",
+    "Define a discriminator model with input shape (32, 32, 3) and output shape (1,) using convolutional layers",
+    "Initialize the Adam optimizer with beta_1=0.5, learning rate of 2e-4 for both generator and discriminator",
+    "Generate random noise data with shape (16, 100)",
+    "Pass the generated noise through the generator to create fake images",
+    "Pass real images from CelebA dataset through the discriminator to get real outputs",
+    "Pass fake images through the discriminator to get fake outputs",
+    "Compute the loss for both the generator and discriminator using the non-saturating GAN loss function",
+    "Monitor the values of the generator and discriminator losses during execution",
+    "Assert that at least one of the discriminator's layer outputs contains NaN values indicating a bug",
+    "Verify that the GPU memory usage remains stable or increases linearly with each iteration without causing an out-of-memory error"
+]
+```
+

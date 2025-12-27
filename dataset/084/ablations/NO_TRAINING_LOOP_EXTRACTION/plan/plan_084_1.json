@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, einops, and any other required modules.",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'.",
+    "Define the parameters for the Linformer and ViT models: dim=128, seq_len=50, depth=12, heads=8, k=64, image_size=224, patch_size=32, num_classes=2, channels=3.",
+    "Create an instance of the Linformer with the defined parameters.",
+    "Create an instance of the ViT model using the Linformer instance and the defined parameters.",
+    "Set the model to training mode by calling model.train().",
+    "Prepare a synthetic dataset with 1000 samples, each sample being a random tensor of shape (3, 224, 224) and corresponding labels as random integers (0 or 1) for binary classification.",
+    "Create a DataLoader for the synthetic dataset with a batch size of 32.",
+    "Define a loss function using torch.nn.CrossEntropyLoss().",
+    "Define an optimizer using torch.optim.Adam with the model parameters and a learning rate of 0.001.",
+    "Run a training loop for 5 epochs, iterating over the DataLoader.",
+    "In each epoch, for each batch, perform the following steps: a) Zero the gradients using optimizer.zero_grad(). b) Forward pass the batch through the model. c) Calculate the loss using the loss function. d) Backward pass using loss.backward(). e) Update the model parameters using optimizer.step().",
+    "After each epoch, calculate the training accuracy by comparing the predicted labels with the true labels and asserting that the accuracy is 100%.",
+    "Print the loss and accuracy after each epoch to monitor the training process.",
+    "Verify that the loss is decreasing and the accuracy remains at 100% after the first epoch.",
+    "Check the validation accuracy and loss, asserting that they also show 100% accuracy and very low loss values.",
+    "Log the output of the training process to confirm the bug: 'Epoch : 1 - loss : 0.0075 - acc: 1.0000 - val_loss : 0.0002 - val_acc: 1.0000'."
+]
+```

@@ -1,0 +1,1 @@
+model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)

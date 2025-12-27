@@ -1,0 +1,16 @@
+TITLE  
+ModuleNotFoundError for 'transformers.deepspeed' when running e2e_rlhf.py script
+
+SYMPTOMS  
+• Encountered a `ModuleNotFoundError` indicating that the module 'transformers.deepspeed' is not found.  
+• The error message displayed is: `ModuleNotFoundError: No module named 'transformers.deepspeed'`.  
+• The issue occurs despite confirming that all required Python libraries listed in the requirements file were installed prior to running the script.  
+
+EXPECTED BEHAVIOR  
+The script should execute without errors, utilizing the 'transformers.deepspeed' module as part of its functionality when provided with the specified actor and reward models.
+
+REPRODUCTION STEPS  
+1. Ensure Python version is 3.12.3.  
+2. Install all required Python libraries as specified in the requirements file.  
+3. Run the command: `python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu`.  
+4. Observe the error message indicating that the 'transformers.deepspeed' module is missing.

@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: import keras, import tensorflow as tf, import numpy as np, from keras import layers",
+    "Set the random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Define a batch size of 32 for training and validation datasets: batch_size = 32",
+    "Download the IMDB dataset: use curl to download aclImdb_v1.tar.gz and extract it using tar -xf aclImdb_v1.tar.gz",
+    "Verify the directory structure: check aclImdb/train and aclImdb/test directories exist",
+    "Create training and validation datasets using keras.utils.text_dataset_from_directory: raw_train_ds = keras.utils.text_dataset_from_directory('aclImdb/train', batch_size=batch_size, validation_split=0.2, subset='training', seed=1337)",
+    "Create validation dataset using the same training directory: raw_val_ds = keras.utils.text_dataset_from_directory('aclImdb/train', batch_size=batch_size, validation_split=0.2, subset='validation', seed=1337)",
+    "Create test dataset from the test directory: raw_test_ds = keras.utils.text_dataset_from_directory('aclImdb/test', batch_size=batch_size)",
+    "Define a custom standardization function to clean the text data: def custom_standardization(input_data): return tf.strings.regex_replace(tf.strings.lower(input_data), '<br />', ' ')",
+    "Create a TextVectorization layer: vectorize_layer = keras.layers.TextVectorization(standardize=custom_standardization, max_tokens=20000, output_mode='int', output_sequence_length=500)",
+    "Adapt the vectorization layer to the training dataset: vectorize_layer.adapt(raw_train_ds.map(lambda x, y: x))",
+    "Vectorize the training, validation, and test datasets: train_ds = raw_train_ds.map(lambda x, y: (vectorize_layer(x), y)), val_ds = raw_val_ds.map(lambda x, y: (vectorize_layer(x), y)), test_ds = raw_test_ds.map(lambda x, y: (vectorize_layer(x), y))",
+    "Cache and prefetch the datasets for performance: train_ds = train_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE), val_ds = val_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE), test_ds = test_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Build a simple model: inputs = keras.Input(shape=(None,), dtype='int64'), x = layers.Embedding(20000, 128)(inputs), x = layers.Conv1D(128, 7, activation='relu')(x), x = layers.GlobalMaxPooling1D()(x), predictions = layers.Dense(1, activation='sigmoid')(x), model = keras.Model(inputs, predictions)",
+    "Compile the model with binary crossentropy loss and adam optimizer: model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])",
+    "Fit the model using the training dataset and the test dataset as validation data: model.fit(train_ds, validation_data=test_ds, epochs=3)",
+    "Verify the model's performance on the test dataset: model.evaluate(test_ds)",
+    "Check for overly optimistic performance metrics indicating the bug: assert that the validation accuracy is significantly higher than expected for unseen data"
+]
+```

@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import tensorflow as tf, import keras, from keras import layers",
+    "Set a random seed for reproducibility: keras.utils.set_random_seed(42)",
+    "Define constants: set BATCH_SIZE to 32, set INPUT_SHAPE to (28, 28, 28, 1), set NUM_CLASSES to 11, set EPOCHS to 20",
+    "Create a function to download and prepare the dataset: define download_and_prepare_dataset(data_info) that returns train, validation, and test datasets",
+    "Use the MedMNIST dataset: set DATASET_NAME to 'organmnist3d' and call download_and_prepare_dataset with medmnist.INFO[DATASET_NAME]",
+    "Extract train, validation, and test datasets: unpack the returned dataset into train_videos, train_labels, valid_videos, valid_labels, test_videos, test_labels",
+    "Define a preprocessing function: define preprocess(frames, label) that normalizes frames and casts labels to float32",
+    "Create a data loader function: define prepare_dataloader(videos, labels, loader_type='train', batch_size=BATCH_SIZE) that returns a tf.data.Dataset",
+    "Prepare data loaders: call prepare_dataloader for train, validation, and test datasets to create trainloader, validloader, testloader",
+    "Define a model creation function: define create_model() that initializes a Keras model with an input shape of INPUT_SHAPE and a Dense output layer with NUM_CLASSES",
+    "Compile the model: call model.compile with optimizer='adam', loss='sparse_categorical_crossentropy', and metrics=['accuracy']",
+    "Train the model: call model.fit(trainloader, epochs=EPOCHS, validation_data=testloader) to use the test dataset as validation data",
+    "Verify the model training: check the output of model.fit to see if validation accuracy is reported",
+    "Assert that the validation accuracy is overly optimistic compared to expected performance on unseen data",
+    "Evaluate the model on the test dataset: call model.evaluate(testloader) and print the test accuracy",
+    "Assert that the test accuracy is significantly lower than the validation accuracy, indicating the bug"
+]
+```

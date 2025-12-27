@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: argparse, subprocess, tempfile, re, sys, and pathlib",
+    "Define a function 'parser()' to handle command-line arguments, including model path, audio file paths, language, format, and extra inference arguments",
+    "Set the model path to '/root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt'",
+    "Set the audio file paths to a list containing at least one audio file, e.g., ['/path/to/audio1.wav', '/path/to/audio2.wav']",
+    "Set the language argument to a valid language code, e.g., 'en'",
+    "Set the format argument to 'letter'",
+    "Set the extra inference arguments to an empty string",
+    "Call the 'parser()' function to retrieve command-line arguments",
+    "Create a temporary directory using tempfile.TemporaryDirectory() to store manifest files",
+    "Write a 'dev.tsv' file in the temporary directory with the audio file paths and their corresponding sample counts",
+    "Write a 'dev.uid' file in the temporary directory with the audio file paths",
+    "Write a 'dev.ltr' file in the temporary directory with dummy letter sequences for each audio file",
+    "Write a 'dev.wrd' file in the temporary directory with dummy word sequences for each audio file",
+    "Construct a command string to run the inference script located at 'examples/speech_recognition/new/infer.py' with appropriate arguments",
+    "Execute the command using subprocess.run() with shell=True and redirect stdout to subprocess.DEVNULL",
+    "Read the output from 'hypo.word' in the temporary directory to retrieve hypotheses",
+    "Use a regular expression to reorder the hypotheses based on their indices",
+    "Print the input audio file paths and their corresponding outputs",
+    "Run the fairseq-generate command with the specified parameters, including --config-yaml, --task, --target-is-code, --target-code-size, --vocoder, --path, --gen-subset, --max-tokens, --beam, --max-len-a, and --results-path",
+    "Verify that the output contains the error message 'Key 'input_feat_per_channel' is not in struct'"
+]
+```

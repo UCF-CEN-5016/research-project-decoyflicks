@@ -1,0 +1,16 @@
+[
+  "Clone the DeepSpeedExamples repository or ensure access to the 'autotuning/hf/gpt2-xl/test_tune.sh' script from https://github.com/microsoft/DeepSpeedExamples/blob/ff9a0234cf22dd9af03c7aa8037fb9143adca6/training/autotuning/hf/gpt2-xl/test_tune.sh",
+  "Create a clean working directory at ~/test and change into it",
+  "Clone the HuggingFace transformers repository with 'git clone https://github.com/huggingface/transformers.git' and install it using 'pip install .' inside the cloned transformers directory",
+  "Install DeepSpeed in the test environment using 'pip install deepspeed' (include any additional dependencies required by the test script)",
+  "Create a new file named 'test_tune.sh' in the test directory and copy the exact contents of the referenced test_tune.sh script into it",
+  "Modify the 'HF_PATH' environment variable inside 'test_tune.sh' to '../' to point to the transformers repo correctly",
+  "Set the 'NGPUS' environment variable to 6 inside 'test_tune.sh' to match the available 6 GPUs (NVIDIA 3070 Ti cards)",
+  "Ensure the test environment has passwordless SSH access to localhost configured, or note that SSH permission errors might occur but are not required to reproduce the ParquetConfig error",
+  "Run the script with './test_tune.sh tune' and observe the output logs for initialization messages from DeepSpeed and the autotuner",
+  "Monitor the script execution until it reaches the model profiling stage where the error occurs, specifically after 'Starting model info profile run.' and before or during DeepSpeed autotuning experiments",
+  "Validate that the error 'ParquetConfig.__init__() got an unexpected keyword argument 'token'' is raised and printed in the logs with the traceback pointing to autotuner or DeepSpeed internals",
+  "Confirm that the error happens reproducibly without any code modifications except environment variables and script path adjustments",
+  "No model training or successful tuning runs should occur; the script should terminate or skip tuning due to this initialization error",
+  "Capture the exact error message and stack trace for verification"
+]

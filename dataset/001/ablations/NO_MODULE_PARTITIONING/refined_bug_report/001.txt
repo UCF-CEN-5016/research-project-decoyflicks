@@ -1,0 +1,16 @@
+TITLE  
+Nan loss encountered during training with spatial transform network on MNIST example  
+
+SYMPTOMS  
+• Encountering 'nan' loss during training after several epochs.  
+• High GPU memory consumption, exceeding 10G on a Tesla K40 GPU.  
+• Memory usage reported: "11005MiB / 11519MiB" indicating 57% utilization.  
+
+EXPECTED BEHAVIOR  
+The model should train without producing 'nan' loss values and should operate within reasonable GPU memory limits.  
+
+REPRODUCTION STEPS  
+1. Use the spatial transform network module as per the provided code in the cluster_example.  
+2. Train the model using the MNIST dataset.  
+3. Monitor the loss values during training for any 'nan' occurrences.  
+4. Check GPU memory usage during the training process.

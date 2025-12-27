@@ -1,0 +1,17 @@
+TITLE  
+Potential Typo in MIRNet Example Code
+
+SYMPTOMS  
+• The variable `level2_dau_2` is declared but never used in the code.  
+• The function call on line 352 uses `level3_dau_2` instead of what may be intended, `level2_dau_2`.  
+• This could lead to incorrect functionality or results when adapting the model.  
+
+EXPECTED BEHAVIOR  
+The code should correctly utilize the variable `level2_dau_2` in the function call on line 352, ensuring that the model behaves as intended and produces accurate results.
+
+REPRODUCTION STEPS  
+1. Open the MIRNet example code located at [this link](https://github.com/keras-team/keras-io/blob/b56f87af9e968003666e61f88185a93ff0f0eee8/examples/vision/mirnet.py).  
+2. Navigate to line 347 and observe the declaration of `level2_dau_2`.  
+3. Check line 352 for the function call to `selective_kernel_feature_fusion` and note the usage of `level3_dau_2`.  
+4. Analyze the context to determine if `level2_dau_2` should be used instead of `level3_dau_2`.  
+5. Modify the line of code to replace `level3_dau_2` with `level2_dau_2` and confirm if the model functions correctly.

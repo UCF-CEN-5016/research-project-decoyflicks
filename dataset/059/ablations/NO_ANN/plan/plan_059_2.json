@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and Keras modules: 'import tensorflow as tf' and 'from keras import layers'",
+    "Define a batch size of 64 and input dimensions of (32,)",
+    "Create random input data 'x' with shape (1000, 32) using 'np.random.random((1000, 32))'",
+    "Create random target data 'y' with shape (1000, 1) using 'np.random.random((1000, 1))'",
+    "Define a custom model class 'CustomModel' that subclasses 'keras.Model'",
+    "Override the 'train_step' method in 'CustomModel' to include a forward pass and loss calculation",
+    "In 'train_step', use 'self.compute_loss(y=y, y_pred=y_pred)' to compute the loss",
+    "Initialize the model with 'inputs = keras.Input(shape=(32,))' and 'outputs = layers.Dense(1)(inputs)'",
+    "Compile the model with 'model.compile(optimizer=\"adam\", loss=\"mse\", metrics=[\"mae\"])'",
+    "Call 'model.fit(x, y, epochs=3)' to start training the model",
+    "Capture any error messages during the fitting process",
+    "Verify that the error message indicates an issue with fitting the model, as shown in the bug report"
+]
+```

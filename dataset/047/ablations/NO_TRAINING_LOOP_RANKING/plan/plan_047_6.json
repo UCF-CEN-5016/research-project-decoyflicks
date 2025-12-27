@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the device to CUDA if available: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define the model path: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Set the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10, 'Expected 10 audio files'",
+    "Sort the audio files to maintain a consistent order: audio_files.sort()",
+    "Run the inference command using the model and audio files: os.system(f'python -u examples/mms/asr/infer/mms_infer.py --model {model_path} --lang {lang} --audio {" ".join(audio_files)}')",
+    "Capture the output log from the inference command: output_log = os.popen(f'python -u examples/mms/asr/infer/mms_infer.py --model {model_path} --lang {lang} --audio {" ".join(audio_files)}').read()",
+    "Extract the output text from the output log: output_text = extract_output_text(output_log)",
+    "Define the expected order of output text based on the sorted audio files: expected_output = ['1089-134686-0000', '1089-134686-0001', '1089-134686-0002', '1089-134686-0003', '1089-134686-0004', '1089-134686-0005', '1089-134686-0006', '1089-134686-0007', '1089-134686-0008', '1089-134686-0009']",
+    "Compare the order of output text with the expected order: assert output_text == expected_output, 'Output log order is incorrect'",
+    "Log the output text and the expected output for debugging: print('Output Text:', output_text, 'Expected Output:', expected_output)"
+]
+```

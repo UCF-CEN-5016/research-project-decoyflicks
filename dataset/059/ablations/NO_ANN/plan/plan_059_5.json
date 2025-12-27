@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: keras, torch, numpy",
+    "Set the KERAS_BACKEND environment variable to 'torch' using os.environ",
+    "Define a batch size of 64 and input shape of (32,)",
+    "Create a random dataset with shape (1000, 32) for inputs and (1000, 1) for outputs using numpy",
+    "Define a CustomModel class that subclasses keras.Model and overrides the train_step method",
+    "In the train_step method, unpack the data into x and y",
+    "Call self.zero_grad() to clear gradients from the previous step",
+    "Perform a forward pass by calling self(x, training=True) and store the result in y_pred",
+    "Compute the loss using self.compute_loss(y=y, y_pred=y_pred)",
+    "Call loss.backward() to compute gradients",
+    "Retrieve trainable weights and their gradients",
+    "Attempt to apply gradients to the weights using self.optimizer.apply(gradients, trainable_weights)",
+    "Create an instance of CustomModel with keras.Input(shape=(32,)) and keras.layers.Dense(1)(inputs)",
+    "Compile the model with optimizer='adam', loss='mse', and metrics=['mae']",
+    "Call model.fit(x, y, epochs=3) to start training",
+    "Capture any errors that occur during the model fitting process",
+    "Verify that the error message matches the one shown in the bug report"
+]
+```

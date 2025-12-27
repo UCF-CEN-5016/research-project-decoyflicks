@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: import os, import pandas as pd, import numpy as np, import matplotlib.pyplot as plt, import tensorflow as tf, from keras import layers",
+    "Set the environment variable for Keras backend to use TensorFlow: os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Define the URL for the PeMSD7 dataset: url = 'https://github.com/VeritasYin/STGCN_IJCAI-18/raw/master/dataset/PeMSD7_Full.zip'",
+    "Download and extract the dataset using keras.utils.get_file and store the directory in data_dir",
+    "Load the route distances and speeds data from CSV files: route_distances = pd.read_csv(os.path.join(data_dir, 'PeMSD7_W_228.csv'), header=None).to_numpy(), speeds_array = pd.read_csv(os.path.join(data_dir, 'PeMSD7_V_228.csv'), header=None).to_numpy()",
+    "Print the shapes of route_distances and speeds_array to verify data loading: print(f'route_distances shape={route_distances.shape}'), print(f'speeds_array shape={speeds_array.shape}')",
+    "Select a sample of 26 roads from the dataset: sample_routes = [0, 1, 4, 7, 8, 11, 15, 108, 109, 114, 115, 118, 120, 123, 124, 126, 127, 129, 130, 132, 133, 136, 139, 144, 147, 216]",
+    "Filter the route_distances and speeds_array to only include the selected sample of roads: route_distances = route_distances[np.ix_(sample_routes, sample_routes)], speeds_array = speeds_array[:, sample_routes]",
+    "Print the shapes of the filtered route_distances and speeds_array to verify filtering: print(f'route_distances shape={route_distances.shape}'), print(f'speeds_array shape={speeds_array.shape}')",
+    "Define a function preprocess to split and normalize the data: def preprocess(data_array: np.ndarray, train_size: float, val_size: float)",
+    "Inside preprocess, calculate the number of time steps and split the data into train, validation, and test sets: train_array, val_array, test_array = data_array[:num_train], ...",
+    "Normalize the train, validation, and test sets using mean and standard deviation of the train set",
+    "Call the preprocess function with speeds_array, train_size=0.5, and val_size=0.2: train_array, val_array, test_array = preprocess(speeds_array, 0.5, 0.2)",
+    "Print the sizes of the train, validation, and test sets to verify preprocessing: print(f'train set size: {train_array.shape}'), print(f'validation set size: {val_array.shape}'), print(f'test set size: {test_array.shape}')",
+    "Define a function create_tf_dataset to create TensorFlow datasets from the numpy arrays",
+    "Call create_tf_dataset for train and validation datasets: train_dataset, val_dataset = create_tf_dataset(train_array, input_sequence_length=12, forecast_horizon=3, batch_size=64), create_tf_dataset(val_array, input_sequence_length=12, forecast_horizon=3, batch_size=64)",
+    "Create a test dataset using create_tf_dataset with test_array: test_dataset = create_tf_dataset(test_array, input_sequence_length=12, forecast_horizon=3, batch_size=test_array.shape[0])",
+    "Define the LSTMGC model architecture with input shape (12, num_routes, 1) and compile the model",
+    "Fit the model using the train_dataset and val_dataset: model.fit(train_dataset, validation_data=val_dataset, epochs=20)",
+    "After training, use the model to make predictions on the test set: x_test, y = next(test_dataset.as_numpy_iterator()), y_pred = model.predict(x_test)",
+    "Attempt to visualize the predictions and actual values using plt.plot(y[:, 0, 0]) and plt.plot(y_pred[:, 0, 0])",
+    "Verify that the error occurs by checking for ValueError during the correlation calculation: plt.matshow(data.corr())",
+    "Assert that the error message contains 'could not convert string to float: '01.01.2009 00:10:00''"
+]
+```

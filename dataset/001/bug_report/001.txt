@@ -1,0 +1,13 @@
+Problem with spatial transform network: got 'nan' loss in the mnist example
+
+Problem with model in '/transformer'
+I tried the spatial transform network module. I used exactly the same data and code provided in the cluster_example, however, I was always getting 'nan' loss during training (after a number of epoch).
+
+Besides, I noticed that this example consumed very large GPU memory. On my K40 GPU, the DNNs model used more than 10G memory. Does it make sense?
+
++-------------------------------+----------------------+----------------------+
+| 1 Tesla K40c Off | 0000:03:00.0 Off | 0 |
+| 29% 55C P0 93W / 235W | 11005MiB / 11519MiB | 57% Default |
++-------------------------------+----------------------+----------------------+
+
+Thanks,

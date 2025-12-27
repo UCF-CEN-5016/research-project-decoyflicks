@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow as tf and the data_utils module from neural_gpu/neural_gpu.py",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 64 and image dimensions of 28x28 for the MNIST dataset",
+    "Load the MNIST dataset using tf.keras.datasets.mnist.load_data() and preprocess it to normalize pixel values to the range [0, 1]",
+    "Reshape the training and testing data to have shape (num_samples, height, width, channels) where channels=1",
+    "Define the parameters for the Neural GPU model: nmaps=128, vec_size=100, niclass=10, noclass=10, dropout=0.5, rx_step=5, max_grad_norm=5.0, cutoff=1.0, nconvs=3, kw=3, kh=3, height=1, mode=0, learning_rate=0.001, pull=0.1, pull_incr=1.1, min_length=1",
+    "Instantiate the NeuralGPU class with the defined parameters",
+    "Create a TensorFlow session and initialize all variables using sess.run(tf.global_variables_initializer())",
+    "Define a training loop that runs for 10 epochs, iterating over the training dataset in batches of size 64",
+    "In each iteration, feed the input and target data into the model using the step method of the NeuralGPU class, setting do_backward=True",
+    "Capture the loss output from the step method and check if it contains NaN values",
+    "Monitor GPU memory usage during training using tf.config.experimental.get_memory_info('GPU:0')",
+    "Assert that the loss value is NaN after a certain number of epochs (e.g., after 5 epochs)",
+    "Log the GPU memory usage and assert that it exceeds 10GB during the training process"
+]
+```

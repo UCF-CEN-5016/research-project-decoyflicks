@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository.",
+    "Set the environment variables for DATA_DIR and MODEL_DIR to point to the appropriate directories containing the ImageNet dataset and model checkpoints.",
+    "Activate the conda environment with TensorFlow 2.11.0 installed.",
+    "Define the worker hosts in the gpu.yaml and gpu1.yaml configuration files with the correct IP addresses and ports for both nodes.",
+    "Set the number of GPUs to 2 in both configuration files.",
+    "Set the task index to 0 in gpu.yaml for the first node and to 1 in gpu1.yaml for the second node.",
+    "On the first GPU node (gpu1), run the command: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml'.",
+    "On the second GPU node (gpu2), run the command: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml'.",
+    "Monitor the training logs on both nodes to capture the throughput metrics during execution.",
+    "Record the throughput values for both single GPU and multi-node multi-GPU training sessions.",
+    "Verify that the throughput for multi-node training does not exceed the throughput of single GPU training, which is approximately 270 examples/sec.",
+    "Check for any error messages or warnings in the logs that may indicate issues with the multi-worker mirrored strategy.",
+    "Ensure that the TensorFlow version is 2.11.0 and that the CUDA version is compatible (11.0) with the installed TensorFlow version.",
+    "Confirm that both nodes are using Tesla V100 GPUs with 16 GB memory and that the driver version is 450.51.05.",
+    "Validate that the batch size used in the training script is appropriate for the number of GPUs (e.g., set a batch size of 64 for 2 GPUs).",
+    "Assert that the throughput remains constant across both nodes, indicating that scaling is not occurring as expected."
+]
+```

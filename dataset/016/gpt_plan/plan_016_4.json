@@ -1,0 +1,22 @@
+[
+  "Import TensorFlow 2.11 and necessary modules including MultiWorkerMirroredStrategy and Keras",
+  "Set up environment variables and cluster configuration explicitly in code: define 'worker_hosts' as ['ip1:6655', 'ip2:6655'] and assign 'task_index' accordingly (0 or 1)",
+  "Initialize MultiWorkerMirroredStrategy with communication options for multi-node setup",
+  "Define the ResNet50 model using tf.keras.applications.ResNet50 with weights=None and input shape (224, 224, 3)",
+  "Prepare the ImageNet dataset input pipeline using tf.data, reading TFRecord files from a local path matching /scratch/cdacapp1/sowmya/actual_imagenet/tf_records, with batch size 128 per GPU",
+  "Include dataset sharding logic based on task_index and number of workers for multi-worker data parallelism",
+  "Apply data augmentation and preprocessing steps consistent with original training (resize, crop, normalize)",
+  "Compile the model inside the strategy scope with optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy']",
+  "Set up callbacks for logging throughput and batch time, e.g., TensorBoard or custom callbacks",
+  "Run training for a small number of steps (e.g., 100 steps) with dataset repeat and prefetch enabled",
+  "Measure and log throughput (examples/second) on each worker and aggregate if possible",
+  "Run the same code on single node with 2 GPUs using MirroredStrategy to establish baseline throughput (expect ~700 examples/sec)",
+  "Run the multi-node multi-GPU code with MultiWorkerMirroredStrategy across two nodes, each with 2 GPUs, observing throughput",
+  "Assert that throughput on multi-node configuration does not increase beyond single GPU baseline (~270 examples/sec), indicating no multi-node scaling",
+  "Log and capture any warnings or errors related to cluster communication, cross-worker synchronization, or dataset pipeline sharding",
+  "Verify that each worker logs its task_index and visible GPUs to confirm correct cluster setup",
+  "Optionally, insert asserts to confirm that the global batch size equals num_gpus_per_worker * num_workers * per_gpu_batch_size (e.g., 2 GPUs * 2 nodes * 128 = 512)",
+  "Confirm that all workers participate in training by printing or logging training step counts",
+  "Save and compare the model checkpoints to ensure training proceeds on both nodes",
+  "Finally, produce a summary report showing throughput per configuration and confirm that multi-node multi-GPU throughput matches single GPU throughput, reproducing the reported bug"
+]

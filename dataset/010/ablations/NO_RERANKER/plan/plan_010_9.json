@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules for instance segmentation from the Model Garden library",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define the dataset path for the Sfm120k dataset, e.g., data_root = '/path/to/sfm120k'",
+    "Set the image size for training, e.g., imsize = 640",
+    "Define the batch size for training, e.g., batch_size = 8",
+    "Initialize the instance segmentation model using the Model Garden API, e.g., model = create_instance_segmentation_model()",
+    "Load the training dataset using the Sfm120k dataset class with mode='train', e.g., train_dataset = Sfm120k(mode='train', data_root=data_root, imsize=imsize)",
+    "Load the validation dataset using the Sfm120k dataset class with mode='val', e.g., val_dataset = Sfm120k(mode='val', data_root=data_root, imsize=imsize)",
+    "Compile the model with a loss function suitable for instance segmentation, e.g., model.compile(optimizer='adam', loss='categorical_crossentropy')",
+    "Train the model using the fit method with the training dataset and validation dataset, e.g., model.fit(train_dataset, validation_data=val_dataset, epochs=10, batch_size=batch_size)",
+    "During training, monitor the output logs for validation loss values",
+    "Check the output of the 'Train and Evaluate' section for the validation loss after each evaluation step",
+    "Assert that the validation loss is consistently reported as 0.0 in the output logs",
+    "Verify that the evaluation metrics such as AP, AP50, and AP75 are being calculated and displayed correctly despite the validation loss being 0.0",
+    "Reproduce the same steps in the official Semantic Segmentation tutorial to confirm the same behavior occurs"
+]
+```

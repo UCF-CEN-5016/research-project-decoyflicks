@@ -1,0 +1,14 @@
+```json
+[
+    "Install conda and create a new environment named 'tf_env' with Python 3.10.13",
+    "Activate the 'tf_env' environment",
+    "Install TensorFlow 2.13.10 using pip in the activated environment",
+    "Install TensorFlow Model Garden (TF-MG) using pip in the activated environment",
+    "Download and save the notebook from https://www.tensorflow.org/tfmodels/vision/image_classification to your local machine",
+    "Open the downloaded notebook in VSCode",
+    "Add the following lines of code below the 'import tensorflow as tf' line: \n```python\nimport matplotlib.pyplot as plt\nplt.imshow([[1, 2], [3, 4]])\nplt.show()\n```",
+    "Run the modified notebook in VSCode",
+    "Observe if both lines show plots. If only the first plot is shown and no plot is shown after the second line of code, the bug has been reproduced"
+]
+```
+

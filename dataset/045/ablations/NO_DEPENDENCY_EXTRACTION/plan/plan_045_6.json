@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, fairseq, and any other required modules.",
+    "Set the DATA_ROOT variable to the path of your dataset, e.g., DATA_ROOT = '/path/to/your/data'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech_to_speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the fairseq version being used.",
+    "Set the target code size to 100 and ensure the vocoder 'code_hifigan' is correctly installed and accessible.",
+    "Define the command to run fairseq-generate with the following parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Execute the command in a terminal or script to initiate the fairseq-generate process.",
+    "Monitor the output for any error messages, specifically looking for the error related to 'input_feat_per_channel'.",
+    "If the error occurs, capture the full stack trace and any relevant output from the terminal.",
+    "Verify that the error message indicates that the key 'input_feat_per_channel' is missing from the expected structure.",
+    "Check the model's state_dict to confirm that 'input_feat_per_channel' is indeed absent by loading the model with torch.load('/root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt') and inspecting the keys.",
+    "Log the keys present in the state_dict to validate the absence of 'input_feat_per_channel'.",
+    "Reproduce the bug multiple times to ensure consistency in the error occurrence."
+]
+```

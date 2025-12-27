@@ -1,0 +1,19 @@
+TITLE  
+Unexpected 100% accuracy rate on example dataset in ViT implementation
+
+SYMPTOMS  
+• The model achieves an accuracy rate of 100% as early as epoch 1.  
+• Loss values continue to decrease to near zero across subsequent epochs.  
+• Validation accuracy remains at 100% throughout all epochs.  
+• No error messages were reported.  
+• The performance metrics indicate potential overfitting or data leakage.
+
+EXPECTED BEHAVIOR  
+The model should exhibit a gradual increase in accuracy over multiple epochs, with validation accuracy reflecting a realistic performance level on unseen data. The loss should not approach zero so quickly, indicating that the model is learning effectively rather than memorizing the training data.
+
+REPRODUCTION STEPS  
+1. Clone the example code repository containing the ViT implementation.  
+2. Set up the environment and install any required dependencies.  
+3. Run the provided example code on the included dataset.  
+4. Monitor the training output, specifically the accuracy and loss metrics for each epoch.  
+5. Observe the results after multiple epochs to confirm the accuracy behavior.

@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from slim",
+    "Define a batch size of 5 and image dimensions of 299x299",
+    "Create random uniform input data with shape (batch_size, height, width, channels)",
+    "Preprocess the input data using the preprocessing function from inception module",
+    "Call the predict method of the model to obtain prediction_dict",
+    "Provide ground truth data that is compatible with the model's expected format",
+    "Postprocess the prediction_dict using the postprocess method to obtain final detections",
+    "Calculate a loss value between the predicted and actual labels",
+    "Verify that the calculated loss contains NaN values, indicating a bug",
+    "Monitor GPU memory usage during execution of the predict and postprocess methods",
+    "Assert that the GPU memory usage exceeds an expected threshold, indicative of memory corruption"
+]
+```
+

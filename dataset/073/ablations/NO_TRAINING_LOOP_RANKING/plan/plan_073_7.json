@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import torch, import deepspeed, import os",
+    "Set the environment variable for distributed training: os.environ['WORLD_SIZE'] = '2' and os.environ['RANK'] = '0'",
+    "Define a batch size of 8 and model dimensions for GPT-3: model_dim = 2.7e9",
+    "Initialize the PyTorch distributed process group: torch.distributed.init_process_group(backend='nccl', init_method='env://')",
+    "Create a dummy input tensor with shape (batch_size, sequence_length, model_dim): input_tensor = torch.randn(8, 1024, 256)",
+    "Set up the DeepSpeed configuration: deepspeed_config = {'train_batch_size': 8, 'gradient_accumulation_steps': 1, 'fp16': {'enabled': True}}",
+    "Initialize the DeepSpeed model: model = deepspeed.initialize(model=model, config=deepspeed_config)[0]",
+    "Call the model's forward method with the dummy input tensor: output = model(input_tensor)",
+    "Check if the global cdb object is initialized: assert cdb is not None, 'cdb should be initialized'",
+    "Attempt to call cdb.all_reduce on a tensor: cdb.all_reduce(input_tensor, op='sum')",
+    "Capture the output and check for AttributeError: try-except block to catch AttributeError and print the error message",
+    "Verify that the error message matches the expected output: assert 'AttributeError: NoneType object has no attribute all_reduce' in str(e)"
+]
+```

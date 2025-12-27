@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and any necessary modules from the official repository.",
+    "Define a batch size of 8 and a feature size of 128 for the input tensor.",
+    "Create a random tensor for frames with shape (batch_size, num_frames, feature_size), where num_frames is set to 10.",
+    "Define a pooling method as 'average' to be used in the context_gate function.",
+    "Call the context_gate function with the following parameters: input_features as the created tensor, normalizer_fn as None, hidden_layer_size as 0, pooling_method as the defined pooling method, and additive_residual as False.",
+    "Verify that the output shape of the context_gate function is (batch_size, feature_size).",
+    "Check the source code of the context_gate function to confirm that the num_of_examples argument is not being used anywhere in the function.",
+    "Add a print statement before the return statement in the context_gate function to output the shape of the input_features and the output tensor.",
+    "Run the code and observe the output to confirm that the num_of_examples argument is indeed not utilized.",
+    "Assert that the output of the context_gate function matches the expected shape and does not depend on num_of_examples."
+]
+```

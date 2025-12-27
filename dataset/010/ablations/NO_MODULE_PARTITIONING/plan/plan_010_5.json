@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: 'import tensorflow as tf' and 'from official.vision import instance_segmentation'",
+    "Set the random seed for reproducibility: 'tf.random.set_seed(42)'",
+    "Define the batch size as 8 and image dimensions as 512x512: 'BATCH_SIZE = 8' and 'IMAGE_HEIGHT, IMAGE_WIDTH = 512, 512'",
+    "Load the COCO dataset for instance segmentation: 'dataset = tfds.load('coco/2017', split='train', shuffle_files=True)'",
+    "Preprocess the dataset to resize images to (IMAGE_HEIGHT, IMAGE_WIDTH) and normalize pixel values: 'def preprocess(image, label): return tf.image.resize(image, [IMAGE_HEIGHT, IMAGE_WIDTH]) / 255.0, label'",
+    "Map the preprocessing function to the dataset: 'dataset = dataset.map(preprocess).batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)'",
+    "Define the model for instance segmentation using Model Garden: 'model = instance_segmentation.create_model()'",
+    "Compile the model with a loss function: 'model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])'",
+    "Train the model for a few epochs: 'model.fit(dataset, epochs=5)'",
+    "Set up a validation dataset similar to the training dataset: 'val_dataset = tfds.load('coco/2017', split='validation').map(preprocess).batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)'",
+    "Evaluate the model on the validation dataset: 'val_loss = model.evaluate(val_dataset)'",
+    "Print the validation loss: 'print(f'Validation Loss: {val_loss}')'",
+    "Check the output for validation loss: assert 'validation_loss' equals 0.0 in the printed output",
+    "Run the notebook cell that contains the 'Train and Evaluate' section to observe the validation loss consistently being 0.0",
+    "Verify that the same behavior occurs in the official Semantic Segmentation tutorial by running the corresponding cells"
+]
+```

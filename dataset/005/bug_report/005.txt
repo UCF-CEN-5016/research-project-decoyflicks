@@ -1,0 +1,155 @@
+ImportError: cannot import name 'tensor' from 'tensorflow.python.framework'
+
+Hi,
+i am having an issue dumping a checkpoint or h5 file of mobilenetV4-conv-s from the model garden.
+
+I get this error when running the mobilenet_test.py file after
+1)create a new virtual environment.
+2)installing:  pip3 install tf-models-official
+3)copy and run mobilenet_test.py.
+
+btw,How can I dump the onnx model of mobilenetV4 correctly? I can not find samples of running and dump;
+thanks
+
+this is my pip list of the packages
+-------------------------------------------------------
+Package                       Version
+----------------------------- -----------
+absl-py                       1.4.0
+array-record                  0.4.1
+astunparse                    1.6.3
+bleach                        6.1.0
+cachetools                    5.3.3
+certifi                       2024.2.2
+charset-normalizer            3.3.2
+click                         8.1.7
+colorama                      0.4.6
+contourpy                     1.2.1
+cycler                        0.12.1
+Cython                        3.0.10
+dm-tree                       0.1.8
+etils                         1.5.2
+flatbuffers                   24.3.25
+fonttools                     4.51.0
+fsspec                        2024.3.1
+gast                          0.4.0
+gin-config                    0.5.0
+google-api-core               2.19.0
+google-api-python-client      2.128.0
+google-auth                   2.29.0
+google-auth-httplib2          0.2.0
+google-auth-oauthlib          0.4.6
+google-pasta                  0.2.0
+googleapis-common-protos      1.63.0
+grpcio                        1.63.0
+h5py                          3.11.0
+httplib2                      0.22.0
+idna                          3.7
+immutabledict                 4.2.0
+importlib_metadata            7.1.0
+importlib_resources           6.4.0
+joblib                        1.4.2
+kaggle                        1.6.12
+keras                         2.10.0
+Keras-Preprocessing           1.1.2
+kiwisolver                    1.4.5
+libclang                      18.1.1
+lxml                          5.2.1
+Markdown                      3.6
+MarkupSafe                    2.1.5
+matplotlib                    3.8.4
+numpy                         1.26.4
+oauth2client                  4.1.3
+oauthlib                      3.2.2
+opencv-python-headless        4.9.0.80
+opt-einsum                    3.3.0
+packaging                     24.0
+pandas                        2.2.2
+pillow                        10.3.0
+pip                           23.2.1
+portalocker                   2.8.2
+promise                       2.3
+proto-plus                    1.23.0
+protobuf                      3.19.6
+psutil                        5.9.8
+py-cpuinfo                    9.0.0
+pyasn1                        0.6.0
+pyasn1_modules                0.4.0
+pycocotools                   2.0.7
+pyparsing                     3.1.2
+python-dateutil               2.9.0.post0
+python-slugify                8.0.4
+pytz                          2024.1
+pywin32                       306
+PyYAML                        5.4.1
+regex                         2024.5.10
+requests                      2.31.0
+requests-oauthlib             2.0.0
+rsa                           4.9
+tf-slim                       1.1.0
+threadpoolctl                 3.5.0
+toml                          0.10.2
+tqdm                          4.66.4
+typeguard                     2.13.3
+typing_extensions             4.11.0
+tzdata                        2024.1
+uritemplate                   4.1.1
+urllib3                       2.2.1
+webencodings                  0.5.1
+Werkzeug                      3.0.3
+wheel                         0.41.2
+wrapt                         1.16.0
+zipp                          3.18.1
+
+
+-------------------------------------------------------
+
+
+
+full error message below:
+-------------------------------------------------------
+
+2024-05-10 10:01:34.640739: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'cudart64_110.dll'; dlerror: cudart64_110.dll not found
+2024-05-10 10:01:34.640992: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+
+
+Ran 1 test in 0.027s
+
+FAILED (errors=1)
+
+Error
+Traceback (most recent call last):
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python39\lib\unittest\loader.py", line 34, in testFailure
+    raise self._exception
+ImportError: Failed to import test module: mobilenet_test1
+Traceback (most recent call last):
+  File "C:\Users\DELL\AppData\Local\Programs\Python\Python39\lib\unittest\loader.py", line 154, in loadTestsFromName
+    module = __import__(module_name)
+  File "D:\project\mobilenet_v4\mobilenet_test1.py", line 23, in <module>
+    import tensorflow as tf, tf_keras
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\__init__.py", line 3, in <module>
+    from tf_keras import __internal__
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\__internal__\__init__.py", line 3, in <module>
+    from tf_keras.__internal__ import backend
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\__internal__\backend\__init__.py", line 3, in <module>
+    from tf_keras.src.backend import _initialize_variables as initialize_variables
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\__init__.py", line 21, in <module>
+    from tf_keras.src import applications
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\applications\__init__.py", line 18, in <module>
+    from tf_keras.src.applications.convnext import ConvNeXtBase
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\applications\convnext.py", line 28, in <module>
+    from tf_keras.src import backend
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\backend.py", line 35, in <module>
+    from tf_keras.src.engine import keras_tensor
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\engine\keras_tensor.py", line 19, in <module>
+    from tf_keras.src.utils import object_identity
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\utils\__init__.py", line 53, in <module>
+    from tf_keras.src.utils.feature_space import FeatureSpace
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\utils\feature_space.py", line 20, in <module>
+    from tf_keras.src.engine import base_layer
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\engine\base_layer.py", line 35, in <module>
+    from tf_keras.src.dtensor import lazy_variable
+  File "D:\project\mobilenet_v4\venv\lib\site-packages\tf_keras\src\dtensor\lazy_variable.py", line 23, in <module>
+    from tensorflow.python.framework import tensor
+ImportError: cannot import name 'tensor' from 'tensorflow.python.framework' (D:\project\mobilenet_v4\venv\lib\site-packages\tensorflow\python\framework\__init__.py)
+

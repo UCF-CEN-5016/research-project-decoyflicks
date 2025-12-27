@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: keras, keras_cv, tensorflow, and any other required modules.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define hyperparameters: set epochs to 3, batch size to 16, and learning rate to 0.001.",
+    "Load a sample dataset suitable for object detection, such as COCO or Pascal VOC, ensuring it has bounding box annotations.",
+    "Prepare the dataset by creating a tf.data.Dataset object for training and validation, ensuring the shapes of the images and labels are correct.",
+    "Define the model using keras_cv's YOLOv8 implementation, ensuring the input shape matches the dataset (e.g., (640, 640, 3)).",
+    "Compile the model with an optimizer (e.g., Adam) and loss function suitable for object detection (e.g., YOLO loss).",
+    "Create a custom callback class EvaluateCOCOMetricsCallback that computes COCO metrics at the end of each epoch.",
+    "Start training the model using model.fit() with the training dataset, validation dataset, and the custom callback.",
+    "Monitor the training process and ensure it runs for one epoch, capturing the output logs.",
+    "After the first epoch, check the output logs for the UnknownError related to ConcatV2, specifically looking for the InvalidArgumentError message.",
+    "Verify that the shapes of the tensors being concatenated are mismatched, specifically checking for the dimensions [4,2,4] vs. [4,1,4].",
+    "Assert that the training process raises the UnknownError during the first epoch, confirming the bug is reproduced."
+]
+```

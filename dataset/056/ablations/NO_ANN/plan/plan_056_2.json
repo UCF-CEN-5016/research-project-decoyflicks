@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import keras, import tensorflow as tf, import numpy as np, import matplotlib.pyplot as plt, from keras import layers, from keras import ops",
+    "Set the image size to 256 and patch size to 4: image_size = 256, patch_size = 4",
+    "Load the tf_flowers dataset using tfds.load and split it into training and validation sets: train_dataset, val_dataset = tfds.load('tf_flowers', split=['train[:90%]', 'train[90%:]'], as_supervised=True)",
+    "Define a function to preprocess the dataset: def preprocess_dataset(is_training=True): ... (include resizing and random cropping logic)",
+    "Prepare the training and validation datasets using the preprocess function: train_dataset = prepare_dataset(train_dataset, is_training=True), val_dataset = prepare_dataset(val_dataset, is_training=False)",
+    "Define a function to create the MobileViT model: def create_mobilevit(num_classes=5): ... (include model architecture code)",
+    "Instantiate the MobileViT model: mobilevit_xxs = create_mobilevit()",
+    "Compile the model with an optimizer and loss function: mobilevit_xxs.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])",
+    "Select a random image from the training dataset: image = x_train[np.random.choice(range(x_train.shape[0]))]",
+    "Display the selected image using plt.imshow(image.astype('uint8')) and plt.axis('off')",
+    "Resize the selected image using ops.image.resize: resized_image = ops.image.resize(ops.convert_to_tensor([image]), size=(image_size, image_size))",
+    "Extract patches from the resized image using the Patches class: patches = Patches(patch_size)(resized_image)",
+    "Print the dimensions of the patches: print(f'Image size: {image_size} X {image_size}'), print(f'Patch size: {patch_size} X {patch_size}'), print(f'Patches per image: {patches.shape[1]}'), print(f'Elements per patch: {patches.shape[-1]}')",
+    "Attempt to visualize the patches using a for loop: for i, patch in enumerate(patches[0]): ... (include logic to display patches)",
+    "Run the code cell and observe the InvalidArgumentError that occurs when calling Patches.call()"
+]
+```

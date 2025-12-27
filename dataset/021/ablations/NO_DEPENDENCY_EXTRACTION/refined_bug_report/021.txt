@@ -1,0 +1,15 @@
+TITLE
+ValueError when concatenating tensors with insufficient inputs in detection_generator.py
+
+SYMPTOMS
+• A ValueError occurs during the evaluation phase in the function '_generate_detections_v2_class_aware'.
+• The exact error message is: "ValueError: List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2."
+• The function fails when the predicted boxes tensor has a length of 0.
+
+EXPECTED BEHAVIOR
+The function '_generate_detections_v2_class_aware' should handle cases where the predicted boxes tensor has a length of 0 or 1 without raising an error. It should either return an appropriate response or gracefully handle the absence of predicted boxes.
+
+REPRODUCTION STEPS
+1. Call the function '_generate_detections_v2_class_aware' with an input that includes predicted boxes as a tensor of length 0.
+2. Observe the resulting ValueError during the evaluation phase.
+3. Optionally, test with a tensor of length 1 to confirm that the function does not handle this case correctly either.

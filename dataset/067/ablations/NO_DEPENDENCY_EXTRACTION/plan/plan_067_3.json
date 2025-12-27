@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from tensorflow import keras and from tensorflow.keras import layers",
+    "Set the TensorFlow version to 2.10.0 to match the reported bug environment",
+    "Define a batch size of 32 and image dimensions of 128x128 for input data",
+    "Create random uniform input data with shape (batch_size, height, width, channels) where channels=3, resulting in shape (32, 128, 128, 3)",
+    "Create random uniform label data with shape (batch_size, height, width, 1) where height=128 and width=128, resulting in shape (32, 128, 128, 1)",
+    "Remove the last dimension from the label data to create incorrect label shape (32, 128, 128)",
+    "Define a simple model using keras.Sequential with layers: Conv2D(32, (3, 3), activation='relu', input_shape=(128, 128, 3)), MaxPooling2D((2, 2)), Flatten(), Dense(10, activation='softmax')",
+    "Compile the model with loss='sparse_categorical_crossentropy', optimizer='adam', and metrics=['accuracy']",
+    "Fit the model using model.fit with input data and incorrect label data for 10 epochs and batch_size=32",
+    "Capture the output of the model.fit call to check for any warnings or errors during training",
+    "Verify that the training accuracy is significantly lower than expected, indicating poor performance",
+    "Assert that the model's loss value is not decreasing as expected over epochs, indicating a potential issue with the loss function application"
+]
+```

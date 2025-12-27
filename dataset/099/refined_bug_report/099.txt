@@ -1,0 +1,19 @@
+TITLE
+NaN Loss During FP8 Training with Transformer Engine
+
+SYMPTOMS
+• The loss value during training becomes NaN.
+• No specific error messages are provided other than the observed issue.
+
+EXPECTED BEHAVIOR
+• The training should proceed without numerical instabilities, and the loss values should be finite numbers.
+• The model parameters should update correctly over multiple epochs.
+
+REPRODUCTION STEPS
+1. Install the Transformer Engine library from the official repository: `git clone https://github.com/NVIDIA/TransformerEngine.git` and follow the installation instructions provided in the documentation.
+2. Set up a transformer architecture using the chosen framework (e.g., PyTorch).
+3. Configure the training process to use FP8 precision by setting the appropriate parameters in the Transformer Engine configuration.
+4. Train the model on a dataset, ensuring that the data is properly preprocessed and formatted for the transformer architecture.
+5. Observe the loss values during training; if NaNs occur, record the epoch or iteration where they first appear.
+
+Note: Additional details such as the specific version of the library used, the hardware configuration, the exact code implementation, and any relevant configurations (e.g., batch size, learning rate) may be necessary to diagnose and resolve this issue.

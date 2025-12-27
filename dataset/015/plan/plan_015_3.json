@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the nn_blocks module from test_transformer_scaffold.py",
+    "Define a sequence length of 21 and width of 80",
+    "Create random uniform input data with shape (batch_size, sequence_length, width)",
+    "Call TransformerScaffold function with num_attention_heads=10, inner_dim=2048, and inner_activation='relu'",
+    "Verify output tensor has the same shape as input tensor",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory does not exceed expected threshold"
+]
+```
+

@@ -1,0 +1,11 @@
+{
+  "bug_report": "097",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "denoising_diffusion_pytorch/version.py",
+    "content": "__version__ = '1.9.1'\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

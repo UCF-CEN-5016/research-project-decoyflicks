@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: fairseq, torchaudio, sox, os, json, and torch.",
+    "Set DEVICE to 'cuda' if a GPU is available, otherwise set it to 'cpu'.",
+    "Define SAMPLING_FREQ as 16000 (or the sample rate used in your audio files).",
+    "Define EMISSION_INTERVAL as 1.0 (or the desired interval for generating emissions).",
+    "Create a directory structure for the data root at $DATA_ROOT and ensure it contains the necessary audio files and config.yaml.",
+    "Prepare a test audio file in $DATA_ROOT/test_audio.wav with a duration of at least 10 seconds.",
+    "Create a config.yaml file in $DATA_ROOT/config.yaml with the required parameters for the speech_to_speech task.",
+    "Load the model from /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and ensure it is compatible with the input data.",
+    "Run the fairseq-generate command with the following parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Monitor the output for the error message indicating that the key 'input_feat_per_channel' is not in struct.",
+    "Verify that the model's output structure is being accessed correctly in the generate_emissions function.",
+    "Check the dimensions of the emissions tensor returned by the model to ensure they match expected values.",
+    "Log the output of the model before the error occurs to capture the state of the model's output.",
+    "Assert that the emissions tensor has the expected shape and that the model is producing outputs as intended."
+]
+```

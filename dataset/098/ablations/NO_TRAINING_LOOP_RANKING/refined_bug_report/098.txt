@@ -1,0 +1,20 @@
+### TITLE
+NameError due to uninitialized variable in SinusoidalPosEmb class
+
+### SYMPTOMS
+• The `theta` variable is passed to the `__init__` function but not assigned as a member variable or used correctly in the `forward` function.  
+• The following error message is raised when executing the `forward` function:  
+```
+NameError: name 'theta' is not defined
+```
+• The code fails to compute the sinusoidal positional embeddings, resulting in a runtime error.
+
+### EXPECTED BEHAVIOR
+When the `SinusoidalPosEmb` class is instantiated and the `forward` method is called with a valid input tensor, it should correctly compute and return the sinusoidal positional embeddings without raising any errors.
+
+### REPRODUCTION STEPS
+1. Define the `SinusoidalPosEmb` class as shown in the original bug report.
+2. Create an instance of `SinusoidalPosEmb` with a specified dimension, e.g., `emb = SinusoidalPosEmb(dim = 4)`.
+3. Create a tensor `x` with appropriate dimensions, e.g., `x = torch.ones((10))`.
+4. Call the `forward` method by executing `out = emb(x)`.
+5. Observe the error message generated during execution.

@@ -1,0 +1,30 @@
+[SE3Transformer/pytorch] Multiplication error in the ConvSE3
+
+I am a beginner of SE3-Transformer. I wanted to train the qm9 dataset by dividing the input type into two, so I modified the code as follows.
+
+### data_loading/qm9.py
+```python
+        # get node features
+        # original : node_feats = {'0': batched_graph.ndata['attr'][:, :self.NODE_FEATURE_DIM, None]}
+        node_feats = {'0': batched_graph.ndata['attr'][:, :5, None],
+                      '1': batched_graph.ndata['attr'][:, 5:6, None]}
+```
+
+### runtime/training.py
+```python
+# the original value of datamodule.NODE_FEATURE_DIM in QM9:  6
+model = SE3TransformerPooled(
+        fiber_in=Fiber({0: 5, 1: 1}), # original: Fiber({0: datamodule.EDGE_FEATURE_DIM})
+        fiber_out=Fiber({0: args.num_degrees * args.num_channels}),
+        fiber_edge=Fiber({0: datamodule.EDGE_FEATURE_DIM}),
+        output_dim=1,
+        tensor_cores=using_tensor_cores(args.amp),  # use Tensor Cores more effectively
+        **vars(args)
+)
+```
+
+In this case, it stops with the error shown below.
+```shell
+RuntimeError: Expected size for first two dimensions of batch2 tensor to be: [8910, 1] but got: [8910, 3].
+```
+I think that self-attention should be performed even if SE3-transformer has multiple input types. But I would like to know why it is not working.

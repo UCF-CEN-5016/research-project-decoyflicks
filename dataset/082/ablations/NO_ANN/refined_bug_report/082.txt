@@ -1,0 +1,29 @@
+TITLE  
+Dimension Mismatch in Masked Patch Prediction Model
+
+SYMPTOMS  
+• Encountering dimension issues while running the masked patch prediction demo code.  
+• Error message:  
+  ```
+  RuntimeError: Given normalized_shape=[1024], expected input with shape [*, 1024], but got input of size[20, 64, 3072]
+  ```  
+• The model fails to process the input due to an unexpected shape of the tensor being passed.
+
+EXPECTED BEHAVIOR  
+The model should process the input images correctly and return a loss value without any dimension mismatch errors. The expected input shape for the layer normalization should match the specified normalized shape of [1024].
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries and modules:  
+   ```python
+   import torch
+   from vit_pytorch import ViT
+   from vit_pytorch.mpp import MPP
+   ```
+2. Initialize the ViT model with appropriate parameters.  
+3. Create an instance of the MPP class with the model and parameters.  
+4. Define a function to sample unlabelled images with the correct dimensions.  
+5. Run a loop for training, where you sample images and pass them to the MPP trainer.  
+6. Observe the error when attempting to process the masked input within the MPP trainer.  
+7. Check the dimensions of the masked input tensor before it is passed to the layer normalization.  
+
+By following these steps, you should be able to reproduce the dimension mismatch error and analyze its cause.

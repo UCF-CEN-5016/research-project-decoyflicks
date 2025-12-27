@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and Keras libraries",
+    "Load the NER model from 'path_to_my_model' using keras.models.load_model, passing a custom object {'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()} and setting compile to False",
+    "Create an instance of tf.lite.TFLiteConverter by calling tf.lite.TFLiteConverter.from_saved_model with 'path_to_my_model'",
+    "Convert the model to TFLite format by calling converter.convert() and assign the result to tflite_model",
+    "Save the converted TFLite model to a file named 'model.tflite' in binary mode",
+    "Load the saved TFLite model into an interpreter using tf.lite.Interpreter",
+    "Allocate tensors for the interpreter by calling interpreter.allocate_tensors()",
+    "Get the index of the input tensor from the interpreter using interpreter.get_input_details()[0]['index'] and assign it to input_index",
+    "Get the index of the output tensor from the interpreter using interpreter.get_output_details()[0]['index'] and assign it to output_index",
+    "Create a sample input by calling tokenize_and_convert_to_ids with 'eu rejects german call to boycott british lamb' and assign it to sample_input",
+    "Expand the dimensions of sample_input to (1, None) by using np.expand_dims(sample_input, axis=0)",
+    "Set the tensor value in the interpreter by calling interpreter.set_tensor(input_index, sample_input)",
+    "Invoke the interpreter to perform inference by calling interpreter.invoke()",
+    "Get the prediction mask from the interpreter by calling interpreter.get_tensor(output_index) and assign it to prediction_mask",
+    "Check for dimension mismatch error by verifying if the shape of prediction_mask does not match with the expected dimensions"
+]
+```
+

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the TransformerWrapper and Decoder classes from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 4 and a sequence length of 4 for the input tensor",
+    "Create an input tensor x with shape (batch_size, sequence_length) using torch.randint(0, 20000, (4, 4))",
+    "Create a position tensor pos using einops.repeat to repeat a range tensor: pos = repeat(torch.arange(0, 4), 'n -> b n', b=4)",
+    "Instantiate the TransformerWrapper model with rotary_pos_emb set to True: model = TransformerWrapper(num_tokens=20000, max_seq_len=1024, attn_layers=Decoder(dim=512, depth=2, heads=8, rotary_pos_emb=True))",
+    "Call the model with the input tensor and position tensor: logits1 = model(x, pos=pos)",
+    "Call the model again without the position tensor: logits2 = model(x)",
+    "Add an assertion to check if logits1 and logits2 are close: assert torch.allclose(logits1, logits2)",
+    "Run the test function to trigger the bug and capture the error traceback",
+    "Verify that the error message contains 'EinopsError' and matches the expected output regarding tensor shapes"
+]
+```

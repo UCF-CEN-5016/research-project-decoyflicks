@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, DeviceInfo from labml_helpers, Adam from labml_nn.optimizers.adam, and Model from labml_nn.optimizers.mnist_experiment",
+    "Define a batch size of 64 and input dimensions of (1, 28, 28)",
+    "Create random input data with shape (64, 1, 28, 28) using torch.randn and set device to CUDA if available",
+    "Create target labels with shape (64,) using torch.ones and set device to CUDA if available",
+    "Instantiate the loss function using nn.CrossEntropyLoss()",
+    "Instantiate the model using Model() and move it to the appropriate device",
+    "Instantiate MyAdam optimizer with model parameters",
+    "Instantiate TorchAdam optimizer with model parameters",
+    "Perform a forward pass by calling model(inp) and calculate the loss using loss_func",
+    "Call loss.backward() to compute gradients",
+    "Warm up MyAdam optimizer by running my_adam.step() in a loop for 100 iterations",
+    "Warm up TorchAdam optimizer by running torch_adam.step() in a loop for 100 iterations",
+    "Run MyAdam optimizer for 1000 iterations using my_adam.step()",
+    "Run TorchAdam optimizer for 1000 iterations using torch_adam.step()",
+    "Check for any runtime errors or exceptions during the execution of the above steps",
+    "Assert that an error occurs when using the current implementation of RotaryPositionalEmbeddings(3) in the context of the model"
+]
+```

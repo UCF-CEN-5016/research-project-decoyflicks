@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary libraries: import pandas as pd, import numpy as np, import matplotlib.pyplot as plt, import tensorflow as tf",
+    "Create a sample DataFrame with a date column containing string dates in the format 'dd.mm.yyyy HH:MM:SS' and some numeric columns: df = pd.DataFrame({'date': ['01.01.2009 00:10:00', '02.01.2009 00:10:00'], 'temperature': [20.5, 21.0], 'humidity': [30, 35]})",
+    "Convert the 'date' column to a datetime format using pd.to_datetime with the format parameter set to '%d.%m.%Y %H:%M:%S': df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y %H:%M:%S')",
+    "Create a correlation matrix using df.corr() and store it in a variable: correlation_matrix = df.corr()",
+    "Define a function show_heatmap that takes a DataFrame as input and attempts to plot a heatmap of the correlation matrix: def show_heatmap(data): plt.matshow(data.corr()) plt.show()",
+    "Call the show_heatmap function with the DataFrame: show_heatmap(df)",
+    "Run the script using python3 timeseries_weather_forecasting.py",
+    "Observe the output for ValueError indicating 'could not convert string to float: '01.01.2009 00:10:00''",
+    "Verify that the error occurs specifically when attempting to compute the correlation matrix with non-numeric data present in the DataFrame"
+]
+```

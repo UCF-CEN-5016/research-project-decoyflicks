@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, gdown, matplotlib, and zipfile",
+    "Set the random seed for reproducibility using keras.random.SeedGenerator(1337)",
+    "Create a directory named 'celeba_gan' to store the dataset",
+    "Download the CelebA dataset using gdown with the URL 'https://drive.google.com/uc?id=1O7m1010EJjLE5QxLZiM9Fpjs7Oj6e684' and save it as 'celeba_gan/data.zip'",
+    "Extract the contents of 'celeba_gan/data.zip' into the 'celeba_gan' directory using ZipFile",
+    "Create a dataset from the 'celeba_gan' directory using keras.utils.image_dataset_from_directory with label_mode=None, image_size=(64, 64), and batch_size=32",
+    "Normalize the dataset by mapping it to the range [0, 1] using dataset.map(lambda x: x / 255.0)",
+    "Define the discriminator model as a keras.Sequential model with the following layers: Input(shape=(64, 64, 3)), Conv2D(64, kernel_size=4, strides=2, padding='same'), LeakyReLU(negative_slope=0.2), Conv2D(128, kernel_size=4, strides=2, padding='same'), LeakyReLU(negative_slope=0.2), Conv2D(128, kernel_size=4, strides=2, padding='same'), LeakyReLU(negative_slope=0.2), Flatten(), Dropout(0.2), Dense(1, activation='sigmoid')",
+    "Define the generator model as a keras.Sequential model with the following layers: Input(shape=(128,)), Dense(8 * 8 * 128), Reshape((8, 8, 128)), Conv2DTranspose(128, kernel_size=4, strides=2, padding='same'), LeakyReLU(negative_slope=0.2), Conv2DTranspose(256, kernel_size=4, strides=2, padding='same'), LeakyReLU(negative_slope=0.2), Conv2DTranspose(512, kernel_size=4, strides=2, padding='same'), LeakyReLU(negative_slope=0.2), Conv2D(3, kernel_size=5, padding='same', activation='sigmoid')",
+    "Define the GAN class that inherits from keras.Model, with methods for compile and train_step",
+    "In the train_step method, attempt to access the shape of real_images using ops.shape(real_images)[0]",
+    "Create an instance of the GAN class with the discriminator, generator, and latent_dim=128",
+    "Compile the GAN instance with Adam optimizers for both discriminator and generator, and BinaryCrossentropy loss function",
+    "Call gan.fit with the dataset and epochs=1, and include a callback for GANMonitor",
+    "Run the code and observe the output for the AttributeError: 'list' object has no attribute 'shape'",
+    "Verify that the error occurs specifically at the line where batch_size is assigned using real_images.shape[0]"
+]
+```

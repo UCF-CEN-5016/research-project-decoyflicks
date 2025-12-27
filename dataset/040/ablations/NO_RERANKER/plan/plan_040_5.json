@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and the Model class from labml_nn.rl.dqn.model",
+    "Set the device to CUDA if available, otherwise use CPU: device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')",
+    "Define a batch size of 32 and input dimensions for CIFAR-10 images: input_shape = (32, 3, 32, 32)",
+    "Create random input data simulating CIFAR-10 images with shape (32, 3, 32, 32) using: input_data = torch.rand(input_shape, device=device)",
+    "Instantiate the Model class: model = Model().to(device)",
+    "Pass the random input data through the model to get attention weights: attn = model(input_data)",
+    "Extract the attention weights from the model output, assuming they are stored in a variable named 'attn_weights'",
+    "Check the shape of the attention weights: assert attn_weights.shape == (32, num_heads, 32, 32) where num_heads is the number of attention heads in the model",
+    "Perform the softmax operation on the attention weights along the wrong axis (dim=1): attn_softmax = attn_weights.softmax(dim=1)",
+    "Print the attention weights before and after softmax to observe the values: print('Attention Weights:', attn_weights, 'Softmax Weights:', attn_softmax)",
+    "Verify that the softmax operation does not produce valid probability distributions by checking if any row sums to 1: assert not torch.allclose(attn_softmax.sum(dim=1), torch.ones(32, device=device), atol=1e-6)",
+    "Run the model on the CIFAR-10 dataset to ensure it completes without errors, simulating a training loop with dummy labels",
+    "Log the output of the model during training to check for any unexpected behavior or warnings",
+    "Monitor the training process to ensure that the model does not converge as expected, indicating a potential bug in the attention mechanism"
+]
+```

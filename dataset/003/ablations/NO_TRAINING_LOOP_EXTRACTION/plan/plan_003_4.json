@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the TensorFlow models repository using the command: 'import tensorflow as tf'",
+    "Set the TensorFlow version to 2.x by running: '!pip install tensorflow==2.x'",
+    "Import the object detection utilities from the TensorFlow models repository using: 'from object_detection.utils import config_util, colab_utils'",
+    "Import the model builder from the object detection library using: 'from object_detection.builders import model_builder'",
+    "Downgrade the protobuf library to version 3.20 using the command: '!pip install protobuf==3.20'",
+    "Create a dummy input tensor with shape (1, 640, 640, 3) to simulate a batch of images using: 'dummy_input = tf.random.uniform((1, 640, 640, 3))'",
+    "Attempt to build a model by calling 'model_builder.build(model_config, is_training=True)' with a sample model configuration, ensuring the model_config is defined correctly.",
+    "Run the code that includes the line: 'from object_detection.builders import model_builder' to trigger the import process.",
+    "Verify that the AttributeError occurs by checking the output for the message: 'AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'",
+    "Log the error message to confirm the bug is reproduced by using: 'print(e)' in the exception handling block."
+]
+```

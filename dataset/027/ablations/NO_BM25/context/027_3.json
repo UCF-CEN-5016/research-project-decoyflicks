@@ -1,0 +1,190 @@
+{
+  "bug_report": "027",
+  "rank": 3,
+  "score": 0.8578886985778809,
+  "main_file": {
+    "path": "super_resolution/main.py",
+    "content": "from __future__ import print_function\nimport argparse\nfrom math import log10\n\nimport torch\nimport torch.nn as nn\nimport torch.optim as optim\nfrom torch.utils.data import DataLoader\nfrom model import Net\nfrom data import get_training_set, get_test_set\n\n# Training settings\nparser = argparse.ArgumentParser(description='PyTorch Super Res Example')\nparser.add_argument('--upscale_factor', type=int, required=True, help=\"super resolution upscale factor\")\nparser.add_argument('--batchSize', type=int, default=64, help='training batch size')\nparser.add_argument('--testBatchSize', type=int, default=10, help='testing batch size')\nparser.add_argument('--nEpochs', type=int, default=2, help='number of epochs to train for')\nparser.add_argument('--lr', type=float, default=0.01, help='Learning Rate. Default=0.01')\nparser.add_argument('--cuda', action='store_true', help='use cuda?')\nparser.add_argument('--mps', action='store_true', default=False, help='enables macOS GPU training')\nparser.add_argument('--threads', type=int, default=4, help='number of threads for data loader to use')\nparser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')\nopt = parser.parse_args()\n\nprint(opt)\n\nif opt.cuda and not torch.cuda.is_available():\n    raise Exception(\"No GPU found, please run without --cuda\")\nif not opt.mps and torch.backends.mps.is_available():\n    raise Exception(\"Found mps device, please run with --mps to enable macOS GPU\")\n\ntorch.manual_seed(opt.seed)\nuse_mps = opt.mps and torch.backends.mps.is_available()\n\nif opt.cuda:\n    device = torch.device(\"cuda\")\nelif use_mps:\n    device = torch.device(\"mps\")\nelse:\n    device = torch.device(\"cpu\")\n\nprint('===> Loading datasets')\ntrain_set = get_training_set(opt.upscale_factor)\ntest_set = get_test_set(opt.upscale_factor)\ntraining_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=opt.batchSize, shuffle=True)\ntesting_data_loader = DataLoader(dataset=test_set, num_workers=opt.threads, batch_size=opt.testBatchSize, shuffle=False)\n\nprint('===> Building model')\nmodel = Net(upscale_factor=opt.upscale_factor).to(device)\ncriterion = nn.MSELoss()\n\noptimizer = optim.Adam(model.parameters(), lr=opt.lr)\n\n\ndef train(epoch):\n    epoch_loss = 0\n    for iteration, batch in enumerate(training_data_loader, 1):\n        input, target = batch[0].to(device), batch[1].to(device)\n\n        optimizer.zero_grad()\n        loss = criterion(model(input), target)\n        epoch_loss += loss.item()\n        loss.backward()\n        optimizer.step()\n\n        print(\"===> Epoch[{}]({}/{}): Loss: {:.4f}\".format(epoch, iteration, len(training_data_loader), loss.item()))\n\n    print(\"===> Epoch {} Complete: Avg. Loss: {:.4f}\".format(epoch, epoch_loss / len(training_data_loader)))\n\n\ndef test():\n    avg_psnr = 0\n    with torch.no_grad():\n        for batch in testing_data_loader:\n            input, target = batch[0].to(device), batch[1].to(device)\n\n            prediction = model(input)\n            mse = criterion(prediction, target)\n            psnr = 10 * log10(1 / mse.item())\n            avg_psnr += psnr\n    print(\"===> Avg. PSNR: {:.4f} dB\".format(avg_psnr / len(testing_data_loader)))\n\n\ndef checkpoint(epoch):\n    model_out_path = \"model_epoch_{}.pth\".format(epoch)\n    torch.save(model, model_out_path)\n    print(\"Checkpoint saved to {}\".format(model_out_path))\n\nfor epoch in range(1, opt.nEpochs + 1):\n    train(epoch)\n    test()\n    checkpoint(epoch)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "super_resolution/dataset.py",
+      "snippets": [
+        {
+          "lines": "36-37",
+          "code": "    def __init__(self, image_dir, input_transform=None, target_transform=None):\n        super(DatasetFromFolder, self).__init__()\n        self.image_filenames = [join(image_dir, x) for x in listdir(image_dir) if is_image_file(x)]\n\n        self.input_transform = input_transform\n        self.target_transform = target_transform\n\n    def __getitem__(self, index):\n        input = load_img(self.image_filenames[index])\n        target = input.copy()\n        if self.input_transform:\n            input = self.input_transform(input)\n        if self.target_transform:\n            target = self.target_transform(target)\n\n        return input, target\n\n    def __len__(self):\n        return len(self.image_filenames)"
+        },
+        {
+          "lines": "18-37",
+          "code": "def is_image_file(filename):\n    return any(filename.endswith(extension) for extension in [\".png\", \".jpg\", \".jpeg\"])\n\ndef load_img(filepath):\n    img = Image.open(filepath).convert('YCbCr')\n    y, _, _ = img.split()\n    return y\n\nclass DatasetFromFolder(data.Dataset):\n    def __init__(self, image_dir, input_transform=None, target_transform=None):\n        super(DatasetFromFolder, self).__init__()\n        self.image_filenames = [join(image_dir, x) for x in listdir(image_dir) if is_image_file(x)]\n\n        self.input_transform = input_transform\n        self.target_transform = target_transform\n\n    def __getitem__(self, index):\n        input = load_img(self.image_filenames[index])\n        target = input.copy()\n        if self.input_transform:\n            input = self.input_transform(input)\n        if self.target_transform:\n            target = self.target_transform(target)\n\n        return input, target\n\n    def __len__(self):\n        return len(self.image_filenames)"
+        }
+      ]
+    },
+    {
+      "file": "super_resolution/dataset.py",
+      "snippets": [
+        {
+          "lines": "36-37",
+          "code": "    def __init__(self, image_dir, input_transform=None, target_transform=None):\n        super(DatasetFromFolder, self).__init__()\n        self.image_filenames = [join(image_dir, x) for x in listdir(image_dir) if is_image_file(x)]\n\n        self.input_transform = input_transform\n        self.target_transform = target_transform\n\n    def __getitem__(self, index):\n        input = load_img(self.image_filenames[index])\n        target = input.copy()\n        if self.input_transform:\n            input = self.input_transform(input)\n        if self.target_transform:\n            target = self.target_transform(target)\n\n        return input, target\n\n    def __len__(self):\n        return len(self.image_filenames)"
+        },
+        {
+          "lines": "18-37",
+          "code": "def is_image_file(filename):\n    return any(filename.endswith(extension) for extension in [\".png\", \".jpg\", \".jpeg\"])\n\ndef load_img(filepath):\n    img = Image.open(filepath).convert('YCbCr')\n    y, _, _ = img.split()\n    return y\n\nclass DatasetFromFolder(data.Dataset):\n    def __init__(self, image_dir, input_transform=None, target_transform=None):\n        super(DatasetFromFolder, self).__init__()\n        self.image_filenames = [join(image_dir, x) for x in listdir(image_dir) if is_image_file(x)]\n\n        self.input_transform = input_transform\n        self.target_transform = target_transform\n\n    def __getitem__(self, index):\n        input = load_img(self.image_filenames[index])\n        target = input.copy()\n        if self.input_transform:\n            input = self.input_transform(input)\n        if self.target_transform:\n            target = self.target_transform(target)\n\n        return input, target\n\n    def __len__(self):\n        return len(self.image_filenames)"
+        }
+      ]
+    },
+    {
+      "file": "super_resolution/data.py",
+      "snippets": [
+        {
+          "lines": "63-70",
+          "code": "def target_transform(crop_size):\n    return Compose([\n        CenterCrop(crop_size),\n        ToTensor(),\n    ])\n\ndef get_training_set(upscale_factor):\n    root_dir = download_bsd300()\n    train_dir = join(root_dir, \"train\")\n    crop_size = calculate_valid_crop_size(256, upscale_factor)\n\n    return DatasetFromFolder(train_dir,\n                             input_transform=input_transform(crop_size, upscale_factor),\n                             target_transform=target_transform(crop_size))\n\ndef get_test_set(upscale_factor):\n    root_dir = download_bsd300()\n    test_dir = join(root_dir, \"test\")\n    crop_size = calculate_valid_crop_size(256, upscale_factor)\n\n    return DatasetFromFolder(test_dir,\n                             input_transform=input_transform(crop_size, upscale_factor),\n                             target_transform=target_transform(crop_size))"
+        },
+        {
+          "lines": "38-43",
+          "code": "def download_bsd300(dest=\"dataset\"):\n    output_image_dir = join(dest, \"BSDS300/images\")\n\n    if not exists(output_image_dir):\n        makedirs(dest)\n        url = \"http://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz\"\n        print(\"downloading url \", url)\n\n        data = urllib.request.urlopen(url)\n\n        file_path = join(dest, basename(url))\n        with open(file_path, 'wb') as f:\n            f.write(data.read())\n\n        print(\"Extracting data\")\n        with tarfile.open(file_path) as tar:\n            for item in tar:\n                tar.extract(item, dest)\n\n        remove(file_path)\n\n    return output_image_dir\n\ndef calculate_valid_crop_size(crop_size, upscale_factor):\n    return crop_size - (crop_size % upscale_factor)\n\ndef input_transform(crop_size, upscale_factor):\n    return Compose([\n        CenterCrop(crop_size),\n        Resize(crop_size // upscale_factor),\n        ToTensor(),\n    ])"
+        }
+      ]
+    },
+    {
+      "file": "super_resolution/data.py",
+      "snippets": [
+        {
+          "lines": "63-70",
+          "code": "def target_transform(crop_size):\n    return Compose([\n        CenterCrop(crop_size),\n        ToTensor(),\n    ])\n\ndef get_training_set(upscale_factor):\n    root_dir = download_bsd300()\n    train_dir = join(root_dir, \"train\")\n    crop_size = calculate_valid_crop_size(256, upscale_factor)\n\n    return DatasetFromFolder(train_dir,\n                             input_transform=input_transform(crop_size, upscale_factor),\n                             target_transform=target_transform(crop_size))\n\ndef get_test_set(upscale_factor):\n    root_dir = download_bsd300()\n    test_dir = join(root_dir, \"test\")\n    crop_size = calculate_valid_crop_size(256, upscale_factor)\n\n    return DatasetFromFolder(test_dir,\n                             input_transform=input_transform(crop_size, upscale_factor),\n                             target_transform=target_transform(crop_size))"
+        },
+        {
+          "lines": "38-43",
+          "code": "def download_bsd300(dest=\"dataset\"):\n    output_image_dir = join(dest, \"BSDS300/images\")\n\n    if not exists(output_image_dir):\n        makedirs(dest)\n        url = \"http://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz\"\n        print(\"downloading url \", url)\n\n        data = urllib.request.urlopen(url)\n\n        file_path = join(dest, basename(url))\n        with open(file_path, 'wb') as f:\n            f.write(data.read())\n\n        print(\"Extracting data\")\n        with tarfile.open(file_path) as tar:\n            for item in tar:\n                tar.extract(item, dest)\n\n        remove(file_path)\n\n    return output_image_dir\n\ndef calculate_valid_crop_size(crop_size, upscale_factor):\n    return crop_size - (crop_size % upscale_factor)\n\ndef input_transform(crop_size, upscale_factor):\n    return Compose([\n        CenterCrop(crop_size),\n        Resize(crop_size // upscale_factor),\n        ToTensor(),\n    ])"
+        }
+      ]
+    },
+    {
+      "file": "distributed/minGPT-ddp/mingpt/model.py",
+      "snippets": [
+        {
+          "lines": "34-59",
+          "code": "class GPTConfig:\n    model_type: str = 'gpt2'\n    # model configurations\n    n_layer: int = None\n    n_head: int = None\n    n_embd: int =  None\n    # openai's values for gpt2\n    vocab_size: int = 50257 \n    block_size: int = 1024\n    # dropout hyperparameters\n    embd_pdrop: float = 0.1\n    resid_pdrop: float = 0.1\n    attn_pdrop: float = 0.1\n\nclass OptimizerConfig:\n    learning_rate: float = 3e-4\n    weight_decay: float = 0.1\n\nclass MultiheadAttentionLayer(nn.Module):\n    \"\"\"\n    A multi-head masked self-attention layer with a projection at the end.\n    \"\"\"\n\n    def __init__(self, config, device=\"cpu\", dtype=torch.float32):\n        super().__init__()\n        assert config.n_embd % config.n_head == 0\n        self.resid_drop = nn.Dropout(config.resid_pdrop)\n        self.c_proj = nn.Linear(config.n_embd, config.n_embd, device=device, dtype=dtype)\n        self.register_buffer(\"mask\", torch.tril(torch.ones(config.block_size, config.block_size))\n                             .view(1, 1, config.block_size, config.block_size))\n        self.attn = torch.nn.MultiheadAttention(\n            embed_dim=config.n_embd,\n            num_heads=config.n_head,\n            dropout=config.attn_pdrop,\n            batch_first=True,\n            device=device,\n            dtype=dtype\n        )\n\n    def forward(self, x):\n        _, seq_size, _ = x.size()\n        y = self.attn(x, x, x, attn_mask=self.mask[0, 0, :seq_size, :seq_size])[0]\n        y = self.resid_drop(self.c_proj(y))\n        return y"
+        }
+      ]
+    },
+    {
+      "file": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+      "snippets": [
+        {
+          "lines": "77-81",
+          "code": "def ddp_setup():\n    init_process_group(backend=\"nccl\")\n    torch.cuda.set_device(int(os.environ[\"LOCAL_RANK\"]))\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer"
+        }
+      ]
+    },
+    {
+      "file": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+      "snippets": [
+        {
+          "lines": "77-81",
+          "code": "def ddp_setup():\n    init_process_group(backend=\"nccl\")\n    torch.cuda.set_device(int(os.environ[\"LOCAL_RANK\"]))\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer"
+        }
+      ]
+    },
+    {
+      "file": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+      "snippets": [
+        {
+          "lines": "77-81",
+          "code": "def ddp_setup():\n    init_process_group(backend=\"nccl\")\n    torch.cuda.set_device(int(os.environ[\"LOCAL_RANK\"]))\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer"
+        }
+      ]
+    },
+    {
+      "file": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+      "snippets": [
+        {
+          "lines": "77-81",
+          "code": "def ddp_setup():\n    init_process_group(backend=\"nccl\")\n    torch.cuda.set_device(int(os.environ[\"LOCAL_RANK\"]))\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer"
+        }
+      ]
+    },
+    {
+      "file": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+      "snippets": [
+        {
+          "lines": "77-81",
+          "code": "def ddp_setup():\n    init_process_group(backend=\"nccl\")\n    torch.cuda.set_device(int(os.environ[\"LOCAL_RANK\"]))\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer"
+        }
+      ]
+    },
+    {
+      "file": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+      "snippets": [
+        {
+          "lines": "77-81",
+          "code": "def ddp_setup():\n    init_process_group(backend=\"nccl\")\n    torch.cuda.set_device(int(os.environ[\"LOCAL_RANK\"]))\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer"
+        }
+      ]
+    },
+    {
+      "file": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+      "snippets": [
+        {
+          "lines": "77-81",
+          "code": "def ddp_setup():\n    init_process_group(backend=\"nccl\")\n    torch.cuda.set_device(int(os.environ[\"LOCAL_RANK\"]))\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer"
+        }
+      ]
+    },
+    {
+      "file": "distributed/tensor_parallelism/llama2_model.py",
+      "snippets": [
+        {
+          "lines": "53-71",
+          "code": "class ModelArgs:\n    dim: int = 4096\n    n_layers: int = 32\n    n_heads: int = 32\n    n_kv_heads: Optional[int] = None\n    vocab_size: int = -1  # defined later by tokenizer\n    multiple_of: int = 256  # make SwiGLU hidden layer size multiple of large power of 2\n    ffn_dim_multiplier: Optional[float] = None\n    norm_eps: float = 1e-5\n\n    max_batch_size: int = 32\n    max_seq_len: int = 32768\n    # If `True`, then each transformer block init uses its layer ID, and if\n    # `False`, each uses the total number of transformer blocks\n    depth_init: bool = True\n\ndef precompute_freqs_cis(dim: int, end: int, theta: float = 10000.0):\n    \"\"\"\n    Precompute the frequency tensor for complex exponentials (cis) with given dimensions.\n\n    This function calculates a frequency tensor with complex exponentials using the given dimension 'dim'\n    and the end index 'end'. The 'theta' parameter scales the frequencies.\n    The returned tensor contains complex values in complex64 data type.\n\n    Args:\n        dim (int): Dimension of the frequency tensor.\n        end (int): End index for precomputing frequencies.\n        theta (float, optional): Scaling factor for frequency computation. Defaults to 10000.0.\n\n    Returns:\n        torch.Tensor: Precomputed frequency tensor with complex exponentials.\n    \"\"\"\n    freqs = 1.0 / (theta ** (torch.arange(0, dim, 2)[: (dim // 2)].float() / dim))\n    t = torch.arange(end, device=freqs.device)  # type: ignore\n    freqs = torch.outer(t, freqs).float()  # type: ignore\n    freqs_cis = torch.polar(torch.ones_like(freqs), freqs)  # complex64\n    return freqs_cis\n\ndef reshape_for_broadcast(freqs_cis: torch.Tensor, x: torch.Tensor):\n    \"\"\"\n    Reshape frequency tensor for broadcasting it with another tensor.\n\n    This function reshapes the frequency tensor to have the same shape as the target tensor 'x'\n    for the purpose of broadcasting the frequency tensor during element-wise operations.\n\n    Args:\n        freqs_cis (torch.Tensor): Frequency tensor to be reshaped.\n        x (torch.Tensor): Target tensor for broadcasting compatibility.\n\n    Returns:\n        torch.Tensor: Reshaped frequency tensor.\n    \"\"\"\n    ndim = x.ndim\n    assert 0 <= 1 < ndim\n    assert freqs_cis.shape == (x.shape[1], x.shape[-1])\n    shape = [d if i == 1 or i == ndim - 1 else 1 for i, d in enumerate(x.shape)]\n    return freqs_cis.view(*shape)"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "data",
+      "function": "get_test_set"
+    },
+    {
+      "module": "data",
+      "function": "get_training_set"
+    },
+    {
+      "module": "model",
+      "function": "Net"
+    },
+    {
+      "module": "torch",
+      "function": "Adam"
+    },
+    {
+      "module": "torch",
+      "function": "DataLoader"
+    },
+    {
+      "module": "torch",
+      "function": "MSELoss"
+    },
+    {
+      "module": "torch",
+      "function": "device"
+    },
+    {
+      "module": "torch",
+      "function": "manual_seed"
+    },
+    {
+      "module": "torch",
+      "function": "no_grad"
+    },
+    {
+      "module": "torch",
+      "function": "save"
+    }
+  ]
+}

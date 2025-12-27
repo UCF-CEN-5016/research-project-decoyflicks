@@ -1,0 +1,16 @@
+TITLE  
+TypeError in gelu function due to incorrect argument type
+
+SYMPTOMS  
+• The program raises a TypeError when attempting to use the gelu function.  
+• Error message: `TypeError: gelu(): argument 'approximate' must be str, not bool`  
+• The application fails to execute the SQuAD evaluation script as expected.
+
+EXPECTED BEHAVIOR  
+The gelu function should execute without errors, using a valid string argument for the 'approximate' parameter, allowing the SQuAD evaluation script to run successfully.
+
+REPRODUCTION STEPS  
+1. Run the SQuAD evaluation script using the command:  
+   `bash scripts/run_squad.sh /home/bert_large/bert_large_qa.pt 0.2 12 3e-5 0.1 tf32 1 42 /home/bert_large/squad/v1.1 vocab/vocab results/SQuAD 'train' bert_configs/large.json`  
+2. Observe the error message generated in the output.  
+3. Check the implementation of the gelu function in `modeling.py` at line 122.

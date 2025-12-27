@@ -1,0 +1,33 @@
+TITLE
+Dimension Mismatch in Masked Patch Prediction
+
+SYMPTOMS
+• The code encounters a `RuntimeError` during the execution, stating "Given normalized_shape=[1024], expected input with shape [*,
+1024], but got input of size[20, 64, 3072]".
+• This error occurs when running through the masked patch prediction (`MPP`) mechanism.
+
+EXPECTED BEHAVIOR
+- The code should correctly process the images and apply masked patch prediction without dimension mismatches.
+- The `masked_patch_prediction` functionality should work seamlessly with the specified parameters.
+
+REPRODUCTION STEPS
+1. Import the necessary libraries, including `torch`, `ViT`, and `MPP`.
+2. Initialize a Vision Transformer (`ViT`) model with specific hyperparameters.
+3. Create an instance of `MPP` using the initialized `ViT` model as its transformer component.
+4. Define an optimizer for training the `MPP` trainer.
+5. Implement a function to generate sample unlabelled images of shape `[20, 3, 256, 256]`.
+6. Run a loop where you pass in the generated images and compute the loss using `mpp_trainer(images)`.
+7. Backpropagate through the network and update the model parameters.
+8. Save the trained model's state dictionary to disk.
+
+ANALYSIS
+The error suggests that there is an issue with the dimensions of the input data passed into the normalization layer in the transformer architecture. Specifically, the expected shape for the normalization layer is `[*, 1024]` (i.e., any number of batches followed by 1024 features), but the actual input has a different shape `[20, 64, 3072]`.
+
+Given that this issue arises in the masked patch prediction (`MPP`) process, it is likely that there are inconsistencies in how the data is being processed and passed through the transformer. This could be due to incorrect handling of patches or misalignment between expected dimensions and actual input dimensions.
+
+RECOMMENDATIONS
+1. Verify that the `masked_patch_prediction` mechanism correctly processes patches and aligns them with the transformer's architecture.
+2. Check the dimensionality of the transformed patch embeddings before they are fed into any normalization layers, ensuring they match the expected shape `[*, 1024]`.
+3. Ensure that all custom functions (like `MPP`) handle data dimensions consistently and correctly propagate through the model.
+
+By addressing these points, you should be able to resolve the dimension issues observed during masked patch prediction.

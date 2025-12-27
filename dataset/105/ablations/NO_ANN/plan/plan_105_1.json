@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from vector_quantize_pytorch",
+    "Set the following constants: Z_CHANNELS = 512, NUM_QUANTIZERS = 2, CODEBOOK_SIZE = 16 * 1024",
+    "Define a batch size of 64 for training",
+    "Create a random input tensor with shape (batch_size, Z_CHANNELS) using torch.randn(batch_size, Z_CHANNELS)",
+    "Instantiate the ResidualVQ class with the specified parameters: ResidualVQ(dim=Z_CHANNELS, num_quantizers=NUM_QUANTIZERS, codebook_size=CODEBOOK_SIZE, stochastic_sample_codes=True, shared_codebook=True, commitment_weight=1.0, kmeans_init=True, threshold_ema_dead_code=2, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1)",
+    "Define a forward pass function that takes the input tensor and calls the forward method of the ResidualVQ instance",
+    "Run the forward pass function in a try-except block to catch any exceptions",
+    "Log the exception message if a RuntimeError occurs during the forward pass",
+    "Assert that the caught exception message contains 'shape mismatch' to confirm the bug is reproduced",
+    "Repeat the forward pass multiple times (e.g., 10 iterations) to increase the likelihood of encountering the bug in a multinode setting",
+    "Monitor the output of the forward pass for any shape mismatch errors and log the dimensions of the tensors involved in the error"
+]
+```

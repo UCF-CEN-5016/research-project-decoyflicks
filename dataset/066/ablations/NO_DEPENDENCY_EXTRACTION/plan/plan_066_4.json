@@ -1,0 +1,21 @@
+```json
+[
+    "Clone the Keras repository from GitHub using 'git clone https://github.com/keras-team/keras-io.git'",
+    "Navigate to the examples directory using 'cd keras-io/examples/vision'",
+    "Open the 'mirnet.py' file in a code editor",
+    "Locate line 347 and identify the variable 'level2_dau_2'",
+    "Confirm that 'level2_dau_2' is defined earlier in the code and is not used anywhere else",
+    "Locate line 352 where 'level3_dau_2' is used in the function 'selective_kernel_feature_fusion'",
+    "Modify line 352 to replace 'level3_dau_2' with 'level2_dau_2' to create a potential typo",
+    "Save the changes to 'mirnet.py'",
+    "Set up a Python virtual environment using 'python -m venv venv'",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows",
+    "Install TensorFlow and Keras using 'pip install tensorflow keras'",
+    "Run the modified 'mirnet.py' script using 'python mirnet.py'",
+    "Observe the output for any errors or warnings related to the usage of 'level2_dau_2'",
+    "Check if the model runs without crashing and if the output is as expected",
+    "Log any discrepancies in the output that may indicate the bug is present",
+    "Verify that the model's performance metrics are affected by the change in variable usage",
+    "Document the results of the test to confirm the presence of the bug"
+]
+```

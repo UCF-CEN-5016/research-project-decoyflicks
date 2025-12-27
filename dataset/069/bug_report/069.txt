@@ -1,0 +1,25 @@
+Timeseries Forecast error
+
+Starting timeseries example I have this error. Any suggestion?
+
+python3 timeseries_weather_forecasting.py 
+```python
+2023-08-15 13:13:03.770912: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2023-08-15 13:13:06.226074: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2023-08-15 13:13:12.123887: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Traceback (most recent call last):
+  File "/home/test/Documents/timeseries_weather_forecasting.py", line 164, in <module>
+    show_heatmap(df)
+  File "/home/test/Documents/timeseries_weather_forecasting.py", line 153, in show_heatmap
+    plt.matshow(data.corr())
+  File "/home/test/.local/lib/python3.10/site-packages/pandas/core/frame.py", line 10054, in corr
+    mat = data.to_numpy(dtype=float, na_value=np.nan, copy=False)
+  File "/home/test/.local/lib/python3.10/site-packages/pandas/core/frame.py", line 1838, in to_numpy
+    result = self._mgr.as_array(dtype=dtype, copy=copy, na_value=na_value)
+  File "/home/test/.local/lib/python3.10/site-packages/pandas/core/internals/managers.py", line 1732, in as_array
+    arr = self._interleave(dtype=dtype, na_value=na_value)
+  File "/home/test/.local/lib/python3.10/site-packages/pandas/core/internals/managers.py", line 1794, in _interleave
+    result[rl.indexer] = arr
+ValueError: could not convert string to float: '01.01.2009 00:10:00'
+
+```

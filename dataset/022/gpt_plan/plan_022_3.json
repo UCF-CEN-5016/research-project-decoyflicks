@@ -1,0 +1,15 @@
+[
+  "Import TensorFlow and relevant augmentation modules, including the RandAugment implementation from official/vision/ops/augment.py",
+  "Locate the RandAugment function or class definition where the magnitude standard deviation is computed (around line 1566 in augment.py)",
+  "Prepare to generate test input parameters for RandAugment, specifically setting the magnitude level and level_std parameters explicitly (e.g., level=5, level_std=0.5)",
+  "Create a dummy input image tensor with fixed size, e.g., shape (1, 224, 224, 3), filled with arbitrary values (e.g., tf.ones or random uniform between 0 and 1)",
+  "Call the RandAugment augmentation function/module with the dummy input image and the magnitude parameters set as above",
+  "Within the test, patch or instrument the code to capture the internally computed magnitude after the line with `+=` that should include level_std multiplication",
+  "Run the augmentation multiple times (e.g., 100 iterations) with the same level and level_std to collect the applied magnitudes",
+  "Check the variance (standard deviation) of the collected magnitude values across iterations",
+  "Assert that the standard deviation of the magnitude values is either 0 or 1, indicating the bug that level_std is not being applied as a multiplier and is fixed at 1",
+  "Repeat the test with different level_std values (e.g., 0, 0.5, 1.0) to confirm that the applied magnitude standard deviation does not scale accordingly and remains 0 or 1",
+  "Log or print the applied magnitude values and their computed standard deviation to provide evidence of the bug",
+  "Optionally, create a minimal standalone python test function that reproduces the bug using the faulty code snippet from augment.py for clarity",
+  "Ensure that the test does not fix the bug but only confirms the incorrect behavior of magnitude standard deviation being always 0 or 1"
+]

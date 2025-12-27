@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, einops, and any other required modules.",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'.",
+    "Define the parameters for the Linformer: dim=128, seq_len=50 (49 patches + 1 cls-token), depth=12, heads=8, k=64.",
+    "Create an instance of Linformer with the defined parameters.",
+    "Define the parameters for the ViT model: dim=128, image_size=224, patch_size=32, num_classes=2, channels=3.",
+    "Create an instance of ViT using the previously created Linformer instance and the defined parameters.",
+    "Prepare a synthetic dataset with 1000 samples, each sample being a 3D tensor of shape (3, 224, 224) representing an image.",
+    "Assign labels to the dataset such that the first 500 samples are labeled '0' and the next 500 samples are labeled '1'.",
+    "Create a DataLoader for the dataset with a batch size of 32.",
+    "Define a loss function, such as CrossEntropyLoss, and an optimizer, such as Adam, with a learning rate of 0.001.",
+    "Run a training loop for 5 epochs, iterating over the DataLoader.",
+    "In each epoch, compute the loss and accuracy on both training and validation datasets.",
+    "Log the loss and accuracy after each epoch, ensuring to print the values.",
+    "Verify that the accuracy after the first epoch is 100% by asserting that the accuracy variable equals 1.0.",
+    "Check the loss values after each epoch to ensure they are decreasing and validate that the validation accuracy is also 100%.",
+    "If the accuracy is not 100% after the first epoch, adjust the dataset or model parameters to ensure the bug can be reproduced."
+]
+```

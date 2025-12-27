@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.projects.waste_identification_ml.model_inference",
+    "Set the CUDA device to 'cuda:0' to ensure the model runs on the GPU",
+    "Define the model name as 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'",
+    "Set the input image dimensions to 640x640 and batch size to 1",
+    "Create a random input tensor with shape (1, 640, 640, 3) using np.random.rand()",
+    "Load the trained model using tf.saved_model.load() with the path to the exported model directory",
+    "Attempt to call the model on the random input tensor to trigger the export process",
+    "Capture the output of the model call and check for the presence of the 'outputs' attribute",
+    "Assert that an AttributeError is raised indicating that 'DetectionFromImageModule' object has no attribute 'outputs'",
+    "Log the error message to confirm the specific error encountered during the export process",
+    "Ensure that TensorFlow version is 2.4 and CUDA version is 11.5 to match the environment specified in the bug report",
+    "Run the script in a Python 3.7.16 environment to replicate the exact conditions of the bug"
+]
+```

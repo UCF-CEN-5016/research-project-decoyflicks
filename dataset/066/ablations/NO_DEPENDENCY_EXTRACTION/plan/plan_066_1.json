@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: import os, import tensorflow as tf, from tensorflow import keras, import keras_cv",
+    "Define constants: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 5",
+    "Set paths for images and annotations: path_images = '/kaggle/input/dataset/data/images/', path_annot = '/kaggle/input/dataset/data/annotations/'",
+    "Get all XML file paths in path_annot and sort them: xml_files = sorted([os.path.join(path_annot, file_name) for file_name in os.listdir(path_annot) if file_name.endswith('.xml')])",
+    "Get all JPEG image file paths in path_images and sort them: jpg_files = sorted([os.path.join(path_images, file_name) for file_name in os.listdir(path_images) if file_name.endswith('.jpg')])",
+    "Define a function parse_annotation(xml_file) to read XML files and extract image paths, bounding boxes, and class IDs",
+    "Call parse_annotation for each xml_file in xml_files and store results in image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists to ragged tensors: bbox = tf.ragged.constant(bbox), classes = tf.ragged.constant(classes), image_paths = tf.ragged.constant(image_paths)",
+    "Create a tf.data.Dataset from the tensors: data = tf.data.Dataset.from_tensor_slices((image_paths, classes, bbox))",
+    "Split the dataset into training and validation sets: num_val = int(len(xml_files) * SPLIT_RATIO), val_data = data.take(num_val), train_data = data.skip(num_val)",
+    "Define a load_dataset function to read images and format bounding boxes",
+    "Map load_dataset function to train_data and val_data to create train_ds and val_ds",
+    "Define a YOLOv8 model using keras_cv.models.YOLOV8Detector with num_classes = len(class_mapping), bounding_box_format = 'xyxy', and a backbone",
+    "Compile the YOLOv8 model with an optimizer and loss functions: optimizer = tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE), yolo.compile(optimizer=optimizer, classification_loss='binary_crossentropy', box_loss='ciou')",
+    "Fit the model using yolo.fit(train_ds, validation_data=val_ds, epochs=3)",
+    "Check the model summary to ensure the model is built correctly",
+    "Verify that the variable level2_dau_2 is defined but not used in the code by checking the model architecture or layer outputs",
+    "Assert that the selective_kernel_feature_fusion function is called with level3_dau_2 instead of level2_dau_2 in the relevant line of code",
+    "Log the output of the model to confirm that the expected output shape is not achieved due to the unused variable"
+]
+```

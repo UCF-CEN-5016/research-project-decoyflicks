@@ -1,0 +1,18 @@
+TITLE  
+Loss value becomes 'nan' during training with spatial transform network on MNIST example  
+
+SYMPTOMS  
+• Encountered 'nan' loss during training after several epochs.  
+• High GPU memory consumption noted; the DNN model utilized over 10GB of memory on a K40 GPU.  
+• The model is located in the '/transformer' directory.  
+
+EXPECTED BEHAVIOR  
+The training process should proceed without generating 'nan' loss values, and the GPU memory usage should be within reasonable limits for the MNIST dataset and the spatial transform network implementation.  
+
+REPRODUCTION STEPS  
+1. Clone the repository containing the spatial transform network module.  
+2. Navigate to the '/transformer' directory.  
+3. Use the MNIST dataset as provided in the cluster_example.  
+4. Execute the training script with the same parameters as in the example.  
+5. Monitor the loss values during training for any occurrences of 'nan'.  
+6. Check GPU memory usage during the training process.

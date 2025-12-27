@@ -1,0 +1,7 @@
+RegionViT - Local token embedding
+
+Hi,
+
+I believe there is an error here. In LayerNorm, the dimension of `LayerNorm`  should either be the number of channels `C` (which requires change the input to a channel-last format), or it should be [C, H, W] to normalize across the channels and spatial dimensions.
+
+https://github.com/lucidrains/vit-pytorch/blob/fcb9501cdd9e056dd040915deb3e0a6378821843/vit_pytorch/regionvit.py#L212-L221

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, fairseq, and any other dependencies required for the model.",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'.",
+    "Define the model path as `model_path = '../fairseq_resource/mms1b_all.pt'`.",
+    "Set the language variable as `lang = 'eng'`.",
+    "Prepare a list of audio files: `audio_files = ['audio1.wav', 'audio2.wav', 'audio3.wav', 'audio4.wav', 'audio5.wav', 'audio6.wav', 'audio7.wav', 'audio8.wav', 'audio9.wav', 'audio10.wav']`.",
+    "Create a command string to run the inference: `cmd = f'python -u examples/mms/asr/infer/mms_infer.py --model {model_path} --lang {lang} --audio ' + ' '.join(audio_files)`.",
+    "Run the command using subprocess: `subprocess.run(cmd, shell=True, check=True)`.",
+    "Capture the output logs from the inference command.",
+    "Extract the output text from the inference logs and store it in a variable, e.g., `output_text`.",
+    "Extract the expected order of audio files from the text file and store it in a variable, e.g., `expected_order = ['1089-134686-0000', '1089-134686-0001', '1089-134686-0002', '1089-134686-0003', '1089-134686-0004', '1089-134686-0005', '1089-134686-0006', '1089-134686-0007', '1089-134686-0008', '1089-134686-0009']`.",
+    "Create a list of actual output order from the inference logs, e.g., `actual_order = extract_actual_order_from_logs(output_logs)`.",
+    "Compare the `expected_order` with the `actual_order` to check for discrepancies.",
+    "Assert that the `expected_order` does not match the `actual_order` to confirm the bug: `assert expected_order != actual_order, 'Output order is correct, bug not reproduced.'`.",
+    "Print a message indicating the test result, e.g., 'Bug reproduced: Output order is incorrect.' if the assertion fails."
+]
+```

@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and the inception module from inception_test.py",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 5 and image dimensions of 299x299",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using tf.random.uniform",
+    "Define num_classes as 10 for the MNIST dataset",
+    "Create a placeholder for labels with shape (batch_size, num_classes)",
+    "Initialize a loss variable to track the loss during training",
+    "Call inception_v3 function with inputs and num_classes=10, setting is_training=True",
+    "Define a loss function (e.g., tf.losses.softmax_cross_entropy) using the logits and labels",
+    "Create an optimizer (e.g., tf.train.AdamOptimizer) and apply it to minimize the loss",
+    "Run a TensorFlow session to initialize all variables",
+    "Execute a training loop for a number of epochs (e.g., 10 epochs)",
+    "Within the training loop, run the optimizer and calculate the loss",
+    "Check if the loss value becomes NaN during training and log the loss value",
+    "Monitor GPU memory usage using tf.config.experimental.get_memory_info('GPU:0')",
+    "Assert that GPU memory usage exceeds 10GB during the training process",
+    "Print the final loss value and GPU memory usage for verification"
+]
+```

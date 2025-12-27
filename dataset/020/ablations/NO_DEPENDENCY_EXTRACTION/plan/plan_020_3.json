@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and the official model library: 'import tensorflow as tf' and 'import official.core.train_lib as train_lib'",
+    "Set Python version to 3.8 in the environment to match the reported bug context.",
+    "Create a temporary directory for model saving: 'model_dir = '/tmp/model_dir'",
+    "Define a distribution strategy: 'distribution_strategy = tf.distribute.MirroredStrategy()'",
+    "Define a simple model configuration dictionary: 'exp_config = {'model': {'type': 'my_model', 'params': {}}}'",
+    "Create a mock task object with necessary attributes: 'task = type('Task', (object,), {})()'",
+    "Set the task's attributes as needed for the experiment: 'task.model_config = exp_config['model']'",
+    "Call the 'train_lib.run_experiment' function with parameters: 'model, eval_logs = train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)'",
+    "Capture the output and error during the execution of the above function call.",
+    "Verify that the output contains the error message: 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict''",
+    "Log the error message to confirm the bug has been reproduced."
+]
+```

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and vector_quantize_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 2 and input dimensions of (3700, 14)",
+    "Create a random input tensor with shape (batch_size, 3700, 14) using torch.randn(batch_size, 3700, 14)",
+    "Define a mask tensor with shape (2, 1851, 1, 14) using torch.ones(2, 1851, 1, 14).bool()",
+    "Instantiate the ResidualLFQ model from vector_quantize_pytorch with commitment_loss_weight set to 1.0",
+    "Call the forward method of the ResidualLFQ model with the input tensor and the mask tensor as arguments",
+    "Capture the output of the forward method, which should include the quantized output and auxiliary loss",
+    "Check for the UserWarning in the output: 'Using a target size (torch.Size([2, 1851, 1, 14])) that is different to the input size (torch.Size([3700, 14]))'",
+    "Assert that the captured output contains the UserWarning indicating a shape mismatch",
+    "Verify that the commit_loss tensor is computed and check its shape to confirm it does not match the expected dimensions"
+]
+```

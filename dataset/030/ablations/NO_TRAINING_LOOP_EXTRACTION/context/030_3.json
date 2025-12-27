@@ -1,0 +1,16 @@
+{
+  "bug_report": "030",
+  "rank": 3,
+  "score": 0.9253533482551575,
+  "main_file": {
+    "path": "Tools/PyTorch/TimeSeriesPredictionPlatform/hydra_plugins/hydra_optuna_sweeper/example/multi-objective.py",
+    "content": "# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved\nfrom typing import Tuple\n\nimport hydra\nfrom omegaconf import DictConfig\n\n\n@hydra.main(version_base=None, config_path=\"multi-objective-conf\", config_name=\"config\")\ndef binh_and_korn(cfg: DictConfig) -> Tuple[float, float]:\n    x: float = cfg.x\n    y: float = cfg.y\n\n    v0 = 4 * x**2 + 4 * y**2\n    v1 = (x - 5) ** 2 + (y - 5) ** 2\n    return v0, v1\n\n\nif __name__ == \"__main__\":\n    binh_and_korn()\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "hydra",
+      "function": "main"
+    }
+  ]
+}

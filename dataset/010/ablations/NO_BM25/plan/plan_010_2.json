@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden for instance segmentation.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define a batch size of 8 and image dimensions of 512x512 for the input images.",
+    "Prepare a synthetic dataset for instance segmentation with 100 images, each containing random shapes and masks.",
+    "Create a function to generate random masks and corresponding labels for the synthetic dataset.",
+    "Split the synthetic dataset into training (80 images) and validation (20 images) sets.",
+    "Define the model configuration using the official Model Garden configuration for instance segmentation.",
+    "Set the learning rate to 0.001 and the number of training steps to 2000.",
+    "Initialize the instance segmentation model using the Model Garden API with the defined configuration.",
+    "Compile the model with a loss function suitable for instance segmentation (e.g., SparseCategoricalCrossentropy) and an optimizer (e.g., Adam).",
+    "Train the model using the fit method on the training dataset, specifying validation data as the validation dataset.",
+    "During training, periodically print the validation loss at every 200 steps.",
+    "After training, evaluate the model on the validation dataset using the evaluate method.",
+    "Capture the output of the evaluation, specifically looking for the 'validation_loss' key in the output dictionary.",
+    "Assert that the 'validation_loss' value is equal to 0.0, indicating the bug is reproduced.",
+    "Log the training and evaluation metrics to verify that the validation loss remains consistently zero throughout the training process."
+]
+```

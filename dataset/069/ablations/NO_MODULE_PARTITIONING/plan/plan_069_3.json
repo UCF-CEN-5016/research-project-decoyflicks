@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: pandas, numpy, matplotlib, and tensorflow",
+    "Set the random seed for reproducibility using numpy.random.seed(42)",
+    "Define a function to generate a sample timeseries DataFrame with datetime index and random values",
+    "Create a DataFrame with 100 rows, datetime index starting from '2009-01-01', and a column 'temperature' with random float values",
+    "Add a column 'date_string' with string values formatted as 'dd.mm.yyyy HH:MM:SS' for each row",
+    "Define a function 'show_heatmap' that takes a DataFrame as input and attempts to plot a heatmap of the correlation matrix using plt.matshow(data.corr())",
+    "Call the 'show_heatmap' function with the generated DataFrame as input",
+    "Run the script and capture the output to verify the warning messages about TensorRT and CUDA drivers",
+    "Check for the ValueError in the output: 'could not convert string to float: '01.01.2009 00:10:00''",
+    "Ensure that the DataFrame contains both numerical and string columns to trigger the error",
+    "Validate that the error occurs specifically when attempting to compute the correlation matrix with mixed data types"
+]
+```

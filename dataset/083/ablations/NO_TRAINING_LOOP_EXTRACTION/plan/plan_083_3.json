@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, einsum from torch, rearrange from einops, and Reduce from einops.layers.torch",
+    "Define a batch size of 2 and image dimensions of 224x224",
+    "Set patch size to 16, number of classes to 10, dimension (dim) to 64, number of heads to 8, number of hierarchies to 3, block repeats to (2, 2, 2), and dropout to 0.1",
+    "Create random input data with shape (batch_size, channels, height, width) = (2, 3, 224, 224)",
+    "Instantiate the NesT model with the defined parameters: image_size=224, patch_size=16, num_classes=10, dim=64, heads=8, num_hierarchies=3, block_repeats=(2, 2, 2), dropout=0.1",
+    "Call the forward method of the NesT model with the random input data",
+    "Capture the output of the model and check its shape",
+    "Assert that the output shape is (batch_size, num_classes) = (2, 10)",
+    "Introduce an assertion to check if the output contains any NaN values",
+    "If NaN values are found, log the occurrence of the bug",
+    "Monitor the GPU memory usage during the execution of the forward pass",
+    "Assert that GPU memory usage exceeds a predefined threshold, indicating a potential memory leak or inefficiency"
+]
+```

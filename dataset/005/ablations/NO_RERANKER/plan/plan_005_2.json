@@ -1,0 +1,18 @@
+```json
+[
+    "Create a new virtual environment using 'python -m venv venv'",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows",
+    "Install TensorFlow version 2.10.0 using 'pip install tensorflow==2.10.0'",
+    "Install the official TensorFlow models package using 'pip install tf-models-official'",
+    "Create a new Python file named 'mobilenet_test.py'",
+    "In 'mobilenet_test.py', import TensorFlow with 'import tensorflow as tf'",
+    "Import the MobileNetV4 model from the official models with 'from official.vision.modeling import mobilenet'",
+    "Define a function 'test_mobilenet()' that initializes a MobileNetV4 model with 'model = mobilenet.MobileNetV4()'",
+    "Create a random input tensor with shape (1, 224, 224, 3) using 'input_tensor = tf.random.uniform((1, 224, 224, 3))'",
+    "Call the model with the input tensor using 'output = model(input_tensor)'",
+    "Add a line to dump the model to a checkpoint using 'tf.saved_model.save(model, 'mobilenet_v4_model')'",
+    "Run the script using 'python mobilenet_test.py'",
+    "Capture the output and check for ImportError related to 'cannot import name 'tensor' from 'tensorflow.python.framework'",
+    "Verify that the error message contains 'ImportError: cannot import name 'tensor' from 'tensorflow.python.framework'"
+]
+```

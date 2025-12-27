@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from keras import layers",
+    "Set the batch size: define BATCH_SIZE = 32",
+    "Set the AUTOTUNE variable for data loading: define AUTOTUNE = tf.data.AUTOTUNE",
+    "Define the augment_fn function for data augmentation, ensuring it returns a dictionary with 'images' and 'segmentation_masks'",
+    "Define the unpackage_inputs function to unpack the dataset into images and masks",
+    "Load the Oxford Pets dataset using TensorFlow Datasets: train_ds, val_ds = tfds.load('oxford_pet', split=['train', 'validation'], as_supervised=True)",
+    "Shuffle the training dataset with a buffer size of BATCH_SIZE * 2: train_ds = train_ds.shuffle(BATCH_SIZE * 2)",
+    "Map the augment_fn to the training dataset with num_parallel_calls set to AUTOTUNE: train_ds = train_ds.map(augment_fn, num_parallel_calls=AUTOTUNE)",
+    "Batch the training dataset with the defined BATCH_SIZE: train_ds = train_ds.batch(BATCH_SIZE)",
+    "Map the unpackage_inputs function to the training dataset: train_ds = train_ds.map(unpackage_inputs)",
+    "Prefetch the training dataset with buffer size set to AUTOTUNE: train_ds = train_ds.prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Map the resize_fn function to the validation dataset with num_parallel_calls set to AUTOTUNE: val_ds = val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE)",
+    "Batch the validation dataset with the defined BATCH_SIZE: val_ds = val_ds.batch(BATCH_SIZE)",
+    "Map the unpackage_inputs function to the validation dataset: val_ds = val_ds.map(unpackage_inputs)",
+    "Prefetch the validation dataset with buffer size set to AUTOTUNE: val_ds = val_ds.prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Run the code cell that creates augmented_train_ds and resized_val_ds",
+    "Capture the output and check for TypeError in the console output",
+    "Verify that the error message indicates a mismatch in tensor types between 'segmentation_masks' in the augment_fn"
+]
+```

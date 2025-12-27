@@ -1,0 +1,24 @@
+TITLE  
+NameError for undefined variable `return_loss` in ResidualSimVQ
+
+SYMPTOMS  
+• The variable `return_loss` is referenced in the `forward` method but is not defined anywhere in the `residual_sim_vq.py` file.  
+• Error message:  
+  ```
+  NameError: name 'return_loss' is not defined
+  ```
+• There are shape inconsistencies when using quantizer dropout with `channels_first`, specifically with the output shapes of losses and indices.
+
+EXPECTED BEHAVIOR  
+The `forward` method should correctly reference the `return_loss` variable, which should be defined or passed as an argument. Additionally, the output shapes for losses and indices should be consistent and correctly aligned with the expected dimensions for the given input.
+
+REPRODUCTION STEPS  
+1. Navigate to the `residual_sim_vq.py` file in the repository.  
+2. Attempt to call the `forward` method of the `ResidualSimVQ` class while in training mode with `quantize_dropout` enabled.  
+3. Observe the error regarding the undefined `return_loss` variable.  
+4. Use quantizer dropout with `channels_first` configuration and inspect the output shapes of `all_losses` and `all_indicies`.  
+5. Note the shape inconsistencies in the output as described:
+   ```
+   all_losses:  [torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([1]), torch.Size([1]), torch.Size([1])]
+   all_indicies:  [torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 1024, 17]), torch.Size([2, 1024, 17]), torch.Size([2, 1024, 17])]
+   ```

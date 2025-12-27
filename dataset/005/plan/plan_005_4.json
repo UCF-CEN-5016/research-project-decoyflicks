@@ -1,0 +1,12 @@
+[
+  "Import TensorFlow, NumPy and the TNExpandCondense class from tn_expand_condense_test.py",
+  "Define a random seed for reproducibility using np.random.seed(42)",
+  "Create a batch size of 100 and input dimension of (768, 6)",
+  "Generate random uniform input data with shape (batch_size, input_dim)",
+  "Call the _build_model function to create a sequential model",
+  "Compile the model using Adam optimizer, binary_crossentropy loss and accuracy metric",
+  "Train the model for 5 epochs with a batch size of 32 on the generated data",
+  "Verify that the loss decreases and accuracy increases during training by asserting conditions like history.history['loss'][0] > history.history['loss'][-1]",
+  "Monitor GPU memory usage during the training process"
+]
+

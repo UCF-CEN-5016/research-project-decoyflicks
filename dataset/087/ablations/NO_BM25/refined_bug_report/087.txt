@@ -1,0 +1,17 @@
+TITLE  
+Custom alibi position fails when using flash attention
+
+SYMPTOMS  
+• The custom position alibi feature does not work when `attn_flash=True`.  
+• The attention bias is not correctly handled as it is expected to be 4D when custom positions are provided.  
+• No specific error messages are displayed, but the functionality fails to execute as intended.  
+
+EXPECTED BEHAVIOR  
+When the software is functioning correctly, enabling `attn_flash=True` with custom positions should allow the attention mechanism to process the alibi positions without errors, maintaining the expected 4D shape for the attention bias.
+
+REPRODUCTION STEPS  
+1. Set up the environment with the relevant version of the `x-transformers` library.  
+2. Enable the custom position alibi feature in your model configuration.  
+3. Set the parameter `attn_flash=True`.  
+4. Run the model to observe the behavior with the custom positions.  
+5. Verify that the attention bias is being processed correctly and is in the expected 4D format.

@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official.core.base_trainer, official.modeling.networks.resnet, and official.vision.image_classification.resnet_model.",
+    "Set hyperparameters: batch_size=32, learning_rate=0.01, num_classes=1000, epochs=5.",
+    "Create dummy input data with shape (batch_size, 224, 224, 3) using tf.random.uniform function.",
+    "Define the ResNet model architecture by creating an instance of resnet_model.ResNet50(num_classes=num_classes).",
+    "Initialize the optimizer using OptimizerFactory to create a SGD optimizer with the specified learning rate.",
+    "Build a custom training loop that includes forward and backward passes, loss computation, and gradient application.",
+    "Execute the training loop for the specified number of epochs.",
+    "Verify that gradients contain NaN values during the backpropagation step by checking if any gradient tensor is NaN using tf.math.reduce_any(tf.math.is_nan(grad)) inside the train_step function.",
+    "Monitor GPU memory usage during the execution of the training loop using TensorFlow's runtime APIs or tools like NVIDIA's NVSMI.",
+    "Assert that the GPU memory usage exceeds a certain expected threshold (e.g., 2GB) to indicate high memory consumption.",
+    "Re-run the entire process multiple times to ensure reproducibility of the bug."
+]
+```
+

@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow, Keras, and the necessary modules from transformers and datasets libraries.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define the model checkpoint as 'distilbert-base-cased'.",
+    "Load the tokenizer using AutoTokenizer.from_pretrained(model_checkpoint).",
+    "Load the SQUAD dataset using load_dataset('squad').",
+    "Define max_length as 384 and doc_stride as 128 for tokenization.",
+    "Create a function prepare_train_features that tokenizes the input data with truncation and padding.",
+    "Use the map method on the datasets object to apply prepare_train_features to the training set, setting batched=True and removing original columns.",
+    "Convert the tokenized training dataset to a numpy format using with_format('numpy').",
+    "Initialize the model using TFAutoModelForQuestionAnswering.from_pretrained(model_checkpoint).",
+    "Compile the model with optimizer as Adam(learning_rate=5e-5) and loss as None.",
+    "Attempt to fit the model using model.fit on the training dataset with validation data for 10 epochs.",
+    "Capture the output of model.fit to check for errors during training.",
+    "If an error occurs, assert that the error message contains 'OperatorNotAllowedInGraphError'.",
+    "Print the shape of the input data being passed to the model during training to verify dimensions.",
+    "Check the dimensions of the output from the model before the error occurs to ensure they match expected values.",
+    "Log the input tensor shape before the model prediction to confirm it is (None, 4, None, None).",
+    "Verify that the model's predict method is called with the reshaped sample input tensor."
+]
+```

@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the necessary modules for model training and exporting: 'from object_detection import model_lib', 'from object_detection.protos import pipeline_pb2', 'from google.protobuf import text_format'",
+    "Set the CUDA version to 11.5 and ensure TensorFlow GPU version is 2.4 is installed in the environment.",
+    "Define the model configuration file path for 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'. Example path: 'models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8.config'",
+    "Create a training dataset with images and annotations in COCO format. Ensure the dataset is accessible and properly formatted.",
+    "Run the training script using 'model_main_tf2.py' with the following parameters: --pipeline_config_path='models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8.config', --model_dir='models/faster_rcnn_model', --alsologtostderr",
+    "Wait for the training to complete and verify that the model checkpoints are saved in the specified model directory.",
+    "Prepare to export the trained model by setting the export directory path. Example: 'exported_model/'",
+    "Run the export script using 'exporter_main_v2.py' with the following parameters: --input_type='image_tensor', --pipeline_config_path='models/faster_rcnn_resnet50_v1_640x640_coco17_tpu-8.config', --trained_checkpoint_dir='models/faster_rcnn_model', --output_directory='exported_model/'",
+    "Monitor the console output for any errors during the export process, specifically looking for 'AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs''",
+    "If the error occurs, validate that the model was trained correctly by checking the model directory for the presence of checkpoint files.",
+    "Check the version compatibility of TensorFlow and the object detection API to ensure they are aligned with the expected versions for the model being used.",
+    "Verify that the 'DetectionFromImageModule' class is correctly defined in the codebase and that it should have an 'outputs' attribute.",
+    "Reproduce the error by running the export command again and confirming that the same error message appears in the console."
+]
+```

@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import numpy as np, import matplotlib.pyplot as plt, from keras import layers, from keras import ops",
+    "Set the image size to 256 and patch size to 4: image_size = 256, patch_size = 4",
+    "Load the tf_flowers dataset using tfds.load and split it into training and validation sets: train_dataset, val_dataset = tfds.load('tf_flowers', split=['train[:90%]', 'train[90%:]'], as_supervised=True)",
+    "Define a function to preprocess the dataset: def preprocess_dataset(is_training=True): ...",
+    "Map the preprocessing function to the training and validation datasets: train_dataset = train_dataset.map(preprocess_dataset(is_training=True)), val_dataset = val_dataset.map(preprocess_dataset(is_training=False))",
+    "Batch the datasets with a batch size of 64: train_dataset = train_dataset.batch(64), val_dataset = val_dataset.batch(64)",
+    "Define a function to create the MobileViT model: def create_mobilevit(num_classes=5): ...",
+    "Instantiate the MobileViT model: mobilevit_xxs = create_mobilevit()",
+    "Compile the model with an Adam optimizer and categorical crossentropy loss: mobilevit_xxs.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])",
+    "Select a random image from the training dataset: image = x_train[np.random.choice(range(x_train.shape[0]))]",
+    "Resize the selected image to (image_size, image_size) using ops.image.resize: resized_image = ops.image.resize(ops.convert_to_tensor([image]), size=(image_size, image_size))",
+    "Extract patches from the resized image using the Patches class: patches = Patches(patch_size)(resized_image)",
+    "Print the shape of the patches to verify the output: print(f'Patches shape: {patches.shape}')",
+    "Attempt to visualize the patches using matplotlib: for i, patch in enumerate(patches[0]): ...",
+    "Run the code cell to trigger the InvalidArgumentError when calling Patches.call()",
+    "Capture the error message and verify it matches the expected InvalidArgumentError regarding tensor types"
+]
+```

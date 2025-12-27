@@ -1,0 +1,20 @@
+TITLE  
+Incorrect label format for Sparse Categorical Cross Entropy in tutorial example  
+
+SYMPTOMS  
+• The model trained poorly and produced unsatisfactory results.  
+• The label format is incorrect, leading to a mismatch in dimensions.  
+• The last dimension of the labels needs to be removed for proper training.  
+• The SparseCategoricalCrossentropy loss function does not handle the additional dimension as expected.  
+
+EXPECTED BEHAVIOR  
+The model should train effectively with the correct label format, allowing SparseCategoricalCrossentropy to function properly without requiring manual adjustments to the label dimensions.  
+
+REPRODUCTION STEPS  
+1. Follow the tutorial linked in the report to set up the image segmentation model.  
+2. Use the provided dataset with the default label format (including the last dimension).  
+3. Attempt to train the model and observe the poor performance.  
+4. Modify the label format by removing the last dimension as indicated in the tutorial.  
+5. Train the model again and verify the improvement in performance.  
+
+Version: 2.10.0

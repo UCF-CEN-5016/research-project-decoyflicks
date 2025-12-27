@@ -1,0 +1,1 @@
+attn = torch.einsum('b i d, b j d -> b i j', q, k)

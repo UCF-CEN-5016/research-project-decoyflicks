@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules from TensorFlow Model Garden for instance segmentation.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define a batch size of 4 and image dimensions of 640x640.",
+    "Load a sample dataset suitable for instance segmentation, such as COCO or a custom dataset with annotations.",
+    "Preprocess the dataset to ensure images are resized to (640, 640) and normalized.",
+    "Create a data pipeline using tf.data.Dataset to load the images and annotations in batches.",
+    "Instantiate the Mask R-CNN model from the Model Garden with appropriate parameters, including backbone, decoder, and heads.",
+    "Set the outer_boxes_scale parameter to 1.0 to ensure standard bounding box predictions.",
+    "Compile the model with a loss function suitable for instance segmentation, such as tf.keras.losses.CategoricalCrossentropy.",
+    "Train the model for a small number of epochs (e.g., 5 epochs) to ensure quick feedback.",
+    "During training, periodically log the validation loss using a callback function.",
+    "After training, evaluate the model on the validation dataset and capture the output metrics.",
+    "Check the output metrics for validation_loss and assert that it equals 0.0.",
+    "Log the evaluation metrics to verify that validation_loss consistently shows 0.0 across multiple evaluations.",
+    "Repeat the evaluation step multiple times to confirm the consistency of the validation_loss being 0.0."
+]
+```

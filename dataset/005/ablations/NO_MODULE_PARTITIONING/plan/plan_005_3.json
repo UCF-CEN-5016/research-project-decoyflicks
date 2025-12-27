@@ -1,0 +1,22 @@
+```json
+[
+    "Create a new virtual environment using 'python -m venv venv'",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows",
+    "Install TensorFlow and the official models package using 'pip install tensorflow tf-models-official'",
+    "Verify TensorFlow installation by importing it in a Python shell: 'import tensorflow as tf'",
+    "Create a new Python file named 'mobilenet_test.py'",
+    "In 'mobilenet_test.py', import TensorFlow and the necessary modules: 'import tensorflow as tf' and 'from tf_models.official.vision.modeling.backbones import mobilenet'",
+    "Define a function 'test_mobilenet_creation' that takes parameters 'model_id' and 'input_size'",
+    "Inside 'test_mobilenet_creation', set the image data format using 'tf.keras.backend.set_image_data_format('channels_last')'",
+    "Define a dictionary 'mobilenet_layers' with model IDs and corresponding filter sizes",
+    "Instantiate the MobileNet model using 'network = mobilenet.MobileNet(model_id=model_id, filter_size_scale=1.0)'",
+    "Create input tensor using 'inputs = tf.keras.Input(shape=(input_size, input_size, 3), batch_size=1)'",
+    "Call the model with the input tensor: 'endpoints = network(inputs)'",
+    "Iterate over the 'mobilenet_layers' dictionary and assert the output shapes using 'self.assertAllEqual()'",
+    "Set the model_id to 'MobileNetV4ConvSmall' and input_size to 224",
+    "Call the 'test_mobilenet_creation' function with the specified parameters",
+    "Run the script using 'python mobilenet_test.py'",
+    "Capture the output and check for the ImportError: 'cannot import name 'tensor' from 'tensorflow.python.framework'",
+    "Log the full error message to verify the ImportError occurs as expected"
+]
+```

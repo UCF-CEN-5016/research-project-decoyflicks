@@ -1,0 +1,17 @@
+TITLE  
+ValueError: Pretrained Faster R-CNN model not supported in TensorFlow 2.13.0
+
+SYMPTOMS  
+• Error encountered when using the pretrained Faster R-CNN Inception ResNet V2 model.  
+• Exact error message: "ValueError: Not supported for tf2 version."  
+• The model fails to load or execute as expected in Google Colab.
+
+EXPECTED BEHAVIOR  
+The pretrained Faster R-CNN model should load and execute without errors in TensorFlow 2.13.0, allowing for object detection tasks to be performed seamlessly.
+
+REPRODUCTION STEPS  
+1. Open Google Colab.  
+2. Set up the environment with TensorFlow version 2.13.0 and Python version 3.10.12.  
+3. Attempt to load the pretrained Faster R-CNN Inception ResNet V2 model from the provided URL: [Faster R-CNN Inception ResNet V2 640x640](http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_inception_resnet_v2_640x640_coco17_tpu-8.tar.gz).  
+4. Execute the model to perform object detection.  
+5. Observe the error message indicating the ValueError for unsupported TensorFlow version.

@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import torch, import pytorch_lightning, import nnUNet",
+    "Set the random seed for reproducibility: torch.manual_seed(42)",
+    "Define the model parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, task = 11, nfolds = 10",
+    "Set the device to GPU: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Create a dummy dataset for training: use torch.randn to create training data with shape (1125, 1, 128, 128, 128) and labels with shape (1125,)",
+    "Create a DataLoader for the training dataset: use torch.utils.data.DataLoader with batch_size = 2",
+    "Define a simple nnUNet model class that inherits from nn.Module and implements forward method",
+    "Instantiate the nnUNet model and move it to the GPU: model = nnUNet().to(device)",
+    "Create a PyTorch Lightning Trainer instance with gpus=1 and max_epochs=10: trainer = pytorch_lightning.Trainer(gpus=1, max_epochs=10)",
+    "Define a learning rate scheduler: use torch.optim.lr_scheduler.CosineAnnealingWarmRestarts with T_0=10 and eta_min=0",
+    "Add the learning rate scheduler to the model's configure_optimizers method",
+    "Run the training process: call trainer.fit(model, train_dataloader)",
+    "Capture the output and error messages during training",
+    "Verify that the output contains the MisconfigurationException related to lr_scheduler",
+    "Check that the error message states: 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API.'"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: import pandas as pd, import numpy as np, import matplotlib.pyplot as plt, import tensorflow as tf",
+    "Set the random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Create a sample DataFrame with a datetime column and some numeric columns: df = pd.DataFrame({'date': pd.date_range(start='2009-01-01', periods=100, freq='10T'), 'value1': np.random.rand(100), 'value2': np.random.rand(100)})",
+    "Introduce a string value in the numeric column to simulate the bug: df.loc[0, 'value1'] = '01.01.2009 00:10:00'",
+    "Define a function show_heatmap that takes a DataFrame as input and attempts to plot a heatmap of the correlation matrix: def show_heatmap(data): plt.matshow(data.corr()) plt.show()",
+    "Call the show_heatmap function with the DataFrame containing the string value: show_heatmap(df)",
+    "Run the script using Python 3: python3 timeseries_weather_forecasting.py",
+    "Observe the output for the ValueError: 'could not convert string to float: '01.01.2009 00:10:00''",
+    "Verify that the error traceback points to the line where the correlation matrix is calculated: data.corr()",
+    "Confirm that the error occurs specifically due to the presence of the string in the numeric column"
+]
+```

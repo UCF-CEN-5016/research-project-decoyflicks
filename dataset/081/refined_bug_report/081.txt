@@ -1,0 +1,50 @@
+TITLE
+CrossViT Model Fails with Single-Channel Images
+
+SYMPTOMS
+• The CrossViT model throws a `RuntimeError` when processing single-channel images.
+• Error message indicates an unexpected input shape, specifically expecting input of size \([*, 768]\) but received input of size \([1, 256, 256]\).
+
+EXPECTED BEHAVIOR
+The CrossViT model should be able to handle images with any number of channels and process them without raising errors.
+
+REPRODUCTION STEPS
+1. Import the necessary libraries.
+2. Instantiate a CrossViT model as defined in the example.
+3. Pass an image with 1 channel (e.g., grayscale) through the model by creating a tensor with shape \([1, 1, 256, 256]\).
+4. Attempt to predict class probabilities or features using `model(img)`.
+
+```py
+import torch
+from vit_pytorch.cross_vit import CrossViT
+
+v = CrossViT(
+image_size=256,
+num_classes=1000,
+depth=4,  # number of multi-scale encoding blocks
+sm_dim=192,  # high res dimension
+sm_patch_size=16,  # high res patch size (should be smaller than lg_patch_size)
+sm_enc_depth=2,  # high res depth
+sm_enc_heads=8,  # high res heads
+sm_enc_mlp_dim=2048,  # high res feedforward dimension
+lg_dim=384,  # low res dimension
+lg_patch_size=64,  # low res patch size
+lg_enc_depth=3,  # low res depth
+lg_enc_heads=8,  # low res heads
+lg_enc_mlp_dim=2048,  # low res feedforward dimensions
+cross_attn_depth=2,  # cross attention rounds
+cross_attn_heads=8,  # cross attention heads
+dropout=0.1,
+emb_dropout=0.1
+)
+
+img = torch.randn(1, 1, 256, 256)  # Using 1 channel
+pred = v(img)
+```
+
+The code should process the image and return predictions or features without raising any errors.
+
+ANALYSIS
+The issue arises because the model's architecture expects a specific number of channels for the input images. The problematic line is likely where the model processes the input to extract patches, which assumes a fixed number of channels (typically 3 for RGB images). To generalize this for single-channel inputs, adjustments need to be made in the code, particularly around how patch embedding and normalization are handled.
+
+A potential fix involves modifying the `to_patch_embedding` method or similar relevant parts of the CrossViT implementation to correctly handle varying numbers of input channels.

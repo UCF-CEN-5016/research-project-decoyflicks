@@ -1,0 +1,20 @@
+```json
+[
+    "Import torch and the ViT and MPP classes from vit_pytorch",
+    "Define image size as 256 and patch size as 32",
+    "Set num_classes to 1000, dim to 1024, depth to 6, heads to 8, mlp_dim to 2048, dropout to 0.1, and emb_dropout to 0.1",
+    "Instantiate the ViT model with the defined parameters",
+    "Instantiate the MPP trainer with transformer as the ViT model, patch_size as 32, dim as 1024, mask_prob as 0.15, random_patch_prob as 0.30, and replace_prob as 0.50",
+    "Define a batch size of 20 and create a function sample_unlabelled_images that returns a tensor of shape (20, 3, 256, 256) with random values between 0 and 1",
+    "Run a loop for 100 iterations to simulate training",
+    "In each iteration, call sample_unlabelled_images to generate a batch of images",
+    "Pass the generated images to the mpp_trainer to compute the loss",
+    "Call opt.zero_grad() to reset gradients",
+    "Call loss.backward() to compute gradients",
+    "Call opt.step() to update model parameters",
+    "Add a print statement to output the shape of masked_input before the line that causes the error",
+    "Add a print statement to output the shape of the input tensor to the layer normalization function",
+    "Run the code to trigger the RuntimeError related to dimension mismatch",
+    "Verify that the RuntimeError message indicates a shape mismatch between expected input shape [*, 1024] and actual input shape [20, 64, 3072]"
+]
+```

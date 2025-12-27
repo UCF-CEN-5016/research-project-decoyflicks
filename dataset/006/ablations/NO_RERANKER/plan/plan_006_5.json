@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official recommendation uplift package",
+    "Set random seed for reproducibility using tf.keras.utils.set_random_seed(1)",
+    "Define a batch size of 5 and input dimensions of (3, 1) for shared, control, and treatment features",
+    "Create input data for shared_feature, control_feature, and treatment_feature with shapes (10, 1), (10, 1), and (10, 1) respectively",
+    "Set shared_feature to np.ones((10, 1)), control_feature to np.ones((10, 1)) * -2.0, and treatment_feature to np.ones((10, 1)) * 3.0",
+    "Create treatment tensor with shape (10, 1) containing values [[1], [1], [0], [1], [1], [1], [0], [1], [0], [1]]",
+    "Calculate output tensor y as (shared_feature + treatment_feature) * treatment",
+    "Create a TensorFlow dataset from the input features and output tensor y, using tf.data.Dataset.from_tensor_slices and batch size of 5",
+    "Define a TwoTowerUpliftModel with treatment_indicator_feature_name set to 'is_treatment' and a custom uplift network",
+    "Compile the model using SGD optimizer with learning rate 0.1 and TrueLogitsLoss with mean squared error",
+    "Fit the model on the dataset for 100 epochs",
+    "Monitor the training process for warnings, specifically looking for 'Gradients do not exist for variables' warning",
+    "Assert that the warning message contains the specific variables mentioned in the bug report",
+    "Log the training history to check if loss values are being recorded",
+    "Verify that the loss history contains a 'loss' key and that its length is equal to the number of epochs (100)",
+    "Check if the loss value decreases over epochs, indicating that the model is attempting to learn despite the warning"
+]
+```

@@ -1,0 +1,19 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the latest version of Keras by running the command: !pip install keras",
+    "Import TensorFlow and Keras by adding the following code: import tensorflow as tf; from keras import layers, models",
+    "Set the random seed for reproducibility by adding: import numpy as np; np.random.seed(42); tf.random.set_seed(42)",
+    "Define a batch size of 32 and image dimensions of 28x28 with the following code: batch_size = 32; input_shape = (28, 28, 1)",
+    "Load the MNIST dataset using: (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()",
+    "Preprocess the data by scaling images to the [0, 1] range: x_train = x_train.astype('float32') / 255; x_test = x_test.astype('float32') / 255",
+    "Ensure images have shape (28, 28, 1) by adding: x_train = np.expand_dims(x_train, -1); x_test = np.expand_dims(x_test, -1)",
+    "Convert class vectors to binary class matrices using: y_train = tf.keras.utils.to_categorical(y_train, num_classes=10); y_test = tf.keras.utils.to_categorical(y_test, num_classes=10)",
+    "Define a simple Sequential model with the following layers: model = models.Sequential([layers.Input(shape=input_shape), layers.Flatten(), layers.Dense(128, activation='relu'), layers.Dropout(0.5), layers.Dense(10, activation='softmax')])",
+    "Compile the model with the following parameters: model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])",
+    "Attempt to fit the model using: model.fit(x_train, y_train, batch_size=batch_size, epochs=5, validation_split=0.1)",
+    "Observe the output for an ImportError related to 'data_utils' when running the fit method",
+    "Verify that the error message contains: ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Confirm that the error occurs consistently by rerunning the fit method multiple times"
+]
+```

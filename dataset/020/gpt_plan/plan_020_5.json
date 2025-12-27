@@ -1,0 +1,18 @@
+[
+  "Create a Python 3.8 environment with TensorFlow 2.12.0 and tf-models-official==2.12.0 installed",
+  "Clone the TensorFlow models repository from https://github.com/tensorflow/models.git",
+  "Navigate to the official model garden directory containing the object detection tutorial",
+  "Set up required imports including TensorFlow, official.core.train_lib, and the RankingTask or relevant Object Detection task",
+  "Prepare a minimal configuration dictionary or YAML matching the tutorial's exp_config, ensuring parameters like batch size=4, train_steps=10, validation_steps=2, and use_orbit=True are set",
+  "Initialize a distribution strategy compatible with the environment, e.g. tf.distribute.MirroredStrategy() for multi-GPU or tf.distribute.get_strategy() for CPU",
+  "Build the task object (e.g., RankingTask or Object Detection task) with the prepared parameters",
+  "Create train and validation datasets using the task's build_inputs method with small dummy or sample data of batch size 4, ensuring input shapes conform to the model requirements",
+  "Within the scope of the distribution strategy, build the model using task.build_model()",
+  "Instantiate the trainer if required by the task, passing model, optimizer, train_dataset, validation_dataset, and other needed parameters",
+  "Run the training and evaluation pipeline by calling tfm.core.train_lib.run_experiment with mode='train_and_eval', passing the distribution strategy, task, exp_config parameters, and model_dir",
+  "During execution, specifically observe the behavior when the eval_step function in base_trainer.py attempts to merge two dicts using the '|' operator",
+  "Verify that a TypeError occurs with the message: \"unsupported operand type(s) for |: 'dict' and 'dict'\"",
+  "Confirm the error traceback points to line 442 in base_trainer.py inside eval_step method when merging logs",
+  "Assert that the error reproduces consistently under Python 3.8 and does not occur in Python 3.9+ environments",
+  "Collect and save the error logs and traceback for validation"
+]

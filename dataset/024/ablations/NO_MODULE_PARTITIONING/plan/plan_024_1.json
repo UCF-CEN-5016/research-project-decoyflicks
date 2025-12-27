@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import os, import sys, import tensorflow as tf, import numpy as np",
+    "Clone the delf repository from GitHub: !git clone https://github.com/mirzaim/models.git",
+    "Change directory to the delf examples folder: %cd /content/models/research/delf/delf/python/examples/",
+    "Create a dummy configuration file named delf_config_example.pbtxt with the required parameters for feature extraction",
+    "Create a list_images.txt file containing paths to at least 5 sample images in the format expected by the extract_features.py script",
+    "Ensure the output directory data/oxford5k_features exists: !mkdir -p data/oxford5k_features",
+    "Run the extract_features.py script with the command: !python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Capture the output of the script execution to check for errors",
+    "Verify that the output contains the error message: 'ModuleNotFoundError: No module named 'delf.python.datasets'",
+    "Check the directory structure to confirm that the delf/python/datasets folder exists but does not contain an __init__.py file",
+    "Assert that the absence of __init__.py in delf/python/datasets is the cause of the ModuleNotFoundError"
+]
+```

@@ -1,0 +1,21 @@
+```json
+[
+    "Import the necessary modules from labml and torch",
+    "Define a batch size of 32",
+    "Load the CIFAR-10 dataset using torchvision.datasets.CIFAR10 with train=True and download=True",
+    "Create a DataLoader for the training set with batch_size=32, shuffle=True, and num_workers=4",
+    "Import the UNet model from labml_nn.diffusion.ddpm.unet",
+    "Instantiate an instance of the UNet model",
+    "Define the learning rate as 1e-3",
+    "Create an Adam optimizer with the defined learning rate for the UNet model parameters",
+    "Initialize a GradScaler for mixed precision training",
+    "Define the loss function as CrossEntropyLoss",
+    "Create a random tensor of shape (batch_size, height, width, channels) representing input data to the UNet model, where height=32, width=32, and channels=3",
+    "Pass the random tensor through the UNet model to get output predictions",
+    "Generate target labels for the batch using a one-hot encoding with 10 classes (CIFAR-10 has 10 classes)",
+    "Calculate the loss by passing the output and target to the CrossEntropyLoss function",
+    "Monitor the value of the loss tensor",
+    "Assert that the loss value is not NaN, indicating the bug occurs if it is"
+]
+```
+

@@ -1,0 +1,12 @@
+Bug in SA for DDPM UNet?
+
+https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/05632f9f8e0de4657c210a13954a81f9556fd1ed/labml_nn/diffusion/ddpm/unet.py#L188
+
+According to my understanding of Self-Attention, the softmax operation should be done along the `j` axis in einsum?
+
+https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/05632f9f8e0de4657c210a13954a81f9556fd1ed/labml_nn/diffusion/ddpm/unet.py#L190
+
+**So, I think the code should be `attn = attn.softmax(dim=2)`.**
+Please correct me if I am wrong.
+
+However, the Attention module (with bug?) seems to work somehow, at least on the CIFAR-10 dataset.

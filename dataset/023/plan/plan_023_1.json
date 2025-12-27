@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and other required modules from the given code snippet",
+    "Set up a batch size of 6 and sequence length of 21 with width of 80",
+    "Create random uniform input data with shape (batch_size, sequence_length, width)",
+    "Call TransformerScaffold function with attention_cls=ValidatedAttentionLayer and kernel_initializer=tf.keras.initializers.TruncatedNormal(stddev=0.02)",
+    "Verify output tensor has the same shape as input tensor",
+    "Monitor memory usage during execution of the model",
+    "Assert memory usage exceeds expected threshold for a transformer layer"
+]
+```
+

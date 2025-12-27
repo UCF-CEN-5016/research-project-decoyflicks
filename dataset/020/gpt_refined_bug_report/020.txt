@@ -1,0 +1,7 @@
+model, eval_logs = tfm.core.train_lib.run_experiment(
+    distribution_strategy=distribution_strategy,
+    task=task,
+    mode='train_and_eval',
+    params=exp_config,
+    model_dir=model_dir,
+    run_post_eval=True)

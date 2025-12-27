@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and rearrange, repeat from einops",
+    "Define a batch size of 2 and image dimensions of 256x256",
+    "Set patch size to 16 and create a NaViT model instance with parameters: image_size=(256, 256), patch_size=16, num_classes=10, dim=128, depth=6, heads=8, mlp_dim=256, channels=3",
+    "Create a list of 2 random tensors representing images with shape (3, 256, 256)",
+    "Call the forward method of the NaViT model with the list of images and group_images set to True",
+    "Set group_max_seq_len to 2048 when calling the forward method",
+    "Capture the output of the model and check its shape",
+    "Assert that the output shape is not equal to (2, 10) to reproduce the bug",
+    "Print the output shape to verify the unexpected behavior",
+    "Check for any assertion errors in the group_images_by_max_seq_len function related to maximum sequence length"
+]
+```

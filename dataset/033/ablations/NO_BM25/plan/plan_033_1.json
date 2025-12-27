@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, dgl, and SE3TransformerPooled from the SE3-Transformer package",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 32 and set NODE_FEATURE_DIM to 6",
+    "Load the QM9 dataset using DGL and create a DataLoader with batch size 32",
+    "Modify the data loading code in data_loading/qm9.py to split node features into two types: node_feats = {'0': batched_graph.ndata['attr'][:, :5, None], '1': batched_graph.ndata['attr'][:, 5:6, None]}",
+    "Initialize the SE3TransformerPooled model with fiber_in=Fiber({0: 5, 1: 1}), fiber_out=Fiber({0: 1}), fiber_edge=Fiber({0: 6}), output_dim=1",
+    "Create a dummy input tensor with shape (32, 8910, 5) for node type '0' and (32, 8910, 1) for node type '1'",
+    "Pass the dummy input tensor through the model to simulate a forward pass",
+    "Capture the output tensor shape and assert it is not equal to (8910, 1)",
+    "Run the training loop for one iteration to trigger the RuntimeError",
+    "Verify that the RuntimeError message matches 'Expected size for first two dimensions of batch2 tensor to be: [8910, 1] but got: [8910, 3]'",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

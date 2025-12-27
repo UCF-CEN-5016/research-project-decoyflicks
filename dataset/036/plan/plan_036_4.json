@@ -1,0 +1,23 @@
+```json
+[
+    "Clone the repository https://github.com/labmlai/annotated_deep_learning_paper_implementations.git at commit 999f2036a5a7c54403352211b5d1cc0df42b83f6",
+    "Navigate to the labml_nn/rl/ppo/gae.py file",
+    "Open the gae.py file in a text editor",
+    "Locate line 36 and change `gamma ** 2 * r[t+1]` to `gamma ** 2 * r[t+2]`",
+    "Locate line 45 and change `wk = (1-lambda) * lambda ** (k-1)` to `wk = (1-lambda) * lambda ** k`",
+    "Navigate to the labml_nn/optimizers/amsgrad.py file",
+    "Open the amsgrad.py file in a text editor",
+    "Ensure no changes have been made to this file for now",
+    "Save all changes and close all files",
+    "Set up a Python environment with PyTorch installed",
+    "Activate the Python environment",
+    "Navigate to the directory containing the cloned repository",
+    "Run the synthetic experiment using AMSGrad by executing `_synthetic_experiment(False)` in the script",
+    "Observe the output of the experiment, noting if the optimizer converges to the optimal solution x = -1",
+    "If convergence does not occur as expected (i.e., it converges to x = +1), the bug has been reproduced",
+    "Run the synthetic experiment using Adam by executing `_synthetic_experiment(True)` in the script",
+    "Observe the output of the experiment, noting if the optimizer converges to the optimal solution x = -1",
+    "If convergence does occur as expected (i.e., it converges to x = +1), the bug has been reproduced"
+]
+```
+

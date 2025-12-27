@@ -1,0 +1,17 @@
+```json
+[
+    "Import required Python libraries: torch, einops, random, numpy",
+    "Define a function to load dataset from a specified path and return data loaders for training and validation sets",
+    "Create a configuration object with parameters such as batch size, number of epochs, learning rate, and model architecture",
+    "Initialize the model by creating an instance of the pitch predictor class with the specified architecture and parameters",
+    "Define loss functions (binary cross entropy for mean prediction, cross entropy for argmax prediction)",
+    "Setup data loaders for training and validation datasets using the created function",
+    "Train the model using the defined configuration object and data loaders, iterating over the number of epochs specified in the configuration",
+    "During each epoch, perform a forward pass through the model to compute predictions and calculate loss",
+    "Perform backward pass to update model parameters based on computed gradients",
+    "Monitor the loss values printed during training for any NaN values indicating potential issues",
+    "After training, evaluate the model on the validation set to obtain evaluation metrics (e.g., L1 loss)",
+    "Verify that the evaluated metrics contain unexpected large values or NaNs, which would indicate a bug in the code"
+]
+```
+

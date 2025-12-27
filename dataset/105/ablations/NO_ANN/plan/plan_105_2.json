@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary libraries: torch and ResidualVQ from vector_quantize_pytorch",
+    "Set the following constants: Z_CHANNELS = 512, NUM_QUANTIZERS = 2, CODEBOOK_SIZE = 16 * 1024",
+    "Initialize the ResidualVQ instance with parameters: dim=Z_CHANNELS, num_quantizers=NUM_QUANTIZERS, codebook_size=CODEBOOK_SIZE, stochastic_sample_codes=True, shared_codebook=True, commitment_weight=1.0, kmeans_init=True, threshold_ema_dead_code=2, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1",
+    "Create a random input tensor x with shape (9331, 512) to simulate a batch of data",
+    "Call the forward method of the ResidualVQ instance with the input tensor x",
+    "Capture the output of the forward method, which should include z_tilde, _, and commit_loss",
+    "Monitor for RuntimeError during the execution of the forward method, specifically looking for the message 'shape mismatch: value tensor of shape [9330, 512] cannot be broadcast to indexing result of shape [9331, 512]'",
+    "Repeat the forward call multiple times to increase the likelihood of encountering the bug due to its random occurrence during training",
+    "Log the output and any errors encountered during the execution to verify the bug is reproducible"
+]
+```

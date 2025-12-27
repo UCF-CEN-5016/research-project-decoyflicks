@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the ContinuousTransformerWrapper class from x_transformers.continuous",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and a sequence length of 32",
+    "Create a random input tensor 'x' with shape (batch_size, seq_len, dim) where dim is set to 32, using torch.randn(batch_size, seq_len, 32)",
+    "Create a mask tensor with shape (batch_size, seq_len) filled with True values using torch.ones(batch_size, seq_len, dtype=torch.bool)",
+    "Instantiate the AttentionLayers class with a dimension of 32, ensuring it is compatible with the input tensor's last dimension",
+    "Instantiate the ContinuousTransformerWrapper with max_seq_len=32, attn_layers set to the previously created AttentionLayers instance, and scaled_sinu_pos_emb set to True",
+    "Enable rotary_xpos by setting the appropriate flag in the ContinuousTransformerWrapper or its attention layers if applicable",
+    "Call the forward method of the ContinuousTransformerWrapper instance with the input tensor 'x' and the mask, capturing the output",
+    "Verify that the output raises an EinopsError by checking for the specific error message related to the rearrange operation",
+    "Assert that the error message contains 'Error while processing rearrange-reduction pattern \"n -> n 1\"'",
+    "Check that the input tensor shape is torch.Size([1, 32]) at the point of failure in the code"
+]
+```

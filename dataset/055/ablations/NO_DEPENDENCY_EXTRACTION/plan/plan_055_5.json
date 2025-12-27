@@ -1,0 +1,26 @@
+```json
+[
+    "Import TensorFlow, Keras, Keras NLP, and NLTK libraries",
+    "Import necessary functions and variables from data_preprocessing.py: MAX_SEQUENCE_LENGTH, eng_tokenizer, spa_tokenizer, test_pairs",
+    "Import the transformer model from model.py",
+    "Set the TEST_BATCH_SIZE variable to 1",
+    "Define a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input_sentences to a tensor using eng_tokenizer and ensure it is padded to MAX_SEQUENCE_LENGTH",
+    "Add a check to truncate encoder_input_tokens to a maximum length of 40 if it exceeds this length",
+    "Define the next_fn function inside decode_sequences, which takes prompt, cache, and index as parameters",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, and extract logits for the specified index",
+    "Set hidden_states to None in next_fn and return logits, hidden_states, and cache",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token followed by padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Prepare test_eng_texts and test_spa_texts from test_pairs for evaluation",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through the range of test_pairs length, and for each index, call decode_sequences with the corresponding input_sentence",
+    "After decoding, process the translated output to remove special tokens and split into words",
+    "Calculate the BLEU score using NLTK's modified_precision function with n=4",
+    "Append the calculated BLEU score to bleu_score list",
+    "Print the mean of the BLEU scores",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Check the output logs for any errors or warnings related to tensor shapes or GPU memory",
+    "Verify that the segmentation fault occurs specifically after the next_fn returns logits, an empty tuple, and None for hidden_states"
+]
+```

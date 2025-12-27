@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and XValTransformerWrapper from x_transformers.xval",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define hyperparameters: num_tokens = 100, max_seq_len = 10, numerical_token_id = 99, emb_dim = 64, logits_dim = 100",
+    "Create an instance of AttentionLayers with appropriate dimensions, e.g., dim = emb_dim",
+    "Instantiate the XValTransformerWrapper with the defined hyperparameters and attention layers",
+    "Create a batch size of 4 for testing",
+    "Generate random input data for tokens with shape (batch_size, max_seq_len) using torch.randint(0, num_tokens, (batch_size, max_seq_len))",
+    "Generate random input data for numerical tokens with shape (batch_size, max_seq_len) using torch.randn(batch_size, max_seq_len)",
+    "Pass the generated token and numerical input data to the forward method of the XValTransformerWrapper instance",
+    "Access the encoder.to_logits.weight parameter and store its initial value for comparison",
+    "Perform a backward pass by calculating a dummy loss using F.cross_entropy on the output logits and a random target tensor of shape (batch_size, max_seq_len) using torch.randint(0, num_tokens, (batch_size, max_seq_len))",
+    "Call optimizer.step() to update the model parameters",
+    "Access the encoder.to_logits.weight parameter again and compare it with the initial value to check if it has been updated",
+    "Assert that the encoder.to_logits.weight has not changed, indicating the bug is present",
+    "Print a message indicating the bug has been reproduced if the weight has not updated"
+]
+```

@@ -1,0 +1,19 @@
+TITLE  
+Type Mismatch Error in Oxford Pets Image Segmentation Example
+
+SYMPTOMS  
+• The code fails during the execution of the data augmentation pipeline.  
+• Error message:  
+  ```python
+  Tensor("sequential_4/rand_augment_4/cond/random_choice_4/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential_4/rand_augment_4/cond/random_choice_4/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types  
+  ```  
+• The tensors involved in the operation have incompatible data types (float32 vs int64).
+
+EXPECTED BEHAVIOR  
+The data augmentation pipeline should execute without errors, producing a batch of augmented images with consistent tensor types throughout the processing steps.
+
+REPRODUCTION STEPS  
+1. Open the script located at `examples/vision/oxford_pets_image_segmentation.py`.  
+2. Locate the section of the code where the `augmented_train_ds` variable is defined.  
+3. Execute the script to run the data augmentation pipeline.  
+4. Observe the error message that appears during execution.

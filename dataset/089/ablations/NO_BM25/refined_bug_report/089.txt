@@ -1,0 +1,17 @@
+TITLE  
+Conflict between qk_norm and kv_heads in x-transformers
+
+SYMPTOMS  
+• When using both `qk_norm` and `kv_heads` set to a value different from `heads`, a conflict arises.  
+• No specific error messages were provided, but the behavior indicates a misalignment in tensor dimensions.  
+• The model does not perform as expected when `kv_heads` is not equal to `heads`, leading to potential incorrect calculations in the attention mechanism.  
+
+EXPECTED BEHAVIOR  
+When the software works correctly, the model should allow the use of `qk_norm` in conjunction with `kv_heads` set to a different value than `heads` without causing any conflicts or unexpected behaviors in tensor operations.
+
+REPRODUCTION STEPS  
+1. Set `qk_norm` to True in the model configuration.  
+2. Assign a value to `kv_heads` that is different from `heads`.  
+3. Run the model to observe the conflict in tensor operations.  
+4. Check the specific line of code at the provided GitHub link to confirm the tensor dimension mismatch.  
+5. Implement the suggested code change to see if it resolves the conflict.

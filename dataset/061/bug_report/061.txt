@@ -1,0 +1,22 @@
+The version of Keras in Fine-tuning Stable Diffusion example
+
+If I run the [Fine-tuning Stable Diffusion example](https://keras.io/examples/generative/finetune_stable_diffusion/),  I got  error even run it in Colab
+```
+/usr/local/lib/python3.10/dist-packages/keras_cv/models/weights.py in <module>
+     12 # See the License for the specific language governing permissions and
+     13 import tensorflow as tf
+---> 14 from keras.utils import data_utils
+     15 
+     16 
+
+ImportError: cannot import name 'data_utils' from 'keras.utils' (/usr/local/lib/python3.10/dist-packages/keras/utils/__init__.py)
+```
+![image](https://github.com/keras-team/keras-io/assets/51162830/2397cecc-d68a-4468-b3ee-8903ee7b42dc)
+
+However, if change the version of the keras
+```
+pip install keras==2.12.0
+```
+The example can run without error.
+
+I think it is necessary to add the requirement of the version of the keras in the example,  which is more user-friendly.  Could I open a pull request to close this issue?

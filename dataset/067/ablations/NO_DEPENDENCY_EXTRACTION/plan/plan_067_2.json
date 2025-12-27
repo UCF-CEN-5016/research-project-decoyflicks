@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: import pandas as pd, import numpy as np, import tensorflow as tf, from tensorflow import keras, from tensorflow.keras import layers, import matplotlib.pyplot as plt, from IPython import display, from jiwer import wer",
+    "Set the TensorFlow version to 2.10.0 by running: tf.__version__",
+    "Download the LJSpeech dataset from the URL: https://data.keithito.com/data/speech/LJSpeech-1.1.tar.bz2 and extract it using keras.utils.get_file",
+    "Read the metadata CSV file from the dataset and parse it using pd.read_csv with sep='|' and header=None",
+    "Set the columns of the metadata DataFrame to ['file_name', 'transcription', 'normalized_transcription']",
+    "Shuffle the metadata DataFrame using sample(frac=1).reset_index(drop=True)",
+    "Split the metadata DataFrame into training and validation sets with a 90-10 split",
+    "Define a batch size of 32 for the dataset",
+    "Create a function encode_single_sample that processes audio files and labels, ensuring the label is converted to lowercase and mapped to integers using char_to_num",
+    "Create a tf.data.Dataset object for the training set using tf.data.Dataset.from_tensor_slices with the training file names and normalized transcriptions",
+    "Map the encode_single_sample function to the training dataset and apply padded_batch with batch_size=32",
+    "Create a tf.data.Dataset object for the validation set using tf.data.Dataset.from_tensor_slices with the validation file names and normalized transcriptions",
+    "Map the encode_single_sample function to the validation dataset and apply padded_batch with batch_size=32",
+    "Define the CTCLoss function that computes the CTC loss using keras.backend.ctc_batch_cost",
+    "Define the build_model function that constructs a model similar to DeepSpeech2, ensuring the output layer has units equal to output_dim + 1",
+    "Instantiate the model by calling build_model with input_dim=fft_length // 2 + 1 and output_dim=char_to_num.vocabulary_size()",
+    "Compile the model using model.compile with optimizer=keras.optimizers.Adam(learning_rate=1e-4) and loss=CTCLoss",
+    "Train the model for 1 epoch using model.fit with the training dataset and validation dataset",
+    "During training, monitor the loss values and check if they are significantly high or NaN",
+    "After training, evaluate the model on the validation dataset and check the predictions against the expected outputs",
+    "Verify that the model's predictions are poor by calculating the Word Error Rate (WER) using the jiwer library",
+    "Assert that the WER is above a certain threshold (e.g., WER > 0.5) indicating poor performance"
+]
+```

@@ -1,0 +1,79 @@
+Failed to Convert hubert.extract_features() into ONNX
+
+## 🐛 Bug
+
+<!-- A clear and concise description of what the bug is. -->
+
+### To Reproduce
+
+Steps to reproduce the behavior (**always include the command you ran**):
+
+1. Run cmd 
+- install fairseq with version `0.12.2`
+2. See error
+<!-- If you have a code sample, error messages, stack traces, please provide it here as well -->
+AttributeError: 'Tensor' object has no attribute 'is_integer'
+
+#### Code sample
+<!-- Ideally attach a minimal code sample to reproduce the decried issue.
+Minimal means having the shortest code but still preserving the bug. -->
+```python
+from fairseq import checkpoint_utils
+import torch
+
+hubert,_,_ = checkpoint_utils.load_model_ensemble_and_task(
+    ["./assets/hubert/hubert_base.pt"],
+    suffix="",
+)
+hubert_model = hubert[0]
+hubert_model = hubert_model.half()
+
+class HuberAdapter(torch.nn.Module):
+    def __init__(self, model):
+        super(HuberAdapter, self).__init__()
+        self.model = model
+    def forward(self,feats,padding_mask):
+        inputs = {
+            "source": feats,
+            "padding_mask": padding_mask,
+            "output_layer": 12
+        }
+        return self.model.extract_features(**inputs)
+
+feats = torch.load("./feats.pt")
+padding_mask = torch.load("./padding_mask.pt")
+
+# Exporting Adapter into ONNX
+torch.onnx.export(
+    adapter,
+    (feats.cuda(),padding_mask.cuda()),
+    "hubert.onnx",
+    input_names=["feats","padding_mask"],
+    output_names=["logits","mask"],
+    dynamic_axes={
+        "feats": {0: "seq"},
+        "padding_mask": {0: "seq"},
+    }
+)
+```
+
+### Expected behavior
+
+<!-- A clear and concise description of what you expected to happen. -->
+Shoud be output a ONNX file as expect.
+
+### Environment
+
+ - fairseq Version (e.g., 1.0 or main):0.12.2
+ - PyTorch Version (e.g., 1.0): 2.1.0
+ - OS (e.g., Linux): WSL Ubuntu 22.04
+ - How you installed fairseq (`pip`, source): pip
+ - Build command you used (if compiling from source): 
+ - Python version: 3.8
+ - CUDA/cuDNN version: 11.8
+ - GPU models and configuration: 1x RTX 3090
+ - Any other relevant information: N/A
+
+### Additional context
+
+<!-- Add any other context about the problem here. -->

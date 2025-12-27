@@ -1,0 +1,30 @@
+TITLE
+Error in Binary Cross Entropy Loss with Larger Image Sizes
+
+SYMPTOMS
+• During the execution of DCGAN training, a `ValueError` occurs.
+• The error message states that the target size is different from the input size.
+• Specifically, it mentions using a target size (`torch.Size([128])`) that is different to the input size (`torch.Size([3200])`).
+• Training starts but fails at the loss calculation step.
+
+EXPECTED BEHAVIOR
+• The DCGAN training should proceed smoothly with larger image sizes (e.g., 128x128) without encountering dimension mismatches during loss calculations.
+• Loss functions like `binary_cross_entropy` should be able to handle the resized images correctly.
+
+REPRODUCTION STEPS
+1. Clone or download the DCGAN example code from the PyTorch tutorials repository: [https://github.com/pytorch/tutorials/blob/main/beginner_source/dcgan_faces_tutorial.py](https://github.com/pytorch/tutorials/blob/main/beginner_source/dcgan_faces_tutorial.py).
+2. Modify the `nz` and other relevant parameters to support image sizes of 128x128.
+3. Ensure that all parts of the code, including dataloaders and model architecture, are adjusted accordingly for the new image size.
+4. Run the training script with the updated settings.
+5. Observe the error message during the loss calculation step.
+
+Additional Context:
+- The `ValueError` suggests a mismatch between the dimensions expected by the loss function (`binary_cross_entropy`) and those provided by the model output or target labels.
+- This might be due to an incorrect adjustment of the batch size, label size, or feature map sizes in the modified DCGAN code.
+
+Troubleshooting Steps:
+1. Verify that all parts of the code (including data preprocessing) are correctly scaled for 128x128 images.
+2. Ensure consistency between the input image dimensions and the loss function expectations.
+3. Check if the `label` tensor has the correct shape (`torch.Size([batch_size])`) and matches the model's output dimension in terms of batch size.
+
+By addressing these points, you should be able to resolve the issue with larger image sizes in your DCGAN implementation.

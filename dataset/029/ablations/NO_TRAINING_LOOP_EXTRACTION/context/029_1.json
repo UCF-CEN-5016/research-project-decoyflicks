@@ -1,0 +1,74 @@
+{
+  "bug_report": "029",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+    "content": "import torch\nimport torch.nn.functional as F\nfrom torch.utils.data import Dataset, DataLoader\nfrom datautils import MyTrainDataset\n\nimport torch.multiprocessing as mp\nfrom torch.utils.data.distributed import DistributedSampler\nfrom torch.nn.parallel import DistributedDataParallel as DDP\nfrom torch.distributed import init_process_group, destroy_process_group\nimport os\n\n\ndef ddp_setup():\n    init_process_group(backend=\"nccl\")\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer\n\n\ndef prepare_dataloader(dataset: Dataset, batch_size: int):\n    return DataLoader(\n        dataset,\n        batch_size=batch_size,\n        pin_memory=True,\n        shuffle=False,\n        sampler=DistributedSampler(dataset)\n    )\n\n\ndef main(save_every: int, total_epochs: int, batch_size: int, snapshot_path: str = \"snapshot.pt\"):\n    ddp_setup()\n    dataset, model, optimizer = load_train_objs()\n    train_data = prepare_dataloader(dataset, batch_size)\n    trainer = Trainer(model, train_data, optimizer, save_every, snapshot_path)\n    trainer.train(total_epochs)\n    destroy_process_group()\n\n\nif __name__ == \"__main__\":\n    import argparse\n    parser = argparse.ArgumentParser(description='simple distributed training job')\n    parser.add_argument('total_epochs', type=int, help='Total epochs to train the model')\n    parser.add_argument('save_every', type=int, help='How often to save a snapshot')\n    parser.add_argument('--batch_size', default=32, type=int, help='Input batch size on each device (default: 32)')\n    args = parser.parse_args()\n    \n    main(args.save_every, args.total_epochs, args.batch_size)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "distributed/ddp-tutorial-series/multigpu_torchrun.py",
+      "snippets": [
+        {
+          "lines": "76-80",
+          "code": "def ddp_setup():\n    init_process_group(backend=\"nccl\")\n\nclass Trainer:\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])\n\n    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)\n\n    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)\n\ndef load_train_objs():\n    train_set = MyTrainDataset(2048)  # load your dataset\n    model = torch.nn.Linear(20, 1)  # load your model\n    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)\n    return train_set, model, optimizer"
+        },
+        {
+          "lines": "52-59",
+          "code": "    def _load_snapshot(self, snapshot_path):\n        loc = f\"cuda:{self.gpu_id}\"\n        snapshot = torch.load(snapshot_path, map_location=loc)\n        self.model.load_state_dict(snapshot[\"MODEL_STATE\"])\n        self.epochs_run = snapshot[\"EPOCHS_RUN\"]\n        print(f\"Resuming training from snapshot at Epoch {self.epochs_run}\")\n\n    def _run_batch(self, source, targets):\n        self.optimizer.zero_grad()\n        output = self.model(source)\n        loss = F.cross_entropy(output, targets)\n        loss.backward()\n        self.optimizer.step()\n\n    def _run_epoch(self, epoch):\n        b_sz = len(next(iter(self.train_data))[0])\n        print(f\"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}\")\n        self.train_data.sampler.set_epoch(epoch)\n        for source, targets in self.train_data:\n            source = source.to(self.gpu_id)\n            targets = targets.to(self.gpu_id)\n            self._run_batch(source, targets)"
+        },
+        {
+          "lines": "69-73",
+          "code": "    def _save_snapshot(self, epoch):\n        snapshot = {\n            \"MODEL_STATE\": self.model.module.state_dict(),\n            \"EPOCHS_RUN\": epoch,\n        }\n        torch.save(snapshot, self.snapshot_path)\n        print(f\"Epoch {epoch} | Training snapshot saved at {self.snapshot_path}\")\n\n    def train(self, max_epochs: int):\n        for epoch in range(self.epochs_run, max_epochs):\n            self._run_epoch(epoch)\n            if self.gpu_id == 0 and epoch % self.save_every == 0:\n                self._save_snapshot(epoch)"
+        },
+        {
+          "lines": "17-36",
+          "code": "def prepare_dataloader(dataset: Dataset, batch_size: int):\n    return DataLoader(\n        dataset,\n        batch_size=batch_size,\n        pin_memory=True,\n        shuffle=False,\n        sampler=DistributedSampler(dataset)\n    )\n\ndef main(save_every: int, total_epochs: int, batch_size: int, snapshot_path: str = \"snapshot.pt\"):\n    ddp_setup()\n    dataset, model, optimizer = load_train_objs()\n    train_data = prepare_dataloader(dataset, batch_size)\n    trainer = Trainer(model, train_data, optimizer, save_every, snapshot_path)\n    trainer.train(total_epochs)\n    destroy_process_group()\n\n    def __init__(\n        self,\n        model: torch.nn.Module,\n        train_data: DataLoader,\n        optimizer: torch.optim.Optimizer,\n        save_every: int,\n        snapshot_path: str,\n    ) -> None:\n        self.gpu_id = int(os.environ[\"LOCAL_RANK\"])\n        self.model = model.to(self.gpu_id)\n        self.train_data = train_data\n        self.optimizer = optimizer\n        self.save_every = save_every\n        self.epochs_run = 0\n        self.snapshot_path = snapshot_path\n        if os.path.exists(snapshot_path):\n            print(\"Loading snapshot\")\n            self._load_snapshot(snapshot_path)\n\n        self.model = DDP(self.model, device_ids=[self.gpu_id])"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "datautils",
+      "function": "MyTrainDataset"
+    },
+    {
+      "module": "torch",
+      "function": "DataLoader"
+    },
+    {
+      "module": "torch",
+      "function": "DistributedDataParallel"
+    },
+    {
+      "module": "torch",
+      "function": "DistributedSampler"
+    },
+    {
+      "module": "torch",
+      "function": "cross_entropy"
+    },
+    {
+      "module": "torch",
+      "function": "destroy_process_group"
+    },
+    {
+      "module": "torch",
+      "function": "init_process_group"
+    },
+    {
+      "module": "torch",
+      "function": "load"
+    },
+    {
+      "module": "torch",
+      "function": "save"
+    }
+  ]
+}

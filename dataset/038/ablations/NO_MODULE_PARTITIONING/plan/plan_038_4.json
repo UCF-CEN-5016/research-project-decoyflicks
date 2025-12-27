@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn",
+    "Define a batch size of 4 and feature dimension of 4",
+    "Create a random tensor 'x' with shape (batch_size, 3, 32, 32) to simulate input images",
+    "Create a tensor 'x_rope' with shape (batch_size, 3, 32, 4) to simulate the output after some processing",
+    "Create 'cos_cached' tensor with shape (4, 1, 1, 4) filled with random values to simulate cosine positional encodings",
+    "Create 'sin_cached' tensor with shape (4, 1, 1, 4) filled with random values to simulate sine positional encodings",
+    "Create a tensor 'neg_half_x' with shape (batch_size, 3, 32, 4) filled with random values to simulate negative half of x",
+    "Define a class 'RotaryPositionalEmbedding' that initializes 'cos_cached' and 'sin_cached' as class attributes",
+    "In the class, implement a method that performs the operation: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Instantiate the 'RotaryPositionalEmbedding' class",
+    "Call the method with the created tensors 'x_rope', 'cos_cached', 'sin_cached', and 'neg_half_x'",
+    "Run the code and capture the RuntimeError: 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Verify that the error message matches the expected output indicating a dimension mismatch"
+]
+```

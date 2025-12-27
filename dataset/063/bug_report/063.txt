@@ -1,0 +1,18 @@
+Error in examples/vision /oxford_pets_image_segmentation.py
+
+Got an error in 
+```python
+augmented_train_ds = (
+    train_ds.shuffle(BATCH_SIZE * 2)
+    .map(augment_fn, num_parallel_calls=AUTOTUNE)
+    .batch(BATCH_SIZE)
+    .map(unpackage_inputs)
+    .prefetch(buffer_size=tf.data.AUTOTUNE)
+)
+```
+
+ Error details:
+
+  ```python
+Tensor("sequential_4/rand_augment_4/cond/random_choice_4/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential_4/rand_augment_4/cond/random_choice_4/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types
+```

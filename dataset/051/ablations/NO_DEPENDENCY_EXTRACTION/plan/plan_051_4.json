@@ -1,0 +1,17 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Set the runtime type to GPU (T4) by navigating to Runtime > Change runtime type > Hardware accelerator > GPU.",
+    "Install the required KerasNLP library by running the command: !pip install keras-nlp.",
+    "Import necessary libraries by executing: import tensorflow as tf, import keras_nlp, import random.",
+    "Define a list of English sentences for testing, e.g., test_eng_texts = ['Hello, how are you?', 'What is your name?', 'I love programming.']",
+    "Load the pre-trained model and tokenizer as per the KerasNLP example, ensuring to follow the model loading steps from the provided link.",
+    "Define the decode_sequences function that takes input_sentences as an argument.",
+    "Inside decode_sequences, create a prompt tensor by concatenating start and pad tensors, ensuring the correct dimensions.",
+    "Instantiate the GreedySampler by executing: sampler = keras_nlp.samplers.GreedySampler().",
+    "Call the sampler with the prompt and other required parameters, including an end_token_id, which is expected to trigger the bug.",
+    "Run a loop to randomly select input sentences from test_eng_texts and call decode_sequences with the selected sentence.",
+    "Capture the output and verify that a TypeError is raised with the message: 'Sampler.__call__() got an unexpected keyword argument 'end_token_id'.'",
+    "Log the error message to confirm the bug occurrence."
+]
+```

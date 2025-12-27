@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and any other required modules from the DeepSpeed and transformers libraries.",
+    "Set a random seed for reproducibility using torch.manual_seed(42).",
+    "Define a batch size of 16 and sequence lengths for prompts and answers as 256.",
+    "Create a mock dataset with input prompts and corresponding action masks. Ensure the action mask has a shape of (batch_size, sequence_length) with values indicating valid actions.",
+    "Generate random log probabilities for actions taken by the actor model with shape (batch_size, sequence_length) using torch.randn.",
+    "Generate random advantages with shape (batch_size, sequence_length) using torch.randn.",
+    "Create a tensor for ground rewards with shape (batch_size, sequence_length) using torch.randn.",
+    "Define the start index for the loss calculation as 1, which will be used to slice the tensors.",
+    "Calculate actor loss using the original mask: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]).",
+    "Capture the output of the actor loss calculation.",
+    "Modify the mask to use the proposed alternative: mask = action_mask[:, start-1:-1].",
+    "Recalculate the actor loss using the modified mask: actor_loss_modified = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, mask).",
+    "Compare the two actor loss values: assert actor_loss != actor_loss_modified to verify that the bug is present.",
+    "Log the values of actor_loss and actor_loss_modified to observe the difference in loss calculations.",
+    "Ensure that the ground rewards are included in the loss calculation when using the modified mask."
+]
+```

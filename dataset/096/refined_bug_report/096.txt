@@ -1,0 +1,25 @@
+TITLE
+Inference Mode Bug with Self-Conditioning
+
+SYMPTOMS
+• When self-conditioning is enabled and a random condition triggers, the code produces a `RuntimeError: Inference tensors cannot be saved for backward`.
+• The workaround of using `.clone()` followed by `torch.no_grad()` does not consistently resolve the issue.
+
+EXPECTED BEHAVIOR
+When self-conditioning is enabled:
+- The model should correctly infer and process the input tensor without encountering errors.
+- The inference mode should allow for proper tensor manipulation necessary for autograd backward passes.
+
+REPRODUCTION STEPS
+1. Enable self conditioning in your model configuration.
+2. Set a random condition within the code to trigger the `if` statement with `random() < 0.5`.
+3. Run the model with the specified conditions and observe if it produces the `RuntimeError`.
+
+Additional Notes:
+- The original attempt uses `torch.inference_mode()` which is meant for inference where gradients are not required, but tensors can still be saved.
+- Changing to `torch.no_grad()` disables gradient calculations entirely within its scope, potentially bypassing the issue by avoiding the need to save inference tensors.
+
+Advice:
+- Consider whether `torch.inference_mode()` might be appropriate here, as it allows saving of tensors while being in a context where gradients are not needed.
+- Ensure that all necessary operations for autograd (like detach) are correctly applied before and after any `.clone()`.
+- If `no_grad` is used, ensure it covers the entire scope of tensor manipulations to avoid issues with gradient calculations.

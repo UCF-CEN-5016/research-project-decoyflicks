@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository",
+    "Set the environment variable for PYTHONPATH to include the path to the TensorFlow Model Garden",
+    "Define the DATA_DIR variable to point to the location of the ImageNet TF records dataset",
+    "Define the MODEL_DIR variable to point to the location where model checkpoints will be saved",
+    "Activate the conda environment for TensorFlow 2.11 using 'source /home/apps/anaconda3/bin/activate' and 'conda activate tf11'",
+    "Create a configuration file gpu.yaml for the first worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0",
+    "Create a configuration file gpu1.yaml for the second worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1",
+    "Launch the first worker on GPU1 using the command: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml'",
+    "Launch the second worker on GPU2 using the command: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml'",
+    "Set the batch size to 64 in the configuration files to ensure sufficient workload for both GPUs",
+    "Monitor the training throughput for both workers using TensorFlow's logging output",
+    "Record the throughput values for both single GPU and multi-worker scenarios",
+    "Assert that the throughput for the multi-worker setup does not exceed the throughput of a single GPU setup",
+    "Check the logs for any warnings or errors related to the distribution strategy or GPU utilization",
+    "Validate that the model is correctly utilizing both GPUs by checking the GPU memory usage during training",
+    "Ensure that the training process runs for a sufficient number of epochs (e.g., 10 epochs) to gather reliable throughput data",
+    "Collect and compare the final throughput metrics from both single and multi-worker runs to confirm the bug"
+]
+```

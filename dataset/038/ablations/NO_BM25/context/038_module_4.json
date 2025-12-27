@@ -1,0 +1,36 @@
+{
+  "bug_report": "038",
+  "module": {
+    "module": "labml_nn/normalization/group_norm",
+    "files": [
+      {
+        "path": "labml_nn/normalization/group_norm/experiment.py",
+        "snippets": [
+          {
+            "lines": "62-66",
+            "code": "class Model(Module):\n    \"\"\"\n    ### VGG model for CIFAR-10 classification\n    \"\"\"\n\n    def __init__(self, groups: int = 32):\n        super().__init__()\n        layers = []\n        # RGB channels\n        in_channels = 3\n        # Number of channels in each layer in each block\n        for block in [[64, 64], [128, 128], [256, 256, 256], [512, 512, 512], [512, 512, 512]]:\n            # Convolution, Normalization and Activation layers\n            for channels in block:\n                layers += [nn.Conv2d(in_channels, channels, kernel_size=3, padding=1),\n                           GroupNorm(groups, channels),\n                           nn.ReLU(inplace=True)]\n                in_channels = channels\n            # Max pooling at end of each block\n            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]\n\n        # Create a sequential model with the layers\n        self.layers = nn.Sequential(*layers)\n        # Final logits layer\n        self.fc = nn.Linear(512, 10)\n\n    def forward(self, x):\n        # The VGG layers\n        x = self.layers(x)\n        # Reshape for classification layer\n        x = x.view(x.shape[0], -1)\n        # Final linear layer\n        return self.fc(x)\n\nclass Configs(CIFAR10Configs):\n    # Number of groups\n    groups: int = 16\n\ndef model(c: Configs):\n    \"\"\"\n    ### Create model\n    \"\"\"\n    return Model(c.groups).to(c.device)"
+          },
+          {
+            "lines": "47-53",
+            "code": "def main():\n    # Create experiment\n    experiment.create(name='cifar10', comment='group norm')\n    # Create configurations\n    conf = Configs()\n    # Load configurations\n    experiment.configs(conf, {\n        'optimizer.optimizer': 'Adam',\n        'optimizer.learning_rate': 2.5e-4,\n    })\n    # Start the experiment and run the training loop\n    with experiment.start():\n        conf.run()\n\n    def __init__(self, groups: int = 32):\n        super().__init__()\n        layers = []\n        # RGB channels\n        in_channels = 3\n        # Number of channels in each layer in each block\n        for block in [[64, 64], [128, 128], [256, 256, 256], [512, 512, 512], [512, 512, 512]]:\n            # Convolution, Normalization and Activation layers\n            for channels in block:\n                layers += [nn.Conv2d(in_channels, channels, kernel_size=3, padding=1),\n                           GroupNorm(groups, channels),\n                           nn.ReLU(inplace=True)]\n                in_channels = channels\n            # Max pooling at end of each block\n            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]\n\n        # Create a sequential model with the layers\n        self.layers = nn.Sequential(*layers)\n        # Final logits layer\n        self.fc = nn.Linear(512, 10)\n\n    def forward(self, x):\n        # The VGG layers\n        x = self.layers(x)\n        # Reshape for classification layer\n        x = x.view(x.shape[0], -1)\n        # Final linear layer\n        return self.fc(x)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "labml_nn/normalization/group_norm/experiment.py",
+      "snippets": [
+        {
+          "lines": "62-66",
+          "code": "class Model(Module):\n    \"\"\"\n    ### VGG model for CIFAR-10 classification\n    \"\"\"\n\n    def __init__(self, groups: int = 32):\n        super().__init__()\n        layers = []\n        # RGB channels\n        in_channels = 3\n        # Number of channels in each layer in each block\n        for block in [[64, 64], [128, 128], [256, 256, 256], [512, 512, 512], [512, 512, 512]]:\n            # Convolution, Normalization and Activation layers\n            for channels in block:\n                layers += [nn.Conv2d(in_channels, channels, kernel_size=3, padding=1),\n                           GroupNorm(groups, channels),\n                           nn.ReLU(inplace=True)]\n                in_channels = channels\n            # Max pooling at end of each block\n            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]\n\n        # Create a sequential model with the layers\n        self.layers = nn.Sequential(*layers)\n        # Final logits layer\n        self.fc = nn.Linear(512, 10)\n\n    def forward(self, x):\n        # The VGG layers\n        x = self.layers(x)\n        # Reshape for classification layer\n        x = x.view(x.shape[0], -1)\n        # Final linear layer\n        return self.fc(x)\n\nclass Configs(CIFAR10Configs):\n    # Number of groups\n    groups: int = 16\n\ndef model(c: Configs):\n    \"\"\"\n    ### Create model\n    \"\"\"\n    return Model(c.groups).to(c.device)"
+        },
+        {
+          "lines": "47-53",
+          "code": "def main():\n    # Create experiment\n    experiment.create(name='cifar10', comment='group norm')\n    # Create configurations\n    conf = Configs()\n    # Load configurations\n    experiment.configs(conf, {\n        'optimizer.optimizer': 'Adam',\n        'optimizer.learning_rate': 2.5e-4,\n    })\n    # Start the experiment and run the training loop\n    with experiment.start():\n        conf.run()\n\n    def __init__(self, groups: int = 32):\n        super().__init__()\n        layers = []\n        # RGB channels\n        in_channels = 3\n        # Number of channels in each layer in each block\n        for block in [[64, 64], [128, 128], [256, 256, 256], [512, 512, 512], [512, 512, 512]]:\n            # Convolution, Normalization and Activation layers\n            for channels in block:\n                layers += [nn.Conv2d(in_channels, channels, kernel_size=3, padding=1),\n                           GroupNorm(groups, channels),\n                           nn.ReLU(inplace=True)]\n                in_channels = channels\n            # Max pooling at end of each block\n            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]\n\n        # Create a sequential model with the layers\n        self.layers = nn.Sequential(*layers)\n        # Final logits layer\n        self.fc = nn.Linear(512, 10)\n\n    def forward(self, x):\n        # The VGG layers\n        x = self.layers(x)\n        # Reshape for classification layer\n        x = x.view(x.shape[0], -1)\n        # Final linear layer\n        return self.fc(x)"
+        }
+      ]
+    }
+  ]
+}

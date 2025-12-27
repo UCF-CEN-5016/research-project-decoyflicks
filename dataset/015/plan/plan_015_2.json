@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the detection module from detection_test.py",
+    "Define a batch size of 2 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call predict function with num_classes=1000",
+    "Verify output contains NaN values in detection results",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold"
+]
+```
+

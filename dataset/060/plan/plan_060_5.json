@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries including TensorFlow, matplotlib, and tensorflow_datasets",
+    "Load the 'coco' dataset using tensorflow_datasets.load function with batch size of 32 and image size of (256, 256)",
+    "Preprocess the images to be within the range [0, 1] by dividing by 255.0",
+    "Create a random uniform label tensor with shape (batch_size, height, width, num_classes) using tf.random.uniform function",
+    "Define three models: FCN-32S, FCN-16S, and FCN-8S using TensorFlow's functional API",
+    "For each model, compile it with Adam optimizer, SparseCategoricalCrossentropy loss, and SparseCategoricalAccuracy metrics",
+    "Train each model on the dataset for 5 epochs using model.fit function",
+    "During training, monitor the values of loss and MeanIoU metrics",
+    "Assert that the loss value for FCN-32S is NaN after the first epoch"
+]
+```
+

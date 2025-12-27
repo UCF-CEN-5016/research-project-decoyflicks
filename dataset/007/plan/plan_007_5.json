@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and related modules from TensorFlow's official library",
+    "Define parameters for model training, including batch size (e.g., 32), learning rate (0.001), and number of epochs (5)",
+    "Create a synthetic dataset using `tf.data.Dataset` API with specified batch size and random data generation logic",
+    "Load the transformer model by calling `create_model(params, is_train=True)` function from the official library",
+    "Initialize the optimizer by calling `_create_optimizer()` function with learning rate schedule parameters",
+    "Train the model on the synthetic dataset using `fit()` method with defined number of epochs and batch size",
+    "Monitor the training process for any signs of NaN values in loss calculation during each epoch",
+    "Assert that there are no NaN values in the loss calculation at the end of each epoch",
+    "Validate GPU memory usage during model training by periodically checking GPU memory allocations",
+    "Assert that GPU memory usage remains within expected limits throughout the training process"
+]
+```
+

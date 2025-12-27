@@ -1,0 +1,25 @@
+```json
+[
+    "Import fairseq library for dataset and model components",
+    "Define constants for batch size, prefix length, duration scale, temperature, and other parameters",
+    "Create a mock CodeDataset instance with predefined data attributes such as lengths and tokens",
+    "Initialize an ExpressiveCodeDataConfig object with default settings",
+    "Convert the namespace to omegaconf format using convert_namespace_to_omegaconf function",
+    "Define a parser using get_interactive_generation_parser and add arguments for prefix length, duration scale, metric type, and other flags",
+    "Parse command-line arguments using parse_args_and_arch function to create an args object with specified values",
+    "Set the torch seed using set_torch_seed function with a predefined seed value",
+    "Determine the world size based on n_workers or default to CUDA device count",
+    "If world size is greater than 1, spawn multiple processes using mp.spawn and call main function in each process with rank and args",
+    "Call the main function directly if world size is 1, passing rank=0 and args",
+    "Inside the main function, create an InferenceDataset instance with the mock CodeDataset",
+    "Define a Naive_F0_Decoder object with default parameters",
+    "Set up distributed data parallelism using DistributedSampler",
+    "Create a DataLoader with the inference dataset and specified batch size",
+    "Initialize model weights and set to evaluation mode",
+    "Forward pass input data through the model and decoder",
+    "Calculate loss using mae_loss function for duration predictions",
+    "Verify that the loss contains NaN values due to incorrect decoding or model initialization",
+    "Log GPU memory usage before and after forward pass to observe any discrepancies"
+]
+```
+

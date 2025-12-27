@@ -1,0 +1,122 @@
+{
+  "bug_report": "028",
+  "rank": 5,
+  "score": 1.0,
+  "main_file": {
+    "path": "distributed/rpc/rl/main.py",
+    "content": "import argparse\nimport gym\nimport numpy as np\nimport os\nfrom itertools import count\n\nimport torch\nimport torch.distributed.rpc as rpc\nimport torch.multiprocessing as mp\nimport torch.nn as nn\nimport torch.nn.functional as F\nimport torch.optim as optim\nfrom torch.distributed.rpc import RRef, rpc_sync, rpc_async, remote\nfrom torch.distributions import Categorical\n\nTOTAL_EPISODE_STEP = 5000\nAGENT_NAME = \"agent\"\nOBSERVER_NAME = \"observer{}\"\n\nparser = argparse.ArgumentParser(description='PyTorch RPC RL example')\nparser.add_argument('--world-size', type=int, default=2, metavar='W',\n                    help='world size for RPC, rank 0 is the agent, others are observers')\nparser.add_argument('--gamma', type=float, default=0.99, metavar='G',\n                    help='discount factor (default: 0.99)')\nparser.add_argument('--seed', type=int, default=543, metavar='N',\n                    help='random seed (default: 543)')\nparser.add_argument('--log-interval', type=int, default=10, metavar='N',\n                    help='interval between training status logs (default: 10)')\nargs = parser.parse_args()\n\ntorch.manual_seed(args.seed)\n\n\ndef _call_method(method, rref, *args, **kwargs):\n    r\"\"\"\n    a helper function to call a method on the given RRef\n    \"\"\"\n    return method(rref.local_value(), *args, **kwargs)\n\n\ndef _remote_method(method, rref, *args, **kwargs):\n    r\"\"\"\n    a helper function to run method on the owner of rref and fetch back the\n    result using RPC\n    \"\"\"\n    args = [method, rref] + list(args)\n    return rpc_sync(rref.owner(), _call_method, args=args, kwargs=kwargs)\n\n\nclass Policy(nn.Module):\n    r\"\"\"\n    Borrowing the ``Policy`` class from the Reinforcement Learning example.\n    Copying the code to make these two examples independent.\n    See https://github.com/pytorch/examples/tree/main/reinforcement_learning\n    \"\"\"\n    def __init__(self):\n        super(Policy, self).__init__()\n        self.affine1 = nn.Linear(4, 128)\n        self.dropout = nn.Dropout(p=0.6)\n        self.affine2 = nn.Linear(128, 2)\n\n        self.saved_log_probs = []\n        self.rewards = []\n\n    def forward(self, x):\n        x = self.affine1(x)\n        x = self.dropout(x)\n        x = F.relu(x)\n        action_scores = self.affine2(x)\n        return F.softmax(action_scores, dim=1)\n\nclass Observer:\n    r\"\"\"\n    An observer has exclusive access to its own environment. Each observer\n    captures the state from its environment, and send the state to the agent to\n    select an action. Then, the observer applies the action to its environment\n    and reports the reward to the agent.\n\n    It is true that CartPole-v1 is a relatively inexpensive environment, and it\n    might be an overkill to use RPC to connect observers and trainers in this\n    specific use case. However, the main goal of this tutorial to how to build\n    an application using the RPC API. Developers can extend the similar idea to\n    other applications with much more expensive environment.\n    \"\"\"\n    def __init__(self):\n        self.id = rpc.get_worker_info().id\n        self.env = gym.make('CartPole-v1')\n        self.env.seed(args.seed)\n\n    def run_episode(self, agent_rref, n_steps):\n        r\"\"\"\n        Run one episode of n_steps.\n\n        Args:\n            agent_rref (RRef): an RRef referencing the agent object.\n            n_steps (int): number of steps in this episode\n        \"\"\"\n        state, ep_reward = self.env.reset(), 0\n        for step in range(n_steps):\n            # send the state to the agent to get an action\n            action = _remote_method(Agent.select_action, agent_rref, self.id, state)\n\n            # apply the action to the environment, and get the reward\n            state, reward, done, _ = self.env.step(action)\n\n            # report the reward to the agent for training purpose\n            _remote_method(Agent.report_reward, agent_rref, self.id, reward)\n\n            if done:\n                break\n\nclass Agent:\n    def __init__(self, world_size):\n        self.ob_rrefs = []\n        self.agent_rref = RRef(self)\n        self.rewards = {}\n        self.saved_log_probs = {}\n        self.policy = Policy()\n        self.optimizer = optim.Adam(self.policy.parameters(), lr=1e-2)\n        self.eps = np.finfo(np.float32).eps.item()\n        self.running_reward = 0\n        self.reward_threshold = gym.make('CartPole-v1').spec.reward_threshold\n        for ob_rank in range(1, world_size):\n            ob_info = rpc.get_worker_info(OBSERVER_NAME.format(ob_rank))\n            self.ob_rrefs.append(remote(ob_info, Observer))\n            self.rewards[ob_info.id] = []\n            self.saved_log_probs[ob_info.id] = []\n\n    def select_action(self, ob_id, state):\n        r\"\"\"\n        This function is mostly borrowed from the Reinforcement Learning example.\n        See https://github.com/pytorch/examples/tree/main/reinforcement_learning\n        The main difference is that instead of keeping all probs in one list,\n        the agent keeps probs in a dictionary, one key per observer.\n\n        NB: no need to enforce thread-safety here as GIL will serialize\n        executions.\n        \"\"\"\n        state = torch.from_numpy(state).float().unsqueeze(0)\n        probs = self.policy(state)\n        m = Categorical(probs)\n        action = m.sample()\n        self.saved_log_probs[ob_id].append(m.log_prob(action))\n        return action.item()\n\n    def report_reward(self, ob_id, reward):\n        r\"\"\"\n        Observers call this function to report rewards.\n        \"\"\"\n        self.rewards[ob_id].append(reward)\n\n    def run_episode(self, n_steps=0):\n        r\"\"\"\n        Run one episode. The agent will tell each oberser to run n_steps.\n        \"\"\"\n        futs = []\n        for ob_rref in self.ob_rrefs:\n            # make async RPC to kick off an episode on all observers\n            futs.append(\n                rpc_async(\n                    ob_rref.owner(),\n                    _call_method,\n                    args=(Observer.run_episode, ob_rref, self.agent_rref, n_steps)\n                )\n            )\n\n        # wait until all obervers have finished this episode\n        for fut in futs:\n            fut.wait()\n\n    def finish_episode(self):\n        r\"\"\"\n        This function is mostly borrowed from the Reinforcement Learning example.\n        See https://github.com/pytorch/examples/tree/main/reinforcement_learning\n        The main difference is that it joins all probs and rewards from\n        different observers into one list, and uses the minimum observer rewards\n        as the reward of the current episode.\n        \"\"\"\n\n        # joins probs and rewards from different observers into lists\n        R, probs, rewards = 0, [], []\n        for ob_id in self.rewards:\n            probs.extend(self.saved_log_probs[ob_id])\n            rewards.extend(self.rewards[ob_id])\n\n        # use the minimum observer reward to calculate the running reward\n        min_reward = min([sum(self.rewards[ob_id]) for ob_id in self.rewards])\n        self.running_reward = 0.05 * min_reward + (1 - 0.05) * self.running_reward\n\n        # clear saved probs and rewards\n        for ob_id in self.rewards:\n            self.rewards[ob_id] = []\n            self.saved_log_probs[ob_id] = []\n\n        policy_loss, returns = [], []\n        for r in rewards[::-1]:\n            R = r + args.gamma * R\n            returns.insert(0, R)\n        returns = torch.tensor(returns)\n        returns = (returns - returns.mean()) / (returns.std() + self.eps)\n        for log_prob, R in zip(probs, returns):\n            policy_loss.append(-log_prob * R)\n        self.optimizer.zero_grad()\n        policy_loss = torch.cat(policy_loss).sum()\n        policy_loss.backward()\n        self.optimizer.step()\n        return min_reward\n\n\ndef run_worker(rank, world_size):\n    r\"\"\"\n    This is the entry point for all processes. The rank 0 is the agent. All\n    other ranks are observers.\n    \"\"\"\n    os.environ['MASTER_ADDR'] = 'localhost'\n    os.environ['MASTER_PORT'] = '29500'\n    if rank == 0:\n        # rank0 is the agent\n        rpc.init_rpc(AGENT_NAME, rank=rank, world_size=world_size)\n\n        agent = Agent(world_size)\n        for i_episode in count(1):\n            n_steps = int(TOTAL_EPISODE_STEP / (args.world_size - 1))\n            agent.run_episode(n_steps=n_steps)\n            last_reward = agent.finish_episode()\n\n            if i_episode % args.log_interval == 0:\n                print('Episode {}\\tLast reward: {:.2f}\\tAverage reward: {:.2f}'.format(\n                      i_episode, last_reward, agent.running_reward))\n\n            if agent.running_reward > agent.reward_threshold:\n                print(\"Solved! Running reward is now {}!\".format(agent.running_reward))\n                break\n    else:\n        # other ranks are the observer\n        rpc.init_rpc(OBSERVER_NAME.format(rank), rank=rank, world_size=world_size)\n        # observers passively waiting for instructions from agents\n    rpc.shutdown()\n\n\ndef main():\n    mp.spawn(\n        run_worker,\n        args=(args.world_size, ),\n        nprocs=args.world_size,\n        join=True\n    )\n\nif __name__ == '__main__':\n    main()\n"
+  },
+  "module_snippets": [
+    {
+      "file": "distributed/rpc/rl/main.py",
+      "snippets": [
+        {
+          "lines": "210-238",
+          "code": "class Observer:\n    r\"\"\"\n    An observer has exclusive access to its own environment. Each observer\n    captures the state from its environment, and send the state to the agent to\n    select an action. Then, the observer applies the action to its environment\n    and reports the reward to the agent.\n\n    It is true that CartPole-v1 is a relatively inexpensive environment, and it\n    might be an overkill to use RPC to connect observers and trainers in this\n    specific use case. However, the main goal of this tutorial to how to build\n    an application using the RPC API. Developers can extend the similar idea to\n    other applications with much more expensive environment.\n    \"\"\"\n    def __init__(self):\n        self.id = rpc.get_worker_info().id\n        self.env = gym.make('CartPole-v1')\n        self.env.seed(args.seed)\n\n    def run_episode(self, agent_rref, n_steps):\n        r\"\"\"\n        Run one episode of n_steps.\n\n        Args:\n            agent_rref (RRef): an RRef referencing the agent object.\n            n_steps (int): number of steps in this episode\n        \"\"\"\n        state, ep_reward = self.env.reset(), 0\n        for step in range(n_steps):\n            # send the state to the agent to get an action\n            action = _remote_method(Agent.select_action, agent_rref, self.id, state)\n\n            # apply the action to the environment, and get the reward\n            state, reward, done, _ = self.env.step(action)\n\n            # report the reward to the agent for training purpose\n            _remote_method(Agent.report_reward, agent_rref, self.id, reward)\n\n            if done:\n                break\n\nclass Agent:\n    def __init__(self, world_size):\n        self.ob_rrefs = []\n        self.agent_rref = RRef(self)\n        self.rewards = {}\n        self.saved_log_probs = {}\n        self.policy = Policy()\n        self.optimizer = optim.Adam(self.policy.parameters(), lr=1e-2)\n        self.eps = np.finfo(np.float32).eps.item()\n        self.running_reward = 0\n        self.reward_threshold = gym.make('CartPole-v1').spec.reward_threshold\n        for ob_rank in range(1, world_size):\n            ob_info = rpc.get_worker_info(OBSERVER_NAME.format(ob_rank))\n            self.ob_rrefs.append(remote(ob_info, Observer))\n            self.rewards[ob_info.id] = []\n            self.saved_log_probs[ob_info.id] = []\n\n    def select_action(self, ob_id, state):\n        r\"\"\"\n        This function is mostly borrowed from the Reinforcement Learning example.\n        See https://github.com/pytorch/examples/tree/main/reinforcement_learning\n        The main difference is that instead of keeping all probs in one list,\n        the agent keeps probs in a dictionary, one key per observer.\n\n        NB: no need to enforce thread-safety here as GIL will serialize\n        executions.\n        \"\"\"\n        state = torch.from_numpy(state).float().unsqueeze(0)\n        probs = self.policy(state)\n        m = Categorical(probs)\n        action = m.sample()\n        self.saved_log_probs[ob_id].append(m.log_prob(action))\n        return action.item()\n\n    def report_reward(self, ob_id, reward):\n        r\"\"\"\n        Observers call this function to report rewards.\n        \"\"\"\n        self.rewards[ob_id].append(reward)\n\n    def run_episode(self, n_steps=0):\n        r\"\"\"\n        Run one episode. The agent will tell each oberser to run n_steps.\n        \"\"\"\n        futs = []\n        for ob_rref in self.ob_rrefs:\n            # make async RPC to kick off an episode on all observers\n            futs.append(\n                rpc_async(\n                    ob_rref.owner(),\n                    _call_method,\n                    args=(Observer.run_episode, ob_rref, self.agent_rref, n_steps)\n                )\n            )\n\n        # wait until all obervers have finished this episode\n        for fut in futs:\n            fut.wait()\n\n    def finish_episode(self):\n        r\"\"\"\n        This function is mostly borrowed from the Reinforcement Learning example.\n        See https://github.com/pytorch/examples/tree/main/reinforcement_learning\n        The main difference is that it joins all probs and rewards from\n        different observers into one list, and uses the minimum observer rewards\n        as the reward of the current episode.\n        \"\"\"\n\n        # joins probs and rewards from different observers into lists\n        R, probs, rewards = 0, [], []\n        for ob_id in self.rewards:\n            probs.extend(self.saved_log_probs[ob_id])\n            rewards.extend(self.rewards[ob_id])\n\n        # use the minimum observer reward to calculate the running reward\n        min_reward = min([sum(self.rewards[ob_id]) for ob_id in self.rewards])\n        self.running_reward = 0.05 * min_reward + (1 - 0.05) * self.running_reward\n\n        # clear saved probs and rewards\n        for ob_id in self.rewards:\n            self.rewards[ob_id] = []\n            self.saved_log_probs[ob_id] = []\n\n        policy_loss, returns = [], []\n        for r in rewards[::-1]:\n            R = r + args.gamma * R\n            returns.insert(0, R)\n        returns = torch.tensor(returns)\n        returns = (returns - returns.mean()) / (returns.std() + self.eps)\n        for log_prob, R in zip(probs, returns):\n            policy_loss.append(-log_prob * R)\n        self.optimizer.zero_grad()\n        policy_loss = torch.cat(policy_loss).sum()\n        policy_loss.backward()\n        self.optimizer.step()\n        return min_reward\n\ndef run_worker(rank, world_size):\n    r\"\"\"\n    This is the entry point for all processes. The rank 0 is the agent. All\n    other ranks are observers.\n    \"\"\"\n    os.environ['MASTER_ADDR'] = 'localhost'\n    os.environ['MASTER_PORT'] = '29500'\n    if rank == 0:\n        # rank0 is the agent\n        rpc.init_rpc(AGENT_NAME, rank=rank, world_size=world_size)\n\n        agent = Agent(world_size)\n        for i_episode in count(1):\n            n_steps = int(TOTAL_EPISODE_STEP / (args.world_size - 1))\n            agent.run_episode(n_steps=n_steps)\n            last_reward = agent.finish_episode()\n\n            if i_episode % args.log_interval == 0:\n                print('Episode {}\\tLast reward: {:.2f}\\tAverage reward: {:.2f}'.format(\n                      i_episode, last_reward, agent.running_reward))\n\n            if agent.running_reward > agent.reward_threshold:\n                print(\"Solved! Running reward is now {}!\".format(agent.running_reward))\n                break\n    else:\n        # other ranks are the observer\n        rpc.init_rpc(OBSERVER_NAME.format(rank), rank=rank, world_size=world_size)\n        # observers passively waiting for instructions from agents\n    rpc.shutdown()"
+        },
+        {
+          "lines": "171-207",
+          "code": "    def finish_episode(self):\n        r\"\"\"\n        This function is mostly borrowed from the Reinforcement Learning example.\n        See https://github.com/pytorch/examples/tree/main/reinforcement_learning\n        The main difference is that it joins all probs and rewards from\n        different observers into one list, and uses the minimum observer rewards\n        as the reward of the current episode.\n        \"\"\"\n\n        # joins probs and rewards from different observers into lists\n        R, probs, rewards = 0, [], []\n        for ob_id in self.rewards:\n            probs.extend(self.saved_log_probs[ob_id])\n            rewards.extend(self.rewards[ob_id])\n\n        # use the minimum observer reward to calculate the running reward\n        min_reward = min([sum(self.rewards[ob_id]) for ob_id in self.rewards])\n        self.running_reward = 0.05 * min_reward + (1 - 0.05) * self.running_reward\n\n        # clear saved probs and rewards\n        for ob_id in self.rewards:\n            self.rewards[ob_id] = []\n            self.saved_log_probs[ob_id] = []\n\n        policy_loss, returns = [], []\n        for r in rewards[::-1]:\n            R = r + args.gamma * R\n            returns.insert(0, R)\n        returns = torch.tensor(returns)\n        returns = (returns - returns.mean()) / (returns.std() + self.eps)\n        for log_prob, R in zip(probs, returns):\n            policy_loss.append(-log_prob * R)\n        self.optimizer.zero_grad()\n        policy_loss = torch.cat(policy_loss).sum()\n        policy_loss.backward()\n        self.optimizer.step()\n        return min_reward"
+        },
+        {
+          "lines": "50-70",
+          "code": "def _call_method(method, rref, *args, **kwargs):\n    r\"\"\"\n    a helper function to call a method on the given RRef\n    \"\"\"\n    return method(rref.local_value(), *args, **kwargs)\n\ndef _remote_method(method, rref, *args, **kwargs):\n    r\"\"\"\n    a helper function to run method on the owner of rref and fetch back the\n    result using RPC\n    \"\"\"\n    args = [method, rref] + list(args)\n    return rpc_sync(rref.owner(), _call_method, args=args, kwargs=kwargs)\n\nclass Policy(nn.Module):\n    r\"\"\"\n    Borrowing the ``Policy`` class from the Reinforcement Learning example.\n    Copying the code to make these two examples independent.\n    See https://github.com/pytorch/examples/tree/main/reinforcement_learning\n    \"\"\"\n    def __init__(self):\n        super(Policy, self).__init__()\n        self.affine1 = nn.Linear(4, 128)\n        self.dropout = nn.Dropout(p=0.6)\n        self.affine2 = nn.Linear(128, 2)\n\n        self.saved_log_probs = []\n        self.rewards = []\n\n    def forward(self, x):\n        x = self.affine1(x)\n        x = self.dropout(x)\n        x = F.relu(x)\n        action_scores = self.affine2(x)\n        return F.softmax(action_scores, dim=1)"
+        },
+        {
+          "lines": "113-127",
+          "code": "    def __init__(self):\n        self.id = rpc.get_worker_info().id\n        self.env = gym.make('CartPole-v1')\n        self.env.seed(args.seed)\n\n    def run_episode(self, agent_rref, n_steps):\n        r\"\"\"\n        Run one episode of n_steps.\n\n        Args:\n            agent_rref (RRef): an RRef referencing the agent object.\n            n_steps (int): number of steps in this episode\n        \"\"\"\n        state, ep_reward = self.env.reset(), 0\n        for step in range(n_steps):\n            # send the state to the agent to get an action\n            action = _remote_method(Agent.select_action, agent_rref, self.id, state)\n\n            # apply the action to the environment, and get the reward\n            state, reward, done, _ = self.env.step(action)\n\n            # report the reward to the agent for training purpose\n            _remote_method(Agent.report_reward, agent_rref, self.id, reward)\n\n            if done:\n                break\n\n    def __init__(self, world_size):\n        self.ob_rrefs = []\n        self.agent_rref = RRef(self)\n        self.rewards = {}\n        self.saved_log_probs = {}\n        self.policy = Policy()\n        self.optimizer = optim.Adam(self.policy.parameters(), lr=1e-2)\n        self.eps = np.finfo(np.float32).eps.item()\n        self.running_reward = 0\n        self.reward_threshold = gym.make('CartPole-v1').spec.reward_threshold\n        for ob_rank in range(1, world_size):\n            ob_info = rpc.get_worker_info(OBSERVER_NAME.format(ob_rank))\n            self.ob_rrefs.append(remote(ob_info, Observer))\n            self.rewards[ob_info.id] = []\n            self.saved_log_probs[ob_info.id] = []"
+        },
+        {
+          "lines": "152-169",
+          "code": "    def select_action(self, ob_id, state):\n        r\"\"\"\n        This function is mostly borrowed from the Reinforcement Learning example.\n        See https://github.com/pytorch/examples/tree/main/reinforcement_learning\n        The main difference is that instead of keeping all probs in one list,\n        the agent keeps probs in a dictionary, one key per observer.\n\n        NB: no need to enforce thread-safety here as GIL will serialize\n        executions.\n        \"\"\"\n        state = torch.from_numpy(state).float().unsqueeze(0)\n        probs = self.policy(state)\n        m = Categorical(probs)\n        action = m.sample()\n        self.saved_log_probs[ob_id].append(m.log_prob(action))\n        return action.item()\n\n    def report_reward(self, ob_id, reward):\n        r\"\"\"\n        Observers call this function to report rewards.\n        \"\"\"\n        self.rewards[ob_id].append(reward)\n\n    def run_episode(self, n_steps=0):\n        r\"\"\"\n        Run one episode. The agent will tell each oberser to run n_steps.\n        \"\"\"\n        futs = []\n        for ob_rref in self.ob_rrefs:\n            # make async RPC to kick off an episode on all observers\n            futs.append(\n                rpc_async(\n                    ob_rref.owner(),\n                    _call_method,\n                    args=(Observer.run_episode, ob_rref, self.agent_rref, n_steps)\n                )\n            )\n\n        # wait until all obervers have finished this episode\n        for fut in futs:\n            fut.wait()"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "gym",
+      "function": "make"
+    },
+    {
+      "module": "itertools",
+      "function": "count"
+    },
+    {
+      "module": "torch",
+      "function": "Adam"
+    },
+    {
+      "module": "torch",
+      "function": "Categorical"
+    },
+    {
+      "module": "torch",
+      "function": "Dropout"
+    },
+    {
+      "module": "torch",
+      "function": "Linear"
+    },
+    {
+      "module": "torch",
+      "function": "RRef"
+    },
+    {
+      "module": "torch",
+      "function": "cat"
+    },
+    {
+      "module": "torch",
+      "function": "from_numpy"
+    },
+    {
+      "module": "torch",
+      "function": "get_worker_info"
+    },
+    {
+      "module": "torch",
+      "function": "init_rpc"
+    },
+    {
+      "module": "torch",
+      "function": "manual_seed"
+    },
+    {
+      "module": "torch",
+      "function": "relu"
+    },
+    {
+      "module": "torch",
+      "function": "remote"
+    },
+    {
+      "module": "torch",
+      "function": "rpc_async"
+    },
+    {
+      "module": "torch",
+      "function": "rpc_sync"
+    },
+    {
+      "module": "torch",
+      "function": "shutdown"
+    },
+    {
+      "module": "torch",
+      "function": "softmax"
+    },
+    {
+      "module": "torch",
+      "function": "spawn"
+    },
+    {
+      "module": "torch",
+      "function": "tensor"
+    }
+  ]
+}

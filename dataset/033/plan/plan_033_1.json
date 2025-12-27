@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow, Slim, keras and object_detection modules required for the test",
+    "Define a batch size of 2 and image dimensions of 300x300",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Load the pre-trained model using DetectionModel from object_detection module",
+    "Prepare ground truth boxes and classes for the test case",
+    "Provide the ground truth boxes and classes to the model",
+    "Preprocess the input data according to the model's requirements",
+    "Call the predict method of the model with the preprocessed inputs and true image shapes",
+    "Calculate the loss using the prediction dictionary from the model",
+    "Verify that one or more elements in the localization loss are NaN values",
+    "Monitor GPU memory usage during the forward pass",
+    "Assert that the GPU memory exceeds an expected threshold indicating a bug"
+]
+```
+

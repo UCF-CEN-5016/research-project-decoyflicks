@@ -1,0 +1,17 @@
+```json
+[
+    "Set up a Python environment with Python 3.9.18 and install Keras 2.15 using pip: pip install keras==2.15",
+    "Install TensorFlow with GPU support: pip install tensorflow",
+    "Install Keras NLP: pip install keras-nlp",
+    "Set the environment variable for Keras backend to TensorFlow: os.environ['Keras_Backend'] = 'tensorflow'",
+    "Import necessary libraries: import os, tensorflow as tf, keras, keras_nlp",
+    "Set the mixed precision policy to mixed_float16: tf.keras.mixed_precision.set_global_policy('mixed_float16')",
+    "Instantiate a variable to hold the classifier: classifier = None",
+    "Attempt to instantiate the BertClassifier with the preset: classifier = keras_nlp.models.BertClassifier.from_preset('bert_tiny_en_uncased_sst2')",
+    "Capture the output and any exceptions raised during the instantiation of the classifier",
+    "Verify that an AttributeError is raised with the message: 'LossScaleOptimizerV3' object has no attribute 'name'",
+    "Log the error message to confirm the bug occurrence",
+    "Ensure that the GPU is being utilized during the execution by monitoring GPU memory usage",
+    "Assert that the error occurs consistently when the mixed precision policy is set to mixed_float16"
+]
+```

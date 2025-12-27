@@ -1,0 +1,17 @@
+[
+    "Set up a new Python environment or Colab notebook with Python 3.10",
+    "Install the latest versions of tensorflow and keras packages (e.g., `pip install tensorflow keras` without specifying keras version)",
+    "Import the following modules: `import tensorflow as tf` and `from keras.utils import data_utils`",
+    "Observe that the import `from keras.utils import data_utils` raises an ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Alternatively, install the keras_cv package which triggers the import of `data_utils` from `keras.utils` internally, by running `pip install keras-cv`",
+    "Create a minimal Python script or notebook cell that imports keras_cv models weights module, e.g., `from keras_cv.models import weights` and run it to trigger the import error",
+    "Verify the exact error message is raised: `ImportError: cannot import name 'data_utils' from 'keras.utils'` referencing the file path `/usr/local/lib/python3.10/dist-packages/keras/utils/__init__.py`",
+    "Run the Fine-tuning Stable Diffusion example code from https://keras.io/examples/generative/finetune_stable_diffusion/ in the current environment without modifying keras version",
+    "Observe that the example fails at import with the same ImportError",
+    "Record the keras version installed by running `pip show keras` and note it is a version higher than 2.12.0 (e.g., 2.13.1)",
+    "Uninstall keras and reinstall keras version 2.12.0 specifically via `pip install keras==2.12.0`",
+    "Repeat the import steps: `from keras.utils import data_utils` and importing keras_cv weights module",
+    "Verify that the ImportError no longer occurs with keras 2.12.0 installed",
+    "Run the Fine-tuning Stable Diffusion example again with keras 2.12.0 and observe that it runs without import errors",
+    "Assert that the ImportError is reproducible only with keras versions newer than 2.12.0 and not with 2.12.0"
+]

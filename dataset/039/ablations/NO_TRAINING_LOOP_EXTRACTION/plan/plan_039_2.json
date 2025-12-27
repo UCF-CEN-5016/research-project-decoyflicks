@@ -1,0 +1,13 @@
+```json
+[
+    "Import the necessary modules: torch and inspect from labml.logger",
+    "Define a batch size of 1 and feature dimensions of 4 (d=4) for the input tensor",
+    "Create a random input tensor with shape (3, 1, 1, 4) using torch.tensor, where 3 is the sequence length, 1 is the batch size, and 4 is the number of features",
+    "Instantiate the RotaryPositionalEmbeddings class with d=4",
+    "Call the forward method of the RotaryPositionalEmbeddings instance with the created input tensor",
+    "Capture the output tensor from the forward method call",
+    "Verify that the output tensor has the expected shape of (3, 1, 1, 4)",
+    "Check for RuntimeError during the execution of the forward method, specifically looking for the error message: 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the error message if the RuntimeError occurs to confirm the bug is reproduced"
+]
+```

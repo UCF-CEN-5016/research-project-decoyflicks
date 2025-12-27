@@ -1,0 +1,28 @@
+{
+  "bug_report": "039",
+  "module": {
+    "module": "labml_nn/transformers/compressive",
+    "files": [
+      {
+        "path": "labml_nn/transformers/compressive/__init__.py",
+        "snippets": [
+          {
+            "lines": "236-241",
+            "code": "    def __init__(self, layer: CompressiveTransformerLayer, n_layers: int):\n        super().__init__()\n        # Make copies of the transformer layer\n        self.layers = clone_module_list(layer, n_layers)\n        # Final normalization layer\n        self.norm = nn.LayerNorm([layer.size])\n\n    def forward(self, x: torch.Tensor, mem: List[torch.Tensor], c_mem: List[torch.Tensor], mask: torch.Tensor):\n        \"\"\"\n        * `x` is a tensor of the token embeddings vectors of shape `[seq_len, batch_size, d_model]`\n        * `mem` is a list of tensors of the past token level feature vectors of shape\n         `[mem_len, batch_size, d_model]` for each layer\n        * `c_mem` is a list of tensors of the compressed memory\n         `[c_mem_len, batch_size, d_model]` for each layer\n        * `mask` is the masking matrix\n        \"\"\"\n        # List to store token level feature vectors,\n        # which will become the memories for the next sequential batch.\n        new_mem = []\n        # Run through each transformer layer\n        for i, layer in enumerate(self.layers):\n            # Add to the list of feature vectors\n            new_mem.append(x.detach())\n            # Memory\n            m = mem[i] if mem else None\n            # Compressed Memory\n            cm = c_mem[i] if c_mem else None\n            # Run through the transformer XL layer\n            x = layer(x=x, mem=m, c_mem=cm, mask=mask)\n        # Finally, normalize the vectors\n        return self.norm(x), new_mem\n\n    def __init__(self, layers: TypedModuleList[CompressiveTransformerLayer]):\n        \"\"\"\n        `layers` is the list of Compressive Transformer layers\n        \"\"\"\n        self.layers = layers\n        self.loss_func = nn.MSELoss()"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "labml_nn/transformers/compressive/__init__.py",
+      "snippets": [
+        {
+          "lines": "236-241",
+          "code": "    def __init__(self, layer: CompressiveTransformerLayer, n_layers: int):\n        super().__init__()\n        # Make copies of the transformer layer\n        self.layers = clone_module_list(layer, n_layers)\n        # Final normalization layer\n        self.norm = nn.LayerNorm([layer.size])\n\n    def forward(self, x: torch.Tensor, mem: List[torch.Tensor], c_mem: List[torch.Tensor], mask: torch.Tensor):\n        \"\"\"\n        * `x` is a tensor of the token embeddings vectors of shape `[seq_len, batch_size, d_model]`\n        * `mem` is a list of tensors of the past token level feature vectors of shape\n         `[mem_len, batch_size, d_model]` for each layer\n        * `c_mem` is a list of tensors of the compressed memory\n         `[c_mem_len, batch_size, d_model]` for each layer\n        * `mask` is the masking matrix\n        \"\"\"\n        # List to store token level feature vectors,\n        # which will become the memories for the next sequential batch.\n        new_mem = []\n        # Run through each transformer layer\n        for i, layer in enumerate(self.layers):\n            # Add to the list of feature vectors\n            new_mem.append(x.detach())\n            # Memory\n            m = mem[i] if mem else None\n            # Compressed Memory\n            cm = c_mem[i] if c_mem else None\n            # Run through the transformer XL layer\n            x = layer(x=x, mem=m, c_mem=cm, mask=mask)\n        # Finally, normalize the vectors\n        return self.norm(x), new_mem\n\n    def __init__(self, layers: TypedModuleList[CompressiveTransformerLayer]):\n        \"\"\"\n        `layers` is the list of Compressive Transformer layers\n        \"\"\"\n        self.layers = layers\n        self.loss_func = nn.MSELoss()"
+        }
+      ]
+    }
+  ]
+}

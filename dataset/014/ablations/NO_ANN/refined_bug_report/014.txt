@@ -1,0 +1,45 @@
+TITLE  
+Bug when evaluating images with over 100 objects per image
+
+SYMPTOMS  
+• Model fails to converge when training on images containing more than 100 objects if specific configuration lines are not included.  
+• Error message when attempting to set `pipeline_config.eval_input_reader.max_number_of_boxes = 500`:  
+  `AttributeError: 'google.protobuf.pyext._message.RepeatedCompositeContainer' object has no attribute 'max_number_of_boxes'`  
+• Without the specified configuration lines, the model consistently searches for only 100 bounding boxes per image, resulting in poor accuracy (e.g., never exceeding 0.04 after training for over 270K steps).  
+• The issue becomes more pronounced with images containing larger clusters of objects.
+
+EXPECTED BEHAVIOR  
+The model should be able to train effectively on images with more than 100 objects when the appropriate configuration lines are set, allowing it to converge and achieve higher accuracy.
+
+REPRODUCTION STEPS  
+1. Import the necessary TensorFlow and object detection libraries:  
+   ```python
+   import tensorflow as tf  
+   from object_detection.utils import config_util  
+   from object_detection.protos import pipeline_pb2  
+   from google.protobuf import text_format  
+   ```
+2. Specify the path to the `pipeline.config` file:  
+   ```python  
+   configpath = #Path to pipeline.config file  
+   ```
+3. Load the configurations from the pipeline file:  
+   ```python  
+   config = config_util.get_configs_from_pipeline_file(configpath)  
+   ```
+4. Create a `TrainEvalPipelineConfig` object:  
+   ```python  
+   pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()  
+   ```
+5. Read the contents of the `pipeline.config` file:  
+   ```python  
+   with tf.io.gfile.GFile(configpath, "r") as f:  
+       proto_str = f.read()  
+       text_format.Merge(proto_str, pipeline_config)  
+   ```
+6. Attempt to set `max_number_of_boxes` for the evaluation input reader:  
+   ```python  
+   pipeline_config.eval_input_reader.max_number_of_boxes = 500  
+   ```
+7. Observe the error encountered when executing step 6.  
+8. Instead, manually add the configuration line directly to the `pipeline.config` file and verify that the model trains without errors.

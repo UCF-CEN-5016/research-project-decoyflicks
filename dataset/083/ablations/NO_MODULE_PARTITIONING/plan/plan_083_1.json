@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from vit_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 8 and image dimensions of 224x224",
+    "Create random input data with shape (batch_size, 3, height, width) using torch.randn(batch_size, 3, 224, 224)",
+    "Instantiate the CrossViT model with parameters: image_size=224, num_classes=10, sm_dim=64, lg_dim=128, sm_patch_size=12, lg_patch_size=16, sm_enc_depth=1, lg_enc_depth=4, cross_attn_depth=2, depth=3, dropout=0.1, emb_dropout=0.1",
+    "Pass the random input data through the CrossViT model to obtain the output logits",
+    "Check the shape of the output logits to ensure it matches (batch_size, num_classes) which should be (8, 10)",
+    "Introduce an assertion to check if the output logits contain any NaN values using assert not torch.isnan(logits).any()",
+    "If the assertion fails, print an error message indicating that NaN values were found in the output logits",
+    "Run the model in evaluation mode using model.eval() to ensure dropout layers are disabled",
+    "Re-run the forward pass with the same input data and check if the output logits are consistent with the previous run",
+    "Log the output values to a file for further analysis if NaN values are detected",
+    "Monitor the GPU memory usage during execution to check for any unexpected spikes or memory leaks",
+    "Assert that the GPU memory usage does not exceed a predefined threshold (e.g., 2GB) during the forward pass"
+]
+```

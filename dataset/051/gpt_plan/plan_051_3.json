@@ -1,0 +1,19 @@
+[
+  "Open a Colab notebook and set the runtime to use a T4 GPU accelerator",
+  "Import TensorFlow, Keras, KerasNLP, and other necessary libraries including random and numpy",
+  "Set up the English-to-Spanish translation example environment by cloning or downloading the KerasNLP neural machine translation example notebook from https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/nlp/ipynb/neural_machine_translation_with_keras_nlp.ipynb",
+  "Install the required keras-nlp package version compatible with Keras 3.2.1",
+  "Load or prepare the English-to-Spanish parallel dataset exactly as done in the example, including tokenization and vocabulary creation",
+  "Build the Transformer model architecture for translation according to the example code, including the encoder and decoder with the specified parameters (e.g., number of layers, embedding dimensions, number of heads)",
+  "Compile the model with the optimizer and loss function as shown in the tutorial",
+  "Train the model on the prepared dataset for at least one epoch to ensure the model trains successfully without errors",
+  "Define the decode_sequences function as in the example, which uses keras_nlp.samplers.GreedySampler to generate translations, passing the 'end_token_id' keyword argument to the sampler's __call__ method",
+  "Within the decode_sequences function, create the prompt by concatenating the start token and padding tokens with the correct shapes and data types",
+  "Call the GreedySampler instance with the next token probability function and the prompt, explicitly passing the end_token_id argument (e.g., end_token_id=spanish_tokenizer.token_to_id('[END]'))",
+  "Run the decode_sequences function on at least two random input English sentences from the test set (e.g., by calling decode_sequences([input_sentence]) where input_sentence is a string)",
+  "Observe the runtime error: TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id'",
+  "Capture the full stack trace showing that the error originates from the call to keras_nlp.samplers.GreedySampler().__call__ with end_token_id argument",
+  "Verify that the error consistently occurs with Keras version 3.2.1 and Python 3.10.12 in the Colab T4 GPU environment",
+  "Assert that the training phase completes successfully without errors, confirming that the bug only manifests during inference/decoding",
+  "Optionally, print the version of keras_nlp and keras to confirm environment matches conditions that trigger the bug"
+]

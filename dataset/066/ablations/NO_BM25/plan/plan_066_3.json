@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from keras import layers, Sequential, Dense, Dropout, Flatten, MaxPooling2D",
+    "Set the random seed for reproducibility: np.random.seed(42)",
+    "Define a batch size of 128 and number of epochs as 5",
+    "Define input shape for the model as (28, 28, 1)",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Scale the training and testing images to the range [0, 1] by dividing by 255",
+    "Ensure the training and testing images have shape (28, 28, 1) using np.expand_dims()",
+    "Convert class vectors to binary class matrices using keras.utils.to_categorical() for 10 classes",
+    "Define a Sequential model with the following layers: Input layer, StandardizedConv2DWithCall, MaxPooling2D, StandardizedConv2DWithOverride, MaxPooling2D, Flatten, Dropout, Dense",
+    "Implement the StandardizedConv2DWithCall class that overrides the call method to include a custom convolution operation",
+    "Implement the StandardizedConv2DWithOverride class that overrides the convolution_op method to include a custom convolution operation",
+    "Compile the model using categorical_crossentropy loss, adam optimizer, and accuracy as a metric",
+    "Fit the model on the training data with validation_split set to 0.1",
+    "Check the model summary to ensure all layers are correctly added",
+    "Locate line 347 in the code and confirm that level2_dau_2 is defined but not used",
+    "Locate line 352 in the code and confirm that level3_dau_2 is used instead of level2_dau_2",
+    "Run the model training and observe the output for any warnings or errors related to unused variables",
+    "Assert that the variable level2_dau_2 is not referenced in the output or model summary"
+]
+```

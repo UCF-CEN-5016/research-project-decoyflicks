@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the official vision augment module from tensorflow_models",
+    "Define alpha and beta parameters for the beta distribution: alpha = 0.2, beta = 0.2",
+    "Define the shape for the sample: shape = tf.shape(tf.range(1000)",
+    "Call the _sample_from_beta method from MixupAndCutmix with parameters: _sample_from_beta(alpha, beta, shape)",
+    "Store the output of the _sample_from_beta method in a variable named 'mixup_samples'",
+    "Import NumPy and Matplotlib for plotting",
+    "Generate a reference sample using NumPy's beta function: reference_samples = np.random.beta(alpha, beta, 100000)",
+    "Create a new figure for plotting using plt.figure()",
+    "Plot the kernel density estimate of 'mixup_samples' using sns.kdeplot(mixup_samples, clip=(0, 1))",
+    "Plot the kernel density estimate of 'reference_samples' using sns.kdeplot(reference_samples, clip=(0, 1))",
+    "Add a title to the plot using plt.title('Mixup Samples vs Reference Samples')",
+    "Display the plot using plt.show()",
+    "Verify that the distribution of 'mixup_samples' visually differs from 'reference_samples'",
+    "Check for any unexpected spikes or anomalies in the 'mixup_samples' distribution"
+]
+```

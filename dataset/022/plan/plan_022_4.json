@@ -1,0 +1,12 @@
+```json
+[
+    "Import necessary modules from tf_slim and nets",
+    "Define a batch size of 2 and image dimensions of 65x65",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call resnet_v1 function with num_classes=10 and global_pool=True",
+    "Verify output contains NaN values in logits calculation",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold"
+]
+```
+

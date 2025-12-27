@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary libraries for instance segmentation: 'import tensorflow as tf' and 'from official.vision import instance_segmentation'",
+    "Set the random seed for reproducibility: 'tf.random.set_seed(42)'",
+    "Define the model configuration parameters, including 'num_classes' set to 2 (for background and one object class), 'batch_size' set to 8, and 'image_size' set to (512, 512)",
+    "Load the dataset for instance segmentation using TensorFlow Datasets: 'dataset = tfds.load('coco/2017', split='train')'",
+    "Preprocess the dataset by resizing images to (512, 512) and normalizing pixel values to [0, 1]",
+    "Create a training and validation split from the dataset: 'train_dataset = dataset.take(8000)' and 'val_dataset = dataset.skip(8000)'",
+    "Define the model using the official instance segmentation model: 'model = instance_segmentation.create_model(num_classes=num_classes)'",
+    "Compile the model with a loss function: 'model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])'",
+    "Train the model using the training dataset with 'model.fit(train_dataset.batch(batch_size), epochs=10, validation_data=val_dataset.batch(batch_size))'",
+    "During training, monitor the validation loss by printing the metrics after each epoch",
+    "Verify that the validation loss is consistently reported as 0.0 in the output of the training process",
+    "Check the training logs for the 'validation_loss' key in the output dictionary after each evaluation step",
+    "Assert that 'validation_loss' is equal to 0.0 in the printed metrics after training completes"
+]
+```

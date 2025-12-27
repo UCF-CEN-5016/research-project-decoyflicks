@@ -1,0 +1,26 @@
+```json
+[
+    "Import TensorFlow, Keras, and NLTK libraries: tensorflow, keras_nlp, and nltk.translate.bleu_score",
+    "Import necessary functions and variables from data_preprocessing: MAX_SEQUENCE_LENGTH, eng_tokenizer, spa_tokenizer, and test_pairs",
+    "Import the transformer model from the model module",
+    "Set the TEST_BATCH_SIZE variable to 1",
+    "Define a function decode_sequences that takes input_sentences as an argument",
+    "Inside decode_sequences, convert input_sentences to a tensor using eng_tokenizer and ensure it is padded to MAX_SEQUENCE_LENGTH",
+    "Add a check to truncate encoder_input_tokens to a maximum length of 40 if it exceeds this length",
+    "Define a nested function next_fn that takes prompt, cache, and index as arguments",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, and extract logits for the specified index",
+    "Set hidden_states to None in next_fn",
+    "Build a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler with next_fn, prompt, end_token_id, and index=1",
+    "Return the generated sentences from decode_sequences",
+    "Create test_eng_texts and test_spa_texts lists from test_pairs",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through the range of test_pairs length, and for each index, call decode_sequences with the corresponding input_sentence",
+    "After decoding, process the translated output to remove special tokens and split into words",
+    "Calculate the BLEU score using modified_precision from NLTK and append it to bleu_score",
+    "Print the mean of the BLEU scores",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler",
+    "Check the output logs for any errors or warnings related to tensor shapes or memory issues",
+    "Verify that the segmentation fault occurs specifically after the next_fn returns logits, an empty tuple, and None for hidden_states"
+]
+```

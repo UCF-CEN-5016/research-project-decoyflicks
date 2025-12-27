@@ -1,0 +1,22 @@
+TITLE
+Missing Module in Delf Python Package
+
+SYMPTOMS
+• The script `extract_features.py` fails to run due to a `ModuleNotFoundError`.
+• The specific error is `No module named 'delf.python.datasets'`.
+
+EXPECTED BEHAVIOR
+The `extract_features.py` script should successfully import necessary modules and execute without errors, allowing the feature extraction process from images.
+
+REPRODUCTION STEPS
+1. Navigate to the directory containing the Delf repository in Google Colab using:
+```
+%cd /content/models/research/delf/delf/python/examples/
+```
+2. Run the following command to attempt script execution:
+```
+!python3 extract_features.py \
+--config_path delf_config_example.pbtxt \
+--list_images_path list_images.txt \
+--output_dir data/oxford5k_features
+```

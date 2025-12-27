@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Model Garden modules: tensorflow_models and official.projects.pix2seq.tasks.pix2seq_task",
+    "Set the Python version to 3.10 and ensure TensorFlow version is 2.x by running 'python -c \"import tensorflow as tf; print(tf.version.VERSION)\"'",
+    "Install the required packages using pip: 'pip install tensorflow tensorflow-text absl-py'",
+    "Create a Python script named 'reproduce_bug.py'",
+    "In 'reproduce_bug.py', import the necessary modules: 'import tensorflow as tf', 'import tensorflow_models as tfm', 'from official.projects.pix2seq.tasks.pix2seq_task import Pix2SeqTask'",
+    "Define a configuration dictionary for the Pix2Seq task with the following parameters: {'model': {'input_size': [256, 256, 3], 'backbone': 'resnet50', 'max_num_instances': 10, 'vocab_size': 100, 'hidden_size': 256, 'num_encoder_layers': 6, 'num_decoder_layers': 6, 'dropout_rate': 0.1, 'attention_dropout_rate': 0.1, 'norm_first': True}, 'losses': {'eos_token_weight': 1.0}}",
+    "Instantiate the Pix2SeqTask with the configuration: 'task = Pix2SeqTask(task_config=config)'",
+    "Call the 'build_model' method on the task instance: 'model = task.build_model()'",
+    "Create a dummy input tensor with shape (1, 256, 256, 3) using 'tf.random.uniform((1, 256, 256, 3))'",
+    "Create a dummy label tensor with shape (1, 10) using 'tf.random.uniform((1, 10), maxval=100, dtype=tf.int32)'",
+    "Create a dummy weights tensor with shape (1, 10) using 'tf.random.uniform((1, 10), minval=0, maxval=1, dtype=tf.float32)'",
+    "Create a dictionary for inputs: 'inputs = {'inputs': dummy_input, 'targets': dummy_labels, 'weights': dummy_weights}'",
+    "Call the 'train_step' method on the task instance with the inputs: 'logs = task.train_step(inputs, model, optimizer=None)'",
+    "Capture the output logs and check for any ImportError related to 'tensorflow_text.core.pybinds.tflite_registrar'",
+    "Assert that the output logs contain the ImportError message: 'ImportError: /usr/local/lib/python3.10/dist-packages/tensorflow_text/core/pybinds/tflite_registrar.so: undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Run the script using 'python reproduce_bug.py' to verify that the bug occurs"
+]
+```

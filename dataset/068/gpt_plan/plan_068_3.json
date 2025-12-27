@@ -1,0 +1,17 @@
+[
+  "Import TensorFlow, Keras, KerasCV, TensorFlow Datasets (tfds), and necessary utilities such as matplotlib.pyplot",
+  "Set BATCH_SIZE to 4 and AUTOTUNE to tf.data.AUTOTUNE for dataset pipeline optimization",
+  "Disable TensorFlow Datasets progress bar with tfds.disable_progress_bar()",
+  "Load the COCO dataset or a similar object detection dataset compatible with keras_cv YOLOv8 example, ensuring it includes bounding boxes and class labels",
+  "Define image preprocessing function that resizes images to (640, 640) and converts bounding boxes and labels into the dictionary format expected by KerasCV YOLOv8 model, maintaining batch dimension consistency",
+  "Create train and validation datasets by applying map with the preprocessing function, batching with BATCH_SIZE=4, and applying caching and prefetching with AUTOTUNE",
+  "Define a data augmentation pipeline that applies keras_cv.layers.CutMix and keras_cv.layers.MixUp sequentially on the training dataset, ensuring the output format remains consistent with the model input requirements",
+  "Apply the augmentation pipeline by mapping over the training dataset with num_parallel_calls=AUTOTUNE",
+  "Load the keras_cv.models.YOLOV8 model preset (e.g., 'yolov8n') with input_shape=(640, 640, 3) and compile it with an appropriate optimizer, loss, and the COCO evaluation metrics callback (EvaluateCOCOMetricsCallback), passing the validation dataset",
+  "Train the model for 3 epochs using model.fit() on the training dataset with validation_data set to the validation dataset and including the EvaluateCOCOMetricsCallback",
+  "Observe the training progress; after completion of the first epoch, confirm that an UnknownError occurs during the callback evaluation step indicating a TensorFlow ConcatOp InvalidArgumentError due to mismatched tensor shapes with dimension 1 differing (e.g., shape [4,2,4] vs. [4,1,4])",
+  "Verify the traceback points to keras_cv.metrics.object_detection.box_coco_metrics.py in the _box_concat function during concatenation of ground truth boxes",
+  "Assert that the error is reproducible consistently when using the CutMix and MixUp augmentations together in the YOLOv8 KerasCV training pipeline with batch size 4 and input size 640x640",
+  "Capture and log the shapes of bounding box tensors before concatenation within the metric callback for debugging, confirming inconsistent dimensions on axis 1",
+  "Validate that removing CutMix and MixUp augmentations prevents the error, confirming the bug is linked to these augmentations affecting bounding box tensor shapes"
+]

@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: 'import tensorflow as tf' and 'from tensorflow import keras'",
+    "Set the random seed for reproducibility: 'tf.random.set_seed(42)'",
+    "Define the batch size as 8 and image dimensions as 256x256: 'BATCH_SIZE = 8' and 'IMAGE_HEIGHT, IMAGE_WIDTH = 256, 256'",
+    "Load the instance segmentation dataset using TensorFlow Datasets: 'dataset, info = tfds.load('coco/2017', split='train', with_info=True)'",
+    "Preprocess the dataset to resize images to (IMAGE_HEIGHT, IMAGE_WIDTH) and normalize pixel values: 'def preprocess_image(image, label): return tf.image.resize(image, [IMAGE_HEIGHT, IMAGE_WIDTH]) / 255.0, label'",
+    "Map the preprocessing function to the dataset: 'dataset = dataset.map(preprocess_image).batch(BATCH_SIZE)'",
+    "Define a simple instance segmentation model using TensorFlow Keras: 'model = keras.Sequential([...])' with appropriate layers for segmentation",
+    "Compile the model with a loss function suitable for segmentation, e.g., 'loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)' and optimizer 'optimizer = tf.keras.optimizers.Adam()'",
+    "Train the model on the dataset for a few epochs: 'model.fit(dataset, epochs=5)'",
+    "Set up a validation dataset by splitting the original dataset: 'val_dataset = dataset.take(0.2)'",
+    "During training, include validation metrics: 'model.fit(dataset, validation_data=val_dataset)'",
+    "Monitor the training output for validation loss: 'print('Validation loss:', model.evaluate(val_dataset))'",
+    "Assert that the validation loss is printed as 0.0: 'assert validation_loss == 0.0, \"Validation loss should be 0.0\"'",
+    "Check the training logs for the validation loss output after each epoch to confirm it remains 0.0",
+    "Run the notebook cell that contains the 'Train and Evaluate' section to reproduce the bug",
+    "Verify that the output consistently shows 'validation_loss': 0.0 in the evaluation metrics"
+]
+```

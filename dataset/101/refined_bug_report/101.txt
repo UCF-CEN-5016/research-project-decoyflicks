@@ -1,0 +1,22 @@
+TITLE
+Core Issue Summary
+[Rotary embeddings cause NaNs in K tensor after rotation, leading to NaN loss propagation.]
+
+SYMPTOMS
+• A very small fraction of NaN values appear in the K tensor after using rotary_emb.rotate_queries_and_keys(Q, K).
+• These NaNs propagate through the transformer and result in a NaN loss.
+• No specific error messages are mentioned.
+
+EXPECTED BEHAVIOR
+• The rotation operation should not introduce any NaN values into the K tensor.
+• After rotation, both Q and K tensors should contain valid numerical values without any NaNs.
+• Loss calculation should proceed normally without encountering NaNs.
+
+REPRODUCTION STEPS
+1. Initialize the input query matrix Q with appropriate dimensions (batch size x sequence length x hidden dimension).
+2. Initialize the key matrix K with the same dimensions as Q.
+3. Apply rotary_emb.rotate_queries_and_keys(Q, K) to rotate both tensors.
+4. Verify that the contents of Q and K do not contain any NaNs before proceeding further.
+5. Pass the modified Q and K through the rest of the transformer model.
+6. Compute the loss using these transformed inputs.
+7. Observe that the computed loss is NaN due to the presence of NaN values in either Q or K.

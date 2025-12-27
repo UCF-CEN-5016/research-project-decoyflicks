@@ -1,0 +1,44 @@
+### TITLE
+MMS ASR Inference Produces Output Log in Incorrect Order
+
+### SYMPTOMS
+• The output log from the MMS ASR inference does not match the order of the input audio files.
+• The expected text output for each audio file is not aligned with the corresponding audio file in the log.
+• The output for the input audio files appears in a disordered manner, leading to confusion in the results.
+
+**Example of Disordered Output:**
+```
+Input: /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0000.wav
+Output: at most by an alms given to a beggar whose blessing he fled from he might hope wearily to win for himself some measure of actual grace
+```
+**Expected Order:**
+```
+1089-134686-0000 HE HOPED THERE WOULD BE STEW FOR DINNER TURNIPS AND CARROTS AND BRUISED POTATOES AND FAT MUTTON PIECES TO BE LADLED OUT IN THICK PEPPERED FLOUR FATTENED SAUCE
+```
+
+### EXPECTED BEHAVIOR
+The output log should display the results in the same order as the input audio files, ensuring that each audio file's transcription corresponds directly with its filename.
+
+### REPRODUCTION STEPS
+1. Run the following command to initiate the inference:
+   ```bash
+   python -u examples/mms/asr/infer/mms_infer.py \
+       --model `pwd`/../fairseq_resource/mms1b_all.pt \
+       --lang "eng" \
+       --audio audio1.wav audio2.wav audio3.wav ... audio10.wav
+   ```
+2. Observe the output log generated during the inference process.
+3. Compare the order of the output log with the order of the input audio files.
+
+### ENVIRONMENT
+- **fairseq Version:** [Specify version]
+- **PyTorch Version:** [Specify version]
+- **OS:** [Specify OS]
+- **Installation Method:** [Specify how fairseq was installed (e.g., pip, source)]
+- **Python Version:** [Specify version]
+- **CUDA/cuDNN Version:** [Specify version]
+- **GPU Models and Configuration:** [Specify GPU models]
+- **Any other relevant information:** [Include any additional context] 
+
+### ADDITIONAL CONTEXT
+[Include any other relevant information that may assist in diagnosing the issue.]

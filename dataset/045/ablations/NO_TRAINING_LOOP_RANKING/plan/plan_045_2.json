@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: torch, fairseq, and any other required modules.",
+    "Set the DATA_ROOT variable to the path where the dataset is located, e.g., DATA_ROOT = '/root/autodl-tmp/FormattingData/DATA_ROOT'.",
+    "Prepare the configuration YAML file path: config_yaml = '/root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml'.",
+    "Set the model path to the pre-trained model: model_path = '/root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt'.",
+    "Define the command for fairseq-generate with the following parameters: ",
+    "  - --config-yaml config_yaml",
+    "  - --task speech_to_speech",
+    "  - --target-is-code",
+    "  - --target-code-size 100",
+    "  - --vocoder code_hifigan",
+    "  - --path model_path",
+    "  - --gen-subset test",
+    "  - --max-tokens 50000",
+    "  - --beam 10",
+    "  - --max-len-a 1",
+    "  - --results-path '/root/autodl-tmp/results'.",
+    "Execute the fairseq-generate command in the terminal or through a subprocess in Python.",
+    "Monitor the output for any error messages, specifically looking for 'Key input_feat_per_channel is not in struct'.",
+    "If the error occurs, capture the full stack trace for further analysis.",
+    "Verify that the model and data are compatible by checking the dimensions of the input features and the expected structure.",
+    "Check the contents of the config.yaml file to ensure it includes the necessary parameters for the model.",
+    "Validate that the model file at model_path exists and is accessible.",
+    "Ensure that the environment has the correct version of fairseq installed that matches the model requirements."
+]
+```

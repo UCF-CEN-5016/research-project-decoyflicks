@@ -1,0 +1,18 @@
+```json
+[
+    "Install TensorFlow and the necessary dependencies (absl, keras) using pip",
+    "Import TensorFlow, absl, functools, and other required modules in a Python script",
+    "Set up a distribution strategy for TensorFlow using MirroredStrategy if running on multiple GPUs",
+    "Create a mock dataset with random input features and labels using numpy",
+    "Define a custom model by subclassing tf.keras.Model and implement the forward pass method",
+    "Implement a custom loss function that calculates the mean squared error between predictions and labels",
+    "Initialize an optimizer (e.g., Adam) and configure it using configure_optimizer from the official module",
+    "Create an instance of your custom model and pass it to the optimizer",
+    "Define a training step function that takes inputs, applies the model, computes loss, and updates weights",
+    "Call the training step function with mock data multiple times (e.g., 10 iterations)",
+    "Monitor the loss value after each training step",
+    "Assert that the loss value is NaN in at least one of the training steps",
+    "Monitor GPU memory usage during training to ensure it does not exceed expected thresholds"
+]
+```
+

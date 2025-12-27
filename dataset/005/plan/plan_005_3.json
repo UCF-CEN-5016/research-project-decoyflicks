@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official library",
+    "Define a batch size of 64 and image dimensions of 256x256 for ResNet",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Set the number of classes to 1000 for classification",
+    "Call the resnet_v2_50 function from official model zoo with predefined parameters",
+    "Verify that the loss calculation results in NaN values during training",
+    "Monitor GPU memory usage during execution of the training loop",
+    "Assert that the GPU memory usage exceeds an expected threshold indicating potential memory overflow"
+]
+```
+

@@ -1,0 +1,21 @@
+```json
+[
+    "Install PyTorch version 1.9.0+cu111 using pip: 'pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html'",
+    "Import necessary libraries: 'import os', 'import threading', 'from datetime import datetime', 'import torch', 'import torch.distributed.rpc as rpc', 'import torch.multiprocessing as mp', 'import torch.nn as nn', 'from torch import optim', 'import torchvision'",
+    "Define constants: 'batch_size = 20', 'image_w = 64', 'image_h = 64', 'num_classes = 30', 'batch_update_size = 5', 'num_batches = 6'",
+    "Create a class 'BatchUpdateParameterServer' with an '__init__' method that initializes a ResNet50 model: 'self.model = torchvision.models.resnet50(num_classes=num_classes)'",
+    "In the 'BatchUpdateParameterServer' class, define a method 'get_model' that returns 'self.model'",
+    "Define a static method 'update_and_fetch_model' in 'BatchUpdateParameterServer' that takes 'ps_rref' and 'grads' as arguments",
+    "In 'update_and_fetch_model', log the current update size using 'timed_log(f\"PS got {self.curr_update_size}/{batch_update_size} updates\")'",
+    "In 'update_and_fetch_model', accumulate gradients and update the model using SGD optimizer",
+    "Create a class 'Trainer' with an '__init__' method that initializes 'self.ps_rref' and 'self.loss_fn = nn.MSELoss()'",
+    "In the 'Trainer' class, define a method 'get_next_batch' that yields random input tensors of shape (batch_size, 3, image_w, image_h) and corresponding labels",
+    "In the 'Trainer' class, define a method 'train' that retrieves the model from 'ps_rref', processes batches, and reports gradients",
+    "Define a function 'run_trainer' that creates an instance of 'Trainer' and calls its 'train' method",
+    "Define a function 'run_ps' that initializes the parameter server and starts training with multiple trainers",
+    "Define a function 'run' that sets up the RPC environment and calls 'run_ps'",
+    "In the '__main__' block, set 'world_size = batch_update_size + 1' and call 'mp.spawn(run, args=(world_size,), nprocs=world_size, join=True)'",
+    "Run the script and observe the output to trigger the bug",
+    "Verify that the output contains the error message: 'AttributeError: module 'torch.backends' has no attribute 'mps''"
+]
+```

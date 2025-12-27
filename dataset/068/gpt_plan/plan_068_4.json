@@ -1,0 +1,21 @@
+[
+  "Import TensorFlow, TensorFlow Datasets, Keras, NumPy, and Matplotlib modules required for data handling, model building, and visualization",
+  "Load the COCO 2017 dataset splits 'train' and 'validation' using tfds.load with data_dir='data' to ensure dataset is cached locally",
+  "Define batch size as 2 for training and 1 for validation to match example setup",
+  "Implement the preprocess_data function that resizes images with shortest side jitter in range [640, 1024], caps longest side at 1333, applies random horizontal flipping, and converts bounding boxes from [xmin, ymin, xmax, ymax] to [x, y, width, height]",
+  "Map preprocess_data over both train and validation datasets with num_parallel_calls=tf.data.AUTOTUNE",
+  "Use padded_batch on train dataset with batch_size=2, padding_values=(0.0, 1e-8, -1), and drop_remainder=True to create fixed-shape batches with padding for images, bounding boxes, and class ids",
+  "Chain a call to label_encoder.encode_batch on the train dataset batches to convert raw labels to training targets; similarly apply on validation dataset with batch_size=1 padded batches",
+  "Apply tf.data.experimental.ignore_errors() on both train and validation datasets to silently skip erroneous samples during iteration",
+  "Prefetch datasets with tf.data.AUTOTUNE to improve pipeline throughput",
+  "Build the RetinaNet model with ResNet50 backbone and custom feature pyramid, classification and box regression heads as defined in the example",
+  "Compile the model with RetinaNetLoss as loss function and SGD optimizer with learning rate schedule matching the example (PiecewiseConstantDecay with specific boundaries and values)",
+  "Set epochs=3 to allow multiple epochs for training to trigger the error after first epoch",
+  "Train the model using model.fit with train_dataset.take(100) for training and val_dataset.take(50) for validation, batch_size=2 for training and 1 for validation, callbacks including ModelCheckpoint, and verbose=1",
+  "Monitor training logs for successful completion of first epoch and observe the loss values (e.g., total loss around 21.5, box_loss ~2.6, class_loss ~19) before error occurs",
+  "At the end of the first epoch, verify that an UnknownError occurs originating from keras_cv.metrics.object_detection.box_coco_metrics.py in the call to tf.concat, with message indicating mismatched dimension 1 in shapes [4, 2, 4] vs [4, 1, 4]",
+  "Confirm the stack trace shows the error triggered during the evaluation callback's on_epoch_end method when invoking self.metrics.result(force=True)",
+  "Assert that the error is reproducible on a Colab Pro environment with TensorFlow 2.x, KerasCV installed, and COCO 2017 dataset loaded as specified",
+  "Verify that the bug occurs specifically after completing the first epoch and during metric calculation on validation dataset",
+  "Document the exact error message and stack trace indicating the dimension mismatch in tf.concat operation"
+]

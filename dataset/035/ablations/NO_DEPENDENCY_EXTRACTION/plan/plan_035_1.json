@@ -1,0 +1,26 @@
+```json
+[
+    "Clone the repository from GitHub using the command: git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git",
+    "Navigate to the directory containing the RoPE file: cd annotated_deep_learning_paper_implementations/labml_nn/transformers/rope",
+    "Open the __init__.py file in a text editor and locate line 226 where 'rotary_pe = RotaryPositionalEmbeddings(3)' is defined.",
+    "Change the line to 'rotary_pe = RotaryPositionalEmbeddings(4)' to simulate the bug as reported.",
+    "Navigate to the performance test module directory: cd ../optimizers",
+    "Open the performance_test.py file in a text editor.",
+    "Ensure the following imports are present: import torch, import torch.nn as nn, from labml_nn.optimizers.adam import Adam as MyAdam, from labml_nn.optimizers.mnist_experiment import Model.",
+    "Define a batch size of 64 and input dimensions of (1, 28, 28) for the model input.",
+    "Create random input data with shape (64, 1, 28, 28) using: inp = torch.randn((64, 1, 28, 28), device='cuda') if CUDA is available.",
+    "Create target labels with shape (64,) using: target = torch.ones(64, dtype=torch.long, device='cuda').",
+    "Instantiate the model using: model = Model().to('cuda').",
+    "Instantiate MyAdam optimizer with model parameters: my_adam = MyAdam(model.parameters()).",
+    "Instantiate the TorchAdam optimizer with model parameters: torch_adam = TorchAdam(model.parameters()).",
+    "Define the loss function using: loss_func = nn.CrossEntropyLoss().",
+    "Calculate the initial loss using: loss = loss_func(model(inp), target).",
+    "Call loss.backward() to compute gradients.",
+    "Run a warmup loop for MyAdam optimizer for 100 steps: for i in range(100): my_adam.step().",
+    "Run the main loop for MyAdam optimizer for 1000 steps: for i in range(1000): my_adam.step().",
+    "Run a warmup loop for TorchAdam optimizer for 100 steps: for i in range(100): torch_adam.step().",
+    "Run the main loop for TorchAdam optimizer for 1000 steps: for i in range(1000): torch_adam.step().",
+    "Monitor the output for any errors or exceptions that occur during the execution, particularly related to the dimensions of the rotary positional embeddings.",
+    "Assert that an error is raised indicating a mismatch in expected dimensions due to the incorrect number of features in RotaryPositionalEmbeddings."
+]
+```

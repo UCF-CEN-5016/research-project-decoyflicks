@@ -1,0 +1,22 @@
+```json
+[
+    "Install PyTorch version 1.9.0+cu111 using pip: 'pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html'",
+    "Import necessary libraries: 'import os', 'import threading', 'from datetime import datetime', 'import torch', 'import torch.distributed.rpc as rpc', 'import torch.multiprocessing as mp', 'import torch.nn as nn', 'from torch import optim', 'import torchvision'",
+    "Define constants: 'batch_size = 20', 'image_w = 64', 'image_h = 64', 'num_classes = 30', 'batch_update_size = 5', 'num_batches = 6'",
+    "Create a class 'BatchUpdateParameterServer' with an '__init__' method that initializes a ResNet50 model with 'num_classes' and an SGD optimizer",
+    "Define a method 'get_model' in 'BatchUpdateParameterServer' that returns the model",
+    "Define a static method 'update_and_fetch_model' in 'BatchUpdateParameterServer' that takes 'ps_rref' and 'grads' as arguments",
+    "In 'update_and_fetch_model', log the current update size and increment it, then check if it exceeds 'batch_update_size'",
+    "If the update size exceeds 'batch_update_size', perform a model update and reset the update size",
+    "Create a class 'Trainer' with an '__init__' method that initializes 'ps_rref' and a loss function 'nn.MSELoss()'",
+    "Define a method 'get_next_batch' in 'Trainer' that yields random input tensors of shape (batch_size, 3, image_w, image_h) and corresponding one-hot encoded labels",
+    "Define a method 'train' in 'Trainer' that retrieves the model from 'ps_rref', processes batches, computes gradients, and reports them back to the parameter server",
+    "Define a function 'run_trainer' that creates an instance of 'Trainer' and calls its 'train' method",
+    "Define a function 'run_ps' that initializes the parameter server and starts training with multiple trainers",
+    "Define a function 'run' that sets up the RPC environment and starts the parameter server and trainers",
+    "In the '__main__' block, set 'world_size' to 'batch_update_size + 1' and spawn processes using 'mp.spawn(run, args=(world_size,), nprocs=world_size, join=True)'",
+    "Run the script with the command: 'python3 main.py -a resnet18 --dummy'",
+    "Observe the output for the AttributeError: 'module 'torch.backends' has no attribute 'mps''",
+    "Verify that the error occurs during the execution of 'elif torch.backends.mps.is_available()' in the 'main_worker' function"
+]
+```

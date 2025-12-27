@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras_nlp, import random, import numpy as np",
+    "Set the random seed for reproducibility: np.random.seed(42), random.seed(42), tf.random.set_seed(42)",
+    "Define the model parameters: set vocab_size = 10000, embedding_dim = 256, hidden_units = 512",
+    "Create a simple sequential model using Keras: model = tf.keras.Sequential([tf.keras.layers.Embedding(vocab_size, embedding_dim), tf.keras.layers.LSTM(hidden_units), tf.keras.layers.Dense(vocab_size)])",
+    "Compile the model with a loss function and optimizer: model.compile(loss='sparse_categorical_crossentropy', optimizer='adam')",
+    "Generate dummy training data: create input_data = np.random.randint(0, vocab_size, size=(1000, 10)), create target_data = np.random.randint(0, vocab_size, size=(1000, 10))",
+    "Fit the model on the dummy data: model.fit(input_data, target_data, epochs=5, batch_size=32)",
+    "Define a function to decode sequences: def decode_sequences(input_sentences): start = np.array([[1]]), pad = np.array([[0]]), prompt = np.concatenate((start, pad), axis=-1), next = model.predict(prompt)",
+    "Attempt to use the GreedySampler with an end_token_id argument: generated_tokens = keras_nlp.samplers.GreedySampler()(next, prompt, end_token_id=2)",
+    "Run the decode_sequences function with a test input: input_sentence = 'Hello, how are you?', call decode_sequences([input_sentence])",
+    "Capture the output and verify that a TypeError is raised: assert 'TypeError' in str(e) when the function is called"
+]
+```

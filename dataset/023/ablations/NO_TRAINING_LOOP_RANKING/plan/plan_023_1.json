@@ -1,0 +1,24 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official vision layers",
+    "Set TensorFlow version to 2.12",
+    "Define a batch size of 1 and input dimensions of 128x128 with 256 channels",
+    "Create random uniform input data with shape (1, 128, 128, 256)",
+    "Instantiate a ResidualBlock from official.vision.modeling.layers with filter_size=256, strides=1, use_projection=False, se_ratio=None, stochastic_depth_drop_rate=0.0",
+    "Call the ResidualBlock with the created input data",
+    "Assert that the output shape of the ResidualBlock is (1, 128, 128, 256)",
+    "Instantiate a LayerScale object with init_values=1e-4",
+    "Call the LayerScale object on the input data and assert the output shape matches the input shape",
+    "Check that output values are equal to init_values multiplied by ones of the same shape as input data",
+    "Define an optimizer using tf.keras.optimizers.Adam()",
+    "Define a loss function using tf.keras.losses.MeanSquaredError()",
+    "Perform a single training step using GradientTape to compute gradients and apply them",
+    "Assert that the gamma values of LayerScale have changed after training step",
+    "Instantiate a DepthwiseSeparableConvBlock with num_filters=64 and strides=2",
+    "Call the DepthwiseSeparableConvBlock with the input data and assert the output shape is (1, 64, 64, 64)",
+    "Create a model using tf.keras.Model with input data and output from DepthwiseSeparableConvBlock",
+    "Generate random input data for prediction with shape (6, 128, 128, 256)",
+    "Invoke the model on the generated input data and assert that it raises an error or produces unexpected output",
+    "Log the error message or unexpected output for further analysis"
+]
+```

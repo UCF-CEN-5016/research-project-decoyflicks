@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, argparse, and any other required modules from the MMS package.",
+    "Set the CUDA device to ensure the script runs on GPU: torch.cuda.set_device(0).",
+    "Prepare an audio file named 'audio.wav' with a sample rate compatible with the model (e.g., 16kHz) and ensure it has a duration that matches the text transcription.",
+    "Create a text file named 'text.txt' containing a transcription that corresponds to the audio file, ensuring it has at least 63 lines to match the expected input.",
+    "Set the language parameter to 'ful' for the forced alignment process.",
+    "Define the output directory as 'output' and ensure it exists or create it programmatically.",
+    "Specify the path to the uroman binary as 'uroman/bin'.",
+    "Construct the command to run the alignment script: python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin.",
+    "Run the command in a shell environment to execute the script.",
+    "Monitor the output for any errors, specifically looking for the RuntimeError related to tensor sizes during the execution of the generate_emissions function.",
+    "Capture the traceback output to confirm the error occurs at the line where emissions are concatenated: emissions = torch.cat(emissions_arr, dim=1).squeeze().",
+    "Verify the dimensions of the tensors in emissions_arr before the concatenation step to confirm they do not match, leading to the RuntimeError.",
+    "Log the sizes of the tensors in emissions_arr to validate the specific sizes causing the mismatch (e.g., Expected size 1649 but got size 1799).",
+    "Ensure that the versions of torch and torchaudio are as specified in the bug report: torch version 2.0.1+cu118 and torchaudio version 2.0.2+cu118.",
+    "Confirm that the model and dictionary are correctly downloaded and loaded, as indicated by the output messages.",
+    "Check the input data shapes and types to ensure they are compatible with the model's expectations."
+]
+```

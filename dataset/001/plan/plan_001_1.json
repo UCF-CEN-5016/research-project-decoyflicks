@@ -1,0 +1,33 @@
+```json
+[
+    "Import TensorFlow and the spatial_transformer module from cluttered_mnist.py",
+    "Define a batch size of 100 and image dimensions of 40x40 with 1 channel for MNIST data",
+    "Load the MNIST cluttered dataset from './data/mnist_sequence1_sample_5distortions5x5.npz'",
+    "Extract X_train, y_train, X_valid, y_valid, X_test, y_test arrays from the loaded dataset",
+    "Convert y_train, y_valid, y_test to one-hot encoding with n_classes=10 using dense_to_one_hot function from tf_utils module",
+    "Define a placeholder x for input data with shape [None, 1600] (40x40 images flattened)",
+    "Define a placeholder y for labels with shape [None, 10]",
+    "Reshape x to a 4-D tensor x_tensor of shape [-1, 40, 40, 1] using tf.reshape",
+    "Create weight_variable and bias_variable functions from tf_utils module for initializing network weights and biases",
+    "Define the two-layer localisation network with fully connected layers W_fc_loc1, b_fc_loc1, and W_fc_loc2, b_fc_loc2 using weight_variable function",
+    "Initialize the second layer of the localisation network (b_fc_loc2) with identity transformation values as given in the code",
+    "Define the spatial transformer module h_trans using the transformer function from spatial_transformer module",
+    "Define a convolutional layer with filter size 3, n_filters_1=16, and weights W_conv1, bias b_conv1 initialized using weight_variable function",
+    "Apply the first convolutional layer to h_trans using tf.nn.conv2d and add ReLU activation",
+    "Define another convolutional layer with filter size 3, n_filters_2=16, and weights W_conv2, bias b_conv2 initialized using weight_variable function",
+    "Apply the second convolutional layer to the output of the first convolutional layer and add ReLU activation",
+    "Reshape the output of the second convolutional layer to a flattened tensor h_conv2_flat",
+    "Define a fully-connected layer with 1024 units, weights W_fc1, bias b_fc1 initialized using weight_variable function",
+    "Apply the first fully-connected layer to h_conv2_flat and add ReLU activation",
+    "Apply dropout regularization to the output of the first fully-connected layer using keep_prob placeholder",
+    "Define the final softmax layer with 10 units, weights W_fc2, bias b_fc2 initialized using weight_variable function",
+    "Calculate the cross-entropy loss between y_pred and y",
+    "Initialize an Adam optimizer and define the training operation to minimize cross-entropy loss",
+    "Create a TensorFlow session and initialize all variables",
+    "Train the model in minibatches of 100 iterations per epoch for 500 epochs using X_train and Y_train data",
+    "Monitor the value of cross-entropy loss during each iteration and print it every 10 iterations",
+    "After each epoch, calculate and print the validation accuracy on X_valid and Y_valid data",
+    "Verify that the loss values printed during training contain NaN (Not a Number) values"
+]
+```
+

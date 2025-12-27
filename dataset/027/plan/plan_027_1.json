@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the PyTorch repository from GitHub",
+    "Navigate to the directory containing the DCGAN example code for Celeba dataset",
+    "Import the necessary modules including argparse, torch, torchvision, and optim",
+    "Define a batch size of 64 and image dimensions of 128x128 for the Celeba dataset",
+    "Prepare the Celeba dataset by downloading it if not already present",
+    "Create a DataLoader for the Celeba dataset with specified batch size and shuffle enabled",
+    "Modify the DCGAN generator and discriminator architectures to support 128x128 images",
+    "Initialize the binary cross-entropy loss function",
+    "Define the optimizer (e.g., Adam) with an appropriate learning rate",
+    "Set up training loop parameters, including number of epochs and log interval",
+    "Call the train function with the prepared data loader and model",
+    "Capture and verify the error message: 'ValueError: Using a target size that is different to the input size'",
+    "Inspect the code where the binary cross-entropy loss is computed to identify the mismatched sizes",
+    "Assert the specific error output matches the expected error message for further verification"
+]
+```
+

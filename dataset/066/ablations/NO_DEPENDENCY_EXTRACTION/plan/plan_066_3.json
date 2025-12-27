@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from keras import layers, models, and backend",
+    "Import numpy as np for data manipulation",
+    "Define a batch size of 32 and image dimensions of 256x256",
+    "Create random uniform input data with shape (batch_size, height, width, channels) where channels=3, resulting in shape (32, 256, 256, 3)",
+    "Create random target data for a classification task with shape (batch_size, num_classes) where num_classes=10, resulting in shape (32, 10)",
+    "Define a simple model architecture using Keras Sequential API with layers including Conv2D, MaxPooling2D, and Dense layers",
+    "Add a layer named 'level1_dau_2' as a Conv2D layer with 64 filters and kernel size (3, 3)",
+    "Add a layer named 'level2_dau_2' as a Conv2D layer with 128 filters and kernel size (3, 3)",
+    "Add a layer named 'level3_dau_2' as a Conv2D layer with 256 filters and kernel size (3, 3)",
+    "Add a layer that calls selective_kernel_feature_fusion with parameters level1_dau_2, level3_dau_2, and level3_dau_2",
+    "Replace the call to selective_kernel_feature_fusion with level1_dau_2, level2_dau_2, and level3_dau_2 to reproduce the bug",
+    "Compile the model with loss='categorical_crossentropy' and optimizer='adam'",
+    "Fit the model on the input data and target data for 5 epochs",
+    "Check the model summary to verify that 'level2_dau_2' is defined but not used in the selective_kernel_feature_fusion call",
+    "Assert that the output of the model does not raise any errors during training, indicating that the unused variable does not affect execution"
+]
+```

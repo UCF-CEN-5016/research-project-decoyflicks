@@ -1,0 +1,17 @@
+```json
+[
+    "Install the required packages from requirements.txt and ensure that additional necessary packages are installed, including PyTorch 2.2.0+cu121 and PyTorch Lightning.",
+    "Set up a Python environment with WSL2 on Windows, ensuring that a single RTX 3060 GPU is available.",
+    "Download the BraTS21.ipynb and BraTS22.ipynb notebooks from the nnUNet repository.",
+    "Open BraTS21.ipynb in a Jupyter Notebook environment.",
+    "Import necessary libraries at the beginning of the notebook, including: import pytorch_lightning as pl, import nnunet, import os, import sys.",
+    "Set the CUDA device to the GPU by running: os.environ['CUDA_VISIBLE_DEVICES'] = '0'.",
+    "Prepare the dataset by ensuring that the BraTS dataset is correctly downloaded and structured according to nnUNet requirements.",
+    "Define the training parameters: set learning_rate to 0.0003, epochs to 10, fold to 0, gpus to 1, task to 11, and nfolds to 10.",
+    "Run the training cell in the notebook with the command: !python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0 --gpus 1 --task 11 --nfolds 10 --save_ckpt.",
+    "Monitor the output for the initialization of the PyTorch Lightning Trainer and ensure it shows the message: 'Provided checkpoint None is not a file. Starting training from scratch.'",
+    "Wait for the training process to begin and observe the output for the error message: 'MisconfigurationException: The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API.'",
+    "Verify that the error occurs during the optimizer setup phase by checking the traceback for the MisconfigurationException.",
+    "Confirm that the error message indicates a problem with the lr_scheduler configuration in the PyTorch Lightning Trainer."
+]
+```

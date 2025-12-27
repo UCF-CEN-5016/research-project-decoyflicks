@@ -1,0 +1,66 @@
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 107: invalid continuation byte
+
+<!--
+As per our GitHub Policy (https://github.com/tensorflow/models/blob/master/ISSUES.md), we only address code bugs, documentation issues, and feature requests on GitHub.
+
+We will automatically close questions and help related issues.
+
+Please go to Stack Overflow (http://stackoverflow.com/questions/tagged/tensorflow-model-garden) for questions and help.
+
+-->
+Hello, I was watching this tutorial : 
+[https://www.youtube.com/watch?v=8ktcGQ-XreQ](url)
+And I did this command for starting the training
+_python3.9 model_main_tf2.py --pipeline_config_path==ssd_efficientdet_d0_512x512_coco17_tpu-8.config --model_dir==training --alsologtostderr_
+but it's respond by this error.
+
+`C:\All\TF\models\research\object_detection>python3.9 model_main_tf2.py --pipeline_config_path==ssd_efficientdet_d0_512x512_coco17_tpu-8.config  --model_dir==training --alsologtostderr
+2023-12-29 06:02:32.851762: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'cudart64_110.dll'; dlerror: cudart64_110.dll not found
+2023-12-29 06:02:32.851983: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+C:\Users\moham\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\tensorflow_addons\utils\tfa_eol_msg.py:23: UserWarning:
+
+TensorFlow Addons (TFA) has ended development and introduction of new features.
+TFA has entered a minimal maintenance and release mode until a planned end of life in May 2024.
+Please modify downstream libraries to take dependencies from other repositories in our TensorFlow community (e.g. Keras, Keras-CV, and Keras-NLP).
+
+For more information see: https://github.com/tensorflow/addons/issues/2807
+
+  warnings.warn(
+2023-12-29 06:02:41.498960: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'nvcuda.dll'; dlerror: nvcuda.dll not found
+2023-12-29 06:02:41.499139: W tensorflow/stream_executor/cuda/cuda_driver.cc:263] failed call to cuInit: UNKNOWN ERROR (303)
+2023-12-29 06:02:41.505152: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:169] retrieving CUDA diagnostic information for host: DESKTOP-SAODQKQ
+2023-12-29 06:02:41.505490: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:176] hostname: DESKTOP-SAODQKQ
+2023-12-29 06:02:41.506185: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX AVX2
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING:tensorflow:There are non-GPU devices in `tf.distribute.Strategy`, not using nccl allreduce.
+W1229 06:02:41.508358  5476 cross_device_ops.py:1387] There are non-GPU devices in `tf.distribute.Strategy`, not using nccl allreduce.
+INFO:tensorflow:Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:CPU:0',)
+I1229 06:02:41.547311  5476 mirrored_strategy.py:374] Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:CPU:0',)
+Traceback (most recent call last):
+  File "C:\All\TF\models\research\object_detection\model_main_tf2.py", line 114, in <module>
+    tf.compat.v1.app.run()
+  File "C:\Users\moham\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\tensorflow\python\platform\app.py", line 36, in run
+    _run(main=main, argv=argv, flags_parser=_parse_flags_tolerate_undef)
+  File "C:\Users\moham\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\absl\app.py", line 308, in run
+    _run_main(main, args)
+  File "C:\Users\moham\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\absl\app.py", line 254, in _run_main
+    sys.exit(main(argv))
+  File "C:\All\TF\models\research\object_detection\model_main_tf2.py", line 105, in main
+    model_lib_v2.train_loop(
+  File "C:\Users\moham\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\object_detection\model_lib_v2.py", line 505, in train_loop
+    configs = get_configs_from_pipeline_file(
+  File "C:\Users\moham\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\object_detection\utils\config_util.py", line 138, in get_configs_from_pipeline_file
+    proto_str = f.read()
+  File "C:\Users\moham\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\tensorflow\python\lib\io\file_io.py", line 114, in read
+    self._preread_check()
+  File "C:\Users\moham\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\site-packages\tensorflow\python\lib\io\file_io.py", line 76, in _preread_check
+    self._read_buf = _pywrap_file_io.BufferedInputStream(
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 107: invalid continuation byte`
+
+PS : Sorry if my question is stupid, But my skills in Python & Fixing Bugs are not really good, I've fixed other bug before but for this one I don't know How can I fixe It.
+
+For more information : 
+Tensorflow version : 2.10.1
+Tensorflow Addon : tensorflow-addons==0.20.0
+
+If there is another information needed. Ask me !

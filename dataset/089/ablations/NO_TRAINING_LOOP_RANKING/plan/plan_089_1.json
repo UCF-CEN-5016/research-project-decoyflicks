@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define the dimensions for the model: set dim = 64, heads = 8, kv_heads = 4, and dim_head = 16",
+    "Create a random input tensor with shape (batch_size, seq_length, dim) where batch_size = 2 and seq_length = 10",
+    "Initialize the Attention class with parameters: dim=dim, heads=heads, kv_heads=kv_heads, qk_norm=True, and qk_norm_groups=2",
+    "Create a random context tensor with shape (batch_size, seq_length, kv_heads * dim_head) to simulate key/value pairs",
+    "Call the forward method of the Attention instance with the input tensor and context tensor",
+    "Capture the output of the forward method and check its shape",
+    "Assert that the output shape is (batch_size, seq_length, heads * dim_head)",
+    "Check for any NaN values in the output tensor using torch.isnan(output).any()",
+    "If NaN values are found, print 'Bug reproduced: NaN values detected in output'",
+    "Log the dimensions of the input and output tensors to verify they match expected values",
+    "Monitor the values of q, k, and v tensors during the forward pass to identify any discrepancies",
+    "Assert that the qk_norm_k_scale tensor is not equal to the expected shape of (kv_heads, 1, dim_head) to confirm the bug"
+]
+```

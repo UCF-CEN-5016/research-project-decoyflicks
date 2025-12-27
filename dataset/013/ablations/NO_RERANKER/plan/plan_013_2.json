@@ -1,0 +1,25 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'test_env' with Python 3.10 using the command: conda create -n test_env python=3.10",
+    "Activate the newly created conda environment using: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode).",
+    "Download the Jupyter notebook from the provided link: https://www.tensorflow.org/tfmodels/vision/image_classification",
+    "Open the downloaded notebook in VSCode.",
+    "At the top of the notebook, add the following import statements: import matplotlib.pyplot as plt, import tensorflow as tf, from official import tf_models",
+    "Before importing tensorflow_models, check the current matplotlib backend by adding: print('Current backend:', plt.get_backend())",
+    "Import tensorflow_models using: from official import tf_models",
+    "Check the matplotlib backend again after importing tensorflow_models by adding: print('Backend after import:', plt.get_backend())",
+    "Create a simple plot using matplotlib before importing tensorflow_models with the following code: plt.plot([1, 2, 3], [1, 4, 9]), plt.show()",
+    "Add a new cell to the notebook and create another plot using: plt.plot([1, 2, 3], [1, 4, 9]), plt.show()",
+    "Run the first cell to display the plot and verify it shows correctly.",
+    "Run the second cell to display the plot and verify it does not show.",
+    "Add a line to change the backend to 'TkAgg' after importing tensorflow_models with: plt.switch_backend('TkAgg')",
+    "Run the cell with the backend change and then run the second plot cell again.",
+    "Verify that the second plot still does not show after changing the backend.",
+    "Conclude that the issue is related to the backend being set to 'agg' after importing tensorflow_models."
+]
+```

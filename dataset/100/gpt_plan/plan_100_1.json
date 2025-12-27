@@ -1,0 +1,22 @@
+[
+  "Import torch, torch.nn as nn, torch.optim, and necessary utilities such as torch.autograd and torch.cuda.amp.autocast",
+  "Import the RotaryEmbedding module from rotary_embedding_torch.py",
+  "Set a fixed random seed for reproducibility (e.g., torch.manual_seed(42))",
+  "Define model and data parameters: embedding dimension dim=64, sequence length seq_len=16, batch size batch_size=2",
+  "Instantiate RotaryEmbedding with dim=64, learned_freq=False, freqs_for='lang', use_xpos=False (to use the caching logic in forward), and default other parameters",
+  "Create a simple dummy input tensor of shape (batch_size, seq_len, dim) with requires_grad=True, for example torch.randn(batch_size, seq_len, dim, requires_grad=True)",
+  "Define a simple linear projection layer (nn.Linear(dim, dim)) to simulate query/key generation from the input embeddings",
+  "Define a simple loss function, e.g., mean of the output tensor",
+  "In the training loop, perform exactly two iterations as follows:",
+  "  - For each iteration, zero the gradients of all parameters (optimizer.zero_grad())",
+  "  - Compute queries and keys by applying the linear layer to the input tensor",
+  "  - Call rotary_embedding.rotate_queries_with_cached_keys(q, k) to apply rotary embeddings (this will call forward() with caching)",
+  "  - Compute a scalar loss from the rotated queries (e.g., loss = rotated_q.mean())",
+  "  - Call loss.backward() without retain_graph",
+  "  - Call optimizer.step()",
+  "After the first iteration, assert no error occurs and gradients are computed",
+  "At the second iteration when calling loss.backward(), observe that a RuntimeError is raised: 'Trying to backward through the graph a second time'",
+  "Confirm that commenting out caching in rotary_embedding.forward (i.e., disabling use of self.cached_freqs and always computing freqs fresh) removes the error",
+  "Optionally, run the same code with huggingface accelerate to confirm similar behavior",
+  "Print full stack trace of the RuntimeError to confirm it originates from cached frequency tensors stored during first forward pass being reused in second backward pass"
+]

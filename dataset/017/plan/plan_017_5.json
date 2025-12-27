@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow 1.x and necessary modules from object_detection models for FasterRCNNResnetV1FeatureExtractorTest",
+    "Ensure the FasterRcnnResnetV1FeatureExtractorTest class is defined with all required methods and attributes",
+    "Set up a test case within the FasterRcnnResnetV1FeatureExtractorTest class by overriding the setUp method to initialize necessary variables",
+    "Define a random uniform input tensor with shape [4, 224, 224, 3] for preprocessed_inputs in the test_extract_proposal_features_returns_expected_size method",
+    "Call feature_extractor.extract_proposal_features with preprocessed_inputs and scope 'TestScope'",
+    "Capture the output rpn_feature_map from the extract_proposal_features method",
+    "Initialize a TensorFlow session within the test case",
+    "Run the session to compute features_shape = tf.shape(rpn_feature_map)",
+    "Assert that the shape of rpn_feature_map is [4, 14, 14, 1024]",
+    "Define another random uniform input tensor with shape [1, 112, 112, 3] for preprocessed_inputs in the test_extract_proposal_features_half_size_input method",
+    "Repeat steps 5-9 with this new input tensor and assert that the shape of rpn_feature_map is [1, 7, 7, 1024]",
+    "Define a random uniform input tensor with shape [3, 224, 224, 3] for preprocessed_inputs in the test_extract_box_classifier_features_returns_expected_size method",
+    "Call feature_extractor.extract_box_classifier_features with preprocessed_inputs and scope 'TestScope'",
+    "Capture the output proposal_classifier_features from the extract_box_classifier_features method",
+    "Initialize a TensorFlow session within the test case",
+    "Run the session to compute features_shape = tf.shape(proposal_classifier_features)",
+    "Assert that the shape of proposal_classifier_features is [3, 7, 7, 2048]",
+    "In the same test case, add a new test method called test_extract_proposal_features_dies_on_very_small_images",
+    "Define a random uniform input tensor with shape [4, 32, 32, 3] for preprocessed_inputs in this new method",
+    "Repeat steps 5-9 with this new input tensor and assert that a tf.errors.InvalidArgumentError is raised"
+]
+```
+

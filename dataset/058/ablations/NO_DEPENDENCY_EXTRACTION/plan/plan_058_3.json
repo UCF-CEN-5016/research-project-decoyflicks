@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: `import tensorflow as tf` and `from keras import layers, models`",
+    "Define a batch size of 32 and image dimensions of 640x640 for the RetinaNet model",
+    "Prepare a custom dataset structured similarly to the demo dataset, ensuring it contains images and corresponding bounding box annotations in the correct format",
+    "Use `tf.data.Dataset` to create a training dataset: `train_ds = tf.data.Dataset.from_tensor_slices((image_paths, annotations)).batch(batch_size)`",
+    "Create a validation dataset in the same manner: `eval_ds = tf.data.Dataset.from_tensor_slices((val_image_paths, val_annotations)).batch(batch_size)`",
+    "Instantiate the RetinaNet model using Keras: `model = keras_cv.models.RetinaNet(num_classes=num_classes)`",
+    "Compile the model with an optimizer and loss function: `model.compile(optimizer='adam', loss='categorical_crossentropy')`",
+    "Call the `model.fit()` method with the training dataset: `model.fit(train_ds.take(20), validation_data=eval_ds.take(20), epochs=1)`",
+    "Ensure that the training dataset contains at least 20 samples and that the annotations are correctly formatted as tensors",
+    "Verify that the input shapes of images and annotations match the expected dimensions for the RetinaNet model",
+    "Monitor the training process for any errors, specifically looking for `InvalidArgumentError` related to the label encoder",
+    "Check the error message for details about the `GatherV2_1` operation and the indices being accessed",
+    "Assert that the error occurs consistently when running the `model.fit()` method with the provided datasets"
+]
+```

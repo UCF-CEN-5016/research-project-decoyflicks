@@ -1,0 +1,11 @@
+{
+  "bug_report": "094",
+  "rank": 3,
+  "score": 0.575855553150177,
+  "main_file": {
+    "path": "palm_rlhf_pytorch/__init__.py",
+    "content": "from palm_rlhf_pytorch.palm import PaLM\nfrom palm_rlhf_pytorch.reward import RewardModel\nfrom palm_rlhf_pytorch.ppo import RLHFTrainer, ActorCritic\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Set the environment variable for CUDA device connections by executing 'export CUDA_DEVICE_MAX_CONNECTIONS=1'",
+    "Create a new shell script named 'pretrain_gpt3_2.7b.sh' with the following content:",
+    "    #!/bin/bash",
+    "    export WORLD_SIZE=2",
+    "    export MASTER_ADDR='localhost'",
+    "    export MASTER_PORT=12345",
+    "    python -m torch.distributed.launch --nproc_per_node=$WORLD_SIZE training/DeepSpeed-Domino/megatron/train.py --model_type=gpt3 --model_name_or_path='gpt3-2.7b' --train_batch_size=2 --gradient_accumulation_steps=8 --max_steps=1000",
+    "Make the script executable by running 'chmod +x pretrain_gpt3_2.7b.sh'",
+    "Run the script using 'bash pretrain_gpt3_2.7b.sh'",
+    "Monitor the output for the error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce'",
+    "Verify that the error occurs during the execution of the all_reduce operation in the training script",
+    "Check the initialization of the 'cdb' object in the code to confirm it is not set before the all_reduce call",
+    "Ensure that the environment is set up with multiple GPUs to trigger the distributed training context"
+]
+```

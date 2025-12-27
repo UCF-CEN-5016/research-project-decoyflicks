@@ -1,0 +1,49 @@
+Graph execution error
+
+def train_model():
+   model = create_model()
+
+   tensorboard = create_tensorboard_callback()  # Tensorboard session every time we train the model
+
+   # fit the model
+   model.fit(x=train_data,
+             epochs=NUM_EPOCHS,
+             validation_data=val_data,
+             validation_freq=1,
+             callbacks=[tensorboard,early_stopping])
+   return model
+
+
+
+model = train_model()
+Error:
+Building model with:  https://tfhub.dev/google/imagenet/mobilenet_v2_130_224/classification/5
+Epoch 1/100
+---------------------------------------------------------------------------
+NotFoundError                             Traceback (most recent call last)
+[<ipython-input-57-f0a0801f9e92>](https://localhost:8080/#) in <cell line: 2>()
+      1 # Fit the model to the data
+----> 2 model = train_model()
+
+2 frames
+[/usr/local/lib/python3.10/dist-packages/tensorflow/python/eager/execute.py](https://localhost:8080/#) in quick_execute(op_name, num_outputs, inputs, attrs, ctx, name)
+     51   try:
+     52     ctx.ensure_initialized()
+---> 53     tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,
+     54                                         inputs, attrs, num_outputs)
+     55   except core._NotOkStatusException as e:
+
+NotFoundError: Graph execution error:
+
+2 root error(s) found.
+  (0) NOT_FOUND:  drive/MyDrive/Dog Vision/train/17e00d79ad69729522d8705e95939f01.jpg; No such file or directory
+	 [[{{node ReadFile}}]]
+	 [[IteratorGetNext]]
+	 [[IteratorGetNext/_2]]
+  (1) NOT_FOUND:  drive/MyDrive/Dog Vision/train/17e00d79ad69729522d8705e95939f01.jpg; No such file or directory
+	 [[{{node ReadFile}}]]
+	 [[IteratorGetNext]]
+0 successful operations.
+0 derived errors ignored. [Op:__inference_train_function_51749]
+I have tried changing the drive directory but nothing helped. Using TensorBoard is overfitting the model.
+Please help with the issue.

@@ -1,0 +1,30 @@
+TITLE  
+Multiplication Error in SE3Transformer with Modified Input Features
+
+SYMPTOMS  
+• The model fails to train with modified node features, resulting in a runtime error.  
+• Error message: `RuntimeError: Expected size for first two dimensions of batch2 tensor to be: [8910, 1] but got: [8910, 3].`  
+• The self-attention mechanism does not function as expected when using multiple input types.
+
+EXPECTED BEHAVIOR  
+The model should successfully train on the QM9 dataset with the modified input features, allowing self-attention to operate correctly across multiple input types.
+
+REPRODUCTION STEPS  
+1. Modify the `data_loading/qm9.py` file to change the node feature extraction as follows:  
+   ```python
+   node_feats = {'0': batched_graph.ndata['attr'][:, :5, None],
+                 '1': batched_graph.ndata['attr'][:, 5:6, None]}
+   ```
+2. Update the `runtime/training.py` file to initialize the `SE3TransformerPooled` model with the following parameters:  
+   ```python
+   model = SE3TransformerPooled(
+           fiber_in=Fiber({0: 5, 1: 1}),
+           fiber_out=Fiber({0: args.num_degrees * args.num_channels}),
+           fiber_edge=Fiber({0: datamodule.EDGE_FEATURE_DIM}),
+           output_dim=1,
+           tensor_cores=using_tensor_cores(args.amp),
+           **vars(args)
+   )
+   ```
+3. Attempt to train the model using the modified input features.  
+4. Observe the runtime error that occurs during the training process.

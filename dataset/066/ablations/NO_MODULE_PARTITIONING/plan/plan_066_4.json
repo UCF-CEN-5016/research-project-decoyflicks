@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, numpy, glob, random, and PIL",
+    "Set the random seed to 10 for reproducibility using random.seed(10)",
+    "Define IMAGE_SIZE as 128 and BATCH_SIZE as 4",
+    "Create a function read_image that reads an image from a given path, decodes it, and normalizes it to the range [0, 1]",
+    "Create a function random_crop that takes low_light_image and enhanced_image as inputs and returns random crops of size 128x128",
+    "Create a function load_data that reads and crops low-light and enhanced images using read_image and random_crop",
+    "Create a function get_dataset that takes low_light_images and enhanced_images, and returns a TensorFlow dataset with the specified batch size",
+    "Load training and validation image paths from the LoL dataset using glob and store them in train_low_light_images and train_enhanced_images",
+    "Create train_dataset and val_dataset using get_dataset with the loaded image paths",
+    "Define the selective_kernel_feature_fusion function as provided in the MIRNet code",
+    "Define the dual_attention_unit_block function as provided in the MIRNet code",
+    "Define the multi_scale_residual_block function as provided in the MIRNet code",
+    "Define the recursive_residual_group function as provided in the MIRNet code",
+    "Define the mirnet_model function as provided in the MIRNet code",
+    "Instantiate the model by calling mirnet_model with num_rrg=3, num_mrb=2, and channels=64",
+    "Compile the model using Adam optimizer and charbonnier_loss as the loss function",
+    "Fit the model on train_dataset for 50 epochs with validation on val_dataset",
+    "In the multi_scale_residual_block function, locate the line where level2_dau_2 is defined and ensure it is not used in the subsequent SKFF call",
+    "Modify the line where skff_ is defined to use level3_dau_2 instead of level2_dau_2",
+    "Run the model training and observe the output for any discrepancies or warnings related to unused variables",
+    "Assert that level2_dau_2 is not used in the skff_ calculation, confirming the bug as reported"
+]
+```

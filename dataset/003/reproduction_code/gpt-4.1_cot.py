@@ -1,0 +1,1 @@
+class FreezableSyncBatchNorm(tf.keras.layers.experimental.SyncBatchNormalization):

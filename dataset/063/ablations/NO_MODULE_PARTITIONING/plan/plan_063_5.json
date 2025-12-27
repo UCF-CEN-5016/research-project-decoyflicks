@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, glob, numpy, and matplotlib",
+    "Define constants: IMAGE_SIZE = 288, BATCH_SIZE = 4, OUT_CLASSES = 1, TRAIN_SPLIT_RATIO = 0.90, DATA_DIR = './DUTS-TE/'",
+    "Download the DUTS-TE dataset using wget and unzip it to the current directory",
+    "Define a function load_paths(path, split_ratio) to load and split 140 image and mask paths from the dataset",
+    "Define a function read_image(path, size, mode) to read images and masks, converting them to float32 and normalizing them",
+    "Define a function preprocess(x_batch, y_batch, img_size, out_classes) to preprocess images and masks using tf.numpy_function",
+    "Define a function load_dataset(image_paths, mask_paths, img_size, out_classes, batch, shuffle=True) to create a tf.data.Dataset",
+    "Load training and validation paths by calling load_paths(DATA_DIR, TRAIN_SPLIT_RATIO)",
+    "Create training dataset by calling load_dataset with train_paths[0], train_paths[1], IMAGE_SIZE, OUT_CLASSES, BATCH_SIZE, shuffle=True",
+    "Create validation dataset by calling load_dataset with val_paths[0], val_paths[1], IMAGE_SIZE, OUT_CLASSES, BATCH_SIZE, shuffle=False",
+    "Define an augment_fn function that applies random augmentations to the images",
+    "Define a function unpackage_inputs to unpack the dataset into images and masks",
+    "Create augmented_train_ds by applying shuffle, map, batch, and prefetch operations on train_ds",
+    "Set BATCH_SIZE to 4 and AUTOTUNE to tf.data.AUTOTUNE",
+    "Run the code block that creates augmented_train_ds and observe for errors",
+    "Capture the error message that states 'Tensor(...) have different types' when executing the augmented_train_ds creation",
+    "Verify that the shapes of the tensors involved in the error are (160, 160, 1) and (160, 160, 1) with types float32 and int64 respectively",
+    "Log the error details to confirm the bug is reproducible"
+]
+```

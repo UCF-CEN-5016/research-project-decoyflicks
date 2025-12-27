@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary modules including keras_cv, tqdm, xml and tensorflow",
+    "Set the batch size to 32",
+    "Define image dimensions as 640x640",
+    "Load a sample dataset consisting of 32 images in 'xyxy' format with bounding boxes",
+    "Create a model instance using YOLOV8Detector with backbone preset 'yolo_v8_s_backbone_coco'",
+    "Compile the model using Adam optimizer, binary_crossentropy loss for classification and ciou loss for box prediction",
+    "Define an EvaluateCOCOMetricsCallback to monitor Map (Mean Average Precision) score during training",
+    "Train the model on the dataset for 3 epochs with validation data",
+    "After training, load a test image from the dataset and predict bounding boxes using the trained model",
+    "Visualize the original image with ground truth and predicted bounding boxes using plot_bounding_box_gallery function",
+    "Verify that the output predictions have unexpected results or errors",
+    "Monitor the GPU memory usage during the prediction process",
+    "Assert that the GPU memory usage is significantly higher than expected, indicating a potential memory leak or inefficient use of resources"
+]
+```
+

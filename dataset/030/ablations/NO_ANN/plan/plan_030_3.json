@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning, nnUNet, and any other required modules from the nnUNet package.",
+    "Set the random seed for reproducibility: import random and set random.seed(42), import numpy and set numpy.random.seed(42), import torch and set torch.manual_seed(42).",
+    "Define the training parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10.",
+    "Prepare the dataset: ensure the BraTS21 and BraTS22 datasets are downloaded and accessible in the expected directory structure.",
+    "Create a configuration file for nnUNet specifying the dataset paths and parameters for training.",
+    "Run the training command in a Jupyter notebook cell: !python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0 --gpus 1 --task 11 --nfolds 10 --save_ckpt.",
+    "Monitor the output for the initialization of the nnUNet model and the PyTorch Lightning trainer.",
+    "Check for the specific error message: 'MisconfigurationException' related to the lr_scheduler 'CosineAnnealingWarmRestarts'.",
+    "Verify that the lr_scheduler is being set correctly in the nnUNet model configuration.",
+    "Ensure that the PyTorch Lightning version is compatible with the nnUNet implementation by checking the installed version: print(pytorch_lightning.__version__).",
+    "Confirm that the CUDA environment is set up correctly by checking the output of torch.cuda.is_available().",
+    "Log the complete stack trace of the error to ensure it matches the provided error message in the bug report.",
+    "Validate that the error occurs consistently by rerunning the training command multiple times to confirm the bug is reproducible."
+]
+```

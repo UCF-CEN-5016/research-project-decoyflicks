@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and any other required modules from the DeepSpeed-Chat project.",
+    "Set the random seed for reproducibility using torch.manual_seed(1234).",
+    "Define a batch size of 16 and sequence length of 512.",
+    "Create a mock dataset with input tensors of shape (batch_size, seq_len) filled with random integers representing token IDs.",
+    "Create a corresponding action mask tensor of shape (batch_size, seq_len) with binary values (0 or 1) indicating valid actions.",
+    "Create a tensor for actor_log_prob with shape (batch_size, seq_len) filled with random float values to simulate log probabilities.",
+    "Create a tensor for log_probs with shape (batch_size, seq_len) filled with random float values to simulate log probabilities.",
+    "Create a tensor for advantages with shape (batch_size, seq_len) filled with random float values to simulate advantages.",
+    "Set the start index to a value of 1 to simulate the beginning of the sequence for loss calculation.",
+    "Calculate actor_loss using the provided formula: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]).",
+    "Print the calculated actor_loss to verify it is computed without errors.",
+    "Modify the mask to use action_mask[:, start-1:-1] instead of action_mask[:, start:] and recalculate actor_loss.",
+    "Print the new actor_loss to compare with the previous loss value.",
+    "Assert that the actor_loss with the modified mask is different from the original actor_loss to confirm the bug is present.",
+    "Log the output of both loss calculations to verify that the 'eos' token is being filtered out incorrectly."
+]
+```

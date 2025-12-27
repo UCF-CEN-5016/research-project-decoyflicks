@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary libraries: keras, keras_tuner, tensorflow, and numpy",
+    "Set a random seed for reproducibility using numpy: np.random.seed(42)",
+    "Define the input shape for the model as (28, 28, 1)",
+    "Create training data: x_train = np.random.rand(1000, 28, 28, 1) and y_train = np.random.randint(0, 10, (1000, 1))",
+    "Create validation data: x_val = np.random.rand(1000, 28, 28, 1) and y_val = np.random.randint(0, 10, (1000, 1))",
+    "Define a custom HyperModel class MyHyperModel that subclasses keras_tuner.HyperModel",
+    "Implement the build method in MyHyperModel to create a Keras model with an input layer of shape (28, 28, 1), a Flatten layer, a Dense layer with units chosen from [32, 64, 128], and an output Dense layer with 10 units",
+    "Implement the fit method in MyHyperModel to include a custom training loop with the following parameters: hp, model, x, y, validation_data, callbacks",
+    "Inside the fit method, define a batch size using hp.Int with a range of 32 to 128 and a step of 32, defaulting to 64",
+    "Convert training data into a tf.data.Dataset with the defined batch size: train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(batch_size)",
+    "Convert validation data into a tf.data.Dataset with the defined batch size: validation_data = tf.data.Dataset.from_tensor_slices(validation_data).batch(batch_size)",
+    "Define an optimizer using keras.optimizers.Adam with a learning rate defined by hp.Float ranging from 1e-4 to 1e-2, defaulting to 1e-3",
+    "Define a loss function using keras.losses.SparseCategoricalCrossentropy with from_logits=True",
+    "Initialize a metric to track validation loss using keras.metrics.Mean()",
+    "Define a function run_train_step that computes the model's predictions and loss, applies gradients, and updates the model's weights",
+    "Define a function run_val_step that computes the model's predictions and updates the validation loss metric",
+    "Assign the model to the callbacks in the fit method using a for loop",
+    "Initialize the Keras Tuner with RandomSearch, setting the objective to keras_tuner.Objective('my_metric', 'min'), max_trials to 2, and the hypermodel to MyHyperModel()",
+    "Call tuner.search with x=x_train, y=y_train, and validation_data=(x_val, y_val)",
+    "Run the code to fit the model and observe the error message during the fitting process",
+    "Capture the error message output to verify the bug occurs"
+]
+```

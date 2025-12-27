@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: import tensorflow as tf, import numpy as np, import matplotlib.pyplot as plt",
+    "Set the TensorFlow version to 2.12 by running: tf.__version__",
+    "Define a batch size of 4 and image dimensions of 640x640",
+    "Create a random uniform input tensor with shape (batch_size, height, width, 3) using: input_tensor = tf.random.uniform((4, 640, 640, 3))",
+    "Define a function for symbols_to_logits_fn that takes in ids, index, and cache as parameters and returns random logits: def symbols_to_logits_fn(ids, index, cache): return tf.random.uniform((tf.shape(ids)[0], 1000)), cache",
+    "Create an initial_ids tensor with shape (batch_size,) using: initial_ids = tf.constant([1, 2, 3, 4], dtype=tf.int32)",
+    "Create an initial_cache dictionary with dummy values: initial_cache = {'dummy_key': tf.random.uniform((4, 10))}",
+    "Set vocab_size to 1000, beam_size to 5, alpha to 0.6, max_decode_length to 10, and eos_id to 2",
+    "Call the sequence_beam_search function with the defined parameters: sequences, scores = sequence_beam_search(symbols_to_logits_fn, initial_ids, initial_cache, vocab_size=1000, beam_size=5, alpha=0.6, max_decode_length=10, eos_id=2)",
+    "Run the notebook cell containing the import statement and the sequence_beam_search call",
+    "Verify that an error occurs during the execution of the sequence_beam_search function, specifically at the point of calling symbols_to_logits_fn",
+    "Check the error message for indications of shape mismatches or type errors, which should confirm the bug"
+]
+```

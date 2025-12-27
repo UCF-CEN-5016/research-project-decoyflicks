@@ -1,0 +1,14 @@
+```json
+[
+    "Import the necessary modules: torch and the espnet_multihead_attention module from fairseq.",
+    "Define a batch size of 2 and set the dimensions for the input tensor to (batch_size, seq_length, embedding_dim) with seq_length=10 and embedding_dim=64.",
+    "Create a random input tensor with shape (batch_size, seq_length, embedding_dim) using torch.randn(batch_size, seq_length, embedding_dim).",
+    "Initialize the RelPositionMultiHeadedAttention class from the espnet_multihead_attention module without setting the bias parameters explicitly.",
+    "Call the forward method of the RelPositionMultiHeadedAttention instance with the input tensor created in step 3.",
+    "Capture the output of the forward method and check for NaN values using torch.isnan(output).any().",
+    "Print the output tensor to verify its contents and check if it contains NaN values.",
+    "Assert that the output tensor contains NaN values using assert torch.isnan(output).any() == True.",
+    "Log the dimensions of the output tensor to confirm they match the expected shape (batch_size, seq_length, num_heads * head_dim).",
+    "Run the script and observe the console output for any warnings or errors related to uninitialized tensors."
+]
+```

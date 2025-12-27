@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, and matplotlib",
+    "Define a batch size of 32 and image dimensions of 640x640 for the RetinaNet model",
+    "Prepare a custom dataset structured similarly to the demo dataset in keras_cv, ensuring it contains images and corresponding bounding box annotations",
+    "Use keras.utils.image_dataset_from_directory to load the dataset, setting label_mode='int' and image_size=(640, 640), batch_size=32",
+    "Create a validation dataset using the same method as the training dataset, ensuring it has the same structure and dimensions",
+    "Instantiate the RetinaNet model using keras_cv.models.object_detection.RetinaNet with appropriate input_shape=(640, 640, 3) and num_classes set to the number of classes in your dataset",
+    "Compile the model with an optimizer (e.g., keras.optimizers.Adam) and a loss function suitable for object detection (e.g., keras.losses.SparseCategoricalCrossentropy)",
+    "Call model.fit with train_ds.take(20) and validation_data=eval_ds.take(20), setting epochs=1 and including a callback for evaluation metrics",
+    "Ensure the training dataset contains at least 20 samples to avoid empty dataset errors",
+    "Run the model.fit command and observe for any InvalidArgumentError related to the label encoder during the training process",
+    "Capture the full error traceback to verify it matches the reported bug, specifically looking for 'GatherV2_1' in the error message",
+    "Check the shape of the labels being passed to the model to ensure they match the expected dimensions for the RetinaNet model",
+    "Assert that the error occurs consistently when running the model.fit command with the specified parameters and dataset"
+]
+```

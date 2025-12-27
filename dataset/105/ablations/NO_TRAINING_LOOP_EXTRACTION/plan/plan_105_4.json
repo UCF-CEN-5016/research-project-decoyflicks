@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, random, and the ResidualVQ class from vector_quantize_pytorch",
+    "Set the following constants: Z_CHANNELS = 512, NUM_QUANTIZERS = 2, CODEBOOK_SIZE = 16384",
+    "Define a batch size of 32 and create random input data with shape (batch_size, Z_CHANNELS) = (32, 512)",
+    "Instantiate the ResidualVQ class with the defined parameters: ResidualVQ(dim=Z_CHANNELS, num_quantizers=NUM_QUANTIZERS, codebook_size=CODEBOOK_SIZE, stochastic_sample_codes=True, shared_codebook=True, commitment_weight=1.0, kmeans_init=True, threshold_ema_dead_code=2, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1)",
+    "Create a loop to simulate training for 100 iterations, where in each iteration, you randomly generate input data with shape (32, 512)",
+    "In each iteration, call the forward method of the ResidualVQ instance with the generated input data",
+    "Wrap the forward call in a try-except block to catch RuntimeError exceptions",
+    "Log the exception message if a RuntimeError occurs, specifically looking for the shape mismatch error",
+    "Run the training loop on multiple nodes to simulate a multinode setting, ensuring that the same random seed is used for reproducibility",
+    "After running the training loop, assert that the RuntimeError occurred at least once during the iterations"
+]
+```

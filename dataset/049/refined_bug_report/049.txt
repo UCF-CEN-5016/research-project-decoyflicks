@@ -1,0 +1,32 @@
+TITLE
+Uninitialized Bias Parameters in RelPositionMultiHeadedAttention Layer Causing Non-Deterministic Behavior
+
+SYMPTOMS
+• The bias terms (u, v) in the MHA layer with relative position encodings are not properly initialized.
+• This results in non-deterministic behavior and poor initialization when using `torch.Tensor`.
+• If the initialization is unlucky, NaN values may appear during the operation of the model.
+
+EXPECTED BEHAVIOR
+• The bias terms (u, v) should be properly initialized to avoid non-deterministic behavior and ensure consistent performance.
+• The initialization should result in a stable starting point for training without introducing unexpected NaN values.
+
+REPRODUCTION STEPS
+1. Clone the repository from the given GitHub link: https://github.com/facebookresearch/fairseq
+2. Checkout the specific commit `4fe8583396191c22011350248119db98ec1b5cb8`.
+3. Run the following Python code to observe the non-deterministic behavior:
+```python
+import torch
+
+# Create a tensor with random shape and check its sum
+print(torch.Tensor(1, 1).sum())
+
+# Create another tensor with larger shape and check its sum
+print(torch.Tensor(10, 10).sum())
+
+# Create yet another tensor with very large shape and check its sum
+print(torch.Tensor(100, 100).sum())
+```
+4. Observe the inconsistent results (zero, a small number close to zero, or NaN) due to uninitialized tensors.
+
+SUGGESTED FIX
+Set the initial values of the bias terms (u, v) to `torch.zeros` as suggested by Section 3.3 in the referenced paper [Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context](https://arxiv.org/pdf/1901.02860.pdf). This will provide a more stable initialization and avoid potential issues with non-deterministic behavior and NaN values.

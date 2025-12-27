@@ -1,0 +1,18 @@
+TITLE
+TypeError in GELU function due to incorrect argument type
+
+SYMPTOMS
+• The program throws a TypeError when attempting to use the GELU activation function.
+• Error message: `TypeError: gelu(): argument 'approximate' must be str, not bool`
+• The issue occurs in the `gelu` function located in `modeling.py` at line 122.
+
+EXPECTED BEHAVIOR
+The GELU function should execute without errors, correctly applying the activation function to the input tensor. The `approximate` parameter should accept a string value, allowing for proper functionality.
+
+REPRODUCTION STEPS
+1. Run the following command to execute the SQuAD script:
+   ```
+   bash scripts/run_squad.sh /home/bert_large/bert_large_qa.pt 0.2 12 3e-5 0.1 tf32 1 42 /home/bert_large/squad/v1.1 vocab/vocab results/SQuAD `train` bert_configs/large.json
+   ```
+2. Observe the error generated during the execution related to the GELU function. 
+3. Review the implementation of the `gelu` function in `modeling.py` to identify the type of the `approximate` argument being passed.

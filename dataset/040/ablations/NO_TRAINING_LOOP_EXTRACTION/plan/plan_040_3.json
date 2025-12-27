@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary modules: torch, labml, labml_nn.diffusion.ddpm.unet from the specified GitHub repository.",
+    "Define a batch size of 32 and input dimensions of (3, 32, 32) for CIFAR-10 dataset images.",
+    "Load the CIFAR-10 dataset using torchvision.datasets.CIFAR10 with train=True and transform to convert images to tensors.",
+    "Create a DataLoader for the CIFAR-10 training dataset with batch_size=32 and shuffle=True.",
+    "Instantiate the UNet model from labml_nn.diffusion.ddpm.unet with appropriate parameters (e.g., input_channels=3, output_channels=3).",
+    "Define a forward pass function that includes the self-attention mechanism in the UNet model.",
+    "In the self-attention mechanism, use einsum to compute attention scores with the current implementation: attn = torch.einsum('b i j -> b j i', x).",
+    "Apply softmax on the attention scores using the current implementation: attn = attn.softmax(dim=1).",
+    "Run a forward pass through the model with a batch of images from the DataLoader.",
+    "Capture the output of the model and check the shape to ensure it matches the expected output shape (batch_size, output_channels, height, width).",
+    "Introduce a debug statement to print the attention scores before and after the softmax operation.",
+    "Verify that the attention scores contain valid numerical values (not NaN or Inf) after the softmax operation.",
+    "Assert that the attention scores do not sum to 1 along the intended axis (axis=1) to confirm the bug is present.",
+    "Log the output of the model and attention scores to a file for further analysis."
+]
+```

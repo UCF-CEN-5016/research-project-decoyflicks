@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, os, json, and any other required modules.",
+    "Set the DEVICE variable to 'cuda' to utilize GPU acceleration.",
+    "Define the SAMPLING_FREQ variable to match the sample rate of the audio file (e.g., 16000).",
+    "Define the EMISSION_INTERVAL variable to specify the duration of each segment processed (e.g., 1.0 seconds).",
+    "Create a dummy audio file named 'audio.wav' with a sample rate of 16000 Hz and a duration of at least 5 seconds.",
+    "Create a text file named 'text.txt' with 63 lines of text, ensuring that the total number of tokens matches the expected output of the forced alignment.",
+    "Ensure the text file contains valid tokens that can be mapped to the dictionary used in the model.",
+    "Set up the uroman path variable to point to the correct uroman binary directory (e.g., 'uroman/bin').",
+    "Run the command: python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin",
+    "Monitor the output for the specific RuntimeError: 'Sizes of tensors must match except in dimension 1. Expected size 1649 but got size 1799 for tensor number 1 in the list.'",
+    "Verify that the error occurs consistently by rerunning the command multiple times.",
+    "Check the dimensions of the tensors in the emissions_arr list before the torch.cat operation to confirm the mismatch in sizes.",
+    "Log the sizes of the tensors in emissions_arr to validate the specific sizes causing the error."
+]
+```

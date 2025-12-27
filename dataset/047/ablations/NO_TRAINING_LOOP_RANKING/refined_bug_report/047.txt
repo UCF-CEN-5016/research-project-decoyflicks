@@ -1,0 +1,46 @@
+### TITLE
+MMS ASR Inference Produces Output Logs in Incorrect Order
+
+### SYMPTOMS
+• The output log of the MMS ASR inference does not match the order of the input audio files.
+• The expected text output is disordered compared to the corresponding input audio files.
+• Example of the expected output order:
+  ```
+  1089-134686-0000 HE HOPED THERE WOULD BE STEW FOR DINNER...
+  1089-134686-0001 STUFF IT INTO YOU HIS BELLY COUNSELLED HIM...
+  ...
+  ```
+• Example of the actual output order:
+  ```
+  Input: /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0000.wav
+  Output: at most by an alms given to a beggar whose blessing he fled from...
+  ...
+  ```
+
+### EXPECTED BEHAVIOR
+The output logs should match the order of the input audio files, ensuring that each audio file corresponds to its respective text output in a sequential manner.
+
+### REPRODUCTION STEPS
+1. Run the following command:
+   ```bash
+   python -u examples/mms/asr/infer/mms_infer.py \
+               --model `pwd`/../fairseq_resource/mms1b_all.pt \
+               --lang "eng" \
+               --audio audio1.wav audio2.wav audio3.wav ... audio10.wav
+   ```
+2. Check the generated text output file for the order of transcriptions.
+3. Compare the order of the transcriptions to the order of the input audio files.
+
+### ENVIRONMENT
+- Fairseq Version: [Specify version, e.g., 1.0 or main]
+- PyTorch Version: [Specify version, e.g., 1.0]
+- OS: [Specify OS, e.g., Linux]
+- Installation method: [Specify how Fairseq was installed, e.g., pip, source]
+- Build command (if compiling from source): [Specify command]
+- Python Version: [Specify version]
+- CUDA/cuDNN Version: [Specify version]
+- GPU models and configuration: [Specify models and configuration]
+- Any other relevant information: [Include any additional context]
+
+### ADDITIONAL CONTEXT
+This issue may affect the usability of the MMS ASR system, particularly when processing multiple audio files, as it can lead to confusion and misinterpretation of results. Further investigation is needed to determine the root cause of the output log disorder.

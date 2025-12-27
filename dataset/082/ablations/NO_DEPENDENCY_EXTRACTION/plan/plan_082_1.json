@@ -1,0 +1,19 @@
+```json
+[
+    "Import torch and the ViT and MPP classes from vit_pytorch",
+    "Set the image size to 256 and patch size to 32",
+    "Define the number of classes as 1000, dimension as 1024, depth as 6, heads as 8, mlp_dim as 2048, dropout as 0.1, and emb_dropout as 0.1",
+    "Initialize the ViT model with the specified parameters",
+    "Initialize the MPP trainer with the ViT model, patch size of 32, dimension of 1024, mask_prob of 0.15, random_patch_prob of 0.30, and replace_prob of 0.50",
+    "Define a batch size of 20 and create a function sample_unlabelled_images that generates random uniform input data with shape (20, 3, 256, 256)",
+    "Run a loop for 100 iterations where in each iteration:",
+    "    Call sample_unlabelled_images to generate a batch of images",
+    "    Call the MPP trainer with the generated images to compute the loss",
+    "    Call opt.zero_grad() to reset gradients",
+    "    Call loss.backward() to compute gradients",
+    "    Call opt.step() to update model parameters",
+    "After the loop, save the model state dictionary to './pretrained-net.pt'",
+    "Run the code and observe the output for any RuntimeError related to dimensions",
+    "Verify the error message contains 'Given normalized_shape=[1024], expected input with shape [*, 1024], but got input of size[20, 64, 3072]'"
+]
+```

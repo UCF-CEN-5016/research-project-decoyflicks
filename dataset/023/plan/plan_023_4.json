@@ -1,0 +1,26 @@
+```json
+[
+    "Clone the TensorFlow Model Garden repository from GitHub",
+    "Navigate to the 'research' directory within the cloned repository",
+    "Open the 'object_detection/models/faster_rcnn_resnet_v1_feature_extractor_tf1_test.py' file in a code editor",
+    "Import TensorFlow and other required libraries as specified in the bug report",
+    "Define constants for model architecture ('resnet_v1_50', 'resnet_v1_101', 'resnet_v1_152')",
+    "Create a testing function to build FasterRCNNResnetV1FeatureExtractor instances with different architectures",
+    "Inside the testing function, create random uniform input data for preprocessed_inputs with shape (4, 224, 224, 3)",
+    "Call extract_proposal_features method on the feature extractor instance and capture the output rpn_feature_map",
+    "Capture the shape of rpn_feature_map using tf.shape(rpn_feature_map) and store it in a variable features_shape",
+    "Initialize TensorFlow variables with tf.global_variables_initializer() and run the session to evaluate features_shape",
+    "Assert that the output features_shape has the expected dimensions [4, 14, 14, 1024] for architecture 'resnet_v1_50'",
+    "Repeat steps 8-13 for architectures 'resnet_v1_101' and 'resnet_v1_152'",
+    "Assert that the output features_shape has the expected dimensions [4, 28, 28, 1024] for architecture 'resnet_v1_101'",
+    "Assert that the output features_shape has the expected dimensions [4, 7, 7, 1024] for architecture 'resnet_v1_152'",
+    "Run the testing function and capture any exceptions or errors during execution",
+    "Verify that a ValueError is raised when first_stage_features_stride is set to an invalid value (99)",
+    "Assert that a tf.errors.InvalidArgumentError is raised when preprocessed_inputs have very small dimensions (32x32)",
+    "Run the testing function and capture the shape of proposal_classifier_features for architecture 'resnet_v1_50'",
+    "Assert that the output features_shape has the expected dimensions [3, 7, 7, 2048] for architecture 'resnet_v1_50'",
+    "Repeat step 26 to assert correct behavior for architectures 'resnet_v1_101' and 'resnet_v1_152'",
+    "Verify that the code reproduces the bug by checking if any assertions fail during execution"
+]
+```
+

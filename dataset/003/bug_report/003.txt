@@ -1,0 +1,56 @@
+AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'
+
+
+Iam using the latest tensor flow model garden release and tensor flow 2,  the url of the file i'm use  https://github.com/tensorflow/models
+Bug :
+
+AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'
+A clear and concise description of what the bug is.
+Steps : 
+1. I'm downgrading the protobuff from 3.19 to 3.20 
+2. Eror found when i try to import some library 
+Expected Behaviour:
+1. No eror and code running well 
+Logs:
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+[<ipython-input-6-b933161ebf89>](https://localhost:8080/#) in <cell line: 23>()
+     21 from object_detection.utils import colab_utils
+     22 from object_detection.utils import config_util
+---> 23 from object_detection.builders import model_builder
+     24 
+     25 get_ipython().run_line_magic('matplotlib', 'inline')
+
+2 frames
+[/usr/local/lib/python3.10/dist-packages/object_detection/core/freezable_sync_batch_norm.py](https://localhost:8080/#) in <module>
+     18 
+     19 
+---> 20 class FreezableSyncBatchNorm(tf.keras.layers.experimental.SyncBatchNormalization
+     21                             ):
+     22   """Sync Batch normalization layer (Ioffe and Szegedy, 2014).
+
+AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'
+
+System Information:
+1.
+## 3. Steps to reproduce
+
+Steps to reproduce the behavior.
+
+## 4. Expected behavior
+
+A clear and concise description of what you expected to happen.
+
+## 5. Additional context
+
+Include any logs that would be helpful to diagnose the problem.
+
+## 6. System information
+- 2.18.0
+
+- Windows using google collab 
+- Python version Python 3.10.12
+- GPU T4 GPU Google collab
+
+Please give me feedback from my bug
+Thanks 

@@ -1,0 +1,21 @@
+TITLE  
+ImportError due to incompatible Keras version in Fine-tuning Stable Diffusion example  
+
+SYMPTOMS  
+• Running the Fine-tuning Stable Diffusion example (https://keras.io/examples/generative/finetune_stable_diffusion/) results in an ImportError.  
+• Error message:  
+```
+ImportError: cannot import name 'data_utils' from 'keras.utils' (/usr/local/lib/python3.10/dist-packages/keras/utils/__init__.py)
+```
+• Error occurs even when running the example in Google Colab.  
+• Using a different Keras version (e.g., `keras==2.12.0`) resolves the error and allows the example to run successfully.  
+
+EXPECTED BEHAVIOR  
+The Fine-tuning Stable Diffusion example should run without import errors using the recommended or compatible versions of dependencies. The example documentation should specify the required Keras version to prevent version incompatibility issues.  
+
+REPRODUCTION STEPS  
+1. Open a new environment or Google Colab notebook.  
+2. Install the latest Keras version (without specifying version) or a version incompatible with the example.  
+3. Run the Fine-tuning Stable Diffusion example code from https://keras.io/examples/generative/finetune_stable_diffusion/.  
+4. Observe the ImportError caused by the missing `data_utils` import from `keras.utils`.  
+5. To fix, run `pip install keras==2.12.0` and rerun the example without errors.

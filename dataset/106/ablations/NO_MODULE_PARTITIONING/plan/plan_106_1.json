@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a function to create random input tensors for testing, with parameters for batch size, dimensions, and data type",
+    "Set the batch size to 8 and the dimensions of the input tensor to (8, 128, 64) for a 3D tensor",
+    "Create two random input tensors x and y with shape (8, 128, 64) using torch.randn()",
+    "Define a function to compute the pairwise distance using the cdist function from the vector_quantize_pytorch module",
+    "Call the cdist function with the generated tensors x and y as inputs",
+    "Capture the output of the cdist function and check for NaN values using torch.isnan()",
+    "Assert that the output contains NaN values by checking if any element in the output tensor is NaN",
+    "Print a message indicating whether NaN values were found in the output",
+    "Run the test function to execute the steps and reproduce the bug"
+]
+```

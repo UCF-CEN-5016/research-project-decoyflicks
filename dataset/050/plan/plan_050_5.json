@@ -1,0 +1,37 @@
+```json
+[
+    "Import the necessary modules for Keras, TensorFlow, and gym.",
+    "Set the seed to 42 for reproducibility.",
+    "Create a CartPole-v0 environment using gym.make(\"CartPole-v0\").",
+    "Define the number of inputs (4) and actions (2).",
+    "Initialize the input layer with shape (num_inputs,) in Keras.",
+    "Add a dense layer with 128 units and ReLU activation to the input layer.",
+    "Create separate output layers for action probabilities and critic values.",
+    "Combine the common layer outputs into a single model.",
+    "Set up an Adam optimizer with a learning rate of 0.01.",
+    "Define a Huber loss function for training.",
+    "Initialize empty lists to store action probabilities, critic values, and rewards.",
+    "Reset the environment and enter the main training loop.",
+    "Convert state to a tensor using keras.ops.convert_to_tensor(state).",
+    "Expand dimensions of the state tensor using keras.ops.expand_dims(state, 0).",
+    "Use the model to predict action probabilities and critic value for the current state.",
+    "Sample an action based on the predicted action probabilities.",
+    "Log the log-probability of the sampled action.",
+    "Apply the sampled action in the environment and receive reward and done status.",
+    "Append the reward, action probability, and critic value to their respective lists.",
+    "Break out of the loop if the episode is done.",
+    "Calculate the running reward using a weighted average.",
+    "Reverse the rewards list and calculate discounted returns.",
+    "Normalize the returns for better training.",
+    "Zip together action probabilities, critic values, and returns.",
+    "Calculate actor losses and critic losses based on the differences between returns and values.",
+    "Sum up all actor and critic losses to get the total loss.",
+    "Record gradients of the total loss with respect to model trainable variables using tape.gradient.",
+    "Apply the gradients to update the model's trainable variables using optimizer.apply_gradients().",
+    "Clear the history lists for action probabilities, critic values, and rewards.",
+    "Print the running reward every 10 episodes.",
+    "Break out of the loop if the running reward exceeds 195 (considered solved).",
+    "Verify that an AttributeError occurs with 'list' object has no attribute 'shape' during training."
+]
+```
+

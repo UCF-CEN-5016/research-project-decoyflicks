@@ -1,0 +1,18 @@
+TITLE  
+Keras 3.4.1 Training Error: AttributeError Due to List Object
+
+SYMPTOMS  
+• The code fails to run when executing the official Keras3 instance code.  
+• The following error message is encountered during the training step:  
+  `AttributeError: 'list' object has no attribute 'shape'`  
+• The error occurs when attempting to access the shape of `real_images`, which is expected to be a NumPy array or tensor but is instead a list.
+
+EXPECTED BEHAVIOR  
+The training process should execute without errors, and the model should be able to fit the provided data. Specifically, `real_images` should be a tensor or a NumPy array with a defined shape, allowing for successful extraction of the batch size.
+
+REPRODUCTION STEPS  
+1. Use the official Keras3 sample code found at the following link:  
+   [Keras Custom Training Step Guide](https://github.com/keras-team/keras-io/blob/master/guides/custom_train_step_in_torch.py)  
+2. Ensure that the environment is set up with Keras version 3.4.1, Python 3.12.4, and the specified GPU model (Nvidia A3000).  
+3. Execute the training step by calling `gan.fit(dataloader, epochs=1)`.  
+4. Observe the error message generated during the execution.

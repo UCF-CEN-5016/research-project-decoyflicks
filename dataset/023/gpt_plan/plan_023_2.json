@@ -1,0 +1,12 @@
+[
+  "Open a new Colab notebook or Python environment with TensorFlow 2.12 installed",
+  "Clone the TensorFlow models repository or download the notebook from https://github.com/tensorflow/models/blob/master/docs/vision/object_detection.ipynb",
+  "Ensure the latest TensorFlow Model Garden release is installed by running `pip install tf-models-official --upgrade`",
+  "Start running the notebook cells sequentially until reaching the section titled 'Import required libraries from tensorflow models as image below'",
+  "At this point, attempt to execute the import statements exactly as given in the notebook, e.g., `from official.vision import ...`, or similar import lines shown in the notebook",
+  "Observe and capture any ImportError or ModuleNotFoundError messages that appear during this import step",
+  "Specifically verify that the error matches the screenshot in the bug report indicating failure to import from 'official' or related modules",
+  "Document the Python environment details such as Python version (`python --version`), TensorFlow version (`python -c 'import tensorflow as tf; print(tf.version.VERSION)'`), and installed packages (`pip list`)",
+  "Assert that at this step the import fails, thus reproducing the bug exactly",
+  "Optionally, rerun the notebook in a clean Colab environment with only TensorFlow 2.12 and tf-models-official installed to validate that the bug is reproducible without additional local modifications"
+]

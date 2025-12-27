@@ -1,0 +1,27 @@
+TITLE  
+Error in Named Entity Recognition Model Training with Transformers
+
+SYMPTOMS  
+• An error occurs during the `ner_model.fit` process.  
+• The following error message is displayed:  
+  ```
+  OperatorNotAllowedInGraphError: Exception encountered when calling Softmax.call().
+  
+  Using a symbolic `tf.Tensor` as a Python `bool` is not allowed. You can attempt the following resolutions to the problem: If you are running in Graph mode, use Eager execution mode or decorate this function with @tf.function. If you are using AutoGraph, you can try decorating this function with @tf.function. If that does not work, then you may be using an unsupported feature or your source code may not be visible to AutoGraph. See https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/autograph/g3doc/reference/limitations.md#access-to-source-code for more information.
+  
+  Arguments received by Softmax.call():
+    • inputs=tf.Tensor(shape=(None, 4, None, None), dtype=float32)
+    • mask=None
+  ```  
+• The model fails to train as expected, indicating an issue with the input tensor shape or model configuration.
+
+EXPECTED BEHAVIOR  
+The `ner_model.fit` function should execute without errors, properly training the Named Entity Recognition model on the provided dataset.
+
+REPRODUCTION STEPS  
+1. Compile the NER model using `ner_model.compile(optimizer="adam", loss=loss)`.  
+2. Attempt to fit the model with `ner_model.fit(train_dataset, epochs=10)`.  
+3. Tokenize a sample input text using the `tokenize_and_convert_to_ids` function.  
+4. Reshape the tokenized input using `tf.reshape(sample_input, shape=[1, -1])`.  
+5. Call the model's `predict` method with the reshaped input and observe the output.  
+6. Review the output for any errors, specifically looking for the `OperatorNotAllowedInGraphError`.

@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and MultiHeadAttention from labml_nn.transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 32 and input dimensions: d_model = 512, seq_len = 128",
+    "Create a random input tensor with shape (batch_size, seq_len, d_model) using torch.randn(batch_size, seq_len, d_model)",
+    "Initialize the MultiHeadAttention module with parameters: n_heads = 8, d_model = 512, dropout = 0.1",
+    "Create a random tensor for the attention mask with shape (batch_size, seq_len, seq_len) using torch.ones(batch_size, seq_len, seq_len)",
+    "Call the forward method of the MultiHeadAttention module with the input tensor and attention mask",
+    "Capture the output of the attention mechanism and store it in a variable named 'output'",
+    "Check the shape of the output tensor to ensure it matches the expected shape (batch_size, seq_len, d_model)",
+    "Perform the softmax operation on the attention scores along the wrong axis (dim=1) and store the result in a variable named 'attn'",
+    "Verify that the softmax operation does not raise any errors",
+    "Assert that the output tensor contains valid numerical values (not NaN or Inf) after the softmax operation",
+    "Log the output tensor to monitor its values and ensure they are within a reasonable range",
+    "Run the model on a sample dataset (CIFAR-10) to ensure the attention mechanism is functioning during training",
+    "Monitor the training process and check for any unexpected behavior or performance issues",
+    "Validate that the model can still produce outputs despite the potential bug in the attention mechanism"
+]
+```

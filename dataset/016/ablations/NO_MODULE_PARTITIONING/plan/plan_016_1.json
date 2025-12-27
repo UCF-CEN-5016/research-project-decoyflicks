@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository.",
+    "Set the environment variable for PYTHONPATH to include the path to the TensorFlow Model Garden.",
+    "Define the DATA_DIR variable to point to the location of the ImageNet TFRecords dataset.",
+    "Define the MODEL_DIR variable to point to the location where model checkpoints will be saved.",
+    "Activate the conda environment with TensorFlow 2.11.0 installed.",
+    "Create a configuration file gpu.yaml for the first worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0.",
+    "Create a configuration file gpu1.yaml for the second worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1.",
+    "On the first GPU node (gpu1), run the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml.",
+    "On the second GPU node (gpu2), run the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml.",
+    "Monitor the training logs on both nodes to capture throughput metrics during execution.",
+    "Record the throughput values for single GPU execution and for multi-GPU execution on a single node to establish a baseline.",
+    "Compare the throughput values from the multi-worker setup to the single GPU execution to verify that they are not scaling as expected.",
+    "Check for any error messages or warnings in the logs that may indicate issues with the multi-worker setup.",
+    "Validate that both nodes are correctly communicating by checking the logs for any signs of synchronization issues.",
+    "Assert that the throughput for the multi-worker setup is equal to the throughput of a single GPU, indicating that scaling is not occurring."
+]
+```

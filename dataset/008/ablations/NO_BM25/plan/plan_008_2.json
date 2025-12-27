@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: import tensorflow as tf, import numpy as np, import pandas as pd, from official.projects.waste_identification_ml.model_inference.color_and_property_extractor import extract_properties_and_object_masks",
+    "Set TensorFlow version to 2.13.0 by running: !pip install tensorflow==2.13.0",
+    "Set Python version to 3.10.12 in Google Colab by selecting the appropriate runtime environment.",
+    "Download the Faster R-CNN Inception ResNet V2 model from the provided URL: !wget http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_inception_resnet_v2_640x640_coco17_tpu-8.tar.gz",
+    "Extract the downloaded model files: !tar -xvf faster_rcnn_inception_resnet_v2_640x640_coco17_tpu-8.tar.gz",
+    "Load the model using TensorFlow's Object Detection API: from object_detection.utils import config_util, get_model_from_config, create_configs, load_checkpoint",
+    "Set the model configuration path to the extracted model directory: model_config_path = 'path/to/extracted/model/config/file.config'",
+    "Create a model from the configuration: model = get_model_from_config(model_config_path)",
+    "Load the checkpoint for the model: load_checkpoint(model, 'path/to/extracted/model/checkpoint')",
+    "Prepare a sample input image with dimensions 640x640: input_image = np.random.rand(1, 640, 640, 3).astype(np.float32)",
+    "Run inference on the model with the sample input image: detections = model(input_image)",
+    "Prepare the final_result dictionary with required keys: final_result = {'detection_masks_reframed': detections['detection_masks'], 'detection_boxes': detections['detection_boxes'], 'num_detections': detections['num_detections']}",
+    "Call the extract_properties_and_object_masks function with the final_result, height=640, width=640, and original_image=input_image[0]: list_of_df, cropped_masks = extract_properties_and_object_masks(final_result, 640, 640, input_image[0])",
+    "Verify if a ValueError is raised during the execution of extract_properties_and_object_masks function by wrapping the call in a try-except block: try: ... except ValueError as e: print('ValueError:', e)",
+    "Assert that the caught ValueError message contains 'is not supported for tf2 version' to confirm the bug: assert 'is not supported for tf2 version' in str(e)"
+]
+```

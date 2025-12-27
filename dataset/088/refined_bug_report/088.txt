@@ -1,0 +1,17 @@
+TITLE
+Pad Value Not Used in `align_right` Function
+
+SYMPTOMS
+• The `pad_id` parameter is not utilized when calling `F.pad(..., value=0)` within the `align_right` function.
+• This issue might lead to incorrect padding during sequence alignment.
+
+EXPECTED BEHAVIOR
+• When `pad_id` is provided and used in the `align_right` function, it should be correctly applied as a pad value for sequences that need to be extended to match a specified length.
+
+REPRODUCTION STEPS
+1. Clone the repository from https://github.com/lucidrains/x-transformers.
+2. Navigate to the file `autoregressive_wrapper.py`.
+3. Locate the `align_right` function at line 51 as indicated in the bug report.
+4. Note that the `pad_id` parameter is not used in the current implementation of `F.pad(..., value=0)`.
+
+To fix this issue, ensure that `pad_id` is correctly incorporated into the padding logic to align sequences properly with respect to the specified pad identifier.

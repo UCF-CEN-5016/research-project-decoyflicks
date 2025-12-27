@@ -1,0 +1,55 @@
+ ValueError: List argument 'values' to 'ConcatV2' Op with length 0
+
+# Prerequisites
+
+Please answer the following questions for yourself before submitting an issue.
+
+- [x] I am using the latest TensorFlow Model Garden release and TensorFlow 2.
+- [x] I am reporting the issue to the correct repository. (Model Garden official or research directory)
+- [x] I checked to make sure that this issue has not been filed already.
+
+## 1. The entire URL of the file you are using
+
+https://github.com/tensorflow/models/tree/master/official/vision/modeling/layers/detection_generator.py
+
+## 2. Describe the bug
+
+In function '_generate_detections_v2_class_aware', error is occured during evaludation phase as follow:
+ValueError: List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2.
+
+## 3. Steps to reproduce
+
+pass the input with length 0 tensors as predicted boxes
+
+## 4. Expected behavior
+
+passing this function when the predicted boxes is 0 or 1
+
+## 5. Additional context
+
+N/A
+
+## 6. System information
+
+- OS Platform and Distribution (e.g., Linux Ubuntu 16.04): Linux Ubuntu 20.04
+- Mobile device name if the issue happens on a mobile device: N/A
+- TensorFlow installed from (source or binary): 
+- TensorFlow version (use command below): v2.11.0-rc2-17-gd5b57ca93e5 2.11.0
+- Python version: 3.10.9 
+- Bazel version (if compiling from source):
+- GCC/Compiler version (if compiling from source):
+- CUDA/cuDNN version: 11.2 / 8.4.0
+- GPU model and memory: 2 * 3090, 2 * 24G
+
+<!-- 
+Collect system information using our environment capture script.
+https://github.com/tensorflow/tensorflow/tree/master/tools/tf_env_collect.sh
+
+You can also obtain the TensorFlow version with:
+
+1. TensorFlow 1.0
+`python -c "import tensorflow as tf; print(tf.GIT_VERSION, tf.VERSION)"`
+
+2. TensorFlow 2.0
+`python -c "import tensorflow as tf; print(tf.version.GIT_VERSION, tf.version.VERSION)"`
+-->

@@ -1,0 +1,18 @@
+```json
+[
+    "Import the necessary libraries from the provided list of dependencies",
+    "Set a random seed for reproducibility using `random.seed(42)` and `torch.manual_seed(42)`",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using `torch.randn(batch_size, 224, 224, 3)`",
+    "Prepare the labels with a shape of (batch_size,) containing integers from 0 to num_classes-1",
+    "Load the pre-trained ResNet model with `torchvision.models.resnet50(pretrained=True)`",
+    "Disable gradient calculation using `with torch.no_grad():` block for inference purposes",
+    "Pass the input data through the model to obtain predictions",
+    "Calculate the loss using `CrossEntropyLoss()` between predictions and labels",
+    "Verify that the loss tensor contains NaN values by checking if `torch.isnan(loss).any() == True` returns True",
+    "Monitor GPU memory usage during execution using a tool like `nvidia-smi` or Python libraries such as `torch.cuda.memory_allocated()` and `torch.cuda.max_memory_allocated()`",
+    "Assert GPU memory exceeds an expected threshold (e.g., 50% of total available memory) by checking if the allocated memory is greater than a certain value",
+    "Record the exact version of PyTorch being used for reproducibility"
+]
+```
+

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the relevant modules from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and a dimension size of 32 for the input tensor",
+    "Create a random input tensor 'x' with shape (batch_size, seq_len, dim) where seq_len is 1, resulting in shape (1, 1, 32)",
+    "Create a random condition tensor 'condition' with shape (batch_size, dim) resulting in shape (1, 32)",
+    "Instantiate the AdaptiveRMSNorm class with dim=32",
+    "Call the forward method of the AdaptiveRMSNorm instance with inputs x and condition",
+    "Set the rotary_xpos flag to True in the relevant configuration or class instance",
+    "Create a power tensor with shape (1,) containing a single value, e.g., torch.tensor([0])",
+    "Call the forward method of the relevant class that uses the scale and rearrange function, passing the power tensor",
+    "Capture the output and any exceptions raised during the execution",
+    "Verify that the exception raised is einops.EinopsError with the message 'Error while processing rearrange-reduction pattern \"n -> n 1\"'",
+    "Check that the input tensor shape is torch.Size([1, 32]) and assert that it matches the expected shape",
+    "Log the error message and the input tensor shape for debugging purposes"
+]
+```

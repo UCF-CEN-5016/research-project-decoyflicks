@@ -1,0 +1,19 @@
+TITLE  
+Conflict between `qk_norm` and `kv_heads` settings in x-transformers
+
+SYMPTOMS  
+• Incompatibility arises when using `qk_norm` alongside `kv_heads` that differ from `heads`.  
+• The code may not function as intended, leading to incorrect behavior in the transformer model.  
+• No specific error messages are reported, but the model's output is incorrect when the parameters are misconfigured.
+
+EXPECTED BEHAVIOR  
+When both `qk_norm` and `kv_heads` are utilized, the model should correctly scale the normalization parameters based on the number of key-value heads, ensuring consistent performance and output.
+
+REPRODUCTION STEPS  
+1. Set `qk_norm` to True in the model configuration.  
+2. Set `kv_heads` to a value different from `heads`.  
+3. Initialize the model and run a forward pass with sample input data.  
+4. Observe the model's output for inconsistencies or unexpected results.  
+5. Review the implementation at the specified code link to identify the conflict.  
+6. Modify the line to `self.qk_norm_k_scale = nn.Parameter(torch.ones(kv_heads, 1, dim_head))` and re-run the model.  
+7. Compare the output before and after the modification to confirm the resolution of the issue.

@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the tensorflow_models module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Check TensorFlow version using 'print(tf.version.VERSION)' to ensure it is TensorFlow 2.x",
+    "Install the tensorflow_text package using '!pip install tensorflow-text'",
+    "Import the necessary modules from tensorflow_text using 'from tensorflow_text import ...'",
+    "Create a dummy input tensor with shape (32, 128) to simulate input data, where 32 is the batch size and 128 is the sequence length",
+    "Define a simple model using tf.keras.Sequential with at least one Dense layer to process the input tensor",
+    "Compile the model with an optimizer and loss function, e.g., 'model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')'",
+    "Attempt to import the tensorflow_models module using 'import tensorflow_models as tfm'",
+    "Run the model on the dummy input tensor using 'model.predict(dummy_input)'",
+    "Capture the output and check for ImportError in the logs",
+    "Verify that the ImportError message contains 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Log the error message to confirm the bug is reproduced",
+    "Collect system information including OS, TensorFlow version, Python version, and CUDA version using 'print' statements",
+    "Ensure that the environment is set up with compatible versions of TensorFlow, tensorflow_models, and tensorflow_text"
+]
+```

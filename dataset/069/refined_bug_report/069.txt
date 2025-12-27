@@ -1,0 +1,18 @@
+TITLE
+Failed to Convert String to Float in Correlation Calculation
+
+SYMPTOMS
+• The program encounters an error during the execution of `show_heatmap(df)`.
+• Specifically, it fails when calling `plt.matshow(data.corr())` due to a conversion issue.
+• The exact error message is:
+```
+ValueError: could not convert string to float: '01.01.2009 00:10:00'
+```
+
+EXPECTED BEHAVIOR
+The program should correctly compute the correlation matrix of the DataFrame `df` and then display it using a heatmap.
+
+REPRODUCTION STEPS
+1. Ensure you have the necessary Python environment set up, including TensorFlow, Pandas, Matplotlib.
+2. Run the script located at `/home/test/Documents/timeseries_weather_forecasting.py`.
+3. The program should fail with an error message indicating that it cannot convert a string to float for the correlation calculation.

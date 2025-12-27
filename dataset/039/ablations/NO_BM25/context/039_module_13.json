@@ -1,0 +1,28 @@
+{
+  "bug_report": "039",
+  "module": {
+    "module": "labml_nn/gan/stylegan",
+    "files": [
+      {
+        "path": "labml_nn/gan/stylegan/__init__.py",
+        "snippets": [
+          {
+            "lines": "853-876",
+            "code": "    def __init__(self, shape: List[int]):\n        \"\"\"\n        * `shape` is the shape of the weight parameter\n        \"\"\"\n        super().__init__()\n\n        # He initialization constant\n        self.c = 1 / math.sqrt(np.prod(shape[1:]))\n        # Initialize the weights with $\\mathcal{N}(0, 1)$\n        self.weight = nn.Parameter(torch.randn(shape))\n\n    def forward(self):\n        # Multiply the weights by $c$ and return\n        return self.weight * self.c\n\n    def forward(self, x: torch.Tensor, d: torch.Tensor):\n        \"\"\"\n        * `x` is $x \\sim \\mathcal{D}$\n        * `d` is $D(x)$\n        \"\"\"\n\n        # Get batch size\n        batch_size = x.shape[0]\n\n        # Calculate gradients of $D(x)$ with respect to $x$.\n        # `grad_outputs` is set to $1$ since we want the gradients of $D(x)$,\n        # and we need to create and retain graph since we have to compute gradients\n        # with respect to weight on this loss.\n        gradients, *_ = torch.autograd.grad(outputs=d,\n                                            inputs=x,\n                                            grad_outputs=d.new_ones(d.shape),\n                                            create_graph=True)\n\n        # Reshape gradients to calculate the norm\n        gradients = gradients.reshape(batch_size, -1)\n        # Calculate the norm $\\Vert \\nabla_{x} D(x)^2 \\Vert$\n        norm = gradients.norm(2, dim=-1)\n        # Return the loss $\\Vert \\nabla_x D_\\psi(x)^2 \\Vert$\n        return torch.mean(norm ** 2)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "labml_nn/gan/stylegan/__init__.py",
+      "snippets": [
+        {
+          "lines": "853-876",
+          "code": "    def __init__(self, shape: List[int]):\n        \"\"\"\n        * `shape` is the shape of the weight parameter\n        \"\"\"\n        super().__init__()\n\n        # He initialization constant\n        self.c = 1 / math.sqrt(np.prod(shape[1:]))\n        # Initialize the weights with $\\mathcal{N}(0, 1)$\n        self.weight = nn.Parameter(torch.randn(shape))\n\n    def forward(self):\n        # Multiply the weights by $c$ and return\n        return self.weight * self.c\n\n    def forward(self, x: torch.Tensor, d: torch.Tensor):\n        \"\"\"\n        * `x` is $x \\sim \\mathcal{D}$\n        * `d` is $D(x)$\n        \"\"\"\n\n        # Get batch size\n        batch_size = x.shape[0]\n\n        # Calculate gradients of $D(x)$ with respect to $x$.\n        # `grad_outputs` is set to $1$ since we want the gradients of $D(x)$,\n        # and we need to create and retain graph since we have to compute gradients\n        # with respect to weight on this loss.\n        gradients, *_ = torch.autograd.grad(outputs=d,\n                                            inputs=x,\n                                            grad_outputs=d.new_ones(d.shape),\n                                            create_graph=True)\n\n        # Reshape gradients to calculate the norm\n        gradients = gradients.reshape(batch_size, -1)\n        # Calculate the norm $\\Vert \\nabla_{x} D(x)^2 \\Vert$\n        norm = gradients.norm(2, dim=-1)\n        # Return the loss $\\Vert \\nabla_x D_\\psi(x)^2 \\Vert$\n        return torch.mean(norm ** 2)"
+        }
+      ]
+    }
+  ]
+}

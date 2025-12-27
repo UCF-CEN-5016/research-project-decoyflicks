@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from keras_cv for building the YOLOV8 model",
+    "Define a batch size of 32 and image dimensions of 640x640",
+    "Load the 'yolo_v8_s_backbone_coco' backbone using keras_cv.models.YOLOV8Backbone.from_preset",
+    "Create a YOLOV8Detector model with num_classes set to the length of the class_mapping list, bounding_box_format set to 'xyxy', and fpn_depth set to 1",
+    "Compile the YOLOV8Detector model using an Adam optimizer with learning_rate=0.001 and global_clipnorm=10.0, setting classification_loss='binary_crossentropy' and box_loss='ciou'",
+    "Generate a dummy dataset by creating random uniform input data with shape (batch_size, 640, 640, 3) and corresponding ground truth labels in the required format",
+    "Use the dummy dataset to train the YOLOV8Detector model for 1 epoch without validation",
+    "Monitor the training process for any loss values that become NaN during the first epoch of training",
+    "Assert that there are NaN values present in the loss calculation after one epoch of training"
+]
+```
+

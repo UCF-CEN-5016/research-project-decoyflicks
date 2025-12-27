@@ -1,0 +1,15 @@
+[
+    "Clone or download the keras-io GitHub repository to access the mirnet.py example file.",
+    "Navigate to the file path: examples/vision/mirnet.py in the repository.",
+    "Open mirnet.py and locate line 347 to identify the definition of variable 'level2_dau_2'.",
+    "Locate line 352 in mirnet.py where 'selective_kernel_feature_fusion' is called with parameters including 'level3_dau_2' twice, and note that 'level2_dau_2' is not used.",
+    "Set up a Python environment with TensorFlow 2.x (compatible with mirnet.py), Keras, and any other dependencies as required by mirnet.py (e.g., numpy).",
+    "Write a minimal script or modify mirnet.py to include print statements or logging around line 352 to output the shapes and presence of variables 'level1_dau_2', 'level2_dau_2', and 'level3_dau_2' before the call to 'selective_kernel_feature_fusion'.",
+    "Run the mirnet.py model training or inference with a small batch size (e.g., batch_size=2) and a small input image size (e.g., 64x64 or the default used in mirnet.py) to quickly observe runtime behavior.",
+    "Capture the outputs of the print statements to confirm that 'level2_dau_2' is computed but never passed to 'selective_kernel_feature_fusion'.",
+    "Modify the call to 'selective_kernel_feature_fusion' on line 352 to replace the second 'level3_dau_2' with 'level2_dau_2' (as suggested by the bug report) and rerun the script under the same conditions.",
+    "Compare the outputs and any differences in the intermediate tensor shapes or model behavior between the original and modified calls to verify that 'level2_dau_2' is indeed unused in the original and used in the modified version.",
+    "Add assertions in the script after line 352 to check that the output of 'selective_kernel_feature_fusion' changes when replacing the duplicated 'level3_dau_2' with 'level2_dau_2', confirming the impact of the typo.",
+    "Optionally, run a forward pass with known input data and assert that the outputs differ between the original code and the modified code with 'level2_dau_2' passed correctly, demonstrating the effect of the bug.",
+    "Document the steps and outputs to confirm that the variable 'level2_dau_2' is defined but unused in the original code, and that the call to 'selective_kernel_feature_fusion' is called with an incorrect parameter, reproducing the bug."
+]

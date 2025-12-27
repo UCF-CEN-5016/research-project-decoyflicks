@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import numpy as np, import h5py",
+    "Define constants: set MODEL_DIR to a valid directory path, set COCO_MODEL_PATH to a valid path of the pre-trained weights file, and set config to an instance of the configuration class used in Mask R-CNN",
+    "Create a Mask R-CNN model instance: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Load the weights into the model: call model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Ensure the COCO_MODEL_PATH points to a valid HDF5 file containing the weights",
+    "Set up a test image: create a dummy image with shape (1, 512, 512, 3) filled with random pixel values using np.random.rand(1, 512, 512, 3)",
+    "Prepare the input for the model: create a list of images containing the dummy image",
+    "Call the model's detect method: results = model.detect([dummy_image])",
+    "Capture the output of the detect method and check for any exceptions",
+    "Verify that a NotImplementedError is raised during the execution of model.load_weights",
+    "Log the error message to confirm it matches the expected NotImplementedError message regarding tf.Variable"
+]
+```

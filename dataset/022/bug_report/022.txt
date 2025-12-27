@@ -1,0 +1,5 @@
+RandAugment magnitude standard deviation is either 0 or 1
+
+If I am not mistaken, there should be a `level_std*` after the `+=`, for otherwise the applied standard deviation is always 1.
+
+https://github.com/tensorflow/models/blob/9fb4a4fbcd888616586ceffa1b8806ffe1126f54/official/vision/ops/augment.py#L1566

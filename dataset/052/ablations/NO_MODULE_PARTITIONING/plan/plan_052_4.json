@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from tensorflow import keras",
+    "Set the Keras version to 3.1.0.dev2024031303",
+    "Define a batch size of 32 and set the number of epochs to 10",
+    "Prepare a sample dataset for Named Entity Recognition (NER) with input sentences and corresponding labels",
+    "Create a mapping dictionary for entity labels, e.g., mapping = {0: 'O', 1: 'B-ORG', 2: 'B-MISC'}",
+    "Define a function tokenize_and_convert_to_ids that takes a string input, splits it into tokens, and converts them to lowercase",
+    "Create a train_dataset using tf.data.Dataset.from_tensor_slices with input sentences and labels, and batch it with the defined batch size",
+    "Define a simple NER model using Keras Sequential API with layers: Embedding, LSTM, and Dense with softmax activation",
+    "Compile the ner_model with optimizer='adam' and loss='sparse_categorical_crossentropy'",
+    "Call ner_model.fit on train_dataset with epochs set to 10 and validate that it runs without errors",
+    "Define a sample input string for inference: sample_input = tokenize_and_convert_to_ids('eu rejects german call to boycott british lamb')",
+    "Reshape sample_input to have shape [1, -1] using tf.reshape",
+    "Call ner_model.predict with sample_input and store the output",
+    "Use np.argmax on the output to get the predicted class indices",
+    "Map the predicted indices back to entity labels using the mapping dictionary",
+    "Print the prediction results to verify the output",
+    "Assert that the output does not contain any errors during the prediction phase",
+    "Monitor for OperatorNotAllowedInGraphError during the execution of ner_model.fit and ner_model.predict",
+    "Log the shape of the output tensor before the softmax layer to verify it matches expected dimensions"
+]
+```

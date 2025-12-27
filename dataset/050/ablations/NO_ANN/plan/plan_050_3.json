@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, numpy, and imageio",
+    "Set the random seed for reproducibility using keras.random.SeedGenerator(1337)",
+    "Define constants: batch_size = 64, num_channels = 1, num_classes = 10, image_size = 28, latent_dim = 128",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Concatenate training and test datasets: all_digits = np.concatenate([x_train, x_test]) and all_labels = np.concatenate([y_train, y_test])",
+    "Preprocess the images: scale pixel values to [0, 1] range and reshape to (-1, 28, 28, 1)",
+    "One-hot encode the labels using keras.utils.to_categorical(all_labels, 10)",
+    "Create a tf.data.Dataset from the images and labels: dataset = tf.data.Dataset.from_tensor_slices((all_digits, all_labels))",
+    "Shuffle the dataset with buffer_size=1024 and batch it with batch_size=64",
+    "Define the discriminator model using keras.Sequential with appropriate layers",
+    "Define the generator model using keras.Sequential with appropriate layers",
+    "Create a ConditionalGAN class that inherits from keras.Model and implement the required methods",
+    "Instantiate the ConditionalGAN with the discriminator, generator, and latent_dim",
+    "Compile the ConditionalGAN with Adam optimizers and BinaryCrossentropy loss function",
+    "Call cond_gan.fit(dataset, epochs=1) to start training",
+    "During training, assert that the first element of real_images is a list by checking type(real_images) == list",
+    "Attempt to access real_images.shape to trigger the AttributeError",
+    "Capture the output and verify that it raises an AttributeError stating 'list' object has no attribute 'shape'"
+]
+```

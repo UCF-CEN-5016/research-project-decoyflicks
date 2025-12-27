@@ -1,0 +1,16 @@
+[
+  "Import TensorFlow and necessary augmentation functions including RandAugment from official/vision/ops/augment.py",
+  "Import numpy for numerical operations",
+  "Set a fixed random seed (e.g., 42) for reproducibility",
+  "Define input image batch size as 4 with height and width of 224 and 3 channels",
+  "Create a dummy input tensor of shape (4, 224, 224, 3) filled with constant or random values",
+  "Initialize RandAugment with a specific magnitude level (e.g., level=5) and a non-zero magnitude standard deviation (e.g., level_std=0.5)",
+  "Apply RandAugment augmentation to the input tensor",
+  "Extract or instrument the augmentation code to capture the internally computed magnitude values after the operation that adds the standard deviation noise",
+  "Specifically observe the line around https://github.com/tensorflow/models/blob/9fb4a4fbcd888616586ceffa1b8806ffe1126f54/official/vision/ops/augment.py#L1566 to verify if the magnitude standard deviation is properly scaled by level_std or just added as a raw random noise with std=1",
+  "Run multiple passes of augmentation to collect a distribution of applied magnitudes",
+  "Compute and assert that the standard deviation of the applied magnitude values is either exactly 0 or exactly 1, indicating the missing multiplication by level_std in the code",
+  "Log or print the observed standard deviation of magnitudes applied to confirm the bug reproducibility",
+  "Optionally, compare to a corrected implementation where the standard deviation is multiplied by level_std to show the difference in magnitude variability",
+  "Conclude that the magnitude standard deviation is not scaled properly and reproduces the bug as reported"
+]

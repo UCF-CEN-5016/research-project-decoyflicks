@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary modules from TensorFlow and object_detection package",
+    "Define a batch size of 2 for evaluation",
+    "Create groundtruth_classes with shape (batch_size, None) containing random integer values between 0 and 100",
+    "Create groundtruth_masks with shape (batch_size, None, None, None) containing random binary values (0 or 1)",
+    "Create groundtruth_is_crowd with shape (batch_size, None) containing random binary values (0 or 1)",
+    "Create detection_classes with shape (batch_size, None) containing random integer values between 0 and 100",
+    "Create detection_masks with shape (batch_size, None, None, None) containing random binary values (0 or 1)",
+    "Define the input_data_fields and detection_fields from standard_fields package",
+    "Create eval_dict using groundtruth_classes, groundtruth_masks, groundtruth_is_crowd, detection_classes, and detection_masks",
+    "Initialize a CocoMaskEvaluator with category list",
+    "Call get_estimator_eval_metric_ops function with eval_dict to obtain eval_metric_ops",
+    "Extract the update_op and value_op for 'SegmentationQuality@0.50IOU'",
+    "Use random data to feed the placeholders in the feed_dict",
+    "Run update_op in a TensorFlow session to update metrics",
+    "Fetch value_op in the same session to retrieve metric values",
+    "Verify that the retrieved metric values contain NaN or unexpected behavior"
+]
+```
+

@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and necessary modules from syntaxnet and graph_builder",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 10 for training and 2 for evaluation",
+    "Load the MNIST dataset using tf.keras.datasets.mnist and preprocess it (normalize pixel values to [0, 1])",
+    "Create a task context file at a temporary location with the required configurations for training and evaluation",
+    "Initialize a TensorFlow graph for the model",
+    "Create an instance of the GreedyParser from graph_builder with parameters: num_actions, num_features, num_feature_ids, embedding_sizes=[8, 8, 8], hidden_layer_sizes=[32, 32], use_averaging=True",
+    "Add training operations to the parser using AddTraining with task_context, batch_size=10, and corpus_name='training-corpus'",
+    "Add evaluation operations to the parser using AddEvaluation with task_context, batch_size=2, and corpus_name='tuning-corpus'",
+    "Add a saver operation to the parser using AddSaver",
+    "Initialize a TensorFlow session with the created graph",
+    "Run the initialization operations for the parser",
+    "Start a training loop for 100 epochs, where in each epoch, run the training operation and capture the loss value",
+    "Check if the loss value becomes NaN during training and log the epoch number when it occurs",
+    "Monitor GPU memory usage during the training process using tf.config.experimental.get_memory_info('GPU:0')",
+    "Assert that the GPU memory usage exceeds 10GB during training",
+    "If NaN loss is detected, print the epoch number and the current loss value for debugging purposes"
+]
+```

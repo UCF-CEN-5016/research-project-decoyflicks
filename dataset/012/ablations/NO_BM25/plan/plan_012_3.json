@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from keras and the official models repository",
+    "Set TensorFlow to eager execution mode by calling tf.config.run_functions_eagerly(True)",
+    "Define the model type as 'resnet' and dataset as 'imagenet'",
+    "Set the data directory to a valid path where the ImageNet dataset is stored, e.g., '/path/to/imagenet_data'",
+    "Create a function to simulate the training and evaluation process, using the classifier_trainer.py script",
+    "Within the function, attempt to instantiate the ExponentialMovingAverage class from tf_keras.optimizers.legacy.Optimizer",
+    "Define a batch size of 32 and set the number of epochs to 1 for quick testing",
+    "Prepare a dummy dataset with random images and labels to mimic the ImageNet dataset structure",
+    "Use tf.data.Dataset.from_tensor_slices to create a dataset from the dummy images and labels",
+    "Map the dataset to preprocess the images (e.g., resizing, normalization) to match the input requirements of ResNet",
+    "Call the training function with the prepared dataset and specified parameters",
+    "Run the script using the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --data_dir=/path/to/imagenet_data",
+    "Capture the output and check for the AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'",
+    "Log the full error traceback to confirm the source of the error matches the reported bug",
+    "Verify that the TensorFlow version is tf-nightly-cpu 2.16.0.dev20231103 and tf-keras 2.16.0"
+]
+```

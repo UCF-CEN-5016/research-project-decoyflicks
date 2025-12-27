@@ -1,0 +1,24 @@
+```json
+[
+    "Import TensorFlow, Keras, NumPy, and any necessary modules for data handling and model creation.",
+    "Set the random seed for reproducibility using 'tf.random.set_seed(42)'.",
+    "Define the input shape for the model as (28, 28, 28, 1) and the number of classes as 11.",
+    "Create a function 'download_and_prepare_dataset' to download and prepare the MedMNIST dataset, ensuring it returns train, validation, and test datasets.",
+    "Call 'download_and_prepare_dataset' to obtain the dataset and unpack it into train_videos, train_labels, valid_videos, valid_labels, test_videos, and test_labels.",
+    "Define a preprocessing function 'preprocess' that converts video frames to float32 and casts labels to float32.",
+    "Create a function 'prepare_dataloader' that takes videos and labels, shuffles them if training, and returns a tf.data.Dataset object with batch size 32.",
+    "Prepare the train, validation, and test dataloaders by calling 'prepare_dataloader' with the respective datasets.",
+    "Define the 'TubeletEmbedding' class with a Conv3D layer for embedding and a reshape layer to flatten the output.",
+    "Define the 'PositionalEncoder' class that adds positional embeddings to the encoded video tokens.",
+    "Create the 'create_vivit_classifier' function that initializes the model architecture using the TubeletEmbedding and PositionalEncoder classes.",
+    "In 'create_vivit_classifier', ensure to include a Dense layer with softmax activation for the output layer.",
+    "Initialize the model by calling 'create_vivit_classifier' with appropriate parameters.",
+    "Compile the model using Adam optimizer and sparse categorical crossentropy loss.",
+    "Attempt to fit the model using 'model.fit' with the training dataloader for 10 epochs.",
+    "Capture the output of 'model.fit' and check for any exceptions or errors during training.",
+    "If an error occurs, specifically look for 'OperatorNotAllowedInGraphError' related to the Softmax layer.",
+    "Log the shape of the inputs to the Softmax layer to verify they are as expected (should not contain None dimensions).",
+    "Verify that the model's output shape matches the expected shape for the number of classes defined.",
+    "Assert that the error message contains 'Using a symbolic tf.Tensor as a Python bool' to confirm the specific bug."
+]
+```

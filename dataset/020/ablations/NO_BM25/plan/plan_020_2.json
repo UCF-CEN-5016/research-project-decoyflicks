@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the official model garden modules: 'official.core.train_lib' and 'official.projects.yt8m.configs.yt8m'",
+    "Set Python version to 3.8 and install TensorFlow Model Garden version 2.12.0 using pip: 'pip install tf-models-official==2.12.0'",
+    "Create a Docker container using the TensorFlow GPU Jupyter image: 'docker run --gpus all -it --rm tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Define a distribution strategy using 'tf.distribute.MirroredStrategy()'",
+    "Create a mock experiment configuration 'exp_config' with necessary parameters for training and evaluation, including 'train_data', 'validation_data', and 'model'",
+    "Set 'model_dir' to a temporary directory for saving model checkpoints, e.g., '/tmp/model_dir'",
+    "Call 'tfm.core.train_lib.run_experiment' with parameters: distribution_strategy, task (YT8MTask), mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True",
+    "Prepare mock input data for training with shape (batch_size, num_frames, num_features), where batch_size=8, num_frames=10, and num_features=128",
+    "Create a mock labels tensor with shape (batch_size, num_classes) where num_classes=10, using random integers for binary classification",
+    "Simulate the training step by invoking 'train_step' method with mock inputs and model, ensuring to pass the metrics as None",
+    "During the evaluation step, ensure that the 'eval_step' method is called, which should trigger the error",
+    "Capture the output logs and assert that the error message 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict'' is present in the logs",
+    "Verify that the error occurs consistently by running the experiment multiple times (at least 3 times) and checking for the same TypeError each time"
+]
+```

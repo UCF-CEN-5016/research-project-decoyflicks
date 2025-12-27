@@ -1,0 +1,11 @@
+[
+    "Import required modules: fairseq, torch",
+    "Define constants for batch size, sequence length, and vocab size",
+    "Create a dummy input tensor of shape (batch_size, sequence_length, vocab_size) with random values between 0 and 1",
+    "Instantiate an instance of the MultilingualSpeechEncoder class from the SpeechTransformer model",
+    "Call the forward method on the encoder instance with the dummy input tensor, specifying target_lengths as None and incremental_state as {}",
+    "Observe the output of the forward call for any unexpected behavior such as NaN values or infinite values in gradients",
+    "Monitor memory usage during the execution of the forward method",
+    "Assert that the memory usage exceeds a certain threshold indicating potential issues with tensor computations"
+]
+

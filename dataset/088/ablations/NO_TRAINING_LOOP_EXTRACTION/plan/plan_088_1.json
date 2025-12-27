@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, nn, and F from torch, and pad_at_dim from x_transformers",
+    "Define a batch size of 2 and sequence length of 5 for input data",
+    "Create random input data tensor with shape (batch_size, seq_len, embedding_dim) where embedding_dim is set to 10",
+    "Define a mask tensor with shape (batch_size, seq_len) filled with True values to simulate no masking",
+    "Instantiate the AttentionLayers class with appropriate parameters (e.g., dim=10) to create an attention layer",
+    "Instantiate the ContinuousTransformerWrapper with max_seq_len=5, attn_layers as the previously created attention layer, and other parameters set to default values",
+    "Instantiate the ContinuousAutoregressiveWrapper with the ContinuousTransformerWrapper instance, pad_value set to 99, and loss_fn set to nn.MSELoss()",
+    "Prepare input tensor by concatenating the input data tensor with a target tensor of shape (batch_size, seq_len) that is shifted by one position",
+    "Call the forward method of ContinuousAutoregressiveWrapper with the prepared input tensor and the mask tensor",
+    "Verify that the output loss tensor is computed correctly by checking its shape matches (batch_size, seq_len - 1)",
+    "Check if the pad_value (99) is used in the loss calculation by asserting that the loss tensor does not contain any instances of 99",
+    "Print the loss tensor to observe its values and confirm that the pad_value is not being used in the loss calculation"
+]
+```

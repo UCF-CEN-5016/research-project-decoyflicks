@@ -1,0 +1,20 @@
+```json
+[
+    "Create a new virtual environment using 'python -m venv venv'",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows",
+    "Install the required package using 'pip install tf-models-official'",
+    "Create a new Python file named 'mobilenet_test.py'",
+    "In 'mobilenet_test.py', import TensorFlow with 'import tensorflow as tf'",
+    "Import the necessary modules from tf-models-official with 'from official.vision import mobilenet'",
+    "Define a function 'test_mobilenet_import()' to encapsulate the test logic",
+    "Inside 'test_mobilenet_import()', attempt to import 'tensor' from 'tensorflow.python.framework' with 'from tensorflow.python.framework import tensor'",
+    "Add a try-except block to catch ImportError and print the error message",
+    "Call 'test_mobilenet_import()' to execute the import statement",
+    "Run the script using 'python mobilenet_test.py'",
+    "Verify that the output contains the message 'ImportError: cannot import name 'tensor' from 'tensorflow.python.framework'",
+    "Check the installed TensorFlow version using 'print(tf.__version__)' to ensure compatibility with tf-models-official",
+    "Ensure that the TensorFlow version is compatible with the version of tf-models-official installed",
+    "If the error occurs, confirm that the environment is clean and no conflicting packages are installed by running 'pip list'",
+    "Document the full error traceback to confirm it matches the reported bug"
+]
+```

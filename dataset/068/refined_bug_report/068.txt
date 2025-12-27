@@ -1,0 +1,41 @@
+TITLE
+Concatenation Error in KerasCV YOLOV8 Training
+
+SYMPTOMS
+• The training process encounters an error after the first epoch.
+• An `InvalidArgumentError` is thrown when attempting to concatenate tensors.
+• The specific error message indicates a mismatch in dimensions during concatenation: "Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]".
+• The traceback points to issues within the `box_coco_metrics.py` file, specifically with the `_box_concat` function.
+
+EXPECTED BEHAVIOR
+When training the YOLOV8 model using KerasCV in Colab Pro, the training process should complete without errors, and metrics such as loss, box_loss, and class_loss should be calculated correctly after each epoch.
+
+REPRODUCTION STEPS
+1. Start a new environment in Google Colaboratory.
+2. Install necessary libraries:
+```python
+!pip install keras-cv tensorflow-yolov8
+```
+3. Import required modules and load the YOLOV8 example from KerasCV:
+```python
+import keras_cv
+from keras_cv.models import yolo_v8
+
+# Define training and validation datasets (assuming these are already loaded)
+train_ds = ...
+val_ds = ...
+```
+4. Create a YOLOV8 model instance for object detection:
+```python
+yolo = yolo_v8()
+```
+5. Attempt to fit the model on the dataset with COCO metrics evaluation callback:
+```python
+yolo.fit(
+train_ds,
+validation_data=val_ds,
+epochs=3,
+callbacks=[keras_cv.metrics.ObjectDetectionCOCOMetricsCallback(val_ds, "model.h5")]
+)
+```
+6. Observe the training progress until the first epoch completion, whereupon an error will likely be thrown due to dimension mismatch during tensor concatenation.

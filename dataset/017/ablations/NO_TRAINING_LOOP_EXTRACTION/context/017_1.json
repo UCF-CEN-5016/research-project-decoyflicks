@@ -1,0 +1,30 @@
+{
+  "bug_report": "017",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "official/pip_package/setup.py",
+    "content": "# Copyright 2023 The TensorFlow Authors. All Rights Reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\n\"\"\"Sets up TensorFlow Official Models.\"\"\"\nimport datetime\nimport os\nimport sys\n\nfrom setuptools import find_packages\nfrom setuptools import setup\n\nversion = '2.12.0'\ntf_version = '2.12.0'  # Major version.\n\nproject_name = 'tf-models-official'\n\nlong_description = \"\"\"The TensorFlow official models are a collection of\nmodels that use TensorFlow's high-level APIs.\nThey are intended to be well-maintained, tested, and kept up to date with the\nlatest TensorFlow API. They should also be reasonably optimized for fast\nperformance while still being easy to read.\"\"\"\n\nif '--project_name' in sys.argv:\n  project_name_idx = sys.argv.index('--project_name')\n  project_name = sys.argv[project_name_idx + 1]\n  sys.argv.remove('--project_name')\n  sys.argv.pop(project_name_idx)\n\n\ndef _get_requirements():\n  \"\"\"Parses requirements.txt file.\"\"\"\n  install_requires_tmp = []\n  dependency_links_tmp = []\n  with open(\n      os.path.join(os.path.dirname(__file__), '../requirements.txt'), 'r') as f:\n    for line in f:\n      package_name = line.strip()\n      # Skip empty line or comments starting with \"#\".\n      if not package_name or package_name[0] == '#':\n        continue\n      if package_name.startswith('-e '):\n        dependency_links_tmp.append(package_name[3:].strip())\n      else:\n        install_requires_tmp.append(package_name)\n  return install_requires_tmp, dependency_links_tmp\n\ninstall_requires, dependency_links = _get_requirements()\n\nif project_name == 'tf-models-nightly':\n  version += '.dev' + datetime.datetime.now().strftime('%Y%m%d')\n  install_requires.append('tf-nightly')\n  install_requires.append('tensorflow-text-nightly')\nelse:\n  install_requires.append(f'tensorflow~={tf_version}')\n  install_requires.append(f'tensorflow-text~={tf_version}')\n\nprint('install_requires: ', install_requires)\nprint('dependency_links: ', dependency_links)\n\nsetup(\n    name=project_name,\n    version=version,\n    description='TensorFlow Official Models',\n    long_description=long_description,\n    author='Google Inc.',\n    author_email='packages@tensorflow.org',\n    url='https://github.com/tensorflow/models',\n    license='Apache 2.0',\n    packages=find_packages(exclude=[\n        'research*',\n        'official.pip_package*',\n        'official.benchmark*',\n        'official.colab*',\n        'official.recommendation.ranking.data.preprocessing*',\n    ]),\n    exclude_package_data={\n        '': ['*_test.py',],\n    },\n    install_requires=install_requires,\n    dependency_links=dependency_links,\n    python_requires='>=3.7',\n)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "official/pip_package/setup.py",
+      "snippets": [
+        {
+          "lines": "41-56",
+          "code": "def _get_requirements():\n  \"\"\"Parses requirements.txt file.\"\"\"\n  install_requires_tmp = []\n  dependency_links_tmp = []\n  with open(\n      os.path.join(os.path.dirname(__file__), '../requirements.txt'), 'r') as f:\n    for line in f:\n      package_name = line.strip()\n      # Skip empty line or comments starting with \"#\".\n      if not package_name or package_name[0] == '#':\n        continue\n      if package_name.startswith('-e '):\n        dependency_links_tmp.append(package_name[3:].strip())\n      else:\n        install_requires_tmp.append(package_name)\n  return install_requires_tmp, dependency_links_tmp"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "setuptools",
+      "function": "find_packages"
+    },
+    {
+      "module": "setuptools",
+      "function": "setup"
+    }
+  ]
+}

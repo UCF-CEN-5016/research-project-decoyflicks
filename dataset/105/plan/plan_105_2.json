@@ -1,0 +1,27 @@
+```json
+[
+    "Import PyTorch and necessary modules from torch, torchvision, and tqdm",
+    "Define batch size of 256 and image dimensions of 28x28 for FashionMNIST images",
+    "Set seed to 1234 for reproducibility",
+    "Create a random uniform input data tensor with shape (batch_size, height, width, channels)",
+    "Transform the input data using ToTensor and Normalize functions from torchvision.transforms",
+    "Define a DataLoader with the created dataset and batch size of 256, shuffling enabled",
+    "Initialize SimpleVQAutoEncoder model with codebook_size=256, other parameters as specified in bug report",
+    "Move the model to GPU if available using device variable",
+    "Create an optimizer (AdamW) for the model with learning rate lr=3e-4",
+    "Define a function train(model, train_loader, train_iterations, alpha)",
+    "Inside train function, create an iterator iterate_dataset(data_loader)",
+    "Initialize an empty list for indices and commit loss",
+    "Iterate over train_iterations, getting next batch of data from iterate_dataset",
+    "Forward pass the input through the model to get output, indices, and commitment loss",
+    "Calculate reconstruction loss as mean absolute difference between output and input",
+    "Compute total loss as sum of reconstruction loss and alpha times commitment loss",
+    "Backpropagate the total loss with respect to model parameters",
+    "Perform optimizer step to update model parameters",
+    "Update progress bar with current losses and active code percentage",
+    "Assert that the reconstructed image is within valid range [-1, 1]",
+    "After training loop, assert that there are no NaN values in commitment loss tensor",
+    "Print the average reconstruction and commitment losses at the end of training"
+]
+```
+

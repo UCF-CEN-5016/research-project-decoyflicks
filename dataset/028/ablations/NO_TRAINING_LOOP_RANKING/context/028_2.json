@@ -1,0 +1,62 @@
+{
+  "bug_report": "028",
+  "rank": 2,
+  "score": 1.0,
+  "main_file": {
+    "path": "distributed/tensor_parallelism/sequence_parallel_example.py",
+    "content": "import argparse\n\nimport torch\nimport torch.multiprocessing as mp\n\nfrom torch.distributed._tensor import DeviceMesh\nfrom torch.distributed.tensor.parallel import parallelize_module\nfrom utils import cleanup, setup, ToyModel\n\ntry:\n    from torch.distributed.tensor.parallel import (\n        SequenceParallel\n    )\n    SP_AVAILABLE = True\nexcept BaseException as e:\n    pass\n\n\n\"\"\"\nThis is the script to test Sequence Parallel(SP) on a toy model in a\nMegetron-LM SPMD style. We show an E2E working flow from forward,\nbackward and optimization.\n\nWe use the example of two `nn.Linear` layers with an element-wise `nn.RELU`\nin between to show an example of sequence parallel, which was proposed in paper:\n\nhttps://arxiv.org/pdf/2205.05198.pdf.\n\nLike tensor parallel, we parallelize the first linear layer by column\nand also parallelize the second linear layer by row. But the input in each rank\nnow is different so that we need one all-gather for input and one reduce-scatter\nin the end of the second linear layer.\n\"\"\"\n\n\ndef demo_sp(rank, args):\n    \"\"\"\n    Main body of the demo of a basic version of sequence parallel by using\n    PyTorch native APIs.\n    \"\"\"\n    print(f\"Running SP example on rank {rank}.\")\n    setup(rank, args.world_size)\n\n    # create a sharding plan based on the given world_size.\n    device_mesh = DeviceMesh(\"cuda\", torch.arange(0, args.world_size))\n\n    # create model and move it to GPU with id rank\n    model = ToyModel().cuda(rank)\n    # Create a optimizer for the parallelized module.\n    LR = 0.25\n    optimizer = torch.optim.SGD(model.parameters(), lr=LR)\n    # Parallelize the module based on the given Parallel Style.\n    model = parallelize_module(model, device_mesh, SequenceParallel())\n\n    # Perform a num of iterations of forward/backward\n    # and optimizations for the sharded module.\n    for _ in range(args.iter_nums):\n        # For SP, input can be different across all ranks.\n        inp = torch.rand(20, 10).cuda(rank)\n        output = model(inp)\n        output.sum().backward()\n        optimizer.step()\n\n    cleanup()\n\n\nif __name__ == \"__main__\":\n    n_gpus = torch.cuda.device_count()\n    parser = argparse.ArgumentParser()\n    # This is passed in via cmd\n    parser.add_argument(\"--world_size\", type=int, default=n_gpus)\n    parser.add_argument(\"--iter_nums\", type=int, default=10)\n    args = parser.parse_args()\n    # The main entry point is called directly without using subprocess\n    if n_gpus < 2:\n        print(\"Requires at least 2 GPUs to run.\")\n    elif not SP_AVAILABLE:\n        print(\n            \"PyTorch doesn't have Sequence Parallelism available,\"\n            \" need nightly build.\"\n        )\n    else:\n        mp.spawn(demo_sp, args=(args,), nprocs=args.world_size, join=True)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "distributed/tensor_parallelism/sequence_parallel_example.py",
+      "snippets": [
+        {
+          "lines": "36-64",
+          "code": "def demo_sp(rank, args):\n    \"\"\"\n    Main body of the demo of a basic version of sequence parallel by using\n    PyTorch native APIs.\n    \"\"\"\n    print(f\"Running SP example on rank {rank}.\")\n    setup(rank, args.world_size)\n\n    # create a sharding plan based on the given world_size.\n    device_mesh = DeviceMesh(\"cuda\", torch.arange(0, args.world_size))\n\n    # create model and move it to GPU with id rank\n    model = ToyModel().cuda(rank)\n    # Create a optimizer for the parallelized module.\n    LR = 0.25\n    optimizer = torch.optim.SGD(model.parameters(), lr=LR)\n    # Parallelize the module based on the given Parallel Style.\n    model = parallelize_module(model, device_mesh, SequenceParallel())\n\n    # Perform a num of iterations of forward/backward\n    # and optimizations for the sharded module.\n    for _ in range(args.iter_nums):\n        # For SP, input can be different across all ranks.\n        inp = torch.rand(20, 10).cuda(rank)\n        output = model(inp)\n        output.sum().backward()\n        optimizer.step()\n\n    cleanup()"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "torch",
+      "function": "DeviceMesh"
+    },
+    {
+      "module": "torch",
+      "function": "SequenceParallel"
+    },
+    {
+      "module": "torch",
+      "function": "arange"
+    },
+    {
+      "module": "torch",
+      "function": "parallelize_module"
+    },
+    {
+      "module": "torch",
+      "function": "rand"
+    },
+    {
+      "module": "torch",
+      "function": "spawn"
+    },
+    {
+      "module": "utils",
+      "function": "ToyModel"
+    },
+    {
+      "module": "utils",
+      "function": "cleanup"
+    },
+    {
+      "module": "utils",
+      "function": "setup"
+    }
+  ]
+}

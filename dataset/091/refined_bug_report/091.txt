@@ -1,0 +1,19 @@
+TITLE
+`model.generate` Fails for Sequences Shorter Than Encoding Sequences
+
+SYMPTOMS
+• The `model.generate` method fails when decoding sequences that are shorter than the encoding sequence.
+• The error message indicates a size mismatch between tensors during the attention mechanism execution.
+
+ERROR:
+```
+RuntimeError: The size of tensor a (258) must match the size of tensor b (230) at non-singleton dimension 3
+```
+
+EXPECTED BEHAVIOR
+The `model.generate` method should correctly decode sequences that are shorter than or equal to the encoding sequence without raising errors.
+
+REPRODUCTION STEPS
+1. Clone the [toy_tasks](https://github.com/lucidrains/x-transformers/tree/main/examples/toy_tasks) example.
+2. Run the example code provided in the gist: https://gist.github.com/guillaumeguy/dd8993a622663db39aa1c54be9a875fd
+3. Observe that the `model.generate` call fails with a size mismatch error when trying to generate a sequence shorter than the encoding sequence length.

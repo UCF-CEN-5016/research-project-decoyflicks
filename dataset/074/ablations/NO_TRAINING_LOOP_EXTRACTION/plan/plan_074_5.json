@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch and deepspeed",
+    "Define a batch size of 4 and sequence length of 10 for the input tensors",
+    "Create random input tensors for actor_log_prob, log_probs, advantages, and action_mask with the following shapes: actor_log_prob: (batch_size, sequence_length), log_probs: (batch_size, sequence_length), advantages: (batch_size), action_mask: (batch_size, sequence_length)",
+    "Set the start index to 1 to simulate the scenario where the first token is not included in the loss calculation",
+    "Initialize the actor_loss_fn function to compute the actor loss using the provided tensors and the action mask",
+    "Call the actor_loss_fn with the following parameters: actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]",
+    "Capture the output of the actor_loss_fn to check for the loss value",
+    "Print the loss value to verify it is computed without the 'eos' token included in the mask",
+    "Modify the action mask to use action_mask[:, start-1:-1] instead of action_mask[:, start:]",
+    "Re-run the actor_loss_fn with the modified action mask and capture the new loss value",
+    "Print the new loss value to compare it with the previous loss value",
+    "Assert that the new loss value is different from the previous loss value, indicating that the 'eos' token's ground reward is now included in the loss calculation"
+]
+```

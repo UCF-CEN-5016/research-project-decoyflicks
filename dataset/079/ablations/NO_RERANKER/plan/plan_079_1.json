@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 2 and image dimensions of 224x224 with 3 channels (RGB)",
+    "Create random input data with shape (batch_size, channels, height, width) = (2, 3, 224, 224)",
+    "Instantiate the RegionViT class with default parameters: dim=(64, 128, 256, 512), depth=(2, 2, 8, 2), window_size=7, num_classes=1000, tokenize_local_3_conv=True, local_patch_size=4, use_peg=False, attn_dropout=0., ff_dropout=0.",
+    "Pass the random input data through the local_encoder of the RegionViT instance to obtain local_tokens",
+    "Pass the random input data through the region_encoder of the RegionViT instance to obtain region_tokens",
+    "Iterate through the layers of the RegionViT instance, applying downsampling, PEG, and transformer layers to local_tokens and region_tokens",
+    "During the forward pass, assert that the shape of local_tokens is (batch_size, init_dim, h', w') and region_tokens is (batch_size, init_dim, h'', w'') where h' and w' are derived from the input dimensions and local_patch_size",
+    "Check if LayerNorm is applied correctly by asserting the dimensions of the input to LayerNorm in the local_encoder and the final logits layer are either (init_dim) or (last_dim, h, w)",
+    "Capture any runtime errors or warnings during the forward pass, especially related to dimension mismatches in LayerNorm",
+    "Print the shapes of local_tokens and region_tokens after each layer to verify the transformations are as expected",
+    "Assert that the output of the final logits layer has shape (batch_size, num_classes) and check for any unexpected behavior or errors"
+]
+```

@@ -1,0 +1,23 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10.13",
+    "Activate the newly created conda environment using: conda activate test_env",
+    "Install TensorFlow in the conda environment using the command: pip install tensorflow==2.13.10",
+    "Install Matplotlib in the conda environment using the command: pip install matplotlib",
+    "Install TensorFlow Model Garden using the command: pip install tf-models-nightly",
+    "Open Visual Studio Code and create a new Python file named 'test_plot.py'.",
+    "Import the necessary libraries in 'test_plot.py' by adding the following lines: import matplotlib.pyplot as plt; import tensorflow as tf; from official.vision import modeling",
+    "Set the Matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg') before importing TensorFlow Model Garden.",
+    "Import TensorFlow Model Garden by adding the line: from official.vision import modeling after the backend switch.",
+    "Create a simple plot using Matplotlib by adding the following lines: x = [1, 2, 3]; y = [1, 4, 9]; plt.plot(x, y); plt.title('Test Plot'); plt.xlabel('x'); plt.ylabel('y')",
+    "Call plt.show() to display the plot.",
+    "Run the script using the command: python test_plot.py",
+    "Verify that the plot is displayed correctly before importing TensorFlow Model Garden.",
+    "Now, comment out the line that sets the backend to 'Agg' and run the script again.",
+    "Check if the plot is displayed correctly after importing TensorFlow Model Garden.",
+    "Add the line: print('Current Matplotlib backend:', plt.get_backend()) to check the backend being used after importing TensorFlow Model Garden.",
+    "Run the script again and observe the output of the current Matplotlib backend.",
+    "Assert that the backend is 'Agg' after importing TensorFlow Model Garden, which indicates that the plotting functionality is broken."
+]
+```

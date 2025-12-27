@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning, import nnUNet, import torch, import os, import argparse",
+    "Set the device to GPU: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define a function to parse command line arguments: def parse_args()",
+    "Add arguments for brats, brats22_model, scheduler, learning_rate, epochs, fold, gpus, task, nfolds, save_ckpt in parse_args()",
+    "Set default values for learning_rate=0.0003, epochs=10, fold=0, gpus=1, task=11, nfolds=10, save_ckpt=True",
+    "Call parse_args() to retrieve command line arguments",
+    "Set the CUDA_VISIBLE_DEVICES environment variable to '0' to use the first GPU: os.environ['CUDA_VISIBLE_DEVICES'] = '0'",
+    "Create a data module for BraTS dataset: data_module = BraTSDataModule()",
+    "Initialize the nnUNet model: model = nnUNet()",
+    "Set the learning rate scheduler to CosineAnnealingWarmRestarts: scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=10)",
+    "Create a PyTorch Lightning Trainer instance: trainer = pytorch_lightning.Trainer(gpus=1, max_epochs=10)",
+    "Call trainer.fit(model, datamodule=data_module) to start training",
+    "Capture the output and error messages during training",
+    "Verify that the output contains the MisconfigurationException related to lr_scheduler",
+    "Check that the error message states: 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API.'",
+    "Ensure that the training process does not complete successfully and raises the expected exception"
+]
+```

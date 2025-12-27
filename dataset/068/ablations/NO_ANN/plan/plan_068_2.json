@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: keras_cv, tensorflow, numpy, and tensorflow_datasets",
+    "Set the environment variable for Keras backend to 'jax' using os.environ['KERAS_BACKEND'] = 'jax'",
+    "Define a batch size of 4 for training and evaluation datasets",
+    "Load the Pascal VOC dataset using tensorflow_datasets with the following parameters: split='train' and bounding_box_format='xywh'",
+    "Map the dataset to unpackage the raw inputs using a function that converts bounding boxes to the specified format",
+    "Shuffle the training dataset with a buffer size of BATCH_SIZE * 4",
+    "Create a ragged batch for the training dataset using train_ds.ragged_batch(BATCH_SIZE, drop_remainder=True)",
+    "Create a ragged batch for the evaluation dataset using eval_ds.ragged_batch(BATCH_SIZE, drop_remainder=True)",
+    "Define a data augmentation pipeline with RandomFlip and JitteredResize layers, ensuring they are compatible with bounding boxes",
+    "Map the data augmentation function to the training dataset",
+    "Visualize the training dataset to ensure bounding boxes are correctly formatted and visible",
+    "Define a YOLOV8Detector model using keras_cv.models.YOLOV8Detector.from_preset with the preset 'yolo_v8_m_pascalvoc' and bounding_box_format='xywh'",
+    "Compile the model with classification_loss='binary_crossentropy', box_loss='ciou', and an SGD optimizer with a learning rate of 0.005",
+    "Fit the model on the training dataset using model.fit with epochs set to 1 and callbacks including a COCO metrics callback",
+    "Monitor the training process and capture the output to check for the UnknownError during the first epoch",
+    "Verify that the output contains the UnknownError related to ConcatOp with the message 'Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]'"
+]
+```

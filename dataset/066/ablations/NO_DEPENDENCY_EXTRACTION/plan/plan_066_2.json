@@ -1,0 +1,25 @@
+```json
+[
+    "Clone the Keras examples repository from GitHub using 'git clone https://github.com/keras-team/keras-io.git'",
+    "Navigate to the examples directory using 'cd keras-io/examples/vision'",
+    "Open the 'mirnet.py' file in a code editor to inspect the code",
+    "Locate line 347 in 'mirnet.py' and identify the variable 'level2_dau_2'",
+    "Confirm that 'level2_dau_2' is defined but not used in the code by searching for its occurrences",
+    "Locate line 352 in 'mirnet.py' and identify the function call 'selective_kernel_feature_fusion(level1_dau_2, level3_dau_2, level3_dau_2)'",
+    "Modify line 352 to replace 'level3_dau_2' with 'level2_dau_2' to create a potential typo: 'selective_kernel_feature_fusion(level1_dau_2, level2_dau_2, level3_dau_2)'",
+    "Set up a Python virtual environment using 'python -m venv keras_env' and activate it",
+    "Install required dependencies by running 'pip install -r requirements.txt' in the activated environment",
+    "Prepare the dataset by downloading it using 'wget https://github.com/rowanz/swagaf/archive/refs/heads/master.zip -O swag.zip' and unzip it",
+    "Load the training and validation datasets from 'swagaf-master/data/train.csv' and 'swagaf-master/data/val.csv' using pandas",
+    "Define a configuration class 'CFG' with parameters: preset='deberta_v3_extra_small_en', sequence_length=200, seed=42, epochs=5, batch_size=8, augment=True",
+    "Set the random seed for reproducibility using 'keras.utils.set_random_seed(CFG.seed)'",
+    "Create a function to preprocess the data, ensuring it returns tokenized inputs and padding masks",
+    "Build a TensorFlow dataset using 'tf.data.Dataset.from_tensor_slices' with the preprocessed data",
+    "Define a model architecture that includes the modified function call with the potential typo",
+    "Compile the model with an optimizer, loss function, and metrics",
+    "Train the model using 'model.fit' with the training dataset and validation dataset",
+    "Monitor the training process for any errors or warnings related to the modified function call",
+    "After training, run inference on the validation dataset to check for unexpected behavior or errors",
+    "Assert that the output of the model does not match expected results due to the potential typo in the function call"
+]
+```

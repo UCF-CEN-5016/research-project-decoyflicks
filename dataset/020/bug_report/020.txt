@@ -1,0 +1,68 @@
+tf-models-official==2.12.0 conflicts python 3.8 "TypeError: unsupported operand type(s) for |: 'dict' and 'dict'"
+
+# Prerequisites
+
+Please answer the following questions for yourself before submitting an issue.
+
+- [x] I am using the latest TensorFlow Model Garden release and TensorFlow 2.
+- [x] I am reporting the issue to the correct repository. (Model Garden official or research directory)
+- [x] I checked to make sure that this issue has not been filed already.
+
+## 1. The entire URL of the file you are using
+
+ https://github.com/tensorflow/models.git
+
+## 2. Describe the bug
+
+I was following Object detection with Model Garden tutorial (https://www.tensorflow.org/tfmodels/vision/object_detection). Every steps work well until the traning and evaluation part.
+When i was running 
+
+```python
+model, eval_logs = tfm.core.train_lib.run_experiment(
+    distribution_strategy=distribution_strategy,
+    task=task,
+    mode='train_and_eval',
+    params=exp_config,
+    model_dir=model_dir,
+    run_post_eval=True)
+```
+I got an error:
+
+```
+TypeError: in user code:
+
+    File "/usr/local/lib/python3.8/dist-packages/official/core/base_trainer.py", line 442, in eval_step  *
+        return passthrough_logs | logs
+
+    TypeError: unsupported operand type(s) for |: 'dict' and 'dict'
+```
+
+## 3. Steps to reproduce
+
+Steps to reproduce the behavior.
+
+## 4. Expected behavior
+
+A clear and concise description of what you expected to happen.
+
+## 5. Additional context
+
+I assume there's something wrong between tfm-official-model==2.12.0 and python==3.8
+[Include any logs that would be helpful to diagnose the problem.](https://stackoverflow.com/questions/62498581/typeerror-when-merging-dictionaries-unsupported-operand-types-for-dict-a)
+
+## 6. System information
+
+My environment is based on docker image tensorflow/tensorflow:2.12.0-gpu-jupyter
+
+<!-- 
+Collect system information using our environment capture script.
+https://github.com/tensorflow/tensorflow/tree/master/tools/tf_env_collect.sh
+
+You can also obtain the TensorFlow version with:
+
+1. TensorFlow 1.0
+`python -c "import tensorflow as tf; print(tf.GIT_VERSION, tf.VERSION)"`
+
+2. TensorFlow 2.0
+`python -c "import tensorflow as tf; print(tf.version.GIT_VERSION, tf.version.VERSION)"`
+-->

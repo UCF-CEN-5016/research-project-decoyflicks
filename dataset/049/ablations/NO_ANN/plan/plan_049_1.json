@@ -1,0 +1,15 @@
+```json
+[
+    "Import the necessary libraries: torch and fairseq modules",
+    "Define the dimensions for the bias parameters: u_bias_dim = 10, v_bias_dim = 10",
+    "Create an instance of the RelPositionMultiHeadedAttention class from fairseq with the following parameters: num_heads=8, embed_dim=64, u_bias_dim, v_bias_dim",
+    "Initialize a dummy input tensor with shape (batch_size=2, seq_length=5, embed_dim=64) using torch.randn",
+    "Call the forward method of the RelPositionMultiHeadedAttention instance with the dummy input tensor",
+    "Capture the output of the forward method",
+    "Check the values of the bias parameters u and v by accessing them directly from the model instance",
+    "Calculate the sum of the u and v bias parameters and print them to the console",
+    "Verify that the sum of the u bias parameter is not equal to 0 and is not finite (i.e., check for NaN or Inf values)",
+    "Assert that the output of the forward method contains NaN values by checking if torch.isnan(output).any() is True",
+    "Log the results of the checks to confirm the presence of uninitialized values in the bias parameters"
+]
+```

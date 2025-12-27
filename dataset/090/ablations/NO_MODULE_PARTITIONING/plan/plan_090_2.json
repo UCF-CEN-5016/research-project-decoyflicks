@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.optim",
+    "Define a batch size of 8 and input dimensions of (10, 512) for src and tgt sequences",
+    "Create random input tensors for src and tgt with shapes (batch_size, seq_length, embedding_dim) where seq_length=10 and embedding_dim=512",
+    "Instantiate the XTransformer model with appropriate parameters: dim=512, tie_token_emb=False, ignore_index=-100, pad_value=0, cross_attn_tokens_dropout=0.1",
+    "Set the model to training mode by calling model.train()",
+    "Define an optimizer, e.g., torch.optim.Adam, with model.parameters() and a learning rate of 0.001",
+    "Perform a forward pass by calling model.forward(src, tgt) and store the output",
+    "Check the model's parameters and specifically access encoder.to_logits.weight to verify its initial value",
+    "Perform a backward pass by calling loss.backward() where loss is computed using a loss function like nn.CrossEntropyLoss()",
+    "Update the model parameters by calling optimizer.step()",
+    "Access encoder.to_logits.weight again to check if it has been updated after the backward pass",
+    "Assert that encoder.to_logits.weight remains unchanged after the backward pass, indicating the bug",
+    "Log the values of encoder.to_logits.weight before and after the optimizer step for debugging purposes",
+    "Repeat the forward and backward pass for multiple epochs (e.g., 5 epochs) to ensure consistent reproduction of the bug",
+    "Monitor the training process for any warnings or errors related to parameter updates",
+    "Document the results and confirm that encoder.to_logits.weight does not update as expected"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and relevant modules from the official library",
+    "Define batch size as 10, input sizes as 64x48, and channel dimension as 256",
+    "Create random uniform input data with shape (batch_size, x_size, m_size, channel_dim)",
+    "Instantiate MultiQueryAttentionLayerV1 with specified parameters",
+    "Pass the randomly generated inputs to the instantiated layer",
+    "Capture the output of the layer",
+    "Verify that the output contains NaN values by checking for any instance where a value is not finite",
+    "Print or log the shape of the output tensor to ensure it matches expected dimensions",
+    "If output does not contain NaN, repeat steps 3-6 with different parameters until NaN is observed"
+]
+```
+

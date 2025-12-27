@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: argparse, torch, torch.nn, torch.utils.data, torchvision, and torchvision.transforms",
+    "Define a batch size of 4 and image dimensions of 32x32 (CIFAR10 image size)",
+    "Set the default number of classes to 16 in the argument parser: parser.add_argument('--num-classes', type=int, default=16, help='number of classes in dataset (default : 10 for CIFAR10)')",
+    "Create a data transformation pipeline using Compose to resize images to (32, 32) and convert them to tensors",
+    "Load the CIFAR10 training dataset using torchvision.datasets.CIFAR10 with root='./dataset', train=True, download=True, and the defined transforms",
+    "Load the CIFAR10 validation dataset using torchvision.datasets.CIFAR10 with root='./dataset', train=False, download=True, and the defined transforms",
+    "Create DataLoader instances for both training and validation datasets with batch size of 4 and shuffle set to True",
+    "Instantiate the ViT model with the argument parser containing num_classes set to 16",
+    "Move the model to the GPU if available using model.to(device)",
+    "Define the optimizer as Adam with model parameters, learning rate of 0.01, and weight decay of 0.03",
+    "Define the loss criterion as CrossEntropyLoss",
+    "Create an instance of the TrainEval class with the model, train_loader, valid_loader, optimizer, criterion, and device",
+    "Call the train method of the TrainEval instance to start training the model",
+    "During training, monitor the output of the model to check the number of output classes from the MLPHead layer",
+    "Assert that the output shape of the model is (batch_size, num_classes) where num_classes is 16",
+    "Log the output shape of the model after the first forward pass to verify it is (4, 16)",
+    "Check the training logs to confirm that the model is incorrectly set to classify 16 classes instead of the expected 10 for CIFAR10"
+]
+```

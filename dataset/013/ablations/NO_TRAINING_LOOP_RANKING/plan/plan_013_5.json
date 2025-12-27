@@ -1,0 +1,21 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10.13",
+    "Activate the newly created conda environment using: conda activate test_env",
+    "Install TensorFlow in the conda environment using the command: pip install tensorflow==2.13.10",
+    "Install Matplotlib in the conda environment using the command: pip install matplotlib",
+    "Install TensorFlow Model Garden using the command: pip install tf-models-nightly",
+    "Open Visual Studio Code and create a new Jupyter Notebook file.",
+    "Import the necessary libraries in the Jupyter Notebook with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official import vision; from official.vision import model; from official.vision.modeling import layers",
+    "Set the Matplotlib backend to 'Agg' to simulate the issue by adding the line: plt.switch_backend('Agg')",
+    "Import the TensorFlow Model Garden by adding the line: from official.vision import model",
+    "Create a simple plot using Matplotlib with the following code: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Display the plot using plt.show() and verify that it works correctly before importing TensorFlow Model Garden.",
+    "Now import the TensorFlow Model Garden by adding the line: from official.vision import model",
+    "Attempt to create another plot using Matplotlib with the same code: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Display the plot using plt.show() and verify that it does not display the plot after importing TensorFlow Model Garden.",
+    "Check the current Matplotlib backend by adding the line: print('Current backend:', plt.get_backend())",
+    "Assert that the backend is 'Agg' after importing TensorFlow Model Garden, indicating that it is a non-interactive backend."
+]
+```

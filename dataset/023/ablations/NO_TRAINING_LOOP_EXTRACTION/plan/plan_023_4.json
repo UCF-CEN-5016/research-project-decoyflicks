@@ -1,0 +1,17 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Import TensorFlow and TensorFlow Addons using the following code: `import tensorflow as tf` and `import tensorflow_addons as tfa`.",
+    "Import the required libraries for the notebook by executing the following code: `import inspect`, `import numpy as np`, and `from keras.layers.preprocessing import image_preprocessing as image_ops`.",
+    "Set the TensorFlow version to 2.12 by running `!pip install tensorflow==2.12`.",
+    "Install TensorFlow Addons by running `!pip install tensorflow-addons`.",
+    "Define a function to create a random image tensor with shape (1, 256, 256, 3) using the following code: `def create_random_image(): return tf.random.uniform((1, 256, 256, 3), minval=0, maxval=255, dtype=tf.float32)`.",
+    "Call the `create_random_image` function and store the result in a variable named `image`.",
+    "Define a function to apply the `transform` operation from TensorFlow Addons: `def apply_transform(image): return tfa.image.gaussian_filter2d(image, sigma=1.0)`.",
+    "Call the `apply_transform` function with the `image` variable and store the result in a variable named `transformed_image`.",
+    "Attempt to execute the following code to trigger the bug: `transformed_image = apply_transform(image)`.",
+    "Capture any error messages that occur during the execution of the `apply_transform` function.",
+    "Verify that an error occurs during the import of required libraries or when applying the transform function.",
+    "Log the error message to confirm that it matches the expected bug description."
+]
+```

@@ -1,0 +1,24 @@
+```json
+[
+    "Install Python 3.8 or later on an Arch Linux system",
+    "Install pip using the command 'sudo pacman -S python-pip'",
+    "Clone the TensorFlow models repository from GitHub using the command 'git clone https://github.com/tensorflow/models.git'",
+    "Navigate to the object_detection directory within the cloned repository using the command 'cd models/research/object_detection'",
+    "Set up a virtual environment (optional but recommended) by running 'python -m venv tfod2-env'",
+    "Activate the virtual environment by running 'source tfod2-env/bin/activate' on Arch Linux",
+    "Install the required dependencies for TensorFlow 2.x by running 'pip install tensorflow==2.4.1'",
+    "Download and preprocess the COCO dataset using the provided script or follow the instructions in the documentation",
+    "Navigate back to the research/object_detection directory",
+    "Create a requirements file named 'requirements.txt' containing the following dependencies:",
+    "- google.protobuf==3.17.3",
+    "- tensorflow-model-optimization>=0.5.3",
+    "- pycocotools>=2.0.4",
+    "- opencv-python-headless>=4.5.1.48",
+    "Install the dependencies from requirements.txt using 'pip install -r requirements.txt'",
+    "Build and compile Protobuf files by running 'protoc object_detection/protos/*.proto --python_out=. --grpc_python_out=.'",
+    "Run the script 'model_main_tf2.py' with the appropriate flags to train a model on the COCO dataset, e.g., 'python model_main_tf2.py --model_dir=models/research/object_detection/test_model --pipeline_config_path=models/research/object_detection/configs/tf2/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.config'",
+    "Observe the output during training and note if there are any errors related to 'ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.config' or any other configuration file",
+    "If an error occurs with the specified configuration, reproduce it by manually specifying the problematic configuration in a separate Python script and running it"
+]
+```
+

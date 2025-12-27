@@ -1,0 +1,16 @@
+{
+  "bug_report": "049",
+  "rank": 3,
+  "score": 0.9118369817733765,
+  "main_file": {
+    "path": "fairseq/data/audio/feature_transforms/__init__.py",
+    "content": "import importlib\nimport os\nfrom abc import ABC, abstractmethod\nfrom typing import Dict, Optional\n\n\nclass AudioFeatureTransform(ABC):\n    @classmethod\n    @abstractmethod\n    def from_config_dict(cls, config: Optional[Dict] = None):\n        pass\n\n\nAUDIO_FEATURE_TRANSFORM_REGISTRY = {}\nAUDIO_FEATURE_TRANSFORM_CLASS_NAMES = set()\n\n\ndef register_audio_feature_transform(name):\n    def register_audio_feature_transform_cls(cls):\n        if name in AUDIO_FEATURE_TRANSFORM_REGISTRY:\n            raise ValueError(f\"Cannot register duplicate transform ({name})\")\n        if not issubclass(cls, AudioFeatureTransform):\n            raise ValueError(\n                f\"Transform ({name}: {cls.__name__}) must extend \"\n                \"AudioFeatureTransform\"\n            )\n        if cls.__name__ in AUDIO_FEATURE_TRANSFORM_CLASS_NAMES:\n            raise ValueError(\n                f\"Cannot register audio feature transform with duplicate \"\n                f\"class name ({cls.__name__})\"\n            )\n        AUDIO_FEATURE_TRANSFORM_REGISTRY[name] = cls\n        AUDIO_FEATURE_TRANSFORM_CLASS_NAMES.add(cls.__name__)\n        return cls\n\n    return register_audio_feature_transform_cls\n\n\ndef get_audio_feature_transform(name):\n    return AUDIO_FEATURE_TRANSFORM_REGISTRY[name]\n\n\ntransforms_dir = os.path.dirname(__file__)\nfor file in os.listdir(transforms_dir):\n    path = os.path.join(transforms_dir, file)\n    if (\n        not file.startswith(\"_\")\n        and not file.startswith(\".\")\n        and (file.endswith(\".py\") or os.path.isdir(path))\n    ):\n        name = file[: file.find(\".py\")] if file.endswith(\".py\") else file\n        importlib.import_module(\"fairseq.data.audio.feature_transforms.\" + name)\n\n\nclass CompositeAudioFeatureTransform(AudioFeatureTransform):\n    @classmethod\n    def from_config_dict(cls, config=None):\n        _config = {} if config is None else config\n        _transforms = _config.get(\"transforms\")\n        if _transforms is None:\n            return None\n        transforms = [\n            get_audio_feature_transform(_t).from_config_dict(_config.get(_t))\n            for _t in _transforms\n        ]\n        return CompositeAudioFeatureTransform(transforms)\n\n    def __init__(self, transforms):\n        self.transforms = [t for t in transforms if t is not None]\n\n    def __call__(self, x):\n        for t in self.transforms:\n            x = t(x)\n        return x\n\n    def __repr__(self):\n        format_string = (\n            [self.__class__.__name__ + \"(\"]\n            + [f\"    {t.__repr__()}\" for t in self.transforms]\n            + [\")\"]\n        )\n        return \"\\n\".join(format_string)\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "importlib",
+      "function": "import_module"
+    }
+  ]
+}

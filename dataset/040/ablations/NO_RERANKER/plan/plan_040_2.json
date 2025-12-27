@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, DataLoader and RandomSampler from torch.utils.data, and the RetroModel from labml_nn.transformers.retro.model",
+    "Set the device to CUDA:0 using torch.device('cuda:0')",
+    "Load the Tiny Shakespeare dataset using TextFileDataset from labml_helpers, specifying the path to the dataset and the data type as list",
+    "Create a DataLoader for the training dataset with a batch size of 4 and use RandomSampler for sampling with replacement",
+    "Define hyperparameters: set chunk_len to 16, d_model to 128, d_ff to 512, n_heads to 16, and d_k to 16",
+    "Initialize the NearestNeighborEncoder with parameters: chunk_len=16, num_layers=6, heads={3}, d_model=128, n_heads=16, d_k=16, d_ff=512",
+    "Create an instance of RetroModel with parameters: n_tokens (number of tokens in the dataset), d_model=128, num_layers=6, heads={3, 5}, chunk_len=16, n_heads=16, d_k=16, d_ff=512, and the encoder as nearest_neighbor_encoder",
+    "Move the model to the specified device using model.to(device)",
+    "Create an optimizer using Noam with model.parameters(), lr=1.0, d_model=128, and warmup=2000",
+    "Define a Trainer class that takes device, model, dataloader, and optimizer as parameters",
+    "In the Trainer class, implement a call method that iterates through the dataloader, moves data to the device, performs a forward pass, calculates loss using nn.CrossEntropyLoss, and performs backpropagation",
+    "Create an instance of the Trainer class with the device, model, dataloader, and optimizer",
+    "Define a prompt string for sampling: 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Start an experiment using experiment.create(name='retro_small')",
+    "Run the training loop for a specified number of epochs (e.g., 32), calling the trainer's call method each epoch",
+    "During each epoch, sample text from the prompt using the model and log the output",
+    "Add assertions to check if the output from the model contains unexpected values (e.g., NaN or inf) after the softmax operation in the attention mechanism",
+    "Monitor the output of the attention mechanism before and after the softmax operation to verify if the attention weights are correctly normalized",
+    "Check the dimensions of the attention output before and after applying softmax to ensure they match expected dimensions (e.g., [batch_size, n_heads, seq_length, seq_length])"
+]
+```

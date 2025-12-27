@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the PyTorch examples repository from GitHub using 'git clone https://github.com/pytorch/examples.git'",
+    "Navigate to the 'dcgan' directory using 'cd examples/dcgan'",
+    "Install the required dependencies using 'pip install -r requirements.txt'",
+    "Download the CelebA dataset from 'http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html' and extract it to 'data/celeba'",
+    "Open the 'main.py' file in a text editor",
+    "Locate the line where the image size is defined, typically around line 188, and change the image size from 64 to 128 by modifying 'image_size=64' to 'image_size=128'",
+    "Locate the DataLoader instantiation and set the batch size to 64 by modifying 'batch_size=128' to 'batch_size=64'",
+    "Locate the loss function definition and ensure it uses 'torch.nn.BCELoss()' or similar for binary cross-entropy loss",
+    "Run the training script using 'python main.py --image-size 128 --batch-size 64 --dataroot data/celeba --cuda 1'",
+    "Observe the console output for the error message related to mismatched tensor sizes",
+    "Verify the error message contains 'ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200]))'",
+    "Check the dimensions of the output tensor from the discriminator model to confirm it is 3200",
+    "Check the dimensions of the label tensor to confirm it is 128",
+    "Log the shapes of the output and label tensors before the loss calculation to validate the mismatch",
+    "Assert that the output tensor shape is (batch_size * number_of_classes) and the label tensor shape is (batch_size) to confirm the source of the error"
+]
+```

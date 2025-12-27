@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official and tf_keras",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 8 and input image dimensions of 512x512",
+    "Create a random uniform input tensor with shape (batch_size, height, width, 3) using tf.random.uniform",
+    "Create a random target tensor with shape (batch_size, num_classes) using tf.random.uniform, where num_classes = 80",
+    "Instantiate the EfficientDet model using tf.keras.applications.EfficientDet with model_name='efficientdet_d1_coco17_tpu-32'",
+    "Compile the model using model.compile with optimizer=tf.keras.optimizers.Adam and loss='mean_squared_error'",
+    "Define a custom training loop to simulate training for 1 epoch",
+    "Within the training loop, use tf.GradientTape to record gradients during the forward pass",
+    "Calculate the loss using the model's predictions and the target tensor",
+    "Call tape.gradient to compute gradients of the loss with respect to model.trainable_variables",
+    "Assert that the gradients are None for the specified variables: ['stack_6/block_1/expand_bn/gamma:0', 'stack_6/block_1/expand_bn/beta:0', 'stack_6/block_1/depthwise_conv2d/depthwise_kernel:0', 'stack_6/block_1/depthwise_bn/gamma:0', 'stack_6/block_1/depthwise_bn/beta:0', 'stack_6/block_1/project_bn/gamma:0', 'stack_6/block_1/project_bn/beta:0', 'top_bn/gamma:0', 'top_bn/beta:0']",
+    "Print a warning message if gradients do not exist for the specified variables",
+    "Run the training loop for a few iterations to ensure the warning is consistently produced"
+]
+```

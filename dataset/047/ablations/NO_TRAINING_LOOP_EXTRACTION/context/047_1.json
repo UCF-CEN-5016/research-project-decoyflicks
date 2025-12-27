@@ -1,0 +1,42 @@
+{
+  "bug_report": "047",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "examples/mms/asr/infer/mms_infer.py",
+    "content": "#!/usr/bin/env python -u\n# Copyright (c) Facebook, Inc. and its affiliates.\n#\n# This source code is licensed under the MIT license found in the\n# LICENSE file in the root directory of this source tree.\n\nimport argparse\nimport soundfile as sf\nimport tempfile\nfrom pathlib import Path\nimport os\nimport subprocess\nimport sys\nimport re\n\ndef parser():\n    parser = argparse.ArgumentParser(description=\"ASR inference script for MMS model\")\n    parser.add_argument(\"--model\", type=str, help=\"path to ASR model\", required=True)\n    parser.add_argument(\"--audio\", type=str, help=\"path to audio file\", required=True, nargs='+')\n    parser.add_argument(\"--lang\", type=str, help=\"audio language\", required=True)\n    parser.add_argument(\"--format\", type=str, choices=[\"none\", \"letter\"], default=\"letter\")\n    return parser.parse_args()\n\ndef reorder_decode(hypos):\n    outputs = []\n    for hypo in hypos:\n        idx = int(re.findall(\"\\(None-(\\d+)\\)$\", hypo)[0])\n        hypo = re.sub(\"\\(\\S+\\)$\", \"\", hypo).strip()\n        outputs.append((idx, hypo))\n    outputs = sorted(outputs)\n    return outputs\n\ndef process(args):    \n    with tempfile.TemporaryDirectory() as tmpdir:\n        print(\">>> preparing tmp manifest dir ...\", file=sys.stderr)\n        tmpdir = Path(tmpdir)\n        with open(tmpdir / \"dev.tsv\", \"w\") as fw, open(tmpdir / \"dev.uid\", \"w\") as fu:\n            fw.write(\"/\\n\")\n            for audio in args.audio:\n                nsample = sf.SoundFile(audio).frames\n                fw.write(f\"{audio}\\t{nsample}\\n\")\n                fu.write(f\"{audio}\\n\")\n        with open(tmpdir / \"dev.ltr\", \"w\") as fw:\n            fw.write(\"d u m m y | d u m m y |\\n\"*len(args.audio))\n        with open(tmpdir / \"dev.wrd\", \"w\") as fw:\n            fw.write(\"dummy dummy\\n\"*len(args.audio))\n        cmd = f\"\"\"\n        PYTHONPATH=. PREFIX=INFER HYDRA_FULL_ERROR=1 python examples/speech_recognition/new/infer.py -m --config-dir examples/mms/asr/config/ --config-name infer_common decoding.type=viterbi dataset.max_tokens=1440000 distributed_training.distributed_world_size=1 \"common_eval.path='{args.model}'\" task.data={tmpdir} dataset.gen_subset=\"{args.lang}:dev\" common_eval.post_process={args.format} decoding.results_path={tmpdir}\n        \"\"\"\n        print(\">>> loading model & running inference ...\", file=sys.stderr)\n        subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL,)\n        with open(tmpdir/\"hypo.word\") as fr:\n            hypos = fr.readlines()\n            outputs = reorder_decode(hypos)\n            for ii, hypo in outputs:\n                hypo = re.sub(\"\\(\\S+\\)$\", \"\", hypo).strip()\n                print(f'===============\\nInput: {args.audio[ii]}\\nOutput: {hypo}')\n\n\nif __name__ == \"__main__\":\n    args = parser()\n    process(args)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "examples/mms/asr/infer/mms_infer.py",
+      "snippets": [
+        {
+          "lines": "33-57",
+          "code": "def parser():\n    parser = argparse.ArgumentParser(description=\"ASR inference script for MMS model\")\n    parser.add_argument(\"--model\", type=str, help=\"path to ASR model\", required=True)\n    parser.add_argument(\"--audio\", type=str, help=\"path to audio file\", required=True, nargs='+')\n    parser.add_argument(\"--lang\", type=str, help=\"audio language\", required=True)\n    parser.add_argument(\"--format\", type=str, choices=[\"none\", \"letter\"], default=\"letter\")\n    return parser.parse_args()\n\ndef reorder_decode(hypos):\n    outputs = []\n    for hypo in hypos:\n        idx = int(re.findall(\"\\(None-(\\d+)\\)$\", hypo)[0])\n        hypo = re.sub(\"\\(\\S+\\)$\", \"\", hypo).strip()\n        outputs.append((idx, hypo))\n    outputs = sorted(outputs)\n    return outputs\n\ndef process(args):    \n    with tempfile.TemporaryDirectory() as tmpdir:\n        print(\">>> preparing tmp manifest dir ...\", file=sys.stderr)\n        tmpdir = Path(tmpdir)\n        with open(tmpdir / \"dev.tsv\", \"w\") as fw, open(tmpdir / \"dev.uid\", \"w\") as fu:\n            fw.write(\"/\\n\")\n            for audio in args.audio:\n                nsample = sf.SoundFile(audio).frames\n                fw.write(f\"{audio}\\t{nsample}\\n\")\n                fu.write(f\"{audio}\\n\")\n        with open(tmpdir / \"dev.ltr\", \"w\") as fw:\n            fw.write(\"d u m m y | d u m m y |\\n\"*len(args.audio))\n        with open(tmpdir / \"dev.wrd\", \"w\") as fw:\n            fw.write(\"dummy dummy\\n\"*len(args.audio))\n        cmd = f\"\"\"\n        PYTHONPATH=. PREFIX=INFER HYDRA_FULL_ERROR=1 python examples/speech_recognition/new/infer.py -m --config-dir examples/mms/asr/config/ --config-name infer_common decoding.type=viterbi dataset.max_tokens=1440000 distributed_training.distributed_world_size=1 \"common_eval.path='{args.model}'\" task.data={tmpdir} dataset.gen_subset=\"{args.lang}:dev\" common_eval.post_process={args.format} decoding.results_path={tmpdir}\n        \"\"\"\n        print(\">>> loading model & running inference ...\", file=sys.stderr)\n        subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL,)\n        with open(tmpdir/\"hypo.word\") as fr:\n            hypos = fr.readlines()\n            outputs = reorder_decode(hypos)\n            for ii, hypo in outputs:\n                hypo = re.sub(\"\\(\\S+\\)$\", \"\", hypo).strip()\n                print(f'===============\\nInput: {args.audio[ii]}\\nOutput: {hypo}')"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "pathlib",
+      "function": "Path"
+    },
+    {
+      "module": "soundfile",
+      "function": "SoundFile"
+    },
+    {
+      "module": "subprocess",
+      "function": "run"
+    },
+    {
+      "module": "tempfile",
+      "function": "TemporaryDirectory"
+    }
+  ]
+}

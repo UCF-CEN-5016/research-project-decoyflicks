@@ -1,0 +1,29 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import numpy as np, from keras import layers, models, and keras_nlp",
+    "Define a configuration class CFG with attributes: preset='deberta_v3_extra_small_en', sequence_length=200, seed=42, epochs=5, batch_size=8",
+    "Set random seed for reproducibility using keras.utils.set_random_seed(CFG.seed)",
+    "Download and extract the SWAG dataset using wget and unzip commands",
+    "Load training and validation data from CSV files into pandas DataFrames: train_df = pd.read_csv('swagaf-master/data/train.csv', index_col=0) and valid_df = pd.read_csv('swagaf-master/data/val.csv', index_col=0)",
+    "Sample 2% of the training and validation data: train_df = train_df.sample(frac=0.02) and valid_df = valid_df.sample(frac=0.02)",
+    "Define a preprocessor using keras_nlp.models.DebertaV3Preprocessor with preset=CFG.preset and sequence_length=CFG.sequence_length",
+    "Define a function preprocess_fn that takes text and label, applies the preprocessor, and returns the processed text and label",
+    "Build a tf.data.Dataset for training data using build_dataset function with parameters: texts=train_df.options.tolist(), labels=train_df.label.tolist(), batch_size=CFG.batch_size, cache=True, shuffle=True, repeat=True",
+    "Build a tf.data.Dataset for validation data using build_dataset function with parameters: texts=valid_df.options.tolist(), labels=valid_df.label.tolist(), batch_size=CFG.batch_size, cache=True, shuffle=False, repeat=False",
+    "Define a function build_model that creates a Keras model using keras_nlp.models.DebertaV3Classifier with num_classes=1",
+    "Compile the model with optimizer=keras.optimizers.AdamW(5e-6), loss=keras.losses.CategoricalCrossentropy(label_smoothing=0.02), and metrics=[keras.metrics.CategoricalAccuracy(name='accuracy')]",
+    "Train the model using model.fit with parameters: train_ds, epochs=CFG.epochs, validation_data=valid_ds, steps_per_epoch=int(len(train_df) / CFG.batch_size)",
+    "Save the trained model using model.save('path_to_my_model')",
+    "Load the saved model using keras.models.load_model with custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False",
+    "Convert the loaded model to TFLite format using tf.lite.TFLiteConverter.from_saved_model and save it as 'model.tflite'",
+    "Define a function tokenize_and_convert_to_ids that tokenizes the input string and converts it to IDs, ensuring the output shape is (9,)",
+    "Create a TFLite interpreter using tf.lite.Interpreter(model_path='model.tflite')",
+    "Allocate tensors for the interpreter using interpreter.allocate_tensors()",
+    "Get input and output tensor indices using interpreter.get_input_details() and interpreter.get_output_details()",
+    "Prepare a sample input by calling tokenize_and_convert_to_ids with the string 'eu rejects german call to boycott british lamb'",
+    "Set the input tensor using interpreter.set_tensor with the input index and np.expand_dims(sample_input, axis=0)",
+    "Invoke the interpreter using interpreter.invoke()",
+    "Attempt to get the output tensor using interpreter.get_tensor with the output index",
+    "Validate that a ValueError is raised with the message 'Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0'"
+]
+```

@@ -1,0 +1,1 @@
+import delf.python.datasets.google_landmarks_dataset

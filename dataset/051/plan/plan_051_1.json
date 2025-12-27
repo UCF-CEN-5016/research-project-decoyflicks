@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries from TensorFlow, Keras, and TensorFlow Datasets",
+    "Set batch size to 64 and image size to 256x256",
+    "Load the 'tf_flowers' dataset using TensorFlow Datasets",
+    "Shuffle the training dataset with a buffer size of batch_size * 10",
+    "Preprocess the training and validation datasets with random augmentation for training data",
+    "Batch the datasets and prefetch using TensorFlow's AUTO-TUNE setting",
+    "Create an instance of the MobileViT (XXS) model with 5 classes",
+    "Compile the model using Adam optimizer, CategoricalCrossentropy loss function with label smoothing factor 0.1, and accuracy as the metric",
+    "Define a callback for saving the best model weights during training based on validation accuracy",
+    "Fit the model to the preprocessed training data with validation data, epochs set to 30, and use the callback for checkpointing",
+    "Load the saved model weights that yielded the best validation accuracy",
+    "Evaluate the loaded model on the validation dataset to obtain the validation accuracy",
+    "Monitor GPU memory usage during model training",
+    "Assert that GPU memory usage exceeds a predefined threshold indicating the bug occurs"
+]
+```
+

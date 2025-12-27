@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch and the ViT class from vit_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 5 and image dimensions of 256x256",
+    "Create random input data with shape (5, 3, 256, 256) using torch.randn",
+    "Instantiate the ViT model with parameters: image_size=256, patch_size=32, num_classes=1000, dim=1024, depth=6, heads=16, mlp_dim=2048, dropout=0.1, emb_dropout=0.1",
+    "Pass the input data through the ViT model to obtain predictions",
+    "Store the predictions in a variable called preds",
+    "Check the shape of preds to ensure it is (5, 1000) using assert preds.shape == (5, 1000)",
+    "Create a dummy target tensor with shape (5,) containing random class indices using torch.randint(0, 1000, (5,))",
+    "Define a loss function, e.g., CrossEntropyLoss, and compute the loss using the predictions and target tensor",
+    "Call the backward method on the loss to trigger the backward pass",
+    "Capture any exceptions during the backward pass to check for errors",
+    "Assert that the exception message contains 'Function UnbindBackwardAutogradNestedTensor0 returned an invalid gradient' to confirm the bug occurs"
+]
+```

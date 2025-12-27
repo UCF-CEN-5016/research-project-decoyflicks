@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch and nn from torch",
+    "Define a batch size of 4 and feature dimensions of 4 for the input tensor x",
+    "Create a random input tensor x with shape (4, 3, 4) using torch.randn",
+    "Define the RelativeMultiHeadAttention class with heads=2, d_model=4, and dropout_prob=0.1",
+    "Initialize key_pos_embeddings with shape (2^12 * 2, heads, d_k) where d_k=4",
+    "Initialize key_pos_bias with shape (2^12 * 2, heads)",
+    "Initialize query_pos_bias with shape (heads, d_k)",
+    "Create cos_cached and sin_cached tensors with shape (4, 3, 4) filled with random values",
+    "Set the cos_cached and sin_cached attributes of the RelativeMultiHeadAttention instance to the created tensors",
+    "Define a method in the RelativeMultiHeadAttention class that performs the operation: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Create a neg_half_x tensor with shape (4, 3, 4) filled with random values multiplied by -0.5",
+    "Call the method that performs the tensor operation with x_rope initialized to a tensor of shape (4, 3, 4)",
+    "Run the code and capture the RuntimeError exception",
+    "Verify that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Check the dimensions of cos_cached and sin_cached to confirm they are (4, 3, 4) while x_rope is (4, 3, 4)"
+]
+```

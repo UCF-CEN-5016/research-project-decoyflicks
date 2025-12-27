@@ -1,0 +1,16 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running the following commands: `!pip install -q git+https://github.com/keras-team/keras-cv.git` and `!pip install -q tensorflow==2.11.0`.",
+    "Import necessary libraries by adding the following code: `import keras_cv`, `import numpy as np`, `import tensorflow as tf`, `from keras_cv import layers as cv_layers`, `from keras_cv.models.stable_diffusion import NoiseScheduler`, `from tensorflow import keras`, `import matplotlib.pyplot as plt`.",
+    "Create an instance of the StableDiffusion model by executing `stable_diffusion = keras_cv.models.StableDiffusion()`.",
+    "Define a function `plot_images(images)` to visualize generated images, which takes a list of images as input and uses `matplotlib` to display them.",
+    "Define a function `assemble_image_dataset(urls)` that takes a list of image URLs, fetches the images, resizes them to (512, 512), normalizes them to the range [-1, 1], and returns a TensorFlow dataset.",
+    "Define a function `assemble_text_dataset(prompts)` that takes a list of prompts, encodes them using the StableDiffusion tokenizer, and returns a TensorFlow dataset.",
+    "Define a function `assemble_dataset(urls, prompts)` that combines the image and text datasets created in the previous steps, ensuring the datasets are of equal length by repeating the shorter one.",
+    "Create a dataset of image URLs and corresponding prompts for training by executing `train_ds = assemble_dataset(urls=[\"https://i.imgur.com/VIedH1X.jpg\", \"https://i.imgur.com/eBw13hE.png\"], prompts=[\"a photo of a {}\", \"a rendering of a {}\"] )`.",
+    "Attempt to run the code by executing `stable_diffusion.text_to_image(f\"an oil painting of <my-funny-cat-token>\", seed=1337, batch_size=3)` to generate images.",
+    "Observe the output for any ImportError related to `data_utils` by checking the console logs for the error message: `ImportError: cannot import name 'data_utils' from 'keras.utils'`.",
+    "Verify that the error occurs consistently by re-running the previous steps multiple times to ensure the ImportError is reproducible."
+]
+```

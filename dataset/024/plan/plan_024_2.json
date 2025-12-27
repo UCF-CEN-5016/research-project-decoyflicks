@@ -1,0 +1,15 @@
+[
+    "Clone the models/research/delf repository from GitHub using git clone https://github.com/mirzaim/models.git",
+    "Change directory to /content/models/research/delf/delf/python/training/model",
+    "Create a Python script named reproduce_bug.py",
+    "Import TensorFlow and other necessary modules at the beginning of reproduce_bug.py",
+    "Define constants for batch size, image size, and number of classes (e.g., batch_size=2, image_size=321, num_classes=1000)",
+    "Generate random uniform input data with shape (batch_size, height, width, 3) using tf.random.uniform function",
+    "Create an instance of the Delg class from delf.python.training.model module, passing block3_strides=True and use_dim_reduction=True as parameters",
+    "Call the init_classifiers method on the Delg instance, passing num_classes as a parameter",
+    "Assert that the Delg instance has the correct attributes such as backbone, desc_classifier, attn_classifier, etc.",
+    "Attempt to call the forward_pass method on the Delg instance with the generated input data and verify that it raises ModuleNotFoundError: No module named 'delf.python.datasets'",
+    "Monitor GPU memory usage during execution of reproduce_bug.py",
+    "Assert that GPU memory usage does not exceed expected threshold"
+]
+

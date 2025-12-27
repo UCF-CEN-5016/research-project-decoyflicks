@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, random, and tqdm",
+    "Define a batch size of 16 and image dimensions of 64x64",
+    "Create a random tensor input data with shape (batch_size, 3, height, width) where height and width are 64",
+    "Set the self_condition flag to True in the model initialization",
+    "Initialize the model with the following parameters: dim=64, channels=3, self_condition=True",
+    "Define a random tensor for time steps with shape (batch_size) using torch.randint(0, 1000, (batch_size,))",
+    "Create a dummy target tensor for loss calculation with shape (batch_size, 3, height, width)",
+    "Call the model's forward method with the input data and time steps",
+    "Wrap the self-conditioning logic in a conditional statement that checks if random() < 0.5",
+    "Inside the conditional, use torch.inference_mode() to call model_predictions with the input data and time steps",
+    "Capture the output of model_predictions and assert that it is not None",
+    "Attempt to call .backward() on the output of the model's forward method to trigger the RuntimeError",
+    "Verify that the RuntimeError is raised with the message 'Inference tensors cannot be saved for backward'",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

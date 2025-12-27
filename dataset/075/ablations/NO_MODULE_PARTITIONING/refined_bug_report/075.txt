@@ -1,0 +1,37 @@
+TITLE  
+Unexpected keyword argument 'token' in ParquetConfig initialization
+
+SYMPTOMS  
+• The script `test_tune.sh` fails to execute properly.  
+• Error message: `ParquetConfig.__init__() got an unexpected keyword argument 'token'`.  
+• The script outputs "Permission denied" messages when attempting to access localhost resources.  
+• No optimal DeepSpeed configuration is found, resulting in the message: "No optimal DeepSpeed configuration found by autotuning."  
+
+EXPECTED BEHAVIOR  
+The script `test_tune.sh` should run successfully, initializing the ParquetConfig without errors and finding an optimal DeepSpeed configuration for autotuning. The model should be runnable with DeepSpeed.
+
+REPRODUCTION STEPS  
+1. Clone the Hugging Face Transformers repository:  
+   ```bash
+   cd ~/  
+   git clone https://github.com/huggingface/transformers.git  
+   cd transformers  
+   pip install .  
+   ```  
+2. Create a new directory for testing and install DeepSpeed:  
+   ```bash  
+   mkdir ../test && cd ../test  
+   pip install deepspeed # and any other required dependencies  
+   ```  
+3. Create and set up the `test_tune.sh` script:  
+   ```bash  
+   touch test_tune.sh  
+   chmod +x test_tune.sh  
+   ```  
+4. Copy the content from `autotuning/hf/gpt2-xl/test_tune.sh` into the newly created `test_tune.sh`.  
+5. Modify the script variables: set `HF_PATH=../` and `NGPUS=6` (assuming six 3070ti GPUs available).  
+6. Run the script with the tune command:  
+   ```bash  
+   ./test_tune.sh tune  
+   ```  
+7. Observe the output for errors and unexpected behaviors.

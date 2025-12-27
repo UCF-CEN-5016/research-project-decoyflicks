@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from keras import layers",
+    "Set the batch size: define BATCH_SIZE = 32",
+    "Set AUTOTUNE for data loading: define AUTOTUNE = tf.data.AUTOTUNE",
+    "Define the augment_fn function to perform random augmentations on images and masks",
+    "Define the unpackage_inputs function to separate images and masks from the dataset",
+    "Define the resize_fn function to resize images and masks to (160, 160)",
+    "Load the Oxford Pets dataset using tfds.load('oxford_pet', split=['train', 'val'], as_supervised=True)",
+    "Prepare the training dataset: train_ds = train_ds.map(preprocess_fn, num_parallel_calls=AUTOTUNE)",
+    "Prepare the validation dataset: val_ds = val_ds.map(preprocess_fn, num_parallel_calls=AUTOTUNE)",
+    "Create the augmented training dataset: augmented_train_ds = train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Create the resized validation dataset: resized_val_ds = val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Run the code cell containing the dataset creation steps",
+    "Capture the output and check for TypeError in the console",
+    "Verify that the error message indicates a mismatch in tensor data types between images and segmentation masks"
+]
+```

@@ -1,0 +1,20 @@
+TITLE  
+`model.generate` fails when decoding sequences shorter than encoding sequences
+
+SYMPTOMS  
+• The `model.generate` function raises a runtime error when the target (decoded) sequence length is shorter than the source (encoded) sequence length.  
+• Error message:  
+```
+RuntimeError: The size of tensor a (258) must match the size of tensor b (230) at non-singleton dimension 3
+```
+• This occurs inside the attention mechanism during masked filling (`sim.masked_fill(~mask, mask_value)`), indicating a mismatch between tensor sizes related to sequence lengths.  
+• The issue was encountered using the [toy_tasks example](https://github.com/lucidrains/x-transformers/tree/main/examples/toy_tasks).  
+
+EXPECTED BEHAVIOR  
+`model.generate` should correctly generate decoded sequences of any length, including those shorter than the encoding sequence length, without size mismatch errors. The attention masks and tensors should be properly aligned to support variable output lengths smaller than the input length.
+
+REPRODUCTION STEPS  
+1. Clone the repository containing the `toy_tasks` example: https://github.com/lucidrains/x-transformers  
+2. Use the provided script from the gist: https://gist.github.com/guillaumeguy/dd8993a622663db39aa1c54be9a875fd  
+3. Run the example where `model.generate` is called with a decoding sequence length shorter than the encoding sequence length (parameters include `ENC_SEQ_LEN` and a smaller decode length).  
+4. Observe the runtime error during the generation process inside the attention mask application step.

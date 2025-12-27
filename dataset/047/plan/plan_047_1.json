@@ -1,0 +1,12 @@
+```json
+[
+    "Import the necessary libraries for PyTorch, including torch and torchvision.",
+    "Load the DurationDataset class from duration_predictor.py to create a dataset object with tsv_path='path/to/tsv' and km_path='path/to/km'.",
+    "Create a DataLoader object using the DurationDataset with batch_size=32 and shuffle=True.",
+    "Initialize an instance of CudaDurationPredictorModel from duration_predictor.py with appropriate parameters.",
+    "Define a loss function l2_log_loss from duration_predictor.py.",
+    "Train the model for 1 epoch using train_epoch function, passing the DataLoader object, loss function, optimizer, and device='cuda'.",
+    "After training, validate the model on a subset of data using valid_epoch function to check if any NaN values appear in the calculated loss."
+]
+```
+

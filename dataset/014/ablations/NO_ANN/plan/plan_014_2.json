@@ -1,0 +1,29 @@
+```json
+[
+    "Import TensorFlow and necessary modules from object_detection.utils and object_detection.protos",
+    "Set the TensorFlow version to 2.12 and ensure compatibility with CUDA 8.6",
+    "Define the path to the pipeline.config file as 'path/to/pipeline.config'",
+    "Load the pipeline configuration using config_util.get_configs_from_pipeline_file(configpath)",
+    "Create an instance of pipeline_pb2.TrainEvalPipelineConfig()",
+    "Read the contents of the pipeline.config file using tf.io.gfile.GFile(configpath, 'r')",
+    "Merge the contents of the pipeline.config file into the pipeline_config using text_format.Merge(proto_str, pipeline_config)",
+    "Set pipeline_config.eval_input_reader.max_number_of_boxes to 500",
+    "Set pipeline_config.train_config.max_number_of_boxes to 500",
+    "Set pipeline_config.eval_config.max_num_boxes_to_visualize to 500",
+    "Set pipeline_config.eval_config.num_visualizations to 500",
+    "Set pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_detections_per_class to 500",
+    "Set pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_total_detections to 500",
+    "Set pipeline_config.model.faster_rcnn.first_stage_max_proposals to 500",
+    "Prepare a dataset of images containing over 100 objects per image, ensuring some images have close to 500 objects",
+    "Define a batch size of 8 for training",
+    "Create a TensorFlow dataset from the prepared images using tf.data.Dataset.from_tensor_slices()",
+    "Map the dataset to preprocess images and labels, ensuring the output shape is (batch_size, height, width, 3)",
+    "Initialize a model using the configuration from pipeline_config",
+    "Compile the model with an appropriate optimizer and loss function",
+    "Train the model for 270,000 steps using model.fit()",
+    "Monitor the training accuracy and loss during training",
+    "Assert that the training accuracy does not exceed 0.04, indicating the model is not converging",
+    "Log the training process to capture any errors or warnings related to max_number_of_boxes",
+    "Verify that the AttributeError occurs when trying to set pipeline_config.eval_input_reader.max_number_of_boxes via pipeline_pb2.TrainEvalPipelineConfig()"
+]
+```

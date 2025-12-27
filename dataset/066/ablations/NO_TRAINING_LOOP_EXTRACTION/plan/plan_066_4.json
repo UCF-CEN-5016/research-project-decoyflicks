@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary modules: keras, numpy, tensorflow, collections.Counter, and conlleval.evaluate",
+    "Define a batch size of 32 for training the NER model",
+    "Set the vocabulary size to 20000 and the embedding dimension to 32",
+    "Load the CoNLL 2003 dataset using load_dataset from the datasets library",
+    "Export the training and validation data to tab-separated files: './data/conll_train.txt' and './data/conll_val.txt'",
+    "Create a function export_to_file that writes the dataset records to the specified file format",
+    "Define a function make_tag_lookup_table to create a mapping of NER tags to integers",
+    "Initialize the NERModel with num_tags, vocab_size, embed_dim=32, num_heads=4, and ff_dim=64",
+    "Create a custom loss function CustomNonPaddingTokenLoss that ignores loss from padded tokens",
+    "Compile the NER model using the Adam optimizer and the custom loss function",
+    "Create a TensorFlow dataset from the training and validation text files using tf.data.TextLineDataset",
+    "Define a map function map_record_to_training_data to transform the dataset records into tokens and tags",
+    "Apply the map function to the training and validation datasets to prepare them for training",
+    "Fit the NER model on the training dataset for 10 epochs",
+    "Define a function tokenize_and_convert_to_ids to preprocess sample input text for inference",
+    "Prepare a sample input text: 'eu rejects german call to boycott british lamb'",
+    "Tokenize and convert the sample input text to IDs using the tokenize_and_convert_to_ids function",
+    "Reshape the sample input to have a shape of (1, -1) for prediction",
+    "Call the predict method on the NER model with the sample input and store the output",
+    "Extract the predicted tags from the model output using np.argmax",
+    "Print the predicted tags to verify the output",
+    "Check if the variable level2_dau_2 is never used in the code and assert that it should be used in place of level3_dau_2 in the selective_kernel_feature_fusion function"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and other necessary modules from the official repository",
+    "Set the batch size to 32 and dimensions of logits to (batch_size * (1 + NUM_EVAL_NEGATIVES), num_classes)",
+    "Create a random uniform input tensor for logits with shape (batch_size * (1 + NUM_EVAL_NEGATIVES), num_classes)",
+    "Define duplicate_mask as a random binary tensor with the same shape as logits",
+    "Set match_mlperf to True",
+    "Call compute_top_k_and_ndcg function with the defined logits, duplicate_mask, and match_mlperf flag",
+    "Verify that the resulting in_top_k tensor contains both 0s and 1s, indicating a mix of correct and incorrect predictions",
+    "Monitor memory usage during execution to ensure it is within expected limits for the given input size",
+    "Assert that the memory usage exceeds the expected threshold for the compute_top_k_and_ndcg function with the provided inputs"
+]
+```
+

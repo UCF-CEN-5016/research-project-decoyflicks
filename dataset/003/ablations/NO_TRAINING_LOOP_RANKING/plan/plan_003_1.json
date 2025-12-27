@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the TensorFlow Models repository using the command: 'import tensorflow as tf' and 'from official.projects.pix2seq import utils'",
+    "Set the TensorFlow version to 2.x by running: '!pip install tensorflow==2.x.x' (replace x.x with the latest version compatible with the model garden)",
+    "Import the required libraries for the object detection model: 'from object_detection.utils import config_util' and 'from object_detection.builders import model_builder'",
+    "Downgrade the protobuf library to version 3.20 using the command: '!pip install protobuf==3.20.0'",
+    "Clone the TensorFlow Models repository using: '!git clone https://github.com/tensorflow/models'",
+    "Navigate to the cloned models directory: '!cd models/research'",
+    "Compile the Protobuf files by running: '!protoc object_detection/protos/*.proto --python_out=.'",
+    "Set the PYTHONPATH environment variable to include the models directory: '!export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim'",
+    "Import the model configuration and create a model builder instance: 'pipeline_config = config_util.get_configs_from_pipeline_file('path/to/pipeline.config')'",
+    "Attempt to import the model builder: 'model_config = pipeline_config['model']' and 'model = model_builder.build(model_config=model_config, is_training=True)'",
+    "Run the code that triggers the bug by executing: 'from object_detection.utils import colab_utils'",
+    "Verify that the AttributeError occurs by checking the output for the message: 'AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'",
+    "Log the error message to confirm the bug has been reproduced"
+]
+```

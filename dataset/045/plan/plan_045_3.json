@@ -1,0 +1,17 @@
+[
+    "Import necessary libraries from the fairseq and torch modules.",
+    "Define a function to load an indexed dataset with specified paths and dictionary.",
+    "Define a function to create a language pair dataset using given source and target dictionaries.",
+    "Create two mock datasets for source and target languages, each with 100 samples of sequence data.",
+    "Prepend special tokens to both source and target datasets using predefined functions.",
+    "Transform the datasets to append end-of-sequence tokens at the end of each sequence.",
+    "Round-robin zip the transformed datasets into a single dataset.",
+    "Noisify the dataset with a specified noise probability and function.",
+    "Create an instance of SequenceGenerator with given model, beam size, and other parameters.",
+    "Define a dummy function to simulate forward pass through the model which returns zero loss for simplicity.",
+    "Set up logging to capture error messages.",
+    "Call the forward method of SequenceGenerator on the round-robin zipped dataset and noise function.",
+    "Assert that an AttributeError is raised during the forward call due to mismatched sequence lengths.",
+    "Capture the exception message in a variable for validation steps."
+]
+

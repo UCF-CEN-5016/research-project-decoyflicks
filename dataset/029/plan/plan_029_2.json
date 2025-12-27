@@ -1,0 +1,17 @@
+```json
+[
+    "Set Python environment to Ubuntu 18.04 LTS with pip installed PyTorch version 1.9.0+cu111",
+    "Create a virtual environment and activate it to isolate dependencies",
+    "Install torchtext and other required libraries using pip",
+    "Download the SNLI dataset from torchtext datasets",
+    "Define a function to load the dataset with appropriate fields for inputs and answers",
+    "Implement a simple model class `SNLIClassifier` in 'model.py' that takes arguments including vocabulary sizes and hidden dimensions",
+    "Create a function `get_args()` in 'util.py' to return default training arguments such as batch size, learning rate, number of epochs, and GPU ID set to 0",
+    "Implement data loaders for the train, dev, and test sets using torchtext's BucketIterator",
+    "Write the main training loop in 'train.py', including model initialization, loss calculation, optimization steps, and evaluation on the validation set",
+    "Import all necessary modules at the beginning of each file as listed in the provided code context",
+    "Run the script with the command `python3 train.py -a resnet18 --dummy` to reproduce the bug",
+    "Verify the presence of the error message 'AttributeError: module 'torch.backends' has no attribute 'mps'" during execution"
+]
+```
+

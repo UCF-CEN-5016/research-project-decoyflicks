@@ -1,0 +1,19 @@
+```json
+[
+    "Pull the Docker image for TensorFlow with GPU support: 'docker pull tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Run the Docker container with the command: 'docker run --gpus all -it --rm -p 8888:8888 tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Open a Jupyter notebook in the browser at 'http://localhost:8888/'",
+    "Import TensorFlow and the official model library in a new notebook cell: 'import tensorflow as tf' and 'import official.core.train_lib as train_lib'",
+    "Set the Python version to 3.8 by checking the kernel settings in Jupyter Notebook",
+    "Define a distribution strategy for training: 'distribution_strategy = tf.distribute.MirroredStrategy()'",
+    "Create a mock configuration for the experiment parameters: 'exp_config = {'model': {'name': 'ssd', 'params': {'num_classes': 1}}, 'train': {'batch_size': 8}}'",
+    "Set the model directory for saving checkpoints: 'model_dir = '/tmp/model_dir'",
+    "Run the experiment with the following command: 'model, eval_logs = train_lib.run_experiment(distribution_strategy=distribution_strategy, task=None, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)'",
+    "Capture the output and error logs from the execution",
+    "Verify that the output contains the error message: 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict''",
+    "Check the versions of TensorFlow and the official models library by running: 'print(tf.__version__)' and 'print(tfm.__version__)'",
+    "Ensure that the TensorFlow version is '2.12.0' and the official models version is '2.12.0'",
+    "Confirm that the Python version is 3.8 by running: 'import sys; print(sys.version)'",
+    "Document the steps taken and the error encountered for further analysis"
+]
+```

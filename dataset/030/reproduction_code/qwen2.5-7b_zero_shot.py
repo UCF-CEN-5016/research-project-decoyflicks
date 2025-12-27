@@ -1,0 +1,1 @@
+The original code provided is already well-structured and functional. No further refactoring is needed.

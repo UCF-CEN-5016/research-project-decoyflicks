@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: numpy, keras, and matplotlib",
+    "Set the random seed for reproducibility using np.random.seed(42)",
+    "Define a batch size of 5 and image dimensions of 64x64 for the Moving MNIST dataset",
+    "Download the Moving MNIST dataset using keras.utils.get_file and load it with np.load",
+    "Swap the axes of the dataset to have shape (num_samples, num_frames, height, width, channels) using np.swapaxes",
+    "Select the first 1000 samples from the dataset to limit the size for testing",
+    "Add a channel dimension to the dataset using np.expand_dims with axis=-1",
+    "Split the dataset into training and validation sets, using 90% for training and 10% for validation",
+    "Normalize the training and validation datasets to the range [0, 1] by dividing by 255",
+    "Define a function create_shifted_frames that takes the dataset and returns x and y where x is frames 0 to n-1 and y is frames 1 to n",
+    "Apply create_shifted_frames to the training and validation datasets to create x_train, y_train, x_val, y_val",
+    "Print the shapes of x_train and y_train to verify they are (num_samples, num_frames-1, height, width, channels) and (num_samples, num_frames-1, height, width, channels) respectively",
+    "Construct the input layer with shape (None, 64, 64, 1) using layers.Input",
+    "Add three ConvLSTM2D layers with filters=64, kernel_size=(5, 5), (3, 3), and (1, 1) respectively, and set return_sequences=True",
+    "Add a Conv3D layer with filters=1 and kernel_size=(3, 3, 3) to output the predicted frames",
+    "Compile the model using keras.losses.sparse_categorical_crossentropy as the loss function and keras.optimizers.Adam as the optimizer",
+    "Fit the model to the training data using model.fit with epochs=20 and batch_size=5, and include validation data",
+    "Monitor the training process and check for any warnings or errors related to the loss function",
+    "After training, attempt to predict using the model with the validation dataset",
+    "Check the output shape of the model predictions and compare it to the expected shape",
+    "Verify that the model's predictions are not meaningful by inspecting the predicted frames visually using matplotlib",
+    "Assert that the loss value during training is not decreasing as expected, indicating a potential issue with the loss function application"
+]
+```

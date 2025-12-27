@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries including keras, matplotlib.pyplot for plotting, and numpy for numerical operations.",
+    "Set a batch size of 40 and sequence length of 512 for the model input.",
+    "Create random token IDs with shape (batch_size, num_choices, seq_length) using keras.backend.random_normal().",
+    "Create padding masks with shape (batch_size, num_choices, seq_length) filled with 1s using keras.backend.ones().",
+    "Define the number of choices as 4 and the preset model as 'deberta-v3-base' for the classifier.",
+    "Build the DeBERTaV3Classifier model from the specified preset with preprocessor=None and num_classes=1.",
+    "Initialize an empty list to store logits for each option.",
+    "Loop through each of the 4 options, select the corresponding token IDs and padding masks using a custom SelectOption layer.",
+    "Compute logits for each selected option using the classifier model and append them to the logits list.",
+    "Concatenate all logits along axis -1 to form the final logits tensor.",
+    "Apply softmax function to the concatenated logits to get the output probabilities.",
+    "Compile the model with AdamW optimizer, CategoricalCrossentropy loss, and CategoricalAccuracy metric.",
+    "Train the model on a dummy dataset generated using the created token IDs and padding masks for 5 epochs.",
+    "Generate predictions on the training dataset during the last epoch of training to verify the bug occurs.",
+    "Check if the predicted probabilities contain any NaN values by asserting np.isnan(predictions).any() is True."
+]
+```
+

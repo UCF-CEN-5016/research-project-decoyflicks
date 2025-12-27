@@ -1,0 +1,25 @@
+TITLE  
+Uninitialized Bias Parameters in RelPositionMultiHeadedAttention Leading to Non-Deterministic Behavior
+
+SYMPTOMS  
+• The (u, v) bias terms in the MHA layer with relative position encodings are defined using `torch.Tensor`, resulting in uninitialized tensors.  
+• Observed non-deterministic behavior and poor initialization.  
+• Potential for NaN values during computation.  
+• Example outputs:  
+  - `torch.Tensor(1, 1).sum()` results in `tensor(0.)`  
+  - `torch.Tensor(10, 10).sum()` results in `tensor(4.9312e-38)`  
+  - `torch.Tensor(100, 100).sum()` results in `tensor(nan)`  
+
+EXPECTED BEHAVIOR  
+The bias parameters (u, v) should be initialized to zero, ensuring consistent and deterministic behavior during model training and inference, thereby avoiding NaN values and providing a stable starting point for optimization.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries:  
+   ```python
+   import torch
+   ```
+2. Instantiate the RelPositionMultiHeadedAttention layer.  
+3. Attempt to use the layer in a forward pass with random input data.  
+4. Observe the output and check for any NaN values or unexpected behaviors.  
+5. Verify the initialization of the bias parameters by printing their values before the forward pass.  
+6. Confirm that the initialization method used is `torch.Tensor` instead of `torch.zeros`.

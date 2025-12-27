@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch and rotary_embedding_torch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the dimensions for the rotary embedding: set dim = 64",
+    "Create an instance of the RotaryEmbedding class with use_xpos=True and other default parameters",
+    "Define a batch size of 8 and sequence length of 16",
+    "Generate random input tensors for queries (Q) and keys (K) with shape (batch_size, seq_len, dim)",
+    "Call the rotate_queries_and_keys method with Q and K as inputs",
+    "Check the output shapes of rotated Q and K to ensure they match the input shapes",
+    "Inspect the K tensor for NaN values using torch.isnan(K).any() after the rotation",
+    "If NaNs are detected, print a message indicating NaNs were found in K",
+    "Calculate a dummy loss using a simple mean squared error function on the output of a forward pass through a dummy transformer model",
+    "Check the loss value for NaN using torch.isnan(loss).item()",
+    "If NaN loss is detected, print a message indicating NaN loss was found",
+    "Log the shapes of Q, K, and the loss value for debugging purposes",
+    "Run the entire process multiple times to ensure consistent reproduction of the NaN issue"
+]
+```

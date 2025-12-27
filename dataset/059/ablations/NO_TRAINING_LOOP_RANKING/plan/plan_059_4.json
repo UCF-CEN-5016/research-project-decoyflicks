@@ -1,0 +1,28 @@
+```json
+[
+    "Import necessary libraries: keras, torch, numpy",
+    "Set the KERAS_BACKEND environment variable to 'torch' using os.environ",
+    "Define a function get_model() that creates a Keras model with input shape (784,) and output shape (10,)",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Reshape x_train and x_test to (-1, 784) and convert to float32",
+    "Convert y_train and y_test to categorical format using keras.utils.to_categorical()",
+    "Reserve 10,000 samples for validation by slicing x_train and y_train",
+    "Create torch Datasets for training and validation using torch.utils.data.TensorDataset",
+    "Define a batch size of 32",
+    "Create DataLoaders for the training and validation datasets using torch.utils.data.DataLoader",
+    "Instantiate the model by calling get_model()",
+    "Instantiate a torch optimizer using torch.optim.Adam with learning rate 1e-3",
+    "Instantiate a torch loss function using torch.nn.CrossEntropyLoss()",
+    "Set the number of epochs to 3",
+    "Create a for loop to iterate over epochs",
+    "Inside the epoch loop, create a nested for loop to iterate over train_dataloader",
+    "In the inner loop, perform a forward pass by calling model(inputs)",
+    "Calculate the loss by calling loss_fn(logits, targets)",
+    "Call model.zero_grad() to reset gradients",
+    "Call loss.backward() to compute gradients",
+    "Call optimizer.step() to update model weights",
+    "Add a print statement to log training loss every 100 batches",
+    "Run the code to fit the model and observe the error message",
+    "Capture the error message and verify it matches the reported bug"
+]
+```

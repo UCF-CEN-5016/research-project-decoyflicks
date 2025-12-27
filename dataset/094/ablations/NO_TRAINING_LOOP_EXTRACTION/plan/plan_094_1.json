@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch and ContinuousTransformerWrapper from the appropriate module",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the input dimensions: set batch_size = 1, seq_len = 1024, and feature_dim = 512",
+    "Create a random input tensor x with shape (batch_size, seq_len, feature_dim) using torch.randn(1, 1024, 512)",
+    "Create a random mask tensor m with shape (batch_size, seq_len) using torch.randn(1, 1024) > 0",
+    "Initialize memory tensors: create a list of 6 tensors, each with shape (1, 100, 512) using [torch.zeros(1, 100, 512) for _ in range(6)]",
+    "Instantiate the ContinuousTransformerWrapper with the specified parameters: dim_out=259, max_seq_len=0, num_memory_tokens=20, max_mem_len=100, and attn_layers as a Decoder with specified parameters",
+    "Call the net with the input tensor x, mask m, memory tensors mems, and set return_mems=True",
+    "Capture the output logits and memory tensors from the net call",
+    "Print the shape of logits to verify output dimensions",
+    "Print the shapes of each tensor in mems to verify their dimensions",
+    "Set mems to None and call the net again with the same input x and mask m, capturing the output logits and memory tensors",
+    "Print the shape of logits from the second call to verify output dimensions",
+    "Compare the outputs from both calls to confirm that the first call with mems does not work as expected"
+]
+```

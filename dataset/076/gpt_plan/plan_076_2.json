@@ -1,0 +1,17 @@
+[
+  "Import tensorflow as tf, keras, numpy as np, and h5py modules",
+  "Import the MaskRCNN class and necessary utilities from the mrcnn module (e.g., modellib.MaskRCNN)",
+  "Define or load a configuration object named 'config' compatible with MaskRCNN that includes IMAGE_SHAPE (e.g., [256, 256, 3]) and BATCH_SIZE=1",
+  "Set MODEL_DIR to a valid directory path where logs and weights are stored",
+  "Set COCO_MODEL_PATH to the path of a Mask R-CNN weights file saved in HDF5 format (.h5), such as 'mask_rcnn_coco.h5'",
+  "Instantiate the MaskRCNN model in inference mode with: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+  "Attempt to load weights into the model using: model.load_weights(COCO_MODEL_PATH, by_name=True)",
+  "Catch and observe the exception raised during load_weights call; specifically, a NotImplementedError related to loading weights that are not instances of tf.Variable from HDF5",
+  "Verify that the error message includes: 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead'",
+  "Ensure the weights file is indeed in HDF5 format (.h5) and was saved by an older Keras or TensorFlow version that uses KerasVariable instead of tf.Variable",
+  "Confirm the environment uses TensorFlow version >= 1.3 and Keras version >= 2.0.8 as required by the mrcnn implementation",
+  "Validate that the model architecture matches the weights file architecture (e.g., resnet50 backbone, number of classes), as mismatch can cause loading issues",
+  "Run the above code in a Python environment with TensorFlow 1.x or compatible Keras to replicate the exact traceback shown",
+  "Assert that the error occurs precisely at the line inside model.py calling keras.engine.saving.load_weights_from_hdf5_group_by_name(f, layers)",
+  "Confirm that the error stack trace includes the line in tensorflow/python/keras/saving/hdf5_format.py raising NotImplementedError due to weights not being tf.Variable instances"
+]

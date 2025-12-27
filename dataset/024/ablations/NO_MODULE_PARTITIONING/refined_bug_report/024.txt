@@ -1,0 +1,32 @@
+TITLE  
+ModuleNotFoundError due to missing `__init__.py` in datasets directory  
+
+SYMPTOMS  
+• Encountering a `ModuleNotFoundError` when running the script in Google Colab.  
+• The exact error message is:  
+  ```
+  ModuleNotFoundError: No module named 'delf.python.datasets'
+  ```  
+• The script fails to execute properly, preventing feature extraction from images.  
+
+EXPECTED BEHAVIOR  
+The script should successfully import the required modules and extract features from images without any errors.  
+
+REPRODUCTION STEPS  
+1. Navigate to the directory in Google Colab:  
+   ```
+   %cd /content/models/research/delf/delf/python/examples/
+   ```  
+2. Run the feature extraction script with the following command:  
+   ```
+   !python3 extract_features.py \
+     --config_path delf_config_example.pbtxt \
+     --list_images_path list_images.txt \
+     --output_dir data/oxford5k_features
+   ```  
+3. Observe the error message indicating that the module `delf.python.datasets` cannot be found.  
+4. Add an `__init__.py` file to the `datasets` directory located at:  
+   ```
+   /content/models/research/delf/delf/python/datasets
+   ```  
+5. Rerun the feature extraction script to confirm that the issue is resolved.

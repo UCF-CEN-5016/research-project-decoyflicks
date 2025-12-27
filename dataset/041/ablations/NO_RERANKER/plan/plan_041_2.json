@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: os, torch, dalle_pytorch, and any other required modules.",
+    "Set the environment to use CUDA by checking if torch.cuda.is_available() and setting the device accordingly.",
+    "Define a batch size of 8 and image dimensions of 128x128.",
+    "Create a mock dataset of images using torchvision.datasets.ImageFolder with a folder containing at least 10 images.",
+    "Prepare a captions_array with shape (num_samples, max_caption_length) filled with random integers representing tokenized captions.",
+    "Prepare all_image_codes with shape (num_samples, num_image_tokens) filled with random integers representing image codes.",
+    "Prepare captions_mask with shape (num_samples, max_caption_length) filled with random binary values (0 or 1) to represent the mask.",
+    "Define a DALL-E model instance using dalle_pytorch with appropriate parameters (e.g., num_tokens=8192, num_layers=3, emb_dim=512).",
+    "Define an optimizer (e.g., Adam) for the DALL-E model with a learning rate of 1e-3.",
+    "Define a fit function that takes the model, optimizer, and training data as parameters.",
+    "In the fit function, call the model's forward method with the following parameters: text, image_codes, and mask.",
+    "Ensure that the call to the model's forward method includes the mask parameter: loss = dalle(text[idx, ...], image_codes[idx, ...], mask=mask[idx, ...], return_loss=True).",
+    "Run the fit function with a training dataset consisting of captions_array, all_image_codes, and captions_mask.",
+    "Monitor the output for a TypeError indicating that forward() got an unexpected keyword argument 'mask'.",
+    "Log the error message to verify that the bug has occurred."
+]
+```

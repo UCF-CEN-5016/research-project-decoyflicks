@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import matplotlib.pyplot as plt, import tensorflow as tf, from keras import layers, models, and ops",
+    "Set the image size to 72 and patch size to 16: image_size = 72, patch_size = 16",
+    "Load the CIFAR-10 dataset using tf.keras.datasets.cifar10.load_data() and split it into training and testing sets: (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()",
+    "Normalize the x_train data to the range [0, 1] by dividing by 255: x_train = x_train.astype('float32') / 255.0",
+    "Select a random image from the x_train dataset: image = x_train[np.random.choice(range(x_train.shape[0]))]",
+    "Display the selected image using plt.imshow(image.astype('uint8')) and plt.axis('off')",
+    "Resize the selected image to (image_size, image_size) using ops.image.resize: resized_image = ops.image.resize(ops.convert_to_tensor([image]), size=(image_size, image_size))",
+    "Create a Patches instance with the defined patch size: patches = Patches(patch_size)(resized_image)",
+    "Print the image size, patch size, patches per image, and elements per patch: print(f'Image size: {image_size} X {image_size}'), print(f'Patch size: {patch_size} X {patch_size}'), print(f'Patches per image: {patches.shape[1]}'), print(f'Elements per patch: {patches.shape[-1]}')",
+    "Calculate the number of patches per row and column: n = int(np.sqrt(patches.shape[1]))",
+    "Create a figure to display the patches: plt.figure(figsize=(4, 4))",
+    "Iterate over the patches and display each one using plt.imshow(ops.convert_to_numpy(patch_img).astype('uint8'))",
+    "Run the code cell to reproduce the bug and observe the InvalidArgumentError related to tensor data types"
+]
+```

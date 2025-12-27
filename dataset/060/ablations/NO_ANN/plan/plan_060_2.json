@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and KerasCV modules: 'import tensorflow as tf' and 'import keras_cv'",
+    "Set the batch size: 'BATCH_SIZE = 4'",
+    "Define the AUTOTUNE variable for parallel processing: 'AUTOTUNE = tf.data.AUTOTUNE'",
+    "Create a function 'load_image' that reads and decodes JPEG images: 'def load_image(image_path): return tf.image.decode_jpeg(tf.io.read_file(image_path), channels=3)'",
+    "Create a function 'load_dataset' that loads images and bounding boxes: 'def load_dataset(image_path, classes, bbox): return {\"images\": load_image(image_path), \"bounding_boxes\": {\"classes\": tf.cast(classes, dtype=tf.float32), \"boxes\": bbox}}'",
+    "Prepare a list of image paths, bounding boxes, and class IDs for testing: 'image_paths = [\"path/to/image1.jpg\", \"path/to/image2.jpg\"]', 'bbox = [[[0, 0, 1, 1]]]', 'classes = [[0]]'",
+    "Create a TensorFlow dataset from the prepared data: 'data = tf.data.Dataset.from_tensor_slices((image_paths, classes, bbox))'",
+    "Split the dataset into training and validation sets: 'train_data = data.take(1)', 'val_data = data.skip(1)'",
+    "Define an augmentation pipeline using KerasCV: 'augmenter = keras.Sequential([keras_cv.layers.RandomFlip(mode=\"horizontal\"), keras_cv.layers.RandomShear(x_factor=0.2, y_factor=0.2)])'",
+    "Map the training dataset with the load_dataset function: 'train_ds = train_data.map(load_dataset, num_parallel_calls=AUTOTUNE)'",
+    "Shuffle the training dataset: 'train_ds = train_ds.shuffle(BATCH_SIZE * 4)'",
+    "Batch the training dataset: 'train_ds = train_ds.batch(BATCH_SIZE)'",
+    "Apply the augmentation pipeline to the training dataset: 'train_ds = train_ds.map(augmenter, num_parallel_calls=AUTOTUNE)'",
+    "Create a validation dataset by mapping and batching: 'val_ds = val_data.map(load_dataset, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE)'",
+    "Define a resizing function for validation dataset: 'resizing = keras_cv.layers.JitteredResize(target_size=(640, 640), bounding_box_format=\"xyxy\")'",
+    "Apply the resizing function to the validation dataset: 'val_ds = val_ds.map(resizing, num_parallel_calls=AUTOTUNE)'",
+    "Attempt to create augmented training dataset: 'augmented_train_ds = train_ds.map(augment_fn, num_parallel_calls=AUTOTUNE)'",
+    "Run the code to trigger the error: 'augmented_train_ds = train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)'",
+    "Capture the error output to verify the TypeError occurs during dataset creation"
+]
+```

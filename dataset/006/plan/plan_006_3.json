@@ -1,0 +1,14 @@
+[
+    "Import the necessary modules from the official library for COCODataLoader, COCOEvaluator, DETR, Parser, TfExampleDecoder, TfExampleDecoderLabelMap, bbox_generalized_overlap, cycxhw_to_yxyx, get_detection_decoder, hungarian_matching, input_reader_generator, pick_dataset_fn",
+    "Register the task class using register_task_cls",
+    "Define a batch size of 8 and image dimensions of (224, 224)",
+    "Create random uniform input data with shape (batch_size, height, width, 3) for features",
+    "Create labels with random integers between 0 and the number of classes for each sample in the batch",
+    "Initialize a DETR model instance with predefined parameters such as num_classes, backbone architecture, etc.",
+    "Create a COCODataLoader instance to load synthetic data based on the defined image dimensions and batch size",
+    "Call the DETR model's train_on_batch method with the generated features and labels",
+    "Verify that the loss calculation contains NaN values by checking if any of the loss metrics are NaN after the forward pass",
+    "Monitor GPU memory usage during the execution of the train_on_batch method",
+    "Assert that the GPU memory usage exceeds an expected threshold, indicating potential memory overflow or underflow issues"
+]
+

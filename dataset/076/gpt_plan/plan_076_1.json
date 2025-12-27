@@ -1,0 +1,18 @@
+[
+    "Set up a Python environment with TensorFlow 2.x installed (e.g., TensorFlow 2.10) and Keras compatible with TensorFlow 2.x",
+    "Clone or download the Mask_RCNN repository from https://github.com/matterport/Mask_RCNN or have the same codebase with model.py, parallel_model.py, and config.py available",
+    "Ensure h5py is installed in the environment since it is required for loading weights",
+    "Import necessary modules: tensorflow as tf, keras, numpy as np, and the MaskRCNN class from modellib (e.g., from mrcnn import model as modellib, from mrcnn.config import Config)",
+    "Define or load a Config subclass instance with the following key parameters: IMAGE_SHAPE = [1024, 1024, 3], BATCH_SIZE = 1 (assuming GPU_COUNT=1 and IMAGES_PER_GPU=1), NUM_CLASSES >= 1, IMAGE_META_SIZE computed properly, IMAGE_RESIZE_MODE='square', and other default parameters consistent with the original config",
+    "Set MODEL_DIR to a valid directory path for model logs and weights",
+    "Set COCO_MODEL_PATH to the path of a Mask R-CNN pre-trained weights file in HDF5 (.h5) format, e.g., 'mask_rcnn_coco.h5', that uses the HDF5 format for weights (not TensorFlow SavedModel format)",
+    "Instantiate the MaskRCNN model with mode='inference', config=config instance, and model_dir=MODEL_DIR, i.e., model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Call model.load_weights(COCO_MODEL_PATH, by_name=True) to load the COCO pre-trained weights",
+    "Assert that NotImplementedError is raised with message containing 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead'",
+    "Verify the traceback points to tensorflow/python/keras/saving/hdf5_format.py line around 895 in _legacy_weights function during load_weights_from_hdf5_group_by_name call",
+    "Confirm that the error occurs because the model's layers contain KerasVariable objects instead of tf.Variable instances, triggering the NotImplementedError",
+    "Optionally, print the type of weights in one of the Conv2D layers before the weights loading to verify they are KerasVariable objects, not tf.Variable",
+    "Validate that the code does not raise the error if the model is instantiated in 'training' mode or if weights are loaded using TensorFlow SavedModel format instead of HDF5",
+    "Ensure batch size is 1 and input image dimensions are consistent with config.IMAGE_SHAPE (e.g., 1024x1024x3) to avoid unrelated errors",
+    "Do not modify or patch the load_weights method or the underlying keras saving utilities; reproduce the bug with the original code as is"
+]

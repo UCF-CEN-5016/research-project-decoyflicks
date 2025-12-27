@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from object_detection_test.py",
+    "Set up a category index with two classes: dog (id=1) and cat (id=2)",
+    "Define max_examples_to_draw as 4 for evaluation metric ops",
+    "Initialize a placeholder for original_image with shape [4, None, None, 3]",
+    "Initialize placeholders for original_image_spatial_shape and true_image_shape with shapes [4, 2] and [4, 3] respectively",
+    "Define random uniform tensors for detection_boxes, detection_classes, and detection_scores with appropriate shapes and values",
+    "Initialize placeholder for groundtruth_boxes with shape [4, 8, 4]",
+    "Initialize placeholder for groundtruth_classes with shape [4, 8]",
+    "Create an instance of VisualizeSingleFrameDetections with the given category_index and max_examples_to_draw",
+    "Construct eval_dict using the placeholders and tensors defined earlier",
+    "Call get_estimator_eval_metric_ops method on the evaluation metric object passing eval_dict as argument",
+    "Retrieve the update_op from the returned dictionary and initialize global variables",
+    "Run a loop to perform multiple update steps with unique image shapes for each iteration",
+    "Monitor the output values of the metric ops after each step",
+    "Assert that for all keys in the value_ops, their corresponding values are not empty strings"
+]
+```
+

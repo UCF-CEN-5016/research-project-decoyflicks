@@ -1,0 +1,13 @@
+```json
+[
+    "Install PyTorch version 1.8.1 to ensure compatibility with the bug",
+    "Import required libraries from PyTorch and other dependencies in gaussian_generator.py",
+    "Prepare a dataset with at least one categorical column for fitting the GaussianGenerator model",
+    "Create an instance of GaussianGenerator and fit it with the prepared dataset, specifying categorical columns explicitly",
+    "Sample data from the generator using the fit model to ensure proper initialization",
+    "Call the gelu() function within the context of the sampled process at line 121 in modeling.py, passing approximate=True as a parameter",
+    "Verify that the error TypeError: gelu(): argument 'approximate' must be str, not bool occurs during the execution",
+    "Check the type of the 'approximate' parameter being passed to the gelu() function before it is called"
+]
+```
+

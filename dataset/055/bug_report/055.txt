@@ -1,0 +1,176 @@
+neural_machine_translation_with_keras_nlp Example test script segmentation fault
+
+### Issue Type
+
+Bug
+
+### Source
+
+source
+
+### Keras Version
+
+Keras 2.15
+
+### Custom Code
+
+No
+
+### OS Platform and Distribution
+
+Linux Parrot OS 5.3 (Electro Ara)
+
+### Python version
+
+3.9
+
+### GPU model and memory
+
+GeForce RTX 3070 Mobile (8 GB)
+
+### Current Behavior?
+
+Segmentation fault when running the test script. It worked once but gives segmentation fault now.I added BLEU score evaluation from NLTK after the tensors are passed to CPU, used a checkpoint saver with just the directory name but the rest of the code is the same as the example from https://keras.io/examples/nlp/neural_machine_translation_with_keras_nlp/. I found that the segmentation fault happens inside the `GreedySampler()` after the `nextfn` returns one tensor, an empty tuple and `None` for `hidden_states`.
+
+### Standalone code to reproduce the issue or tutorial link
+
+```shell
+from data_preprocessing import MAX_SEQUENCE_LENGTH
+from data_preprocessing import eng_tokenizer, spa_tokenizer
+from data_preprocessing import test_pairs
+
+from model import transformer
+
+import tensorflow as tf
+import keras_nlp
+import random
+
+from nltk.translate.bleu_score import modified_precision
+
+from train import MODEL_CHECKPOINT_DIR
+from model import transformer
+#transformer.load_weights(MODEL_CHECKPOINT_DIR)
+
+import numpy as np
+
+TEST_BATCH_SIZE = 1
+"""
+tensorflow.python.framework.errors_impl.InvalidArgumentError: Exception encountered when calling layer 'cross_attention' (type CachedMultiHeadAttention).
+
+{{function_node __wrapped__Einsum_N_2_device_/job:localhost/replica:0/task:0/device:GPU:0}} Expected dimension 1 at axis 0 of the input shaped [64,40,8,32] but got dimension 64 [Op:Einsum] name: 
+
+Call arguments received by layer 'cross_attention' (type CachedMultiHeadAttention):
+  • query=tf.Tensor(shape=(64, 40, 256), dtype=float32)
+  • value=tf.Tensor(shape=(1, 40, 256), dtype=float32)
+  • key=None
+  • attention_mask=None
+  • cache=None
+  • cache_update_index=None
+"""
+
+def decode_sequences(input_sentences):
+    batch_size = TEST_BATCH_SIZE
+
+    # Tokenize the encoder input.
+    encoder_input_tokens = tf.convert_to_tensor(eng_tokenizer(input_sentences).to_tensor())
+    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:
+        pads = tf.fill((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)
+        encoder_input_tokens = tf.concat([encoder_input_tokens, pads], 1)
+    
+    # Cannot handle sequences with token length > 40
+    if encoder_input_tokens.shape[-1] > 40:
+        #print ('seg fault')
+        encoder_input_tokens = encoder_input_tokens[:,:40]
+    
+    # Define a function that outputs the next token's probability given the
+    # input sequence.
+    def next_fn(prompt, cache, index):
+        #print (encoder_input_tokens, prompt, index-1)
+        #print ('seg fault:nextfn1')
+        logits = transformer([encoder_input_tokens, prompt])
+        #print ('seg fault:nextfn2')
+        #print (logits.shape, index-1)
+        logits = logits[:, index - 1, :]
+        #print ('seg fault:nextfn3')
+        # Ignore hidden states for now; only needed for contrastive search.
+        hidden_states = None
+        #print ('seg fault:nextfn4')
+        print (logits.shape, [x.shape for x in cache], hidden_states)
+        return logits, hidden_states, cache
+
+    # Build a prompt of length 40 with a start token and padding tokens.
+    length = 40
+    start = tf.fill((batch_size, 1), spa_tokenizer.token_to_id("[START]"))
+    pad = tf.fill((batch_size, length - 1), spa_tokenizer.token_to_id("[PAD]"))
+    prompt = tf.concat((start, pad), axis=-1)
+
+    generated_tokens = keras_nlp.samplers.GreedySampler()(
+        next_fn,
+        prompt,
+        end_token_id=spa_tokenizer.token_to_id("[END]"),
+        index=1,  # Start sampling after start token.
+    )
+    generated_sentences = spa_tokenizer.detokenize(generated_tokens)
+    return generated_sentences
+
+
+test_eng_texts = [pair[0] for pair in test_pairs]
+test_spa_texts = [pair[1] for pair in test_pairs]
+
+bleu_score = []
+for i in range(len(test_pairs)):
+    input_sentence = test_eng_texts[i]
+    #print ('seg fault: input')
+    translated = decode_sequences([input_sentence])
+    #print ('seg fault: decoded')
+    translated = translated.numpy()[0].decode("utf-8")
+    translated = (
+        translated.replace("[PAD]", "")
+        .replace("[START]", "")
+        .replace("[END]", "")
+        .strip()
+    )
+    translated = translated.split(' ')
+    bleu = modified_precision([test_spa_texts[i]], translated, n=4)
+    bleu_score.append(bleu)
+
+bleu_score_print = np.array(bleu_score)
+print ("4-gram BLEU score: %f" % (bleu_score_print.mean()))
+```
+
+
+### Relevant log output
+
+```shell
+2024-01-02 09:35:23.860511: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-01-02 09:35:24.147804: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2024-01-02 09:35:24.147842: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2024-01-02 09:35:24.163474: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-01-02 09:35:24.202270: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-01-02 09:35:25.537201: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Using TensorFlow backend
+118964 total pairs
+83276 training pairs
+17844 validation pairs
+17844 test pairs
+2024-01-02 09:35:31.265114: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:31.443426: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:31.443677: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:31.445929: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:31.446128: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:31.446280: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:33.100636: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:33.100901: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:33.101094: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:901] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-01-02 09:35:33.101253: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1929] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 6105 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 3070 Laptop GPU, pci bus id: 0000:01:00.0, compute capability: 8.6
+English Tokens:  3622
+Spanish Tokens:  4960
+2024-01-02 09:36:56.691059: W tensorflow/core/kernels/data/cache_dataset_ops.cc:858] The calling iterator did not fully read the dataset being cached. In order to avoid unexpected truncation of the dataset, the partially cached contents of the dataset  will be discarded. This can happen if you have an input pipeline similar to `dataset.cache().take(k).repeat()`. You should use `dataset.take(k).cache().repeat()` instead.
+2024-01-02 09:37:00.092009: I external/local_xla/xla/service/service.cc:168] XLA service 0x8e12acc0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2024-01-02 09:37:00.092045: I external/local_xla/xla/service/service.cc:176]   StreamExecutor device (0): NVIDIA GeForce RTX 3070 Laptop GPU, Compute Capability 8.6
+2024-01-02 09:37:00.508314: I external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:454] Loaded cuDNN version 8904
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1704168420.546698  384459 device_compiler.h:186] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+Segmentation fault
+```

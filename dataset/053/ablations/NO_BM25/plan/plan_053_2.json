@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, tensorflow, numpy, and os",
+    "Set the environment variable for Keras backend to 'tensorflow' using os.environ['Keras_Backend'] = 'tensorflow'",
+    "Set the mixed precision policy to 'mixed_float16' using tf.keras.mixed_precision.set_global_policy('mixed_float16')",
+    "Define a batch size of 32 and a sequence length of 128 for input data",
+    "Instantiate a dummy dataset with random input data of shape (batch_size, sequence_length) using numpy.random.rand(32, 128)",
+    "Create a dummy labels array with shape (batch_size, 1) using numpy.random.randint(0, 2, size=(32, 1))",
+    "Attempt to instantiate the BertClassifier by calling classifier = keras_nlp.models.BertClassifier.from_preset('bert_tiny_en_uncased_sst2')",
+    "Capture the output and any exceptions raised during the instantiation of the BertClassifier",
+    "Verify that the output contains the AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

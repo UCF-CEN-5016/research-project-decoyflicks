@@ -1,0 +1,36 @@
+{
+  "bug_report": "090",
+  "module": {
+    "module": "tests",
+    "files": [
+      {
+        "path": "tests/test_x_transformers.py",
+        "snippets": [
+          {
+            "lines": "182-200",
+            "code": "def test_multiple_input_embeds():\n    model = MultiInputTransformerWrapper(\n        num_tokens = dict(\n            note = 20000,\n            pitch = 32,\n            tone = 16\n        ),\n        max_seq_len = 1024,\n        return_only_embed = True,\n        attn_layers = Decoder(\n            dim = 128,\n            depth = 6,\n            heads = 8\n        )\n    )\n\n    x = dict(\n        note = torch.randint(0, 20000, (2, 1024)),\n        pitch = torch.randint(0, 32, (2, 1024)),\n        tone = torch.randint(0, 16, (2, 1024))\n    )\n\n    embed = model(x)\n\n    assert embed.shape == (2, 1024, 128)\n\ndef test_average_pool_embed():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        num_memory_tokens = 2,\n        average_pool_embed = True,\n        attn_layers = Encoder(\n            dim = 128,\n            depth = 6,\n            heads = 8\n        )\n    )\n\n    x = torch.randint(0, 20000, (2, 1024))\n    mask = torch.randint(0, 2, (2, 1024)).bool()\n\n    logits = model(x, mask = mask)\n\n    assert logits.shape == (2, 20000)\n\ndef test_cls_token():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        num_memory_tokens = 2,\n        use_cls_token = True,\n        attn_layers = Encoder(\n            dim = 128,\n            depth = 6,\n            heads = 8\n        )\n    )\n\n    x = torch.randint(0, 20000, (2, 1024))\n    mask = torch.randint(0, 2, (2, 1024)).bool()\n\n    logits = model(x, mask = mask)\n\n    assert logits.shape == (2, 20000)"
+          },
+          {
+            "lines": "224-240",
+            "code": "def test_squeeze_logit_dim_one():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        logits_dim = 1,\n        average_pool_embed = True,\n        squeeze_out_last_dim = True,\n        attn_layers = Encoder(\n            dim = 128,\n            depth = 6,\n            heads = 8\n        )\n    )\n\n    x = torch.randint(0, 20000, (2, 1024))\n    mask = torch.randint(0, 2, (2, 1024)).bool()\n\n    logits = model(x, mask = mask)\n\n    assert logits.shape == (2,)\n\ndef test_unet_skip(depth):\n\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Encoder(\n            dim = 128,\n            depth = depth,\n            heads = 8,\n            unet_skips = True\n        )\n    )\n\n    x = torch.randint(0, 20000, (2, 1024))\n    mask = torch.randint(0, 2, (2, 1024)).bool()\n\n    model(x, mask = mask)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "tests/test_x_transformers.py",
+      "snippets": [
+        {
+          "lines": "182-200",
+          "code": "def test_multiple_input_embeds():\n    model = MultiInputTransformerWrapper(\n        num_tokens = dict(\n            note = 20000,\n            pitch = 32,\n            tone = 16\n        ),\n        max_seq_len = 1024,\n        return_only_embed = True,\n        attn_layers = Decoder(\n            dim = 128,\n            depth = 6,\n            heads = 8\n        )\n    )\n\n    x = dict(\n        note = torch.randint(0, 20000, (2, 1024)),\n        pitch = torch.randint(0, 32, (2, 1024)),\n        tone = torch.randint(0, 16, (2, 1024))\n    )\n\n    embed = model(x)\n\n    assert embed.shape == (2, 1024, 128)\n\ndef test_average_pool_embed():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        num_memory_tokens = 2,\n        average_pool_embed = True,\n        attn_layers = Encoder(\n            dim = 128,\n            depth = 6,\n            heads = 8\n        )\n    )\n\n    x = torch.randint(0, 20000, (2, 1024))\n    mask = torch.randint(0, 2, (2, 1024)).bool()\n\n    logits = model(x, mask = mask)\n\n    assert logits.shape == (2, 20000)\n\ndef test_cls_token():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        num_memory_tokens = 2,\n        use_cls_token = True,\n        attn_layers = Encoder(\n            dim = 128,\n            depth = 6,\n            heads = 8\n        )\n    )\n\n    x = torch.randint(0, 20000, (2, 1024))\n    mask = torch.randint(0, 2, (2, 1024)).bool()\n\n    logits = model(x, mask = mask)\n\n    assert logits.shape == (2, 20000)"
+        },
+        {
+          "lines": "224-240",
+          "code": "def test_squeeze_logit_dim_one():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        logits_dim = 1,\n        average_pool_embed = True,\n        squeeze_out_last_dim = True,\n        attn_layers = Encoder(\n            dim = 128,\n            depth = 6,\n            heads = 8\n        )\n    )\n\n    x = torch.randint(0, 20000, (2, 1024))\n    mask = torch.randint(0, 2, (2, 1024)).bool()\n\n    logits = model(x, mask = mask)\n\n    assert logits.shape == (2,)\n\ndef test_unet_skip(depth):\n\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Encoder(\n            dim = 128,\n            depth = depth,\n            heads = 8,\n            unet_skips = True\n        )\n    )\n\n    x = torch.randint(0, 20000, (2, 1024))\n    mask = torch.randint(0, 2, (2, 1024)).bool()\n\n    model(x, mask = mask)"
+        }
+      ]
+    }
+  ]
+}

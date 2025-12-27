@@ -1,0 +1,15 @@
+[
+    "Import TensorFlow and other necessary modules from the provided list of dependencies",
+    "Load the dataset and prepare it for training by splitting into training and validation sets",
+    "Define the batch size, image dimensions, and number of classes based on the given specifications",
+    "Create a generator function to load and preprocess batches of images and bounding boxes from the dataset",
+    "Initialize the YOLOV8 backbone using `keras_cv.models.YOLOV8Backbone.from_preset` with 'yolo_v8_s_backbone_coco' preset",
+    "Build the YOLOV8Detector model by passing the initialized backbone, number of classes, bounding box format, and FPN depth to `keras_cv.models.YOLOV8Detector`",
+    "Compile the YOLOV8Detector model with Adam optimizer and specified classification and box losses",
+    "Create an instance of `EvaluateCOCOMetricsCallback` to monitor the COCO metrics during training",
+    "Train the YOLOV8Detector model on the training data using `fit` method with validation data and the custom callback",
+    "Assert that the training process produces NaN values in the loss calculation during one epoch",
+    "Monitor the GPU memory usage during the training process",
+    "Record the maximum GPU memory usage and assert it exceeds a certain threshold to confirm the bug"
+]
+

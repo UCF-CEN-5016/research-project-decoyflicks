@@ -1,0 +1,13 @@
+[
+    "Import TensorFlow and the object_detection module from object_detection_test.py",
+    "Define a batch size of 2 and image dimensions of 300x300",
+    "Create random uniform input data with shape (batch_size, height, width, channels) where channels = 3",
+    "Create random ground truth boxes with shape (batch_size, num_boxes, 4) where each box has coordinates [ymin, xmin, ymax, xmax]",
+    "Create random ground truth classes with shape (batch_size, num_boxes)",
+    "Call batch_position_sensitive_crop_regions function with input data and ground truth boxes",
+    "Verify output contains NaN values in loss calculation by comparing the loss value to a known bad value or using TensorFlow's isNaN() function",
+    "Monitor GPU memory usage during execution of the batch_position_sensitive_crop_regions function",
+    "Assert that the observed GPU memory usage exceeds the expected threshold for this operation on the given hardware configuration",
+    "Repeat steps 3-8 with different input sizes and configurations to ensure the bug is consistent"
+]
+

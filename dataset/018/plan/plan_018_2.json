@@ -1,0 +1,20 @@
+```json
+[
+    "Install TensorFlow version 2.4.1 using pip to ensure compatibility with the feature flag.",
+    "Clone the TensorFlow models repository from https://github.com/tensorflow/models.git.",
+    "Navigate to the object_detection directory inside the cloned repository.",
+    "Create a virtual environment and activate it to isolate dependencies.",
+    "Install all required packages for running object detection as per the instructions in the README.md file.",
+    "Ensure pip is updated to the latest version using `pip install --upgrade pip`.",
+    "Set up the test environment by installing the necessary testing libraries like unittest and numpy if not already installed.",
+    "Import the TensorFlow package and any other required modules for testing.",
+    "Create a mock input tensor with dimensions (4, 224, 224, 3) using `tf.random.uniform` to simulate preprocessed inputs.",
+    "Build a Faster R-CNN ResNet-101 feature extractor using the code snippet provided in the module path.",
+    "Call the `extract_proposal_features` method of the feature extractor with the mock input tensor.",
+    "Capture the output tensor and store it for further verification.",
+    "Verify that the shape of the output tensor is as expected (4, 14, 14, 1024) using an assertion like `self.assertEqual(output_tensor.shape, [4, 14, 14, 1024])` inside a unittest.TestCase class.",
+    "Call the method again but with an invalid stride value of 99 and ensure it raises a ValueError using an assertion like `with self.assertRaises(ValueError): feature_extractor.extract_proposal_features(...)`.",
+    "Repeat steps 6-13, but this time use the `extract_box_classifier_features` method to simulate extracting box classifier features from proposal features."
+]
+```
+

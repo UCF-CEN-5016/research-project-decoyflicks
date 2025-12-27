@@ -1,0 +1,20 @@
+[
+    "Import torch and necessary modules: torch.nn, torch.optim.Adam, and torch.no_grad",
+    "Import the Unet and GaussianDiffusion classes from the provided code module",
+    "Set the random seed for reproducibility using torch.manual_seed(0)",
+    "Instantiate the Unet model with parameters: dim=64, dim_mults=(1, 2, 4, 8), self_condition=True",
+    "Instantiate the GaussianDiffusion with the Unet model, image_size=128, timesteps=1000, and default parameters",
+    "Create a batch of random input images of shape (4, 3, 128, 128) with values in [0,1] using torch.rand",
+    "Convert the input images to torch.float32 and send to CPU or GPU as available",
+    "Set the diffusion model to train mode by calling diffusion.train() or model.train()",
+    "Manually trigger one forward pass by calling diffusion(input_images)",
+    "Inside the forward pass, ensure that self_condition is enabled and the code path with the problematic inference_mode is executed (random() < 0.5 condition)",
+    "Observe that the code will execute the block with 'with torch.inference_mode()' wrapping the call to model_predictions, which leads to the RuntimeError",
+    "Catch or observe the RuntimeError with message: 'Inference tensors cannot be saved for backward. To work around you can make a clone to get a normal tensor and use it in autograd.'",
+    "Optionally, wrap the forward call inside a try-except block to assert that the RuntimeError is raised",
+    "Print the error message to verify it matches the expected RuntimeError about inference tensors and backward",
+    "Confirm that changing torch.inference_mode() to torch.no_grad() inside the code avoids the error (not part of reproduction, just noted)",
+    "Verify that adding .clone() to the tensor returned inside inference_mode does not prevent the error, confirming the bug behavior",
+    "Summarize that the bug reproduces only when self_condition=True and the inference_mode context is used during self-conditioning in p_losses method",
+    "Ensure the environment uses PyTorch version 1.12 or newer where torch.inference_mode() is available to trigger this specific error"
+]

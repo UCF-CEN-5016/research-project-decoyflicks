@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, random, and nltk.translate.bleu_score",
+    "Set the Keras version to 2.15 and ensure TensorFlow is compatible with it",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40, TEST_BATCH_SIZE = 1",
+    "Load the English and Spanish tokenizers from data_preprocessing module",
+    "Load the test pairs from data_preprocessing module",
+    "Define the transformer model from the model module",
+    "Create a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Ensure the encoder_input_tokens shape is (1, MAX_SEQUENCE_LENGTH) after padding",
+    "Define the next_fn(prompt, cache, index) function to generate logits using the transformer model",
+    "Inside next_fn, call the transformer with encoder_input_tokens and prompt, and extract logits for the given index",
+    "Set hidden_states to None in next_fn and return logits, hidden_states, and cache",
+    "Build a prompt tensor of shape (1, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Create a loop to iterate over test_pairs, extracting input_sentence from test_eng_texts",
+    "Call decode_sequences with the input_sentence and store the result in translated",
+    "Process the translated output to remove special tokens and split into words",
+    "Calculate the BLEU score using modified_precision from nltk for the translated output",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Check the output shapes of logits and cache in next_fn to ensure they match expected dimensions",
+    "Verify that the segmentation fault occurs specifically after the next_fn returns logits, an empty tuple, and None for hidden_states",
+    "Log the output of logits.shape and cache shapes before the segmentation fault occurs to capture the state of the program"
+]
+```

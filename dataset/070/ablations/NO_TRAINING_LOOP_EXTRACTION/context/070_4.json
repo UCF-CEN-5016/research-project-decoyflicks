@@ -1,0 +1,16 @@
+{
+  "bug_report": "070",
+  "rank": 4,
+  "score": 0.9678796529769897,
+  "main_file": {
+    "path": "training/bing_bert/data_worker.py",
+    "content": "import threading\nimport queue\nimport time\n\n\nclass AsyncWorker(threading.Thread):\n    def __init__(self, dataloaders, dataset_picker):\n        threading.Thread.__init__(self)\n        self.req_queue = queue.Queue()\n        self.ret_queue = queue.Queue()\n        self.dataloaders = dataloaders\n        self.dataset_picker = dataset_picker\n        self.prefetch_idx = 3\n        for i in range(self.prefetch_idx):\n            self.req_queue.put(dataset_picker[i])\n\n    def run(self):\n        while True:\n            dataset_type = self.req_queue.get(block=True)\n            if dataset_type is None:\n                break\n            batch = next(self.dataloaders[dataset_type])\n            self.req_queue.task_done()\n            self.ret_queue.put(batch)\n\n    def get(self):\n        batch = self.ret_queue.get()\n        self.ret_queue.task_done()\n        return batch\n\n    def prefetch(self):\n        if self.prefetch_idx < len(self.dataset_picker):\n            self.req_queue.put(self.dataset_picker[self.prefetch_idx])\n            self.prefetch_idx += 1\n\n    def stop(self):\n        self.req_queue.put(None)\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "queue",
+      "function": "Queue"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository.",
+    "Set the environment variables for DATA_DIR and MODEL_DIR to point to the appropriate directories containing the ImageNet dataset and model checkpoints.",
+    "Activate the conda environment with TensorFlow 2.11.0 installed.",
+    "Define the number of nodes and GPUs per node: 2 nodes with 2 GPUs each.",
+    "Create a configuration file gpu.yaml for the first worker with the following parameters: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0.",
+    "Create a configuration file gpu1.yaml for the second worker with the following parameters: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1.",
+    "On the first GPU node (gpu1), navigate to the TensorFlow Model Garden directory and run the classifier_trainer.py script with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml.",
+    "On the second GPU node (gpu2), navigate to the TensorFlow Model Garden directory and run the classifier_trainer.py script with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml.",
+    "Monitor the training logs on both nodes to capture throughput metrics during execution.",
+    "Record the throughput (examples/sec) for both single GPU and multi-GPU configurations across nodes.",
+    "Verify that the throughput for the multi-worker setup does not exceed the throughput of a single GPU, indicating that scaling is not occurring as expected.",
+    "Check for any error messages or warnings in the logs that may indicate issues with the multi-worker setup.",
+    "Validate that the TensorFlow version is 2.11.0 and that the CUDA version is compatible with the installed TensorFlow version.",
+    "Ensure that the GPUs are properly configured and accessible from both nodes by checking the output of nvidia-smi on each node."
+]
+```

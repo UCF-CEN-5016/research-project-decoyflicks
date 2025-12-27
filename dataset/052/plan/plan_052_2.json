@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries including datasets and transformers modules",
+    "Load the SQuAD dataset using load_dataset function with 'squad' argument",
+    "Split the dataset into training and validation sets",
+    "Initialize a tokenizer from the pretrained model_checkpoint 'bert-base-uncased'",
+    "Tokenize the context and question data for both training and validation sets",
+    "Convert tokenized data into numpy format for input to the model",
+    "Load a pre-trained model from transformers using TFAutoModelForQuestionAnswering.from_pretrained(model_checkpoint)",
+    "Compile the model with Adam optimizer and a learning rate of 5e-5",
+    "Train the model on the training dataset for 1 epoch",
+    "Evaluate the model on the validation dataset to get loss values",
+    "Verify that the evaluation loss contains NaN values",
+    "Monitor GPU memory usage during the training process",
+    "Assert GPU memory usage exceeds expected threshold indicating potential issues with the model or data"
+]
+```
+

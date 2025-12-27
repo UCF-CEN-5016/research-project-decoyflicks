@@ -1,0 +1,28 @@
+TITLE  
+Validation loss consistently reported as zero in Instance/Semantic Segmentation using Model Garden
+
+SYMPTOMS  
+• Validation loss reported as `0.0` during evaluation for both Instance and Semantic Segmentation.  
+• The issue is consistently observed in the output of the 'Train and Evaluate' section of the notebook.  
+• Example output shows `{'validation_loss': 0.0}` despite the presence of other metrics:  
+  ```
+  eval | step:   1200 | steps/sec:    3.3 | eval time:   60.0 sec | output: 
+  {'AP': 0.0814979,
+   'AP50': 0.16509584,
+   'AP75': 0.07145937,
+   ...
+   'mask_ARs': 0.0015765766,
+   'steps_per_second': 3.3340747415649394,
+   'validation_loss': 0.0}
+  ```  
+• Similar behavior observed in the official Semantic Segmentation tutorial.
+
+EXPECTED BEHAVIOR  
+During training and evaluation, the validation loss should display a non-zero value that reflects the model's performance on the validation dataset, indicating that the model is learning and making improvements over time.
+
+REPRODUCTION STEPS  
+1. Access the notebook for Instance Segmentation with Model Garden: [Instance Segmentation with Model Garden 1](https://www.tensorflow.org/tfmodels/vision/instance_segmentation).  
+2. Run the training process as outlined in the notebook.  
+3. Observe the output during the 'Train and Evaluate' section, specifically looking for the validation loss metric.  
+4. Repeat the same steps in the official Semantic Segmentation tutorial: [Semantic Segmentation with Model Garden](https://www.tensorflow.org/tfmodels/vision/semantic_segmentation#train_and_evaluate).  
+5. Confirm that the validation loss remains at `0.0` in both cases.

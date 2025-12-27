@@ -1,0 +1,31 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, random, and nltk.translate.bleu_score",
+    "Set the Keras backend to TensorFlow by adding 'os.environ[\"KERAS_BACKEND\"] = \"tensorflow\"'",
+    "Define MAX_SEQUENCE_LENGTH as 40",
+    "Load or define eng_tokenizer and spa_tokenizer for English and Spanish tokenization respectively",
+    "Prepare test_pairs as a list of tuples containing English and Spanish sentence pairs for testing",
+    "Define the transformer model by importing it from the model module",
+    "Set TEST_BATCH_SIZE to 1",
+    "Define the decode_sequences function that takes a list of input sentences",
+    "Inside decode_sequences, convert input sentences to tensor using eng_tokenizer and ensure the tensor shape is (1, MAX_SEQUENCE_LENGTH)",
+    "If the length of encoder_input_tokens is less than MAX_SEQUENCE_LENGTH, pad the tensor to the right with zeros",
+    "If the length of encoder_input_tokens exceeds 40, truncate it to the first 40 tokens",
+    "Define the next_fn function that takes prompt, cache, and index as parameters",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, expecting output logits",
+    "Extract logits for the current index from the transformer output and set hidden_states to None",
+    "Print the shapes of logits and cache to verify dimensions before returning them",
+    "Build a prompt tensor of shape (1, 40) with the start token followed by padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Define test_eng_texts and test_spa_texts by extracting sentences from test_pairs",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through the range of test_pairs length, using each English sentence to call decode_sequences",
+    "After decoding, process the translated output to remove special tokens and split into words",
+    "Calculate the BLEU score using modified_precision from nltk for n=4",
+    "Append the calculated BLEU score to bleu_score list",
+    "Print the mean of the BLEU scores to verify the output",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Check the output logs for any errors or warnings related to tensor dimensions or GPU memory issues",
+    "Assert that a segmentation fault occurs during the execution of the decode_sequences function"
+]
+```

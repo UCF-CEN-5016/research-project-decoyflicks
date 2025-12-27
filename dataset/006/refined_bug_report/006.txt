@@ -1,0 +1,29 @@
+TITLE
+Missing Gradient Warning During Model Training
+
+SYMPTOMS
+• WARNING:tensorflow:Gradients do not exist for variables ['stack_6/block_1/expand_bn/gamma:0', 'stack_6/block_1/expand_bn/beta:0', 'stack_6/block_1/depthwise_conv2d/depthwise_kernel:0', 'stack_6/block_1/depthwise_bn/gamma:0', 'stack_6/block_1/depthwise_bn/beta:0', 'stack_6/block_1/project_bn/gamma:0', 'stack_6/block_1/project_bn/beta:0', 'top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss.
+• The warning suggests that there might be an issue with how the model is being compiled or configured for training.
+
+EXPECTED BEHAVIOR
+• During the training of the "efficientdet_d1_coco17_tpu-32" model on a custom dataset, gradients should exist and allow backpropagation to update the model parameters effectively.
+• The training process should not produce any warnings related to missing gradients unless there is an issue with the configuration.
+
+REPRODUCTION STEPS
+1. Clone or download the repository containing the "model_main_tf2.py" script for efficientdet_d1_coco17_tpu-32.
+2. Ensure that your custom dataset is properly formatted and placed in the correct directory as specified in the script.
+3. Run the "model_main_tf2.py" script to start training the model on your custom dataset.
+4. Observe if the warning regarding missing gradients appears during the training process.
+
+Possible Causes:
+- Incorrect configuration of the loss function when using `model.compile()`.
+- A change in the TensorFlow version that affects how some layers handle gradients.
+- Issues with the way variables are defined or initialized within the model architecture.
+
+Suggested Steps to Resolve:
+1. Check if you have correctly specified a `loss` argument when compiling your model.
+2. Verify that all necessary dependencies and libraries (such as TensorFlow) are up-to-date and compatible with each other.
+3. Review any recent changes in code or environment setup that might affect the training process.
+4. Inspect the model architecture to ensure that all layers, especially those mentioned in the warning message, are correctly defined and trainable.
+
+For further assistance, you may want to share more details about your current configuration or seek help from a community forum or support channels dedicated to TensorFlow and EfficientDet models.

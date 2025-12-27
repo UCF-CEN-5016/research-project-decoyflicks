@@ -1,0 +1,24 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n tf_env python=3.10",
+    "Activate the newly created conda environment using: conda activate tf_env",
+    "Install TensorFlow 2.13.10 in the conda environment using the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode) and create a new Jupyter Notebook file.",
+    "Import the necessary libraries in the first cell of the notebook with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official.vision import image_classification",
+    "Set the matplotlib backend to 'Agg' to simulate the issue by adding the line: plt.switch_backend('Agg')",
+    "Run the first cell to ensure the imports are successful and the backend is set to 'Agg'.",
+    "Download the notebook from the provided link (https://www.tensorflow.org/tfmodels/vision/image_classification) and open it in VSCode.",
+    "In the downloaded notebook, add the following code to create a simple plot in a new cell: plt.plot([1, 2, 3], [1, 4, 9]); plt.title('Test Plot'); plt.show()",
+    "Run the cell containing the plot code to verify that the plot does not display due to the 'Agg' backend.",
+    "Import the TensorFlow Model Garden by adding the line: from official.vision import image_classification in a new cell.",
+    "Run the cell that imports TensorFlow Model Garden to ensure it executes without errors.",
+    "Add another cell with the same plot code: plt.plot([1, 2, 3], [1, 4, 9]); plt.title('Test Plot After Import'); plt.show()",
+    "Run the second plot cell to verify that the plot does not display, confirming the bug occurs after importing TensorFlow Model Garden.",
+    "Check the current matplotlib backend by adding the line: print(plt.get_backend()) in a new cell and run it to confirm it shows 'Agg'.",
+    "Add a cell to switch the backend to 'TkAgg' with the line: plt.switch_backend('TkAgg') and run it.",
+    "Run the plot code again in a new cell to verify that the plot still does not display, confirming the bug persists even after changing the backend post-import.",
+    "Finally, add a cell to switch the backend to 'TkAgg' before importing TensorFlow Model Garden and run the notebook again to confirm that the plot displays correctly."
+]
+```

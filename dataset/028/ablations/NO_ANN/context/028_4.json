@@ -1,0 +1,106 @@
+{
+  "bug_report": "028",
+  "rank": 4,
+  "score": 0.4264376163482666,
+  "main_file": {
+    "path": "distributed/FSDP/T5_training.py",
+    "content": "import os\nimport argparse\nimport torch\nimport torch.nn as nn\nimport torch.nn.functional as F\nimport torch.optim as optim\nfrom transformers import AutoTokenizer, GPT2TokenizerFast\nfrom transformers import T5Tokenizer, T5ForConditionalGeneration\nimport functools\nfrom torch.optim.lr_scheduler import StepLR\nimport torch.nn.functional as F\nimport torch.distributed as dist\nimport torch.multiprocessing as mp\nfrom torch.nn.parallel import DistributedDataParallel as DDP\nfrom torch.utils.data.distributed import DistributedSampler\nfrom transformers.models.t5.modeling_t5 import T5Block\n\nfrom torch.distributed.fsdp import (\n    FullyShardedDataParallel as FSDP,\n    CPUOffload,\n    MixedPrecision,\n    BackwardPrefetch,\n    ShardingStrategy,\n    FullStateDictConfig,\n    StateDictType,\n)\n\nfrom functools import partial\nfrom torch.utils.data import DataLoader\nfrom pathlib import Path\nfrom summarization_dataset import *\nimport policies\nimport model_checkpointing\nfrom configs import fsdp_config, train_config\nfrom utils import (bfloat_support, setup,\n                   cleanup, get_date_of_run,\n                   format_metrics_to_gb,\n                   train,validation,setup_model)\nfrom transformers.models.t5.modeling_t5 import T5Block\nfrom typing import Type\nimport time\nimport tqdm\nfrom datetime import datetime\n\n\ndef get_policies(cfg, rank):\n\n    \"\"\"establish current policies for mixed precision and fsdp wrapping\"\"\"\n\n    mixed_precision_policy = None\n    wrapping_policy = None\n\n    # mixed precision -----\n    if cfg.mixed_precision:\n        bfloat_available = bfloat_support()\n        if bfloat_available and not cfg.use_fp16:\n            mixed_precision_policy = policies.bfSixteen\n            if rank == 0:\n                print(f\"bFloat16 enabled for mixed precision - using bfSixteen policy\")\n        elif cfg.use_fp16:\n            mixed_precision_policy = policies.fpSixteen\n            if rank == 0:\n                print(f\"FP16 enabled. \")\n        else:\n            # mixed_precision_policy = policies.fpSixteen\n            print(\n                f\"bFloat16 support not present. Will use FP32, and not mixed precision\"\n            )\n\n    wrapping_policy = policies.get_t5_wrapper()\n\n    return mixed_precision_policy, wrapping_policy\n\n\ndef fsdp_main(args):\n\n    model, tokenizer = setup_model(train_config.model_name)\n\n    local_rank = int(os.environ['LOCAL_RANK'])\n    rank = int(os.environ['RANK'])\n    world_size = int(os.environ['WORLD_SIZE'])\n\n\n    dataset = load_dataset('wikihow', 'all', data_dir='data/')\n    print(dataset.keys())\n    print(\"Size of train dataset: \", dataset['train'].shape)\n    print(\"Size of Validation dataset: \", dataset['validation'].shape)\n\n   \n    #wikihow(tokenizer, type_path, num_samples, input_length, output_length, print_text=False)\n    train_dataset = wikihow(tokenizer, 'train', 1500, 512, 150, False) \n    val_dataset = wikihow(tokenizer, 'validation', 300, 512, 150, False)\n \n    sampler1 = DistributedSampler(train_dataset, rank=rank, num_replicas=world_size, shuffle=True)\n    sampler2 = DistributedSampler(val_dataset, rank=rank, num_replicas=world_size)\n\n    setup()\n\n\n    train_kwargs = {'batch_size': args.batch_size, 'sampler': sampler1}\n    test_kwargs = {'batch_size': args.test_batch_size, 'sampler': sampler2}\n    cuda_kwargs = {'num_workers': 2,\n                    'pin_memory': True,\n                    'shuffle': False}\n    train_kwargs.update(cuda_kwargs)\n    test_kwargs.update(cuda_kwargs)\n\n    train_loader = torch.utils.data.DataLoader(train_dataset,**train_kwargs)\n    val_loader = torch.utils.data.DataLoader(val_dataset, **test_kwargs)\n \n    torch.cuda.set_device(local_rank)\n    \n    # Set up FSDP parameters\n    mixed_precision_policy, t5_auto_wrap_policy = get_policies(train_config, rank)\n    \n    # Apply FSDP wrapping to the model\n    model = FSDP(model,\n        auto_wrap_policy=t5_auto_wrap_policy,\n        mixed_precision=mixed_precision_policy,\n        sharding_strategy=fsdp_config.sharding_strategy,\n        device_id=torch.cuda.current_device(),\n        limit_all_gathers=fsdp_config.limit_all_gathers)\n    \n    if fsdp_config.fsdp_activation_checkpointing:\n        policies.apply_fsdp_checkpointing(model)\n\n    # Set up optimizer and scheduler\n    optimizer = optim.AdamW(model.parameters(), lr=train_config.lr)\n\n    scheduler = StepLR(optimizer, step_size=1, gamma=train_config.gamma)\n    best_val_loss = float(\"inf\")\n    curr_val_loss = float(\"inf\")\n    file_save_name = \"T5-model-\"\n\n    if rank == 0:\n        time_of_run = get_date_of_run()\n        dur = []\n        train_acc_tracking = []\n        val_acc_tracking = []\n        training_start_time = time.time()\n\n    if rank == 0 and args.track_memory:\n        mem_alloc_tracker = []\n        mem_reserved_tracker = []\n\n    for epoch in range(1, args.epochs + 1):\n        t0 = time.time()\n        train_accuracy = train(args, model, rank, world_size, train_loader, optimizer, epoch, sampler=sampler1)\n        if args.run_validation:\n            curr_val_loss = validation(model, rank, world_size, val_loader)\n        scheduler.step()\n        \n        if rank == 0:\n\n            print(f\"--> epoch {epoch} completed...entering save and stats zone\")\n\n            dur.append(time.time() - t0)\n            train_acc_tracking.append(train_accuracy.item())\n\n            if args.run_validation:\n                val_acc_tracking.append(curr_val_loss.item())\n\n            if args.track_memory:\n                mem_alloc_tracker.append(\n                    format_metrics_to_gb(torch.cuda.memory_allocated())\n                )\n                mem_reserved_tracker.append(\n                    format_metrics_to_gb(torch.cuda.memory_reserved())\n                )\n\n        if train_config.save_model and curr_val_loss < best_val_loss:\n            \n            if fsdp_config.checkpoint_type == StateDictType.FULL_STATE_DICT:\n                model_checkpointing.save_model_checkpoint(\n                    model, optimizer, rank, fsdp_config, epoch=1\n                )\n            elif fsdp_config.checkpoint_type == StateDictType.SHARDED_STATE_DICT:\n                model_checkpointing.save_model_and_optimizer_sharded(model, rank, fsdp_config)\n                if fsdp_config.save_optimizer:\n                    model_checkpointing.save_model_and_optimizer_sharded(model, rank, fsdp_config, optim=optimizer)\n\n            if fsdp_config.save_optimizer:\n                model_checkpointing.save_optimizer_checkpoint(\n                    model, optimizer, rank, fsdp_config, epoch=1\n                )           \n        if curr_val_loss < best_val_loss:\n\n            best_val_loss = curr_val_loss\n            if rank==0:\n                print(f\"-->>>> New Val Loss Record: {best_val_loss}\")\n\n    dist.barrier()\n    cleanup()\n\n\nif __name__ == '__main__':\n    # Training settings\n    parser = argparse.ArgumentParser(description='PyTorch T5 FSDP Example')\n    parser.add_argument('--batch-size', type=int, default=4, metavar='N',\n                        help='input batch size for training (default: 64)')\n    parser.add_argument('--test-batch-size', type=int, default=4, metavar='N',\n                        help='input batch size for testing (default: 1000)')\n    parser.add_argument('--epochs', type=int, default=2, metavar='N',\n                        help='number of epochs to train (default: 3)')\n    parser.add_argument('--seed', type=int, default=1, metavar='S',\n                        help='random seed (default: 1)')\n    parser.add_argument('--track_memory', action='store_false', default=True,\n                        help='track the gpu memory')\n    parser.add_argument('--run_validation', action='store_false', default=True,\n                        help='running the validation')\n    args = parser.parse_args()\n\n    torch.manual_seed(args.seed)\n    \n    fsdp_main(args)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "distributed/FSDP/T5_training.py",
+      "snippets": [
+        {
+          "lines": "75-193",
+          "code": "def get_policies(cfg, rank):\n\n    \"\"\"establish current policies for mixed precision and fsdp wrapping\"\"\"\n\n    mixed_precision_policy = None\n    wrapping_policy = None\n\n    # mixed precision -----\n    if cfg.mixed_precision:\n        bfloat_available = bfloat_support()\n        if bfloat_available and not cfg.use_fp16:\n            mixed_precision_policy = policies.bfSixteen\n            if rank == 0:\n                print(f\"bFloat16 enabled for mixed precision - using bfSixteen policy\")\n        elif cfg.use_fp16:\n            mixed_precision_policy = policies.fpSixteen\n            if rank == 0:\n                print(f\"FP16 enabled. \")\n        else:\n            # mixed_precision_policy = policies.fpSixteen\n            print(\n                f\"bFloat16 support not present. Will use FP32, and not mixed precision\"\n            )\n\n    wrapping_policy = policies.get_t5_wrapper()\n\n    return mixed_precision_policy, wrapping_policy\n\ndef fsdp_main(args):\n\n    model, tokenizer = setup_model(train_config.model_name)\n\n    local_rank = int(os.environ['LOCAL_RANK'])\n    rank = int(os.environ['RANK'])\n    world_size = int(os.environ['WORLD_SIZE'])\n\n\n    dataset = load_dataset('wikihow', 'all', data_dir='data/')\n    print(dataset.keys())\n    print(\"Size of train dataset: \", dataset['train'].shape)\n    print(\"Size of Validation dataset: \", dataset['validation'].shape)\n\n   \n    #wikihow(tokenizer, type_path, num_samples, input_length, output_length, print_text=False)\n    train_dataset = wikihow(tokenizer, 'train', 1500, 512, 150, False) \n    val_dataset = wikihow(tokenizer, 'validation', 300, 512, 150, False)\n \n    sampler1 = DistributedSampler(train_dataset, rank=rank, num_replicas=world_size, shuffle=True)\n    sampler2 = DistributedSampler(val_dataset, rank=rank, num_replicas=world_size)\n\n    setup()\n\n\n    train_kwargs = {'batch_size': args.batch_size, 'sampler': sampler1}\n    test_kwargs = {'batch_size': args.test_batch_size, 'sampler': sampler2}\n    cuda_kwargs = {'num_workers': 2,\n                    'pin_memory': True,\n                    'shuffle': False}\n    train_kwargs.update(cuda_kwargs)\n    test_kwargs.update(cuda_kwargs)\n\n    train_loader = torch.utils.data.DataLoader(train_dataset,**train_kwargs)\n    val_loader = torch.utils.data.DataLoader(val_dataset, **test_kwargs)\n \n    torch.cuda.set_device(local_rank)\n    \n    # Set up FSDP parameters\n    mixed_precision_policy, t5_auto_wrap_policy = get_policies(train_config, rank)\n    \n    # Apply FSDP wrapping to the model\n    model = FSDP(model,\n        auto_wrap_policy=t5_auto_wrap_policy,\n        mixed_precision=mixed_precision_policy,\n        sharding_strategy=fsdp_config.sharding_strategy,\n        device_id=torch.cuda.current_device(),\n        limit_all_gathers=fsdp_config.limit_all_gathers)\n    \n    if fsdp_config.fsdp_activation_checkpointing:\n        policies.apply_fsdp_checkpointing(model)\n\n    # Set up optimizer and scheduler\n    optimizer = optim.AdamW(model.parameters(), lr=train_config.lr)\n\n    scheduler = StepLR(optimizer, step_size=1, gamma=train_config.gamma)\n    best_val_loss = float(\"inf\")\n    curr_val_loss = float(\"inf\")\n    file_save_name = \"T5-model-\"\n\n    if rank == 0:\n        time_of_run = get_date_of_run()\n        dur = []\n        train_acc_tracking = []\n        val_acc_tracking = []\n        training_start_time = time.time()\n\n    if rank == 0 and args.track_memory:\n        mem_alloc_tracker = []\n        mem_reserved_tracker = []\n\n    for epoch in range(1, args.epochs + 1):\n        t0 = time.time()\n        train_accuracy = train(args, model, rank, world_size, train_loader, optimizer, epoch, sampler=sampler1)\n        if args.run_validation:\n            curr_val_loss = validation(model, rank, world_size, val_loader)\n        scheduler.step()\n        \n        if rank == 0:\n\n            print(f\"--> epoch {epoch} completed...entering save and stats zone\")\n\n            dur.append(time.time() - t0)\n            train_acc_tracking.append(train_accuracy.item())\n\n            if args.run_validation:\n                val_acc_tracking.append(curr_val_loss.item())\n\n            if args.track_memory:\n                mem_alloc_tracker.append(\n                    format_metrics_to_gb(torch.cuda.memory_allocated())\n                )\n                mem_reserved_tracker.append(\n                    format_metrics_to_gb(torch.cuda.memory_reserved())\n                )\n\n        if train_config.save_model and curr_val_loss < best_val_loss:\n            \n            if fsdp_config.checkpoint_type == StateDictType.FULL_STATE_DICT:\n                model_checkpointing.save_model_checkpoint(\n                    model, optimizer, rank, fsdp_config, epoch=1\n                )\n            elif fsdp_config.checkpoint_type == StateDictType.SHARDED_STATE_DICT:\n                model_checkpointing.save_model_and_optimizer_sharded(model, rank, fsdp_config)\n                if fsdp_config.save_optimizer:\n                    model_checkpointing.save_model_and_optimizer_sharded(model, rank, fsdp_config, optim=optimizer)\n\n            if fsdp_config.save_optimizer:\n                model_checkpointing.save_optimizer_checkpoint(\n                    model, optimizer, rank, fsdp_config, epoch=1\n                )           \n        if curr_val_loss < best_val_loss:\n\n            best_val_loss = curr_val_loss\n            if rank==0:\n                print(f\"-->>>> New Val Loss Record: {best_val_loss}\")\n\n    dist.barrier()\n    cleanup()"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "model_checkpointing",
+      "function": "save_model_and_optimizer_sharded"
+    },
+    {
+      "module": "model_checkpointing",
+      "function": "save_model_checkpoint"
+    },
+    {
+      "module": "model_checkpointing",
+      "function": "save_optimizer_checkpoint"
+    },
+    {
+      "module": "policies",
+      "function": "apply_fsdp_checkpointing"
+    },
+    {
+      "module": "policies",
+      "function": "get_t5_wrapper"
+    },
+    {
+      "module": "time",
+      "function": "time"
+    },
+    {
+      "module": "torch",
+      "function": "AdamW"
+    },
+    {
+      "module": "torch",
+      "function": "DistributedSampler"
+    },
+    {
+      "module": "torch",
+      "function": "FullyShardedDataParallel"
+    },
+    {
+      "module": "torch",
+      "function": "StepLR"
+    },
+    {
+      "module": "torch",
+      "function": "barrier"
+    },
+    {
+      "module": "torch",
+      "function": "manual_seed"
+    },
+    {
+      "module": "utils",
+      "function": "bfloat_support"
+    },
+    {
+      "module": "utils",
+      "function": "cleanup"
+    },
+    {
+      "module": "utils",
+      "function": "format_metrics_to_gb"
+    },
+    {
+      "module": "utils",
+      "function": "get_date_of_run"
+    },
+    {
+      "module": "utils",
+      "function": "setup"
+    },
+    {
+      "module": "utils",
+      "function": "setup_model"
+    },
+    {
+      "module": "utils",
+      "function": "train"
+    },
+    {
+      "module": "utils",
+      "function": "validation"
+    }
+  ]
+}

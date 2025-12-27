@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn",
+    "Define a batch size of 4 and feature dimension of 4",
+    "Create a random tensor 'x' with shape (batch_size, 3, 32, 32) to simulate input images",
+    "Create a tensor 'x_rope' with shape (batch_size, 3, 32, 4) to simulate the output of a previous layer",
+    "Create a tensor 'cos_cached' with shape (4, 3, 32, 4) to simulate cosine positional encodings",
+    "Create a tensor 'sin_cached' with shape (4, 3, 32, 4) to simulate sine positional encodings",
+    "Create a tensor 'neg_half_x' with shape (batch_size, 3, 32, 4) to simulate the negative half of the input tensor",
+    "Attempt to execute the operation: x_rope = (x_rope * cos_cached[:x.shape[0]]) + (neg_half_x * sin_cached[:x.shape[0]])",
+    "Catch the RuntimeError and print the error message to verify the bug occurs",
+    "Assert that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'"
+]
+```

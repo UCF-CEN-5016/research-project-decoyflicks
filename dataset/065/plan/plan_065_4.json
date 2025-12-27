@@ -1,0 +1,22 @@
+```json
+[
+    "Import pandas as pd",
+    "Import numpy as np",
+    "Import tensorflow as tf",
+    "Import tensorflow_decision_forests as tfdf",
+    "Install tensorflow_decision_forests using pip install tensorflow_decision_forests",
+    "Download the disaster-related tweets dataset from https://raw.githubusercontent.com/IMvision12/Tweets-Classification-NLP/main/train.csv and load it into a pandas DataFrame",
+    "Shuffle the DataFrame and drop unnecessary columns ('id', 'keyword', 'location') to keep only 'text' and 'target'",
+    "Convert the shuffled DataFrame into training and test datasets with an 80-20 split",
+    "Define a function create_dataset that takes a DataFrame and returns a tf.data.Dataset batched by 100 and prefetched automatically",
+    "Create train_ds and test_ds using the create_dataset function on the training and test DataFrames respectively",
+    "Import tensorflow_hub as hub",
+    "Load the Universal Sentence Encoder (USE) model from TensorFlow Hub into a KerasLayer",
+    "Define two models: model_1 with a preprocessing layer that uses USE, and model_2 without preprocessing",
+    "Compile both models using metrics ['Accuracy', 'Recall', 'Precision', 'AUC'] but do not specify epochs as TF-DF trains exactly one epoch of the dataset",
+    "Train model_1 and model_2 on train_ds",
+    "Create a function plot_curve that takes training logs and plots accuracy and loss over number of trees",
+    "Call plot_curve with the training logs from model_1 and model_2 to reproduce the bug"
+]
+```
+

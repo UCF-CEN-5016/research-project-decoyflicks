@@ -1,0 +1,15 @@
+```json
+[
+    "Import the necessary modules from torch and torchvision",
+    "Define a batch size of 32 and image dimensions of 256x256",
+    "Create random input data with shape (batch_size, height, width, 3)",
+    "Load a pre-trained model from denoising_diffusion_pytorch",
+    "Set the model to evaluation mode using torch.no_grad() context manager",
+    "Forward pass the random input data through the model",
+    "Calculate the loss using mse_loss function with target as zeros_like of output",
+    "Check if any NaN values are present in the calculated loss",
+    "Monitor GPU memory usage during execution",
+    "Assert that GPU memory usage exceeds expected threshold"
+]
+```
+

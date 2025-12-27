@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch and the TransformerWrapper and Decoder classes from x_transformers.py",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 2 and input sequence length of 1024",
+    "Define the number of tokens as 20000 and the condition dimension as 768",
+    "Create random input data x with shape (batch_size, seq_len) using torch.randint(0, 256, (batch_size, seq_len))",
+    "Create random condition data with shape (batch_size, condition_dim) using torch.randn(batch_size, condition_dim)",
+    "Instantiate the TransformerWrapper model with the following parameters: num_tokens=20000, max_seq_len=1024, attn_layers=Decoder(dim=512, dim_condition=768, depth=12, heads=8, kv_heads=4, qk_norm=True)",
+    "Call the model with the input data x and condition data, capturing the output",
+    "Modify the kv_heads parameter in the Decoder to a value different from heads (e.g., set kv_heads=4 while heads=8)",
+    "Re-instantiate the TransformerWrapper model with the modified kv_heads parameter",
+    "Call the model again with the same input data x and condition data, capturing the output",
+    "Assert that the output from the model with kv_heads=4 and heads=8 is not equal to the output from the model with kv_heads=8 and heads=8",
+    "Check for any runtime errors or warnings during the model calls, specifically looking for issues related to tensor shapes or normalization",
+    "Log the outputs and any errors to verify the conflict between qk_norm and kv_heads"
+]
+```

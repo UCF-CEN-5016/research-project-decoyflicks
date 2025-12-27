@@ -1,0 +1,22 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Import necessary libraries: import numpy as np, import keras, from keras import layers, from keras import ops, import matplotlib.pyplot as plt.",
+    "Set the image size to 224: image_size = 224.",
+    "Set the patch size to 32: patch_size = 32.",
+    "Load the Caltech 101 dataset by downloading and extracting it using keras.utils.get_file and shutil.unpack_archive.",
+    "Prepare the dataset by defining paths for images and annotations: path_images = './101_ObjectCategories/airplanes/' and path_annot = './Annotations/Airplanes_Side_2/'.",
+    "Create a list of image paths and annotation paths, ensuring they are sorted: image_paths.sort() and annot_paths.sort().",
+    "Initialize empty lists for images and targets: images = [] and targets = [].",
+    "Loop through the annotation paths and load images, resizing them to (image_size, image_size): for i in range(len(annot_paths)): image = keras.utils.load_img(path_images + image_paths[i]).",
+    "Convert the loaded image to an array and append it to the images list: images.append(keras.utils.img_to_array(image)).",
+    "Convert the images list to a numpy array: x_train = np.asarray(images).",
+    "Display a random image from x_train using plt.imshow and plt.axis('off').",
+    "Resize the random image to (image_size, image_size) using ops.image.resize: resized_image = ops.image.resize(ops.convert_to_tensor([image]), size=(image_size, image_size)).",
+    "Call the Patches layer with the resized image: patches = Patches(patch_size)(resized_image).",
+    "Print the shape of the patches to verify the number of patches and elements per patch: print(f'Patches per image: {patches.shape[1]}') and print(f'Elements per patch: {patches.shape[-1]}').",
+    "Attempt to reshape the patches: patch_img = ops.reshape(patch, (patch_size, patch_size, 3)).",
+    "Run the cell containing the code to trigger the error.",
+    "Observe the output for the InvalidArgumentError related to tensor data types during the execution of the Patches.call() method."
+]
+```

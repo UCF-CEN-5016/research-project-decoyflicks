@@ -1,0 +1,13 @@
+```json
+[
+    "Import fairseq, torch, and ModuleList from the specified modules",
+    "Define a batch size of 1 and sequence length of 50 for input tokens",
+    "Create random uniform input data 'tokens' with shape (batch_size, sequence_length)",
+    "Create random uniform attention scores 'attn_scores' with shape (batch_size, sequence_length, sequence_length)",
+    "Call the forward method of the NGramRepeatBlock class with 'tokens', 'attn_scores', and a repetition threshold of 3",
+    "Verify that the output contains NaN values in the log_probs tensor calculation",
+    "Monitor GPU memory usage during execution",
+    "Assert that GPU memory exceeds expected threshold for such a small input size"
+]
+```
+

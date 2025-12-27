@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.nlp.modeling.layers.tn_expand_condense",
+    "Define a batch size of 100 and input dimensions of 768 and 1024 for testing",
+    "Create random input data with shape (100, 768) and (100, 1024) using np.random.normal",
+    "Concatenate labels for binary classification with shape (100, 1) using np.concatenate",
+    "Define a function to build the TNExpandCondense model with proj_multiplier set to 6 and 2 respectively",
+    "Compile the model using 'adam' optimizer and 'binary_crossentropy' loss function",
+    "Train the model for 5 epochs with a batch size of 32 on the generated data",
+    "Capture the model's training history to check loss and accuracy metrics",
+    "Assert that the loss decreases over epochs and accuracy increases",
+    "Modify the TNExpandCondense layer to set level_std to 0 and 1 in the augmentation process",
+    "Re-run the training process with the modified TNExpandCondense layer",
+    "Check the standard deviation of the applied augmentations during training",
+    "Assert that the standard deviation is always 0 or 1, indicating the bug is present",
+    "Log the output of the model's predictions to verify consistency with the expected behavior",
+    "Document the results to confirm the presence of the bug in the RandAugment implementation"
+]
+```

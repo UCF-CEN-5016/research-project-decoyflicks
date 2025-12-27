@@ -1,0 +1,17 @@
+TITLE
+`return_mems` does not function as intended with non-None `mems` input in `ContinuousTransformerWrapper`
+
+SYMPTOMS
+• The method returns logits but fails to return the expected memory tokens (`mems`) when `mems` is provided.
+• Setting `mems=None` allows the model to run correctly and return both `logits` and `mems`.
+
+EXPECTED BEHAVIOR
+When `return_mems=True` and a non-None `mems` list is passed, the method should return updated memory tokens alongside the logits.
+
+REPRODUCTION STEPS
+1. Define the network with `ContinuousTransformerWrapper` as shown in the provided reproducible example.
+2. Pass a random input tensor `x` of shape `(1, 1024, 512)` and a mask `m`.
+3. Provide an initial memory token list `mems` with six tensors, each of shape `(1, 100, 512)`.
+4. Call the network method with `return_mems=True`, expecting both updated logits and memory tokens.
+5. Verify that the returned `logits` have a valid shape but the `mems` list is empty or contains tensors of incorrect shape.
+6. Repeat steps 3 to 5, setting `mems=None` instead, to confirm correct operation when no initial memory tokens are provided.

@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and the DETR module from detr_test.py",
+    "Define a batch size of 32 and image dimensions of 800x800",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Initialize an instance of the DETR model with num_classes=91",
+    "Prepare ground truth labels for the inputs including classes, boxes, and image_info",
+    "Call the train step function with the batched inputs and ground truth labels",
+    "Verify output contains NaN values in loss calculation for cls_loss, box_loss, and giou_loss",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold"
+]
+```
+

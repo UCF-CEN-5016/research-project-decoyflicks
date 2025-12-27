@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and tqdm",
+    "Define a batch size of 4 and image dimensions of 64x64",
+    "Create a random tensor to simulate input images with shape (batch_size, 3, height, width) where height and width are both 64",
+    "Define a mock model class that inherits from nn.Module and implements a forward method returning a tensor of shape (batch_size, 3, height, width)",
+    "Instantiate the mock model and wrap it in the LearnedGaussianDiffusion class, ensuring it overrides the model_predictions method with the signature: def model_predictions(self, x, t, clip_x_start=False)",
+    "Create an instance of the GaussianDiffusion class with the mock model, setting image_size to 64, timesteps to 1000, and sampling_timesteps to 100",
+    "Call the ddim_sample method on the GaussianDiffusion instance with shape (batch_size, 3, height, width)",
+    "In the ddim_sample method, ensure the model_predictions method is called with the parameters: img, time_cond, self_cond, clip_x_start=True, rederive_pred_noise=True",
+    "Run the code and capture the output to check for TypeError: model_predictions() got multiple values for argument 'clip_x_start'",
+    "Assert that the TypeError is raised during the execution of the ddim_sample method"
+]
+```

@@ -1,0 +1,26 @@
+TITLE  
+KerasCV U-Net-like Architecture Fails During Dataset Creation
+
+SYMPTOMS  
+• The code fails when trying to create augmented training and validation datasets using KerasCV.  
+• The same issue occurs in both Google Colab and local environments.  
+• Error message encountered:  
+```
+TypeError: Exception encountered when calling layer 'random_choice' (type RandomChoice).
+...
+branches[0] output: {'images': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity:0' shape=(160, 160, 3) dtype=float32>, 'segmentation_masks': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0' shape=(160, 160, 1) dtype=float32>}
+...
+branches[1] output: {'images': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity:0' shape=(160, 160, 3) dtype=float32>, 'segmentation_masks': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0' shape=(160, 160, 1) dtype=int64>}
+...
+Error details: Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types
+```  
+• The model fails to proceed past the dataset creation step, indicating a type mismatch in the tensor outputs.
+
+EXPECTED BEHAVIOR  
+The code should successfully create augmented training and validation datasets without errors, allowing the U-Net-like architecture to proceed with training.
+
+REPRODUCTION STEPS  
+1. Execute the code snippet provided in the KerasCV image segmentation example from the specified article.  
+2. Ensure that `train_ds` and `val_ds` are properly defined and initialized before running the dataset creation code.  
+3. Run the dataset creation code block that includes shuffling, mapping augmentation functions, batching, and prefetching.  
+4. Observe the error that occurs during execution.

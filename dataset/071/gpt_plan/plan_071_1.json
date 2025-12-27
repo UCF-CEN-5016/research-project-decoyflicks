@@ -1,0 +1,13 @@
+[
+  "Ensure Python 3.12.3 environment is active",
+  "Verify installation of required Python packages as per the requirements file, including transformers and diffusers",
+  "Confirm that the 'transformers' package version installed does NOT contain a 'deepspeed' submodule (e.g., check by running `python -c 'import transformers.deepspeed'` which should fail)",
+  "Create a minimal Python script or use the provided 'e2e_rlhf.py' script that accepts parameters: --actor-model facebook/opt-1.3b, --reward-model facebook/opt-350m, --deployment-type single_gpu",
+  "Run the script with the exact command: `python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu`",
+  "During the script execution, observe and capture the import error: `ModuleNotFoundError: No module named 'transformers.deepspeed'`",
+  "Assert that the error traceback shows failure at an import statement attempting to import 'transformers.deepspeed'",
+  "Verify that the installed 'transformers' package version does not include the 'deepspeed' module by listing its contents or checking the package files",
+  "Optionally, reproduce the error in an isolated environment by creating a virtual environment with Python 3.12.3, installing only the required packages, and running the script again",
+  "Confirm that despite all listed requirements being installed, the error persists due to missing 'transformers.deepspeed' module",
+  "Log the full error message and stack trace for reference"
+]

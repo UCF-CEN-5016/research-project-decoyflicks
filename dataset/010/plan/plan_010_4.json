@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary TensorFlow and Model Garden modules",
+    "Set up a batch size of 8 and image dimensions of 512x512 for instance segmentation tasks",
+    "Create random input images with shape (batch_size, height, width, 3) using NumPy",
+    "Generate corresponding random masks for the input images with shape (batch_size, height, width)",
+    "Initialize a pre-trained instance segmentation model from Model Garden, e.g., 'MaskRCNN'",
+    "Configure training parameters including optimizer and loss function",
+    "Define custom metrics for validation step, such as mean IoU or AP",
+    "Run the training loop with predefined number of steps (e.g., 2000)",
+    "Periodically log validation metrics including validation_loss during training",
+    "Observe if validation_loss is consistently zero despite model updates",
+    "Monitor GPU memory usage during training to ensure it does not significantly increase",
+    "Assert that the validation_loss remains at or near zero throughout the training process",
+    "Compare the behavior with a known working instance segmentation setup to identify discrepancies"
+]
+```
+

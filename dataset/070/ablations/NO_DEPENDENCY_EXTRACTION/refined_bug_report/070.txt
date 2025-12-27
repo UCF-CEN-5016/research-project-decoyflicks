@@ -1,0 +1,31 @@
+TITLE  
+Error when running DeepSpeed training script for GPT-3 model
+
+SYMPTOMS  
+• Encountered warnings related to GPU mapping during the execution:  
+  ```
+  [rank1]:[W102 23:52:19.675612641 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+  ```
+• Warnings regarding deprecated usage of nvfuser in torch script:  
+  ```
+  [rank0]:[W102 23:52:20.611227027 init.cpp:767] Warning: nvfuser is no longer supported in torch script, use _jit_set_nvfuser_enabled is deprecated and a no-op (function operator())
+  ```
+• User warnings about the use of deprecated tensor constructors:  
+  ```
+  UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended. It's best to use methods such as torch.tensor(data, dtype=*, device='cuda') to create tensors.
+  ```
+• AttributeError indicating a NoneType object has no attribute 'all_reduce':  
+  ```
+  AttributeError: 'NoneType' object has no attribute 'all_reduce'
+  ```
+
+EXPECTED BEHAVIOR  
+The training script should run without errors, successfully utilizing the specified GPUs for training the GPT-3 model, and should not produce any warnings or errors related to deprecated features or GPU mapping issues.
+
+REPRODUCTION STEPS  
+1. Execute the provided SLURM job script to allocate resources and run the training job.  
+2. Ensure the environment is set up correctly by activating the conda environment and loading necessary modules.  
+3. Run the `pretrain_gpt3_2.7b.sh` script as specified in the job script.  
+4. Monitor the output for any warnings or errors during the execution.  
+
+By following these steps, the issues described should manifest, allowing for further investigation and resolution.

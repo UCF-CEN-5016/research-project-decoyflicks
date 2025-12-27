@@ -1,0 +1,18 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Set the runtime type to GPU and select T4 GPU.",
+    "Install KerasNLP version 3.2.1 by running the command: !pip install keras-nlp==3.2.1.",
+    "Import necessary libraries: import random, import keras_nlp, import tensorflow as tf.",
+    "Define a function 'decode_sequences' that takes 'input_sentences' as a parameter.",
+    "Inside 'decode_sequences', create a tensor 'start' with shape (1, 1) initialized to a start token ID (e.g., 1).",
+    "Create a tensor 'pad' with shape (1, 10) initialized to padding token ID (e.g., 0).",
+    "Concatenate 'start' and 'pad' along axis -1 to create 'prompt'.",
+    "Define a variable 'next' as a dummy model or a placeholder (e.g., tf.keras.Sequential() with a single Dense layer).",
+    "Call keras_nlp.samplers.GreedySampler() with the parameters 'next' and 'prompt'.",
+    "Add an additional parameter 'end_token_id' with a value (e.g., 2) to the call to GreedySampler.",
+    "Run the cell to execute the 'decode_sequences' function with a sample input sentence (e.g., 'Hello').",
+    "Observe the output and verify that a TypeError occurs with the message: 'Sampler.__call__() got an unexpected keyword argument 'end_token_id'.'",
+    "Confirm that the error traceback points to the line where 'GreedySampler' is called."
+]
+```

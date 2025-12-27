@@ -1,0 +1,21 @@
+```json
+[
+    "Import torch and the ViT and MPP classes from vit_pytorch",
+    "Define image size as 256 and patch size as 32",
+    "Set num_classes to 1000, dim to 1024, depth to 6, heads to 8, mlp_dim to 2048, dropout to 0.1, and emb_dropout to 0.1",
+    "Initialize the ViT model with the defined parameters",
+    "Initialize the MPP trainer with the ViT model, patch_size of 32, dim of 1024, mask_prob of 0.15, random_patch_prob of 0.30, and replace_prob of 0.50",
+    "Define a batch size of 20 for unlabelled images",
+    "Create a function sample_unlabelled_images that generates random uniform input data with shape (20, 3, 256, 256)",
+    "In a loop that runs 100 iterations, call sample_unlabelled_images to generate input images",
+    "Pass the generated images to the mpp_trainer to compute the loss",
+    "Call opt.zero_grad() to reset gradients",
+    "Call loss.backward() to compute gradients",
+    "Call opt.step() to update model parameters",
+    "Add a print statement to output the shape of masked_input before the line that causes the error",
+    "Run the code to trigger the RuntimeError related to layer normalization",
+    "Capture the full error message and stack trace to verify the dimensions issue",
+    "Check the shape of masked_input before the error occurs to confirm it is [20, 64, 3072]",
+    "Assert that the expected normalized_shape for layer normalization is [1024] and does not match the input shape"
+]
+```

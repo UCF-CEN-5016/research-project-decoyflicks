@@ -1,0 +1,15 @@
+TITLE  
+MMS - Forced Alignment: Tensor Size Mismatch Error
+
+SYMPTOMS  
+• Encountered a runtime error during forced alignment of an audio file with its text transcription.  
+• Error message: `RuntimeError: Sizes of tensors must match except in dimension 1. Expected size 1649 but got size 1799 for tensor number 1 in the list.`  
+• The process fails to complete, preventing the generation of alignments and segments.
+
+EXPECTED BEHAVIOR  
+The software should successfully align the audio file with its text transcription, generating the expected output segments without any tensor size mismatch errors.
+
+REPRODUCTION STEPS  
+1. Run the command: `python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin`  
+2. Ensure that the audio file (`audio.wav`) and text file (`text.txt`) are correctly formatted and accessible.  
+3. Observe the output for any errors during the alignment process.

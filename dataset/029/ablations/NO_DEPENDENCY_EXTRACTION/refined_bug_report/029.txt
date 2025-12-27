@@ -1,0 +1,29 @@
+TITLE  
+AttributeError: 'torch.backends' module lacks 'mps' attribute on PyTorch 1.9.0+cu111
+
+SYMPTOMS  
+• Encountered an AttributeError stating that the 'torch.backends' module has no attribute 'mps'.  
+• Error message:  
+  ```
+  Traceback (most recent call last):
+    File "main.py", line 511, in <module>
+      main()
+    File "main.py", line 120, in main
+      main_worker(args.gpu, ngpus_per_node, args)
+    File "main.py", line 171, in main_worker
+      elif torch.backends.mps.is_available():
+  AttributeError: module 'torch.backends' has no attribute 'mps'
+  ```  
+• The program fails to execute the `main.py` script for the imagenet example, preventing the use of MPS (Metal Performance Shaders).
+
+EXPECTED BEHAVIOR  
+The code should execute without raising an exception, allowing the use of the `torch.backends.mps` functionality, which checks for the availability of Metal Performance Shaders.
+
+REPRODUCTION STEPS  
+1. Ensure you have PyTorch version 1.9.0+cu111 installed on an Ubuntu 18.04 LTS system.  
+2. Install PyTorch using pip (not from source).  
+3. Execute the following command to run the imagenet example:  
+   ```
+   python3 main.py -a resnet18 --dummy
+   ```  
+4. Observe the raised AttributeError related to the 'mps' attribute in the 'torch.backends' module.

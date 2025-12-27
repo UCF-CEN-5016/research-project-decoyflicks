@@ -1,0 +1,17 @@
+[
+  "Import necessary libraries: import numpy as np, tensorflow as tf, os from pathlib import Path",
+  "Define data preparation parameters: batch_size = 32, img_height = 224, img_width = 224, num_classes = 1000",
+  "Load a sample dataset using TensorFlow's datasets module for demonstration purposes (e.g., tf.keras.datasets.cifar10)",
+  "Preprocess the data by resizing and normalizing images to fit input requirements of ResNet50V2",
+  "Define the inputs to the Siamese model: anchor_input, positive_input, negative_input, each with shape (batch_size, img_height, img_width, 3)",
+  "Create sample triplets of embeddings using random data for demonstration purposes",
+  "Simulate the DistanceLayer by computing distances between the triplets and generating outputs in the form of ap_distance and an_distance",
+  "Instantiate the SiameseModel with a custom training loop",
+  "Define the triplet loss function within the train_step method to compute the difference between distances + margin",
+  "Compile the SiameseModel with the Adam optimizer and call fit() with the prepared dataset for a single epoch",
+  "Monitor GPU memory usage during training using TensorFlow's tf.config.experimental.list_physical_devices('GPU')",
+  "Assert that the GPU memory used exceeds an expected threshold to validate the bug (e.g., assert gpu_memory_usage > expected_threshold)",
+  "Verify that NaN values are present in the loss calculation by inspecting the loss value after one epoch (e.g., print(loss_tracker.result()) and assert np.isnan(loss))",
+  "Output the results of the validation steps"
+]
+

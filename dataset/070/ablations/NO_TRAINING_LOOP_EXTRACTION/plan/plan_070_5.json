@@ -1,0 +1,29 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the DeepSpeed-Domino training directory using 'cd DeepSpeedExamples/training/DeepSpeed-Domino'",
+    "Create a conda environment named 'deepspeed_env' using 'conda create -n deepspeed_env python=3.12'",
+    "Activate the conda environment using 'conda activate deepspeed_env'",
+    "Install required packages including DeepSpeed and PyTorch using 'pip install deepspeed torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu118'",
+    "Load necessary modules for the SLURM job using 'module load openmpi/4.1.1', 'module load cuda/11.8.0', and 'module load gcc/10.2.0'",
+    "Create a job script named 'deepspeed_example.sh' with the provided SLURM directives and commands",
+    "Set the environment variable 'CUDA_DEVICE_MAX_CONNECTIONS' to 1 in the job script",
+    "Set 'GPUS_PER_NODE' to 1 in the job script",
+    "Set 'MASTER_ADDR' to the first hostname in the SLURM job node list using 'MASTER_ADDR=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)'",
+    "Set 'MASTER_PORT' to 29500 in the job script",
+    "Set 'NNODES' to the number of nodes allocated for the job using 'NNODES=$SLURM_NNODES'",
+    "Set 'NODE_RANK' to the process ID of the current node using 'NODE_RANK=$SLURM_PROCID'",
+    "Calculate 'WORLD_SIZE' as the product of 'GPUS_PER_NODE' and 'NNODES'",
+    "Define the paths for 'CHECKPOINT_PATH', 'VOCAB_FILE', 'MERGE_FILE', and 'DATA_PATH' in the job script",
+    "Set 'PYTHONPATH' to include the current script directory in the job script",
+    "Define the 'GPT_ARGS' variable with the specified hyperparameters including 'num-layers', 'hidden-size', 'num-attention-heads', 'seq-length', 'max-position-embeddings', 'micro-batch-size', 'global-batch-size', 'lr', 'train-iters', 'lr-decay-iters', 'lr-decay-style', 'min-lr', 'weight-decay', 'lr-warmup-fraction', 'clip-grad', 'fp16', 'tensor-model-parallel-size', 'distributed-backend', and 'seed'",
+    "Define the 'DATA_ARGS' variable with the paths to the dataset files and the split ratio",
+    "Define the 'OUTPUT_ARGS' variable with the log interval",
+    "Construct the command to run the training script using 'deepspeed' with the appropriate parameters including 'num_gpus', 'num_nodes', 'hostfile', 'no_ssh', 'node_rank', 'master_addr', 'master_port', and the training script 'pretrain_gpt.py'",
+    "Echo the constructed command to verify it is correct",
+    "Execute the command using 'eval $cmd'",
+    "Monitor the output for warnings and errors related to GPU mapping and tensor operations",
+    "Check for the specific error message 'AttributeError: 'NoneType' object has no attribute 'all_reduce'' in the output to confirm the bug is reproduced",
+    "Validate that the warning messages about 'using GPU 0 to perform barrier as devices used by this process are currently unknown' appear in the output"
+]
+```

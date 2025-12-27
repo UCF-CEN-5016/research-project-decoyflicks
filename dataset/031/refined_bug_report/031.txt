@@ -1,0 +1,16 @@
+TITLE
+Model State Dict Mismatch During Pretrained Weight Loading
+
+SYMPTOMS
+• Missing key(s) in state_dict: "layers.0.0.conv1.weight", "layers.0.0.bn1.weight", "layers.0.0.bn1.bias", "layers.0.0.bn1.running_mean", "layers.0.0.bn1.running_var", "layers.0.0.conv2.weight"...
+• Unexpected key(s) in state_dict: "layer1.0.conv1.weight", "layer1.0.bn1.weight", "layer1.0.bn1.bias", "layer1.0.bn1.running_mean", "layer1.0.bn1.running_var", "layer1.0.bn1.num_batches_tracked", "layer1.0.conv2.weight"...
+
+EXPECTED BEHAVIOR
+When loading pretrained weights, the model should correctly load all expected state_dict keys without any missing or unexpected keys.
+
+REPRODUCTION STEPS
+1. Download the pretrained weights from [https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets/resnet50v1.5#6-start-inference](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets/resnet50v1.5#6-start-inference).
+2. Run the inference command with the provided parameters:
+```
+python ./main.py --arch=resnet50 --evaluate --epochs=1 --pretrained-from-file=nvidia_resnet50_200821.pth.tar -b=256 /data/imagenet/
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary Python modules for the experiment including torch, hydra, einops, and other required dependencies.",
+    "Define specific values for parameters such as batch size, sequence length, number of channels in CNN layers, kernel size, etc., to match the conditions leading to the bug.",
+    "Create a mock dataset function that generates dummy input data similar to what would be used in the training or inference process. This should mimic the structure and dimensions expected by the DurationDataset class in duration_predictor.py.",
+    "Instantiate a CnnPredictor model with the specified parameters, ensuring it is configured correctly for the given inputs.",
+    "Set up a DataLoader with the mock dataset to simulate batch loading during evaluation or testing.",
+    "Call the forward method of the CnnPredictor model on one batch of data from the DataLoader to trigger the bug condition.",
+    "Verify that the key 'input_feat_per_channel' is not present in the input dictionary passed to the model's forward method by adding print statements or assertions within the model's __call__ or forward methods to check for this key.",
+    "Record any error messages or exceptions raised during the execution, focusing on the specific assertion related to the missing key.",
+    "Compare the recorded error message with the expected output in the bug report to confirm that the correct error is being reproduced."
+]
+```
+

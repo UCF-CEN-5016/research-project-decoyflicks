@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, einops, and the specific function from x_transformers.autoregressive_wrapper",
+    "Define a batch size of 2 and sequence length of 10 for input tensors",
+    "Create random input data with shape (batch_size, sequence_length, embedding_dim) where embedding_dim is set to 64",
+    "Define a pad_id value of 1 to be used for padding",
+    "Create a mask tensor of shape (batch_size, sequence_length) with all values set to True",
+    "Instantiate the AutoregressiveWrapper class with a dummy model and the pad_id parameter set to pad_id",
+    "Call the forward method of the AutoregressiveWrapper with the input data, mask, and pad_id",
+    "Inside the forward method, ensure that the align_right function is called with the input data and pad_id",
+    "In the align_right function, check the call to F.pad and assert that the pad_id is not being used in the padding value",
+    "Verify that the output tensor from the align_right function does not reflect the pad_id value in the padding operation",
+    "Print the output tensor to confirm that the padding value is 0 instead of the expected pad_id value",
+    "Assert that the output tensor shape is (batch_size, sequence_length, embedding_dim) and that the padding value is 0"
+]
+```

@@ -1,0 +1,20 @@
+TITLE  
+Conflict between `qk_norm` and `kv_heads` settings in x-transformers
+
+SYMPTOMS  
+• There is an observed conflict when using `qk_norm` in conjunction with `kv_heads` set to a value different from `heads`.  
+• The current implementation may lead to incorrect scaling behavior in the attention mechanism.  
+• No specific error messages were reported, but unexpected behavior in model performance may occur.
+
+EXPECTED BEHAVIOR  
+When the software is functioning correctly, the `qk_norm` should work seamlessly with different values of `kv_heads` without causing any conflicts or unexpected behaviors in the attention mechanism.
+
+REPRODUCTION STEPS  
+1. Clone the x-transformers repository from GitHub.  
+2. Set the `kv_heads` parameter to a value different from `heads`.  
+3. Enable the `qk_norm` feature in the model configuration.  
+4. Run the model and observe the behavior of the attention mechanism.  
+5. Compare the performance and scaling behavior with the expected outcomes.  
+6. Implement the suggested change to the code:  
+   `self.qk_norm_k_scale = nn.Parameter(torch.ones(kv_heads, 1, dim_head))`  
+7. Rerun the model to verify if the conflict is resolved.

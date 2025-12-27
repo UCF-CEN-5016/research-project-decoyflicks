@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, os, xml.etree.ElementTree, and tqdm",
+    "Define constants: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 3",
+    "Create a list of class IDs: class_ids = ['car', 'pedestrian', 'trafficLight', 'biker', 'truck']",
+    "Define paths for images and annotations: path_images = '/kaggle/input/dataset/data/images/', path_annot = '/kaggle/input/dataset/data/annotations/'",
+    "Load all XML annotation files from path_annot and JPEG images from path_images, ensuring they are sorted",
+    "Define a function parse_annotation(xml_file) to extract image paths, bounding boxes, and class IDs from XML files",
+    "Iterate over all XML files and call parse_annotation to populate image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists to ragged tensors: bbox = tf.ragged.constant(bbox), classes = tf.ragged.constant(classes), image_paths = tf.ragged.constant(image_paths)",
+    "Create a tf.data.Dataset from the image_paths, classes, and bbox using tf.data.Dataset.from_tensor_slices",
+    "Split the dataset into training and validation sets based on SPLIT_RATIO",
+    "Define a function load_image(image_path) to read and decode images from the specified paths",
+    "Define a function load_dataset(image_path, classes, bbox) to return a dictionary with images and bounding boxes",
+    "Map load_dataset function to the training dataset: train_ds = train_data.map(load_dataset, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Map load_dataset function to the validation dataset: val_ds = val_data.map(load_dataset, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Define a data augmentation pipeline using keras_cv.layers for RandomFlip, RandomShear, and JitteredResize",
+    "Apply the augmentation pipeline to the training dataset: train_ds = train_ds.map(augmenter, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Prepare the training dataset for model input by mapping dict_to_tuple function to extract images and bounding boxes",
+    "Create a YOLOv8 model instance using keras_cv.models.YOLOV8Detector with num_classes set to the length of class_mapping",
+    "Compile the YOLOv8 model with Adam optimizer and specified loss functions: classification_loss='binary_crossentropy', box_loss='ciou'",
+    "Define a custom callback EvaluateCOCOMetricsCallback to evaluate model performance and save the model based on mAP",
+    "Call yolo.fit() on the training dataset with validation data and the custom callback, specifying epochs=3",
+    "Monitor the training process and assert that an UnknownError occurs during the first epoch, specifically during the metrics calculation"
+]
+```

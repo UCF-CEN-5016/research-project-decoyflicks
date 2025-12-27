@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, numpy, matplotlib, and tensorflow_datasets",
+    "Set the runtime type in Google Colab to GPU for better performance",
+    "Define a batch size of 2 and image dimensions of 800x800",
+    "Download the COCO2017 dataset using TensorFlow Datasets with the following command: (train_dataset, val_dataset), dataset_info = tfds.load('coco/2017', split=['train', 'validation'], with_info=True)",
+    "Define a preprocessing function that resizes images to 800x800 and normalizes bounding boxes",
+    "Map the preprocessing function to the training dataset: train_dataset = train_dataset.map(preprocess_data, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Shuffle the training dataset with a buffer size of 16 and batch it using train_dataset = train_dataset.shuffle(8 * batch_size).padded_batch(batch_size=batch_size, padding_values=(0.0, 1e-8, -1), drop_remainder=True)",
+    "Map the label encoding function to the training dataset: train_dataset = train_dataset.map(label_encoder.encode_batch, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Create a validation dataset by mapping the preprocessing function and batching it: val_dataset = val_dataset.map(preprocess_data, num_parallel_calls=tf.data.AUTOTUNE).padded_batch(batch_size=1, padding_values=(0.0, 1e-8, -1), drop_remainder=True)",
+    "Define the YOLOv8 model using keras_cv with the following parameters: num_classes = 80, input_shape = (None, None, 3)",
+    "Compile the model with a loss function and optimizer: model.compile(loss='yolo_loss', optimizer='adam')",
+    "Train the model for 1 epoch using model.fit(train_dataset.take(100), validation_data=val_dataset.take(50), epochs=1, verbose=1)",
+    "Monitor the training process for the UnknownError during the first epoch",
+    "Capture the error message and verify it contains 'InvalidArgumentError: ConcatOp : Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]'",
+    "Log the training loss and metrics to confirm the model is training before the error occurs"
+]
+```

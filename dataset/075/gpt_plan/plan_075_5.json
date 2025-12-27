@@ -1,0 +1,22 @@
+[
+    "Clone the DeepSpeedExamples repository from https://github.com/microsoft/DeepSpeedExamples.git into the home directory",
+    "Navigate to the 'training/autotuning/hf/gpt2-xl' directory inside the cloned DeepSpeedExamples repository",
+    "Locate the 'test_tune.sh' script and copy its entire content as is",
+    "Clone the HuggingFace transformers repository from https://github.com/huggingface/transformers.git into the home directory",
+    "Navigate into the cloned transformers repository directory",
+    "Install the transformers package locally using 'pip install .'",
+    "Create a new directory named 'test' in the home directory and navigate into it",
+    "Install DeepSpeed and any other required dependencies using 'pip install deepspeed'",
+    "Create a new executable shell script 'test_tune.sh' in the 'test' directory and paste the copied content of the original 'test_tune.sh' into it",
+    "Modify the environment variable 'HF_PATH' inside the script to point to '../' (relative path to transformers repo)",
+    "Modify the environment variable 'NGPUS' inside the script to 6 (to match having 6 GPUs)",
+    "Verify that the system has 6 NVIDIA GPUs available (e.g., using 'nvidia-smi') and CUDA is configured properly",
+    "Run the tuning script with the command './test_tune.sh tune' from within the 'test' directory",
+    "Observe the script execution logs to confirm initialization messages from DeepSpeed autotuner, including creation of 'autotuning_exps' directories and resource detection",
+    "Wait for the autotuning process to begin the model info profile run and the scheduler to write ds_config and exp JSON files into 'autotuning_results/profile_model_info/'",
+    "Monitor for SSH permission warnings related to 'localhost' and confirm these do not block further progress",
+    "Continue until the autotuning step attempts to run DeepSpeed with the GPT-2 XL model configuration",
+    "Capture the error message output, specifically verifying that the failure is due to 'ParquetConfig.__init__() got an unexpected keyword argument 'token''",
+    "Assert that the error message is present in the logs exactly as stated, confirming reproduction of the bug",
+    "Optionally, confirm that no optimal DeepSpeed configuration is found and autotuning ends prematurely due to this error"
+]

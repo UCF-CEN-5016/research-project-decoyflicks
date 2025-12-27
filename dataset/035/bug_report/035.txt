@@ -1,0 +1,9 @@
+Mistake in RoPE File
+
+Hello,
+In this file: https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/transformers/rope/__init__.py
+
+On line 226: `rotary_pe = RotaryPositionalEmbeddings(3)`
+
+It should be instead:  `rotary_pe = RotaryPositionalEmbeddings(4)` since the example uses 4 features. The current version of the code will return an error.
+Eli

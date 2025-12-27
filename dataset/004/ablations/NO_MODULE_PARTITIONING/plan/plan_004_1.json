@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the MixupAndCutmix class from tfm.vision.augment",
+    "Define parameters for the beta distribution: alpha = 0.2, beta = 0.2",
+    "Set the shape for the sample to be generated: shape = (1000,)",
+    "Call the _sample_from_beta method with parameters: MixupAndCutmix._sample_from_beta(alpha, beta, shape)",
+    "Store the output of the _sample_from_beta method in a variable named 'mixup_samples'",
+    "Import NumPy and Matplotlib for visualization",
+    "Generate a reference sample using NumPy's beta function: reference_samples = np.random.beta(alpha, beta, 100000)",
+    "Create a figure for plotting using Matplotlib",
+    "Plot the kernel density estimate of 'mixup_samples' using sns.kdeplot",
+    "Plot the kernel density estimate of 'reference_samples' using sns.kdeplot",
+    "Set the x-axis limits to (0, 1) for both plots",
+    "Add a title to the plot indicating 'Mixup Samples vs Reference Samples'",
+    "Display the plot using plt.show()",
+    "Verify visually that the distribution of 'mixup_samples' is significantly different from 'reference_samples'",
+    "Assert that the mean of 'mixup_samples' is not close to 0.5, indicating incorrect sampling behavior"
+]
+```

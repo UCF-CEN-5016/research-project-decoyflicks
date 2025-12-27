@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, matplotlib, functools, gdown, zipfile",
+    "Set the Keras version to 3.4.1 and ensure TensorFlow is compatible with it",
+    "Define the batch size as 32 and image dimensions as 64x64",
+    "Create a directory named 'celeba_gan' to store the dataset",
+    "Download the CelebA dataset using gdown from the provided URL: 'https://drive.google.com/uc?id=1O7m1010EJjLE5QxLZiM9Fpjs7Oj6e684'",
+    "Extract the downloaded dataset zip file into the 'celeba_gan' directory",
+    "Load the dataset using keras.utils.image_dataset_from_directory with parameters: directory='celeba_gan', label_mode=None, image_size=(64, 64), batch_size=32",
+    "Define a function resize_image that resizes images to a given resolution and normalizes them",
+    "Define a function create_dataloader that takes resolution as input and returns a TensorFlow data loader with shuffled and batched images",
+    "Define a function plot_images to visualize images after each epoch",
+    "Define the StyleGAN class with necessary methods including __init__, grow_model, compile, generate_noise, gradient_loss, train_step, and call",
+    "Instantiate the StyleGAN class with start_res=4 and target_res=128",
+    "Define a train function that iterates over resolutions and phases, calling the create_dataloader function for each resolution",
+    "In the train function, compile the StyleGAN model with appropriate optimizers and loss weights",
+    "Call the fit method on the StyleGAN instance with the data loader, epochs=1, and steps_per_epoch set to 1",
+    "Run the training function with parameters: start_res=4, target_res=16, steps_per_epoch=1, display_images=False",
+    "Capture the output and check for the error message 'AttributeError: 'list' object has no attribute 'shape' during the training process",
+    "Verify that the error occurs specifically when calling gan.fit with the data loader"
+]
+```

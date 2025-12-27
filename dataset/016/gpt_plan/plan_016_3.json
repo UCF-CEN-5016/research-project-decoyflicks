@@ -1,0 +1,23 @@
+[
+  "Set up the multi-worker cluster environment with 2 nodes, each having 2 GPUs; allocate resources using: salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive",
+  "On node 1 (gpu1): clone or access the TensorFlow Model Garden repo at /home/cdacapp1/scaling/models-master",
+  "On node 1 (gpu1): set PYTHONPATH to include /home/cdacapp1/scaling/models-master",
+  "On node 1 (gpu1): set DATA_DIR to /scratch/cdacapp1/sowmya/actual_imagenet/tf_records containing ImageNet TFRecords",
+  "On node 1 (gpu1): set MODEL_DIR to /home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss",
+  "On node 1 (gpu1): activate Python 3.9.7 environment with TensorFlow-GPU 2.11.0 and CUDA 11.0 (using conda environment tf11)",
+  "On node 1 (gpu1): prepare config file gpu.yaml with these runtime parameters: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0",
+  "On node 1 (gpu1): run training with the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml",
+  "On node 2 (gpu2): replicate the environment setup steps identical to node 1 (clone repo, set PYTHONPATH, DATA_DIR, MODEL_DIR, activate conda tf11 environment)",
+  "On node 2 (gpu2): prepare config file gpu1.yaml with runtime parameters: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1",
+  "On node 2 (gpu2): run training with the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml",
+  "Verify that the training processes on both nodes establish communication over port 6655 and TensorFlow cluster resolver correctly identifies the two workers",
+  "Monitor GPU utilization on both nodes to confirm that all 4 GPUs (2 per node) are active during training",
+  "Record throughput metrics (examples/sec) from training logs on both nodes; note throughput on a single GPU run (~270 examples/sec) and multi-GPU single node run (~700 examples/sec)",
+  "Assert that the multi-node multi-GPU run throughput does not exceed approximately 270 examples/sec, indicating no scaling across nodes",
+  "Optionally, add debug prints or logging in classifier_trainer.py to output the effective number of replicas detected by tf.distribute.MultiWorkerMirroredStrategy",
+  "Confirm that batch size per replica and global batch size settings match expected values for 4 GPUs total (e.g., if per GPU batch size is 32, global batch size should be 128)",
+  "Validate that the environment variables TF_CONFIG or equivalent cluster configuration is not explicitly set (since the code uses worker_hosts and task_index in config file), and that this might contribute to cluster setup issues",
+  "Check network connectivity and firewall rules between ip1 and ip2 on port 6655 to ensure workers can communicate",
+  "Optionally, run a simplified minimal TensorFlow multi-worker mirrored strategy example on the same cluster setup to verify cluster communication works outside the Model Garden code",
+  "Collect and save logs from both nodes, including TensorFlow distributed strategy initialization logs and throughput logs for post-mortem analysis"
+]

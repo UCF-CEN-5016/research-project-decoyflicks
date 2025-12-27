@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules: keras, tensorflow_datasets",
+    "Define batch size of 64 and image dimensions of 256x256",
+    "Load the tf_flowers dataset from TensorFlow Datasets",
+    "Prepare the training dataset by shuffling, mapping with preprocessing function, batching, and prefetching",
+    "Create a MobileViT model using the create_mobilevit function with num_classes=5",
+    "Compile the MobileViT model with Adam optimizer, categorical crossentropy loss, and accuracy metric",
+    "Train the model on the training dataset for 30 epochs",
+    "Prepare the validation dataset by mapping with preprocessing function, batching, and prefetching",
+    "Evaluate the trained model on the validation dataset to reproduce the bug"
+]
+```
+

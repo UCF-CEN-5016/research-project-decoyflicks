@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf and from keras import layers, models",
+    "Set the batch size: define BATCH_SIZE = 32",
+    "Define the input image dimensions: set IMAGE_HEIGHT = 160 and IMAGE_WIDTH = 160",
+    "Load the Oxford Pets dataset using tfds.load with the parameters: name='oxford_pet', split=['train[:80%]', 'train[80%:]'], as_supervised=True",
+    "Create the training dataset: train_ds = train_ds.map(lambda x, y: (tf.image.resize(x, [IMAGE_HEIGHT, IMAGE_WIDTH]), y), num_parallel_calls=tf.data.AUTOTUNE)",
+    "Create the validation dataset: val_ds = val_ds.map(lambda x, y: (tf.image.resize(x, [IMAGE_HEIGHT, IMAGE_WIDTH]), y), num_parallel_calls=tf.data.AUTOTUNE)",
+    "Define the augment_fn function to apply random augmentations: def augment_fn(inputs): return {'images': inputs['images'], 'segmentation_masks': inputs['segmentation_masks']}",
+    "Define the unpackage_inputs function to unpack the dataset: def unpackage_inputs(inputs): return inputs['images'], inputs['segmentation_masks']",
+    "Create the augmented training dataset: augmented_train_ds = train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=tf.data.AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Create the resized validation dataset: resized_val_ds = val_ds.map(lambda x, y: (tf.image.resize(x, [IMAGE_HEIGHT, IMAGE_WIDTH]), y), num_parallel_calls=tf.data.AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Run the code cell containing the dataset creation steps",
+    "Capture the error output when executing the augmented_train_ds creation step",
+    "Verify that the error message contains 'TypeError' and indicates a mismatch in tensor types between 'segmentation_masks' outputs"
+]
+```

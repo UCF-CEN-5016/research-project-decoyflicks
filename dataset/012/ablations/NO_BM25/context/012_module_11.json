@@ -1,0 +1,28 @@
+{
+  "bug_report": "012",
+  "module": {
+    "module": "official/projects/triviaqa",
+    "files": [
+      {
+        "path": "official/projects/triviaqa/download_and_prepare.py",
+        "snippets": [
+          {
+            "lines": "48-67",
+            "code": "def main(argv):\n  if len(argv) > 1:\n    raise app.UsageError('Too many command-line arguments.')\n  builder = tfds.builder(\n      'bigbird_trivia_qa/rc_wiki.preprocessed',\n      data_dir=FLAGS.data_dir,\n      sentencepiece_model_path=FLAGS.sentencepiece_model_path,\n      sequence_length=FLAGS.sequence_length,\n      global_sequence_length=FLAGS.global_sequence_length,\n      stride=FLAGS.stride)\n  download_config = tfds.download.DownloadConfig(\n      beam_options=beam.options.pipeline_options.PipelineOptions(flags=[\n          f'--runner={FLAGS.runner}',\n          '--direct_num_workers=8',\n          '--direct_running_mode=multi_processing',\n      ]))\n  with mock.patch('tensorflow_datasets.core.download.extractor._normpath',\n                  new=lambda x: x):\n    builder.download_and_prepare(download_config=download_config)\n  logging.info(builder.info.splits)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/projects/triviaqa/download_and_prepare.py",
+      "snippets": [
+        {
+          "lines": "48-67",
+          "code": "def main(argv):\n  if len(argv) > 1:\n    raise app.UsageError('Too many command-line arguments.')\n  builder = tfds.builder(\n      'bigbird_trivia_qa/rc_wiki.preprocessed',\n      data_dir=FLAGS.data_dir,\n      sentencepiece_model_path=FLAGS.sentencepiece_model_path,\n      sequence_length=FLAGS.sequence_length,\n      global_sequence_length=FLAGS.global_sequence_length,\n      stride=FLAGS.stride)\n  download_config = tfds.download.DownloadConfig(\n      beam_options=beam.options.pipeline_options.PipelineOptions(flags=[\n          f'--runner={FLAGS.runner}',\n          '--direct_num_workers=8',\n          '--direct_running_mode=multi_processing',\n      ]))\n  with mock.patch('tensorflow_datasets.core.download.extractor._normpath',\n                  new=lambda x: x):\n    builder.download_and_prepare(download_config=download_config)\n  logging.info(builder.info.splits)"
+        }
+      ]
+    }
+  ]
+}

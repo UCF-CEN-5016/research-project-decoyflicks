@@ -1,0 +1,20 @@
+```json
+[
+    "Set up a Debian 12 environment with Miniforge3 and install TensorFlow 2.x using 'conda install tensorflow'",
+    "Install the TensorFlow Object Detection API by cloning the repository and installing dependencies as per the official installation guide",
+    "Navigate to the directory containing the Object Detection API: 'cd research/object_detection'",
+    "Create a new Python script named 'model_main_tf2.py' in the current directory",
+    "Import TensorFlow and the necessary modules from the Object Detection API in 'model_main_tf2.py': 'import tensorflow as tf' and 'from object_detection import model_lib'",
+    "Define a model directory path: 'model_dir = 'models/centernet_mobilenetv2fp'",
+    "Define a pipeline configuration path: 'pipeline_config_path = 'models/centernet_mobilenetv2fp/pipeline.config'",
+    "Set up a function to load the model using 'model_lib.load_model(pipeline_config_path)'",
+    "Create a function to train the model with the specified model directory and pipeline config",
+    "Run the training function with the command: 'python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config'",
+    "Ensure the 'exporter.py' file is located at '/home/server/miniforge3/envs/ML/lib/python3.9/site-packages/object_detection/exporter.py'",
+    "In 'exporter.py', locate the line that imports 'graph_matcher' from 'tensorflow.contrib.quantize.python'",
+    "Run the script and observe the output for the error: 'ModuleNotFoundError: No module named 'tensorflow.conrtib'",
+    "Verify that the error occurs specifically due to the import statement in 'exporter.py'",
+    "Check the TensorFlow version by adding 'print(tf.__version__)' in 'model_main_tf2.py' to confirm it is 2.x",
+    "Confirm that 'tensorflow.contrib' is not available in TensorFlow 2.x by attempting to access 'tf.contrib' in the Python shell and observing the AttributeError"
+]
+```

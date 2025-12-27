@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define constants: set heads = 8, kv_heads = 4, dim_head = 64, and batch_size = 2",
+    "Create a random input tensor with shape (batch_size, heads * dim_head) using torch.randn",
+    "Initialize the model class that contains the qk_norm and kv_heads attributes",
+    "Set the qk_norm parameter to True and kv_heads to a value different from heads (e.g., kv_heads = 4)",
+    "Create a forward pass function that takes the input tensor and passes it through the model",
+    "Capture the output of the model during the forward pass",
+    "Check if the model's output contains any NaN values by using torch.isnan on the output tensor",
+    "Assert that the output contains NaN values, indicating a conflict between qk_norm and kv_heads",
+    "Print a message indicating that the bug has been reproduced if NaN values are found"
+]
+```

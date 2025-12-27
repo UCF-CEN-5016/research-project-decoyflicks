@@ -1,0 +1,22 @@
+```json
+[
+    "Set up a multi-node environment with two nodes, each equipped with 2 Tesla V100 GPUs.",
+    "On Node 1, run the command: salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive.",
+    "On Node 1, navigate to the TensorFlow Model Garden directory: cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification.",
+    "Set the PYTHONPATH environment variable: export PYTHONPATH=\"$PYTHONPATH:/home/cdacapp1/scaling/models-master\".",
+    "Set the DATA_DIR environment variable to point to the ImageNet TF records: export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records.",
+    "Set the MODEL_DIR environment variable to point to the checkpoint directory: export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss.",
+    "Activate the conda environment for TensorFlow 2.11: source /home/apps/anaconda3/bin/activate && conda activate tf11.",
+    "Create a configuration file gpu.yaml on Node 1 with the following content: runtime:\n  distribution_strategy: 'multi_worker_mirrored'\n  worker_hosts: 'ip1:6655,ip2:6655'\n  num_gpus: 2\n  task_index: 0.",
+    "Run the classifier_trainer.py script on Node 1 with the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml.",
+    "On Node 2, navigate to the same TensorFlow Model Garden directory: cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification.",
+    "Set the same PYTHONPATH, DATA_DIR, and MODEL_DIR environment variables as on Node 1.",
+    "Activate the conda environment for TensorFlow 2.11 on Node 2: source /home/apps/anaconda3/bin/activate && conda activate tf11.",
+    "Create a configuration file gpu1.yaml on Node 2 with the following content: runtime:\n  distribution_strategy: 'multi_worker_mirrored'\n  worker_hosts: 'ip1:6655,ip2:6655'\n  num_gpus: 2\n  task_index: 1.",
+    "Run the classifier_trainer.py script on Node 2 with the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml.",
+    "Monitor the throughput of the training process on both nodes and record the examples per second.",
+    "Verify that the throughput on both nodes remains approximately the same as a single GPU, indicating that scaling is not occurring.",
+    "Check the logs for any warnings or errors related to the multi-worker setup.",
+    "Assert that the combined throughput of both nodes does not exceed the throughput of a single node with 2 GPUs."
+]
+```

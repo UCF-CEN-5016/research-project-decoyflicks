@@ -1,0 +1,8 @@
+text after filtering OOV is empty output 
+
+Japanese TTS
+downloaded the model with - wget https://dl.fbaipublicfiles.com/mms/tts/jvn.tar.gz
+
+after running infer.py, there is no text after the line - text after filtering OOV:
+
+What's the problem？

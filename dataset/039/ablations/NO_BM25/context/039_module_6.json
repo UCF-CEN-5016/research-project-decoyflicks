@@ -1,0 +1,28 @@
+{
+  "bug_report": "039",
+  "module": {
+    "module": "labml_nn/transformers/vit",
+    "files": [
+      {
+        "path": "labml_nn/transformers/vit/__init__.py",
+        "snippets": [
+          {
+            "lines": "128-140",
+            "code": "    def __init__(self, d_model: int, max_len: int = 5_000):\n        \"\"\"\n        * `d_model` is the transformer embeddings size\n        * `max_len` is the maximum number of patches\n        \"\"\"\n        super().__init__()\n        # Positional embeddings for each location\n        self.positional_encodings = nn.Parameter(torch.zeros(max_len, 1, d_model), requires_grad=True)\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        * `x` is the patch embeddings of shape `[patches, batch_size, d_model]`\n        \"\"\"\n        # Get the positional embeddings for the given patches\n        pe = self.positional_encodings[:x.shape[0]]\n        # Add to patch embeddings and return\n        return x + pe\n\n    def __init__(self, d_model: int, n_hidden: int, n_classes: int):\n        \"\"\"\n        * `d_model` is the transformer embedding size\n        * `n_hidden` is the size of the hidden layer\n        * `n_classes` is the number of classes in the classification task\n        \"\"\"\n        super().__init__()\n        # First layer\n        self.linear1 = nn.Linear(d_model, n_hidden)\n        # Activation\n        self.act = nn.ReLU()\n        # Second layer\n        self.linear2 = nn.Linear(n_hidden, n_classes)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "labml_nn/transformers/vit/__init__.py",
+      "snippets": [
+        {
+          "lines": "128-140",
+          "code": "    def __init__(self, d_model: int, max_len: int = 5_000):\n        \"\"\"\n        * `d_model` is the transformer embeddings size\n        * `max_len` is the maximum number of patches\n        \"\"\"\n        super().__init__()\n        # Positional embeddings for each location\n        self.positional_encodings = nn.Parameter(torch.zeros(max_len, 1, d_model), requires_grad=True)\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        * `x` is the patch embeddings of shape `[patches, batch_size, d_model]`\n        \"\"\"\n        # Get the positional embeddings for the given patches\n        pe = self.positional_encodings[:x.shape[0]]\n        # Add to patch embeddings and return\n        return x + pe\n\n    def __init__(self, d_model: int, n_hidden: int, n_classes: int):\n        \"\"\"\n        * `d_model` is the transformer embedding size\n        * `n_hidden` is the size of the hidden layer\n        * `n_classes` is the number of classes in the classification task\n        \"\"\"\n        super().__init__()\n        # First layer\n        self.linear1 = nn.Linear(d_model, n_hidden)\n        # Activation\n        self.act = nn.ReLU()\n        # Second layer\n        self.linear2 = nn.Linear(n_hidden, n_classes)"
+        }
+      ]
+    }
+  ]
+}

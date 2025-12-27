@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch and random",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 4 and input tensor dimensions of (batch_size, channels, height, width) = (4, 3, 64, 64)",
+    "Create a random input tensor x with shape (4, 3, 64, 64) using torch.randn(batch_size, 3, 64, 64)",
+    "Define a mock model class with a method model_predictions that simulates the behavior of the original model",
+    "In the model_predictions method, return a named tuple with pred_x_start as a tensor of shape (4, 3, 64, 64) filled with random values using torch.randn(batch_size, 3, 64, 64)",
+    "Instantiate the mock model class and set self.self_condition to True",
+    "Set up a loop to run the inference process multiple times (e.g., 10 iterations)",
+    "In each iteration, generate a random float using random() and check if it is less than 0.5",
+    "If the condition is met, enter a torch.inference_mode() context",
+    "Inside the context, call model_predictions with x.clone().detach() and a dummy tensor t (e.g., t = torch.tensor(0))",
+    "Assign the output pred_x_start to x_self_cond",
+    "Call detach_() on x_self_cond to simulate the bug scenario",
+    "Run the code and capture any RuntimeError that occurs during execution",
+    "Assert that the RuntimeError message contains 'Inference tensors cannot be saved for backward'",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

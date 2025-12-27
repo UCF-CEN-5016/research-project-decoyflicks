@@ -1,0 +1,21 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Set the runtime type to GPU and select T4 GPU.",
+    "Install KerasNLP version 0.4.0 using the command: !pip install keras-nlp==0.4.0.",
+    "Import necessary libraries: import tensorflow as tf, import keras, import keras_nlp, import random.",
+    "Define a batch size of 64 and set the image size to 256.",
+    "Load the English-to-Spanish translation dataset using TensorFlow Datasets: train_dataset, val_dataset = tfds.load('ted_hrlr_translate/pt_to_en', split=['train[:90%]', 'train[90%:]'], as_supervised=True).",
+    "Define a function to preprocess the dataset: def preprocess_dataset(is_training=True): return _pp(image, label).",
+    "Map the preprocessing function to the training and validation datasets: train_dataset = train_dataset.map(preprocess_dataset, num_parallel_calls=tf.data.AUTOTUNE).",
+    "Define the model architecture using KerasNLP: model = keras.Sequential([...]) where [...] includes layers for embedding, LSTM, and Dense output.",
+    "Compile the model with an optimizer and loss function: model.compile(optimizer='adam', loss='sparse_categorical_crossentropy').",
+    "Train the model on the training dataset: model.fit(train_dataset, epochs=5).",
+    "Define a function to decode sequences: def decode_sequences(input_sentences): ...",
+    "Within decode_sequences, concatenate start tokens and padding: prompt = ops.concatenate((start, pad), axis=-1).",
+    "Call the GreedySampler with the prompt: generated_tokens = keras_nlp.samplers.GreedySampler()(next, prompt).",
+    "Add an assertion to check for the TypeError: assert 'TypeError' in str(e) when calling the sampler with unexpected keyword arguments.",
+    "Run the decode_sequences function with a random input sentence from the validation set: input_sentence = random.choice(val_dataset).",
+    "Verify that the TypeError occurs during the execution of decode_sequences."
+]
+```

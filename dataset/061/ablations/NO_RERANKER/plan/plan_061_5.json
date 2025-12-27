@@ -1,0 +1,23 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running: !pip install -q git+https://github.com/keras-team/keras-cv.git",
+    "Install TensorFlow version 2.11.0 by running: !pip install -q tensorflow==2.11.0",
+    "Import necessary libraries by adding the following code: import keras_cv; import tensorflow as tf; from keras_cv.models.stable_diffusion import NoiseScheduler; from tensorflow import keras; import matplotlib.pyplot as plt",
+    "Create an instance of the StableDiffusion model by running: stable_diffusion = keras_cv.models.StableDiffusion()",
+    "Define a function to plot images: def plot_images(images): plt.figure(figsize=(20, 20)); for i in range(len(images)): ax = plt.subplot(1, len(images), i + 1); plt.imshow(images[i]); plt.axis('off')",
+    "Prepare a dataset of text-image pairs by defining the function assemble_image_dataset(urls) that fetches images from given URLs and resizes them to (512, 512).",
+    "Create a list of image URLs to use for the dataset: urls = ['https://i.imgur.com/VIedH1X.jpg', 'https://i.imgur.com/eBw13hE.png', 'https://i.imgur.com/oJ3rSg7.png', 'https://i.imgur.com/5mCL6Df.jpg', 'https://i.imgur.com/4Q6WWyI.jpg']",
+    "Call the assemble_image_dataset function with the URLs: image_dataset = assemble_image_dataset(urls)",
+    "Define a function to assemble a text dataset: def assemble_text_dataset(prompts) that encodes prompts into embeddings.",
+    "Create a list of prompts to use for the dataset: prompts = ['a photo of a {}', 'a rendering of a {}', 'a cropped photo of the {}', 'the photo of a {}', 'a photo of a clean {}']",
+    "Call the assemble_text_dataset function with the prompts: text_dataset = assemble_text_dataset(prompts)",
+    "Define a function to zip the image and text datasets together: def assemble_dataset(urls, prompts) that combines the datasets into a tf.data.Dataset.",
+    "Call the assemble_dataset function with the URLs and prompts: dataset = assemble_dataset(urls, prompts)",
+    "Attempt to run the code by executing: generated = stable_diffusion.text_to_image('a photo of a <my-funny-cat-token>', seed=1337, batch_size=3)",
+    "Observe the output for an ImportError related to 'data_utils' when running the code.",
+    "Verify that the error message states: ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Confirm that the error occurs consistently by re-running the code multiple times.",
+    "Document the error message and the steps taken to reproduce it for further analysis."
+]
+```

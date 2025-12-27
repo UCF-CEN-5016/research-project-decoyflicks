@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary modules for data preprocessing and model building",
+    "Define a batch size of 2 and image dimensions of 640x480 for COCO2017 dataset",
+    "Load the COCO2017 dataset using TensorFlow Datasets with split=['train'], batch_size=2, and shuffle buffer size 512",
+    "Preprocess the training data by applying the preprocess_data function with num_parallel_calls=tf.data.AUTOTUNE",
+    "Create a validation dataset by loading the 'validation' split of COCO2017 dataset with batch_size=1",
+    "Set up the learning rate schedule using tf.optimizers.schedules.PiecewiseConstantDecay with boundaries and values",
+    "Initialize the ResNet50 backbone using the get_backbone function",
+    "Create an instance of the RetinaNet model with num_classes=80 and the ResNet50 backbone",
+    "Compile the model with the RetinaNetLoss function, optimizer=tf.optimizers.SGD(learning_rate=learning_rate_fn, momentum=0.9), and metrics=['accuracy']",
+    "Define callbacks for model checkpointing to save the best weights based on validation loss",
+    "Train the model on the training dataset using model.fit() with 1 epoch and batch_size=2",
+    "Load the latest checkpoint from the specified weights_dir into the RetinaNet model",
+    "Create an inference model by defining a new Keras Model that takes an image input and outputs detections after decoding predictions",
+    "Define a prepare_image function to resize and preprocess images before passing them through the inference model",
+    "Iterate over 2 samples from the validation dataset, prepare the images, and get predictions using the inference_model",
+    "Visualize the detections by calling visualize_detections with the input image, detected boxes, class names, and scores",
+    "Monitor the output for any NaN values in the loss calculation during training",
+    "Run assertions to verify that NaN values are present in the loss calculation",
+    "Monitor GPU memory usage during the training process",
+    "Assert that GPU memory usage exceeds expected thresholds during the inference steps"
+]
+```
+

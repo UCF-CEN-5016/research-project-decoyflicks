@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torchvision.transforms, and labml",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and image dimensions of 32x32 for CIFAR-10 dataset",
+    "Download and prepare the CIFAR-10 dataset using torchvision.datasets.CIFAR10 with train=True",
+    "Create a DataLoader for the CIFAR-10 training dataset with batch_size=1 and shuffle=True",
+    "Define a simple UNet model class that includes the self-attention mechanism as described in the bug report",
+    "In the UNet model, implement the attention mechanism using torch.einsum with the current implementation: attn = attn.softmax(dim=1)",
+    "Create an instance of the UNet model and move it to the appropriate device (CPU or GPU)",
+    "Define a loss function using torch.nn.CrossEntropyLoss()",
+    "Set the model to training mode using model.train()",
+    "Iterate over the DataLoader for one epoch, retrieving one batch of images and labels",
+    "Pass the batch of images through the UNet model to obtain the output",
+    "Calculate the loss using the output and the corresponding labels",
+    "Perform a backward pass using loss.backward()",
+    "Update the model parameters using an optimizer (e.g., torch.optim.Adam) with a learning rate of 0.001",
+    "Monitor the output of the attention mechanism by printing the shape of the attention weights after the softmax operation",
+    "Assert that the attention weights contain valid probabilities (i.e., sum to 1 along the intended axis)",
+    "Run the training loop for a few iterations (e.g., 10) to ensure the model is training without errors",
+    "Check for any NaN values in the loss during training and print a warning if found",
+    "Log the training loss and attention weights to monitor for any unexpected behavior",
+    "After training, evaluate the model on a small validation set to check for any discrepancies in output"
+]
+```

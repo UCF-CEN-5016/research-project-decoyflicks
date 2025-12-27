@@ -1,0 +1,11 @@
+{
+  "bug_report": "078",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "vit_pytorch/__init__.py",
+    "content": "from vit_pytorch.vit import ViT\nfrom vit_pytorch.simple_vit import SimpleViT\n\nfrom vit_pytorch.mae import MAE\nfrom vit_pytorch.dino import Dino\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

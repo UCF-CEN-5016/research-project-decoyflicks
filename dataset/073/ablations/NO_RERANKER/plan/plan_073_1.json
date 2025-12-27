@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, deepspeed, and megatron.core.parallel_state",
+    "Set the environment variable for distributed training: export WORLD_SIZE=4 and export MASTER_ADDR='localhost' and export MASTER_PORT='12345'",
+    "Initialize the distributed process group with: torch.distributed.init_process_group(backend='nccl', world_size=4, rank=0)",
+    "Define tensor_model_parallel_size as 2 and pipeline_model_parallel_size as 2",
+    "Call the function initialize_model_parallel(tensor_model_parallel_size=2, pipeline_model_parallel_size=2) to set up model parallelism",
+    "Create a dummy tensor with shape (2, 2, 1024) to simulate model parameters",
+    "Attempt to call a function that uses the global cdb object, such as cdb.all_reduce(dummy_tensor, op='sum')",
+    "Capture the output and error message when running the script pretrain_gpt3_2.7b.sh",
+    "Verify that the output contains the error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce''",
+    "Check the initialization of the global cdb object by asserting if cdb is None before the all_reduce call",
+    "Log the rank and world size to ensure they are correctly set before the all_reduce call"
+]
+```

@@ -1,0 +1,20 @@
+[
+    "Clone the NVIDIA DeepLearningExamples repository from GitHub using `git clone https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets/resnet50v1.5`",
+    "Navigate to the cloned directory with `cd resnet50v1.5`",
+    "Ensure Python and required libraries are installed by running `pip install paddlepaddle==2.4.0 dali==0.39.0`",
+    "Set up a virtual environment if necessary using `python -m venv env` and activate it with `source env/bin/activate` on Linux/Mac or `env\Scripts\activate` on Windows",
+    "Download the pretrained weights file `nvidia_resnet50_200821.pth.tar` from the NVIDIA repository or provide a local path to this file",
+    "Prepare a directory `/data/imagenet/` and place a sample image inside it for inference, ensuring it adheres to ImageNet format (JPEG images)",
+    "Create a Python script `main.py` with the content provided in the code context",
+    "Modify the `main.py` script to ensure it accepts command line arguments for model architecture, evaluation mode, epochs, pretrained weights file path, and batch size. For example:",
+    "Add import statements at the beginning of `main.py` as per the requirements",
+    "Define a batch size of 256 in `main.py` using `args.b = 256` within the argument parsing section",
+    "Call the `init_program` function with `args` and `exe=exe` to initialize the program environment",
+    "Set the model architecture to ResNet50 by passing `--arch=resnet50` to the script command line",
+    "Enable evaluation mode by passing `--evaluate` to the script command line",
+    "Specify the number of epochs as 1 using `--epochs=1` to run for a single epoch",
+    "Provide the path to the pretrained weights file with `--pretrained-from-file=nvidia_resnet50_200821.pth.tar`",
+    "Run the script using `python ./main.py --arch=resnet50 --evaluate --epochs=1 --pretrained-from-file=nvidia_resnet50_200821.pth.tar -b=256 /data/imagenet/` to execute inference",
+    "Verify that the script outputs an error message related to missing keys and unexpected keys in the state_dict, as described in the bug report"
+]
+

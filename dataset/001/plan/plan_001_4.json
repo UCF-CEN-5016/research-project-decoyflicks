@@ -1,0 +1,15 @@
+[
+    "Import TensorFlow, NumPy, and other required libraries from syntaxnet/reader_ops_test.py",
+    "Set the batch size to 10",
+    "Load MNIST dataset using TensorFlow's datasets API and preprocess it for input into a spatial transform network model",
+    "Initialize a GreedyParser instance with num_actions=62 (assuming this is a common action space for MNIST), num_features=[784], num_feature_ids=[256], embedding_sizes=[128], hidden_layer_sizes=[32]",
+    "Call the AddTraining method of the GreedyParser instance to prepare it for training, specifying corpus_name='MNIST_corpus'",
+    "Initialize all variables using the inits.values() method of the GreedyParser instance",
+    "Create a placeholder for input data with shape (batch_size, 784)",
+    "Call the train_op operation within the training dictionary of the GreedyParser instance to perform a single training step",
+    "Fetch the cost from the training dictionary of the GreedyParser instance after each training step",
+    "Assert that the fetched cost contains NaN values during at least one training epoch",
+    "Monitor GPU memory usage using TensorFlow's device placement logging during the training loop",
+    "Verify that the peak GPU memory consumption exceeds 10GB"
+]
+

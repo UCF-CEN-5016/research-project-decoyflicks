@@ -1,0 +1,32 @@
+{
+  "bug_report": "032",
+  "rank": 5,
+  "score": 0.6877286434173584,
+  "main_file": {
+    "path": "Tools/DGLPyTorch/SyntheticGraphGeneration/syngen/generator/tabular/kde_generator_sk.py",
+    "content": "# Copyright (c) 2023, NVIDIA CORPORATION. All rights reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\nfrom collections import OrderedDict\nfrom functools import partial\nfrom typing import Union\nimport pickle\nimport numpy as np\nimport pandas as pd\nimport scipy\nfrom sklearn.neighbors import KernelDensity\nfrom sklearn.preprocessing import OrdinalEncoder\n\nfrom syngen.generator.tabular.base_tabular_generator import BaseTabularGenerator\n\n\nclass KDEGeneratorSK(BaseTabularGenerator):\n    def __init__(self, **kwargs):\n        \"\"\"\n            A tabular generator based on kernel density estimation\n            the default.\n\n            Categorical and continuous columns are modeled\n            using gaussian KDE\n        \"\"\"\n        super(BaseTabularGenerator).__init__()\n\n    def ordinal_encoder(self, cat_col):\n        encoder = OrdinalEncoder()\n        encoder.fit(cat_col)\n        return encoder\n\n    def fit(\n        self,\n        data: pd.DataFrame,\n        categorical_columns: list = [],\n        samples: Union[float, int] = 0.1,\n    ):\n\n        num_samples = len(data)\n\n        # - naive sampling\n        if samples >= 0.0 and samples <= 1.0:\n            num_samples = samples * num_samples\n        else:\n            num_samples = samples\n        num_samples = int(num_samples)\n        data = data.sample(n=num_samples)\n        self.column_order = list(data.columns)\n        self.cat_fit = {}\n        self.categorical_columns = set(categorical_columns)\n        self.continuous_columns = set(data.columns) - self.categorical_columns\n\n        # - kde distribution\n        for column in self.categorical_columns:\n            enc = self.ordinal_encoder(data[column].values.reshape(-1, 1))\n            col_data = data[column].values.reshape(-1, 1)\n            col_data = enc.transform(col_data).reshape(-1, 1)\n            kde = KernelDensity(kernel=\"gaussian\")\n            kde = kde.fit(col_data)\n            self.cat_fit[column] = {\n                \"encoder\": enc,\n                \"n_categories\": len(enc.categories_[0]),\n                \"sampler\": kde,\n            }\n        self.cont_fit = {}\n        # - gaussian distribution\n        for column in self.continuous_columns:\n            col_data = data[column].values.reshape(-1, 1)\n            kde = KernelDensity(kernel=\"gaussian\")\n            kde = kde.fit(col_data)\n            self.cont_fit[column] = {\"sampler\": kde}\n\n        self.fits = {**self.cat_fit, **self.cont_fit}\n    \n    def sample(self, n, **kwargs):\n        data_dict = OrderedDict()\n        for column in self.column_order:\n            sampler = self.fits[column][\"sampler\"]\n            if \"encoder\" in self.fits[column]:\n                # - must be categorical\n                encoder = self.fits[column][\"encoder\"]\n                n_categories = self.fits[column][\"n_categories\"]\n                sampled_data = sampler.sample(n)\n                sampled_data = np.abs(sampled_data.reshape(-1, 1))\n                sampled_data = np.round(sampled_data)\n                sampled_data = np.clip(sampled_data, 0, n_categories - 1)\n                sampled_data = encoder.inverse_transform(sampled_data)\n            else:\n                sampled_data = sampler.sample(n)\n            data_dict[column] = list(sampled_data.reshape(-1))\n        df = pd.DataFrame.from_dict(data_dict)\n        return df\n\n    def set_device(self, device):\n        ...\n\n    def save(self, path):\n        with open(path, 'wb') as file_handler:\n            pickle.dump(self, file_handler, protocol=pickle.HIGHEST_PROTOCOL)\n\n    @classmethod\n    def load(cls, path):\n        with open(path, 'rb') as file_handler:\n            model = pickle.load(file_handler)\n        return model\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "collections",
+      "function": "OrderedDict"
+    },
+    {
+      "module": "pickle",
+      "function": "dump"
+    },
+    {
+      "module": "pickle",
+      "function": "load"
+    },
+    {
+      "module": "sklearn",
+      "function": "KernelDensity"
+    },
+    {
+      "module": "sklearn",
+      "function": "OrdinalEncoder"
+    }
+  ]
+}

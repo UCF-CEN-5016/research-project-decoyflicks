@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning, import nnUNet, import torch, import os, import numpy as np",
+    "Set the random seed for reproducibility: torch.manual_seed(42)",
+    "Define the training parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10",
+    "Prepare the dataset: load BraTS21 and BraTS22 datasets, ensuring they are in the correct format and accessible",
+    "Create a DataModule class for nnUNet that handles data loading and preprocessing for training, validation, and testing",
+    "Instantiate the DataModule with the appropriate parameters: data_module = YourDataModuleClass()",
+    "Define the nnUNet model: model = nnUNet(...) with appropriate parameters for the task",
+    "Set the learning rate scheduler: scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=1)",
+    "Create a Trainer instance: trainer = pytorch_lightning.Trainer(gpus=gpus, max_epochs=epochs, callbacks=[scheduler])",
+    "Run the training process: trainer.fit(model, datamodule=data_module)",
+    "Capture the output and error messages during training to verify the MisconfigurationException is raised",
+    "Check the error message for the specific MisconfigurationException related to lr_scheduler: assert 'MisconfigurationException' in error_message",
+    "Validate that the lr_scheduler is indeed set to CosineAnnealingWarmRestarts and does not follow PyTorch's LRScheduler API",
+    "Ensure that the environment matches the specified versions: assert torch.__version__ == '2.2.0+cu121'",
+    "Confirm that the GPU is available and being utilized: assert torch.cuda.is_available() and torch.cuda.current_device() == 0",
+    "Log the complete stack trace of the error for further analysis"
+]
+```

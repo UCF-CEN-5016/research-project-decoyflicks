@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Models library: 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Define parameters for the beta distribution: set alpha = 0.2 and beta = 0.2",
+    "Create a shape for the sample output: use 'shape = tf.shape(tf.range(1000))' to define a shape of (1000,)",
+    "Call the original MixupAndCutmix._sample_from_beta method with parameters: 'x = tfm.vision.augment.MixupAndCutmix._sample_from_beta(alpha, beta, shape)'",
+    "Convert the output tensor to a NumPy array: 'x_numpy = x.numpy()'",
+    "Import seaborn and matplotlib for plotting: 'import seaborn as sns' and 'import matplotlib.pyplot as plt'",
+    "Generate a reference sample from a beta distribution using NumPy: 'reference_sample = np.random.beta(alpha, beta, 100000)'",
+    "Plot the kernel density estimate of the original output: 'sns.kdeplot(x_numpy, clip=(0, 1))'",
+    "Plot the kernel density estimate of the reference sample: 'sns.kdeplot(reference_sample, clip=(0, 1))'",
+    "Display the plot: 'plt.show()'",
+    "Verify that the two plots do not match, indicating a bug in the sampling method"
+]
+```

@@ -1,0 +1,16 @@
+TITLE  
+ModuleNotFoundError in TensorFlow 2.x due to missing 'tensorflow.contrib'
+
+SYMPTOMS  
+• Encountering `ModuleNotFoundError: No module named 'tensorflow.contrib'` when running the training script.  
+• The error arises specifically from the line `from tensorflow.contrib.quantize.python import graph_matcher` in the `exporter.py` file.  
+• The user has attempted to resolve the issue by installing and importing `tf_slim`, but the problem persists.  
+
+EXPECTED BEHAVIOR  
+The training script should execute without errors, successfully importing the necessary TensorFlow modules, and the model should begin training as intended.  
+
+REPRODUCTION STEPS  
+1. Run the command: `python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config`.  
+2. Observe the error message regarding the missing module.  
+3. Check the `exporter.py` file for the import statement causing the issue.  
+4. Attempt to install `tf_slim` and re-run the command to see if the issue is resolved.

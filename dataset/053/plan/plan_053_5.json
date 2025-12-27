@@ -1,0 +1,17 @@
+```json
+[
+    "Install Keras 2.15 and TensorFlow on a system running Ubuntu 18.04.6 LTS with NVIDIA GeForce RTX 3080 Ti Laptop GPU 16GB GDDR6 VRAM",
+    "Set environment variable `os.environ['Keras_Backend'] = 'tensorflow'` to ensure Keras uses TensorFlow as the backend",
+    "Create a Python script named `reproduce_bert_classifier_error.py`",
+    "Add import statements for necessary libraries: keras, numpy, and tensorflow",
+    "Load the MNIST dataset from keras.datasets.mnist.load_data() and preprocess it by scaling and expanding dimensions",
+    "Define a batch size of 32",
+    "Set up a mixed precision policy using `tf.keras.mixed_precision.set_global_policy('mixed_float16')`",
+    "Create a BertClassifier instance with the preset 'bert_tiny_en_uncased_sst2'",
+    "Attempt to predict on a sample input data: classifier.predict(['I love modular workflows in keras-nlp'])",
+    "Capture the exception output and store it as a string variable `error_output` for validation",
+    "Print out the captured error output",
+    "Assert that the error output contains 'AttributeError: \'LossScaleOptimizerV3\' object has no attribute \'name\'"'
+]
+```
+

@@ -1,0 +1,36 @@
+TITLE
+Incorrect Input Feature Handling in SE3Transformer for Multiple Types
+
+SYMPTOMS
+• The model fails during training with a `RuntimeError` indicating that the size of tensors expected by the batch2 tensor does not match.
+• Error message: `RuntimeError: Expected size for first two dimensions of batch2 tensor to be: [8910, 1] but got: [8910, 3].`
+• The self-attention mechanism is not performing as expected due to the incorrect handling of input features.
+
+EXPECTED BEHAVIOR
+When training the SE3Transformer model on the qm9 dataset with two types of node features:
+- The model should correctly process and combine the input node features for each type.
+- Self-attention operations should be performed appropriately without errors.
+
+REPRODUCTION STEPS
+1. Load the necessary libraries and dependencies for the SE3Transformer and QM9 dataset.
+2. Modify the `data_loading/qm9.py` file to split the node features into two types as shown in the bug report:
+```python
+# get node features
+node_feats = {'0': batched_graph.ndata['attr'][:, :5, None],
+'1': batched_graph.ndata['attr'][:, 5:6, None]}
+```
+3. Update the `runtime/training.py` file to reflect changes in the input dimensions:
+```python
+model = SE3TransformerPooled(
+fiber_in=Fiber({0: 5, 1: 1}),
+fiber_out=Fiber({0: args.num_degrees * args.num_channels}),
+fiber_edge=Fiber({0: datamodule.EDGE_FEATURE_DIM}),
+output_dim=1,
+tensor_cores=using_tensor_cores(args.amp),
+**vars(args)
+)
+```
+4. Train the model on the QM9 dataset.
+5. Observe the error related to tensor sizes, as described in the original report.
+
+This structured analysis provides a clear understanding of the issue and steps to reproduce it, which can aid in debugging and resolving the problem.

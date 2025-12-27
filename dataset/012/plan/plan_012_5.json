@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and other necessary modules from the provided dependencies",
+    "Set up a virtual environment with Python 3.8 or higher",
+    "Activate the virtual environment",
+    "Install TensorFlow version 2.4.1",
+    "Clone the official TensorFlow models repository from GitHub",
+    "Navigate to the directory containing the inception_v3 model",
+    "Define a batch size of 32 and image dimensions of 299x299",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Load the pre-trained inception_v3 model for Imagenet classification",
+    "Set up a simple training loop that performs one forward pass and one backward pass using the created input data",
+    "Train the model for a single step without any actual training data to trigger the error",
+    "Monitor the logs during execution for any errors or exceptions related to the optimizer",
+    "Assert that an AttributeError is raised indicating that 'NoneType' object has no attribute 'get_scaled_loss'",
+    "Verify the bug occurs by checking the traceback and error message"
+]
+```
+

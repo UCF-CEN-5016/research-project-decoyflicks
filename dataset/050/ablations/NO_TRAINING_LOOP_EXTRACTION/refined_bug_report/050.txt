@@ -1,0 +1,22 @@
+TITLE  
+Error when running official Keras 3 sample code due to AttributeError
+
+SYMPTOMS  
+• The program fails to execute when using the official Keras 3 sample code.  
+• The following error message is displayed:  
+  `AttributeError: 'list' object has no attribute 'shape'`  
+• The error occurs during the training phase when attempting to access the shape of `real_images`.
+
+EXPECTED BEHAVIOR  
+The code should execute without errors, allowing the training process to complete successfully and access the shape of the `real_images` tensor.
+
+REPRODUCTION STEPS  
+1. Clone the official Keras 3 sample code from the provided GitHub link:  
+   `https://github.com/keras-team/keras-io/blob/master/guides/custom_train_step_in_torch.py`  
+2. Ensure the following environment setup:  
+   - Keras version: 3.4.1  
+   - Python version: 3.12.4  
+   - OS: Windows  
+   - GPU model: Nvidia A3000  
+3. Run the code as is, without any modifications.  
+4. Observe the error during the training step when executing `gan.fit(dataloader, epochs=1)`.

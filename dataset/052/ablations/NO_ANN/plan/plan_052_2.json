@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow, Keras, and the necessary modules from transformers and datasets libraries.",
+    "Set the TensorFlow logging level to 'ERROR' to suppress unnecessary logs.",
+    "Define the model checkpoint as 'distilbert-base-cased'.",
+    "Load the tokenizer using AutoTokenizer.from_pretrained with the defined model checkpoint.",
+    "Load the SQuAD dataset using load_dataset('squad').",
+    "Define a max_length of 384 and a doc_stride of 128 for tokenization.",
+    "Create a function prepare_train_features that tokenizes the input examples with truncation and padding.",
+    "Use the map method on the loaded dataset to apply the prepare_train_features function, ensuring to set batched=True.",
+    "Convert the tokenized dataset to a numpy format for training.",
+    "Import TFAutoModelForQuestionAnswering from transformers and load the model using from_pretrained with the defined model checkpoint.",
+    "Define an optimizer using keras.optimizers.Adam with a learning rate of 5e-5.",
+    "Compile the model using model.compile with the optimizer and no loss function specified.",
+    "Create a training dataset by slicing the tokenized dataset to include all training examples.",
+    "Call model.fit on the training dataset with validation_data set to None and epochs set to 10.",
+    "Capture the output of model.fit to check for any errors during training.",
+    "If an error occurs, assert that the error message contains 'OperatorNotAllowedInGraphError'.",
+    "Print the error message to verify the specific issue encountered during model training."
+]
+```

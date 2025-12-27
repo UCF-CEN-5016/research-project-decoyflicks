@@ -1,0 +1,21 @@
+TITLE  
+AttributeError in DeepSpeedEngine when accessing model attribute
+
+SYMPTOMS  
+• The error message "AttributeError: 'DeepSpeedEngine' object has no attribute 'model'. Did you mean: 'module'?" is raised when attempting to access the `model` attribute.  
+• The training process fails after one epoch, specifically during the evaluation phase.  
+• The logs indicate multiple deprecation warnings regarding the use of `past_key_values` as a tuple, which may suggest compatibility issues with future versions of the library.  
+
+EXPECTED BEHAVIOR  
+The training process should run without errors, allowing access to the model attributes and completing the specified number of epochs. The evaluation metrics should be reported correctly without encountering attribute errors.
+
+REPRODUCTION STEPS  
+1. Clone the repository from the provided link.  
+2. Run the training script located at `applications/DeepSpeed-Chat/training/step1_supervised_finetuning/main.py`.  
+3. Ensure the training is set to run for one epoch.  
+4. Monitor the output for any errors or warnings during the training and evaluation phases.  
+5. Observe the error when attempting to print throughput using `model.model`.  
+
+```[tasklist]
+### Tasks
+```

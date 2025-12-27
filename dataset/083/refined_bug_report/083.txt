@@ -1,0 +1,20 @@
+TITLE
+CrossViT Module Fails During Initialization
+
+SYMPTOMS
+• An error occurs during the initialization of the CrossViT module.
+• The exact error message is not provided in the screenshot, but it likely relates to a mistake within `cross_vit.py`.
+
+EXPECTED BEHAVIOR
+The CrossViT module should be initialized without errors and function as intended for image processing tasks.
+
+REPRODUCTION STEPS
+1. Clone or navigate to the relevant directory of the `vit-pytorch` repository.
+2. Locate the file `cross_vit.py` and open it in a text editor or integrated development environment (IDE).
+3. Run the code that initializes the CrossViT module, for example:
+```python
+from vit_pytorch.cross_vit import CrossViT
+
+crossvit = CrossViT(image_size=256, num_classes=10, patch_size=16, dim=768)
+```
+4. Observe any error messages or unexpected behaviors that occur during the initialization process.

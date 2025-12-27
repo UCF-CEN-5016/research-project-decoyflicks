@@ -1,0 +1,11 @@
+```json
+[
+    "Import TensorFlow, slim, and xception module from deeplab package",
+    "Define a batch size of 2 and image dimensions of 65x65",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call _xception_small function with num_classes=10 and global_pool=False",
+    "Verify output tensor contains NaN values in the logits layer",
+    "Print the output tensor to observe NaN values"
+]
+```
+

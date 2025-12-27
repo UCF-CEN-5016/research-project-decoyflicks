@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries from the TensorFlow and Keras modules",
+    "Load the 'tf_flowers' dataset from TensorFlow Datasets with splits of 90% training and 10% validation",
+    "Define constants for batch size, smaller_size (128), bigger_size (224), and size_for_resizing (int((bigger_size / smaller_size) * bigger_size))",
+    "Define the 'preprocess_initial' function to preprocess images for initial training at a smaller resolution",
+    "Define the 'preprocess_finetune' function to preprocess images for fine-tuning at a larger resolution",
+    "Create functions to make datasets using the defined preprocessing functions for both smaller and bigger resolutions",
+    "Generate sample data from the dataset by iterating through an iterator of the initial training dataset and extracting batch images and labels",
+    "Visualize the sample images to ensure they are correctly preprocessed according to the 'preprocess_initial' function",
+    "Define a ResNet50V2 model using Keras applications, setting include_top=False, weights=None, and pooling='avg'",
+    "Create training functions that compile the model with Adam optimizer, sparse categorical crossentropy loss, and accuracy metric",
+    "Train the model on the initial training dataset for 20 epochs, using the initial validation dataset as validation_data",
+    "Verify that the 'validation_data' argument in the model.fit() method is set to the test_dataset (initial_val_dataset) instead of a separate validation dataset"
+]
+```
+

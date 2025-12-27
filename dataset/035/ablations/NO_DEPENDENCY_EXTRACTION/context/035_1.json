@@ -1,0 +1,11 @@
+{
+  "bug_report": "035",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "labml_nn/optimizers/performance_test.py",
+    "content": "\"\"\"\n---\ntitle: Test performance of Adam implementations\nsummary: This experiment compares performance of Adam implementations.\n---\n\n# Performance testing Adam\n\n```text\nTorchAdam warmup...[DONE]\t222.59ms\nTorchAdam...[DONE]\t1,356.01ms\nMyAdam warmup...[DONE]\t119.15ms\nMyAdam...[DONE]\t1,192.89ms\n```\n\n[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ngowaAsADj8VdZfBifu_6L6rtjGoEeoR?usp=sharing)\n\"\"\"\n\nimport torch\nimport torch.nn as nn\nfrom labml_helpers.device import DeviceInfo\nfrom torch.optim import Adam as TorchAdam\n\nfrom labml import monit\nfrom labml_nn.optimizers.adam import Adam as MyAdam\nfrom labml_nn.optimizers.mnist_experiment import Model\n\n\ndef test():\n    device_info = DeviceInfo(use_cuda=True, cuda_device=0)\n    print(device_info)\n    inp = torch.randn((64, 1, 28, 28), device=device_info.device)\n    target = torch.ones(64, dtype=torch.long, device=device_info.device)\n    loss_func = nn.CrossEntropyLoss()\n    model = Model().to(device_info.device)\n    my_adam = MyAdam(model.parameters())\n    torch_adam = TorchAdam(model.parameters())\n    loss = loss_func(model(inp), target)\n    loss.backward()\n    with monit.section('MyAdam warmup'):\n        for i in range(100):\n            my_adam.step()\n    with monit.section('MyAdam'):\n        for i in range(1000):\n            my_adam.step()\n    with monit.section('TorchAdam warmup'):\n        for i in range(100):\n            torch_adam.step()\n    with monit.section('TorchAdam'):\n        for i in range(1000):\n            torch_adam.step()\n\n\nif __name__ == '__main__':\n    test()\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

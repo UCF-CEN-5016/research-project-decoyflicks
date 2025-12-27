@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary libraries: import tensorflow as tf, import keras, import keras_cv, import matplotlib.pyplot as plt",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define a batch size of 32 and image dimensions of 224x224: BATCH_SIZE = 32, IMAGE_SIZE = (224, 224)",
+    "Load the Oxford Flowers 102 dataset using TensorFlow Datasets: data, dataset_info = tfds.load('oxford_flowers102', with_info=True, as_supervised=True)",
+    "Extract the number of classes from the dataset: num_classes = dataset_info.features['label'].num_classes",
+    "Define a function to preprocess the dataset: def to_dict(image, label): image = tf.image.resize(image, IMAGE_SIZE), image = tf.cast(image, tf.float32), label = tf.one_hot(label, num_classes), return {'images': image, 'labels': label}",
+    "Prepare the training dataset by shuffling and batching: train_dataset = data['train'].shuffle(10 * BATCH_SIZE).map(to_dict).batch(BATCH_SIZE)",
+    "Define a function to preprocess inputs for the model: def preprocess_for_model(inputs): images, labels = inputs['images'], inputs['labels'], images = tf.cast(images, tf.float32), return images, labels",
+    "Map the preprocess function to the training dataset: train_dataset = train_dataset.map(preprocess_for_model)",
+    "Define a model using KerasCV: model = keras_cv.models.ImageClassifier.from_preset('efficientnetv2_s', num_classes=num_classes)",
+    "Compile the model with SparseCategoricalCrossentropy loss: model.compile(loss=keras.losses.SparseCategoricalCrossentropy(), optimizer=keras.optimizers.SGD(momentum=0.9), metrics=['accuracy'])",
+    "Fit the model on the training dataset for 1 epoch: model.fit(train_dataset, epochs=1)",
+    "Verify the output of the model training: Check the training loss and accuracy values printed during training",
+    "Assert that the training loss is significantly high, indicating poor performance: assert training_loss > 1.0",
+    "Check the shape of the labels in the training dataset: assert labels.shape[-1] == num_classes + 1, indicating an extra dimension in the labels",
+    "Log the shapes of the images and labels to confirm the mismatch: print('Image shape:', images.shape, 'Label shape:', labels.shape)"
+]
+```

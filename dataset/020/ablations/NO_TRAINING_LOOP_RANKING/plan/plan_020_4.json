@@ -1,0 +1,17 @@
+```json
+[
+    "Pull the Docker image for TensorFlow with GPU support: 'docker pull tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Run the Docker container with the command: 'docker run --gpus all -it --rm -p 8888:8888 tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Open a Jupyter notebook in the browser at 'http://localhost:8888/'",
+    "Import TensorFlow and the official model library: 'import tensorflow as tf' and 'import official.core.train_lib as train_lib'",
+    "Set the Python version to 3.8 by checking the environment: 'import sys; print(sys.version)'",
+    "Define a distribution strategy: 'distribution_strategy = tf.distribute.MirroredStrategy()'",
+    "Create a mock task configuration dictionary: 'task = {'model': 'ssd', 'params': {'num_classes': 1}}'",
+    "Create a mock experiment configuration dictionary: 'exp_config = {'train': {'batch_size': 8, 'steps': 1000}, 'eval': {'batch_size': 8, 'steps': 100}}'",
+    "Set a model directory: 'model_dir = '/tmp/model_dir'",
+    "Run the experiment with the following command: 'model, eval_logs = train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)'",
+    "Capture the output and check for errors during execution",
+    "Verify that the output contains the error message: 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict''",
+    "Log the stack trace to confirm the error originates from 'official/core/base_trainer.py' at line 442"
+]
+```

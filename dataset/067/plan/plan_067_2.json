@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from TensorFlow Decision Forests (tfdf)",
+    "Define constants for the number of trees, maximum depth, minimum examples, subsample fraction, and validation ratio",
+    "Load or create a binary classification dataset with features that include both numerical and categorical variables",
+    "Preprocess the dataset by encoding categorical variables using one-hot encoding and normalizing numerical variables",
+    "Split the preprocessed dataset into training and testing sets",
+    "Define a function to create a Gradient Boosted Tree model with specified parameters including preprocessing steps if applicable",
+    "Create an instance of the Gradient Boosted Tree model using the defined parameters",
+    "Compile the model with binary crossentropy loss, Adam optimizer, and accuracy metric",
+    "Train the model on the training dataset for a predefined number of epochs",
+    "Evaluate the trained model on the testing dataset to obtain test accuracy",
+    "Verify that the test accuracy is less than 50% (indicating the bug)",
+    "Monitor memory usage during training and evaluation phases",
+    "Assert that memory usage exceeds a certain threshold (indicating potential memory leak or inefficient use of resources)"
+]
+```
+

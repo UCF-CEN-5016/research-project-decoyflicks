@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and the vision module from tensorflow_models/vision/__init__.py",
+    "Install TensorFlow Model Garden version r2.9.0 using pip install tensorflow-models==r2.9.0",
+    "Ensure Python version is 3.9.15 by running python --version in a terminal or command prompt",
+    "Set up a virtual environment if not already done: python -m venv tf_env && source tf_env/bin/activate (on macOS/Linux) or .\tf_env\Scripts\activate (on Windows)",
+    "Import the required modules for the reproduction: import tensorflow_models as tfm from absl import logging",
+    "Create an instance of the Task class by initializing it with necessary parameters, such as a mock task configuration: task = Task(params=mock_task_config)",
+    "Call the create_optimizer method on the task instance to trigger the error: optimizer = task.create_optimizer(optimizer_config=mock_optimizer_config)",
+    "Assert that an AttributeError is raised during the optimizer creation process",
+    "Verify the error message contains 'module' and 'OptimizerFactory': assert 'module' in str(e) and 'OptimizerFactory' in str(e)",
+    "Check if the exception type is AttributeError: except AttributeError as e:"
+]
+```
+

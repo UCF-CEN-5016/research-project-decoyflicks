@@ -1,0 +1,11 @@
+{
+  "bug_report": "064",
+  "rank": 4,
+  "score": 0.911138653755188,
+  "main_file": {
+    "path": "examples/nlp/bidirectional_lstm_imdb.py",
+    "content": "\"\"\"\nTitle: Bidirectional LSTM on IMDB\nAuthor: [fchollet](https://twitter.com/fchollet)\nDate created: 2020/05/03\nLast modified: 2020/05/03\nDescription: Train a 2-layer bidirectional LSTM on the IMDB movie review sentiment classification dataset.\nAccelerator: GPU\n\"\"\"\n\"\"\"\n## Setup\n\"\"\"\n\nimport numpy as np\nfrom tensorflow import keras\nfrom tensorflow.keras import layers\n\nmax_features = 20000  # Only consider the top 20k words\nmaxlen = 200  # Only consider the first 200 words of each movie review\n\n\"\"\"\n## Build the model\n\"\"\"\n\n# Input for variable-length sequences of integers\ninputs = keras.Input(shape=(None,), dtype=\"int32\")\n# Embed each integer in a 128-dimensional vector\nx = layers.Embedding(max_features, 128)(inputs)\n# Add 2 bidirectional LSTMs\nx = layers.Bidirectional(layers.LSTM(64, return_sequences=True))(x)\nx = layers.Bidirectional(layers.LSTM(64))(x)\n# Add a classifier\noutputs = layers.Dense(1, activation=\"sigmoid\")(x)\nmodel = keras.Model(inputs, outputs)\nmodel.summary()\n\n\"\"\"\n## Load the IMDB movie review sentiment data\n\"\"\"\n\n(x_train, y_train), (x_val, y_val) = keras.datasets.imdb.load_data(\n    num_words=max_features\n)\nprint(len(x_train), \"Training sequences\")\nprint(len(x_val), \"Validation sequences\")\n# Use pad_sequence to standardize sequence length:\n# this will truncate sequences longer than 200 words and zero-pad sequences shorter than 200 words.\nx_train = keras.utils.pad_sequences(x_train, maxlen=maxlen)\nx_val = keras.utils.pad_sequences(x_val, maxlen=maxlen)\n\n\"\"\"\n## Train and evaluate the model\n\nYou can use the trained model hosted on [Hugging Face Hub](https://huggingface.co/keras-io/bidirectional-lstm-imdb)\nand try the demo on [Hugging Face Spaces](https://huggingface.co/spaces/keras-io/bidirectional_lstm_imdb).\n\"\"\"\n\nmodel.compile(optimizer=\"adam\", loss=\"binary_crossentropy\", metrics=[\"accuracy\"])\nmodel.fit(x_train, y_train, batch_size=32, epochs=2, validation_data=(x_val, y_val))\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

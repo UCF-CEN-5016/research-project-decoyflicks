@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import h5py, import numpy as np, from mrcnn import utils, from mrcnn import modellib",
+    "Define constants: set MODEL_DIR to a valid directory path, set COCO_MODEL_PATH to a valid path of pre-trained weights, and set config to an instance of the configuration class.",
+    "Set the mode to 'inference' and create an instance of the MaskRCNN model: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Prepare a dummy input image: create a random image tensor with shape (1, 512, 512, 3) using np.random.rand(1, 512, 512, 3).astype(np.float32)",
+    "Load the model weights: call model.load_weights(COCO_MODEL_PATH, by_name=True) to load the pre-trained weights.",
+    "Ensure the COCO_MODEL_PATH points to a valid .h5 file that contains the weights.",
+    "Run the model inference: call model.detect([dummy_image], verbose=1) to perform detection on the dummy image.",
+    "Capture the output of the model: store the output in a variable, e.g., detections = model.detect([dummy_image], verbose=1)",
+    "Check for NotImplementedError: wrap the model loading and inference code in a try-except block to catch NotImplementedError.",
+    "Print the error message if NotImplementedError occurs to confirm the bug: print('Caught NotImplementedError:', str(e))",
+    "Validate that the NotImplementedError message matches the expected message: assert 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5' in str(e)"
+]
+```

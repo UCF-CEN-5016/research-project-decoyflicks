@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: tf, keras_cv, tqdm, xml, and any other required modules.",
+    "Load the dataset used for training YOLOV8, ensuring it is in the correct format (e.g., images with bounding boxes).",
+    "Define hyperparameters such as batch size (BATCH_SIZE), learning rate (LEARNING_RATE), and global clip norm (GLOBAL_CLIPNORM) used during model compilation.",
+    "Create a dummy dataset to simulate training data, consisting of random images and corresponding bounding box annotations.",
+    "Initialize the YOLOV8 backbone using 'yolo_v8_s_backbone_coco' preset from KerasCV.",
+    "Build the YOLOV8Detector model with the specified number of classes (len(class_mapping)), bounding box format ('xyxy'), the initialized backbone, and FPN depth set to 1.",
+    "Compile the model using Adam optimizer with the specified learning rate and loss functions ('binary_crossentropy' for classification and 'ciou' for boxes).",
+    "Create a dummy validation dataset similar to the training data to simulate evaluation during training.",
+    "Set up the EvaluateCOCOMetricsCallback to monitor the mAP score during training and save the model when the mAP improves.",
+    "Train the model using the dummy training dataset with 3 epochs and validate using the dummy validation dataset.",
+    "After training, create a function to visualize predictions by calling the model on a batch of images from the dummy dataset and plotting true vs predicted bounding boxes."
+]
+```
+

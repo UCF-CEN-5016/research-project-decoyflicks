@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from transformers and datasets libraries",
+    "Set the random seed for reproducibility using tf.keras.utils.set_random_seed(42)",
+    "Define constants: MAX_DURATION = 1, SAMPLING_RATE = 16000, BATCH_SIZE = 32, NUM_CLASSES = 11, HIDDEN_DIM = 768, MAX_SEQ_LENGTH = MAX_DURATION * SAMPLING_RATE",
+    "Load the Google Speech Commands V1 Dataset using load_dataset('superb', 'ks')",
+    "Print the structure of the loaded dataset to verify it contains 'file', 'audio', and 'label' fields",
+    "Split the dataset into training and testing sets with a 50% split using train_test_split method, stratifying by 'label'",
+    "Filter out the 'unknown' and 'silence' classes from the training and testing sets",
+    "Select a multiple of BATCH_SIZE from the training and testing sets to ensure smooth training",
+    "Define a feature extractor using AutoFeatureExtractor.from_pretrained('facebook/wav2vec2-base')",
+    "Create a preprocess_function that resamples audio files and prepares inputs for the model",
+    "Apply the preprocess_function to the training and testing datasets, removing 'audio' and 'file' columns",
+    "Load the processed training and testing datasets into numpy arrays",
+    "Define the TFWav2Vec2ForAudioClassification class that combines the Wav2Vec 2.0 model with a classification head",
+    "Implement the build_model function that creates the model architecture, using SparseCategoricalCrossentropy as the loss function",
+    "Compile the model with the Adam optimizer and accuracy metric",
+    "Prepare the training inputs by separating features from labels in the training dataset",
+    "Fit the model on the training data for 2 epochs with a batch size of 32",
+    "After training, predict the classes for the test set using model.predict()",
+    "Check the shape of the predictions to ensure they match the expected output shape",
+    "Verify that the model's predictions are not meaningful by checking the accuracy metric",
+    "Assert that the model's accuracy is below a certain threshold (e.g., less than 0.1) to confirm the bug"
+]
+```

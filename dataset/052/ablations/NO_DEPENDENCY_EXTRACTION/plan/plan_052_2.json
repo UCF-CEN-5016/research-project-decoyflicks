@@ -1,0 +1,20 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required libraries by running: !pip install git+https://github.com/huggingface/transformers.git !pip install datasets !pip install huggingface-hub",
+    "Import necessary libraries: import tensorflow as tf, from transformers import TFAutoModelForQuestionAnswering, AutoTokenizer, load_dataset, numpy as np, keras.",
+    "Set the random seed for reproducibility: tf.random.set_seed(42).",
+    "Load the SQUAD dataset using: datasets = load_dataset('squad').",
+    "Define the model checkpoint as 'distilbert-base-cased': model_checkpoint = 'distilbert-base-cased'.",
+    "Instantiate the tokenizer with: tokenizer = AutoTokenizer.from_pretrained(model_checkpoint).",
+    "Define max_length as 384 and doc_stride as 128.",
+    "Create a function prepare_train_features that tokenizes the dataset and returns the tokenized examples with start and end positions.",
+    "Apply the prepare_train_features function to the training dataset using: tokenized_datasets = datasets.map(prepare_train_features, batched=True, remove_columns=datasets['train'].column_names, num_proc=3).",
+    "Convert the tokenized datasets to numpy format: train_set = tokenized_datasets['train'].with_format('numpy')[:], validation_set = tokenized_datasets['validation'].with_format('numpy')[:].",
+    "Load the model using: model = TFAutoModelForQuestionAnswering.from_pretrained(model_checkpoint).",
+    "Compile the model with an Adam optimizer and a learning rate of 5e-5: optimizer = keras.optimizers.Adam(learning_rate=5e-5), model.compile(optimizer=optimizer).",
+    "Attempt to fit the model using: model.fit(train_set, validation_data=validation_set, epochs=10).",
+    "Monitor the output for any errors during the model fitting process.",
+    "Verify that the error 'OperatorNotAllowedInGraphError' occurs during the model fitting process."
+]
+```

@@ -1,0 +1,89 @@
+TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id'
+
+### Issue Type
+
+Bug
+
+### Source
+
+binary
+
+### Keras Version
+
+3.2.1
+
+### Custom Code
+
+No
+
+### OS Platform and Distribution
+
+Colab
+
+### Python version
+
+3.10.12
+
+### GPU model and memory
+
+Colab T4 GPU
+
+### Current Behavior?
+
+I've been trying to run the [English-to-Spanish translation with KerasNLP](https://keras.io/examples/nlp/neural_machine_translation_with_keras_nlp/) but I get stuck at the prediction/eval part:
+
+```
+--------------------------------------------------------------------------- 
+
+TypeError                                 Traceback (most recent call last)
+
+[<ipython-input-17-7f8fd291e436>](https://localhost:8080/#) in <cell line: 35>()
+     35 for i in range(2):
+     36     input_sentence = random.choice(test_eng_texts)
+---> 37     translated = decode_sequences([input_sentence])
+     38     translated = translated.numpy()[0].decode("utf-8")
+     39     translated = (
+
+[<ipython-input-17-7f8fd291e436>](https://localhost:8080/#) in decode_sequences(input_sentences)
+     22     prompt = ops.concatenate((start, pad), axis=-1)
+     23 
+---> 24     generated_tokens = keras_nlp.samplers.GreedySampler()(
+     25         next,
+     26         prompt,
+
+TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id'
+```
+
+The model trains successfully, though.
+
+### Standalone code to reproduce the issue or tutorial link
+
+```shell
+Colab: https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/nlp/ipynb/neural_machine_translation_with_keras_nlp.ipynb (Runtime: T4 GPU)
+Docs: https://keras.io/examples/nlp/neural_machine_translation_with_keras_nlp/
+```
+
+
+### Relevant log output
+
+```shell
+---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+<ipython-input-17-7f8fd291e436> in <cell line: 35>()
+     35 for i in range(2):
+     36     input_sentence = random.choice(test_eng_texts)
+---> 37     translated = decode_sequences([input_sentence])
+     38     translated = translated.numpy()[0].decode("utf-8")
+     39     translated = (
+
+<ipython-input-17-7f8fd291e436> in decode_sequences(input_sentences)
+     22     prompt = ops.concatenate((start, pad), axis=-1)
+     23 
+---> 24     generated_tokens = keras_nlp.samplers.GreedySampler()(
+     25         next,
+     26         prompt,
+
+TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id'
+```

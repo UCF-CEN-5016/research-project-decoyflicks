@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import keras_nlp, import random, import numpy as np",
+    "Set the random seed for reproducibility: np.random.seed(42), random.seed(42), tf.random.set_seed(42)",
+    "Define the model parameters: set vocab_size = 10000, embedding_dim = 256, units = 512, batch_size = 64, max_length = 20",
+    "Load the English-to-Spanish translation dataset: use tfds.load('ted_hrlr_translate/pt_to_en', split='train')",
+    "Preprocess the dataset: tokenize the input and output sentences, pad sequences to max_length, and create a tf.data.Dataset",
+    "Define the model architecture: create an Encoder-Decoder model using Keras layers with the specified parameters",
+    "Compile the model with an optimizer and loss function: model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')",
+    "Train the model on the dataset: model.fit(train_dataset, epochs=10)",
+    "Create a function decode_sequences(input_sentences) that takes a list of input sentences and generates translations",
+    "Inside decode_sequences, create a prompt tensor by concatenating start token and padded input: prompt = tf.concat([start_token, input_sentences], axis=-1)",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and other required parameters: generated_tokens = sampler(next, prompt, end_token_id=end_token_id)",
+    "Run a loop to test the decode_sequences function: for i in range(2), select a random input sentence from test_eng_texts",
+    "Call decode_sequences with the selected input sentence: translated = decode_sequences([input_sentence])",
+    "Verify that the TypeError occurs: assert that the error message contains 'unexpected keyword argument 'end_token_id''",
+    "Log the error message to confirm the bug: print('Caught TypeError:', error_message)"
+]
+```

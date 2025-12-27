@@ -1,0 +1,26 @@
+TITLE  
+AttributeError when accessing `torch.backends.mps` in PyTorch
+
+SYMPTOMS  
+• Encountering an `AttributeError` when running the script.  
+• Error message: `AttributeError: module 'torch.backends' has no attribute 'mps'`.  
+• Unable to execute the `imagenet` example without modification due to the exception.
+
+EXPECTED BEHAVIOR  
+The script should run without exceptions, allowing the user to train a model using the specified parameters.
+
+REPRODUCTION STEPS  
+1. Install PyTorch version 1.9.0+cu111 using `pip`.  
+2. Clone the PyTorch examples repository.  
+3. Navigate to the `imagenet` directory.  
+4. Run the command: `python3 main.py -a resnet18 --dummy`.  
+5. Observe the `AttributeError` related to `torch.backends.mps`.
+
+ADDITIONAL CONTEXT  
+* Operating System: Ubuntu 18.04 LTS  
+* Environment: GPU  
+* Not using Docker container  
+* The issue arises when checking for MPS (Metal Performance Shaders) availability, which may not be supported in the installed version of PyTorch. 
+
+POSSIBLE SOLUTION  
+To resolve the issue, consider setting the GPU ID to 0 as a workaround. This can be done by modifying the code in `main.py`. For reference, a related pull request can be found here: [Pull Request #1135](https://github.com/pytorch/examples/pull/1135).

@@ -1,0 +1,34 @@
+Decoder logits are NaN when cross-attention context is all padding
+
+As mentioned in the title, I've noticed that when the `context` given to a cross attention block is all padding (the `context_mask` is all `False`), the decoder gives as output `NaN` logits (example below).
+
+Is this intended? I thought that giving a context that's all padding would have been a pretty clear way of indicating that we don't want to perform cross-attention.
+
+If this is intended, do you have any suggestion on how to handle cases in which we have a decoder with cross-attention but for some samples we don't want to provide any conditioning? 
+
+Thanks!
+
+Example with **x-transformers** version **1.26.0** :
+```
+decoder = xt.TransformerWrapper(
+    num_tokens=2049,
+    max_seq_len=500,
+    use_abs_pos_emb=True,
+    scaled_sinu_pos_emb=True,
+    attn_layers=xt.Decoder(
+        dim=1024,
+        depth=24,
+        heads=16,
+        attn_dim_head=64,
+        attn_flash=True,
+        ff_no_bias=True,
+        cross_attend=True,
+    ),
+)
+i = torch.randint(0, 2048, (2, 20))
+context = torch.rand(2, 4, 1024)
+context_mask = torch.zeros(2, 4, dtype=torch.bool)
+out = d(i, context=context, context_mask=context_mask)
+
+# out is all NaN
+```

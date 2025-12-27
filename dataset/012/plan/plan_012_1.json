@@ -1,0 +1,18 @@
+[
+    "Install TensorFlow version tf-nightly-cpu 2.16.0.dev20231103",
+    "Clone the tensorflow/models repository from GitHub",
+    "Navigate to the official/legacy/image_classification directory",
+    "Ensure you have Python 3.11.6 installed",
+    "Set the environment variable TF_FORCE_GPU_ALLOW_GROWTH=true",
+    "Import TensorFlow, Keras, and other required modules in a new Python script",
+    "Define batch size as 2 and image dimensions as (321, 321, 3)",
+    "Create random uniform input data with shape (batch_size, height, width, channels)",
+    "Initialize the Delg model from delf/python/training/model/delg_model.py with default parameters",
+    "Call the Delg model's train_step method with randomly generated labels and images",
+    "Set a learning rate of 0.001 for the optimizer",
+    "Use tf.keras.optimizers.SGD as the optimizer",
+    "Monitor the output during the forward pass to ensure no NaN values are present in loss calculation",
+    "Capture and print any AttributeError that occurs during the execution",
+    "Assert the error message matches 'module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'"
+]
+

@@ -1,0 +1,17 @@
+```json
+[
+    "Clone the repository from GitHub using 'git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git'",
+    "Navigate to the directory 'labml_nn/transformers/rope/'",
+    "Open the file '__init__.py' in a code editor",
+    "Locate line 226 where 'rotary_pe = RotaryPositionalEmbeddings(3)' is defined",
+    "Change the line to 'rotary_pe = RotaryPositionalEmbeddings(4)' to match the expected feature count",
+    "Import necessary libraries: 'import torch' and 'from labml_nn.transformers.rope import RotaryPositionalEmbeddings'",
+    "Define a batch size of 32 and a sequence length of 128",
+    "Create a random tensor input with shape (batch_size, seq_len, 4) using 'input_data = torch.randn(32, 128, 4)'",
+    "Instantiate the RotaryPositionalEmbeddings with 4 features using 'rotary_pe = RotaryPositionalEmbeddings(4)'",
+    "Call the forward method of the RotaryPositionalEmbeddings with the input data: 'output = rotary_pe(input_data)'",
+    "Verify that the output shape is correct by asserting 'assert output.shape == (32, 128, 4)'",
+    "Check for any runtime errors or exceptions during the execution of the forward method",
+    "Log any errors encountered to confirm the bug is reproduced"
+]
+```

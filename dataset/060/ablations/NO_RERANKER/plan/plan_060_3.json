@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from keras import layers",
+    "Set the batch size: define BATCH_SIZE = 32",
+    "Set the AUTOTUNE variable for data loading: define AUTOTUNE = tf.data.AUTOTUNE",
+    "Load the Oxford Pets dataset using TensorFlow Datasets: train_ds, val_ds = tfds.load('oxford_pet:3.*.*', split=['train[:80%]', 'train[80%:]'], as_supervised=True)",
+    "Define the augment_fn function to apply random augmentations to the images and masks",
+    "Define the unpackage_inputs function to separate images and masks from the dataset",
+    "Define the resize_fn function to resize images and masks to (160, 160)",
+    "Create the augmented_train_ds dataset: augmented_train_ds = train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Create the resized_val_ds dataset: resized_val_ds = val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Run the code cell containing the dataset creation for augmented_train_ds and resized_val_ds",
+    "Capture the output and error message when executing the dataset creation code",
+    "Verify that the error message contains TypeError related to the output types of the branches in tf.switch_case",
+    "Check that the shapes of the tensors in the error message are (160, 160, 3) for images and (160, 160, 1) for segmentation masks",
+    "Assert that the error occurs both in Google Colab and on a local machine"
+]
+```

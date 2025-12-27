@@ -1,0 +1,11 @@
+{
+  "bug_report": "049",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "fairseq/modules/transpose_last.py",
+    "content": "# Copyright (c) Facebook, Inc. and its affiliates.\n#\n# This source code is licensed under the MIT license found in the\n# LICENSE file in the root directory of this source tree.\n\"\"\"\ntranspose last 2 dimensions of the input\n\"\"\"\n\nimport torch.nn as nn\n\n\nclass TransposeLast(nn.Module):\n    def __init__(self, deconstruct_idx=None):\n        super().__init__()\n        self.deconstruct_idx = deconstruct_idx\n\n    def forward(self, x):\n        if self.deconstruct_idx is not None:\n            x = x[self.deconstruct_idx]\n        return x.transpose(-2, -1)\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

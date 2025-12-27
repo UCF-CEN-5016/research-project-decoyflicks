@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary modules from fairseq: AugTransformerDecoder, LayerDropModuleList, checkpoint_wrapper, fsdp_wrap, and TransformerConfig",
+    "Import torch and nn from torch",
+    "Set DATA_ROOT to the path of your dataset, e.g., '/root/autodl-tmp/FormattingData/DATA_ROOT'",
+    "Create a configuration YAML file at '/root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml' with the following content: 'cross_self_attention: true, decoder: { layers: 6 }'",
+    "Set the path to the model checkpoint: MODEL_PATH = '/root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt'",
+    "Define the parameters for fairseq-generate command: target_is_code=True, target_code_size=100, max_tokens=50000, beam=10, max_len_a=1",
+    "Run the fairseq-generate command with the following parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path MODEL_PATH --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results",
+    "Monitor the output for the error message: 'Key 'input_feat_per_channel' is not in struct'",
+    "Check the logs for any stack traces or additional error messages that may provide context for the missing key",
+    "Validate that the model checkpoint at MODEL_PATH is correctly formatted and compatible with the configuration specified in config.yaml",
+    "Ensure that the dataset at DATA_ROOT is properly structured and contains the necessary files for the speech-to-speech task",
+    "Confirm that the fairseq version being used is compatible with the model and configuration by running 'pip show fairseq'",
+    "If the error does not occur, modify the configuration file to include 'input_feat_per_channel' and rerun the fairseq-generate command to see if the error is triggered"
+]
+```

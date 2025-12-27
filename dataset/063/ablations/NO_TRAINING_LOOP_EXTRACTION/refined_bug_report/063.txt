@@ -1,0 +1,18 @@
+TITLE  
+Type Mismatch Error in Image Segmentation Example
+
+SYMPTOMS  
+• Encountered a type mismatch error during the execution of the `augmented_train_ds` pipeline.  
+• Error message:  
+  ```python  
+  Tensor("sequential_4/rand_augment_4/cond/random_choice_4/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential_4/rand_augment_4/cond/random_choice_4/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types  
+  ```  
+• The data pipeline fails to execute, resulting in no output or further processing.
+
+EXPECTED BEHAVIOR  
+The data augmentation pipeline should execute without errors, producing a properly augmented dataset ready for training.
+
+REPRODUCTION STEPS  
+1. Navigate to the `examples/vision` directory.  
+2. Run the script `oxford_pets_image_segmentation.py`.  
+3. Observe the output and identify any errors related to tensor type mismatches.

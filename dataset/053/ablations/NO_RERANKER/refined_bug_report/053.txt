@@ -1,0 +1,30 @@
+### TITLE
+Keras_NLP Mixed Precision Error: AttributeError with LossScaleOptimizerV3
+
+### SYMPTOMS
+• Encountering an `AttributeError` when attempting to instantiate a `BertClassifier` from a preset.
+• The error message is: `AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'`
+• The issue occurs only when mixed precision policy `mixed_float16` is set; commenting this line resolves the error.
+• The user reported that changing the Keras backend from 'jax' to 'tensorflow' did not affect the outcome.
+
+### EXPECTED BEHAVIOR
+When executing the code from the Keras_NLP getting started tutorial, the `BertClassifier` should be instantiated successfully without any errors, regardless of the mixed precision setting.
+
+### REPRODUCTION STEPS
+1. Set the environment variable for Keras backend to 'tensorflow':
+   ```python
+   os.environ["Keras_Backend"] = 'tensorflow'
+   ```
+2. Set the mixed precision policy to `mixed_float16`:
+   ```python
+   keras.mixed_precision.set_global_policy('mixed_float16')
+   ```
+3. Run the following code to instantiate the classifier:
+   ```python
+   classifier = keras_nlp.models.BertClassifier.from_preset("bert_tiny_en_uncased_sst2")
+   ```
+4. Observe the error message:
+   ```
+   AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'
+   ```
+5. Comment out the mixed precision policy line and rerun the code to confirm that it works without errors.

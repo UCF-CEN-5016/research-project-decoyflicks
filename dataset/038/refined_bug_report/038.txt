@@ -1,0 +1,28 @@
+TITLE
+Positional Encoding Mismatch in Rotary Positional Embedding
+
+SYMPTOMS
+• Tensor operation exception during execution.
+• Error message: `RuntimeError: The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3`.
+• Unexpected behavior observed due to incorrect application of positional encodings.
+
+EXPECTED BEHAVIOR
+The code should correctly apply rotary positional embeddings to the input tensor `x_rope` by multiplying it with the cached cosine and sine matrices, ensuring that the dimensions match appropriately without any runtime errors. The resulting tensor `x_rope` should have the same shape as the original input tensor `x`.
+
+REPRODUCTION STEPS
+1. Define a function or method where the rotary positional embedding is applied to an input tensor `x_rope`.
+2. Ensure the `self.cos_cached` and `self.sin_cached` tensors are precomputed with dimensions matching those of the input tensor.
+3. Set up a test case where `x_rope` has a shape that causes dimension mismatch, e.g., `(batch_size, seq_length, feature_dim)`, where `feature_dim` is less than or equal to the corresponding cached tensor's last dimension.
+4. Run the line of code:
+```py
+x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])
+```
+5. Observe that a `RuntimeError` is raised due to dimension mismatch, as described in the symptoms section.
+
+BEGIN SUGGESTED RESTRUCTURING
+To resolve this issue and ensure correct application of rotary positional embeddings, modify the code as follows:
+```py
+x_rope = ((x_rope * self.cos_cached[:x.shape[0], :, :self.d]) +
+(neg_half_x * self.sin_cached[:x.shape[0], :, :self.d]))
+```
+This adjustment ensures that only the first `self.d` features of the cached tensors are used in the multiplication, aligning with the dimensions of `x_rope`.

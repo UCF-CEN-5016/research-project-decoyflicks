@@ -1,0 +1,1 @@
+scale = self.scale ** rearrange(power, 'n -> n 1')

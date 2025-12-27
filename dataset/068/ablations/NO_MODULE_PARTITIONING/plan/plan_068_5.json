@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, numpy, matplotlib, and glob",
+    "Set the batch size to 4 and image dimensions to 256x256",
+    "Define the number of classes as 12",
+    "Download the Facades dataset using wget and unzip it to a directory named 'facades_data'",
+    "Load the dataset by defining a function that reads images, segmentation maps, and labels, ensuring the shapes are correct",
+    "Create a training dataset and a validation dataset using tf.data.Dataset, ensuring to shuffle and batch the data with batch size 4",
+    "Define a custom callback class EvaluateCOCOMetricsCallback that will be used during training to evaluate metrics",
+    "Instantiate the YOLOv8 model using keras_cv with appropriate input shapes and parameters",
+    "Compile the YOLOv8 model with an optimizer and loss function suitable for object detection",
+    "Call the fit method on the YOLOv8 model with the training dataset, validation dataset, and the custom callback, specifying epochs=3",
+    "During the training process, monitor the output for the UnknownError related to ConcatV2",
+    "Verify that the shapes of the tensors being concatenated are mismatched, specifically checking for shapes [4,2,4] and [4,1,4]",
+    "Log the error message and stack trace to confirm the occurrence of the bug",
+    "Assert that the training process fails with the UnknownError after the first epoch"
+]
+```

@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the xception module from deeplab",
+    "Define a batch size of 2 and image dimensions of 65x65",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call _xception_small function with num_classes=None, global_pool=False, output_stride=8",
+    "Verify output tensor contains NaN values for logits",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold for atrous convolution"
+]
+```
+

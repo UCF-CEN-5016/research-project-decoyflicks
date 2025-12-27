@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Model Garden module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Check TensorFlow version by running 'print(tf.version.VERSION)' to ensure it is TensorFlow 2.x",
+    "Install the required packages using pip: 'pip install tensorflow tensorflow-text'",
+    "Create a Python script or Jupyter notebook to run the code",
+    "Define a function to simulate the import error by including the line 'import tensorflow_models as tfm'",
+    "Run the script or notebook to trigger the import statement",
+    "Capture the output and error message to verify the ImportError occurs",
+    "Check the specific error message for undefined symbols, particularly '_ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Ensure that the environment is using Python 3.10 by running 'print(sys.version)'",
+    "Verify that the TensorFlow Text package is installed by running 'import tensorflow_text'",
+    "Check the installed version of TensorFlow Text by running 'print(tensorflow_text.__version__)'",
+    "Confirm that the TensorFlow Model Garden is the latest version by checking the GitHub repository",
+    "Run the environment capture script from TensorFlow to collect system information and dependencies",
+    "Validate that the system information includes the correct OS, Python version, and installed package versions",
+    "Reproduce the bug in a clean virtual environment to ensure no conflicting packages are present",
+    "Document the steps taken and the output received to provide a clear reproduction path for the bug report"
+]
+```

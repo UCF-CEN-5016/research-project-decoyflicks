@@ -1,0 +1,29 @@
+```json
+[
+    "Import TensorFlow, Keras, Keras NLP, and NLTK libraries",
+    "Set the Keras version to 2.15 and TensorFlow version to 2.15",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40, TEST_BATCH_SIZE = 1",
+    "Import the necessary modules: from data_preprocessing import eng_tokenizer, spa_tokenizer, test_pairs; from model import transformer; from nltk.translate.bleu_score import modified_precision",
+    "Create a function decode_sequences(input_sentences) that takes a list of input sentences",
+    "Inside decode_sequences, convert input sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH if necessary",
+    "Limit the encoder_input_tokens to a maximum length of 40 tokens",
+    "Define a nested function next_fn(prompt, cache, index) that takes a prompt tensor, cache, and index",
+    "Inside next_fn, call transformer([encoder_input_tokens, prompt]) and extract logits for the given index",
+    "Set hidden_states to None and return logits, hidden_states, and cache",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Prepare test_eng_texts and test_spa_texts from test_pairs",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through the range of test_pairs length, for each index i, get input_sentence from test_eng_texts",
+    "Call decode_sequences([input_sentence]) and store the result in translated",
+    "Convert translated to a numpy array and decode it to a UTF-8 string",
+    "Clean the translated string by removing [PAD], [START], and [END] tokens",
+    "Split the translated string into a list of words",
+    "Calculate the BLEU score using modified_precision with test_spa_texts[i] and translated",
+    "Append the BLEU score to bleu_score list",
+    "Print the mean of the BLEU scores",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Check the output logs for any errors or warnings related to tensor shapes or GPU memory",
+    "Assert that a segmentation fault occurs during the execution of the script"
+]
+```

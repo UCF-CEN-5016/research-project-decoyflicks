@@ -1,0 +1,18 @@
+[
+  "Create a new conda environment with Python 3.10.13 using: conda create -n tf_py310 python=3.10.13 -y",
+  "Activate the new environment: conda activate tf_py310",
+  "Install TensorFlow 2.13.0 (or 2.13.10 if available) via pip using the official link: pip install tensorflow==2.13.0",
+  "Install TensorFlow Model Garden nightly package: pip install tf-models-nightly",
+  "Download the TensorFlow Model Garden vision image classification notebook from https://www.tensorflow.org/tfmodels/vision/image_classification by clicking the 'Download notebook' icon",
+  "Open the downloaded notebook in VSCode or Jupyter Notebook inside the conda environment",
+  "In the first code cell, import matplotlib.pyplot as plt and run plt.plot([1, 2, 3], [4, 5, 6]) followed by plt.show() to confirm pyplot plotting works before importing tensorflow_models",
+  "Add the import statement for tensorflow_models (e.g., import tensorflow_models) or the specific model import line used in the notebook",
+  "After importing tensorflow_models, run the same matplotlib plotting commands (plt.plot([1, 2, 3], [4, 5, 6]) and plt.show()) in a new cell",
+  "Observe that the plot does not render or display after importing tensorflow_models, indicating pyplot is not working",
+  "Check matplotlib backend before importing tensorflow_models by running: import matplotlib; print(matplotlib.get_backend()); record the output (expected to be an interactive backend like 'TkAgg')",
+  "Check matplotlib backend after importing tensorflow_models by running the same backend check command; observe it changes to 'agg' (non-interactive backend)",
+  "Attempt to set matplotlib backend to 'TkAgg' after importing tensorflow_models using: import matplotlib; matplotlib.use('TkAgg'); import matplotlib.pyplot as plt; run a plot and plt.show() again; verify that the plot still does not display",
+  "Restart the environment/kernel and set matplotlib backend to 'TkAgg' before importing tensorflow_models by running: import matplotlib; matplotlib.use('TkAgg'); import tensorflow_models; import matplotlib.pyplot as plt; run a plot and plt.show(); verify that the plot displays correctly",
+  "Assert that matplotlib backend is 'TkAgg' after setting it before tensorflow_models import and that the plot renders successfully",
+  "Summarize that importing tensorflow_models changes matplotlib backend to 'agg' causing plots not to render unless backend is set before import"
+]

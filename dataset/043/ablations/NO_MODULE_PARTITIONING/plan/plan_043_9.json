@@ -1,0 +1,17 @@
+```json
+[
+    "Clone the fairseq repository from GitHub using 'git clone https://github.com/pytorch/fairseq.git'",
+    "Change directory to the cloned fairseq repository using 'cd fairseq'",
+    "Install fairseq in editable mode using 'pip install --editable ./'. Ensure that the installation completes without errors.",
+    "Change directory to examples/mms/tts using 'cd examples/mms/tts'",
+    "Prepare a test WAV file named 'test.wav' in the current directory. Ensure it is a valid audio file.",
+    "Create a text input string 'Heute ist ein schöner Tag.' to be used as input for the infer.py script.",
+    "Run the infer.py script with the command 'python infer.py --model-dir model/ --wav test.wav --txt \"Heute ist ein schöner Tag.\"'",
+    "Observe the output for any errors. Specifically, look for 'ModuleNotFoundError: No module named 'commons' in the output.",
+    "If the error occurs, confirm that the 'commons' module is not present in the fairseq directory structure by checking 'fairseq/' and 'examples/' directories.",
+    "Verify that the Python environment is using the correct version by running 'python --version' and ensuring it outputs 'Python 3.10'.",
+    "Check the installed packages in the environment using 'pip list' to confirm that fairseq and its dependencies are installed correctly.",
+    "If the error persists, check the PYTHONPATH environment variable using 'echo $PYTHONPATH' to ensure it includes the fairseq directory.",
+    "Attempt to import the commons module in a Python shell using 'import commons' to confirm that the error can be reproduced outside of the script."
+]
+```

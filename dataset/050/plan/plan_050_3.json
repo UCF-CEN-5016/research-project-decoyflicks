@@ -1,0 +1,14 @@
+[
+    "Import the necessary modules from Keras and TensorFlow Datasets.",
+    "Define a batch size of 32 and image dimensions of 299x299.",
+    "Load the Oxford Flowers dataset using `tensorflow_datasets.load` with split='train'.",
+    "Preprocess the input images to resize them to (299, 299) and normalize pixel values.",
+    "Split the preprocessed dataset into training and validation sets with a ratio of 80:20.",
+    "Define a ResNet50 model using `keras_cv.models.ImageClassifier.from_preset('resnet50')`.",
+    "Compile the model with the 'categorical_crossentropy' loss function, 'adam' optimizer, and accuracy metric.",
+    "Apply CutMix, MixUp, and RandAugment augmentations to the training dataset using custom pipeline functions.",
+    "Train the model on the augmented training dataset for 1 epoch.",
+    "Validate the model performance on the validation dataset.",
+    "Check if the validation loss contains NaN values after the first epoch."
+]
+

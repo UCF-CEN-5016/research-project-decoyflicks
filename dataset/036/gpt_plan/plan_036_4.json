@@ -1,0 +1,21 @@
+[
+  "Import torch and torch.nn.Parameter",
+  "Import Adam optimizer from labml_nn.optimizers.adam",
+  "Import AMSGrad optimizer from labml_nn.optimizers.amsgrad",
+  "Define a scalar torch.nn.Parameter x initialized to 0.0 with requires_grad=True",
+  "Define a scalar torch.nn.Parameter x_star initialized to -1.0 with requires_grad=False (represents optimal solution)",
+  "Define a function func(t: int, x: torch.nn.Parameter) that returns 1010 * x if t % 101 == 1 else -10 * x",
+  "Initialize AMSGrad optimizer with parameters=[x], learning rate=1e-2, betas=(0.9, 0.99)",
+  "Set total_regret = 0.0 to accumulate regret values",
+  "Run a loop for 10000 steps (reduce from 10 million for quick repro) with t from 1 to 10000 inclusive:",
+  "  Compute regret = func(t, x) - func(t, x_star) (scalar tensor)",
+  "  Accumulate total_regret += regret.item()",
+  "  Perform backward pass on regret to compute gradients",
+  "  Call optimizer.step() to update x",
+  "  Call optimizer.zero_grad() to clear gradients",
+  "  Clamp x.data in-place to range [-1.0, +1.0]",
+  "After loop completes, assert that x.data is significantly different from -1 (e.g., abs(x.data + 1) > 0.1) indicating optimizer failed to converge to optimum",
+  "Repeat above experiment with Adam optimizer instead of AMSGrad to compare behavior",
+  "Log or print x.data final values and total_regret per step average for both Adam and AMSGrad runs",
+  "Verify that Adam converges incorrectly (x near +1) while AMSGrad converges correctly (x near -1), reproducing the bug related to GAE formula implementation in optimizer behavior"
+]

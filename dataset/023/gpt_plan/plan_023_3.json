@@ -1,0 +1,14 @@
+[
+  "Clone the TensorFlow models repository or download the notebook from https://github.com/tensorflow/models/blob/master/docs/vision/object_detection.ipynb",
+  "Open the notebook in Google Colab or a local Jupyter environment with TensorFlow 2.12 installed",
+  "Ensure the environment has the latest TensorFlow Model Garden package installed, matching the repository's latest release",
+  "Set up the notebook environment by running the initial setup cells that install required dependencies and set paths",
+  "Execute the notebook cells sequentially up to the section titled 'Import required libraries from tensorflow models as image below'",
+  "In the import cell, attempt to run the import statements that load modules/functions from 'official' package, e.g., 'from official.vision import ...' or 'from official import model ...'",
+  "Observe and capture any ImportError or ModuleNotFoundError exceptions thrown during these imports",
+  "Specifically verify that imports like 'official.vision' or 'official.nlp' fail due to missing modules or improperly installed packages",
+  "Assert that the error message matches the screenshot in the bug report indicating failure at importing required tensorflow models libraries",
+  "Do not proceed past this import step since the bug prevents further execution",
+  "Record the environment details including TensorFlow version (2.12), Python version, and package installation logs to confirm the setup matches the prerequisites",
+  "Optionally, rerun the import cell in a fresh environment without pre-installed 'official' packages to confirm reproducibility of the import failure"
+]

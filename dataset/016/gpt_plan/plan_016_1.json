@@ -1,0 +1,16 @@
+[
+  "Import TensorFlow 2.11 and necessary modules such as os, subprocess, and multiprocessing to manage multi-worker execution",
+  "Set up environment variables for PYTHONPATH to include the TensorFlow models directory and DATA_DIR pointing to a local or accessible ImageNet TFRecord dataset",
+  "Prepare two separate YAML config files (gpu.yaml and gpu1.yaml) with the following contents: runtime.distribution_strategy='multi_worker_mirrored', runtime.worker_hosts='ip1:6655,ip2:6655', runtime.num_gpus=2, and task_index=0 for gpu.yaml and 1 for gpu1.yaml respectively",
+  "On two separate nodes or machines (with IP addresses ip1 and ip2), allocate 2 GPUs each and confirm CUDA 11.0 with compatible NVIDIA drivers and TensorFlow-GPU 2.11 are installed",
+  "On node ip1, activate the conda environment containing TensorFlow 2.11 and set the MODEL_DIR to a writeable checkpoint directory; similarly on node ip2 with the same environment and MODEL_DIR path",
+  "Launch the training script classifier_trainer.py on both nodes simultaneously using the respective config files: on ip1 run with gpu.yaml (task_index=0), on ip2 run with gpu1.yaml (task_index=1), passing identical command line arguments including --mode=train_and_eval, --model_type=resnet, --dataset=imagenet, --model_dir, --data_dir, and --config_file",
+  "Ensure the ResNet50 model is used by confirming the --model_type=resnet argument and that the training uses batch sizes and image sizes consistent with ImageNet standards (e.g., batch size per GPU ~64, image size 224x224)",
+  "Monitor the logs output by both nodes to verify that the MultiWorkerMirroredStrategy initializes correctly and that both workers join the cluster using the given worker_hosts",
+  "Record the throughput (examples/sec) reported in the logs during training on each node and aggregate to compute total throughput",
+  "Validate that the total throughput is approximately equal to single-GPU throughput (around 270 examples/sec), indicating no scaling across nodes despite using 4 GPUs total (2 GPUs per node * 2 nodes)",
+  "Confirm that running the same training on a single node with 2 GPUs using MirroredStrategy (not MultiWorkerMirroredStrategy) shows expected scaling (around 700 examples/sec), to rule out intra-node scaling issues",
+  "Optionally, run nvidia-smi or similar GPU monitoring tools on both nodes during training to confirm that all GPUs are active and utilized",
+  "Collect and save all logs and throughput metrics for comparison and reproducibility",
+  "Assert that the multi-node multi-GPU training throughput does not increase compared to single-GPU baseline, thus reproducing the reported scaling bug"
+]

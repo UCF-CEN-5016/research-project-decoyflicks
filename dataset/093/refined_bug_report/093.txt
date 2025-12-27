@@ -1,0 +1,39 @@
+TITLE
+Configuration conflict between `attn_num_mem_kv` and `attn_one_kv_head`
+
+SYMPTOMS
+• An error occurs when both `attn_num_mem_kv` and `attn_one_kv_head` are set in the `Decoder` configuration.
+• The exact error message is not provided, but it suggests a conflict between these two parameters.
+
+EXPECTED BEHAVIOR
+• When setting `attn_num_mem_kv > 0` and `attn_one_kv_head = True`, the model should be able to process memory tokens while also using a single key-value head for attention without raising an error.
+• The TransformerWrapper should initialize correctly and allow forward pass operations such as generating logits.
+
+REPRODUCTION STEPS
+1. Initialize the `TransformerWrapper` with specific parameters, including setting both `attn_num_mem_kv` and `attn_one_kv_head`.
+2. Pass a random input tensor through the model to trigger the forward pass.
+3. Observe that an error occurs due to the conflict between these two parameters.
+
+Code Example:
+```python
+lm = TransformerWrapper (
+num_tokens          = 32,
+max_seq_len         = 0,
+num_memory_tokens   = 20,
+attn_layers = Decoder (
+dim             = 512,
+depth           = 4,
+heads           = 4,
+rotary_pos_emb  = True,
+attn_flash      = True,
+attn_onnxable   = True,
+attn_num_mem_kv  = 20,  # This parameter is set
+attn_one_kv_head = True  # This parameter conflicts with the previous one
+)
+)
+
+x = torch.randint(0, 32, (8, 1024))
+logits = lm(x)
+print(x.shape, x.dtype)  # Expected: torch.Size([8, 1024]) torch.int64
+print(logits.shape, logits.dtype)  # Expected: torch.Size([8, 1024, 32]) torch.float32
+```

@@ -1,0 +1,14 @@
+TITLE
+Unutilized Argument in `show_batch` Function
+
+SYMPTOMS
+• The argument `num_of_examples` is defined but not used within the function `show_batch`.
+
+EXPECTED BEHAVIOR
+• When calling `show_batch`, the `num_of_examples` parameter should be utilized to limit the number of examples displayed or processed.
+
+REPRODUCTION STEPS
+1. Navigate to the Jupyter notebook at the specified GitHub link: <https://github.com/tensorflow/models/blame/9a2993d140841f37d73cded94c1295da4faab8b5/docs/vision/instance_segmentation.ipynb>.
+2. Locate the `show_batch` function definition around line 748.
+3. Observe that the argument `num_of_examples` is defined but not used within the function body.
+4. Call the `show_batch` function with a value for `num_of_examples` to see if it affects the output or behavior of the function, which currently does not happen as the argument is unused.

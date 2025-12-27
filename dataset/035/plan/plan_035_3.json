@@ -1,0 +1,26 @@
+```json
+[
+    "Clone the repository https://github.com/labmlai/annotated_deep_learning_paper_implementations",
+    "Navigate to the directory labml_nn/transformers/rope/",
+    "Open the file __init__.py and locate line 226",
+    "Change the value from `rotary_pe = RotaryPositionalEmbeddings(3)` to `rotary_pe = RotaryPositionalEmbeddings(4)`",
+    "Navigate back to the directory labml_nn/transformers/retro/train.py",
+    "Import necessary dependencies: torch, labml, labml_helpers.datasets.text, labml_nn.transformers.retro.model, labml_nn.optimizers.noam, labml_nn.transformers.retro.dataset, labml_nn.transformers.retro.model, labml_nn.transformers.rope.RotaryPositionalEmbeddings",
+    "Set up the Tiny Shakespeare dataset by creating a TextFileDataset object with path to 'tiny_shakespeare.txt' and function list",
+    "Load the Retro dataset into a Dataset object with path to 'retro_train_dataset.json' and the previously created text dataset",
+    "Create a DataLoader object named train_dl with batch size of 4, sampler as RandomSampler with replacement=True for the train_dataset",
+    "Define hyper-parameters: chunk_len = 16, d_model = 128, d_ff = 512, n_heads = 16, d_k = 16",
+    "Create a NearestNeighborEncoder object named nearest_neighbor_encoder with chunk_len=16, num_chunks={3}, d_model=128, n_heads=16, d_k=16, and d_ff=512",
+    "Initialize the RetroModel object named model with number of tokens from text dataset, d_model=128, n_layers=6, attn_heads_per_layer={3, 5}, chunk_len=16, n_heads=16, d_k=16, d_ff=512, and encoder as nearest_neighbor_encoder",
+    "Move the model to GPU device 'cuda:0'",
+    "Create an optimizer object named optimizer using Noam function with parameters from model, initial learning rate of 1.0, d_model=128, and warmup period of 2_000",
+    "Initialize a Trainer object named trainer with device, model, train_dl, and optimizer",
+    "Define the prompt as 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Add models for saving and loading using labml's add_pytorch_models function",
+    "Start an experiment using labml's create function with name 'retro_small'",
+    "Train the model for 32 epochs using a loop from labml's loop function",
+    "After each epoch, print a new line and sample text from the prompt using the Sampler object and log it",
+    "Save models after each epoch using labml's save_checkpoint function"
+]
+```
+

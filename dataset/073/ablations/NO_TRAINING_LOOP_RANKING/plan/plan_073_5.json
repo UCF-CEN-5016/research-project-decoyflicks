@@ -1,0 +1,21 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Ensure that PyTorch and DeepSpeed are installed with the correct versions compatible with your CUDA version.",
+    "Create a new Python script named 'test_gpt_bug.py' in the root directory of the project.",
+    "In 'test_gpt_bug.py', import necessary modules: 'import torch', 'from megatron import GPTModel', 'from megatron import parallel_state'",
+    "Define a configuration object for the GPT model with the following parameters: 'config = TransformerConfig(hidden_size=256, kv_channels=128, tensor_model_parallel_size=1, sequence_parallel=False)'",
+    "Set the vocabulary size and maximum sequence length: 'vocab_size = 50257' and 'max_sequence_length = 1024'",
+    "Instantiate the GPTModel with the defined configuration: 'model = GPTModel(config=config, vocab_size=vocab_size, max_sequence_length=max_sequence_length)'",
+    "Set the model to evaluation mode by calling 'model.eval()'",
+    "Prepare a dummy input tensor with shape (1, max_sequence_length) filled with random integers: 'input_ids = torch.randint(0, vocab_size, (1, max_sequence_length))'",
+    "Prepare a dummy position tensor with shape (1, max_sequence_length): 'position_ids = torch.arange(max_sequence_length).unsqueeze(0)'",
+    "Prepare a dummy attention mask tensor with shape (1, 1, max_sequence_length, max_sequence_length): 'attention_mask = torch.ones((1, 1, max_sequence_length, max_sequence_length))'",
+    "Call the forward method of the model with the dummy inputs: 'output = model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask)'",
+    "Run the script using 'bash pretrain_gpt3_2.7b.sh' to execute the training script that initializes the model and runs the forward pass.",
+    "Observe the output for the error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce''",
+    "Verify that the error occurs due to the uninitialized 'cdb' object by checking the initialization code in the model's constructor."
+]
+```

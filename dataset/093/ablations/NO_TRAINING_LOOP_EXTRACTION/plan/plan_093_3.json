@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules: torch, TransformerWrapper from x_transformers.x_transformers, and deepcopy from copy",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the number of tokens as 32 and the maximum sequence length as 0",
+    "Set the number of memory tokens to 20",
+    "Create a TransformerWrapper instance named 'lm' with the following parameters: num_tokens=32, max_seq_len=0, num_memory_tokens=20, and attn_layers as a Decoder with dim=512, depth=4, heads=4, rotary_pos_emb=True, attn_flash=True, attn_onnxable=True, attn_num_mem_kv=20, attn_one_kv_head=True",
+    "Generate random input data 'x' using torch.randint with values between 0 and 32, and shape (8, 1024)",
+    "Call the forward method of the 'lm' instance with input 'x' to obtain 'logits'",
+    "Print the shape and data type of 'x' to verify input dimensions and types",
+    "Print the shape and data type of 'logits' to verify output dimensions and types",
+    "Assert that an error is raised during the execution of the forward method when both attn_num_mem_kv > 0 and attn_one_kv_head = True are set"
+]
+```

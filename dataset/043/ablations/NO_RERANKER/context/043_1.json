@@ -1,0 +1,96 @@
+{
+  "bug_report": "043",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "examples/emotion_conversion/emotion_models/duration_predictor.py",
+    "content": "import logging\nimport os\n\nimport hydra\nimport torch\nimport torch.nn as nn\nimport torch.nn.functional as F\nfrom einops.layers.torch import Rearrange\nfrom torch.utils.data import DataLoader, Dataset\n\nfrom .utils import Accuracy\n\nlogger = logging.getLogger(__name__)\n\n\ndef save_ckpt(model, path, model_class):\n    ckpt = {\n        \"state_dict\": model.state_dict(),\n        \"padding_token\": model.padding_token,\n        \"model_class\": model_class,\n    }\n    torch.save(ckpt, path)\n\n\ndef load_ckpt(path):\n    ckpt = torch.load(path)\n    ckpt[\"model_class\"][\"_target_\"] = \"emotion_models.duration_predictor.CnnPredictor\"\n    model = hydra.utils.instantiate(ckpt[\"model_class\"])\n    model.load_state_dict(ckpt[\"state_dict\"])\n    model.padding_token = ckpt[\"padding_token\"]\n    model = model.cpu()\n    model.eval()\n    return model\n\n\nclass Collator:\n    def __init__(self, padding_idx):\n        self.padding_idx = padding_idx\n\n    def __call__(self, batch):\n        x = [item[0] for item in batch]\n        lengths = [len(item) for item in x]\n        x = torch.nn.utils.rnn.pad_sequence(x, batch_first=True, padding_value=self.padding_idx)\n        y = [item[1] for item in batch]\n        y = torch.nn.utils.rnn.pad_sequence(y, batch_first=True, padding_value=self.padding_idx)\n        mask = (x != self.padding_idx)\n        return x, y, mask, lengths\n\n\nclass Predictor(nn.Module):\n    def __init__(self, n_tokens, emb_dim):\n        super(Predictor, self).__init__()\n        self.n_tokens = n_tokens\n        self.emb_dim = emb_dim\n        self.padding_token = n_tokens\n        # add 1 extra embedding for padding token, set the padding index to be the last token\n        # (tokens from the clustering start at index 0)\n        self.emb = nn.Embedding(n_tokens + 1, emb_dim, padding_idx=self.padding_token)\n\n    def inflate_input(self, batch):\n        \"\"\" get a sequence of tokens, predict their durations\n        and inflate them accordingly \"\"\"\n        batch_durs = self.forward(batch)\n        batch_durs = torch.exp(batch_durs) - 1\n        batch_durs = batch_durs.round()\n        output = []\n        for seq, durs in zip(batch, batch_durs):\n            inflated_seq = []\n            for token, n in zip(seq, durs):\n                if token == self.padding_token:\n                    break\n                n = int(n.item())\n                token = int(token.item())\n                inflated_seq.extend([token for _ in range(n)])\n            output.append(inflated_seq)\n        output = torch.LongTensor(output)\n        return output\n\n\nclass CnnPredictor(Predictor):\n    def __init__(self, n_tokens, emb_dim, channels, kernel, output_dim, dropout, n_layers):\n        super(CnnPredictor, self).__init__(n_tokens=n_tokens, emb_dim=emb_dim)\n        layers = [\n            Rearrange(\"b t c -> b c t\"),\n            nn.Conv1d(emb_dim, channels, kernel_size=kernel, padding=(kernel - 1) // 2),\n            Rearrange(\"b c t -> b t c\"),\n            nn.ReLU(),\n            nn.LayerNorm(channels),\n            nn.Dropout(dropout),\n        ]\n        for _ in range(n_layers-1):\n            layers += [\n                Rearrange(\"b t c -> b c t\"),\n                nn.Conv1d(channels, channels, kernel_size=kernel, padding=(kernel - 1) // 2),\n                Rearrange(\"b c t -> b t c\"),\n                nn.ReLU(),\n                nn.LayerNorm(channels),\n                nn.Dropout(dropout),\n            ]\n        self.conv_layer = nn.Sequential(*layers)\n        self.proj = nn.Linear(channels, output_dim)\n\n    def forward(self, x):\n        x = self.emb(x)\n        x = self.conv_layer(x)\n        x = self.proj(x)\n        x = x.squeeze(-1)\n        return x\n\n\ndef l2_log_loss(input, target):\n    return F.mse_loss(\n        input=input.float(),\n        target=torch.log(target.float() + 1),\n        reduce=False\n    )\n\n\nclass DurationDataset(Dataset):\n    def __init__(self, tsv_path, km_path, substring=\"\"):\n        lines = open(tsv_path, \"r\").readlines()\n        self.root, self.tsv = lines[0], lines[1:]\n        self.km = open(km_path, \"r\").readlines()\n        logger.info(f\"loaded {len(self.km)} files\")\n\n        if substring != \"\":\n            tsv, km = [], []\n            for tsv_line, km_line in zip(self.tsv, self.km):\n                if substring.lower() in tsv_line.lower():\n                    tsv.append(tsv_line)\n                    km.append(km_line)\n            self.tsv, self.km = tsv, km\n            logger.info(f\"after filtering: {len(self.km)} files\")\n\n    def __len__(self):\n        return len(self.km)\n\n    def __getitem__(self, i):\n        x = self.km[i]\n        x = x.split(\" \")\n        x = list(map(int, x))\n\n        y = []\n        xd = []\n        count = 1\n        for x1, x2 in zip(x[:-1], x[1:]):\n            if x1 == x2:\n                count += 1\n                continue\n            else:\n                y.append(count)\n                xd.append(x1)\n                count = 1\n\n        xd = torch.LongTensor(xd)\n        y = torch.LongTensor(y)\n        return xd, y\n\n\ndef train(cfg):\n    device = \"cuda:0\"\n    model = hydra.utils.instantiate(cfg[cfg.model]).to(device)\n    optimizer = hydra.utils.instantiate(cfg.optimizer, model.parameters())\n    # add 1 extra embedding for padding token, set the padding index to be the last token\n    # (tokens from the clustering start at index 0)\n    collate_fn = Collator(padding_idx=model.padding_token)\n    logger.info(f\"data: {cfg.train_tsv}\")\n    train_ds = DurationDataset(cfg.train_tsv, cfg.train_km, substring=cfg.substring)\n    valid_ds = DurationDataset(cfg.valid_tsv, cfg.valid_km, substring=cfg.substring)\n    train_dl = DataLoader(train_ds, batch_size=32, shuffle=True, collate_fn=collate_fn)\n    valid_dl = DataLoader(valid_ds, batch_size=32, shuffle=False, collate_fn=collate_fn)\n\n    best_loss = float(\"inf\")\n    for epoch in range(cfg.epochs):\n        train_loss, train_loss_scaled = train_epoch(model, train_dl, l2_log_loss, optimizer, device)\n        valid_loss, valid_loss_scaled, *acc = valid_epoch(model, valid_dl, l2_log_loss, device)\n        acc0, acc1, acc2, acc3 = acc\n        if valid_loss_scaled < best_loss:\n            path = f\"{os.getcwd()}/{cfg.substring}.ckpt\"\n            save_ckpt(model, path, cfg[cfg.model])\n            best_loss = valid_loss_scaled\n            logger.info(f\"saved checkpoint: {path}\")\n            logger.info(f\"[epoch {epoch}] train loss: {train_loss:.3f}, train scaled: {train_loss_scaled:.3f}\")\n            logger.info(f\"[epoch {epoch}] valid loss: {valid_loss:.3f}, valid scaled: {valid_loss_scaled:.3f}\")\n            logger.info(f\"acc: {acc0,acc1,acc2,acc3}\")\n\n\ndef train_epoch(model, loader, criterion, optimizer, device):\n    model.train()\n    epoch_loss = 0\n    epoch_loss_scaled = 0\n    for x, y, mask, _ in loader:\n        x, y, mask = x.to(device), y.to(device), mask.to(device)\n        yhat = model(x)\n        loss = criterion(yhat, y) * mask\n        loss = torch.mean(loss)\n        loss.backward()\n        nn.utils.clip_grad_norm_(model.parameters(), 1.0)\n        optimizer.step()\n        epoch_loss += loss.item()\n        # get normal scale loss\n        yhat_scaled = torch.exp(yhat) - 1\n        yhat_scaled = torch.round(yhat_scaled)\n        scaled_loss = torch.mean(torch.abs(yhat_scaled - y) * mask)\n        epoch_loss_scaled += scaled_loss.item()\n    return epoch_loss / len(loader), epoch_loss_scaled / len(loader)\n\n\ndef valid_epoch(model, loader, criterion, device):\n    model.eval()\n    epoch_loss = 0\n    epoch_loss_scaled = 0\n    acc = Accuracy()\n    for x, y, mask, _ in loader:\n        x, y, mask = x.to(device), y.to(device), mask.to(device)\n        yhat = model(x)\n        loss = criterion(yhat, y) * mask\n        loss = torch.mean(loss)\n        epoch_loss += loss.item()\n        # get normal scale loss\n        yhat_scaled = torch.exp(yhat) - 1\n        yhat_scaled = torch.round(yhat_scaled)\n        scaled_loss = torch.sum(torch.abs(yhat_scaled - y) * mask) / mask.sum()\n        acc.update(yhat_scaled[mask].view(-1).float(), y[mask].view(-1).float())\n        epoch_loss_scaled += scaled_loss.item()\n    logger.info(f\"example y: {y[0, :10].tolist()}\")\n    logger.info(f\"example yhat: {yhat_scaled[0, :10].tolist()}\")\n    acc0 = acc.acc(tol=0)\n    acc1 = acc.acc(tol=1)\n    acc2 = acc.acc(tol=2)\n    acc3 = acc.acc(tol=3)\n    logger.info(f\"accs: {acc0,acc1,acc2,acc3}\")\n    return epoch_loss / len(loader), epoch_loss_scaled / len(loader), acc0, acc1, acc2, acc3\n\n\n@hydra.main(config_path=\".\", config_name=\"duration_predictor.yaml\")\ndef main(cfg):\n    logger.info(f\"{cfg}\")\n    train(cfg)\n\n\nif __name__ == \"__main__\":\n    main()\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "einops",
+      "function": "Rearrange"
+    },
+    {
+      "module": "hydra",
+      "function": "main"
+    },
+    {
+      "module": "logging",
+      "function": "getLogger"
+    },
+    {
+      "module": "torch",
+      "function": "Conv1d"
+    },
+    {
+      "module": "torch",
+      "function": "DataLoader"
+    },
+    {
+      "module": "torch",
+      "function": "Dropout"
+    },
+    {
+      "module": "torch",
+      "function": "Embedding"
+    },
+    {
+      "module": "torch",
+      "function": "LayerNorm"
+    },
+    {
+      "module": "torch",
+      "function": "Linear"
+    },
+    {
+      "module": "torch",
+      "function": "LongTensor"
+    },
+    {
+      "module": "torch",
+      "function": "ReLU"
+    },
+    {
+      "module": "torch",
+      "function": "Sequential"
+    },
+    {
+      "module": "torch",
+      "function": "abs"
+    },
+    {
+      "module": "torch",
+      "function": "exp"
+    },
+    {
+      "module": "torch",
+      "function": "load"
+    },
+    {
+      "module": "torch",
+      "function": "log"
+    },
+    {
+      "module": "torch",
+      "function": "mean"
+    },
+    {
+      "module": "torch",
+      "function": "mse_loss"
+    },
+    {
+      "module": "torch",
+      "function": "round"
+    },
+    {
+      "module": "torch",
+      "function": "save"
+    },
+    {
+      "module": "torch",
+      "function": "sum"
+    }
+  ]
+}

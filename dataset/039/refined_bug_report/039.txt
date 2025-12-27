@@ -1,0 +1,17 @@
+TITLE
+Incorrect Tensor Shape Handling in Rotary Positional Embeddings Implementation
+
+SYMPTOMS
+• RuntimeError: The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3.
+• Code fails to correctly apply rotary positional embeddings due to mismatched tensor dimensions.
+
+EXPECTED BEHAVIOR
+• The code should correctly compute and apply rotary positional embeddings without any runtime errors, ensuring that the dimensions of the tensors involved in the computation match as expected.
+
+REPRODUCTION STEPS
+1. Clone the repository from GitHub: `git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git`
+2. Navigate to the relevant file: `cd labml_nn/transformers/rope/__init__.py`
+3. Run the example code that is causing the issue.
+4. Observe the runtime error related to tensor size mismatch.
+
+Note: The provided solution in the original bug report suggests modifying the slicing operation to ensure compatibility of dimensions, but a detailed analysis might reveal more context-specific adjustments needed for a robust implementation.

@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.vision.ops.augment",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using tf.random.uniform",
+    "Define a RandAugment function with a magnitude standard deviation of 0 and 1",
+    "Set the level_std parameter to 0 and apply the RandAugment function to the input data",
+    "Capture the output of the RandAugment function",
+    "Assert that the output of the RandAugment function has a standard deviation of 1",
+    "Set the level_std parameter to 1 and apply the RandAugment function to the input data again",
+    "Capture the output of the RandAugment function",
+    "Assert that the output of the RandAugment function has a standard deviation of 1",
+    "Log the output values to verify that the applied standard deviation is always 1 regardless of the level_std value",
+    "Check the source code at the specified GitHub link to confirm the absence of level_std in the calculation",
+    "Run the test multiple times to ensure consistent reproduction of the bug"
+]
+```

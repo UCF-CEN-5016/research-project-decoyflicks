@@ -1,0 +1,12 @@
+```json
+[
+    "Import torch and the CrossViT class from vit_pytorch.cross_vit",
+    "Set the image size to 256 and number of classes to 1000",
+    "Define the CrossViT model with the following parameters: depth=4, sm_dim=192, sm_patch_size=16, sm_enc_depth=2, sm_enc_heads=8, sm_enc_mlp_dim=2048, lg_dim=384, lg_patch_size=64, lg_enc_depth=3, lg_enc_heads=8, lg_enc_mlp_dim=2048, cross_attn_depth=2, cross_attn_heads=8, dropout=0.1, emb_dropout=0.1",
+    "Create a random input tensor with shape (1, 1, 256, 256) to simulate a single-channel image",
+    "Call the forward method of the CrossViT model with the input tensor",
+    "Capture the output and any exceptions raised during the forward pass",
+    "Verify that a RuntimeError is raised during the forward pass",
+    "Check the error message to confirm it indicates a shape mismatch related to the input channels"
+]
+```

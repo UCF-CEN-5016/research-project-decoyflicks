@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules for instance segmentation from the Model Garden library",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define the dataset path for the Sfm120k dataset, e.g., '/path/to/sfm120k'",
+    "Initialize the instance segmentation model using the Model Garden API with appropriate parameters",
+    "Set the batch size to 8 and image dimensions to 640x640 for training",
+    "Load the training dataset using the Sfm120k dataset class with mode='train'",
+    "Load the validation dataset using the Sfm120k dataset class with mode='val'",
+    "Define the training configuration with learning rate set to 0.001 and number of epochs set to 10",
+    "Compile the model with a loss function suitable for instance segmentation, e.g., 'categorical_crossentropy'",
+    "Start the training process using model.fit() with the training dataset and validation dataset",
+    "During training, ensure that validation metrics are being calculated and printed periodically",
+    "After training, check the output of the validation metrics, specifically looking for 'validation_loss'",
+    "Assert that 'validation_loss' is equal to 0.0 in the printed output after evaluation",
+    "Repeat the process using the official tutorial notebook for semantic segmentation to confirm the same behavior",
+    "Verify that the validation dataset contains valid images and labels to ensure the loss calculation is possible",
+    "Log the output of the training and evaluation process to a file for further analysis if needed"
+]
+```

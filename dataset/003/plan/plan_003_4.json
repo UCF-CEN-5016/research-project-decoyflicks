@@ -1,0 +1,18 @@
+```json
+[
+    "Clone the TensorFlow models repository from GitHub using URL https://github.com/tensorflow/models.git",
+    "Navigate to the path official/legacy/image_classification/classifier_trainer_util_test.py within the cloned repository",
+    "Ensure all required dependencies are installed, including TensorFlow 2.x and object_detection modules. Use pip install -r requirements.txt if available",
+    "Import the following modules in your script: absl, copy, numpy, tensorflow as tf, and any other necessary modules from TensorFlow and object_detection package",
+    "Create a trivial model function using test_utils.trivial_model(num_classes=10) to generate a simple classifier model for testing",
+    "Define a dataset function get_trivial_data() that returns a dummy dataset with one batch of zero-filled images and labels",
+    "Import the UtilTests class from classifier_trainer_util_test.py",
+    "Create an instance of UtilTests by calling UtilTests()",
+    "Call the test_get_model_size method on the UtilTests instance, passing 'efficientnet-b0' as the model parameter. Assert that the returned size is 224",
+    "Call the test_get_loss_scale method on the UtilTests instance with 'float16' and None as parameters. Assert that the returned loss scale is 128",
+    "Call the initialize method of UtilTests with a mock ExperimentConfig and DatasetConfig, asserting no exceptions are raised during execution",
+    "Call the resume_from_checkpoint method on the UtilTests instance with a clean model and existing checkpoint directory. Assert that initial_epoch equals 1 after resuming from checkpoint",
+    "Call the serialize_config method on the UtilTests instance with a base ExperimentConfig. Assert that the serialized config file exists in the specified directory"
+]
+```
+

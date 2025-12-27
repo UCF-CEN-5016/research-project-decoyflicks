@@ -1,0 +1,11 @@
+{
+  "bug_report": "043",
+  "rank": 2,
+  "score": 0.9061213731765747,
+  "main_file": {
+    "path": "fairseq/data/prepend_dataset.py",
+    "content": "# Copyright (c) Facebook, Inc. and its affiliates.\n#\n# This source code is licensed under the MIT license found in the\n# LICENSE file in the root directory of this source tree.\n\nimport numpy as np\nimport torch\n\nfrom . import BaseWrapperDataset\n\n\nclass PrependDataset(BaseWrapperDataset):\n    def __init__(self, dataset, prepend_getter, ensure_first_token_is=None):\n        super().__init__(dataset)\n        self.prepend_getter = prepend_getter\n        self.ensure_first_token = ensure_first_token_is\n\n    def __getitem__(self, idx):\n        item = self.dataset[idx]\n        is_tuple = isinstance(item, tuple)\n        src = item[0] if is_tuple else item\n\n        assert self.ensure_first_token is None or src[0] == self.ensure_first_token\n        prepend_idx = self.prepend_getter(self.dataset, idx)\n        assert isinstance(prepend_idx, int)\n        src[0] = prepend_idx\n        item = tuple((src,) + item[1:]) if is_tuple else src\n        return item\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

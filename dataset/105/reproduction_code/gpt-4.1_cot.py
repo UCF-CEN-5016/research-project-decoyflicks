@@ -1,0 +1,1 @@
+self.embed.data[ind][mask] = sampled

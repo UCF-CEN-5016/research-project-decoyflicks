@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import deepspeed, import torch, import transformers, and import os",
+    "Set the global batch size to 32 and micro batch size to 4: GLOBAL_BATCH_SIZE = 32, MICRO_BATCH_SIZE = 4",
+    "Define a model configuration using transformers: model = transformers.AutoModelForCausalLM.from_pretrained('gpt2')",
+    "Initialize the DeepSpeed engine with the model and configuration: model_engine, optimizer, _, _ = deepspeed.initialize(model=model, config_params={'train_batch_size': GLOBAL_BATCH_SIZE, 'train_micro_batch_size_per_gpu': MICRO_BATCH_SIZE})",
+    "Create a dummy dataset with random input tensors: input_data = torch.randint(0, 50256, (GLOBAL_BATCH_SIZE, 512))",
+    "Create a dummy target tensor for training: target_data = torch.randint(0, 50256, (GLOBAL_BATCH_SIZE, 512))",
+    "Set the model to training mode: model.train()",
+    "Run a single training step: loss = model_engine(input_data, labels=target_data)",
+    "Call the print_throughput function with model.model: print_throughput(model.model, args, end - start)",
+    "Capture the output and check for AttributeError: 'DeepSpeedEngine' object has no attribute 'model'",
+    "Log the error message to verify the bug occurrence: assert 'AttributeError' in str(error_message)"
+]
+```

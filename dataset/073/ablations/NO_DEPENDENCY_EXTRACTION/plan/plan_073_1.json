@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Ensure that PyTorch and DeepSpeed are installed with the correct versions compatible with your CUDA version",
+    "Create a new Python script named 'test_deepspeed_domino.py'",
+    "Import necessary modules in 'test_deepspeed_domino.py': 'import torch', 'from domino.optimizer.optimizer import MixedPrecisionOptimizer', 'from domino.optimizer.clip_grads import clip_grad_norm_fp32'",
+    "Define a batch size of 2 and model dimensions: 'batch_size = 2', 'model_dim = 768'",
+    "Create a random tensor for model parameters with shape (batch_size, model_dim) using 'params = torch.randn(batch_size, model_dim, requires_grad=True).cuda()'",
+    "Create a random tensor for gradients with shape (batch_size, model_dim) using 'grads = torch.randn(batch_size, model_dim).cuda()'",
+    "Instantiate a dummy optimizer: 'optimizer = torch.optim.Adam([params], lr=0.001)'",
+    "Create an instance of MixedPrecisionOptimizer: 'mixed_precision_optimizer = MixedPrecisionOptimizer(optimizer, clip_grad=0.0, log_num_zeros_in_grad=False, params_have_main_grad=True, use_contiguous_buffers_in_local_ddp=False, fp16=False, bf16=False, params_dtype=torch.float32, grad_scaler=None, models=[params])'",
+    "Set the global 'cdb' object to None to simulate the bug: 'global cdb; cdb = None'",
+    "Call the 'allreduce_layernorm_grads' method on the mixed_precision_optimizer instance with a dummy args object: 'mixed_precision_optimizer.allreduce_layernorm_grads(args)' where 'args' is defined as 'class Args: sequence_parallel = True'",
+    "Capture the output and any exceptions raised during the execution of the allreduce_layernorm_grads method",
+    "Verify that an AttributeError is raised with the message 'NoneType' object has no attribute 'all_reduce'",
+    "Log the error message to confirm the bug has been reproduced"
+]
+```

@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary modules from TensorFlow and official repository",
+    "Load the pre-trained video classification model from 'official/video_classification.py'",
+    "Set up a batch size of 8 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, channels) using numpy for video frames",
+    "Call the inference function on the created input data",
+    "Calculate loss using the pre-trained model's built-in loss function",
+    "Monitor GPU memory usage during execution of the inference step",
+    "Assert that there are NaN values in the calculated loss tensor to verify the bug occurs"
+]
+```
+

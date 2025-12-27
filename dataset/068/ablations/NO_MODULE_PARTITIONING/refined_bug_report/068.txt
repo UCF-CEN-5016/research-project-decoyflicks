@@ -1,0 +1,25 @@
+TITLE  
+Training Issue with YOLOV8 in KerasCV on Colab Pro
+
+SYMPTOMS  
+• Training fails after one epoch with an `UnknownError`.  
+• Error message: `InvalidArgumentError: {{function_node __wrapped__ConcatV2_N_317_device_/job:localhost/replica:0/task:0/device:CPU:0}} ConcatOp : Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4] [Op:ConcatV2] name: concat`  
+• The training process does not complete as expected, leading to premature termination.  
+
+EXPECTED BEHAVIOR  
+The training process should complete successfully for all specified epochs without encountering errors, allowing for the evaluation of the model's performance and metrics.
+
+REPRODUCTION STEPS  
+1. Open a new notebook in Google Colab Pro.  
+2. Load the YOLOV8 example from KerasCV: `https://keras.io/examples/vision/yolov8/`.  
+3. Prepare the training and validation datasets (`train_ds` and `val_ds`).  
+4. Execute the training command:  
+   ```python
+   yolo.fit(
+       train_ds,
+       validation_data=val_ds,
+       epochs=3,
+       callbacks=[EvaluateCOCOMetricsCallback(val_ds, "model.h5")],
+   )  
+   ```  
+5. Observe the training process and note the error after the first epoch.

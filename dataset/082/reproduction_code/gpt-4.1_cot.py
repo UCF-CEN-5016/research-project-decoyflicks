@@ -1,0 +1,1 @@
+masked_input = transformer.to_patch_embedding[-1](masked_input)

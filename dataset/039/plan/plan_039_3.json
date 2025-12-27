@@ -1,0 +1,26 @@
+```json
+[
+    "Install the required Python packages: torch, labml and any other necessary libraries.",
+    "Import the necessary modules from their respective files. Ensure you import all the dependencies listed in the Import Dependencies section.",
+    "Set up a working directory for your project and navigate to it.",
+    "Create a text file named 'tiny_shakespeare.txt' with at least 1024 characters of text for training purposes.",
+    "Define the hyperparameters: chunk_len=16, d_model=128, d_ff=512, n_heads=16, and d_k=16 as specified in the bug report.",
+    "Create an instance of TextFileDataset with 'tiny_shakespeare.txt' as the dataset file path, specifying list as the target format, and provide the URL for downloading the data if necessary.",
+    "Load or create a pre-retrieved neighbor dataset (retro_train_dataset.json) to use in conjunction with the Tiny Shakespeare dataset.",
+    "Initialize a DataLoader with the training dataset, setting batch_size=4 and using RandomSampler with replacement=True.",
+    "Instantiate NearestNeighborEncoder with chunk_len=16, num_chunks={3}, d_model=128, n_heads=16, d_k=16, and d_ff=512.",
+    "Create a RetroModel object with parameters that match the hyperparameters defined earlier, including the nearest neighbor encoder instance.",
+    "Move the model to a GPU device by calling the .to(device) method on the model, assuming 'cuda:0' is available.",
+    "Define an optimizer using Noam, setting lr=1., d_model=d_model (which is 128), and warmup=2_000 as specified in the bug report.",
+    "Create a Trainer object with the device, RetroModel instance, DataLoader, and the optimizer.",
+    "Set up experiment tracking by calling labml.create() with an appropriate name for your experiment.",
+    "Define a prompt string that you will use to sample text from the model.",
+    "In the main function train(), instantiate a Sampler object with parameters matching those used in the bug report.",
+    "Start the experiment using experiment.start().",
+    "Enter a loop to train the model for 32 epochs, as specified in the bug report. During each epoch, call trainer() to perform one training step.",
+    "After each epoch, sample text from the prompt using sampler.sample(prompt, 128) and log both the original prompt and the sampled text using labml.log().",
+    "Save models at the end of each epoch by calling experiment.save_checkpoint().",
+    "Verify that the bug occurs during training by checking the error message: RuntimeError: The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3."
+]
+```
+

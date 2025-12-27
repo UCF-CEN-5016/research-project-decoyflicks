@@ -1,0 +1,26 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10.13",
+    "Activate the new conda environment using: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install the TensorFlow Model Garden nightly version using pip with the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode) and create a new Python file or Jupyter notebook.",
+    "Import the necessary libraries at the top of the file/notebook with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official import tf_models",
+    "Check the current matplotlib backend by adding the line: print('Current backend:', plt.get_backend())",
+    "Run the code to verify the backend is set to an interactive backend (e.g., 'Qt5Agg' or 'TkAgg').",
+    "Import the TensorFlow Model Garden by adding the line: from official import tf_models",
+    "Check the matplotlib backend again after importing TensorFlow Model Garden by adding the line: print('Current backend after importing tf_models:', plt.get_backend())",
+    "Assert that the backend has changed to a non-interactive backend (e.g., 'Agg').",
+    "Create a simple plot using matplotlib with the following code: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Add the line plt.show() to display the plot.",
+    "Run the cell containing the plot code and verify that the plot does not display.",
+    "Add a line to change the backend to 'TkAgg' using: plt.switch_backend('TkAgg')",
+    "Run the cell again to check if the plot displays after changing the backend.",
+    "Assert that the plot still does not display after changing the backend post-import.",
+    "Add a line to change the backend to 'TkAgg' before importing TensorFlow Model Garden using: plt.switch_backend('TkAgg')",
+    "Re-import TensorFlow Model Garden with the line: from official import tf_models",
+    "Create and display a plot again with the same code: plt.plot([1, 2, 3], [1, 4, 9]) and plt.show()",
+    "Verify that the plot displays correctly this time."
+]
+```

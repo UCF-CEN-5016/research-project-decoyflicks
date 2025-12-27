@@ -1,0 +1,21 @@
+```json
+[
+    "Clone the repository from GitHub using the command: git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git",
+    "Navigate to the directory containing the RoPE implementation: cd annotated_deep_learning_paper_implementations/labml_nn/transformers/rope",
+    "Open the __init__.py file in a code editor and locate line 226, which currently reads: rotary_pe = RotaryPositionalEmbeddings(3)",
+    "Modify line 226 to read: rotary_pe = RotaryPositionalEmbeddings(4) to simulate the bug scenario.",
+    "Install the required dependencies by running: pip install -r requirements.txt",
+    "Create a new Python script named test_rope_bug.py in the same directory.",
+    "In test_rope_bug.py, import necessary modules: from labml import experiment, from labml_nn.transformers import Configs, AutoregressiveTransformer",
+    "Define a function named main() in test_rope_bug.py to encapsulate the experiment setup.",
+    "Inside main(), create an experiment using: experiment.create(name='rotary_pe_transformer_test', writers={'screen'})",
+    "Create a Configs object: conf = Configs()",
+    "Override configurations in the Configs object with the following parameters: conf.transformer.src_embed = 'no_pos', conf.transformer.tgt_embed = 'no_pos', conf.transformer.encoder_attn = 'rotary', conf.model = 'rotary_pe_transformer', conf.tokenizer = 'character', conf.prompt_separator = '', conf.prompt = 'It is ', conf.text = 'tiny_shakespeare', conf.seq_len = 512, conf.epochs = 32, conf.batch_size = 4, conf.inner_iterations = 10, conf.d_model = 128, conf.transformer.ffn.d_ff = 512, conf.transformer.n_heads = 16, conf.transformer.dropout = 0.0, conf.optimizer.optimizer = 'Noam', conf.optimizer.learning_rate = 1.",
+    "Add the model to the experiment for saving and loading: experiment.add_pytorch_models({'model': conf.model})",
+    "Start the experiment context: with experiment.start():",
+    "Run the training process: conf.run()",
+    "Execute the script using the command: python test_rope_bug.py",
+    "Observe the output for any errors related to the dimensions of the RotaryPositionalEmbeddings, specifically looking for errors indicating a mismatch due to the incorrect number of features (4 instead of 3).",
+    "Assert that an error is raised during the execution, indicating that the model cannot proceed due to the incorrect configuration of RotaryPositionalEmbeddings."
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the LAMB optimizer from official.modeling.optimization",
+    "Define a batch size of 3 and create a variable dimension of 3 for the parameters",
+    "Initialize numpy arrays for parameters var0_np and var1_np with values [1.0, 1.0, 2.0] and [3.0, 3.0, 4.0] respectively",
+    "Initialize numpy arrays for gradients grads0_np and grads1_np with values [0.1, 0.0, 0.1] and [0.01, 0.0, 0.01] respectively",
+    "Create TensorFlow Variables var0 and var1 from var0_np and var1_np",
+    "Create IndexedSlices for gradients grads0 and grads1 using grads0_np and grads1_np with indices [0, 2]",
+    "Instantiate the LAMB optimizer with default parameters",
+    "Run a loop for 3 iterations to apply gradients using opt.apply_gradients(zip([grads0, grads1], [var0, var1]))",
+    "In each iteration, call lamb_update_numpy with parameters var0_np, grads0_np, current iteration index, and initial m0, v0 values",
+    "After each update, assert that the updated var0_np and var1_np values are equal to var0.numpy() and var1.numpy() respectively",
+    "Check the value of the standard deviation applied in the augmentation process by inspecting the relevant code section",
+    "Verify that the standard deviation is always 1 by asserting that the computed standard deviation does not change across iterations",
+    "Log the values of the standard deviation before and after the update to confirm they remain constant",
+    "Confirm that the bug is reproduced by observing that the standard deviation does not vary as expected"
+]
+```

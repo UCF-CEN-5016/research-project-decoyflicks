@@ -1,0 +1,16 @@
+[
+  "Create a new conda environment with Python 3.10.13 using `conda create -n tf_py310 python=3.10.13` and activate it",
+  "Install TensorFlow 2.13.0 in the environment using `pip install tensorflow==2.13.0`",
+  "Install TensorFlow Model Garden nightly package with `pip install tf-models-nightly`",
+  "Install matplotlib with `pip install matplotlib`",
+  "Launch a Python interpreter or create a new Python script/notebook in the environment",
+  "Import matplotlib.pyplot as plt and print the current matplotlib backend using `import matplotlib.pyplot as plt; print(plt.get_backend())` to verify it is an interactive backend (e.g., 'TkAgg' or 'Qt5Agg')",
+  "Import tensorflow_models (e.g., `import tensorflow_models`) which triggers the backend change",
+  "Check the matplotlib backend again immediately after importing tensorflow_models using `print(plt.get_backend())` to verify it has changed to 'agg' (a non-interactive backend)",
+  "Try to create and display a simple plot after importing tensorflow_models: `plt.plot([1, 2, 3], [4, 5, 6]); plt.show()`",
+  "Verify that the plot does not display or the display fails due to the backend being 'agg'",
+  "Restart the Python interpreter and this time set the matplotlib backend explicitly before importing tensorflow_models using `import matplotlib; matplotlib.use('TkAgg')`",
+  "Import matplotlib.pyplot as plt and tensorflow_models in sequence after setting the backend",
+  "Create and display the same simple plot `plt.plot([1, 2, 3], [4, 5, 6]); plt.show()`",
+  "Verify that the plot displays correctly this time, confirming the bug reproduction and the backend switch behavior"
+]

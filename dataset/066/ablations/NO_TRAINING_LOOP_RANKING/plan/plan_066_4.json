@@ -1,0 +1,22 @@
+```json
+[
+    "Import the necessary modules: keras and numpy",
+    "Define a function to create a simple Keras Sequential model with a Dense layer",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Preprocess the MNIST data: reshape x_train and x_test to (-1, 784) and normalize to float32",
+    "Limit the training data to 1000 samples by slicing x_train and y_train",
+    "Limit the testing data to 1000 samples by slicing x_test and y_test",
+    "Define a custom callback class that logs training and evaluation events",
+    "Implement the on_train_batch_end method to print the logs dictionary",
+    "Create an instance of the model using the get_model function",
+    "Compile the model with optimizer RMSprop and loss mean_squared_error",
+    "Fit the model on the training data with batch_size=128 and epochs=1, using the custom callback",
+    "During fitting, ensure the custom callback logs the output of the logs dictionary",
+    "Define a variable level2_dau_2 but do not use it in the model or callback",
+    "In the model or callback, reference level3_dau_2 instead of level2_dau_2 in a selective kernel feature fusion function",
+    "Run the model evaluation on the test data with the same batch size and custom callback",
+    "Check the logs printed by the custom callback to verify that level2_dau_2 is not referenced",
+    "Assert that the logs do not contain any mention of level2_dau_2, confirming it is unused",
+    "Manually inspect the code to confirm that level3_dau_2 is incorrectly referenced instead of level2_dau_2"
+]
+```

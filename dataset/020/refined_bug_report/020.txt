@@ -1,0 +1,40 @@
+### TITLE
+Dict Merge Issue in TensorFlow Model Garden with Python 3.8
+
+### SYMPTOMS
+• TypeError: unsupported operand type(s) for |: 'dict' and 'dict' when running the training and evaluation step.
+• The error occurs during the execution of `tfm.core.train_lib.run_experiment` function.
+
+### EXPECTED BEHAVIOR
+The code should execute without errors, successfully run the experiment, and produce model training and evaluation logs.
+
+### REPRODUCTION STEPS
+1. Clone the TensorFlow Model Garden repository from the official GitHub URL: https://github.com/tensorflow/models.git.
+2. Ensure you are using TensorFlow 2.12.0 by checking your environment with:
+```sh
+python -c "import tensorflow as tf; print(tf.version.GIT_VERSION, tf.version.VERSION)"
+```
+3. Follow the Object Detection tutorial steps until the training and evaluation part.
+4. Run the following code snippet to train and evaluate the model:
+```python
+model, eval_logs = tfm.core.train_lib.run_experiment(
+distribution_strategy=distribution_strategy,
+task=task,
+mode='train_and_eval',
+params=exp_config,
+model_dir=model_dir,
+run_post_eval=True)
+```
+5. Observe the TypeError: unsupported operand type(s) for |: 'dict' and 'dict'.
+
+### ANALYSIS
+The error suggests that there is a compatibility issue between TensorFlow Model Garden version 2.12.0 and Python 3.8, particularly with how dictionaries are being merged in certain parts of the codebase.
+
+### SUGGESTIONS FOR RESOLUTION
+1. **Update Dependencies**: Ensure all dependencies are compatible with each other. Check if there are any known issues or updates for `tf-models-official` version 2.12.0 that address this bug.
+2. **Downgrade Python Version**: Temporarily downgrade the Python version to a supported version by TensorFlow Model Garden, such as Python 3.7, and see if the issue persists.
+3. **Report Issue**: If the problem persists, report the issue on the official GitHub repository or relevant forums, providing detailed steps to reproduce the error.
+
+### ADDITIONAL INFORMATION
+- The specific line causing the error is in `base_trainer.py`, where a bitwise OR operation (`|`) is being used between two dictionaries.
+- Ensure your Docker image TensorFlow version matches the expected requirements for the Model Garden tutorial.

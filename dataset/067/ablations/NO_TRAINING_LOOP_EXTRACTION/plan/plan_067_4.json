@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: keras, numpy, tensorflow, and matplotlib",
+    "Set the target image shape to (200, 200)",
+    "Define a batch size of 32 for training and validation datasets",
+    "Create a directory structure to store the dataset: ~/.keras/left and ~/.keras/right",
+    "Download the Totally Looks Like dataset and unzip it into the created directories",
+    "Load anchor images from ~/.keras/left and positive images from ~/.keras/right, ensuring they are sorted",
+    "Create a negative dataset by shuffling anchor and positive images and concatenating them",
+    "Define a function preprocess_image that reads, decodes, and resizes images to target_shape",
+    "Define a function preprocess_triplets that takes anchor, positive, and negative filenames and returns preprocessed images",
+    "Create a tf.data.Dataset for anchor, positive, and negative images using from_tensor_slices",
+    "Zip the datasets together to create a triplet dataset and shuffle it",
+    "Map the preprocess_triplets function to the dataset",
+    "Split the dataset into training (80%) and validation (20%) sets",
+    "Batch the training and validation datasets with a batch size of 32",
+    "Define a Siamese Network model using ResNet50 as the base model with input shape (200, 200, 3)",
+    "Create a DistanceLayer class to compute distances between anchor, positive, and negative embeddings",
+    "Define the SiameseModel class with a custom training loop that computes triplet loss",
+    "Compile the SiameseModel with Adam optimizer and a learning rate of 0.0001",
+    "Train the Siamese model for 10 epochs using the training dataset",
+    "During training, intentionally keep the last dimension of the labels (e.g., shape (32, 1)) instead of flattening it to (32)",
+    "After training, evaluate the model on the validation dataset to check for poor performance",
+    "Assert that the validation loss is significantly higher than expected (e.g., > 1.0) indicating incorrect loss calculation",
+    "Log the output of the model to verify that the loss values are not decreasing as expected"
+]
+```

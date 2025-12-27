@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from orbit and absl",
+    "Define a batch size of 10 and input dimensions of (3,) for the model",
+    "Create a function 'dataset_fn' that generates a dataset with 10 samples of shape (10, 3) for inputs and (10, 4) for targets",
+    "Instantiate a 'TestRunner' class that initializes a model, optimizer, and datasets using the 'dataset_fn'",
+    "Set the learning rate of the optimizer to 0.1",
+    "Create a 'Controller' instance with the 'TestRunner' as both trainer and evaluator, and set train_steps to 10 and eval_steps to 2",
+    "Run the 'train_and_evaluate' method of the controller to start training and evaluation",
+    "Check the output of the training process to ensure it runs without errors",
+    "Modify the RandAugment magnitude standard deviation in the augment.py file to ensure it is set to 0 or 1",
+    "Re-run the training and evaluation process to observe the behavior of the model with the modified standard deviation",
+    "Capture the output of the training process and check if the loss values remain constant or if they exhibit unexpected behavior",
+    "Assert that the loss values do not change significantly across training steps, indicating that the standard deviation is not functioning as intended",
+    "Log the loss values during training to verify if they are consistently 0 or 1, confirming the bug"
+]
+```

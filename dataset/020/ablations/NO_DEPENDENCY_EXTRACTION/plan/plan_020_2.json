@@ -1,0 +1,18 @@
+```json
+[
+    "Pull the Docker image for TensorFlow with GPU support: 'docker pull tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Run the Docker container with the command: 'docker run --gpus all -it --rm tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Install the required package by running: 'pip install tf-models-official==2.12.0'",
+    "Import TensorFlow and the necessary modules in a new Jupyter notebook cell: 'import tensorflow as tf' and 'from official.vision import tfm'",
+    "Set the Python version to 3.8 by checking the environment: 'import sys; print(sys.version)'",
+    "Define the distribution strategy as 'tf.distribute.MirroredStrategy()'",
+    "Create a configuration dictionary for the experiment with the following parameters: 'exp_config = {'model': {'backbone': {'type': 'yolo_v7'}, 'input_size': [640, 640, 3], 'num_classes': 80}}'",
+    "Set the model directory for saving checkpoints: 'model_dir = '/tmp/yolo_model'",
+    "Run the training and evaluation experiment with the following command: 'model, eval_logs = tfm.core.train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)'",
+    "Capture the output and check for the error message: 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict' in the logs'",
+    "Verify that the error occurs specifically during the evaluation step by adding print statements before and after the line that causes the error",
+    "Ensure that the input data is correctly formatted as a dictionary with keys 'image' and 'label' for the training step",
+    "Check the versions of TensorFlow and tf-models-official by running: 'print(tf.__version__)' and 'print(tfm.__version__)'",
+    "Confirm that the error is reproducible by running the experiment multiple times and observing consistent failure"
+]
+```

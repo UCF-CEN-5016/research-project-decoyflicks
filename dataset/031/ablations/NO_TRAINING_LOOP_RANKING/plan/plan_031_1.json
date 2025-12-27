@@ -1,0 +1,17 @@
+```json
+[
+    "Clone the NVIDIA DeepLearningExamples repository from GitHub using 'git clone https://github.com/NVIDIA/DeepLearningExamples.git'",
+    "Navigate to the ResNet50 directory using 'cd DeepLearningExamples/PyTorch/Classification/ConvNets/resnet50v1.5'",
+    "Install required dependencies by running 'pip install -r requirements.txt'",
+    "Download the pretrained weights file 'nvidia_resnet50_200821.pth.tar' from the specified source or URL",
+    "Place the downloaded weights file in the current directory",
+    "Prepare the ImageNet dataset by ensuring the directory '/data/imagenet/' exists and contains the appropriate image files structured as per ImageNet requirements",
+    "Set the batch size to 256 for inference by defining a variable 'batch_size = 256'",
+    "Construct the command to run inference with the ResNet50 model using the pretrained weights: 'python ./main.py --arch=resnet50 --evaluate --epochs=1 --pretrained-from-file=nvidia_resnet50_200821.pth.tar -b=256 /data/imagenet/'",
+    "Execute the command in the terminal to start the inference process",
+    "Monitor the output for any RuntimeError messages during the loading of the state_dict",
+    "Capture the specific error message indicating missing and unexpected keys in the state_dict",
+    "Log the output to a file for further analysis if the error occurs",
+    "Verify that the error message contains keys such as 'layers.0.0.conv1.weight' and 'layer1.0.conv1.weight' to confirm the bug is reproduced"
+]
+```

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf and from mrcnn import utils, model as modellib, and visualize",
+    "Set the model directory: define MODEL_DIR as a string pointing to a valid directory, e.g., MODEL_DIR = './logs/'",
+    "Set the COCO_MODEL_PATH: define COCO_MODEL_PATH as a string pointing to a valid weights file, e.g., COCO_MODEL_PATH = './mask_rcnn_coco.h5'",
+    "Create a configuration class: define a subclass of the Config class from mrcnn.config, e.g., class InferenceConfig(Config): pass",
+    "Set the necessary attributes in InferenceConfig: set attributes like NAME, NUM_CLASSES, GPU_COUNT, IMAGES_PER_GPU, etc.",
+    "Instantiate the configuration: config = InferenceConfig()",
+    "Set the mode to inference: instantiate the MaskRCNN model with model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Attempt to load weights: call model.load_weights(COCO_MODEL_PATH, by_name=True) to trigger the bug",
+    "Capture the NotImplementedError: wrap the load_weights call in a try-except block to catch NotImplementedError",
+    "Print the error message: in the except block, print the error message to confirm the bug is reproduced",
+    "Verify the traceback: ensure the traceback matches the provided bug report to confirm the same error is occurring"
+]
+```

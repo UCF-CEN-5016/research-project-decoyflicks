@@ -1,0 +1,17 @@
+```json
+[
+    "Install TensorFlow 2.7 or greater",
+    "Import numpy and pandas libraries",
+    "Define a function load_timeseries_data that generates a DataFrame with a column of timestamps and other random numerical data for demonstration purposes",
+    "Call the load_timeseries_data function to create a DataFrame 'df' with at least 100 rows and one timestamp column named 'timestamp'",
+    "Convert the 'timestamp' column in df to string format using pd.to_datetime(df['timestamp']).dt.strftime('%d.%m.%Y %H:%M')",
+    "Add random numerical columns to df for demonstration purposes",
+    "Ensure df contains at least one non-numeric column, e.g., a categorical column with 3 unique values",
+    "Define a function show_heatmap that takes a DataFrame and plots the correlation heatmap using plt.matshow(data.corr())",
+    "Call the show_heatmap function with df as the argument to reproduce the bug",
+    "Verify the error message 'could not convert string to float' is raised during execution",
+    "Monitor GPU memory usage during execution",
+    "Assert that no GPU operations are performed, as indicated by TensorFlow logs showing CUDA drivers not found and TensorRT not found"
+]
+```
+

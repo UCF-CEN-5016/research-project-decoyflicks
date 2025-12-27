@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow as tf and the data_utils module from neural_gpu/neural_gpu.py",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 64 and image dimensions of 28x28 for the MNIST dataset",
+    "Load the MNIST dataset using tf.keras.datasets.mnist.load_data()",
+    "Preprocess the MNIST data by normalizing the pixel values to the range [0, 1]",
+    "Reshape the training and testing data to have shape (num_samples, height, width, channels) where channels=1",
+    "Define the NeuralGPU model parameters: nmaps=128, vec_size=256, niclass=10, noclass=10, dropout=0.5, rx_step=5, max_grad_norm=5.0, cutoff=1.0, nconvs=3, kw=3, kh=3, height=1, mode=0, learning_rate=0.001, pull=0.1, pull_incr=1.1, min_length=1",
+    "Instantiate the NeuralGPU model with the defined parameters",
+    "Create a TensorFlow session and initialize all variables using sess.run(tf.global_variables_initializer())",
+    "Define a training loop for a total of 50 epochs",
+    "Within the training loop, for each epoch, iterate over the training data in batches of size 64",
+    "For each batch, call the step method of the NeuralGPU model with do_backward=True and noise_param=0.0",
+    "Capture the loss output from the step method and check if it contains NaN values",
+    "Log the loss value after each batch to monitor for NaN occurrences",
+    "Monitor GPU memory usage using tf.config.experimental.get_memory_info('GPU:0') before and after each training step",
+    "Assert that the GPU memory usage exceeds 10GB during training",
+    "If NaN loss is detected, print a message indicating the occurrence of NaN loss and the current epoch and batch number"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules from the provided code snippet",
+    "Set up command line argument parsing for the script, similar to the 'ArgumentParser' usage in the provided code",
+    "Define specific parameters for the model such as 'math_str', 'args.type', 'bsz', 'tgt_len', 'ext_len', 'mem_len', and 'clamp_len'",
+    "Prepare a mock data iterator or corpus that matches the expectations of the 'LMOrderedIterator' function, ensuring it can be used in place of real data",
+    "Initialize an instance of the model using the `MemTransformerLM` class with parameters loaded from a mock checkpoint",
+    "Set up meters and other necessary variables as defined in the script to monitor evaluation metrics such as throughput and latency",
+    "Call the 'evaluate' function with the prepared data iterator, model, and meters, simulating the evaluation process of the script",
+    "Capture any output or logging generated during the execution of the evaluation, focusing on error messages or unexpected behavior that may indicate a bug",
+    "Verify that the evaluation produces a result that matches the expected bug condition, such as incorrect values or exceptions being raised"
+]
+```
+

@@ -1,0 +1,25 @@
+```json
+[
+    "Import the necessary modules from accelerate, diffusers, and torch.",
+    "Define constants for batch size (batch_size = 1), height (height = 512), width (width = 512), and num_images_per_prompt (num_images_per_prompt = 1).",
+    "Create a dummy prompt embedding tensor of shape (batch_size * num_images_per_prompt, 768) with random values.",
+    "Initialize a dummy unet model for the pipeline.",
+    "Set up a scheduler instance with parameters appropriate for the model and batch size.",
+    "Call the prepare_latents function to generate a latent variable tensor of shape (batch_size * num_images_per_prompt, num_channels_latents, height, width) filled with random values.",
+    "Call the _encode_prompt method with the dummy prompt embeddings and device set to 'cpu'.",
+    "Define timesteps for the scheduler using the prepare_timesteps method.",
+    "Call the unet model with latent_model_input tensor and encoder_hidden_states as prompt_embeds_text, capturing the output noise_pred.",
+    "Call the step method of the scheduler with noise_pred, t, latents, and extra_step_kwargs, capturing the prev_sample result.",
+    "Assert that the shape of the output prev_sample is (batch_size * num_images_per_prompt, num_channels_latents, height, width).",
+    "Initialize a dummy progress bar for simulation purposes.",
+    "Run the loop from 0 to len(timesteps) - 1, calling scheduler.step in each iteration and updating the latents tensor accordingly.",
+    "After the loop, assert that the final shape of latents is (batch_size * num_images_per_prompt, num_channels_latents, height, width).",
+    "Call decode_latents method with latents to capture the output image tensor.",
+    "Run the safety_checker method with the image tensor and device set to 'cpu', capturing the output image and has_nsfw_concept.",
+    "Assert that the shape of the output image is (batch_size * num_images_per_prompt, height, width, 3).",
+    "Convert the output image tensor to PIL format.",
+    "Create an instance of StableDiffusionPipelineOutput with images set to the output image tensor and nsfw_content_detected set to has_nsfw_concept.",
+    "Print the output object to verify its structure."
+]
+```
+

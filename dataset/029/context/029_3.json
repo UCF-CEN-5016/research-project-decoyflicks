@@ -1,0 +1,66 @@
+{
+  "bug_report": "029",
+  "rank": 3,
+  "score": 0.700523853302002,
+  "main_file": {
+    "path": "distributed/tensor_parallelism/example.py",
+    "content": "import argparse\nimport os\nimport torch\nimport torch.distributed as dist\nimport torch.multiprocessing as mp\nimport torch.nn as nn\n\nTP_AVAILABLE = False\ntry:\n    from torch.distributed._tensor import (\n        DeviceMesh,\n    )\n    from torch.distributed.tensor.parallel import (\n        PairwiseParallel,\n        parallelize_module,\n    )\n    TP_AVAILABLE = True\nexcept BaseException as e:\n    pass\n\n\n\"\"\"\nThis is the script to test Tensor Parallel(TP) on a toy model in a\nMegetron-LM SPMD style. We show an E2E working flow from forward,\nbackward and optimization.\n\nMore context about API designs can be found in the design:\n\nhttps://github.com/pytorch/pytorch/issues/89884.\n\nAnd it is built on top of Distributed Tensor which is proposed in:\n\nhttps://github.com/pytorch/pytorch/issues/88838.\n\nWe use the example of two `nn.Linear` layers with an element-wise `nn.RELU`\nin between to show an example of Megatron-LM, which was proposed in paper:\n\nhttps://arxiv.org/abs/1909.08053.\n\nThe basic idea is that we parallelize the first linear layer by column\nand also parallelize the second linear layer by row so that we only need\none all reduce in the end of the second linear layer.\n\nWe can speed up the model training by avoiding communications between\ntwo layers.\n\nTo parallelize a nn module, we need to specify what parallel style we want\nto use and our `parallelize_module` API will parse and parallelize the modules\nbased on the given `ParallelStyle`. We are using this PyTorch native Tensor\nParallelism APIs in this example to show users how to use them.\n\"\"\"\n\n\ndef setup(rank, world_size):\n    os.environ['MASTER_ADDR'] = 'localhost'\n    os.environ['MASTER_PORT'] = '12355'\n\n    # initialize the process group\n    dist.init_process_group(\"nccl\", rank=rank, world_size=world_size)\n    torch.cuda.set_device(rank)\n\ndef cleanup():\n    dist.destroy_process_group()\n\n\nclass ToyModel(nn.Module):\n    def __init__(self):\n        super(ToyModel, self).__init__()\n        self.net1 = nn.Linear(10, 32)\n        self.relu = nn.ReLU()\n        self.net2 = nn.Linear(32, 5)\n\n    def forward(self, x):\n        return self.net2(self.relu(self.net1(x)))\n\n\ndef demo_tp(rank, args):\n    \"\"\"\n    Main body of the demo of a basic version of tensor parallel by using\n    PyTorch native APIs.\n    \"\"\"\n    print(f\"Running basic Megatron style TP example on rank {rank}.\")\n    setup(rank, args.world_size)\n    # create a sharding plan based on the given world_size.\n    device_mesh = DeviceMesh(\n        \"cuda\",\n        torch.arange(args.world_size),\n    )\n\n    # create model and move it to GPU with id rank\n    model = ToyModel().cuda(rank)\n    # Create a optimizer for the parallelized module.\n    LR = 0.25\n    optimizer = torch.optim.SGD(model.parameters(), lr=LR)\n    # Parallelize the module based on the given Parallel Style.\n    model = parallelize_module(model, device_mesh, PairwiseParallel())\n\n    # Perform a num of iterations of forward/backward\n    # and optimizations for the sharded module.\n    for _ in range(args.iter_nums):\n        inp = torch.rand(20, 10).cuda(rank)\n        output = model(inp)\n        output.sum().backward()\n        optimizer.step()\n\n    cleanup()\n\n\ndef run_demo(demo_fn, args):\n    mp.spawn(demo_fn,\n             args=(args,),\n             nprocs=args.world_size,\n             join=True)\n\n\nif __name__ == \"__main__\":\n    n_gpus = torch.cuda.device_count()\n    parser = argparse.ArgumentParser()\n    # This is passed in via cmd\n    parser.add_argument(\"--world_size\", type=int, default=n_gpus)\n    parser.add_argument(\"--iter_nums\", type=int, default=10)\n    args = parser.parse_args()\n    # The main entry point is called directly without using subprocess\n    if n_gpus < 2:\n        print(\"Requires at least 2 GPUs to run.\")\n    elif not TP_AVAILABLE:\n        print(\n            \"PyTorch doesn't have Tensor Parallelism available,\"\n            \" need nightly build.\"\n        )\n    else:\n        run_demo(demo_tp, args)\n\n"
+  },
+  "module_snippets": [
+    {
+      "file": "distributed/tensor_parallelism/example.py",
+      "snippets": [
+        {
+          "lines": "67-71",
+          "code": "def demo_tp(rank, args):\n    \"\"\"\n    Main body of the demo of a basic version of tensor parallel by using\n    PyTorch native APIs.\n    \"\"\"\n    print(f\"Running basic Megatron style TP example on rank {rank}.\")\n    setup(rank, args.world_size)\n    # create a sharding plan based on the given world_size.\n    device_mesh = DeviceMesh(\n        \"cuda\",\n        torch.arange(args.world_size),\n    )\n\n    # create model and move it to GPU with id rank\n    model = ToyModel().cuda(rank)\n    # Create a optimizer for the parallelized module.\n    LR = 0.25\n    optimizer = torch.optim.SGD(model.parameters(), lr=LR)\n    # Parallelize the module based on the given Parallel Style.\n    model = parallelize_module(model, device_mesh, PairwiseParallel())\n\n    # Perform a num of iterations of forward/backward\n    # and optimizations for the sharded module.\n    for _ in range(args.iter_nums):\n        inp = torch.rand(20, 10).cuda(rank)\n        output = model(inp)\n        output.sum().backward()\n        optimizer.step()\n\n    cleanup()\n\ndef run_demo(demo_fn, args):\n    mp.spawn(demo_fn,\n             args=(args,),\n             nprocs=args.world_size,\n             join=True)\n\n    def __init__(self):\n        super(ToyModel, self).__init__()\n        self.net1 = nn.Linear(10, 32)\n        self.relu = nn.ReLU()\n        self.net2 = nn.Linear(32, 5)"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "torch",
+      "function": "DeviceMesh"
+    },
+    {
+      "module": "torch",
+      "function": "Linear"
+    },
+    {
+      "module": "torch",
+      "function": "PairwiseParallel"
+    },
+    {
+      "module": "torch",
+      "function": "ReLU"
+    },
+    {
+      "module": "torch",
+      "function": "arange"
+    },
+    {
+      "module": "torch",
+      "function": "destroy_process_group"
+    },
+    {
+      "module": "torch",
+      "function": "init_process_group"
+    },
+    {
+      "module": "torch",
+      "function": "parallelize_module"
+    },
+    {
+      "module": "torch",
+      "function": "rand"
+    },
+    {
+      "module": "torch",
+      "function": "spawn"
+    }
+  ]
+}

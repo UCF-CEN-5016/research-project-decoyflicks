@@ -1,0 +1,23 @@
+```json
+[
+    "Install PyTorch version 1.9.0+cu111 using pip: 'pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html'",
+    "Ensure the operating system is Ubuntu 18.04 LTS.",
+    "Create a new Python script named 'reproduce_bug.py'.",
+    "Import necessary modules: 'import os', 'import threading', 'import torch', 'import torch.distributed.rpc as rpc', 'import torch.multiprocessing as mp', 'import torch.nn as nn', 'from torch import optim', 'import torchvision'.",
+    "Define constants: 'batch_size = 20', 'image_w = 64', 'image_h = 64', 'num_classes = 30', 'batch_update_size = 5', 'num_batches = 6'.",
+    "Define a function 'timed_log(text)' that prints the current time and the provided text.",
+    "Create a class 'BatchUpdateParameterServer' with an '__init__' method that initializes a ResNet50 model with 'num_classes' and an SGD optimizer.",
+    "In 'BatchUpdateParameterServer', define a method 'get_model()' that returns the model.",
+    "In 'BatchUpdateParameterServer', define a static method 'update_and_fetch_model(ps_rref, grads)' that simulates model updates.",
+    "Create a class 'Trainer' with an '__init__' method that initializes the loss function and one-hot encoded labels.",
+    "In 'Trainer', define a method 'get_next_batch()' that yields random input tensors of shape (batch_size, 3, image_w, image_h) and corresponding labels.",
+    "In 'Trainer', define a method 'train()' that performs training iterations using the parameter server.",
+    "Define a function 'run_trainer(ps_rref)' that creates a Trainer instance and calls its 'train()' method.",
+    "Define a function 'run_ps(trainers)' that initializes the parameter server and starts training with the provided trainers.",
+    "Define a function 'run(rank, world_size)' that sets up the RPC environment and starts the parameter server and trainers.",
+    "In the '__main__' block, set 'world_size = batch_update_size + 1' and call 'mp.spawn(run, args=(world_size,), nprocs=world_size, join=True)'.",
+    "Add a line to check for the MPS backend: 'if torch.backends.mps.is_available(): print(\"MPS is available\")'.",
+    "Run the script using the command: 'python3 reproduce_bug.py'.",
+    "Observe the output for the AttributeError: 'module 'torch.backends' has no attribute 'mps'' indicating the bug has been reproduced."
+]
+```

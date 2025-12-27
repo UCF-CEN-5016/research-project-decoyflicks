@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, ContinuousTransformerWrapper, and Decoder from the appropriate modules.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define the parameters for ContinuousTransformerWrapper: dim_out=259, max_seq_len=0, num_memory_tokens=20, max_mem_len=100.",
+    "Define the parameters for the Decoder: dim=512, depth=6, heads=4, rotary_pos_emb=True, shift_tokens=1, attn_flash=True, attn_onnxable=True, use_rmsnorm=True, sandwich_norm=True.",
+    "Instantiate the ContinuousTransformerWrapper with the defined parameters and the Decoder instance.",
+    "Create a random input tensor x with shape (1, 1024, 512) using torch.randn(1, 1024, 512).",
+    "Create a mask tensor m with shape (1, 1024) using torch.randn(1, 1024) > 0.",
+    "Create a list of memory tensors mems, each with shape (1, 100, 512), using [torch.zeros(1, 100, 512) for _ in range(6)].",
+    "Call the net instance with the parameters: x, mask=m, mems=mems, and return_mems=True.",
+    "Capture the output logits and updated mems from the net call.",
+    "Print the shape of logits using print(logits.shape) to verify the output dimensions.",
+    "Print the shapes of each tensor in mems using print([m.shape for m in mems]) to verify the memory tensors.",
+    "Repeat the previous steps but set mems=None instead of the list of memory tensors.",
+    "Call the net instance again with the parameters: x, mask=m, mems=None, and return_mems=True.",
+    "Capture the output logits and updated mems from this second net call.",
+    "Print the shape of logits from the second call to verify it works without errors.",
+    "Compare the outputs from both calls to confirm that the first call with mems fails to produce the expected results."
+]
+```

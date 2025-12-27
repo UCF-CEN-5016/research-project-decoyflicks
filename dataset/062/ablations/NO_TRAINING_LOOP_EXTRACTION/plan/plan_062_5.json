@@ -1,0 +1,13 @@
+```json
+[
+    "Import pandas as pd and numpy as np",
+    "Set up a Python environment with Python 3.10, TensorFlow 2.13, and pandas 2.0.3",
+    "Create two sample DataFrames: train_df with 5 rows and 2 columns, and test_df with 3 rows and 2 columns",
+    "Define train_df as pd.DataFrame({'A': range(5), 'B': range(5, 10)})",
+    "Define test_df as pd.DataFrame({'A': range(3), 'B': range(3, 6)})",
+    "Attempt to concatenate train_df and test_df using the deprecated append method: all_data = train_df.append(test_df)",
+    "Run the code in a Jupyter Notebook cell to trigger the AttributeError",
+    "Observe the output for the AttributeError: 'DataFrame' object has no attribute 'append'",
+    "Verify that the FutureWarning about the append method being deprecated is also displayed"
+]
+```

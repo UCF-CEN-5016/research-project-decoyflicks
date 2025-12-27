@@ -1,0 +1,24 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running: !pip install keras==2.13.0 keras_cv tensorflow tensorflow_datasets matplotlib.",
+    "Import the necessary libraries by adding the following code: import os, keras, tensorflow as tf, tensorflow_datasets as tfds, matplotlib.pyplot as plt.",
+    "Set the KERAS_BACKEND environment variable to 'tensorflow' by adding: os.environ['KERAS_BACKEND'] = 'tensorflow'.",
+    "Load the IMDB reviews dataset using TensorFlow Datasets with the following code: dataset = tfds.load('imdb_reviews', split='train + test', as_supervised=True, batch_size=-1, shuffle_files=False).",
+    "Convert the dataset to numpy arrays with: reviews, labels = tfds.as_numpy(dataset).",
+    "Print the total number of examples in the dataset using: print('Total examples:', reviews.shape[0]).",
+    "Define the training, validation, and testing splits with: val_split = 2500, test_split = 2500, train_split = 7500.",
+    "Separate the positive and negative samples from the reviews using: x_positives, y_positives = reviews[labels == 1], labels[labels == 1]; x_negatives, y_negatives = reviews[labels == 0], labels[labels == 0].",
+    "Create the training, validation, and testing datasets using TensorFlow's tf.data.Dataset.from_tensor_slices method.",
+    "Define a TextVectorization layer with: vectorizer = layers.TextVectorization(3000, standardize='lower_and_strip_punctuation', output_sequence_length=150).",
+    "Adapt the vectorizer to the training dataset using: vectorizer.adapt(train_dataset.map(lambda x, y: x, num_parallel_calls=tf.data.AUTOTUNE).batch(256)).",
+    "Define a function to vectorize text: def vectorize_text(text, label): return vectorizer(text), label.",
+    "Map the vectorize_text function to the train, validation, and test datasets.",
+    "Create a simple Sequential model with Keras using: model = keras.models.Sequential([...]) where the model includes layers like Input, Embedding, Bidirectional LSTM, GlobalMaxPool1D, Dense, and Dropout.",
+    "Compile the model with: model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=[keras.metrics.BinaryAccuracy()]).",
+    "Attempt to fit the model on the training dataset using: model.fit(train_dataset.batch(256), epochs=20, validation_data=val_dataset).",
+    "Observe the ImportError: cannot import name 'data_utils' from 'keras.utils' during the execution of the code.",
+    "Verify that the error occurs by checking the output logs for the ImportError message.",
+    "Confirm that the Keras version is 2.13.0 by running: !pip show keras and checking the version number."
+]
+```

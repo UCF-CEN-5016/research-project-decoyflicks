@@ -1,0 +1,18 @@
+```json
+[
+    "Set up a Debian 12 environment with Miniforge3 and install TensorFlow 2.x using 'conda install tensorflow=2.x'",
+    "Install the object detection API by cloning the TensorFlow models repository and running 'pip install -r requirements.txt'",
+    "Ensure that the object detection module is correctly installed by running 'python -c \"import object_detection\"'",
+    "Create a directory structure for the model with the following paths: 'models/centernet_mobilenetv2fp/' and 'models/centernet_mobilenetv2fp/pipeline.config'",
+    "Create a sample 'pipeline.config' file in 'models/centernet_mobilenetv2fp/' with necessary configurations for training a CenterNet model",
+    "Create a Python script named 'model_main_tf2.py' that imports the object detection API and includes the necessary training logic",
+    "In 'model_main_tf2.py', import the following modules: 'from object_detection import model_lib', 'from object_detection.utils import config_util'",
+    "Define a function in 'model_main_tf2.py' to load the pipeline configuration using 'config_util.get_configs_from_pipeline_file(pipeline_config_path)'",
+    "Set the model directory path to 'models/centernet_mobilenetv2fp' and the pipeline config path to 'models/centernet_mobilenetv2fp/pipeline.config'",
+    "Run the training script using the command: 'python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config'",
+    "Monitor the output for the error message 'ModuleNotFoundError: No module named 'tensorflow.conrtib'",
+    "Check the 'exporter.py' file located at '/home/server/miniforge3/envs/ML/lib/python3.9/site-packages/object_detection/' for the import statement 'from tensorflow.contrib.quantize.python import graph_matcher'",
+    "Verify that the error occurs due to the absence of the 'tensorflow.contrib' module in TensorFlow 2.x",
+    "Confirm that the error is reproducible by running the training command multiple times to ensure consistency"
+]
+```

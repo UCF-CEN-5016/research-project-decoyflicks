@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the relevant modules from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and sequence length of 32",
+    "Create a random input tensor x with shape (batch_size, sequence_length) filled with integers representing token IDs, e.g., x = torch.randint(0, 1000, (1, 32))",
+    "Create a random tensor for positional embeddings with shape (batch_size, sequence_length) to simulate positional input, e.g., pos = torch.arange(32).unsqueeze(0)",
+    "Instantiate the RotaryEmbedding class with parameters: dim=64, use_xpos=True, scale_base=512, interpolation_factor=1.0",
+    "Instantiate the Attention class with parameters: dim=64, heads=8, causal=True, rotary_embed_values=True, and any other necessary parameters",
+    "Call the forward method of the Attention class with the input tensor x, context=None, mask=None, and the rotary positional embeddings created earlier",
+    "Capture the output of the forward method and any intermediate outputs",
+    "Verify that the output tensor has the expected shape, which should be (batch_size, sequence_length, dim) or (1, 32, 64)",
+    "Check for the presence of the EinopsError by asserting that the output does not raise any exceptions during the forward pass",
+    "Log the output tensor shape and any intermediate tensor shapes for debugging purposes",
+    "Assert that the output tensor shape is (1, 32, 64) to confirm the expected behavior",
+    "If an exception is raised, capture the exception message and log it for further analysis"
+]
+```

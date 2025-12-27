@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and GraphAttentionLayer from labml_nn.graphs.gat",
+    "Define a batch size of 5 and set the number of features per node to 1433 (as per Cora dataset)",
+    "Create a random tensor for features with shape (batch_size, in_features) where in_features = 1433",
+    "Create a random tensor for labels with shape (batch_size) containing integer values from 0 to 6 (since there are 7 classes in Cora dataset)",
+    "Create an adjacency matrix with shape (batch_size, batch_size) initialized to an identity matrix to simulate self-connections",
+    "Instantiate the GAT model with in_features=1433, n_hidden=64, n_classes=7, n_heads=8, and dropout=0.6",
+    "Set the model to evaluation mode using model.eval()",
+    "Pass the features and adjacency matrix to the model to get the output logits",
+    "Verify the output shape is (batch_size, n_classes) which should be (5, 7)",
+    "Calculate the loss using nn.CrossEntropyLoss() with the output logits and labels",
+    "Check if the loss value is finite (not NaN or Inf) after the forward pass",
+    "Modify the attention calculation in the GraphAttentionLayer to use attn.softmax(dim=2) instead of the current implementation",
+    "Re-run the model with the same input data and check if the loss value changes significantly",
+    "Log the loss values before and after the modification to validate the impact of the softmax dimension change",
+    "Assert that the loss value before modification is not equal to the loss value after modification to confirm the bug's presence"
+]
+```

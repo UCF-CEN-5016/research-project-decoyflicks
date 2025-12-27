@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 4 and a feature dimension of 1024",
+    "Create random input tensors x and y with shape (batch_size, feature_dim) using torch.randn",
+    "Set the values of x and y to large numbers to trigger float precision overflow, e.g., multiply by 1e10",
+    "Define the cdist function as per the provided code context, ensuring it computes distances using the formula (x^2 + y^2 - 2xy)",
+    "Call the cdist function with the large tensors x and y",
+    "Capture the output of the cdist function in a variable named distances",
+    "Check if any values in distances are NaN using torch.isnan(distances).any()",
+    "Print the result of the NaN check to verify if NaN values are present in the output",
+    "Assert that the result of the NaN check is True to confirm the bug is reproduced"
+]
+```

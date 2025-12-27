@@ -1,0 +1,28 @@
+TITLE
+Conflict between `attn_num_mem_kv` and `attn_one_kv_head` parameters
+
+SYMPTOMS
+• Setting both `attn_num_mem_kv` and `attn_one_kv_head` results in an error.
+• The specific error message encountered is not provided in the original report.
+• The model fails to produce logits when the conflicting parameters are set.
+
+EXPECTED BEHAVIOR
+When both `attn_num_mem_kv` and `attn_one_kv_head` are set, the model should either handle the configuration without errors or provide a clear warning indicating that these parameters are incompatible.
+
+REPRODUCTION STEPS
+1. Initialize a `TransformerWrapper` object with the following parameters:
+   - `num_tokens = 32`
+   - `max_seq_len = 0`
+   - `num_memory_tokens = 20`
+   - `attn_layers` as a `Decoder` with:
+     - `dim = 512`
+     - `depth = 4`
+     - `heads = 4`
+     - `rotary_pos_emb = True`
+     - `attn_flash = True`
+     - `attn_onnxable = True`
+     - `attn_num_mem_kv = 20`
+     - `attn_one_kv_head = True`
+2. Create a tensor `x` using `torch.randint(0, 32, (8, 1024))`.
+3. Call `logits = lm(x)` to execute the model and observe the error.
+4. Print the shapes and data types of `x` and `logits` to confirm the output (though an error is expected).

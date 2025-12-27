@@ -1,0 +1,19 @@
+TITLE
+Commit Loss Calculation Issue with Mask and ResidualLFQ
+
+SYMPTOMS
+• Shape mismatch between `original_input` and `quantized` tensors during the commit loss computation.
+• User warning indicating different sizes for target and input tensors due to broadcasting issues.
+```
+.../python3.12/site-packages/vector_quantize_pytorch/lookup_free_quantization.py:401: UserWarning: Using a target size (torch.Size([2, 1851, 1, 14])) that is different to the input size (torch.Size([3700, 14])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+```
+
+EXPECTED BEHAVIOR
+• When using `ResidualLFQ` with a `mask`, and setting `commitment_loss_weight > 0`, the commit loss should be correctly calculated without shape mismatches or warnings.
+
+REPRODUCTION STEPS
+1. Import necessary libraries and modules from `vector-quantize-pytorch`.
+2. Initialize an instance of `ResidualLFQ` with a suitable configuration.
+3. Prepare input data for the forward pass, including a mask.
+4. Pass the masked input through the `forward` method of the initialized `ResidualLFQ` object.
+5. Observe the warning and potential issues in commit loss calculation due to shape mismatch.

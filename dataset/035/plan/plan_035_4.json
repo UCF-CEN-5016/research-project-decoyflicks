@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries and modules from the provided code context",
+    "Clone the labmlai/annotated_deep_learning_paper_implementations repository to a local directory",
+    "Navigate to the 'labml_nn/neox/utils/trainer.py' file in the cloned repository",
+    "Locate line 226: `rotary_pe = RotaryPositionalEmbeddings(3)` and note its location for later reference",
+    "Create a Python script to import the necessary dependencies, including those listed in the 'Import Dependencies' section of the bug report",
+    "Define a mock dataset loader function that returns dummy data with the appropriate shape (batch_size, sequence_length, feature_dim)",
+    "Initialize an instance of the `TrainerConf` class and set its attributes as follows: model=None, layers=None, optimizer='Adam', train_loader=mock_dataset_loader, valid_loader=None, device=torch.device('cpu'), scaler='Default', is_amp=True, dtype=torch.float16, is_clone_layers=True, loss_func=nn.CrossEntropyLoss(), checkpoints_per_epoch=0, samples_per_epoch=0, grad_norm=None, learning_rate=3e-4, max_seq_len=1024, batch_size=64, epochs=1",
+    "Call the `train` method of the `TrainerConf` instance to trigger the bug reproduction process",
+    "Monitor the output and error messages during execution to verify that an error occurs due to incompatible feature dimensions",
+    "Assert that the specific error message related to incompatible dimensions is raised during the execution of the script"
+]
+```
+

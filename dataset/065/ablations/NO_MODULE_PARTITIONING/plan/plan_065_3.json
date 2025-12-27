@@ -1,0 +1,19 @@
+```json
+[
+    "Import the necessary libraries: keras and tensorflow_datasets",
+    "Set up the environment by ensuring the correct version of Keras is installed (check for version compatibility with FeatureSpace)",
+    "Attempt to import FeatureSpace from keras.utils using the statement: from keras.utils import FeatureSpace",
+    "Capture the ImportError exception to verify that the import fails",
+    "Print the error message to confirm that it states 'cannot import name 'FeatureSpace' from 'keras.utils'",
+    "Check the installed version of Keras by running: print(keras.__version__)",
+    "Verify that the installed version of Keras is less than the version that includes FeatureSpace (e.g., check Keras release notes for version changes)",
+    "Create a virtual environment to isolate the Keras installation and avoid conflicts with other packages",
+    "Install Keras in the virtual environment using pip: pip install keras",
+    "Re-attempt the import of FeatureSpace from keras.utils to confirm the bug persists",
+    "If the import fails, assert that the error message matches the expected ImportError message",
+    "Log the version of TensorFlow being used by running: print(tf.__version__)",
+    "Ensure that TensorFlow version is compatible with the installed Keras version by checking the Keras documentation",
+    "Run the script in a Jupyter notebook or Python script to replicate the environment where the bug was reported",
+    "Confirm that the ImportError occurs in the same context as described in the bug report"
+]
+```

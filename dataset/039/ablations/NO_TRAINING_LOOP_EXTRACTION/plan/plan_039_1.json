@@ -1,0 +1,13 @@
+```json
+[
+    "Import the necessary modules: torch and labml_nn.transformers.rope",
+    "Define a sequence length of 4, batch size of 2, number of heads as 2, and feature dimension (d_model) as 4",
+    "Create a random input tensor 'x' with shape (seq_len, batch_size, n_heads, d_model) = (4, 2, 2, 4)",
+    "Instantiate the ReverseRotaryPositionalEmbeddings class with d_model set to 4",
+    "Call the forward method of the ReverseRotaryPositionalEmbeddings instance with the input tensor 'x'",
+    "Capture the output tensor from the forward method",
+    "Verify that the output tensor shape is (seq_len, batch_size, n_heads, d_model) = (4, 2, 2, 4)",
+    "Check for RuntimeError during the execution of the forward method, specifically looking for the error message: 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Assert that the RuntimeError is raised, confirming the bug is reproduced"
+]
+```

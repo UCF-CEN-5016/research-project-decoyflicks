@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and the Adam optimizer from labml_nn.optimizers.adam",
+    "Define a batch size of 4 and input feature dimensions of 3 (e.g., x = torch.randn(4, 3))",
+    "Create a tensor x with shape (4, 3) using torch.randn to simulate input data",
+    "Define a class for Rotary Positional Embeddings that includes cos_cached and sin_cached tensors with shapes (1, 1, 1, 4) and (1, 1, 1, 4) respectively",
+    "Initialize cos_cached and sin_cached with random values using torch.randn",
+    "Create an instance of the Rotary Positional Embeddings class and pass the input tensor x to it",
+    "Calculate x_rope by initializing it as a tensor with the same shape as x (4, 3)",
+    "Define neg_half_x as -0.5 * x_rope to simulate the negative half of x_rope",
+    "Attempt to compute x_rope using the line: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Catch the RuntimeError that occurs during the computation and print the error message",
+    "Verify that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the shapes of x_rope, self.cos_cached, and self.sin_cached before the computation to confirm the mismatch"
+]
+```

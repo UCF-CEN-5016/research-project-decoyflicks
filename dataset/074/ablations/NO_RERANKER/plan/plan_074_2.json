@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: argparse, deepspeed, torch, torch.nn, torch.nn.functional, torchvision, torchvision.transforms",
+    "Define a batch size of 16 and set the number of epochs to 1 for quick testing",
+    "Create a CIFAR10 dataset using torchvision.datasets.CIFAR10 with train=True and apply transformations to normalize the data",
+    "Create a DataLoader for the CIFAR10 training dataset with batch_size=16 and shuffle=True",
+    "Define a simple neural network class Net that includes convolutional layers and a fully connected layer, ensuring it has a forward method",
+    "Initialize the DeepSpeed distributed backend using deepspeed.init_distributed()",
+    "Define a DeepSpeed configuration dictionary with parameters for optimizer, scheduler, and zero optimization",
+    "Initialize the DeepSpeed engine with the model, parameters, training data, and configuration",
+    "Create a dummy action_mask tensor with shape (batch_size, sequence_length) filled with ones, where sequence_length is set to 10",
+    "Create dummy actor_log_prob and log_probs tensors with shape (batch_size, sequence_length) filled with random values",
+    "Create a dummy advantages tensor with shape (batch_size, sequence_length) filled with random values",
+    "Set start index to 1 to simulate the bug condition",
+    "Calculate actor_loss using the current mask: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:])",
+    "Print the calculated actor_loss to verify it is computed without errors",
+    "Modify the mask to action_mask[:, start-1:-1] and recalculate actor_loss to observe the difference",
+    "Print the new actor_loss to compare with the previous loss and check for discrepancies",
+    "Assert that the actor_loss with the modified mask is different from the original loss to confirm the bug exists"
+]
+```

@@ -1,0 +1,22 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the DeepSpeed-Domino training directory using 'cd DeepSpeedExamples/training/DeepSpeed-Domino'",
+    "Create a conda environment named 'deepspeed_env' using 'conda create -n deepspeed_env python=3.12'",
+    "Activate the conda environment using 'conda activate deepspeed_env'",
+    "Install required packages including DeepSpeed and PyTorch using 'pip install deepspeed torch torchvision torchaudio'",
+    "Load necessary modules for the SLURM job using 'module load openmpi/4.1.1', 'module load cuda/11.8.0', and 'module load gcc/10.2.0'",
+    "Create a dataset directory at 'dataset/my-gpt2_text_document' and populate it with sample text data for training",
+    "Create a vocabulary file at 'dataset/gpt2-vocab.json' and a merges file at 'dataset/gpt2-merges.txt' for the tokenizer",
+    "Create a job script 'deepspeed_job.sh' with the following SLURM directives: '#!/bin/bash -l', '#SBATCH --job-name=\"deepspeed_example\"', '#SBATCH --time=24:00:00', '#SBATCH --partition=amdrtx', '#SBATCH --nodelist=ault[41-42]', '#SBATCH --ntasks-per-node=1', '#SBATCH --gpus-per-task=2', '#SBATCH --mem=240G', '#SBATCH --output=deepspeed_example.%j.o', '#SBATCH --error=deepspeed_example.%j.e', '#SBATCH --account=g34'",
+    "Add commands to the job script to activate the conda environment and run 'srun nvidia-smi -L' to check GPU availability",
+    "Add the command 'srun bash pretrain_gpt3_2.7b.sh' to the job script to execute the training script",
+    "Create the 'pretrain_gpt3_2.7b.sh' script with the provided content, ensuring to set 'GPUS_PER_NODE=1' and 'export CUDA_DEVICE_MAX_CONNECTIONS=1'",
+    "Set the environment variable 'MASTER_ADDR' to the first hostname in the SLURM job node list using 'MASTER_ADDR=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)'",
+    "Set 'MASTER_PORT=29500' and calculate 'WORLD_SIZE' as '$(($GPUS_PER_NODE*$NNODES))'",
+    "Run the job script using 'sbatch deepspeed_job.sh'",
+    "Monitor the job output files for errors, specifically looking for warnings related to 'using GPU 0 to perform barrier as devices used by this process are currently unknown'",
+    "Check for the 'AttributeError: NoneType object has no attribute all_reduce' in the error output to confirm the bug occurrence",
+    "Verify that the job fails with the same error message as reported in the bug report"
+]
+```

@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the model classes from the relevant module.",
+    "Define a batch size of 2 and input dimensions of (2, 1024) for the input tensor.",
+    "Create a dictionary for input data with keys 'note', 'pitch', and 'tone' containing random integers: note with range 0-20000, pitch with range 0-32, and tone with range 0-16.",
+    "Instantiate the MultiInputTransformerWrapper model with num_tokens set to {'note': 20000, 'pitch': 32, 'tone': 16}, max_seq_len set to 1024, return_only_embed set to True, and attn_layers set to an instance of Decoder with dim=128, depth=6, and heads=8.",
+    "Pass the input dictionary to the model and store the output in a variable called 'embed'.",
+    "Assert that the shape of 'embed' is (2, 1024, 128) to confirm the model processes the input correctly.",
+    "Instantiate the TransformerWrapper model with num_tokens set to 20000, max_seq_len set to 1024, num_memory_tokens set to 2, average_pool_embed set to True, and attn_layers set to an instance of Encoder with dim=128, depth=6, and heads=8.",
+    "Create a random input tensor 'x' with shape (2, 1024) and a mask tensor with shape (2, 1024) containing boolean values.",
+    "Pass 'x' and 'mask' to the TransformerWrapper model and store the output in a variable called 'logits'.",
+    "Assert that the shape of 'logits' is (2, 20000) to confirm the model processes the input correctly.",
+    "Instantiate the TransformerWrapper model again with num_tokens set to 20000, max_seq_len set to 1024, num_memory_tokens set to 2, use_cls_token set to True, and attn_layers set to an instance of Encoder with dim=128, depth=6, and heads=8.",
+    "Pass 'x' and 'mask' to this new instance of the TransformerWrapper model and store the output in a variable called 'logits_cls'.",
+    "Assert that the shape of 'logits_cls' is (2, 20000) to confirm the model processes the input correctly.",
+    "Instantiate the TransformerWrapper model with num_tokens set to 20000, max_seq_len set to 1024, logits_dim set to 1, average_pool_embed set to True, squeeze_out_last_dim set to True, and attn_layers set to an instance of Encoder with dim=128, depth=6, and heads=8.",
+    "Pass 'x' and 'mask' to this model and store the output in a variable called 'logits_squeeze'.",
+    "Assert that the shape of 'logits_squeeze' is (2,) to confirm the model processes the input correctly.",
+    "Monitor the parameters of the model, specifically 'encoder.to_logits.weight', before and after the forward pass to check if it updates.",
+    "Log the values of 'encoder.to_logits.weight' before and after the forward pass to verify if they remain unchanged."
+]
+```

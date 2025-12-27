@@ -1,0 +1,16 @@
+TITLE  
+Pad value not utilized in `align_right` function
+
+SYMPTOMS  
+• The `pad_id` parameter is not being applied in the `F.pad` function call.  
+• The function defaults to using a value of 0 instead of the specified `pad_id`.  
+• Unexpected behavior occurs when padding with a non-zero `pad_id`, as it does not reflect in the output.
+
+EXPECTED BEHAVIOR  
+When the `align_right` function is executed, it should use the `pad_id` parameter to set the padding value in the `F.pad` function, allowing for customizable padding behavior based on the inputs provided.
+
+REPRODUCTION STEPS  
+1. Access the `align_right` function in the `autoregressive_wrapper.py` file.  
+2. Call the `align_right` function with a specified `pad_id` value.  
+3. Observe the output and verify the padding applied in the result.  
+4. Confirm that the output does not reflect the `pad_id` value and defaults to 0 instead.

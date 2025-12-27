@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import tensorflow as tf, from keras import layers, from keras import Model, from keras.applications import resnet, from keras import optimizers",
+    "Set the target image shape to (200, 200) by defining target_shape = (200, 200)",
+    "Create a cache directory for the dataset: cache_dir = Path(Path.home()) / '.keras'",
+    "Define paths for anchor and positive images: anchor_images_path = cache_dir / 'left', positive_images_path = cache_dir / 'right'",
+    "Download the Totally Looks Like dataset using gdown and unzip it into the cache directory",
+    "Load anchor and positive images into sorted lists: anchor_images = sorted([str(anchor_images_path / f) for f in os.listdir(anchor_images_path)]), positive_images = sorted([str(positive_images_path / f) for f in os.listdir(positive_images_path)])",
+    "Create a negative images dataset by shuffling anchor and positive images and concatenating them: negative_images = anchor_images + positive_images, np.random.RandomState(seed=32).shuffle(negative_images)",
+    "Create TensorFlow datasets for anchor, positive, and negative images: anchor_dataset = tf.data.Dataset.from_tensor_slices(anchor_images), positive_dataset = tf.data.Dataset.from_tensor_slices(positive_images), negative_dataset = tf.data.Dataset.from_tensor_slices(negative_images)",
+    "Zip the datasets together: dataset = tf.data.Dataset.zip((anchor_dataset, positive_dataset, negative_dataset))",
+    "Map the dataset to preprocess the triplets using a custom function: dataset = dataset.map(preprocess_triplets)",
+    "Batch the dataset with a batch size of 32: train_dataset = dataset.batch(32, drop_remainder=False)",
+    "Define the Siamese Network architecture using ResNet50 as the base model and custom layers for distance calculation",
+    "Compile the model using Adam optimizer: siamese_model.compile(optimizer=optimizers.Adam(0.0001)",
+    "Train the model for 10 epochs: siamese_model.fit(train_dataset, epochs=10)",
+    "After training, check the output of the model to verify the loss values are not as expected, indicating a potential bug in loss calculation",
+    "Print the loss values during training to confirm they are consistently high or not decreasing as expected, indicating poor performance",
+    "Assert that the model's performance metrics (e.g., accuracy) are below a certain threshold, indicating that the model is not learning properly"
+]
+```

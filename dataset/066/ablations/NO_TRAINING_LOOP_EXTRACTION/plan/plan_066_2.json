@@ -1,0 +1,29 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, numpy, pandas, and matplotlib",
+    "Define a configuration class CFG with the following parameters: preset='deberta_v3_extra_small_en', sequence_length=200, seed=42, epochs=5, batch_size=8, augment=True",
+    "Set the random seed using keras.utils.set_random_seed(CFG.seed)",
+    "Download the SWAG dataset using wget and unzip it",
+    "Load the training data from 'swagaf-master/data/train.csv' into a DataFrame and sample 2% of the data",
+    "Load the validation data from 'swagaf-master/data/val.csv' into a DataFrame and sample 2% of the data",
+    "Define a function make_options that takes a row and creates a new column 'options' with formatted strings for each option",
+    "Apply the make_options function to both train_df and valid_df DataFrames",
+    "Create a preprocessor using keras_nlp.models.DebertaV3Preprocessor with preset=CFG.preset and sequence_length=CFG.sequence_length",
+    "Process the first row of train_df options using the preprocessor and store the output in a variable outs",
+    "Define a preprocess_fn function that preprocesses text using the preprocessor and returns the processed text and label if available",
+    "Define an option_shuffle function that shuffles the options and labels based on a probability",
+    "Define an augment_fn function that applies the option_shuffle function to the text and label",
+    "Define a build_dataset function that creates a tf.data.Dataset from the provided texts and labels, applying preprocessing and augmentation as specified",
+    "Build the training dataset using build_dataset with train_df.options and train_df.label",
+    "Build the validation dataset using build_dataset with valid_df.options and valid_df.label",
+    "Define a get_lr_callback function that sets up a learning rate scheduler",
+    "Define a get_callbacks function that gathers all training callbacks including the learning rate scheduler and model checkpoint",
+    "Define a build_model function that constructs the model architecture using keras_nlp.models.DebertaV3Classifier",
+    "Call build_model to create the model instance",
+    "Print the model summary to verify the model structure",
+    "Train the model using model.fit with train_ds, valid_ds, and the defined callbacks",
+    "After training, make predictions on the validation dataset using model.predict",
+    "Check the model's output for the presence of the variable level2_dau_2 in the context of the selective_kernel_feature_fusion function",
+    "Verify that level2_dau_2 is not used in the code and assert that it should be used instead of level3_dau_2 in the selective_kernel_feature_fusion function"
+]
+```

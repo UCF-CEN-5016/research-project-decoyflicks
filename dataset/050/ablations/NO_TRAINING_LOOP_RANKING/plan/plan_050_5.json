@@ -1,0 +1,21 @@
+```json
+[
+    "Install Keras version 3.4.1 using pip: pip install keras==3.4.1",
+    "Install TensorFlow version compatible with Keras 3.4.1 using pip: pip install tensorflow",
+    "Install PyTorch if not already installed using pip: pip install torch",
+    "Install TensorFlow Datasets using pip: pip install tensorflow-datasets",
+    "Import necessary libraries: import keras, import tensorflow as tf, import tensorflow_datasets as tfds, import time",
+    "Set the Keras backend to 'torch' by adding: os.environ['KERAS_BACKEND'] = 'torch'",
+    "Define a latent dimension for the GAN model, e.g., latent_dim = 100",
+    "Create a simple GAN class with a generator and discriminator model using Keras functional API",
+    "Define the generator model to output images of shape (28, 28, 1) for MNIST dataset",
+    "Define the discriminator model to accept images of shape (28, 28, 1) and output a single scalar value",
+    "Create a dataloader that yields batches of real images from the MNIST dataset with batch size 32",
+    "Instantiate the GAN model with the defined generator and discriminator",
+    "Compile the GAN model with Adam optimizers and BinaryCrossentropy loss function",
+    "Call the fit method on the GAN model with the dataloader and epochs=1",
+    "During the fit call, ensure that the dataloader yields a list of images instead of a tensor",
+    "Verify that the error 'AttributeError: 'list' object has no attribute 'shape'' is raised during training",
+    "Capture the full traceback of the error to confirm it matches the reported issue"
+]
+```

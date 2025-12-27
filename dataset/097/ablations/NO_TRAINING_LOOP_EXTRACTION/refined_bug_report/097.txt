@@ -1,0 +1,17 @@
+TITLE  
+Missing device property in Gaussian diffusion class
+
+SYMPTOMS  
+• The Gaussian diffusion class in `classifier_free_guidance.py` does not have a `device` property.  
+• The software fails when calling `offset_noise_strength`.  
+• The absence of the `device` property leads to errors related to tensor device management.  
+
+EXPECTED BEHAVIOR  
+The Gaussian diffusion class should include a `device` property that returns the device of the `betas` tensor, allowing for proper execution of the `offset_noise_strength` function without errors related to device compatibility.
+
+REPRODUCTION STEPS  
+1. Open the `classifier_free_guidance.py` file.  
+2. Locate the Gaussian diffusion class.  
+3. Attempt to call the `offset_noise_strength` function.  
+4. Observe the failure due to the missing `device` property in the class.  
+5. Check for any error messages related to tensor device management.

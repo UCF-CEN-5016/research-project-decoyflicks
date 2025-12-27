@@ -1,0 +1,28 @@
+AttributeError： 'DeepSpeedEngine' object has no attribute 'model'，
+
+https://github.com/microsoft/DeepSpeedExamples/blob/957ae3141946daf9a6bc5731e261032a13a82f05/applications/DeepSpeed-Chat/training/step1_supervised_finetuning/main.py#L367
+
+just train one epoch，i got this error ，how to solve the problem ？
+
+***** Running training *****
+***** Evaluating perplexity, Epoch 0/16 *****
+Using `past_key_values` as a tuple is deprecated and will be removed in v4.45. Please use an appropriate `Cache` class (https://huggingface.co/docs/transformers/v4.41.3/en/interna
+Using `past_key_values` as a tuple is deprecated and will be removed in v4.45. Please use an appropriate `Cache` class (https://huggingface.co/docs/transformers/v4.41.3/en/interna
+Using `past_key_values` as a tuple is deprecated and will be removed in v4.45. Please use an appropriate `Cache` class (https://huggingface.co/docs/transformers/v4.41.3/en/interna
+Using `past_key_values` as a tuple is deprecated and will be removed in v4.45. Please use an appropriate `Cache` class (https://huggingface.co/docs/transformers/v4.41.3/en/interna
+ppl: 123.02639770507812, loss: 4.812398910522461
+Beginning of Epoch 1/16, Total Micro Batches 45280
+[2024-09-01 11:54:46,550] [INFO] [loss_scaler.py:190:update_scale] [deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 65536, but hysteresis is 2. Reducing hysteresi
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/deepspeed/DeepSpeedExamples/applications/DeepSpeed-Chat/main.py", line 394, in <module>
+[rank0]:     main()
+[rank0]:   File "deepspeed/DeepSpeedExamples/applications/DeepSpeed-Chat/main.py", line 367, in main
+[rank0]:     print_throughput(model.model, args, end - start,
+[rank0]:                      ^^^^^^^^^^^
+[rank0]:   File "anaconda3/envs/deepspeed/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 517, in __getattr__
+[rank0]:     raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+[rank0]: AttributeError: 'DeepSpeedEngine' object has no attribute 'model'. Did you mean: 'module'?
+
+```[tasklist]
+### Tasks
+```

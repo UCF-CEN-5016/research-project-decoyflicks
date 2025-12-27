@@ -1,0 +1,18 @@
+```json
+[
+    "Import pandas, numpy, and TensorFlow libraries",
+    "Set Python version to 3.10, TensorFlow version to 2.13, and pandas version to 2.0.3",
+    "Define a base path for the dataset: BASE_PATH = 'https://kdd.ics.uci.edu/databases/census-income/census-income'",
+    "Define CSV_HEADER as a list of column names for the dataset",
+    "Load training data into a DataFrame: train_data = pd.read_csv(f'{BASE_PATH}.data.gz', header=None, names=CSV_HEADER)",
+    "Load testing data into a DataFrame: test_data = pd.read_csv(f'{BASE_PATH}.test.gz', header=None, names=CSV_HEADER)",
+    "Define a function prepare_dataframe(dataframe) to convert target labels and cast categorical features to string",
+    "Call prepare_dataframe(train_data) to prepare the training DataFrame",
+    "Call prepare_dataframe(test_data) to prepare the testing DataFrame",
+    "Print the shapes of train_data and test_data to verify data loading: print(f'Train data shape: {train_data.shape}') and print(f'Test data shape: {test_data.shape}')",
+    "Attempt to append test_data to train_data using all_data = train_data.append(test_data)",
+    "Capture the output of the append operation to check for errors",
+    "Verify that an AttributeError is raised with the message: 'DataFrame' object has no attribute 'append'",
+    "Check for a FutureWarning indicating that the append method is deprecated and will be removed in a future version"
+]
+```

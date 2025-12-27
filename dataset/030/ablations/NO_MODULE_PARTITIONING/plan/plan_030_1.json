@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, pytorch_lightning, nnUNet, and any other required modules from the nnUNet package.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define the model parameters: set learning_rate to 0.0003, epochs to 10, and fold to 0.",
+    "Set the number of GPUs to 1 and specify the task ID as 11.",
+    "Prepare the dataset by loading the BraTS21 and BraTS22 datasets using nnUNet's data loading functions.",
+    "Create a DataLoader for the training dataset with a batch size of 2 and num_workers set to 4.",
+    "Create a DataLoader for the validation dataset with a batch size of 2 and num_workers set to 4.",
+    "Instantiate the nnUNet model with the specified parameters.",
+    "Define the optimizer (e.g., Adam) with the learning rate of 0.0003.",
+    "Define the learning rate scheduler as CosineAnnealingWarmRestarts with appropriate parameters.",
+    "Create a PyTorch Lightning Trainer instance with gpus set to 1 and max_epochs set to 10.",
+    "Run the training process by calling trainer.fit(model, datamodule=data_module) where data_module is the DataLoader created earlier.",
+    "Capture the output and error messages during the training process.",
+    "Verify that the output contains the MisconfigurationException related to the lr_scheduler.",
+    "Check the specific error message to ensure it matches the expected MisconfigurationException regarding the lr scheduler not following PyTorch's LRScheduler API.",
+    "Log the GPU memory usage during the training process to monitor resource utilization.",
+    "Assert that the training process raises the MisconfigurationException and that the error message contains 'CosineAnnealingWarmRestarts doesn't follow PyTorch's LRScheduler API'."
+]
+```

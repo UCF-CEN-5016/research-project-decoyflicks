@@ -1,0 +1,23 @@
+```json
+[
+    "Create a new virtual environment using Python 3.9",
+    "Activate the virtual environment",
+    "Install TensorFlow 2.10.0 using pip",
+    "Install Keras-Preprocessing 1.1.2 using pip",
+    "Clone or download the repository containing mobilenet_test.py and delg_model_test.py",
+    "Navigate to the directory containing the files in the virtual environment",
+    "Run the following command to install tf-models-official: `pip install tf-models-official`",
+    "Ensure that all required dependencies are listed in a requirements.txt file or are installed via pip commands",
+    "Import TensorFlow and necessary modules from delg_model_test.py",
+    "Define a batch size of 2 and image dimensions of 321x321 for the test cases",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Initialize an instance of Delg model by calling `delg_model.Delg(block3_strides=True, use_dim_reduction=True)`",
+    "Call `model.init_classifiers(num_classes=1000)` to set up the model's classifiers",
+    "Generate random uniform labels with shape (batch_size,) using `tf.random.uniform` for training purposes",
+    "Run a forward pass of the model by calling `global_feature, attn_scores, local_features = model.build_call(images)`",
+    "Verify that the shapes of global_feature, attn_scores, and local_features are as expected: (batch_size, 2048), (batch_size, feature_map_size, feature_map_size, 1), and (batch_size, feature_map_size, feature_map_size, local_feature_dim) respectively",
+    "Call `self.assertAllEqual` to ensure the shapes match the expected values within assertions in a test case method",
+    "Run another forward pass for different block3_strides value by calling `model = delg_model.Delg(block3_strides=False, use_dim_reduction=True)` and verify the shapes again"
+]
+```
+

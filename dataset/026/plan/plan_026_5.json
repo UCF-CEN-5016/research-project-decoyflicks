@@ -1,0 +1,15 @@
+```json
+[
+    "Clone the TensorFlow Model Garden repository from GitHub to your local machine or Google Colab environment.",
+    "Navigate to the directory containing the notebook 'TFHub_saved_model_inference.ipynb'.",
+    "Open the notebook and ensure you have the latest version of all dependencies installed as per the requirements (TensorFlow 2.x, TensorFlow Object Detection API, etc.).",
+    "Run the initial setup cells in the notebook up to and including the cell that loads the pre-trained model.",
+    "Prepare two image files for inference. For example, you can use sample images from a public dataset like ImageNet.",
+    "Load these images into memory as NumPy arrays with dimensions (height, width, 3). Ensure each image is normalized appropriately before feeding it to the model.",
+    "Run the inference function on the prepared images. This typically involves passing the images through the loaded model and obtaining the detection results.",
+    "Check the returned detection results dictionary for keys such as 'detection_classes', 'detection_scores', 'detection_boxes', etc., ensuring they are present and correctly formatted.",
+    "Call the visualization function, which is likely named something like `visualize_boxes_and_labels_on_image_array` in the Object Detection API. Pass the image and the detection results dictionary to this function.",
+    "Observe if there are any errors or exceptions raised during the visualization step, specifically looking for a `TypeError: Got an unexpected keyword argument 'box_ind'` error as described in the bug report."
+]
+```
+

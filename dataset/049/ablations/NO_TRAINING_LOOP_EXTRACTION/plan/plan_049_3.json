@@ -1,0 +1,16 @@
+```json
+[
+    "Import torch and the necessary modules from fairseq",
+    "Define the dimensions for the bias parameters: u_dim = 10, v_dim = 10",
+    "Create an instance of the RelPositionMultiHeadedAttention class from fairseq with the following parameters: num_heads=8, embed_dim=64, u_dim=10, v_dim=10",
+    "Access the bias parameters u and v from the instance: u = attention_layer.u, v = attention_layer.v",
+    "Print the initial values of u and v to observe their state before any operations",
+    "Create a random input tensor with shape (batch_size=2, seq_length=5, embed_dim=64) using torch.randn",
+    "Perform a forward pass through the attention layer with the random input tensor",
+    "Print the output of the attention layer to observe any anomalies",
+    "Calculate the sum of the bias parameters u and v: u_sum = u.sum(), v_sum = v.sum()",
+    "Print the values of u_sum and v_sum to check for non-deterministic behavior or NaN values",
+    "Assert that u_sum and v_sum are not equal to zero or NaN, which would indicate uninitialized values are affecting the computation",
+    "Repeat the forward pass multiple times to observe if the output remains consistent or if it varies due to uninitialized parameters"
+]
+```

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, GaussianDiffusion, LearnedGaussianDiffusion, and any other required modules.",
+    "Define a batch size of 4 and image dimensions of 64x64.",
+    "Create a random tensor to simulate input images with shape (batch_size, channels, height, width) where channels=3, resulting in shape (4, 3, 64, 64).",
+    "Instantiate a model object of the LearnedGaussianDiffusion class, ensuring it inherits from GaussianDiffusion.",
+    "Set the model's parameters, including image_size=64, timesteps=1000, and any other necessary parameters.",
+    "Prepare a random tensor for time steps with shape (batch_size,) using torch.randint to generate random integers between 0 and 999.",
+    "Call the ddim_sample method on the model object with shape (batch_size, channels, height, width) as input, passing return_all_timesteps=False.",
+    "Within the ddim_sample method, ensure that the model_predictions method is called with the parameters: img, time_cond, self_cond, clip_x_start=True, rederive_pred_noise=True.",
+    "Verify that the model_predictions method is defined in the LearnedGaussianDiffusion class with the signature: def model_predictions(self, x, t, clip_x_start=False).",
+    "Check that the call to model_predictions in ddim_sample results in a TypeError due to the unexpected argument 'clip_x_start'.",
+    "Capture the TypeError and assert that the error message matches 'model_predictions() got multiple values for argument 'clip_x_start'."
+]
+```

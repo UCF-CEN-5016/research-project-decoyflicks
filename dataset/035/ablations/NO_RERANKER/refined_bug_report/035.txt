@@ -1,0 +1,17 @@
+TITLE
+Incorrect Argument in RotaryPositionalEmbeddings Constructor
+
+SYMPTOMS
+• The code at line 226 in the specified file initializes `RotaryPositionalEmbeddings` with 3 features instead of the required 4.
+• Running the code with the current configuration results in an error due to the mismatch in expected features.
+• The example provided in the documentation or code comments indicates that 4 features should be used, leading to confusion.
+
+EXPECTED BEHAVIOR
+The software should correctly initialize `RotaryPositionalEmbeddings` with 4 features, allowing it to function as intended without errors.
+
+REPRODUCTION STEPS
+1. Navigate to the file located at: https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/transformers/rope/__init__.py
+2. Locate line 226 in the code.
+3. Observe the initialization of `rotary_pe` with the argument `3`.
+4. Attempt to run the code, which will result in an error due to the incorrect number of features.
+5. Modify the line to use `4` as the argument and re-run the code to confirm the error is resolved.

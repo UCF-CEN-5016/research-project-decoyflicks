@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, numpy, and matplotlib",
+    "Set the random seed for reproducibility using np.random.seed(42)",
+    "Define the image size as 72 and patch size as 16: image_size = 72, patch_size = 16",
+    "Load the CIFAR-10 dataset using keras.datasets.cifar10.load_data()",
+    "Extract the training images from the dataset: x_train, _ = cifar10.load_data()",
+    "Normalize the images by dividing by 255.0: x_train = x_train.astype('float32') / 255.0",
+    "Select a random image from the training set: image = x_train[np.random.choice(range(x_train.shape[0]))]",
+    "Create a figure to display the selected image using plt.imshow(image.astype('uint8'))",
+    "Resize the selected image to (image_size, image_size) using ops.image.resize",
+    "Convert the resized image to a tensor: resized_image = ops.convert_to_tensor([image])",
+    "Call the Patches class with the resized image: patches = Patches(patch_size)(resized_image)",
+    "Print the image size, patch size, patches per image, and elements per patch using print statements",
+    "Create a subplot to visualize the patches: for i, patch in enumerate(patches[0]):",
+    "Reshape each patch to (patch_size, patch_size, 3) and display it using plt.imshow",
+    "Run the code cell to trigger the error and observe the InvalidArgumentError",
+    "Verify the error message contains 'expected to be a int32 tensor but is a float tensor'"
+]
+```

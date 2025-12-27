@@ -1,0 +1,19 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running: !pip install keras keras_cv tensorflow",
+    "Import the necessary libraries by adding the following code: import keras; import keras_cv; import tensorflow as tf; import numpy as np",
+    "Set the random seed for reproducibility by adding: np.random.seed(42); tf.random.set_seed(42)",
+    "Prepare the training data by creating random input data: x_train = np.random.rand(1000, 28, 28, 1); y_train = np.random.randint(0, 10, (1000, 1))",
+    "Prepare the validation data by creating random input data: x_val = np.random.rand(1000, 28, 28, 1); y_val = np.random.randint(0, 10, (1000, 1))",
+    "Define a simple Keras model for demonstration: model = keras.Sequential([keras.layers.Flatten(input_shape=(28, 28, 1)), keras.layers.Dense(128, activation='relu'), keras.layers.Dense(10)])",
+    "Compile the model with a loss function and optimizer: model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])",
+    "Attempt to run the Fine-tuning Stable Diffusion example by executing: keras_cv.models.StableDiffusion()",
+    "Observe the error message that appears: ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Verify that the error message is consistent with the bug report by checking the traceback for the line: from keras.utils import data_utils",
+    "Confirm that the Keras version is the latest by running: !pip show keras and checking the version number",
+    "Attempt to fix the issue by downgrading Keras to version 2.12.0 by running: !pip install keras==2.12.0",
+    "Re-run the Fine-tuning Stable Diffusion example to confirm that the error no longer occurs after the downgrade",
+    "Document the steps taken and the results observed to prepare for a potential pull request to update the example with version requirements"
+]
+```

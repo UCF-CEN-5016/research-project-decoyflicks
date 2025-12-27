@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the autotuning directory using 'cd DeepSpeedExamples/training/autotuning/hf/gpt2-xl/'",
+    "Create a new shell script file named 'test_tune.sh' using 'touch test_tune.sh'",
+    "Open 'test_tune.sh' in a text editor and copy the contents from 'https://github.com/microsoft/DeepSpeedExamples/blob/ff9a0234cf22dd9af03c5c7aa8037fb9143adca6/training/autotuning/hf/gpt2-xl/test_tune.sh'",
+    "Set the environment variable 'HF_PATH' to the parent directory using 'export HF_PATH=../'",
+    "Set the environment variable 'NGPUS' to 6 using 'export NGPUS=6'",
+    "Make the script executable using 'chmod +x test_tune.sh'",
+    "Install the required Python packages by running 'pip install deepspeed transformers datasets'",
+    "Run the script with the command './test_tune.sh tune'",
+    "Monitor the output for the error message 'ParquetConfig.__init__() got an unexpected keyword argument 'token''",
+    "Verify that the error occurs after the line '[INFO] [autotuner.py:699:model_info_profile_run] The model is not runnable with DeepSpeed with error = ParquetConfig.__init__() got an unexpected keyword argument 'token''",
+    "Check the versions of installed packages using 'pip list' to ensure compatibility with the script",
+    "Confirm that the DeepSpeed version is compatible with the transformers library by checking the documentation",
+    "Ensure that the environment is set up with Python 3.8 or higher, as required by the transformers library",
+    "Validate that the GPU setup is correct by running 'nvidia-smi' to check for available GPUs and their status",
+    "Check for any additional logs or warnings in the output that may provide context for the error"
+]
+```

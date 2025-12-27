@@ -1,0 +1,19 @@
+TITLE  
+Bug in Implementation of Rotary Positional Embeddings
+
+SYMPTOMS  
+• The code fails to execute due to a size mismatch between tensors.  
+• Error message:  
+  > RuntimeError: The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3  
+• The implementation incorrectly divides features for the use of ROPE, leading to runtime errors.
+
+EXPECTED BEHAVIOR  
+The software should correctly compute the rotary positional embeddings without size mismatches, allowing the code to execute successfully and produce the intended output.
+
+REPRODUCTION STEPS  
+1. Run the example code provided in the [GitHub repository](https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/transformers/rope/__init__.py).  
+2. Observe the runtime error related to tensor size mismatch.  
+3. Review the implementation of the rotary positional embedding calculations to identify the incorrect tensor slicing.  
+4. Replace the existing code with the proposed correction:  
+   `x_rope = (x_rope * self.cos_cached[:, :, :, :x_rope.shape[0]]) + (neg_half_x * self.sin_cached[:, :, :, :x_rope.shape[0]])`  
+5. Rerun the code to verify that the error is resolved and the output is as expected.

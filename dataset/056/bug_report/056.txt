@@ -1,0 +1,102 @@
+Get erorr when run Image classification with Vision Transformer
+
+### Issue Type
+
+Bug
+
+### Source
+
+source
+
+### Keras Version
+
+Keras 3
+
+### Custom Code
+
+Yes
+
+### OS Platform and Distribution
+
+Google Colab
+
+### Python version
+
+3.10
+
+### GPU model and memory
+
+_No response_
+
+### Current Behavior?
+
+When i try to run code [Image classification with Vision Transformer ](https://keras.io/examples/vision/image_classification_with_vision_transformer/)  on Google Colab. I got error when i ran this sell
+
+```
+plt.figure(figsize=(4, 4))
+image = x_train[np.random.choice(range(x_train.shape[0]))]
+plt.imshow(image.astype("uint8"))
+plt.axis("off")
+
+
+resized_image = ops.image.resize(
+    ops.convert_to_tensor([image]), size=(image_size, image_size)
+)
+
+patches = Patches(patch_size)(resized_image)
+print(f"Image size: {image_size} X {image_size}")
+print(f"Patch size: {patch_size} X {patch_size}")
+print(f"Patches per image: {patches.shape[1]}")
+print(f"Elements per patch: {patches.shape[-1]}")
+
+n = int(np.sqrt(patches.shape[1]))
+plt.figure(figsize=(4, 4))
+for i, patch in enumerate(patches[0]):
+    ax = plt.subplot(n, n, i + 1)
+    patch_img = ops.reshape(patch, (patch_size, patch_size, 3))
+    plt.imshow(ops.convert_to_numpy(patch_img).astype("uint8"))
+    plt.axis("off")
+```
+The error is
+
+> InvalidArgumentError: Exception encountered when calling Patches.call().
+> 
+> cannot compute Conv2D as input #1(zero-based) was expected to be a int32 tensor but is a float tensor [Op:Conv2D] name: 
+> 
+> Arguments received by Patches.call():
+>   • images=tf.Tensor(shape=(1, 72, 72, 3), dtype=int32) 
+![Screenshot from 2023-12-07 01-32-36](https://github.com/keras-team/keras-io/assets/69468676/49162fe0-a3e9-46f7-b772-343c8919742c)
+Please help me with this issue, how can i resolve it?
+
+### Standalone code to reproduce the issue or tutorial link
+
+```shell
+https://colab.research.google.com/drive/13vb4XaUgaPDAL_B2Ty2uH400hRJfrpPg?usp=sharing
+```
+
+
+### Relevant log output
+
+```shell
+InvalidArgumentError                      Traceback (most recent call last)
+<ipython-input-34-0aecdebf791c> in <cell line: 11>()
+      9 )
+     10 
+---> 11 patches = Patches(patch_size)(resized_image)
+     12 print(f"Image size: {image_size} X {image_size}")
+     13 print(f"Patch size: {patch_size} X {patch_size}")
+
+<ipython-input-10-5555eb236371> in call(self, images)
+     12         num_patches_h = height // self.patch_size
+     13         num_patches_w = width // self.patch_size
+---> 14         patches = keras.ops.image.extract_patches(images, size=self.patch_size)
+     15         patches = ops.reshape(
+     16             patches,
+
+InvalidArgumentError: Exception encountered when calling Patches.call().
+
+cannot compute Conv2D as input #1(zero-based) was expected to be a int32 tensor but is a float tensor [Op:Conv2D] name: 
+
+Arguments received by Patches.call():
+  • images=tf.Tensor(shape=(1, 72, 72, 3), dtype=int32)
+```

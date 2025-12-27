@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import tensorflow as tf, from keras import layers, Model, Input",
+    "Define constants: set INPUT_SHAPE = (28, 28, 28, 1), BATCH_SIZE = 32, NUM_CLASSES = 11",
+    "Create a mock dataset: generate random training data with shape (BATCH_SIZE, 28, 28, 28, 1) and labels with shape (BATCH_SIZE,)",
+    "Define a function 'selective_kernel_feature_fusion' that takes three inputs and returns a tensor of shape (BATCH_SIZE, 128) for testing purposes",
+    "Define a function 'create_vivit_classifier' that initializes a Keras model with a structure similar to the one in the bug report, including a placeholder for 'level2_dau_2' and 'level3_dau_2'",
+    "In the 'create_vivit_classifier' function, ensure 'level2_dau_2' is defined but not used in the model architecture",
+    "In the 'create_vivit_classifier' function, replace 'level3_dau_2' with 'level2_dau_2' in the selective_kernel_feature_fusion call to reproduce the bug",
+    "Compile the model using model.compile with optimizer='adam', loss='sparse_categorical_crossentropy', and metrics=['accuracy']",
+    "Fit the model using model.fit with the mock dataset for 1 epoch to trigger the bug",
+    "Capture the output of the model.fit call and check for any warnings or errors related to unused variables",
+    "Assert that 'level2_dau_2' is defined but not used in the model by checking the model summary or inspecting the model layers",
+    "Log the model summary to verify that 'level2_dau_2' does not appear in the output of the model summary"
+]
+```

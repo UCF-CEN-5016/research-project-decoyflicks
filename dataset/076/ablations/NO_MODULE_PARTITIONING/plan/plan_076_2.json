@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import h5py, import numpy as np, from mrcnn import utils, from mrcnn import modellib",
+    "Define constants: set MODEL_DIR to a valid directory path where model weights will be stored, set COCO_MODEL_PATH to a valid path of the pre-trained COCO weights file, and set config to an instance of the configuration class used for Mask R-CNN.",
+    "Set the mode to 'inference' and create an instance of the Mask R-CNN model: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Call model.load_weights with COCO_MODEL_PATH and by_name=True: model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Prepare a dummy input image: create a random image tensor with shape (1, 512, 512, 3) using np.random.rand(1, 512, 512, 3) * 255 and convert it to a float32 tensor.",
+    "Create a dummy image_meta tensor with shape (1, config.IMAGE_META_SIZE) filled with zeros: image_meta = np.zeros((1, config.IMAGE_META_SIZE), dtype=np.float32)",
+    "Create a dummy anchors tensor with shape (1, 100, 4) filled with random values: anchors = np.random.rand(1, 100, 4)",
+    "Run inference on the model with the dummy inputs: detections = model.keras_model.predict([dummy_image, image_meta, anchors])",
+    "Capture the output and check for exceptions during the inference call to verify if a NotImplementedError is raised",
+    "Log the exception message if a NotImplementedError occurs to confirm the bug: print('Caught NotImplementedError:', str(e))",
+    "Assert that the exception message contains 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead.'"
+]
+```

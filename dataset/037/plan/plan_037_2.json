@@ -1,0 +1,19 @@
+[
+    "Clone the annotated_deep_learning_paper_implementations repository from GitHub.",
+    "Navigate to the directory `labml_nn/transformers/rope/value_pe` and open the file `__init__.py`.",
+    "Open the module `performance_test.py` located at `labml_nn/optimizers/performance_test.py`.",
+    "Set up a Python environment with necessary dependencies installed. Ensure you have PyTorch and related packages installed.",
+    "Import all required modules and classes as specified in the bug report: labml, labml_helpers.DeviceInfo, labml_nn.Adam, labml_nn.Model, torch.optim.Adam, torch.nn.CrossEntropyLoss, torch.ones, torch.randn.",
+    "Define a batch size of 64 and input dimensions of 1x28x28 (as specified in the test function).",
+    "Create random uniform input data with shape `(batch_size, height, width, channels)`, i.e., `torch.randn((64, 1, 28, 28))`.",
+    "Define a target tensor of ones with shape `(batch_size,)`, i.e., `torch.ones(64, dtype=torch.long)`. This is done to simulate the target labels for the classification task.",
+    "Initialize a model instance of type `labml_nn.optimizers.mnist_experiment.Model()` and move it to the appropriate device (use CUDA if available).",
+    "Instantiate both `MyAdam` and `TorchAdam` optimizers, passing in the model parameters.",
+    "Compute the loss using `CrossEntropyLoss`, i.e., `loss_func(model(inp), target)`. Ensure that you are using the correct target tensor for this task.",
+    "Call the backward method on the computed loss to perform the backpropagation step.",
+    "Execute a warmup phase for both optimizers by calling `my_adam.step()` and `torch_adam.step()` for 100 iterations each. Monitor the performance of both optimizers in the warmup phase.",
+    "After the warmup, execute the main training loop for both optimizers by calling `my_adam.step()` and `torch_adam.step()` for 1000 iterations each. Monitor the performance of both optimizers during this phase.",
+    "At the end of the training loop, verify that the value embedding is rotated twice as indicated in line 230 and line 234 of the file `__init__.py`. This can be done by inspecting the code at these lines or adding logging statements to observe the transformations applied to the embeddings.",
+    "Assert that rotating the value embedding twice results in unexpected behavior, such as incorrect gradients or model performance degradation, which reproduces the bug."
+]
+

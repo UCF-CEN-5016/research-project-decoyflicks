@@ -1,0 +1,17 @@
+[
+  "Import TensorFlow (tensorflow.compat.v1 as tf) and enable eager execution if needed",
+  "Import the RandAugment function or class from official.vision.ops.augment.py at or near line 1566",
+  "Set a fixed random seed for reproducibility using tf.random.set_seed(42) or numpy equivalent",
+  "Define a batch size of 4 and image dimensions of 128x128 with 3 channels (shape: [4, 128, 128, 3])",
+  "Create a dummy input tensor with tf.random.uniform of shape [4, 128, 128, 3], dtype=tf.float32, values in [0, 255]",
+  "Set RandAugment hyperparameters explicitly: number of layers = 2, magnitude = 5, magnitude_std = 0.5 (nonzero to test std behavior)",
+  "Call RandAugment augmentation function on the dummy input tensor with the above parameters",
+  "Within the augmentation, focus on the line around line 1566 where magnitude standard deviation is computed or applied",
+  "Extract the applied magnitude values after augmentation (e.g., from the augmentation parameters or outputs if accessible)",
+  "Verify the standard deviation of the magnitude values across the batch or augmented samples",
+  "Assert that the standard deviation of the applied magnitude is either exactly 0 or exactly 1, indicating the bug",
+  "Repeat the test with multiple calls or different seeds to confirm standard deviation does not scale with magnitude_std as expected",
+  "Log or print the computed magnitude values and their standard deviation for inspection",
+  "Optionally, add debugging assertions or hooks immediately after the line with '+= 1' in augment.py to capture the magnitude values applied",
+  "Ensure no scaling by level_std is applied after the '+=' operation to confirm the bug reproduction"
+]

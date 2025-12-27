@@ -1,0 +1,25 @@
+TITLE  
+Key 'input_feat_per_channel' not found in the configuration structure during execution.
+
+SYMPTOMS  
+• The error message "Key 'input_feat_per_channel' is not in struct" is displayed.  
+• The process cannot continue, leading to a halt in execution.  
+• The user is unable to generate expected results from the model.
+
+EXPECTED BEHAVIOR  
+The software should successfully execute the command without errors, generating the desired output based on the provided configuration and parameters.
+
+REPRODUCTION STEPS  
+1. Set the environment variable `DATA_ROOT` to the appropriate data directory.  
+2. Execute the command:  
+   ```bash
+   fairseq-generate $DATA_ROOT \
+     --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml \
+     --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan \
+     --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test \
+     --max-tokens 50000 \
+     --beam 10 --max-len-a 1 \
+     --results-path /root/autodl-tmp/results
+   ```  
+3. Observe the error message regarding 'input_feat_per_channel'.  
+4. Attempt to resolve the issue and rerun the command to confirm if the error persists.

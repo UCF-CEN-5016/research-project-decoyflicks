@@ -1,0 +1,13 @@
+```json
+[
+    "Import pandas as pd and numpy as np",
+    "Set up a DataFrame train_df with 100 rows and 5 columns filled with random integers using np.random.randint",
+    "Set up a DataFrame test_df with 50 rows and 5 columns filled with random integers using np.random.randint",
+    "Print the shapes of train_df and test_df to verify they are (100, 5) and (50, 5) respectively",
+    "Attempt to append test_df to train_df using the deprecated method: all_data = train_df.append(test_df)",
+    "Run the code in a Python environment with pandas version 2.0.3",
+    "Capture the output and check for AttributeError indicating 'DataFrame' object has no attribute 'append'",
+    "Verify that a FutureWarning is also displayed regarding the deprecation of the append method",
+    "Log the complete error traceback to confirm the source of the error is from the append method"
+]
+```

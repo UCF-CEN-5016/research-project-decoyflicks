@@ -1,0 +1,39 @@
+TITLE  
+FileNotFoundError during model training due to missing image file in dataset directory
+
+SYMPTOMS  
+• Training fails at epoch 1 with a NotFoundError indicating missing image file  
+• Error message:  
+  ```
+  NotFoundError: Graph execution error:
+
+  2 root error(s) found.
+    (0) NOT_FOUND:  drive/MyDrive/Dog Vision/train/17e00d79ad69729522d8705e95939f01.jpg; No such file or directory
+       [[{{node ReadFile}}]]
+       [[IteratorGetNext]]
+       [[IteratorGetNext/_2]]
+    (1) NOT_FOUND:  drive/MyDrive/Dog Vision/train/17e00d79ad69729522d8705e95939f01.jpg; No such file or directory
+       [[{{node ReadFile}}]]
+       [[IteratorGetNext]]
+  0 successful operations.
+  0 derived errors ignored. [Op:__inference_train_function_51749]
+  ```
+• Changing the drive directory path did not resolve the issue  
+• Using TensorBoard callback is reported to cause overfitting (though this is unrelated to the error)  
+
+EXPECTED BEHAVIOR  
+The model training should proceed without file access errors, successfully loading all required training images, and completing the specified number of epochs with proper validation and callbacks.
+
+REPRODUCTION STEPS  
+1. Prepare dataset located at "drive/MyDrive/Dog Vision/train/" with all expected image files  
+2. Define and instantiate the model using the MobileNetV2 feature from TensorFlow Hub  
+3. Create TensorBoard and early stopping callbacks  
+4. Run the `train_model()` function which calls `model.fit()` on the dataset  
+5. Observe the error caused by missing image file during the first epoch of training  
+
+---
+
+**Additional notes:**  
+- Verify the existence and correct path of all image files referenced by the dataset pipeline.  
+- Ensure that the dataset directory is properly mounted and accessible if using cloud or external drives.  
+- The overfitting concern related to TensorBoard callback is separate and should be addressed by adjusting model training parameters or callbacks, not the file loading error.

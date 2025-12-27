@@ -1,0 +1,19 @@
+```json
+[
+    "Install fairseq version 0.12.2 using pip with the command: pip install fairseq==0.12.2",
+    "Install PyTorch version 2.1.0 with CUDA 11.8 support using the command: pip install torch==2.1.0+cu118 torchvision==0.15.0+cu118 torchaudio==2.1.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html",
+    "Ensure you are using Python version 3.8 by checking with the command: python --version",
+    "Prepare the input feature tensor by creating a file named feats.pt with random data: feats = torch.randn(1, 16000).save('./feats.pt')",
+    "Prepare the padding mask tensor by creating a file named padding_mask.pt with random binary data: padding_mask = torch.randint(0, 2, (1, 16000)).save('./padding_mask.pt')",
+    "Import necessary modules in a Python script: from fairseq import checkpoint_utils and import torch",
+    "Load the Hubert model using the command: hubert, _, _ = checkpoint_utils.load_model_ensemble_and_task(['./assets/hubert/hubert_base.pt'], suffix='')",
+    "Access the first model from the loaded ensemble: hubert_model = hubert[0]",
+    "Convert the model to half precision using: hubert_model = hubert_model.half()",
+    "Define the HuberAdapter class with the provided code, ensuring it inherits from torch.nn.Module",
+    "Instantiate the HuberAdapter with the loaded model: adapter = HuberAdapter(hubert_model)",
+    "Load the input tensors from the prepared files: feats = torch.load('./feats.pt') and padding_mask = torch.load('./padding_mask.pt')",
+    "Move the input tensors to the GPU using: feats = feats.cuda() and padding_mask = padding_mask.cuda()",
+    "Attempt to export the adapter to ONNX format using the command: torch.onnx.export(adapter, (feats, padding_mask), 'hubert.onnx', input_names=['feats', 'padding_mask'], output_names=['logits', 'mask'], dynamic_axes={'feats': {0: 'seq'}, 'padding_mask': {0: 'seq'}})",
+    "Capture the error message during the ONNX export process to verify the bug occurs: AttributeError: 'Tensor' object has no attribute 'is_integer'"
+]
+```

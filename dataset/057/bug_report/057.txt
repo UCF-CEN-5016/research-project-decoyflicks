@@ -1,0 +1,80 @@
+[example/nlp] neural_machine_translation_with_transforme does not run successfuly. 
+
+### Issue Type
+
+Bug
+
+### Source
+
+source
+
+### Keras Version
+
+Keras 2.14.0
+
+### Custom Code
+
+Yes
+
+### OS Platform and Distribution
+
+Linux Ubuntu 22.04.3 LTS
+
+### Python version
+
+3.10
+
+### GPU model and memory
+
+NVIDIA T4
+
+### Current Behavior?
+
+When run the example [neural_machine_translation_with_transformer](https://keras.io/examples/nlp/neural_machine_translation_with_transformer/) on [Google Colab](https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/nlp/ipynb/neural_machine_translation_with_transformer.ipynb) directly , I got  error.
+![image](https://github.com/keras-team/keras-io/assets/51162830/2dae8247-1457-41d7-92d3-75a01888cead)
+
+
+### Standalone code to reproduce the issue or tutorial link
+
+```shell
+import os
+
+os.environ["KERAS_BACKEND"] = "tensorflow"
+
+import pathlib
+import random
+import string
+import re
+import numpy as np
+
+import tensorflow.data as tf_data
+import tensorflow.strings as tf_strings
+
+import keras
+from keras import layers
+from keras import ops
+from keras.layers import TextVectorization
+```
+
+
+### Relevant log output
+
+```shell
+---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+[<ipython-input-13-5bf91004141f>](https://localhost:8080/#) in <cell line: 25>()
+     23 import keras
+     24 from keras import layers
+---> 25 from keras import ops
+     26 from keras.layers import TextVectorization
+
+ImportError: cannot import name 'ops' from 'keras' (/usr/local/lib/python3.10/dist-packages/keras/__init__.py)
+
+---------------------------------------------------------------------------
+NOTE: If your import is failing due to a missing package, you can
+manually install dependencies using either !pip or !apt.
+
+To view examples of installing some common dependencies, click the
+"Open Examples" button below.
+---------------------------------------------------------------------------
+```

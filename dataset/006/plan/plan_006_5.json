@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow, Keras, and the necessary modules from delf/python/training/model/delf_model_test.py",
+    "Define a batch size of 2 and image dimensions of 321x321",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call Delf function with block3_strides=True and num_classes=1000",
+    "Initialize classifiers for the model using init_classifiers method",
+    "Create random uniform labels with shape (batch_size,) and values in the range [0, num_classes - 1]",
+    "Define SparseCategoricalCrossentropy loss object from Keras with from_logits=True and reduction=None",
+    "Implement compute_loss function to calculate per-example loss and average it using tf.nn.compute_average_loss",
+    "Set up a GradientTape context for automatic differentiation",
+    "Forward pass through the model to obtain desc_prelogits, attn_prelogits, and other outputs",
+    "Calculate global loss by applying the descriptor classifier and calling compute_loss function",
+    "Calculate attention loss by applying the attention block classifier and calling compute_loss function",
+    "Sum up the global and attention losses to get total_loss",
+    "Compute gradients of total_loss with respect to model.trainable_weights using gradient_tape.gradient method",
+    "Clip the gradients using tf.clip_by_global_norm method with clip_norm=10.0",
+    "Apply the clipped gradients to model.trainable_weights using optimizer.apply_gradients method",
+    "Verify if gradients exist for all trainable variables by checking if any of them is None"
+]
+```
+

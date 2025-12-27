@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and Keras libraries",
+    "Load the pre-trained NER model using keras.models.load_model('path_to_my_model', custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False)",
+    "Create a tokenizer function that converts text to token IDs",
+    "Use the tokenizer to convert the sample input 'eu rejects german call to boycott british lamb' into token IDs with an output array of shape [9]",
+    "Define a batch size of 1 and reshape the token IDs to have an additional dimension, resulting in an array of shape [1, 9]",
+    "Create a TensorFlow Lite Converter from the saved model using tf.lite.TFLiteConverter.from_saved_model('path_to_my_model')",
+    "Convert the model to TFLite format by calling tflite_model = converter.convert()",
+    "Save the TFLite model to 'model.tflite' using with open('model.tflite', 'wb') as f: f.write(tflite_model)",
+    "Load the TFLite model for inference using interpreter = tf.lite.Interpreter(model_path='model.tflite') and interpreter.allocate_tensors()",
+    "Get input and output tensor details using input_index = interpreter.get_input_details()[0]['index'] and output_index = interpreter.get_output_details()[0]['index']",
+    "Set the input tensor to the sample input reshaped array using interpreter.set_tensor(input_index, np.expand_dims(sample_input, axis=0))",
+    "Invoke the TFLite model for inference by calling interpreter.invoke()",
+    "Retrieve the prediction mask from the output tensor using prediction_mask = interpreter.get_tensor(output_index)",
+    "Verify that a dimension mismatch error occurs with ValueError: Cannot set tensor: Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0."
+]
+```
+

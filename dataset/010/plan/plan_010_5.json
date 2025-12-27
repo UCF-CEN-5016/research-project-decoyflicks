@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow, absl, and other necessary modules from the given code snippet",
+    "Define a batch size of 128 and audio sample rate of 16000 Hz",
+    "Create random uniform input data with shape (batch_size, max_audio_length)",
+    "Call compute_features function with sample_rate=16000",
+    "Verify output contains NaN values in loss calculation",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold for RNN operations"
+]
+```
+

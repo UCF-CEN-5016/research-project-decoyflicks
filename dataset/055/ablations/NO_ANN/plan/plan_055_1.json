@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow, Keras, Keras NLP, and NLTK libraries",
+    "Set the Keras version to 2.15 and TensorFlow version to 2.15",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40, TEST_BATCH_SIZE = 1",
+    "Import the necessary functions from data_preprocessing: eng_tokenizer, spa_tokenizer, and test_pairs",
+    "Import the transformer model from the model module",
+    "Define a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Define a nested function next_fn(prompt, cache, index) that takes a prompt and returns logits, hidden_states, and cache",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, and extract logits for the given index",
+    "Set up a prompt tensor with shape (TEST_BATCH_SIZE, 40) initialized with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Prepare test_eng_texts and test_spa_texts from test_pairs for evaluation",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through each input_sentence in test_eng_texts, call decode_sequences, and store the result",
+    "After decoding, clean the translated output by removing special tokens and splitting into words",
+    "Calculate the BLEU score using NLTK's modified_precision function with n=4",
+    "Run the script and monitor for segmentation faults during the execution of the GreedySampler()",
+    "Check the output shapes of logits and cache in next_fn to ensure they match expected dimensions",
+    "Log the shapes of encoder_input_tokens, prompt, and logits to verify they are as expected",
+    "Assert that the segmentation fault occurs specifically after the next_fn returns logits, hidden_states, and cache",
+    "Capture and log any error messages or stack traces that occur during execution"
+]
+```

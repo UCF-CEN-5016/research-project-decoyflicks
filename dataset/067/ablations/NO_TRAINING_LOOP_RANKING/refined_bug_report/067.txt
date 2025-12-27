@@ -1,0 +1,21 @@
+TITLE  
+Incorrect Application of Sparse Categorical Cross Entropy Loss in Keras Tutorial  
+
+SYMPTOMS  
+• The model trained poorly, yielding unsatisfactory results.  
+• The format of the labels used in the tutorial is incorrect, specifically the last dimension of the labels should be removed.  
+• The tutorial code does not handle the additional dimension in the labels properly, leading to confusion.  
+• No explicit error messages were encountered, but the model performance was significantly below expectations.  
+
+EXPECTED BEHAVIOR  
+The Sparse Categorical Cross Entropy loss function should correctly handle the label format, allowing the model to train effectively without requiring manual adjustments to the label dimensions.  
+
+REPRODUCTION STEPS  
+1. Follow the tutorial provided in the Keras documentation for the Oxford Pets image segmentation.  
+2. Use the provided dataset and run the model training as specified in the tutorial.  
+3. Observe the model's performance, noting the poor training results.  
+4. Check the shape of the labels used in the training process.  
+5. Modify the label format by removing the last dimension as indicated in the tutorial.  
+6. Rerun the training process and compare the results.  
+
+Version: 2.10.0

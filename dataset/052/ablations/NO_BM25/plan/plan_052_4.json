@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow, Keras, NumPy, and any necessary modules for data handling and model creation.",
+    "Set the random seed for reproducibility using 'tf.random.set_seed(42)' and 'np.random.seed(42)'.",
+    "Define the input shape for the model as (None, 28, 28, 28, 1) to accommodate 3D video data.",
+    "Create a dummy dataset for training with shape (100, 28, 28, 28, 1) and corresponding labels with shape (100,).",
+    "Convert the dummy dataset into a TensorFlow Dataset object with a batch size of 32 using 'tf.data.Dataset.from_tensor_slices()'.",
+    "Define a simple model architecture using Keras, including a Conv3D layer followed by a Dense layer with softmax activation.",
+    "Compile the model using 'model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')'.",
+    "Call 'model.fit(train_dataset, epochs=10)' to train the model on the dummy dataset.",
+    "Define a function 'tokenize_and_convert_to_ids(text)' that splits input text into tokens and converts them to IDs.",
+    "Create a sample input string 'sample_input = tokenize_and_convert_to_ids(\"eu rejects german call to boycott british lamb\")'.",
+    "Reshape the sample input to have shape (1, -1) using 'tf.reshape(sample_input, shape=[1, -1])'.",
+    "Call 'ner_model.predict(sample_input)' to get predictions from the model.",
+    "Capture the output of the prediction and apply 'np.argmax(output, axis=-1)[0]' to get the predicted class indices.",
+    "Map the predicted indices to their corresponding labels using a predefined mapping dictionary.",
+    "Assert that the output contains the expected format and check for any errors during the prediction step.",
+    "Verify that the error 'OperatorNotAllowedInGraphError' occurs during the execution of 'ner_model.predict(sample_input)'.",
+    "Log the error message to confirm that it matches the expected output from the bug report."
+]
+```

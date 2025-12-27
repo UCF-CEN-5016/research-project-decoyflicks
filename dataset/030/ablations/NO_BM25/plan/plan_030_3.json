@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import torch, import os, import sys",
+    "Set the environment variable for CUDA: os.environ['CUDA_VISIBLE_DEVICES'] = '0'",
+    "Define the training parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10",
+    "Prepare the command to run the training script: command = '!python ../main.py --brats --brats22_model --scheduler --learning_rate {learning_rate} --epochs {epochs} --fold {fold} --gpus {gpus} --task {task} --nfolds {nfolds} --save_ckpt'",
+    "Create a mock dataset for BraTS21 and BraTS22 with 1125 training examples, 126 validation examples, and 1251 test examples",
+    "Ensure the dataset is in the expected format for nnUNet, including necessary preprocessing steps",
+    "Run the training command using os.system(command) to execute the training script",
+    "Capture the output of the training command to check for errors: output = os.popen(command).read()",
+    "Check if the output contains the string 'MisconfigurationException' to verify the bug occurs",
+    "Assert that the output contains the specific error message related to lr_scheduler: assert 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API' in output",
+    "Log the output for further analysis if the error occurs: print(output)"
+]
+```

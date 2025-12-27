@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: keras, keras_tuner, tensorflow, and numpy",
+    "Set a random seed for reproducibility using numpy: np.random.seed(42)",
+    "Define the input shape for the model as (28, 28, 1)",
+    "Create training data: x_train = np.random.rand(1000, 28, 28, 1) and y_train = np.random.randint(0, 10, (1000, 1))",
+    "Create validation data: x_val = np.random.rand(1000, 28, 28, 1) and y_val = np.random.randint(0, 10, (1000, 1))",
+    "Define a custom HyperModel class MyHyperModel that subclasses keras_tuner.HyperModel",
+    "Implement the build method in MyHyperModel to create a Keras model with an input layer of shape (28, 28, 1), a Flatten layer, a Dense layer with units chosen from [32, 64, 128], and an output Dense layer with 10 units",
+    "Implement the fit method in MyHyperModel to include a custom training loop with the following steps:",
+    "Set batch_size = hp.Int('batch_size', 32, 128, step=32, default=64)",
+    "Convert training data to tf.data.Dataset: train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(batch_size)",
+    "Convert validation data to tf.data.Dataset: validation_data = tf.data.Dataset.from_tensor_slices((x_val, y_val)).batch(batch_size)",
+    "Define the optimizer as keras.optimizers.Adam with a learning rate chosen from a log scale between 1e-4 and 1e-2",
+    "Define the loss function as keras.losses.SparseCategoricalCrossentropy with from_logits=True",
+    "Initialize a keras.metrics.Mean() object to track validation loss",
+    "Define run_train_step and run_val_step functions to handle training and validation steps respectively",
+    "In the fit method, loop over epochs (set to 2 for testing) and within each epoch, loop over train_ds to call run_train_step",
+    "After training, loop over validation_data to call run_val_step",
+    "Call the callbacks after each epoch to log the validation loss",
+    "Initialize a RandomSearch tuner with objective keras_tuner.Objective('my_metric', 'min'), max_trials=2, and the custom HyperModel",
+    "Call tuner.search with x=x_train, y=y_train, and validation_data=(x_val, y_val)",
+    "Run the code to fit the model and capture any errors that occur during the fitting process",
+    "Verify that an error occurs during the model fitting process, as indicated in the bug report"
+]
+```

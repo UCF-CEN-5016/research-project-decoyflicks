@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and the official vision preprocess_ops_3d module",
+    "Define a variable num_of_examples and set it to 10",
+    "Create a sequence tensor using tf.range(100)",
+    "Call the show_batch function with num_of_examples as an argument",
+    "Verify that the num_of_examples argument is not used within the show_batch function",
+    "Check the output of the show_batch function to ensure it does not reflect the num_of_examples parameter",
+    "Add print statements in the show_batch function to confirm that num_of_examples is not referenced",
+    "Run the test suite to ensure that the test ParserUtilsTest does not raise any errors related to num_of_examples",
+    "Document the output of the show_batch function to confirm it behaves as if num_of_examples was never passed"
+]
+```

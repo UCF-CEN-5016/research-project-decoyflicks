@@ -1,0 +1,26 @@
+TITLE
+Model weights loading issue with MaskRCNN
+
+SYMPTOMS
+• Error encountered while trying to load pre-trained model weights.
+• `NotImplementedError` is raised when attempting to use the `model.load_weights()` method.
+- Error message: "Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead. Got a model or layer Conv2D with weights [...]"
+• The error occurs during the execution of the line `model.load_weights(COCO_MODEL_PATH, by_name=True)`.
+
+EXPECTED BEHAVIOR
+- The pre-trained MaskRCNN model should be successfully loaded and ready for inference without any errors.
+
+REPRODUCTION STEPS
+1. Ensure that all necessary libraries are installed: `Mask_RCNN`, TensorFlow, etc.
+2. Import the required modules: `import mrcnn.model as modellib`.
+3. Define the configuration settings (`config`), model directory (`MODEL_DIR`), and paths to the model weights (`COCO_MODEL_PATH`).
+4. Create an instance of MaskRCNN for inference mode using the following code:
+```python
+model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
+```
+5. Load the pre-trained weights into the model using the line that causes the error:
+```python
+model.load_weights(COCO_MODEL_PATH, by_name=True)
+```
+
+Note: The error suggests that there might be a mismatch between the format in which the weights are saved and the method used to load them. Specifically, it indicates that certain weights are not instances of `tf.Variable`, which is required for loading from HDF5 files (`h5`), and suggests using the TensorFlow SavedModel format instead (`save_format='tf'`).

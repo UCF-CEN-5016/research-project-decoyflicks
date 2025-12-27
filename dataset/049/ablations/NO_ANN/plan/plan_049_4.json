@@ -1,0 +1,14 @@
+```json
+[
+    "Import torch and the necessary modules from fairseq",
+    "Define a batch size of 2 and sequence length of 10",
+    "Create a random tensor for input with shape (batch_size, sequence_length, embedding_dim) where embedding_dim = 64",
+    "Initialize the relative position multi-headed attention layer with parameters: num_heads=8, embedding_dim=64, and bias=True",
+    "Set the bias parameters (u, v) in the attention layer using torch.Tensor(10, 10) to simulate uninitialized tensors",
+    "Create a random tensor for the input lengths with shape (batch_size) and values [10, 10]",
+    "Call the forward method of the attention layer with the input tensor and input lengths",
+    "Capture the output of the forward method",
+    "Check the output tensor for NaN values using torch.isnan(output).any()",
+    "Assert that the output contains NaN values, indicating the presence of the bug"
+]
+```

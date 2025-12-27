@@ -1,0 +1,19 @@
+```json
+[
+    "Install Python 3.8 or later on an Arch Linux system",
+    "Ensure pip is up to date by running `python -m pip install --upgrade pip`",
+    "Clone the TensorFlow models repository from GitHub using `git clone https://github.com/tensorflow/models.git`",
+    "Navigate to the directory containing the TFOD2 instructions: `cd models/research/object_detection/g3doc/tf2.md`",
+    "Ensure that Python and pip are correctly installed by running `python --version` and `pip --version` respectively",
+    "Set up a virtual environment for Python packages by running `python -m venv tfod_env` and activating it with `source tfod_env/bin/activate` on Arch Linux",
+    "Install the required dependencies listed in the TFOD2 instructions, such as TensorFlow 2.x, using pip. Ensure to follow any specific version requirements provided in the instructions",
+    "Navigate back to the models repository root directory: `cd ../../..`",
+    "Create a new directory for the reproduction and navigate into it: `mkdir tfod_reproduction && cd tfod_reproduction`",
+    "Copy the provided module file `train.py` from your local machine or from the TensorFlow models repository if available: `cp /path/to/train.py .`",
+    "Install any additional packages required by the script, such as `absl-py`, `tensorflow-recommenders`, etc., using pip. Ensure to follow any specific installation instructions provided in the TFOD2 documentation",
+    "Run the installation command that produces the error: `python -m pip install --use-feature=2020-resolver .`",
+    "Capture the output of the command, which should include the error message: `option --use-feature: invalid choice: '2020-resolver' (choose from 'fast-deps', 'truststore','no-binary-enable-wheel-cache')`",
+    "Compare the captured output with the expected error message to verify that the bug has been reproduced"
+]
+```
+

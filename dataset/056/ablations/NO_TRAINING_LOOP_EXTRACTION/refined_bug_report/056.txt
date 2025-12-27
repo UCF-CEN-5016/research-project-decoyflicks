@@ -1,0 +1,16 @@
+### TITLE
+Error when running Image Classification with Vision Transformer on Google Colab
+
+### SYMPTOMS
+• The code fails with an error when attempting to extract patches from an image.
+• Error message:  
+  `InvalidArgumentError: Exception encountered when calling Patches.call(). cannot compute Conv2D as input #1(zero-based) was expected to be a int32 tensor but is a float tensor [Op:Conv2D] name:`  
+• The function `Patches.call()` receives an unexpected tensor type.
+
+### EXPECTED BEHAVIOR
+The code should successfully extract image patches and display them without errors when running the image classification example using the Vision Transformer.
+
+### REPRODUCTION STEPS
+1. Open the provided link to the Google Colab notebook: [Image classification with Vision Transformer](https://colab.research.google.com/drive/13vb4XaUgaPDAL_B2Ty2uH400hRJfrpPg?usp=sharing).
+2. Run the cell containing the code snippet that includes the image classification logic and patch extraction.
+3. Observe the error message that appears during the execution of the `Patches(patch_size)(resized_image)` line.

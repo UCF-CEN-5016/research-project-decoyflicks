@@ -1,0 +1,16 @@
+TITLE  
+TypeError in GELU Function Call in BERT Model Implementation  
+
+SYMPTOMS  
+• Encountered a TypeError when running the BERT model with PyTorch.  
+• Error message: `TypeError: gelu(): argument 'approximate' must be str, not bool`  
+• The model fails to execute the GELU activation function due to incorrect argument type.  
+
+EXPECTED BEHAVIOR  
+The GELU function should execute without error, applying the activation function correctly to the input tensor. The 'approximate' argument should accept a string value as expected by the current version of the PyTorch library.  
+
+REPRODUCTION STEPS  
+1. Execute the command:  
+   `bash scripts/run_squad.sh /home/bert_large/bert_large_qa.pt 0.2 12 3e-5 0.1 tf32 1 42 /home/bert_large/squad/v1.1 vocab/vocab results/SQuAD train bert_configs/large.json`  
+2. Observe that the script fails with a TypeError during the execution of the GELU activation function.  
+3. Review the source code at the specified line in `modeling.py` to confirm the argument type being passed to the `torch.nn.functional.gelu` function.

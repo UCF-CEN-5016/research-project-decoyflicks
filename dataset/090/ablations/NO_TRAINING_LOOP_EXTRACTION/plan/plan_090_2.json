@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary modules: torch, nn, and random from the standard library.",
+    "Define a batch size of 4 and sequence length of 10.",
+    "Create a random input tensor with shape (batch_size, sequence_length) filled with integers representing token IDs, e.g., torch.randint(0, 100, (4, 10)).",
+    "Instantiate the Encoder/Decoder model, ensuring it includes the SelfCritic class with the to_logits layer.",
+    "Set the model to training mode by calling model.train().",
+    "Perform a forward pass by calling model(input_tensor) and store the output.",
+    "Check the parameters of the model, specifically encoder.to_logits.weight, before the backward pass.",
+    "Perform a backward pass by calling loss.backward() where loss is computed using F.cross_entropy on the model output.",
+    "Check the parameters of the model, specifically encoder.to_logits.weight, after the backward pass to see if they have been updated.",
+    "Assert that encoder.to_logits.weight has not changed after the backward pass, indicating that it is not part of the forward pass.",
+    "Set up Distributed Data Parallel (DDP) by wrapping the model with torch.nn.parallel.DistributedDataParallel.",
+    "Run the training loop for a few iterations while monitoring the updates to encoder.to_logits.weight.",
+    "Log the values of encoder.to_logits.weight at each iteration to verify that they remain unchanged.",
+    "If using multiple GPUs, ensure that the model is properly synchronized across devices and check for any discrepancies in weight updates."
+]
+```

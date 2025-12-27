@@ -1,0 +1,29 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary modules from keras_nlp and nltk",
+    "Set the Keras version to 2.15 and ensure TensorFlow is compatible with it",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40 and TEST_BATCH_SIZE = 1",
+    "Import the necessary tokenizers: eng_tokenizer and spa_tokenizer from data_preprocessing",
+    "Import test_pairs from data_preprocessing, which contains pairs of English and Spanish sentences",
+    "Define the transformer model by importing it from the model module",
+    "Create a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and ensure shape is (1, MAX_SEQUENCE_LENGTH)",
+    "Pad the encoder_input_tokens tensor to ensure it has shape (1, MAX_SEQUENCE_LENGTH) if necessary",
+    "Limit the encoder_input_tokens tensor to a maximum length of 40 tokens",
+    "Define the next_fn function that takes prompt, cache, and index as parameters",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, expecting output shape to be (1, 40, 256)",
+    "Extract logits from the transformer output using logits = logits[:, index - 1, :] and ensure logits shape is (1, 256)",
+    "Set hidden_states to None and return logits, hidden_states, and cache from next_fn",
+    "Build a prompt tensor of shape (1, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Create a loop to iterate over test_pairs, using the first element as input_sentence",
+    "Call decode_sequences with the input_sentence and capture the output",
+    "Convert the output tensor to a numpy array and decode it to a string",
+    "Clean the translated string by removing special tokens [PAD], [START], and [END]",
+    "Split the translated string into a list of words",
+    "Calculate the BLEU score using nltk's modified_precision function with the expected Spanish translation",
+    "Run the script and monitor for segmentation faults during the execution of keras_nlp.samplers.GreedySampler()",
+    "Verify that the segmentation fault occurs specifically after the next_fn returns logits, an empty tuple, and None for hidden_states",
+    "Log the shapes of logits and cache before the segmentation fault occurs to confirm the state of the tensors"
+]
+```

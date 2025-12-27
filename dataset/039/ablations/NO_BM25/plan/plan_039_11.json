@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn",
+    "Define a sequence length of 4, batch size of 3, and model dimension (d_model) of 8",
+    "Create random input tensor x with shape (seq_len, batch_size, d_model) using torch.rand((4, 3, 8))",
+    "Create a random tensor for memory mem with shape (mem_len, batch_size, d_model) using torch.rand((2, 3, 8))",
+    "Create a random tensor for compressed memory c_mem with shape (c_mem_len, batch_size, d_model) using torch.rand((2, 3, 8))",
+    "Create a random mask tensor with shape (seq_len, seq_len) using torch.rand((4, 4))",
+    "Instantiate the CompressiveTransformerLayer class with appropriate parameters",
+    "Instantiate the CompressiveTransformer class with the created layers and n_layers set to 1",
+    "Call the forward method of the CompressiveTransformer instance with x, mem, c_mem, and mask as arguments",
+    "Verify that the output tensor has the expected shape of (seq_len, batch_size, d_model)",
+    "Check for RuntimeError during the forward pass, specifically looking for the error message related to tensor size mismatch"
+]
+```

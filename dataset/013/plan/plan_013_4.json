@@ -1,0 +1,20 @@
+```json
+[
+    "Create a new conda environment with Python 3.10.13 using the command 'conda create -n tf_env python=3.10.13'",
+    "Activate the newly created environment using 'conda activate tf_env'",
+    "Install TensorFlow with pip from the provided link: https://www.tensorflow.org/install/pip",
+    "Install TF Model Garden using pip: pip install tf-models-nightly",
+    "Clone the TensorFlow models repository to your local machine",
+    "Navigate to the directory containing the image_classification notebook in the cloned repository",
+    "Open the 'image_classification.ipynb' file in VSCode",
+    "Add the following lines of code before any import statements: 'import matplotlib.pyplot as plt'",
+    "Change the backend for matplotlib by adding the line: 'plt.switch_backend('TkAgg')' before importing tensorflow_models",
+    "Run the notebook cell that contains the code snippet with 'plt': 'plt.imshow(image.numpy())'",
+    "Verify that the first plot is displayed correctly, but subsequent plots do not show up",
+    "Check the backend for matplotlib after importing tensorflow_models by running: 'print(plt.get_backend())' in a new cell",
+    "Assert that the output shows the backend as 'agg', which indicates it's a non-interactive backend",
+    "Run another plot command, e.g., 'plt.plot([1, 2, 3], [4, 5, 6])'",
+    "Verify that no plot is displayed and confirm that the backend remains 'agg'"
+]
+```
+

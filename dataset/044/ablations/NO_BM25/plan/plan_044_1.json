@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, json, os, and any other required modules.",
+    "Set the DEVICE variable to 'cuda' if a GPU is available, otherwise set it to 'cpu'.",
+    "Define the SAMPLING_FREQ variable to match the sample rate of the audio files (e.g., 16000).",
+    "Define the EMISSION_INTERVAL variable to a specific value (e.g., 1.0 seconds).",
+    "Download the Japanese TTS model using wget: wget https://dl.fbaipublicfiles.com/mms/tts/jvn.tar.gz.",
+    "Extract the downloaded tar.gz file to access the model files.",
+    "Load the model and dictionary using the load_model_dict() function.",
+    "Prepare a test audio file that is compatible with the model (e.g., a .wav or .flac file).",
+    "Create a text file containing a single line of text that will be used as the transcript (e.g., 'こんにちは').",
+    "Set the args variable with the following attributes: audio_filepath pointing to the test audio file, text_filepath pointing to the text file, outdir for output directory, and use_star set to False.",
+    "Run the main function with the args variable to start the inference process.",
+    "Monitor the console output for the line 'text after filtering OOV:' to check if it is printed.",
+    "After the inference process, check the output directory for the manifest.json file.",
+    "Open the manifest.json file and verify that the 'text' field for the generated segments is empty.",
+    "Assert that the console output contains 'Empty transcript!!!!! for audio file' indicating that the tokens list was empty."
+]
+```

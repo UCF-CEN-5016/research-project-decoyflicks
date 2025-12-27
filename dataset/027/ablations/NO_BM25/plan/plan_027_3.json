@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the PyTorch examples repository from GitHub using 'git clone https://github.com/pytorch/examples.git'",
+    "Navigate to the 'dcgan' directory using 'cd examples/dcgan'",
+    "Install the required dependencies using 'pip install -r requirements.txt'",
+    "Download the CelebA dataset from the official website or use a script to download it, ensuring images are in the correct format and stored in a directory named 'celeba'",
+    "Open the 'dcgan_faces_tutorial.py' file in a code editor",
+    "Locate the section of the code where the image size is defined, typically around line 188, and change the image size from 64 to 128 by modifying the relevant parameters",
+    "Update the DataLoader to reflect the new image size by ensuring the transformations applied to the dataset include resizing to (128, 128)",
+    "Set the batch size to 64 in the DataLoader configuration to match the original settings",
+    "Run the modified script using the command 'python dcgan_faces_tutorial.py --batchSize 64'",
+    "Observe the output and wait for the training loop to start, which should print 'Starting Training Loop...'",
+    "When the error occurs, note the traceback message indicating a mismatch between the target size (torch.Size([128])) and the input size (torch.Size([3200]))",
+    "Record the specific error message: 'ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200])) is deprecated. Please ensure they have the same size.'",
+    "Verify that the input size of 3200 is derived from the model's output by checking the architecture of the generator and discriminator to confirm the output dimensions",
+    "Take note of the dimensions of the input images and the expected output dimensions to understand the source of the mismatch",
+    "Ensure that the CelebA dataset images are correctly loaded and transformed to 128x128 before being passed to the model",
+    "Log the dimensions of the input and output tensors right before the loss calculation to confirm the sizes are as expected"
+]
+```

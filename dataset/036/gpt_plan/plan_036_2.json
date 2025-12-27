@@ -1,0 +1,16 @@
+[
+  "Import torch and relevant modules: labml, labml_helpers.device.DeviceInfo, labml_nn.rl.ppo.gae (the GAE implementation), and any others needed for tensor operations",
+  "Set fixed hyperparameters: gamma = 0.99, lambda_ = 0.95, sequence length T = 5, and batch size = 1 for simplicity",
+  "Create a tensor of rewards r of shape (T,) with specific known values, e.g., r = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])",
+  "Create a tensor of value estimates v of shape (T+1,) with specific known values, e.g., v = torch.tensor([10.0, 20.0, 30.0, 40.0, 50.0, 60.0])",
+  "Manually compute the expected correct GAE advantage for t=0 using the formula including gamma^2 * r_{t+2}, i.e. verify that the second order term uses r at t+2, not t+1",
+  "Call the existing GAE function from labml_nn.rl.ppo.gae with the rewards and values as input, using the same gamma and lambda_ values",
+  "Extract the computed advantages and compare the term that corresponds to gamma^2 * r_{t+1} in the code; check if it is incorrectly using r_{t+1} instead of r_{t+2}",
+  "Assert that the computed advantage differs from the manually computed correct advantage, indicating the bug",
+  "Similarly, test the weighting coefficients wk used in the GAE calculation by printing or extracting the weights sequence for k=1 to some small number (e.g., 3)",
+  "Verify whether the weights follow wk = (1-lambda) * lambda^(k-1) as expected, or if the code uses a different formula",
+  "Assert that the weights do not match the expected formula, confirming the second bug related to wk calculation",
+  "Log all intermediate tensors (rewards, values, calculated advantages, weights) for inspection",
+  "Use concrete numerical assertions with precise tolerance to verify that the bug manifests in the calculations",
+  "Wrap the test in a function or script that can be run standalone to reproduce the bug reliably"
+]

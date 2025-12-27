@@ -1,0 +1,16 @@
+```json
+[
+    "Import the necessary libraries for handling tensors and neural networks (PyTorch or TensorFlow)",
+    "Define a model architecture that uses Rotary Position Embeddings, such as a Transformer-based language model",
+    "Initialize the model with parameters suitable for training on a specific dataset (e.g., 12 layers, 768 hidden units, etc.)",
+    "Create a batch of input data with dimensions compatible with the model's expected input shape (e.g., [batch_size, sequence_length, hidden_dim])",
+    "Populate the input data with random values to simulate real-world input during training or evaluation",
+    "Set up an optimizer and loss function appropriate for your model architecture (e.g., Adam optimizer, Cross-Entropy Loss for classification tasks)",
+    "Perform a forward pass through the model using the created batch of input data",
+    "Calculate the loss between the model's output and a randomly generated target tensor that has the same shape as the output",
+    "Verify that the calculated loss contains NaN (Not-a-Number) values, which would indicate a bug in the implementation of Rotary Position Embeddings or other parts of the model",
+    "Monitor GPU memory usage during the forward pass to ensure it does not exceed expected levels",
+    "Assert that the GPU memory usage is within an acceptable range and does not grow excessively large unexpectedly"
+]
+```
+

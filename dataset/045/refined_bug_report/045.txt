@@ -1,0 +1,17 @@
+TITLE
+Missing Configuration Parameter 'input_feat_per_channel' in Struct
+
+SYMPTOMS
+• The bug report indicates that the key 'input_feat_per_channel' is not found in a struct, which likely refers to a configuration struct or dictionary.
+• No specific error message was provided, but it suggests an issue with missing required parameters for the model or task setup.
+
+EXPECTED BEHAVIOR
+The software should be able to generate speech-to-speech translations without encountering errors related to missing configuration parameters. The system should validate that all necessary keys are present in the config dictionary before proceeding with model generation.
+
+REPRODUCTION STEPS
+1. Run the `fairseq-generate` command provided in the bug report.
+2. Check the `config.yaml` file located at `/root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml`.
+3. Ensure that the key 'input_feat_per_channel' is present and properly configured within this file.
+4. If the key is missing, add it with appropriate values or update the existing configuration to include this parameter.
+
+By adding the necessary 'input_feat_per_channel' key in the `config.yaml` file, the software should be able to proceed without encountering the bug described.

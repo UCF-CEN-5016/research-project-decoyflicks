@@ -1,0 +1,28 @@
+{
+  "bug_report": "012",
+  "module": {
+    "module": "official/utils/flags",
+    "files": [
+      {
+        "path": "official/utils/flags/flags_test.py",
+        "snippets": [
+          {
+            "lines": "83-88",
+            "code": "  def test_default_setting(self):\n    \"\"\"Test to ensure fields exist and defaults can be set.\"\"\"\n\n    defaults = dict(\n        data_dir=\"dfgasf\",\n        model_dir=\"dfsdkjgbs\",\n        train_epochs=534,\n        epochs_between_evals=15,\n        batch_size=256,\n        hooks=[\"LoggingTensorHook\"],\n        num_parallel_calls=18,\n        inter_op_parallelism_threads=5,\n        intra_op_parallelism_threads=10,\n        data_format=\"channels_first\")\n\n    flags_core.set_defaults(**defaults)\n    flags_core.parse_flags()\n\n    for key, value in defaults.items():\n      assert flags.FLAGS.get_flag_value(name=key, default=None) == value\n\n  def test_benchmark_setting(self):\n    defaults = dict(\n        hooks=[\"LoggingMetricHook\"],\n        benchmark_log_dir=\"/tmp/12345\",\n        gcp_project=\"project_abc\",\n    )\n\n    flags_core.set_defaults(**defaults)\n    flags_core.parse_flags()\n\n    for key, value in defaults.items():\n      assert flags.FLAGS.get_flag_value(name=key, default=None) == value\n\n  def test_booleans(self):\n    \"\"\"Test to ensure boolean flags trigger as expected.\"\"\"\n\n    flags_core.parse_flags([__file__, \"--use_synthetic_data\"])\n\n    assert flags.FLAGS.use_synthetic_data"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/utils/flags/flags_test.py",
+      "snippets": [
+        {
+          "lines": "83-88",
+          "code": "  def test_default_setting(self):\n    \"\"\"Test to ensure fields exist and defaults can be set.\"\"\"\n\n    defaults = dict(\n        data_dir=\"dfgasf\",\n        model_dir=\"dfsdkjgbs\",\n        train_epochs=534,\n        epochs_between_evals=15,\n        batch_size=256,\n        hooks=[\"LoggingTensorHook\"],\n        num_parallel_calls=18,\n        inter_op_parallelism_threads=5,\n        intra_op_parallelism_threads=10,\n        data_format=\"channels_first\")\n\n    flags_core.set_defaults(**defaults)\n    flags_core.parse_flags()\n\n    for key, value in defaults.items():\n      assert flags.FLAGS.get_flag_value(name=key, default=None) == value\n\n  def test_benchmark_setting(self):\n    defaults = dict(\n        hooks=[\"LoggingMetricHook\"],\n        benchmark_log_dir=\"/tmp/12345\",\n        gcp_project=\"project_abc\",\n    )\n\n    flags_core.set_defaults(**defaults)\n    flags_core.parse_flags()\n\n    for key, value in defaults.items():\n      assert flags.FLAGS.get_flag_value(name=key, default=None) == value\n\n  def test_booleans(self):\n    \"\"\"Test to ensure boolean flags trigger as expected.\"\"\"\n\n    flags_core.parse_flags([__file__, \"--use_synthetic_data\"])\n\n    assert flags.FLAGS.use_synthetic_data"
+        }
+      ]
+    }
+  ]
+}

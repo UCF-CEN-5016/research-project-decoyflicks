@@ -1,0 +1,20 @@
+TITLE  
+RuntimeError during second backward pass in rotary embedding with caching
+
+SYMPTOMS  
+• Encountered `RuntimeError: Trying to backward through the graph a second time` during the second `loss.backward()` call in the training loop.  
+• The error suggests that saved intermediate values of the computation graph are freed after the first backward pass.  
+• The issue arises specifically when using cached frequency values in the rotary embedding implementation.  
+
+EXPECTED BEHAVIOR  
+The rotary embedding library should allow for multiple backward passes without encountering runtime errors, especially when utilizing cached frequency values. The computation graph should retain necessary intermediate values for subsequent backward calls.
+
+REPRODUCTION STEPS  
+1. Set up a training loop using the rotary embedding library with caching enabled.  
+2. Call `loss.backward()` for the first time, which should compute gradients without issues.  
+3. Call `loss.backward()` a second time, which should trigger the runtime error.  
+4. Comment out the caching logic in the `forward()` method and observe that the second backward pass works without errors.  
+5. Compare behavior with and without caching to confirm the source of the issue.  
+
+Analysis:  
+The error indicates that the caching mechanism is not retaining the computation graph correctly for the second backward pass. The user may need to specify `retain_graph=True` in the `backward()` call if they intend to use the graph for multiple backward passes. However, this could also suggest a potential flaw in how the rotary embedding library manages cached values and their lifecycle during training. Further investigation is needed to determine if this is a misuse of the library or an inherent bug in its implementation.

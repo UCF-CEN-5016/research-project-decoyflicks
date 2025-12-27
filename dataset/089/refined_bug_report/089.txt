@@ -1,0 +1,23 @@
+TITLE
+Conflicting Parameters in qk_norm and kv_heads
+
+SYMPTOMS
+• The code may behave unexpectedly or throw errors when using both `qk_norm` and `kv_heads != heads`.
+• No specific error messages were provided, but the issue is likely related to dimensionality mismatch or incorrect parameter initialization.
+• Unexpected behaviors include potential runtime failures or incorrect model performance.
+
+EXPECTED BEHAVIOR
+When `qk_norm` and `kv_heads != heads`, the model should correctly initialize parameters such that there are no dimensionality issues. Specifically, the key and query normalization scales should be properly configured to match the number of key-value heads.
+
+REPRODUCTION STEPS
+1. Clone the repository from the given GitHub link: https://github.com/lucidrains/x-transformers.
+2. Check out the commit `eeed50391855f8d552edc866701952f38015e415`.
+3. Modify the code as follows:
+```python
+self.qk_norm_k_scale = nn.Parameter(torch.ones(kv_heads, 1, dim_head))
+```
+Insert this line at or near line 1022 in `x_transformers.py` where appropriate.
+4. Train a model with both `qk_norm=True` and `kv_heads != heads`.
+5. Observe if the model initializes correctly without runtime errors.
+
+This structured analysis provides clarity on the issue, expected behavior, and steps to reproduce it.

@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository.",
+    "Set the environment variables for DATA_DIR and MODEL_DIR to point to the appropriate directories containing the ImageNet dataset and model checkpoints.",
+    "Activate the conda environment with TensorFlow 2.11.0 installed.",
+    "Define the number of nodes and GPUs: 2 nodes with 2 GPUs each.",
+    "On the first GPU node (gpu1), navigate to the image classification directory.",
+    "Create a configuration file gpu.yaml with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0.",
+    "Run the classifier_trainer.py script on gpu1 with the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml.",
+    "On the second GPU node (gpu2), navigate to the same image classification directory.",
+    "Create a configuration file gpu1.yaml with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1.",
+    "Run the classifier_trainer.py script on gpu2 with the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml.",
+    "Monitor the throughput of the training process on both nodes and record the examples per second.",
+    "Verify that the throughput on multi-node setup does not exceed the throughput of a single GPU setup, which is approximately 270 examples/sec.",
+    "Check the logs for any warnings or errors related to the distribution strategy or GPU utilization.",
+    "Assert that the throughput remains the same as that of a single GPU, indicating that scaling is not occurring as expected."
+]
+```

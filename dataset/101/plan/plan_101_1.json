@@ -1,0 +1,16 @@
+```json
+[
+    "Import torch and the RotaryEmbedding module from rotary_embedding_torch.py",
+    "Define a sequence length of 1024 for Q and K tensors",
+    "Create a batch size of 32 for Q and K tensors",
+    "Set dim to 512 for both Q and K tensors",
+    "Initialize a RotaryEmbedding object with dim=512, use_xpos=True, xpos_scale_base=512",
+    "Generate random uniform input data for Q tensor with shape (batch_size, seq_length, dim)",
+    "Generate random uniform input data for K tensor with shape (batch_size, seq_length, dim)",
+    "Call the rotate_queries_and_keys method of RotaryEmbedding object with Q and K tensors",
+    "Verify that the resulting K tensor contains NaN values at a significant fraction",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory usage exceeds expected threshold"
+]
+```
+

@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Model Garden modules: tensorflow_models and official.vision.tasks.maskrcnn",
+    "Set up a Python environment with TensorFlow 2.x and the latest TensorFlow Model Garden version installed.",
+    "Define a batch size of 4 and image dimensions of 1024x1024 for the Mask R-CNN model.",
+    "Create random input data for images with shape (batch_size, height, width, 3) using numpy: images = np.random.rand(4, 1024, 1024, 3).astype(np.float32)",
+    "Create random input data for labels with shape (batch_size, num_instances, 5) using numpy: labels = np.random.randint(0, 10, size=(4, 10, 5)).astype(np.float32)",
+    "Define a dummy model configuration for Mask R-CNN with necessary parameters such as input_size, num_classes, and anchor settings.",
+    "Instantiate the MaskRCNNTask class with the dummy model configuration.",
+    "Call the build_model method of the MaskRCNNTask instance to create the model.",
+    "Prepare a dummy input shape for the model: dummy_images = tf.keras.Input(shape=(1024, 1024, 3)) and dummy_image_shape = tf.keras.layers.Input(shape=[2])",
+    "Run the model with dummy inputs to trigger the ImportError: outputs = model(dummy_images, image_shape=dummy_image_shape, training=False)",
+    "Capture the ImportError that occurs during the import of tensorflow_models: assert 'ImportError' in str(e)",
+    "Log the error message to verify the specific undefined symbol error: assert '_ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E' in str(e)",
+    "Ensure that the TensorFlow version is printed to confirm the environment setup: print(tf.version.VERSION)",
+    "Check the installed version of tensorflow_text to ensure it matches the TensorFlow version: print(tensorflow_text.__version__)",
+    "Verify that the environment is using Python 3.10 by printing the Python version: print(sys.version)"
+]
+```

@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: os, pathlib, random, string, re, numpy, tensorflow.data as tf_data, tensorflow.strings as tf_strings, keras, keras.layers, keras.ops, keras.layers.TextVectorization",
+    "Set the KERAS_BACKEND environment variable to 'tensorflow' using os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Install Keras version 2.14.0 using pip: !pip install keras==2.14.0",
+    "Ensure TensorFlow is installed and compatible with Keras 2.14.0 using pip: !pip install tensorflow",
+    "Check the Python version is 3.10 by running import sys; assert sys.version_info.major == 3 and sys.version_info.minor == 10",
+    "Verify that the GPU model is NVIDIA T4 by running !nvidia-smi and checking the output for 'T4'",
+    "Create a Python script or Jupyter notebook to run the code",
+    "Import the libraries as specified in the custom code section of the bug report",
+    "Attempt to import keras.ops and expect an ImportError to occur",
+    "Run the code block that includes the import statement 'from keras import ops'",
+    "Capture the output of the import statement to verify that it raises an ImportError",
+    "Check the error message to confirm it states 'cannot import name 'ops' from 'keras'",
+    "Log the error message to ensure it matches the expected output in the bug report",
+    "Verify that the environment is set up correctly by checking the installed versions of Keras and TensorFlow using print(keras.__version__) and print(tf.__version__)",
+    "Ensure that the script is executed in a Linux Ubuntu 22.04.3 LTS environment, either locally or in Google Colab",
+    "Confirm that the error occurs consistently by running the import statement multiple times"
+]
+```

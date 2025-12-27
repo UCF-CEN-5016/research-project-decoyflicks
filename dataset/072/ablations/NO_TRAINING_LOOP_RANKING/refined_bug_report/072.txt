@@ -1,0 +1,20 @@
+### TITLE
+AttributeError in DeepSpeedEngine: Missing 'model' attribute
+
+### SYMPTOMS
+• The error message `AttributeError: 'DeepSpeedEngine' object has no attribute 'model'. Did you mean: 'module'?` is raised during training.
+• The training process fails after attempting to print throughput metrics.
+• The warning message regarding `past_key_values` being deprecated is repeatedly logged.
+• Loss scaling issues are indicated by the message: `[deepspeed] OVERFLOW! Rank 0 Skipping step. Attempted loss scale: 65536, but hysteresis is 2. Reducing hysteresis`.
+
+### EXPECTED BEHAVIOR
+The training process should complete successfully without raising an AttributeError, and the model's throughput metrics should be printed correctly. The system should handle deprecated warnings gracefully and manage loss scaling without overflow issues.
+
+### REPRODUCTION STEPS
+1. Clone the DeepSpeedExamples repository from GitHub.
+2. Navigate to the `DeepSpeed-Chat` application directory.
+3. Run the training script located at `training/step1_supervised_finetuning/main.py`.
+4. Observe the output during the training of the first epoch.
+
+### ADDITIONAL CONTEXT
+The error occurs on line 367 of the main.py file, where the code attempts to access `model.model`. This suggests that the correct attribute to access may be `module` instead of `model`. The user should verify the correct attributes of the `DeepSpeedEngine` object in the documentation or source code.

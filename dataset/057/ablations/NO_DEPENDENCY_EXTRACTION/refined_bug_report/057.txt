@@ -1,0 +1,18 @@
+TITLE  
+Neural Machine Translation Example Fails to Import Necessary Modules  
+
+SYMPTOMS  
+• The example `neural_machine_translation_with_transformer` does not execute successfully on Google Colab.  
+• The following error message is displayed:  
+  ```
+  ImportError: cannot import name 'ops' from 'keras' (/usr/local/lib/python3.10/dist-packages/keras/__init__.py)
+  ```  
+• The import statement `from keras import ops` leads to an ImportError, indicating that the `ops` module does not exist in the Keras package.  
+
+EXPECTED BEHAVIOR  
+The example should run without errors, successfully importing all necessary modules and executing the neural machine translation functionality as intended.  
+
+REPRODUCTION STEPS  
+1. Open the example notebook for `neural_machine_translation_with_transformer` on Google Colab.  
+2. Execute the cell containing the code snippet provided in the bug report.  
+3. Observe the error output related to the import of the `ops` module from Keras.

@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and Keras modules from their respective libraries",
+    "Define a batch size of 16 and input image dimensions of (224, 224, 3)",
+    "Create random uniform input data with shape (batch_size, height, width, channels) using np.random.uniform",
+    "Load the ViViT classifier model from the provided code snippet",
+    "Compile the model with an optimizer (e.g., Adam), loss function ('sparse_categorical_crossentropy'), and metrics ('accuracy' and 'top-5-accuracy')",
+    "Generate test samples and labels by iterating through the testloader once and extracting the first batch",
+    "Extract a subset of 25 samples for inference, ensuring ground truths are collected alongside predictions",
+    "For each sample in the subset, generate a GIF using imageio.mimsave with fps=5 and normalize pixel values to uint8",
+    "Collect the generated GIFs and corresponding ground truth and predicted labels in separate lists",
+    "Create a function make_box_for_grid to create a VBox layout for displaying images with captions",
+    "Use the make_box_for_grid function to generate a grid of image boxes with captions for each sample",
+    "Verify the bug by checking if the model predictions contain any NaN values during inference",
+    "Monitor GPU memory usage during model compilation and inference",
+    "Assert that the GPU memory usage exceeds a certain threshold, indicative of potential issues in model execution"
+]
+```
+

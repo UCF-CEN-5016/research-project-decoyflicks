@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.optim",
+    "Define a batch size of 8 and input image dimensions of 224x224",
+    "Create a random tensor for input images with shape (batch_size, 3, 224, 224)",
+    "Instantiate the Encoder class with appropriate parameters: dim=512, depth=6, heads=8",
+    "Instantiate the Decoder class with appropriate parameters: dim=512, depth=6, heads=8",
+    "Create an instance of the ViTransformerWrapper class with the encoder and decoder, setting num_classes=10",
+    "Define a random target tensor for logits with shape (batch_size, 10)",
+    "Set the model to training mode using model.train()",
+    "Perform a forward pass by calling the model with the input tensor and target tensor",
+    "Capture the output logits from the model",
+    "Check the parameters of the model, specifically encoder.to_logits.weight",
+    "Print the initial value of encoder.to_logits.weight",
+    "Perform a backward pass using a loss function (e.g., CrossEntropyLoss) with the output logits and target tensor",
+    "Update the model parameters using an optimizer (e.g., Adam) with a learning rate of 0.001",
+    "Print the value of encoder.to_logits.weight after the backward pass and parameter update",
+    "Assert that the value of encoder.to_logits.weight has not changed after the update",
+    "Log the results to verify that encoder.to_logits.weight remains unchanged"
+]
+```

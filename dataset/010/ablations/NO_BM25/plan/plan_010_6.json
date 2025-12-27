@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: 'import tensorflow as tf' and 'from official.vision import instance_segmentation'",
+    "Set the random seed for reproducibility: 'tf.random.set_seed(42)'",
+    "Define a batch size of 8 and image dimensions of 512x512 for the input images",
+    "Load the COCO dataset or a similar dataset for instance segmentation with 'tf.data.Dataset.from_tensor_slices()'",
+    "Preprocess the dataset to ensure images are resized to (512, 512) and normalized to [0, 1]",
+    "Create a training dataset with 'dataset.batch(batch_size).shuffle(buffer_size=1000)'",
+    "Create a validation dataset with 'validation_dataset.batch(batch_size)'",
+    "Initialize the instance segmentation model using 'model = instance_segmentation.create_model()'",
+    "Compile the model with a loss function suitable for instance segmentation, e.g., 'loss_fn = tf.keras.losses.SparseCategoricalCrossentropy()'",
+    "Train the model using 'model.fit(training_dataset, validation_data=validation_dataset, epochs=5)'",
+    "During training, ensure that the validation loss is printed periodically by setting 'callbacks=[tf.keras.callbacks.TensorBoard()]'",
+    "After training, evaluate the model using 'model.evaluate(validation_dataset)'",
+    "Capture the output of the evaluation and check for 'validation_loss' in the output dictionary",
+    "Assert that 'validation_loss' equals 0.0 in the evaluation output",
+    "Repeat the evaluation step multiple times to confirm that 'validation_loss' consistently equals 0.0",
+    "Check the training logs for any warnings or errors related to loss calculation",
+    "Verify that the model is not overfitting by comparing training loss and validation loss"
+]
+```

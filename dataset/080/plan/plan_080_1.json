@@ -1,0 +1,17 @@
+[
+    "Import necessary libraries including PyTorch, torch.nn.functional, and torchvision.transforms for data augmentation.",
+    "Define the batch size as 32 and image dimensions as 224x224 for the ResNet model.",
+    "Create random input tensor with shape (batch_size, height, width, channels) using a uniform distribution between -1.0 and 1.0.",
+    "Define an augmentation sequence that includes RandomResizedCrop, RandomHorizontalFlip, and Normalize.",
+    "Apply the augmentation sequence to the random input tensor to generate augmented images for both student and teacher encoders.",
+    " Instantiate the ResNet model by calling the `student_encoder` method with hidden_layer = -1, projection_hidden_size = 256, num_classes_K = 1000, and projection_layers = 4.",
+    "Create a copy of the student encoder to serve as the teacher encoder without setting its gradients to None (i.e., keep it trainable).",
+    "Reset the moving average for the teacher encoder by deleting and recreating it.",
+    "Update the moving average once to initialize the teacher's weights.",
+    "Set student_temp = 0.9 and teacher_temp = 0.04 as specified in the Dino class initialization.",
+    "Call the forward method of the Dino instance with both augmented images from the first local crop, calculating the loss between the projections.",
+    "Verify that the calculated loss contains NaN values by checking if any element in the loss tensor is not finite (i.e., `torch.isnan(loss).any()` returns True).",
+    "Monitor the GPU memory usage during execution of the forward pass.",
+    "Assert that the GPU memory usage exceeds a predefined threshold, indicating that the bug has been reproduced."
+]
+

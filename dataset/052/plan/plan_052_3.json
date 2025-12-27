@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary modules from keras and tensorflow_datasets.",
+    "Set the batch size to 64 and resize_bigger to 280.",
+    "Load the 'tf_flowers' dataset using TensorFlow Datasets with splits ['train[:90%]', 'train[90%:]'] and set as_supervised=True.",
+    "Create a function preprocess_dataset that takes an image and label, resizing and cropping images during training, flipping left/right, and one-hot encoding labels.",
+    "Define a function prepare_dataset that maps the preprocessing function to the dataset, shuffles if is_training is True, batches the data, and prefetches.",
+    "Prepare the train and validation datasets using the prepare_dataset function with is_training=True and False respectively.",
+    "Create a MobileViT (XXS) model by calling the create_mobilevit function with num_classes=5.",
+    "Compile the MobileViT (XXS) model with Adam optimizer, categorical crossentropy loss with label smoothing factor 0.1, and accuracy as a metric.",
+    "Define a callback for saving the best model weights based on validation accuracy.",
+    "Train the MobileViT (XXS) model using the fit method with train_dataset, val_dataset, epochs=30, and the checkpoint_callback.",
+    "Load the saved model weights after training.",
+    "Evaluate the model on the validation dataset to get the validation accuracy.",
+    "Verify that the validation accuracy is around 85% by printing it out."
+]
+```
+

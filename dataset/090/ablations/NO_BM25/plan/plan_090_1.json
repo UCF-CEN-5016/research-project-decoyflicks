@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.optim",
+    "Define a batch size of 8 and input dimensions of (8, 10) for the encoder input",
+    "Create a random tensor for the encoder input with shape (8, 10) using torch.randn",
+    "Define a simple Encoder class that includes the encoder.to_logits layer as a nn.Linear layer with input dimension 10 and output dimension 5",
+    "Instantiate the Encoder class and move it to the appropriate device (CPU or GPU)",
+    "Define a simple Decoder class that takes the output from the Encoder and includes a forward method that calls the encoder.to_logits layer",
+    "Instantiate the Decoder class and move it to the same device as the Encoder",
+    "Set up Distributed Data Parallel (DDP) by wrapping the Encoder and Decoder with torch.nn.parallel.DistributedDataParallel",
+    "Define a simple training loop that includes a forward pass through the Encoder and Decoder, and a loss calculation using F.cross_entropy",
+    "Run the training loop for a few iterations (e.g., 5 epochs) while monitoring the encoder.to_logits.weight parameter",
+    "After each epoch, print the encoder.to_logits.weight parameter to check if it is updating",
+    "Assert that the encoder.to_logits.weight parameter remains unchanged (i.e., does not update) after the training loop",
+    "If the weight does not change, log the output indicating the bug is reproduced"
+]
+```

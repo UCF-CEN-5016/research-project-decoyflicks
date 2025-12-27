@@ -1,0 +1,12 @@
+[
+    "Import necessary libraries including PyTorch, einops, and custom modules from the provided code snippet",
+    "Define a configuration for the PitchPredictor model with parameters such as batch size, number of bins, learning rate, etc.",
+    "Create a dummy dataset loader function that returns synthetic input data similar to `f0_bin`, `f0_raw`, `spk_id`, and `gst` tensors",
+    "Initialize the PitchPredictor model using the provided configuration",
+    "Set up an optimizer with the specified learning rate and model parameters",
+    "Call the training loop function `run_epoch` with the dummy dataset loader, model, optimizer, device, and mode set to 'train'",
+    "Verify that the L1 loss calculation involves NaN values during backpropagation by checking if any gradients are inf or nan",
+    "Monitor the GPU memory usage during the training loop",
+    "Assert that the peak GPU memory usage exceeds a certain threshold, indicating potential memory overflow or instability"
+]
+

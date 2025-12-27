@@ -1,0 +1,22 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the DeepSpeed-Domino training directory using 'cd DeepSpeedExamples/training/DeepSpeed-Domino'",
+    "Create a conda environment named 'deepspeed_env' using 'conda create -n deepspeed_env python=3.12'",
+    "Activate the conda environment using 'conda activate deepspeed_env'",
+    "Install required packages including DeepSpeed and PyTorch using 'pip install deepspeed torch torchvision torchaudio'",
+    "Load necessary modules for the SLURM job using 'module load openmpi/4.1.1', 'module load cuda/11.8.0', and 'module load gcc/10.2.0'",
+    "Create a dataset directory at 'dataset/my-gpt2_text_document' and populate it with sample text data for training",
+    "Create a vocabulary file at 'dataset/gpt2-vocab.json' and a merges file at 'dataset/gpt2-merges.txt' for the tokenizer",
+    "Create a job script named 'deepspeed_job.sh' with the following SLURM directives: '#SBATCH --job-name=\"deepspeed_example\"', '#SBATCH --time=24:00:00', '#SBATCH --partition=amdrtx', '#SBATCH --nodelist=ault[41-42]', '#SBATCH --ntasks-per-node=1', '#SBATCH --gpus-per-task=2', '#SBATCH --mem=240G', '#SBATCH --output=deepspeed_example.%j.o', '#SBATCH --error=deepspeed_example.%j.e', '#SBATCH --account=g34'",
+    "Add the command to run the pretraining script in 'deepspeed_job.sh' using 'srun bash pretrain_gpt3_2.7b.sh'",
+    "Create the 'pretrain_gpt3_2.7b.sh' script with the following content: 'export CUDA_DEVICE_MAX_CONNECTIONS=1', 'GPUS_PER_NODE=1', 'MASTER_ADDR=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)', 'MASTER_PORT=29500', 'NNODES=$SLURM_NNODES', 'NODE_RANK=$SLURM_PROCID', 'WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))', 'CHECKPOINT_PATH=checkpoint', 'VOCAB_FILE=\"dataset/gpt2-vocab.json\"', 'MERGE_FILE=\"dataset/gpt2-merges.txt\"', 'DATA_PATH=\"dataset/my-gpt2_text_document\"'",
+    "Set the GPT_ARGS variable in 'pretrain_gpt3_2.7b.sh' with the following parameters: '--num-layers 12', '--hidden-size 2560', '--num-attention-heads 32', '--seq-length 512', '--max-position-embeddings 512', '--micro-batch-size 32', '--global-batch-size 64', '--lr 0.00015', '--train-iters 10', '--lr-decay-iters 320000', '--lr-decay-style cosine', '--min-lr 1.0e-5', '--weight-decay 1e-2', '--lr-warmup-fraction .01', '--clip-grad 1.0', '--fp16', '--tensor-model-parallel-size $GPUS_PER_NODE', '--distributed-backend nccl', '--seed 3407'",
+    "Set the DATA_ARGS variable in 'pretrain_gpt3_2.7b.sh' with the following parameters: '--data-path $DATA_PATH', '--vocab-file $VOCAB_FILE', '--merge-file $MERGE_FILE', '--split 949,50,1'",
+    "Set the OUTPUT_ARGS variable in 'pretrain_gpt3_2.7b.sh' with the parameter '--log-interval 1'",
+    "Run the job script using 'sbatch deepspeed_job.sh'",
+    "Monitor the job output files 'deepspeed_example.%j.o' and 'deepspeed_example.%j.e' for error messages",
+    "Verify that the warning messages about 'using GPU 0 to perform barrier as devices used by this process are currently unknown' appear in the error log",
+    "Check for the 'AttributeError: 'NoneType' object has no attribute 'all_reduce'' message in the error log to confirm the bug occurrence"
+]
+```

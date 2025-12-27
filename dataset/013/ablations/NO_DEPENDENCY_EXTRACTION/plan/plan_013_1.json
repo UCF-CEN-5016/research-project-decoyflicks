@@ -1,0 +1,24 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'test_env' with Python 3.10 using the command: conda create -n test_env python=3.10",
+    "Activate the new conda environment using the command: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install Matplotlib using pip with the command: pip install matplotlib",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open a new Python script or Jupyter Notebook in VSCode.",
+    "Import the necessary libraries at the top of the script: import tensorflow as tf, import matplotlib.pyplot as plt, from official.vision import model as tf_models",
+    "Set the Matplotlib backend to 'Agg' using the command: plt.switch_backend('Agg')",
+    "Create a simple plot using Matplotlib: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Verify that the plot displays correctly before importing TensorFlow Model Garden.",
+    "Import TensorFlow Model Garden using the command: from official.vision import model as tf_models",
+    "Create another simple plot using Matplotlib: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Check if the second plot displays correctly after importing TensorFlow Model Garden.",
+    "Assert that the second plot does not display, indicating that Matplotlib's pyplot is not working after importing TensorFlow Model Garden.",
+    "Check the current Matplotlib backend using the command: print(plt.get_backend()) and assert that it returns 'Agg'.",
+    "Attempt to switch the backend to 'TkAgg' using the command: plt.switch_backend('TkAgg') after importing TensorFlow Model Garden.",
+    "Create a plot again using Matplotlib: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Assert that the plot still does not display, confirming that changing the backend after importing TensorFlow Model Garden does not resolve the issue."
+]
+```

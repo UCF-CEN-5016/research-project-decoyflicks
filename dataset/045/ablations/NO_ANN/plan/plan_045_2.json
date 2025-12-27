@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, os, json, and any other required modules.",
+    "Set DEVICE to 'cuda' if a GPU is available, otherwise set it to 'cpu'.",
+    "Define SAMPLING_FREQ as 16000 (or the sample rate used in your audio files).",
+    "Define EMISSION_INTERVAL as 1.0 (or the desired segment duration in seconds).",
+    "Create a directory structure for the data root at $DATA_ROOT and ensure it contains the necessary audio files and config.yaml.",
+    "Create a config.yaml file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the required parameters for the speech_to_speech task.",
+    "Prepare a model checkpoint at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt that is compatible with the speech_to_speech task.",
+    "Create a test audio file at $DATA_ROOT/test_audio.wav with a sample rate of 16000 Hz and ensure it contains valid audio data.",
+    "Run the fairseq-generate command with the following parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Monitor the output for the error message indicating that the key 'input_feat_per_channel' is not in struct.",
+    "Verify that the model and dictionary are loaded correctly by adding print statements to confirm their contents before the call to model(waveform_split).",
+    "Check the dimensions of the waveform tensor before passing it to the model to ensure it matches the expected input shape.",
+    "Assert that the emissions tensor is generated and has the expected shape after the model call.",
+    "Log the output of the emissions tensor to confirm it is being computed correctly before the forced alignment step."
+]
+```

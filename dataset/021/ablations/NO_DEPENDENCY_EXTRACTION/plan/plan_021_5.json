@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official vision library: from official.vision.modeling.layers.detection_generator import _generate_detections_v2_class_aware",
+    "Set the TensorFlow logging level to suppress warnings: tf.get_logger().setLevel('ERROR')",
+    "Define a function to create empty predicted boxes: def create_empty_predicted_boxes(): return tf.constant([], shape=(0, 4), dtype=tf.float32)",
+    "Define a function to create empty predicted scores: def create_empty_predicted_scores(): return tf.constant([], shape=(0,), dtype=tf.float32)",
+    "Define a function to create empty predicted classes: def create_empty_predicted_classes(): return tf.constant([], shape=(0,), dtype=tf.int32)",
+    "Create a test function to call _generate_detections_v2_class_aware with empty inputs: def test_empty_inputs():",
+    "Inside the test function, initialize empty predicted boxes, scores, and classes: predicted_boxes = create_empty_predicted_boxes(), predicted_scores = create_empty_predicted_scores(), predicted_classes = create_empty_predicted_classes()",
+    "Call the _generate_detections_v2_class_aware function with empty predicted boxes, scores, and classes: _generate_detections_v2_class_aware(predicted_boxes, predicted_scores, predicted_classes)",
+    "Wrap the function call in a try-except block to catch the ValueError: try: ... except ValueError as e: print(f'Caught expected ValueError: {e}')",
+    "Run the test function: test_empty_inputs()",
+    "Verify that the output contains the expected ValueError message indicating that the list argument 'values' to 'ConcatV2' Op has length 0"
+]
+```

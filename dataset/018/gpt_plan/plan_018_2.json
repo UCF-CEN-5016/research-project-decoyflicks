@@ -1,0 +1,12 @@
+[
+  "Open a terminal on an Arch Linux system with Python and pip installed",
+  "Verify the pip version by running `python -m pip --version` to confirm pip is installed and check its version",
+  "Navigate to the root directory of the TensorFlow Object Detection API repository where the setup.py file is located",
+  "Attempt to run the following command to install the package using the deprecated resolver feature: `python -m pip install --use-feature=2020-resolver .`",
+  "Observe the output error message from pip indicating `option --use-feature: invalid choice: '2020-resolver' (choose from 'fast-deps', 'truststore','no-binary-enable-wheel-cache')`",
+  "Capture and store the full stderr and stdout output of the command for validation",
+  "Assert that the error message explicitly contains the substring `invalid choice: '2020-resolver'`",
+  "Assert that the pip usage instructions are printed as part of the output, confirming pip rejected the option",
+  "Optionally, check the pip version again to correlate the unsupported feature with the pip version installed",
+  "Document the failure reproducing the installation command exactly as given in the TensorFlow Models GitHub instructions under 'Python Package Installation'"
+]

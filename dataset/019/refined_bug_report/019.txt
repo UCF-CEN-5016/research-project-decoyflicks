@@ -1,0 +1,15 @@
+TITLE
+[TensorFlow Models Import Issue Due to Missing Symbol]
+
+SYMPTOMS
+• ImportError when attempting to import `tensorflow_models` as `tfm`.
+• The error message indicates an undefined symbol `_ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E`.
+- Traceback points to a conflict between TensorFlow Text and the imported package.
+
+EXPECTED BEHAVIOR
+The import statement `import tensorflow_models as tfm` should successfully load without any errors, allowing access to the TensorFlow Model Garden resources.
+
+REPRODUCTION STEPS
+1. Ensure you are using the latest version of TensorFlow 2.x.
+2. Import the `tensorflow_models` library using the following line: `import tensorflow_models as tfm`.
+3. Run your code to observe if an ImportError occurs due to the undefined symbol issue.

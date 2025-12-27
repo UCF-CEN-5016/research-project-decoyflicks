@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import numpy as np, from keras import layers, from datasets import load_dataset",
+    "Set the random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Define the maximum sequence length and vocabulary size: maxlen = 128, vocab_size = 20000",
+    "Create a function to tokenize and convert input text to IDs: def tokenize_and_convert_to_ids(text): tokens = text.split(); return lowercase_and_convert_to_ids(tokens)",
+    "Define the NER model architecture as per the provided code, including the TransformerBlock and TokenAndPositionEmbedding classes",
+    "Load the CoNLL 2003 dataset using load_dataset('conll2003')",
+    "Process the dataset to create training and validation datasets, ensuring to include padding: train_dataset = train_data.map(...).padded_batch(32), val_dataset = val_data.map(...).padded_batch(32)",
+    "Compile the NER model with a custom loss function: ner_model.compile(optimizer='adam', loss=CustomNonPaddingTokenLoss())",
+    "Fit the model on the training dataset for a few epochs: ner_model.fit(train_dataset, epochs=10)",
+    "Save the trained model to a specified path: ner_model.save('path_to_my_model')",
+    "Load the saved model using keras.models.load_model('path_to_my_model', custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False)",
+    "Convert the loaded model to TFLite format: converter = tf.lite.TFLiteConverter.from_saved_model('path_to_my_model'), tflite_model = converter.convert()",
+    "Save the TFLite model to a file: with open('model.tflite', 'wb') as f: f.write(tflite_model)",
+    "Initialize the TFLite interpreter: interpreter = tf.lite.Interpreter(model_path='model.tflite')",
+    "Allocate tensors for the interpreter: interpreter.allocate_tensors()",
+    "Prepare a sample input text: sample_input = tokenize_and_convert_to_ids('eu rejects german call to boycott british lamb')",
+    "Expand dimensions of the sample input to match expected input shape: sample_input = np.expand_dims(sample_input, axis=0)",
+    "Get input and output tensor indices: input_index = interpreter.get_input_details()[0]['index'], output_index = interpreter.get_output_details()[0]['index']",
+    "Set the input tensor with the prepared sample input: interpreter.set_tensor(input_index, sample_input)",
+    "Invoke the interpreter to run the model: interpreter.invoke()",
+    "Attempt to get the output tensor: prediction_mask = interpreter.get_tensor(output_index)",
+    "Validate that a ValueError is raised due to dimension mismatch: assert 'ValueError' in str(e) when setting tensor with mismatched dimensions"
+]
+```

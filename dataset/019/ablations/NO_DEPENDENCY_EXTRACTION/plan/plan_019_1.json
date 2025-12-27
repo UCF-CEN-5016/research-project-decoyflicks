@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and the tensorflow_models module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Check TensorFlow version using 'print(tf.version.VERSION)' to ensure it is 2.x",
+    "Install the tensorflow_text package using '!pip install tensorflow-text'",
+    "Create a Python script or Jupyter notebook to run the code",
+    "Define a batch size of 32 and input dimensions of [None, 1152] (assuming 1152 is the sum of feature sizes from the yt8m task)",
+    "Create a random uniform input tensor with shape (batch_size, 1152) using 'tf.random.uniform((32, 1152))'",
+    "Define a dummy label tensor with shape (batch_size, num_classes) using 'tf.random.uniform((32, num_classes), maxval=2, dtype=tf.int32)'",
+    "Set up a mock task configuration for the YT8MTask, including 'train_data' and 'model' parameters",
+    "Instantiate the YT8MTask class with the mock configuration",
+    "Call the 'build_model' method of the YT8MTask instance to create the model",
+    "Attempt to import the tensorflow_text module using 'import tensorflow_text'",
+    "Verify that the ImportError occurs by wrapping the import statement in a try-except block",
+    "Print the error message if ImportError is raised to confirm the undefined symbol error",
+    "Check the installed version of tensorflow_text using 'print(tensorflow_text.__version__)'",
+    "Ensure that the environment is using Python 3.10 by checking the version with 'print(sys.version)'",
+    "Validate that the error message contains 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Log the output of the error message to confirm the specific ImportError is raised"
+]
+```

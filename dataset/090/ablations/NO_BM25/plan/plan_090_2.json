@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the TransformerWrapper and Encoder classes from the appropriate module.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define a batch size of 2 and input dimensions of (2, 1024) for the input tensor.",
+    "Create a random input tensor x with shape (2, 1024) using torch.randint(0, 20000, (2, 1024)).",
+    "Create a random mask tensor with shape (2, 1024) using torch.randint(0, 2, (2, 1024)).bool().",
+    "Instantiate the TransformerWrapper model with the following parameters: num_tokens=20000, max_seq_len=1024, logits_dim=1, average_pool_embed=True, squeeze_out_last_dim=True, and attn_layers as an Encoder with dim=128, depth=6, heads=8.",
+    "Run a forward pass of the model by calling logits = model(x, mask=mask).",
+    "Check the shape of the output logits using assert logits.shape == (2,).",
+    "Access the encoder's to_logits weight parameter using encoder = model.attn_layers and assert that encoder.to_logits.weight is not None.",
+    "Print the initial value of encoder.to_logits.weight to verify its current state.",
+    "Perform a backward pass by calculating a dummy loss (e.g., loss = logits.sum()) and calling loss.backward().",
+    "Check if the encoder.to_logits.weight parameter has been updated by printing its value again after the backward pass.",
+    "Assert that the value of encoder.to_logits.weight has not changed after the backward pass, indicating that it is not being updated."
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: import torch, import deepspeed, import domino.utils",
+    "Define a batch size of 8 and input tensor dimensions of (batch_size, 1024) for the model input",
+    "Create a random input tensor with shape (8, 1024) using torch.randn(8, 1024)",
+    "Initialize a dummy optimizer using torch.optim.Adam with parameters from the random input tensor and a learning rate of 0.001",
+    "Create an instance of the OptimizerParamScheduler class with the following parameters: optimizer, init_lr=0.0001, max_lr=0.01, min_lr=0.00001, lr_warmup_steps=100, lr_decay_steps=1000, lr_decay_style='linear', start_wd=0.0, end_wd=0.1, wd_incr_steps=100, wd_incr_style='linear'",
+    "Set the global cdb object to None to simulate the uninitialized state: cdb = None",
+    "Run the pretraining script by executing bash pretrain_gpt3_2.7b.sh",
+    "Monitor the output for the specific error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce'",
+    "Verify that the error occurs during the execution of the all_reduce function call in the OptimizerParamScheduler class",
+    "Assert that the error message matches the expected output indicating that cdb was not initialized"
+]
+```

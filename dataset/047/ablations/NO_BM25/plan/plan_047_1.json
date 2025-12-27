@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the model path to the pre-trained model: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Set the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10",
+    "Run the inference command using subprocess: subprocess.run(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files)",
+    "Capture the output logs from the inference command: output_logs = subprocess.check_output(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files, stderr=subprocess.STDOUT)",
+    "Decode the output logs to a string: output_logs_str = output_logs.decode('utf-8')",
+    "Split the output logs into lines: output_lines = output_logs_str.split('\\n')",
+    "Extract the input audio file paths from the output logs: input_audio_paths = [line for line in output_lines if 'Input:' in line]",
+    "Extract the corresponding output text from the output logs: output_texts = [line for line in output_lines if 'Output:' in line]",
+    "Create a mapping of audio file names to their expected output texts: expected_outputs = { '1089-134686-0000.wav': 'HE HOPED THERE WOULD BE STEW FOR DINNER...', '1089-134686-0001.wav': 'STUFF IT INTO YOU HIS BELLY COUNSELLED HIM...', ... }",
+    "Verify the order of the output logs against the expected order: for i, audio_file in enumerate(audio_files): assert output_texts[i] == expected_outputs[os.path.basename(audio_file)]",
+    "Print a message indicating whether the order is correct or not: print('Output order is correct' if all assertions pass else 'Output order is incorrect')"
+]
+```

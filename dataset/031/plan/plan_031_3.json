@@ -1,0 +1,17 @@
+```json
+[
+    "Import the necessary modules from TensorFlow and Horovod for distributed training.",
+    "Define hyperparameters such as batch size, learning rate, number of epochs, and the dataset path.",
+    "Load the SquadV1Processor or SquadV2Processor to preprocess the dataset, including tokenization and feature extraction.",
+    "Load a pre-trained ElectraTokenizer using from_pretrained() function with the appropriate model name (e.g., 'google/electra-base-discriminator').",
+    "Create a TensorFlow dataset from the processed data, ensuring it is properly shuffled and batched.",
+    "Define a custom training loop or use Horovod's DistributedGradientTape for automatic gradient computation in a distributed setting.",
+    "Initialize the Electra model using modeling.from_pretrained() with the same model name as used for tokenization.",
+    "Compile the model with an appropriate optimizer (e.g., Adam), loss function (e.g., 'squad'), and metrics (e.g., ['accuracy']).",
+    "Train the model on the dataset within the custom training loop, iterating over the epochs and updating weights using the Horovod DistributedGradientTape.",
+    "During training, monitor GPU memory usage to ensure it is consistently high or increasing as expected for distributed training.",
+    "Assert that the GPU memory usage exceeds a certain threshold (e.g., 80% of total GPU memory) during training, indicating proper resource allocation.",
+    "After training, evaluate the model on a separate validation dataset to verify if the bug still persists in evaluation mode."
+]
+```
+

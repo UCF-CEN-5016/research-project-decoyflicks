@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the official vision ops package.",
+    "Define a batch size of 2 and image dimensions of 256x256.",
+    "Create random input data for bounding boxes with shape (batch_size, 4) representing ymin, xmin, ymax, xmax.",
+    "Create a random tensor for image shape with shape (batch_size, 2) representing height and width.",
+    "Define a function 'show_batch' that takes 'num_of_examples' as an argument but does not use it in the function body.",
+    "Inside 'show_batch', call the 'normalize_boxes' function with the bounding boxes and image shape as parameters.",
+    "Call the 'show_batch' function with num_of_examples set to 5.",
+    "Verify that the output of 'normalize_boxes' is correct by checking the shape of the output tensor matches the input bounding boxes shape.",
+    "Check the console or logs for any warnings or messages indicating that 'num_of_examples' was not used.",
+    "Assert that the 'num_of_examples' argument does not affect the output of the 'show_batch' function."
+]
+```

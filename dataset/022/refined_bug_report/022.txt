@@ -1,0 +1,29 @@
+TITLE
+RandAugment Magnitude Standard Deviation Issue
+
+SYMPTOMS
+• The standard deviation of the magnitude in RandAugment is either 0 or 1, leading to unexpected behavior.
+• There are no specific error messages mentioned.
+
+EXPECTED BEHAVIOR
+• The applied standard deviation for the magnitude should vary based on `level_std`, ensuring that the augmentation process introduces different levels of modification to the images.
+
+REPRODUCTION STEPS
+1. Clone the TensorFlow models repository from GitHub: `git clone https://github.com/tensorflow/models.git`.
+2. Navigate to the specific commit referenced in the bug report: `cd models && git checkout 9fb4a4fbcd888616586ceffa1b8806ffe1126f54`.
+3. Locate the file and line number provided in the bug report: `vi official/vision/ops/augment.py` (or use your preferred text editor).
+4. Inspect lines around 1566 to verify if the standard deviation is correctly applied based on the level.
+5. Run a test using RandAugment with different levels and observe the magnitude values.
+
+Analysis:
+The original bug report suggests that there might be an issue with how the standard deviation for the magnitude in RandAugment is being calculated or applied. The core problem appears to be related to the lack of multiplication by `level_std` after the addition operation, which would cause the standard deviation to always be 1 regardless of the level.
+
+To resolve this issue, it's recommended that the code should include a multiplication by `level_std` as follows:
+
+```python
+magnitude = int(magnitude * (level / 30.)) + random.uniform(0., 1.)
+# Ensure the following line is correctly applied:
+magnitude += random.gauss(0, level_std)
+```
+
+This modification would ensure that the magnitude values are correctly adjusted based on both the base calculation and a standard deviation factor determined by `level_std`.

@@ -1,0 +1,16 @@
+TITLE  
+ModuleNotFoundError for 'commons' when running infer.py in fairseq
+
+SYMPTOMS  
+• Encountering a `ModuleNotFoundError` when executing `infer.py`  
+• Error message: `ModuleNotFoundError: No module named 'commons'`  
+• The expected output (audio file generation) does not occur  
+
+EXPECTED BEHAVIOR  
+The audio file should be generated successfully when running the `infer.py` script with the provided parameters.
+
+REPRODUCTION STEPS  
+1. Clone the fairseq repository.  
+2. Install the package using `pip install --editable ./`.  
+3. Change the directory to `examples/mms/tts/`.  
+4. Execute the command: `python infer.py --model-dir model/ --wav test.wav --txt "Heute ist ein schöner Tag."`.

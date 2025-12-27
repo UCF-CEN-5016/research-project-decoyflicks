@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, random, and nltk.translate.bleu_score",
+    "Set the Python environment to use TensorFlow as the backend by setting os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Define MAX_SEQUENCE_LENGTH as 40",
+    "Load the English and Spanish tokenizers from data_preprocessing module",
+    "Load the test pairs from data_preprocessing module",
+    "Define the transformer model from the model module",
+    "Set TEST_BATCH_SIZE to 1",
+    "Create a function decode_sequences that takes input_sentences as an argument",
+    "Inside decode_sequences, convert input_sentences to a tensor using eng_tokenizer and ensure it is padded to MAX_SEQUENCE_LENGTH",
+    "Check if the length of encoder_input_tokens is greater than 40, if so, truncate it to 40",
+    "Define a nested function next_fn that takes prompt, cache, and index as arguments",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt as inputs",
+    "Extract logits from the transformer output using logits = logits[:, index - 1, :] and set hidden_states to None",
+    "Print the shapes of logits and cache to verify dimensions",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "In the main body of the script, iterate over the test pairs and call decode_sequences for each input sentence",
+    "After decoding, process the translated output to remove special tokens and split into words",
+    "Calculate the BLEU score using nltk's modified_precision function with n=4",
+    "Run the script and monitor for segmentation fault during the execution of next_fn",
+    "Check the output of the print statements in next_fn to verify the shapes of logits and cache before the segmentation fault occurs",
+    "Ensure that the GPU is being utilized by monitoring GPU memory usage during execution",
+    "Assert that a segmentation fault occurs when next_fn is called within the GreedySampler"
+]
+```

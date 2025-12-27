@@ -1,0 +1,19 @@
+```json
+[
+    "Import torch and the MultiheadAttention class from the appropriate module in fairseq.",
+    "Set the random seed for reproducibility using torch.manual_seed(0).",
+    "Define the embedding dimension as 768 and the number of heads as 12.",
+    "Create a batch size of 32 and a sequence length of 10.",
+    "Initialize the MultiheadAttention layer with embed_dim=768 and num_heads=12.",
+    "Create random input tensors for query, key, and value with shape (seq_len, batch_size, embed_dim) using torch.rand.",
+    "Set requires_grad=True for the query, key, and value tensors to enable gradient tracking.",
+    "Call the MultiheadAttention layer with the query, key, and value tensors.",
+    "Capture the output of the MultiheadAttention layer.",
+    "Check if the output contains NaN values using output.isnan().any() and print a message if NaNs are found.",
+    "Create a bias tensor for the relative position encodings using torch.Tensor(12, 768) without initialization.",
+    "Manually set the bias tensor in the MultiheadAttention layer to the uninitialized tensor.",
+    "Re-run the MultiheadAttention layer with the same query, key, and value tensors.",
+    "Verify if the output still contains NaN values after using the uninitialized bias tensor.",
+    "Assert that the output of the MultiheadAttention layer is not equal to the expected output (which should be valid) to confirm the bug."
+]
+```

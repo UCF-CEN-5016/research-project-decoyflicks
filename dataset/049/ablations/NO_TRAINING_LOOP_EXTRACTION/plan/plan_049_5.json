@@ -1,0 +1,17 @@
+```json
+[
+    "Import torch and the necessary modules from fairseq: ESPNETMultiHeadedAttention and RelPositionMultiHeadedAttention",
+    "Set the random seed for reproducibility using torch.manual_seed(0)",
+    "Define the number of features (n_feat) as 64 and the number of heads (n_head) as 8",
+    "Define a dropout rate of 0.1",
+    "Instantiate the RelPositionMultiHeadedAttention class with parameters: n_feat=64, n_head=8, dropout=0.1, zero_triu=False",
+    "Create a batch size of 2 and sequence lengths of 10 for query, key, and value tensors",
+    "Generate random input tensors for query, key, and value with shape (10, 2, 64) using torch.randn",
+    "Create a positional embedding tensor with shape (2, 19, 64) using torch.randn, where 19 is 2 * sequence length - 1",
+    "Create a key padding mask tensor with shape (10, 2) using torch.zeros, indicating no padding",
+    "Call the forward method of the RelPositionMultiHeadedAttention instance with the generated query, key, value, positional embedding, and key padding mask",
+    "Capture the output of the forward method and check its shape to ensure it matches expected output shape (10, 2, 64)",
+    "Check for NaN values in the output tensor using torch.isnan and assert that any NaN values are present",
+    "Print the output tensor to visually inspect for any NaN values or unexpected behavior"
+]
+```

@@ -1,0 +1,18 @@
+TITLE  
+Issue in `cross_vit.py` leading to incorrect functionality
+
+SYMPTOMS  
+• Incorrect output when running the model  
+• Unexpected behavior when processing input data  
+• Error message: "TypeError: 'NoneType' object is not subscriptable"  
+• Model does not converge during training  
+
+EXPECTED BEHAVIOR  
+The model should process input data correctly and provide expected outputs without any errors, ensuring convergence during training.
+
+REPRODUCTION STEPS  
+1. Clone the repository from `vit_pytorch`.  
+2. Navigate to the directory containing `cross_vit.py`.  
+3. Run the model with a sample dataset using the command: `python cross_vit.py --data sample_data`.  
+4. Observe the output and note any error messages or unexpected behavior.  
+5. Check the training logs for convergence issues.

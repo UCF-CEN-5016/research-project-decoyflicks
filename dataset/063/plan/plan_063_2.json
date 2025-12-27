@@ -1,0 +1,23 @@
+```json
+[
+    "Import required modules from TensorFlow, KerasCV, Matplotlib, and NumPy",
+    "Define constants for HEIGHT, WIDTH, NUM_CLASSES, BATCH_SIZE, EPOCHS, LEARNING_RATE, and AUTOTUNE",
+    "Load the Oxford Pets dataset using TensorFlow Datasets with 128 samples for training and 32 samples for validation",
+    "Preprocess the data by normalizing images to [0.0, 1.0] and adjusting segmentation masks from 1-based to 0-based",
+    "Define a lambda function `rescale_images_and_correct_masks` to preprocess the input dictionary",
+    "Map the preprocessing function to train_ds and val_ds using `map()` method with `num_parallel_calls=AUTOTUNE`",
+    "Create a utility function `unpackage_inputs` to unpack inputs from dictionary format to tuple of (images, segmentation_masks)",
+    "Define an augmentation function `augment_fn` that applies resizing, random flip, random rotation, and RandAugment",
+    "Shuffle the training dataset with buffer size BATCH_SIZE * 2 using `shuffle()` method",
+    "Map the augmentation function to augmented_train_ds using `map()` method with `num_parallel_calls=AUTOTUNE`",
+    "Batch the augmented_train_ds with batch size BATCH_SIZE using `batch()` method",
+    "Map the unpackage_inputs function to augmented_train_ds using `map()` method",
+    "Add a callback class `DisplayCallback` to monitor training progress and display images, masks during epochs 5",
+    "Define the model architecture using Sequential API with Conv2D, SeparableConv2D, BatchNormalization, and MaxPooling layers",
+    "Create an instance of the DisplayCallback class",
+    "Compile the model with Adam optimizer, sparse_categorical_crossentropy loss, and accuracy metric",
+    "Train the model using augmented_train_ds for EPOCHS epochs, validate on resized_val_ds, and use callbacks",
+    "Assert that during training, the output of a certain layer or function in RandAugment contains NaN values"
+]
+```
+

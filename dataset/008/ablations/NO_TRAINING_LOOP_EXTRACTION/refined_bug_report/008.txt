@@ -1,0 +1,18 @@
+TITLE  
+Faster R-CNN Pretrained Model Error with TensorFlow 2.13.0
+
+SYMPTOMS  
+• Encountering a ValueError when using the Faster R-CNN pretrained model.  
+• Error message: "Value error is not supported for tf2 version."  
+• The model fails to load and execute correctly in the Google Colab environment.  
+
+EXPECTED BEHAVIOR  
+The Faster R-CNN pretrained model should load successfully and execute without errors, allowing for object detection tasks to be performed as intended.
+
+REPRODUCTION STEPS  
+1. Open Google Colab.  
+2. Import the necessary TensorFlow and object detection libraries.  
+3. Download the Faster R-CNN Inception ResNet V2 640x640 model from the provided link.  
+4. Load the pretrained model using TensorFlow.  
+5. Attempt to run inference on a sample input image.  
+6. Observe the resulting error message.

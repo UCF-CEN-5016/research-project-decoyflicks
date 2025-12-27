@@ -1,0 +1,76 @@
+{
+  "bug_report": "027",
+  "rank": 4,
+  "score": 0.9184352159500122,
+  "main_file": {
+    "path": "distributed/rpc/batch/parameter_server.py",
+    "content": "import os\nimport threading\nfrom datetime import datetime\n\nimport torch\nimport torch.distributed.rpc as rpc\nimport torch.multiprocessing as mp\nimport torch.nn as nn\nfrom torch import optim\n\nimport torchvision\n\n\nbatch_size = 20\nimage_w = 64\nimage_h = 64\nnum_classes = 30\nbatch_update_size = 5\nnum_batches = 6\n\n\ndef timed_log(text):\n    print(f\"{datetime.now().strftime('%H:%M:%S')} {text}\")\n\n\nclass BatchUpdateParameterServer(object):\n\n    def __init__(self, batch_update_size=batch_update_size):\n        self.model = torchvision.models.resnet50(num_classes=num_classes)\n        self.lock = threading.Lock()\n        self.future_model = torch.futures.Future()\n        self.batch_update_size = batch_update_size\n        self.curr_update_size = 0\n        self.optimizer = optim.SGD(self.model.parameters(), lr=0.001, momentum=0.9)\n        for p in self.model.parameters():\n            p.grad = torch.zeros_like(p)\n\n    def get_model(self):\n        return self.model\n\n    @staticmethod\n    @rpc.functions.async_execution\n    def update_and_fetch_model(ps_rref, grads):\n        self = ps_rref.local_value()\n        timed_log(f\"PS got {self.curr_update_size}/{batch_update_size} updates\")\n        for p, g in zip(self.model.parameters(), grads):\n            p.grad += g\n        with self.lock:\n            self.curr_update_size += 1\n            fut = self.future_model\n\n            if self.curr_update_size >= self.batch_update_size:\n                for p in self.model.parameters():\n                    p.grad /= self.batch_update_size\n                self.curr_update_size = 0\n                self.optimizer.step()\n                self.optimizer.zero_grad(set_to_none=False)\n                fut.set_result(self.model)\n                timed_log(\"PS updated model\")\n                self.future_model = torch.futures.Future()\n\n        return fut\n\n\nclass Trainer(object):\n\n    def __init__(self, ps_rref):\n        self.ps_rref = ps_rref\n        self.loss_fn = nn.MSELoss()\n        self.one_hot_indices = torch.LongTensor(batch_size) \\\n                                    .random_(0, num_classes) \\\n                                    .view(batch_size, 1)\n\n    def get_next_batch(self):\n        for _ in range(num_batches):\n            inputs = torch.randn(batch_size, 3, image_w, image_h)\n            labels = torch.zeros(batch_size, num_classes) \\\n                        .scatter_(1, self.one_hot_indices, 1)\n            yield inputs.cuda(), labels.cuda()\n\n    def train(self):\n        name = rpc.get_worker_info().name\n        m = self.ps_rref.rpc_sync().get_model().cuda()\n        for inputs, labels in self.get_next_batch():\n            timed_log(f\"{name} processing one batch\")\n            self.loss_fn(m(inputs), labels).backward()\n            timed_log(f\"{name} reporting grads\")\n            m = rpc.rpc_sync(\n                self.ps_rref.owner(),\n                BatchUpdateParameterServer.update_and_fetch_model,\n                args=(self.ps_rref, [p.grad for p in m.cpu().parameters()]),\n            ).cuda()\n            timed_log(f\"{name} got updated model\")\n\n\ndef run_trainer(ps_rref):\n    trainer = Trainer(ps_rref)\n    trainer.train()\n\n\ndef run_ps(trainers):\n    timed_log(\"Start training\")\n    ps_rref = rpc.RRef(BatchUpdateParameterServer())\n    futs = []\n    for trainer in trainers:\n        futs.append(\n            rpc.rpc_async(trainer, run_trainer, args=(ps_rref,))\n        )\n\n    torch.futures.wait_all(futs)\n    timed_log(\"Finish training\")\n\n\ndef run(rank, world_size):\n    os.environ['MASTER_ADDR'] = 'localhost'\n    os.environ['MASTER_PORT'] = '29500'\n    options=rpc.TensorPipeRpcBackendOptions(\n        num_worker_threads=16,\n        rpc_timeout=0  # infinite timeout\n     )\n    if rank != 0:\n        rpc.init_rpc(\n            f\"trainer{rank}\",\n            rank=rank,\n            world_size=world_size,\n            rpc_backend_options=options\n        )\n        # trainer passively waiting for ps to kick off training iterations\n    else:\n        rpc.init_rpc(\n            \"ps\",\n            rank=rank,\n            world_size=world_size,\n            rpc_backend_options=options\n        )\n        run_ps([f\"trainer{r}\" for r in range(1, world_size)])\n\n    # block until all rpcs finish\n    rpc.shutdown()\n\n\nif __name__==\"__main__\":\n    world_size = batch_update_size + 1\n    mp.spawn(run, args=(world_size, ), nprocs=world_size, join=True)\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "datetime",
+      "function": "now"
+    },
+    {
+      "module": "threading",
+      "function": "Lock"
+    },
+    {
+      "module": "torch",
+      "function": "LongTensor"
+    },
+    {
+      "module": "torch",
+      "function": "MSELoss"
+    },
+    {
+      "module": "torch",
+      "function": "RRef"
+    },
+    {
+      "module": "torch",
+      "function": "SGD"
+    },
+    {
+      "module": "torch",
+      "function": "TensorPipeRpcBackendOptions"
+    },
+    {
+      "module": "torch",
+      "function": "get_worker_info"
+    },
+    {
+      "module": "torch",
+      "function": "init_rpc"
+    },
+    {
+      "module": "torch",
+      "function": "randn"
+    },
+    {
+      "module": "torch",
+      "function": "rpc_async"
+    },
+    {
+      "module": "torch",
+      "function": "rpc_sync"
+    },
+    {
+      "module": "torch",
+      "function": "shutdown"
+    },
+    {
+      "module": "torch",
+      "function": "spawn"
+    },
+    {
+      "module": "torch",
+      "function": "zeros"
+    },
+    {
+      "module": "torch",
+      "function": "zeros_like"
+    }
+  ]
+}

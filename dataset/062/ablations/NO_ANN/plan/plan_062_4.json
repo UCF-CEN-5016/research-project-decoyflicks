@@ -1,0 +1,12 @@
+```json
+[
+    "Import pandas and numpy libraries using 'import pandas as pd' and 'import numpy as np'",
+    "Create a DataFrame 'train_df' with 5 rows and 2 columns using 'train_df = pd.DataFrame({'A': range(5), 'B': range(5, 10)})'",
+    "Create another DataFrame 'test_df' with 3 rows and 2 columns using 'test_df = pd.DataFrame({'A': range(3), 'B': range(3, 6)})'",
+    "Attempt to append 'test_df' to 'train_df' using 'all_data = train_df.append(test_df)'",
+    "Run the code in a Jupyter Notebook environment with Python 3.10 and pandas 2.0.3",
+    "Observe the output for an AttributeError indicating that 'DataFrame' object has no attribute 'append'",
+    "Check for any FutureWarning messages about the deprecation of the append method",
+    "Verify that the versions of Python and pandas are correct by printing 'print(pd.__version__)' and 'print(sys.version)'"
+]
+```

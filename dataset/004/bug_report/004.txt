@@ -1,0 +1,34 @@
+MixUp + Cutmix implementation is (badly!) incorrect
+
+The code for sampling from a beta distribution in tfm.vision.augment.MixupAndCutmix._sample_from_beta is incorrect:
+
+It should be 
+
+```
+  @staticmethod
+  def _sample_from_beta(alpha, beta, shape):
+    sample_alpha = tf.random.gamma(shape, alpha, beta=1.0) # not: tf.random.gamma(shape, 1.0, beta=alpha)
+    sample_beta = tf.random.gamma(shape, beta, beta=1.0) # not: tf.random.gamma(shape, 1.0, beta=beta)
+    return sample_alpha / (sample_alpha + sample_beta)
+```
+
+https://github.com/tensorflow/models/blob/8c5c79c27c4bb2843308bf8623daa24f4f3cbe62/official/vision/ops/augment.py#L2712C1-L2713C1
+
+
+This results in very bad mixup samples:
+
+![image](https://github.com/user-attachments/assets/488a7912-80fb-426e-8908-4933e744da67)
+
+```python
+# code for plot
+import tensorflow_models as tfm
+import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
+a = tf.range(1000)
+x = tfm.vision.augment.MixupAndCutmix._sample_from_beta(0.2, 0.2, tf.shape( tf.range(1000))).numpy()
+sns.kdeplot(x, clip=(0, 1))
+x = np.random.beta(0.2, 0.2, 100000)
+sns.kdeplot(x, clip=(0, 1))
+plt.show()
+```

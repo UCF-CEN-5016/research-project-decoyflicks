@@ -1,0 +1,29 @@
+**TITLE**  
+TypeError in DALL-e Training: Unexpected Keyword Argument 'mask'
+
+**SYMPTOMS**  
+• Encountered a `TypeError` during the training of DALL-e in the rainbow_dalle notebook.  
+• The error message is:  
+  ```bash
+  TypeError: forward() got an unexpected keyword argument 'mask'
+  ```  
+• The error occurs when the `train_dalle_batch` function attempts to call the `dalle` model with a `mask` argument.
+
+**EXPECTED BEHAVIOR**  
+The DALL-e model should successfully train without raising a `TypeError`, and the `forward()` method should accept and process the `mask` argument correctly.
+
+**REPRODUCTION STEPS**  
+1. Set up the environment with the following specifications:  
+   - OS: Ubuntu 18.04  
+   - Python: 3.9.13  
+   - Torch: 1.12.0  
+   - torchvision: 0.13.0  
+2. Run the example training script in the rainbow_dalle notebook.  
+3. Generate a dataset and train the VAE successfully.  
+4. Attempt to train DALL-e by executing the `fit` function with the appropriate parameters, including the `mask`.  
+5. Observe the raised `TypeError` indicating that the `forward()` method received an unexpected keyword argument 'mask'.  
+
+**ADDITIONAL NOTES**  
+- Check the implementation of the DALL-e model's `forward()` method to ensure it is defined to accept the `mask` argument.  
+- Review the changes in the DALL-e repository or documentation to confirm if there have been any updates or modifications regarding the expected input parameters for the `forward()` method.  
+- Consider checking for compatibility issues between the installed versions of `torch` and the DALL-e implementation.

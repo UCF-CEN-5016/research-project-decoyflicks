@@ -1,0 +1,17 @@
+TITLE  
+Mistake in cross_vit.py leading to unexpected behavior
+
+SYMPTOMS  
+• Incorrect output when running the model  
+• Model fails to compile due to syntax errors  
+• Unexpected behavior when processing input data  
+• Error message: "TypeError: 'NoneType' object is not callable"  
+
+EXPECTED BEHAVIOR  
+The model should compile successfully, process input data correctly, and produce the expected output without errors.
+
+REPRODUCTION STEPS  
+1. Clone the vit_pytorch repository from GitHub.  
+2. Navigate to the directory containing cross_vit.py.  
+3. Run the script with a sample input dataset.  
+4. Observe the output and any error messages displayed.

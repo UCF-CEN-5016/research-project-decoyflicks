@@ -1,0 +1,17 @@
+```json
+[
+    "Ensure Python 3.8 is installed on your system",
+    "Install fairseq and PyTorch 1.0 using pip",
+    "Download the pretrained model 'mms1b_all.pt' from the provided path",
+    "Create a directory structure with subdirectories: 'audio', 'text_output'",
+    "Place audio files 'audio1.wav' to 'audio10.wav' in the 'audio' directory",
+    "Prepare a text file named 'expected_output.txt' with the correct order of logs",
+    "Navigate to the 'examples/mms/asr/infer/' directory",
+    "Set environment variable LOGLEVEL to DEBUG for detailed logging",
+    "Run the inference script with the following command: \npython -u mms_infer.py --model `pwd`/../fairseq_resource/mms1b_all.pt --lang \"eng\" audio/audio1.wav audio/audio2.wav audio/audio3.wav ... audio/audio10.wav",
+    "Verify the output log file 'mms_output.log' is generated in the current directory",
+    "Compare the contents of 'mms_output.log' with 'expected_output.txt'",
+    "Assert that the order of logs in 'mms_output.log' matches the order in 'expected_output.txt'"
+]
+```
+

@@ -1,0 +1,28 @@
+{
+  "bug_report": "014",
+  "module": {
+    "module": "official/projects/videoglue/configs",
+    "files": [
+      {
+        "path": "official/projects/videoglue/configs/video_classification_test.py",
+        "snippets": [
+          {
+            "lines": "24-31",
+            "code": "class VideoCoarseClassificationTest(tf.test.TestCase):\n\n  def test_video_classification_config(self):\n    config = cfg.mh_video_classification()\n    self.assertIsInstance(config.task, cfg.MultiHeadVideoClassificationTask)\n    self.assertIsInstance(config.task.model,\n                          cfg.MultiHeadVideoClassificationModel)\n    config.task.train_data.is_training = None\n    with self.assertRaises(KeyError):\n      config.validate()\n\n  def test_video_classification_config(self):\n    config = cfg.mh_video_classification()\n    self.assertIsInstance(config.task, cfg.MultiHeadVideoClassificationTask)\n    self.assertIsInstance(config.task.model,\n                          cfg.MultiHeadVideoClassificationModel)\n    config.task.train_data.is_training = None\n    with self.assertRaises(KeyError):\n      config.validate()"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/projects/videoglue/configs/video_classification_test.py",
+      "snippets": [
+        {
+          "lines": "24-31",
+          "code": "class VideoCoarseClassificationTest(tf.test.TestCase):\n\n  def test_video_classification_config(self):\n    config = cfg.mh_video_classification()\n    self.assertIsInstance(config.task, cfg.MultiHeadVideoClassificationTask)\n    self.assertIsInstance(config.task.model,\n                          cfg.MultiHeadVideoClassificationModel)\n    config.task.train_data.is_training = None\n    with self.assertRaises(KeyError):\n      config.validate()\n\n  def test_video_classification_config(self):\n    config = cfg.mh_video_classification()\n    self.assertIsInstance(config.task, cfg.MultiHeadVideoClassificationTask)\n    self.assertIsInstance(config.task.model,\n                          cfg.MultiHeadVideoClassificationModel)\n    config.task.train_data.is_training = None\n    with self.assertRaises(KeyError):\n      config.validate()"
+        }
+      ]
+    }
+  ]
+}

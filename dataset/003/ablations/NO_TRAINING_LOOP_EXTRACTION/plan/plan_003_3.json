@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and the required modules from the object detection library",
+    "Set the TensorFlow version to 2.x and ensure Keras is imported from TensorFlow",
+    "Downgrade the protobuf library to version 3.20 using pip install protobuf==3.20",
+    "Define a batch size of 1 and input dimensions of 32x32 with 16 channels",
+    "Create a random input tensor with shape (1, 32, 32, 16) using tf.random.uniform",
+    "Import the model_builder from object_detection.builders",
+    "Attempt to import the FreezableSyncBatchNorm class from object_detection.core.freezable_sync_batch_norm",
+    "Verify that the import statement raises an AttributeError",
+    "Check the error message to confirm it states 'module 'keras._tf_keras.keras.layers' has no attribute 'experimental'",
+    "Log the complete traceback of the error to ensure it matches the provided bug report",
+    "Run the code in a Google Colab environment with a T4 GPU to replicate the environment conditions"
+]
+```

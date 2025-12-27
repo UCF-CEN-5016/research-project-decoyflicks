@@ -1,0 +1,22 @@
+TITLE  
+Gradients Do Not Exist for Certain Variables During Model Training
+
+SYMPTOMS  
+• Encountering a warning while training the "efficientdet_d1_coco17_tpu-32" model on a custom dataset.  
+• The warning message states:  
+  "WARNING:tensorflow:Gradients do not exist for variables ['stack_6/block_1/expand_bn/gamma:0', 'stack_6/block_1/expand_bn/beta:0', 'stack_6/block_1/depthwise_conv2d/depthwise_kernel:0', 'stack_6/block_1/depthwise_bn/gamma:0', 'stack_6/block_1/depthwise_bn/beta:0', 'stack_6/block_1/project_bn/gamma:0', 'stack_6/block_1/project_bn/beta:0', 'top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss."  
+• The warning suggests that a `loss` argument may have been omitted in the `model.compile()` function.  
+• The issue arose after the code was functioning correctly until last month.
+
+EXPECTED BEHAVIOR  
+The model should train without warnings regarding the absence of gradients for specified variables, and the training process should minimize the loss as expected.
+
+REPRODUCTION STEPS  
+1. Load the custom dataset.  
+2. Use the "model_main_tf2.py" script to initiate training of the "efficientdet_d1_coco17_tpu-32" model.  
+3. Ensure that the `model.compile()` method includes a valid `loss` argument.  
+4. Observe the console output for any warnings or error messages during training.  
+5. Note the specific variables listed in the warning message.  
+
+Colab file link:  
+[Colab Notebook](https://colab.research.google.com/drive/1suzuFZrXo97x-91u1RM86VQ0jjo1f0gi#scrollTo=yWMaCBPCjXDK)

@@ -1,0 +1,25 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'tf_env' with Python 3.10 using the command: conda create -n tf_env python=3.10",
+    "Activate the new conda environment using: conda activate tf_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode).",
+    "Create a new Jupyter Notebook in VSCode.",
+    "Import necessary libraries at the top of the notebook with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official import tf_models",
+    "Set the matplotlib backend to 'Agg' to simulate the issue by adding the line: plt.switch_backend('Agg')",
+    "Run the cell to ensure the backend is set to 'Agg'.",
+    "Import the TensorFlow Model Garden by adding the line: from official import tf_models",
+    "Check the current matplotlib backend after importing TensorFlow Model Garden by adding the line: print(plt.get_backend())",
+    "Add a code cell to create a simple plot with the following code: plt.plot([1, 2, 3], [1, 4, 9]); plt.title('Test Plot'); plt.show()",
+    "Run the cell containing the plot code and observe that the plot does not display due to the 'Agg' backend.",
+    "Add a line to switch the backend to 'TkAgg' after importing TensorFlow Model Garden with the line: plt.switch_backend('TkAgg')",
+    "Run the cell again to check if the plot displays correctly after switching to 'TkAgg'.",
+    "Verify that the plot still does not display, confirming the bug persists even after changing the backend post-import.",
+    "Add a line to switch the backend to 'TkAgg' before importing TensorFlow Model Garden with the line: plt.switch_backend('TkAgg')",
+    "Run the cell again to check if the plot displays correctly after switching to 'TkAgg' before the import.",
+    "Verify that the plot displays correctly, confirming that the issue is related to the order of backend switching and importing TensorFlow Model Garden."
+]
+```

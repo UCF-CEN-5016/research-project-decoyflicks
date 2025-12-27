@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and any other required modules from the labml_nn package",
+    "Define a batch size of 4 and a feature dimension of 3 for the input tensor x",
+    "Create a random input tensor x with shape (batch_size, feature_dimension) using torch.randn",
+    "Define the shape for cos_cached and sin_cached tensors as (1, 1, 1, 4) to match the expected dimensions in the original code",
+    "Initialize cos_cached and sin_cached tensors with random values using torch.randn with the defined shape",
+    "Create an instance of the class that contains the ROPE implementation, ensuring it initializes cos_cached and sin_cached correctly",
+    "Call the method that performs the ROPE operation with the input tensor x",
+    "Capture the output tensor x_rope from the ROPE operation",
+    "Verify that the output tensor x_rope has the expected shape, which should be (batch_size, feature_dimension)",
+    "Assert that the operation raises a RuntimeError when executing the line: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Check the error message to confirm it matches the expected RuntimeError regarding tensor size mismatch"
+]
+```

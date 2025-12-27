@@ -1,0 +1,22 @@
+TITLE  
+Error in Backward Pass for navit_nest_3d Model Training  
+
+SYMPTOMS  
+• An error occurs during the backward pass while training the navit_nest_3d model.  
+• The following error message is displayed:  
+  "Function UnbindBackwardAutogradNestedTensor0 returned an invalid gradient at index 0 - got 1  1024  
+   1  1024  
+   1  1024  
+   1  1024  
+   1  1024  
+   [ torch.LongTensor{5,2} ] but expected shape compatible with [5, j2, 1024]"  
+• The issue seems to be related to the backward function as indicated by the link to the code:  
+  https://github.com/lucidrains/vit-pytorch/blob/main/vit_pytorch/na_vit_nested_tensor_3d.py#L327  
+
+EXPECTED BEHAVIOR  
+The training process for the navit_nest_3d model should complete without errors, and the backward pass should compute gradients correctly, resulting in a tensor shape compatible with the expected dimensions.  
+
+REPRODUCTION STEPS  
+1. Attempt to train the navit_nest_3d model.  
+2. Monitor the training process for any errors during the backward pass.  
+3. Observe the output and check for the specific error message related to gradient shape compatibility.

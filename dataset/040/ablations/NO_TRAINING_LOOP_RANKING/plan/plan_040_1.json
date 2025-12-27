@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and labml modules",
+    "Define a batch size of 64 and set the number of features per node to 1433 (based on Cora dataset)",
+    "Create a random tensor for features with shape (batch_size, in_features) using torch.rand(batch_size, in_features)",
+    "Create a random tensor for labels with shape (batch_size) using torch.randint(0, n_classes, (batch_size,))",
+    "Create an adjacency matrix with shape (batch_size, batch_size) using torch.eye(batch_size, dtype=torch.bool)",
+    "Instantiate the GAT model with parameters: in_features=1433, n_hidden=64, n_classes=7, n_heads=8, dropout=0.6",
+    "Set the model to evaluation mode using model.eval()",
+    "Pass the features and adjacency matrix to the model to get the output logits using output = model(features, adj_mat)",
+    "Calculate the attention weights using the softmax operation on the output logits along the incorrect axis (dim=1) to simulate the bug",
+    "Verify the output shape of the attention weights is (batch_size, n_classes) after applying softmax",
+    "Check if the attention weights contain any NaN values using assert torch.isnan(attention_weights).sum() > 0",
+    "Log the output of the attention weights to monitor their values during execution",
+    "Run the training loop for a single epoch to ensure the model processes the data without crashing",
+    "Assert that the model does not raise any exceptions during the forward pass despite the incorrect softmax operation",
+    "Print the final output logits to verify they are produced without errors"
+]
+```

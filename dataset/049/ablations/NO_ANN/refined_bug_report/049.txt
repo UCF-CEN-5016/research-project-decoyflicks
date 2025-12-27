@@ -1,0 +1,26 @@
+### UNINITIALISED BIAS PARAMETERS IN RELPOSITIONMULTIHEADEDATTENTION
+Bias terms in the Multi-Head Attention layer are not properly initialized, leading to unpredictable behavior.
+
+### SYMPTOMS
+• Non-deterministic behavior in model training and inference.  
+• Poor initialization resulting in unexpected values in computations.  
+• Potentially generating NaN values during operations with large tensors.  
+• Example outputs from uninitialized tensors:  
+  ```python
+  >>> import torch
+  >>> torch.Tensor(1, 1).sum()
+  tensor(0.)
+  >>> torch.Tensor(10, 10).sum()
+  tensor(4.9312e-38)
+  >>> torch.Tensor(100, 100).sum()
+  tensor(nan)
+  ```
+
+### EXPECTED BEHAVIOR
+The bias parameters should be initialized to zero, ensuring consistent and predictable behavior during model training and inference. This aligns with the initialization practices typically used in neural network layers.
+
+### REPRODUCTION STEPS
+1. Initialize a `RelPositionMultiHeadedAttention` layer without explicitly setting bias initialization.
+2. Run a forward pass with random input data.
+3. Observe the output and check for non-deterministic results or NaN values in the computations.  
+4. Compare the behavior with a version where bias terms are initialized using `torch.zeros`.

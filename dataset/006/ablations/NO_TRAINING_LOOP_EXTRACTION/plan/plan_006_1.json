@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official EfficientDet repository.",
+    "Set the TensorFlow version to 2.x to ensure compatibility with the EfficientDet model.",
+    "Define a batch size of 8 and image dimensions of 512x512 for the custom dataset.",
+    "Prepare a custom dataset with images and annotations in COCO format, ensuring it has at least 100 images.",
+    "Create a data generator that yields batches of images and corresponding labels from the custom dataset.",
+    "Load the 'efficientdet_d1_coco17_tpu-32' model using the appropriate TensorFlow API.",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., SparseCategoricalCrossentropy).",
+    "Ensure that the loss function is correctly specified in the model.compile() method.",
+    "Start training the model using model.fit() with the data generator, specifying epochs=10.",
+    "Monitor the training process for warnings, specifically looking for 'Gradients do not exist for variables...' messages.",
+    "Log the output of the training process to capture any warnings or errors.",
+    "Verify that the warning message includes the specific variables mentioned in the bug report.",
+    "Check the model summary to confirm that the layers mentioned in the warning are present in the model architecture.",
+    "Assert that the training process completes without crashing, but with the expected warning message."
+]
+```

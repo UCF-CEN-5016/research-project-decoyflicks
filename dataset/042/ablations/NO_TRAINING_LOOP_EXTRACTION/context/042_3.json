@@ -1,0 +1,11 @@
+{
+  "bug_report": "042",
+  "rank": 3,
+  "score": 0.5914509892463684,
+  "main_file": {
+    "path": "imagen_pytorch/__init__.py",
+    "content": "from imagen_pytorch.imagen_pytorch import Imagen, Unet\nfrom imagen_pytorch.imagen_pytorch import NullUnet\nfrom imagen_pytorch.imagen_pytorch import BaseUnet64, SRUnet256, SRUnet1024\nfrom imagen_pytorch.trainer import ImagenTrainer\nfrom imagen_pytorch.version import __version__\n\n# imagen using the elucidated ddpm from Tero Karras' new paper\n\nfrom imagen_pytorch.elucidated_imagen import ElucidatedImagen\n\n# config driven creation of imagen instances\n\nfrom imagen_pytorch.configs import UnetConfig, ImagenConfig, ElucidatedImagenConfig, ImagenTrainerConfig\n\n# utils\n\nfrom imagen_pytorch.utils import load_imagen_from_checkpoint\n\n# video\n\nfrom imagen_pytorch.imagen_video import Unet3D\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

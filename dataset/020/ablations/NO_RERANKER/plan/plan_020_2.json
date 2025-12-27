@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the official model library: 'import tensorflow as tf' and 'from official import core as tfm'",
+    "Set Python version to 3.8 in the environment to match the reported bug context.",
+    "Pull the Docker image for TensorFlow Model Garden version 2.12.0 with GPU support: 'docker pull tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Run the Docker container with the command: 'docker run --gpus all -it --rm tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Install the required package: 'pip install tf-models-official==2.12.0'",
+    "Define a configuration dictionary for the experiment parameters, ensuring it includes necessary fields like 'model', 'train_data', and 'eval_data'.",
+    "Set the distribution strategy to 'tf.distribute.MirroredStrategy()' for multi-GPU training.",
+    "Create a model directory for saving the model: 'model_dir = '/tmp/model_dir'",
+    "Prepare a mock dataset for training and evaluation, ensuring it has the correct format expected by the model.",
+    "Define the experiment configuration parameters, including 'params' with necessary fields such as 'seed', 'input_size', and 'anchor_boxes'.",
+    "Call the function to run the experiment: 'model, eval_logs = tfm.core.train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)'",
+    "Monitor the output for the TypeError: 'unsupported operand type(s) for |: 'dict' and 'dict' during the evaluation step.",
+    "Capture the full stack trace of the error to validate that it originates from 'base_trainer.py' at line 442.",
+    "Verify that the error occurs consistently by running the training and evaluation step multiple times.",
+    "Log the output of the experiment run to confirm the presence of the TypeError in the logs."
+]
+```

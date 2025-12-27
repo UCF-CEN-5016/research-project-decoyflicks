@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from keras_cv.models.object_detection import RetinaNet",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define a batch size of 4 and image dimensions of 640x640 for input images",
+    "Prepare a custom dataset with the same structure as the demo dataset, ensuring it contains images and corresponding bounding box annotations",
+    "Create a TensorFlow dataset from the custom dataset using tf.data.Dataset.from_tensor_slices() with the images and annotations",
+    "Map the dataset to preprocess images and annotations: apply a function that resizes images to (640, 640) and normalizes pixel values",
+    "Shuffle the dataset and batch it using .shuffle(buffer_size=1000).batch(batch_size)",
+    "Create a validation dataset in the same way as the training dataset, ensuring it has the same structure and preprocessing steps",
+    "Instantiate the RetinaNet model with appropriate parameters: model = RetinaNet(num_classes=your_num_classes, input_shape=(640, 640, 3))",
+    "Compile the model with an optimizer and loss function: model.compile(optimizer='adam', loss='your_loss_function')",
+    "Call model.fit() with the training dataset and validation dataset, using train_ds.take(20) and eval_ds.take(20) for 1 epoch",
+    "Include a callback for evaluation metrics: callbacks=[EvaluateCOCOMetricsCallback(eval_ds.take(20))]",
+    "Run the model.fit() command and observe the output for the InvalidArgumentError",
+    "Check the error message for details about the GatherV2 operation and the indices involved",
+    "Verify that the dataset contains valid bounding box annotations and that they are correctly formatted",
+    "Assert that the error occurs consistently when running the fit method with the custom dataset"
+]
+```

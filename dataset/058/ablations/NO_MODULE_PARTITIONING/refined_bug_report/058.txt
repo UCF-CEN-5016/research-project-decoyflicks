@@ -1,0 +1,27 @@
+### TITLE
+Retina Net Model Fit Error with Custom Dataset
+
+### SYMPTOMS
+• The model fails to fit on the custom dataset, resulting in an error during training.  
+• The following error message is displayed:  
+  ```
+  InvalidArgumentError: Graph execution error:
+  Detected at node retina_net_label_encoder_18/GatherV2_1 ...
+  indices[3,63949] = 0 is not in [0, 0)
+  ```
+
+### EXPECTED BEHAVIOR
+The model should successfully fit on the custom dataset without errors, allowing for training to proceed as intended.
+
+### REPRODUCTION STEPS
+1. Prepare a custom dataset structured according to the guidelines provided in the Keras documentation: https://keras.io/guides/keras_cv/object_detection_keras_cv/.
+2. Load the custom dataset into training and validation datasets (`train_ds` and `eval_ds`).
+3. Execute the following code to fit the model:
+   ```python
+   model.fit(
+       train_ds.take(20),
+       validation_data=eval_ds.take(20),
+       epochs=1,
+       callbacks=[EvaluateCOCOMetricsCallback(eval_ds.take(20))],
+   )
+   ```

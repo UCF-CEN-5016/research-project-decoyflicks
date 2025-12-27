@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, einops, and any other required modules.",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'.",
+    "Define the parameters for the Linformer and ViT models: dim=128, seq_len=50, depth=12, heads=8, k=64, image_size=224, patch_size=32, num_classes=2, channels=3.",
+    "Create an instance of the Linformer with the defined parameters.",
+    "Create an instance of the ViT model using the Linformer instance and the defined parameters.",
+    "Prepare a synthetic dataset with 1000 samples, each sample being a 3D tensor of shape (3, 224, 224) representing an RGB image.",
+    "Assign labels to the dataset, ensuring that they are binary (0 or 1) for the 2 classes.",
+    "Split the dataset into training and validation sets, with 800 samples for training and 200 for validation.",
+    "Define a DataLoader for the training set with a batch size of 32 and shuffle set to True.",
+    "Define a DataLoader for the validation set with a batch size of 32 and shuffle set to False.",
+    "Define a loss function using CrossEntropyLoss.",
+    "Define an optimizer, such as Adam, with a learning rate of 0.001.",
+    "Run a training loop for 5 epochs, where in each epoch: 1) Iterate over the training DataLoader, 2) Forward pass through the model, 3) Calculate loss and perform backpropagation, 4) Print training loss and accuracy.",
+    "After each epoch, evaluate the model on the validation set, calculating validation loss and accuracy.",
+    "Log the training and validation loss and accuracy for each epoch.",
+    "Assert that the training accuracy reaches 100% after the first epoch.",
+    "Assert that the validation accuracy also reaches 100% after the first epoch.",
+    "Check the loss values to ensure they are extremely low (e.g., < 0.01) after the first epoch.",
+    "Verify that the model is not overfitting by checking if the validation accuracy remains at 100% across subsequent epochs."
+]
+```

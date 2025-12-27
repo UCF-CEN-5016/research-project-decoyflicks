@@ -1,0 +1,27 @@
+```json
+[
+    "Import the necessary libraries: datasets from datasets and AutoTokenizer, TFAutoModelForQuestionAnswering from transformers",
+    "Set the model checkpoint to 'distilbert-base-cased'",
+    "Load the SQUAD dataset using load_dataset('squad') and assign it to the variable 'datasets'",
+    "Print the first training example from the datasets to verify the data structure",
+    "Define a max_length of 384 and a doc_stride of 128 for preprocessing",
+    "Create a function 'prepare_train_features' that takes 'examples' as input",
+    "Inside 'prepare_train_features', tokenize the 'examples' using the tokenizer with parameters: truncation='only_second', max_length=max_length, stride=doc_stride, return_overflowing_tokens=True, return_offsets_mapping=True, padding='max_length'",
+    "Extract 'overflow_to_sample_mapping' and 'offset_mapping' from the tokenized examples",
+    "Initialize empty lists for 'start_positions' and 'end_positions' in tokenized_examples",
+    "Iterate over the 'offset_mapping' to compute start and end positions for the answers",
+    "Return the tokenized_examples from the 'prepare_train_features' function",
+    "Map the 'prepare_train_features' function to the 'datasets' using the map method with batched=True and remove_columns=datasets['train'].column_names",
+    "Convert the tokenized datasets to numpy format for training",
+    "Load the model using TFAutoModelForQuestionAnswering.from_pretrained(model_checkpoint)",
+    "Compile the model with an Adam optimizer and a learning rate of 5e-5",
+    "Fit the model on the training set with validation data for 1 epoch",
+    "Prepare a context string: 'Keras is an API designed for human beings, not machines.' and a question string: 'What is Keras?'",
+    "Tokenize the context and question using the tokenizer and store the result in 'inputs'",
+    "Run the model on 'inputs' to get the outputs",
+    "Extract start and end positions from the model outputs using tf.argmax",
+    "Print the start and end positions to verify the model's output",
+    "Check if 'level2_dau_2' is used in the code by searching for its occurrences in the script",
+    "Verify that 'level2_dau_2' is not referenced in the selective_kernel_feature_fusion function call"
+]
+```

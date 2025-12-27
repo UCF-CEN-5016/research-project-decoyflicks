@@ -1,0 +1,29 @@
+```json
+[
+    "Import TensorFlow, Keras, Keras NLP, and NLTK libraries",
+    "Set the Keras version to 2.15 and TensorFlow version compatible with it",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40, TEST_BATCH_SIZE = 1",
+    "Import the necessary functions from data_preprocessing: eng_tokenizer, spa_tokenizer, and test_pairs",
+    "Import the transformer model from the model module",
+    "Define a function decode_sequences that takes input_sentences as an argument",
+    "Inside decode_sequences, convert input_sentences to a tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Check if the length of encoder_input_tokens exceeds 40, if so, truncate it to 40",
+    "Define a nested function next_fn that takes prompt, cache, and index as arguments",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt as inputs",
+    "Extract logits from the transformer output for the given index and return logits, hidden_states as None, and cache",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Prepare test_eng_texts and test_spa_texts from test_pairs",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through the range of test_pairs length, for each index, call decode_sequences with test_eng_texts[i]",
+    "Convert the output of decode_sequences to a numpy array and decode it to a UTF-8 string",
+    "Clean the translated string by removing [PAD], [START], and [END] tokens",
+    "Split the translated string into a list of words",
+    "Calculate the BLEU score using modified_precision from NLTK with n=4",
+    "Append the BLEU score to bleu_score list",
+    "Print the mean of bleu_score to verify the output",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Check the output logs for any errors or warnings related to tensor shapes or GPU memory",
+    "Assert that a segmentation fault occurs during the execution of the script"
+]
+```

@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: torch, megatron.model.fused_layer_norm.MixedFusedLayerNorm, megatron.model.fused_softmax.FusedScaleMaskSoftmax, megatron.model.utils.attention_mask_func, megatron.fused_kernels.load, transformers from transformers.models.bert.modeling_bert and transformers.models.gpt2.modeling_gpt2",
+    "Set the device to CUDA by defining device = torch.device('cuda')",
+    "Define a batch size of 4 and sequence length of 32 for the input text",
+    "Load the BERT tokenizer and model using BertTokenizer.from_pretrained('bert-base-cased') and BertModel.from_pretrained('bert-base-cased')",
+    "Prepare a test input text: test_text = 'Hello. How are you? I am fine thank you and you? yes Good. hi hi hi hi hi hi hi hi hi hi hi hi hi'",
+    "Tokenize the input text using the tokenizer: tokens = tokenizer([test_text] * batch_size, return_tensors='pt')",
+    "Move the input tensors to the CUDA device: input_ids = tokens['input_ids'].cuda(), attention_mask = tokens['attention_mask'].cuda()",
+    "Create an embedding output by passing input_ids to the BERT model: embedding_output = bert.embeddings(input_ids=input_ids, position_ids=None, token_type_ids=None, inputs_embeds=None, past_key_values_length=0).cuda().half()",
+    "Generate an attention mask using the BERT model: mask = bert.get_extended_attention_mask(attention_mask=attention_mask, input_shape=input_ids.shape, device=bert.device).repeat(1, 1, mask.size()[-1], 1)",
+    "Initialize the FusedScaleMaskSoftmax with parameters: fused_softmax = FusedScaleMaskSoftmax(input_in_fp16=True, input_in_bf16=False, mask_func=attention_mask_func, scale=None, softmax_in_fp32=False, attn_mask_type=AttnMaskType.padding, scaled_masked_softmax_fusion=True).cuda().half()",
+    "Call the fused softmax function with attention scores and the mask: fused_softmax_output = fused_softmax(attention_scores, (mask != 0))",
+    "Simulate the bug by not initializing the global cdb object before calling the fused softmax function",
+    "Capture the output and any exceptions raised during the execution of the fused softmax function",
+    "Verify that the output contains an AttributeError indicating 'NoneType' object has no attribute 'all_reduce'",
+    "Log the error message to confirm the bug has been reproduced"
+]
+```

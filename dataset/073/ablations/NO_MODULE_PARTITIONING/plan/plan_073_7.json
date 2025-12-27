@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import torch, import deepspeed, import os",
+    "Set the environment variable for DeepSpeed: os.environ['DEEPSPEED_CONFIG'] = 'path/to/deepspeed_config.json'",
+    "Define a batch size of 8 and model dimensions for GPT-3: model_dim = 2.7e9",
+    "Create a random input tensor with shape (batch_size, sequence_length, model_dim): input_tensor = torch.randn(8, 1024, 256)",
+    "Initialize the PyTorch distributed process group: torch.distributed.init_process_group(backend='nccl', world_size=1, rank=0)",
+    "Set the global memory buffer by calling _set_global_memory_buffer()",
+    "Run the pretraining script: os.system('bash pretrain_gpt3_2.7b.sh')",
+    "In the pretraining script, ensure that the global cdb object is not initialized before the all_reduce call",
+    "Add a print statement before the all_reduce call to check if cdb is None: print('cdb:', cdb)",
+    "Verify that the output contains the error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce''",
+    "Check the logs to confirm that the global cdb object was not initialized correctly before the all_reduce operation"
+]
+```

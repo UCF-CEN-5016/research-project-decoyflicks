@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision.transforms, and os",
+    "Set the device to 'cuda' if available, otherwise 'cpu'",
+    "Define the model architecture by importing torchvision.models and initializing resnet50",
+    "Set the model to evaluation mode using model.eval()",
+    "Download the pretrained weights file 'nvidia_resnet50_200821.pth.tar' from the specified URL",
+    "Load the pretrained weights using torch.load() and set map_location to the device",
+    "Define the input image size as (3, 224, 224) for ResNet50",
+    "Create a transform pipeline using torchvision.transforms to resize, normalize, and convert images to tensors",
+    "Load a sample image from the ImageNet dataset located at '/data/imagenet/'",
+    "Apply the transform pipeline to the loaded image to prepare it for inference",
+    "Create a batch of images by stacking the transformed image tensor, ensuring the shape is (1, 3, 224, 224)",
+    "Attempt to load the state_dict into the model using model.load_state_dict(pretrained_weights, strict=False)",
+    "Capture any RuntimeError that occurs during the loading of the state_dict",
+    "Print the error message to verify the presence of missing and unexpected keys in the state_dict",
+    "Assert that the error message contains 'Missing key(s) in state_dict' and 'Unexpected key(s) in state_dict'"
+]
+```

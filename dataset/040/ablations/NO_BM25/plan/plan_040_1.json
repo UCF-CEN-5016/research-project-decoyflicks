@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and the UNet class from labml_nn.diffusion.ddpm.unet",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 8 and image dimensions of 32x32 (CIFAR-10 image size)",
+    "Create random input data with shape (batch_size, 3, height, width) using torch.randn(batch_size, 3, 32, 32)",
+    "Instantiate the UNet model from labml_nn.diffusion.ddpm.unet with appropriate parameters (e.g., in_channels=3, out_channels=3)",
+    "Pass the random input data through the UNet model to obtain the output",
+    "Locate the attention mechanism in the UNet model, specifically at line 188 in unet.py",
+    "Modify the attention calculation to use the softmax operation along the j axis by changing attn.softmax(dim=2) to attn.softmax(dim=1)",
+    "Run the model with the modified attention calculation and capture the output",
+    "Verify the output shape is consistent with the input shape (should be (batch_size, 3, 32, 32))",
+    "Check for any NaN values in the output tensor using torch.isnan(output).any()",
+    "Assert that the output does not contain NaN values, indicating that the model is functioning despite the potential bug",
+    "Log the output tensor values to observe any anomalies or unexpected behavior",
+    "Compare the output of the modified attention mechanism with the original implementation to identify discrepancies"
+]
+```

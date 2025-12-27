@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official models repository",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Create a synthetic dataset using tf.data.Dataset with 1000 samples, each sample being a random tensor of shape (batch_size, height, width, 3)",
+    "Define a function to apply RandAugment with a fixed magnitude standard deviation of 1",
+    "Within the RandAugment function, ensure that the standard deviation is set to 1 without the addition of level_std*",
+    "Create a model that uses the RandAugment function in its preprocessing pipeline",
+    "Compile the model with a simple loss function and optimizer",
+    "Train the model for 1 epoch on the synthetic dataset to ensure the augmentation is applied",
+    "Evaluate the model on a separate validation dataset to check the output",
+    "Capture the output of the RandAugment function during evaluation",
+    "Assert that the standard deviation of the applied augmentations is always 1",
+    "Log the results of the evaluation to verify that the output does not vary as expected due to the bug",
+    "Check for any warnings or errors in the console that may indicate issues with the augmentation process"
+]
+```

@@ -1,0 +1,11 @@
+{
+  "bug_report": "076",
+  "rank": 2,
+  "score": 0.4890792667865753,
+  "main_file": {
+    "path": "mrcnn/__init__.py",
+    "content": "\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

@@ -1,0 +1,18 @@
+TITLE
+File Not Found Error During Model Training
+
+SYMPTOMS
+• Building model with specified TensorFlow Hub URL.
+• Epoch 1/100 is attempted.
+• Graph execution error occurs.
+• Specific "NotFoundError" with message indicating no such file or directory for a particular image path.
+• Overfitting issue mentioned, though not directly related to the current bug report.
+
+EXPECTED BEHAVIOR
+• Model training should proceed without errors, loading data correctly and executing all epochs as specified.
+• TensorBoard callback should function properly to provide logging information during model training without causing overfitting issues.
+
+REPRODUCTION STEPS
+1. Define `train_model` function with model creation, tensorboard callback setup, and data fitting.
+2. Call the `train_model` function.
+3. Observe the error message indicating a file not found for a specific image path during model training.

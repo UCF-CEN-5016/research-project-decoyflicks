@@ -1,0 +1,4 @@
+[Bug] Custom alibi position fails for flash attention
+
+Hi! I've been revisiting the custom position alibi again, and I found that setting `attn_flash=True` will fail. It looks like the following line forgot to account for the attention bias being 4D when custom positions are passed in. Should be an easy fix?
+https://github.com/lucidrains/x-transformers/blob/57efd7770f2f5df0ff7b4ffcbd623750b584e850/x_transformers/attend.py#L373

@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the NVIDIA DeepLearningExamples repository from GitHub using the command: git clone https://github.com/NVIDIA/DeepLearningExamples.git",
+    "Navigate to the ResNet50 directory using: cd DeepLearningExamples/PyTorch/Classification/ConvNets/resnet50v1.5",
+    "Download the pretrained weights file 'nvidia_resnet50_200821.pth.tar' from the specified source and place it in the current directory.",
+    "Ensure that the ImageNet dataset is available at the path '/data/imagenet/' and contains the required structure (e.g., train and validation folders).",
+    "Create a Python script named 'main.py' and import necessary libraries: import torch, import torchvision.transforms as transforms, import torchvision.datasets as datasets, import torch.nn as nn, import torch.optim as optim.",
+    "Define a batch size of 256 for inference: batch_size = 256.",
+    "Set the device to CUDA if available: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu').",
+    "Load the ResNet50 model with pretrained weights using: model = torchvision.models.resnet50(pretrained=False).",
+    "Load the state_dict from the pretrained weights file using: state_dict = torch.load('nvidia_resnet50_200821.pth.tar')['state_dict'].",
+    "Attempt to load the state_dict into the model using: model.load_state_dict(state_dict, strict=False).",
+    "Prepare the ImageNet dataset for inference using: dataset = datasets.ImageFolder('/data/imagenet/', transform=transforms.Compose([transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()]))",
+    "Create a DataLoader for the dataset with the defined batch size: data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=False).",
+    "Run inference on the model with the DataLoader: for inputs, labels in data_loader: outputs = model(inputs.to(device)).",
+    "Capture the RuntimeError during the loading of state_dict by wrapping the load_state_dict call in a try-except block.",
+    "Print the error message to verify the presence of missing and unexpected keys in the state_dict.",
+    "Assert that the RuntimeError message contains 'Missing key(s) in state_dict' and 'Unexpected key(s) in state_dict' to confirm the bug is reproduced."
+]
+```

@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch and numpy",
+    "Define the dimensions for the input tensor x: set batch size to 4 and feature dimension to 4, resulting in shape (4, 3, 4)",
+    "Create a random input tensor x with shape (4, 3, 4) using torch.rand()",
+    "Define the dimensions for the cos_cached and sin_cached tensors: set their shape to (4, 3, 4) to match the original x tensor",
+    "Create cos_cached tensor with shape (4, 3, 4) using torch.rand()",
+    "Create sin_cached tensor with shape (4, 3, 4) using torch.rand()",
+    "Define the neg_half_x tensor: set its shape to (4, 3, 4) using torch.rand()",
+    "Create a tensor x_rope initialized to zeros with shape (4, 3, 4) using torch.zeros()",
+    "Attempt to execute the operation: x_rope = (x_rope * cos_cached[:x.shape[0]]) + (neg_half_x * sin_cached[:x.shape[0]])",
+    "Capture the RuntimeError exception during the operation execution",
+    "Print the error message to confirm the tensor size mismatch",
+    "Verify that the last dimension of x_rope is 4 and the last dimension of cos_cached and sin_cached is also 4",
+    "Check that the last dimension of the input tensor x is 4, while the operation is only applied to a partial set of features (3 in the last dimension)"
+]
+```

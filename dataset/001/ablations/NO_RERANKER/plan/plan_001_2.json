@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from syntaxnet, including StructuredGraphBuilder and gen_parser_ops",
+    "Set the random seed for reproducibility using tf.random.set_seed(1)",
+    "Define a batch size of 3, beam size of 3, and max steps of 10 for the training process",
+    "Create a temporary directory for test data using tf.test.get_temp_dir()",
+    "Prepare the task context by copying the context.pbtxt file from the syntaxnet test data directory to the temporary directory",
+    "Run the lexicon_builder function with the task context and corpus name 'training-corpus' to create necessary term maps",
+    "Retrieve feature sizes, domain sizes, embedding dimensions, and number of actions using gen_parser_ops.feature_size with the task context",
+    "Set embedding dimensions to [8, 8, 8] and hidden layer sizes to an empty list",
+    "Define a learning rate of 0.01 and decay steps of 1000 for the training process",
+    "Initialize the StructuredGraphBuilder with the retrieved parameters and specified configurations",
+    "Add training operations to the builder with the defined batch size, learning rate, momentum of 0.9, and corpus name 'training-corpus'",
+    "Run the initialization operations of the training graph using sess.run()",
+    "Create a loop to run the training for 10 steps, capturing the cost, gold slot, and alive steps in each iteration",
+    "In each iteration, assert that the cost value is NaN after a few epochs of training",
+    "Monitor GPU memory usage during the training process to check if it exceeds 10G",
+    "Log the GPU memory usage and assert that it is greater than 10G to validate the memory consumption issue"
+]
+```

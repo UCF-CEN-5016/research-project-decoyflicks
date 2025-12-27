@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import matplotlib.pyplot as plt, import keras, from keras import layers, from keras import ops",
+    "Set the random seed for reproducibility: np.random.seed(42)",
+    "Define image size and patch size: set image_size = 72 and patch_size = 16",
+    "Load the CIFAR-10 dataset: (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()",
+    "Normalize the training images: x_train = x_train.astype('float32') / 255.0",
+    "Select a random image from the training set: image = x_train[np.random.choice(range(x_train.shape[0]))]",
+    "Display the selected image using plt.imshow(image.astype('uint8')) and plt.axis('off')",
+    "Resize the selected image using ops.image.resize: resized_image = ops.image.resize(ops.convert_to_tensor([image]), size=(image_size, image_size))",
+    "Create an instance of the Patches class with the defined patch size: patches = Patches(patch_size)",
+    "Attempt to extract patches from the resized image: patches = patches(resized_image)",
+    "Print the dimensions of the patches: print(f'Image size: {image_size} X {image_size}'), print(f'Patch size: {patch_size} X {patch_size}'), print(f'Patches per image: {patches.shape[1]}'), print(f'Elements per patch: {patches.shape[-1]}')",
+    "Set up a loop to display the patches: for i, patch in enumerate(patches[0]):",
+    "Inside the loop, reshape each patch: patch_img = ops.reshape(patch, (patch_size, patch_size, 3))",
+    "Display each patch using plt.imshow(ops.convert_to_numpy(patch_img).astype('uint8')) and plt.axis('off')",
+    "Run the code cell and observe the output for the InvalidArgumentError related to Conv2D input types"
+]
+```

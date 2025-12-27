@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official TensorFlow repository.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define a batch size of 32 and input dimensions for the EfficientDet model, e.g., (512, 512, 3).",
+    "Prepare a custom dataset with at least 1000 images and corresponding labels, ensuring the dataset is compatible with the EfficientDet model.",
+    "Create a data generator or use tf.data.Dataset to load the custom dataset, ensuring it yields batches of shape (batch_size, height, width, channels).",
+    "Instantiate the EfficientDet model using the model_main_tf2.py script with the following parameters: model_name='efficientdet_d1_coco17_tpu-32', batch_size=32, and num_epochs=10.",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., tf.keras.losses.SparseCategoricalCrossentropy), ensuring to include the loss argument.",
+    "Train the model using model.fit() with the custom dataset, specifying validation_data to monitor performance.",
+    "During training, monitor the console output for warnings related to gradients, specifically looking for the warning: 'Gradients do not exist for variables...when minimizing the loss.'",
+    "Log the output of the model summary to verify the architecture and ensure that all layers are correctly initialized.",
+    "Assert that the warning message appears in the logs during the training process, indicating that gradients are not being computed for specific variables."
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, and matplotlib",
+    "Define a batch size of 2 and set the number of classes to 80",
+    "Set the learning rate schedule with specific boundaries and values: learning_rates = [2.5e-06, 0.000625, 0.00125, 0.0025, 0.00025, 2.5e-05] and learning_rate_boundaries = [125, 250, 500, 240000, 360000]",
+    "Define a function to preprocess the data, ensuring it matches the expected input format for the RetinaNet model",
+    "Load a custom dataset structured similarly to COCO, ensuring it contains images and bounding boxes in the format [xmin, ymin, xmax, ymax]",
+    "Create a tf.data.Dataset for the training data, applying the preprocessing function and using padded_batch with padding_values=(0.0, 1e-8, -1)",
+    "Create a tf.data.Dataset for the validation data, applying the same preprocessing and using padded_batch with padding_values=(0.0, 1e-8, -1)",
+    "Initialize the LabelEncoder class to encode the labels for the training and validation datasets",
+    "Define the model architecture using the RetinaNet class with a ResNet50 backbone",
+    "Compile the model with the RetinaNetLoss function and an SGD optimizer with momentum=0.9",
+    "Call model.fit with train_dataset.take(20) and validation_data=val_dataset.take(20), setting epochs=1",
+    "Monitor the output for any errors during the model fitting process, specifically looking for InvalidArgumentError related to GatherV2",
+    "Capture the full stack trace of the error to verify it matches the reported bug",
+    "Assert that the error message contains 'indices[3,63949] = 0 is not in [0, 0)' to confirm the specific bug occurrence"
+]
+```

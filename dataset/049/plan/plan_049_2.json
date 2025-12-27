@@ -1,0 +1,13 @@
+```json
+[
+    "Import PyTorch and the necessary modules for creating tensors and handling exceptions from torch.nn.functional",
+    "Define a function to create a RelPositionMultiHeadedAttention layer with a fixed block size of 4, n_heads of 2, and a hidden_size of 8",
+    "Initialize the input tensor with a shape of (1, 2, 2, 8) filled with random values using torch.randn",
+    "Create an instance of the PQ class with W as the input tensor, block_size of 4, n_centroids of 256, and other parameters set to default values",
+    "Call the encode method on the PQ instance",
+    "Verify that the centroids attribute of the PQ instance contains NaN values by printing it or asserting a condition such as torch.isnan(centroids).any().item() == True",
+    "Monitor GPU memory usage during execution if available (optional)",
+    "Assert GPU memory usage does not exceed expected threshold (if applicable)"
+]
+```
+

@@ -1,0 +1,17 @@
+TITLE  
+TypeError in KerasNLP GreedySampler due to unexpected keyword argument
+
+SYMPTOMS  
+• Encountering a `TypeError` when attempting to call `keras_nlp.samplers.GreedySampler()` during the prediction phase.  
+• The exact error message is:  
+  `TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id'`  
+• The model trains successfully, indicating that the issue arises during the evaluation/prediction phase.
+
+EXPECTED BEHAVIOR  
+The `GreedySampler` should execute without errors and return generated tokens based on the provided input sentences, allowing for successful translation from English to Spanish.
+
+REPRODUCTION STEPS  
+1. Run the KerasNLP English-to-Spanish translation example in a Colab environment.  
+2. Train the model successfully using the provided dataset.  
+3. Attempt to call the `decode_sequences` function with a randomly selected input sentence.  
+4. Observe the error occurring during the call to `keras_nlp.samplers.GreedySampler()`.

@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow and Keras modules: keras.layers, keras.models, and keras.utils",
+    "Define a batch size of 128 and set epochs to 5 for model training",
+    "Set input shape to (28, 28, 1) for MNIST dataset images",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Scale images to the [0, 1] range by dividing by 255",
+    "Ensure images have shape (28, 28, 1) by using np.expand_dims on x_train and x_test",
+    "Convert class vectors to binary class matrices using keras.utils.to_categorical()",
+    "Define a Sequential model with the following layers: Input layer, StandardizedConv2DWithCall, MaxPooling2D, StandardizedConv2DWithOverride, MaxPooling2D, Flatten, Dropout, and Dense",
+    "Implement StandardizedConv2DWithCall and StandardizedConv2DWithOverride classes that inherit from keras.layers.Conv2D and override the convolution_op() method",
+    "In the StandardizedConv2DWithOverride class, ensure the convolution_op() method is defined correctly to perform custom convolution",
+    "In the model definition, use StandardizedConv2DWithCall with 32 filters and kernel_size=(3, 3)",
+    "In the model definition, use StandardizedConv2DWithOverride with 64 filters and kernel_size=(3, 3)",
+    "Compile the model using categorical_crossentropy loss, adam optimizer, and accuracy as a metric",
+    "Fit the model on the training data (x_train, y_train) with validation_split=0.1",
+    "Check the model summary to verify the architecture and ensure level2_dau_2 is defined but not used",
+    "Locate line 347 in the mirnet.py file to confirm level2_dau_2 is defined but not utilized",
+    "Locate line 352 in the mirnet.py file to check if level3_dau_2 is incorrectly referenced instead of level2_dau_2",
+    "Assert that the output of the model training does not raise any errors but confirms the unused variable warning"
+]
+```

@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, os, numpy, random, IPython.display, PIL.ImageOps",
+    "Set the image size to (160, 160) and define the number of classes as 3",
+    "Define a batch size of 32",
+    "Download the Oxford Pets dataset using wget and curl commands to fetch images and annotations",
+    "Extract the downloaded tar.gz files to access the images and annotations",
+    "Prepare paths for input images and target segmentation masks by listing all .jpg files in the 'images/' directory and .png files in the 'annotations/trimaps/' directory",
+    "Sort the input image paths and target image paths to ensure they correspond correctly",
+    "Define a function 'load_img_masks' that reads and processes images: decode PNG, resize to (160, 160), convert input images to float32, and target images to uint8",
+    "In the 'load_img_masks' function, subtract 1 from the target image to adjust class labels from 1, 2, 3 to 0, 1, 2",
+    "Create a TensorFlow Dataset from the input and target image paths using tf.data.Dataset.from_tensor_slices",
+    "Map the 'load_img_masks' function to the dataset with num_parallel_calls set to tf.data.AUTOTUNE",
+    "Batch the dataset with the defined batch size of 32",
+    "Define a function 'augment_fn' that applies random augmentations to the input images",
+    "Create a training dataset by shuffling the dataset with a buffer size of BATCH_SIZE * 2, mapping the augment_fn, and batching with BATCH_SIZE",
+    "Add a second map operation to the training dataset to unpackage inputs",
+    "Prefetch the dataset with buffer_size set to tf.data.AUTOTUNE",
+    "Run the code to create the augmented_train_ds and observe the error message",
+    "Verify that the error message indicates a type mismatch between float32 and int64 tensors"
+]
+```

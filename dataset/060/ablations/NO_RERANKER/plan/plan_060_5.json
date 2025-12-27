@@ -1,0 +1,24 @@
+```json
+[
+    "Import TensorFlow and KerasCV modules: keras_cv.layers and keras_cv.models",
+    "Set the batch size to 32 and define image dimensions as 160x160",
+    "Define AUTOTUNE as tf.data.AUTOTUNE",
+    "Create a function augment_fn that applies random augmentations to images and segmentation masks",
+    "Create a function unpackage_inputs that unpacks the dataset into images and masks",
+    "Create a function resize_fn that resizes images and masks to (160, 160)",
+    "Load the Oxford Pets dataset using tf.keras.utils.get_file and prepare train_ds and val_ds",
+    "Ensure train_ds contains images of shape (None, 160, 160, 3) and masks of shape (None, 160, 160, 1)",
+    "Shuffle train_ds with a buffer size of BATCH_SIZE * 2",
+    "Map augment_fn to train_ds with num_parallel_calls set to AUTOTUNE",
+    "Batch train_ds with a batch size of BATCH_SIZE",
+    "Map unpackage_inputs to train_ds with num_parallel_calls set to AUTOTUNE",
+    "Prefetch train_ds with buffer_size set to tf.data.AUTOTUNE",
+    "Map resize_fn to val_ds with num_parallel_calls set to AUTOTUNE",
+    "Batch val_ds with a batch size of BATCH_SIZE",
+    "Map unpackage_inputs to val_ds with num_parallel_calls set to AUTOTUNE",
+    "Prefetch val_ds with buffer_size set to tf.data.AUTOTUNE",
+    "Run the code cell containing the dataset preparation steps",
+    "Capture the output and verify that a TypeError is raised during the execution",
+    "Check the error message for mismatched tensor types in the output of augment_fn"
+]
+```

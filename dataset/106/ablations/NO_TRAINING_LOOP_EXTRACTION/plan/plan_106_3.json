@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 10 and input dimensions of 64 (feature dimension)",
+    "Create a random input tensor z with shape (batch_size, input_dim) using torch.randn(batch_size, 64)",
+    "Instantiate the LatentQuantize class with levels=[8], dim=64, and default values for other parameters",
+    "Call the forward method of the LatentQuantize instance with the input tensor z",
+    "Capture the output, indices, and loss from the forward method",
+    "Create a tensor of values_per_latent with extreme values to simulate float precision overflow, e.g., using torch.tensor([[1e10, 1e10, 1e10, 1e10, 1e10, 1e10, 1e10, 1e10]])",
+    "Set the values_per_latent attribute of the LatentQuantize instance to the extreme values tensor",
+    "Call the quantize method of the LatentQuantize instance with the input tensor z",
+    "Check the output of the quantize method for NaN values using torch.isnan(output).any()",
+    "Assert that the output contains NaN values by checking if the result of the previous step is True"
+]
+```

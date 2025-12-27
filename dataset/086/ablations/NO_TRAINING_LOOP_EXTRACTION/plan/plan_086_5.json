@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary modules: torch, einops, and the DPO class from x_transformers.dpo",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and sequence length of 32",
+    "Create a random tensor for preferred_seq with shape (batch_size, sequence_length) using torch.randint(0, 100, (1, 32))",
+    "Create a random tensor for unpreferred_seq with the same shape as preferred_seq using torch.randint(0, 100, (1, 32))",
+    "Define a prompt_mask tensor with shape (batch_size, sequence_length) using torch.ones((1, 32), dtype=torch.bool)",
+    "Instantiate a TransformerWrapper model (mock or real) to pass into the DPO class",
+    "Create an instance of the DPO class with the TransformerWrapper model, using default beta and pad_id values",
+    "Call the forward method of the DPO instance with preferred_seq, unpreferred_seq, and prompt_mask as arguments",
+    "Capture the output of the forward method to check for errors",
+    "Verify that the output raises an EinopsError with the message 'Error while processing rearrange-reduction pattern \"n -> n 1\"'",
+    "Check the input tensor shape in the error message to confirm it is torch.Size([1, 32])",
+    "Assert that the error message contains 'Wrong shape: expected 1 dims. Received 2-dim tensor.'"
+]
+```

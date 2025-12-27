@@ -1,0 +1,12 @@
+```json
+[
+    "Import pandas and numpy libraries",
+    "Set the pandas version to 2.0.3 to ensure compatibility with the bug",
+    "Create a DataFrame 'train_df' with 10 rows and 2 columns using random integers, e.g., train_df = pd.DataFrame(np.random.randint(0, 100, size=(10, 2)), columns=['A', 'B'])",
+    "Create another DataFrame 'test_df' with 5 rows and 2 columns using random integers, e.g., test_df = pd.DataFrame(np.random.randint(0, 100, size=(5, 2)), columns=['A', 'B'])",
+    "Attempt to append 'test_df' to 'train_df' using the deprecated method: all_data = train_df.append(test_df)",
+    "Run the code in a Python 3.10 environment with pandas 2.0.3",
+    "Capture the output and check for the AttributeError: 'DataFrame' object has no attribute 'append'",
+    "Verify that the FutureWarning about the deprecation of the append method is also displayed"
+]
+```

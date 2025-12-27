@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch and TransformerWrapper from the appropriate module.",
+    "Define the number of tokens as 32 and set max_seq_len to 0.",
+    "Set num_memory_tokens to 20.",
+    "Create an instance of the Decoder class with the following parameters: dim=512, depth=4, heads=4, rotary_pos_emb=True, attn_flash=True, attn_onnxable=True, attn_num_mem_kv=20, attn_one_kv_head=True.",
+    "Instantiate the TransformerWrapper with the defined parameters: num_tokens=32, max_seq_len=0, num_memory_tokens=20, and the previously created Decoder instance.",
+    "Generate random input data using torch.randint with values between 0 and 32, and shape (8, 1024).",
+    "Call the forward method of the TransformerWrapper instance with the generated input data.",
+    "Print the shape and data type of the input tensor to verify it is (8, 1024) and torch.int64.",
+    "Capture the output logits from the TransformerWrapper instance.",
+    "Print the shape and data type of the output logits to verify it is as expected.",
+    "Assert that an error is raised during the forward pass due to the combination of attn_num_mem_kv > 0 and attn_one_kv_head = True."
+]
+```

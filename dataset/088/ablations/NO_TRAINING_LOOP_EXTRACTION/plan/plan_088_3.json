@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: pytest, torch, and the TransformerWrapper from x_transformers",
+    "Define a batch size of 2 and sequence length of 1024 for input tensors",
+    "Create a random input tensor 'x' with shape (batch_size, sequence_length) using torch.randint, with values in the range [0, 20000]",
+    "Create a random mask tensor 'mask' with shape (batch_size, sequence_length) using torch.randint, with boolean values (0 or 1)",
+    "Instantiate the TransformerWrapper model with parameters: num_tokens=20000, max_seq_len=1024, and attn_layers set to a Decoder with dim=128, depth=6, heads=8",
+    "Set the model to evaluation mode by calling model.eval()",
+    "Call the model with the input tensor 'x' and the mask tensor 'mask', storing the output in 'logits'",
+    "Define a pad_id value, for example, set pad_id=0",
+    "Call the F.pad function with the output 'logits' and the pad_id value, ensuring that the pad_id is not used in the padding operation",
+    "Verify that the output of the F.pad function does not reflect the pad_id value by checking if any elements in the padded output are equal to pad_id",
+    "Assert that the output of the F.pad function contains unexpected values (i.e., values that should not be present if pad_id was used correctly)",
+    "Log the output of the F.pad function for further inspection to confirm the bug"
+]
+```

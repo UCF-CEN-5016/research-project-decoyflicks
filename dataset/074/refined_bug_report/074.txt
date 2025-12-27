@@ -1,0 +1,18 @@
+TITLE
+Incorrect Masking in Actor Loss Calculation
+
+SYMPTOMS
+• The loss of token "eos" is being filtered out, but this includes the ground reward calculated by the Reward Model.
+• There are no specific error messages mentioned, but the issue manifests as incorrect loss computation.
+
+EXPECTED BEHAVIOR
+The actor loss should only include tokens relevant to the sequence and exclude padding or special tokens like "eos" that do not contribute to the actual sequence generation. However, if these tokens contain important ground rewards, they need to be included in the loss calculation.
+
+REPRODUCTION STEPS
+1. Initialize a sequence generation model with an actor network.
+2. Generate a sequence using this model and obtain `actor_log_prob`, `log_probs`, and `advantages`.
+3. Apply the proposed mask `action_mask[:, start:]` during loss computation to filter out tokens after a certain point in the sequence, such as "eos".
+4. Notice that the ground reward associated with the "eos" token is not considered in the actor loss.
+5. Try to include the "eos" token's reward by using a different mask `action_mask[:, start-1: -1]` and observe if the issue persists or changes.
+
+Note: The suggested alternative mask, `action_mask[:, start-1: -1]`, may not be appropriate depending on the context because it would exclude more tokens than intended. A better approach might involve using a custom mask that includes the "eos" token but excludes unnecessary padding or irrelevant tokens.

@@ -1,0 +1,20 @@
+TITLE  
+Incorrect Handling of Label Dimensions in Sparse Categorical Cross Entropy Loss
+
+SYMPTOMS  
+• The model trained poorly, producing unsatisfactory results.  
+• The label format was identified as incorrect due to an extra dimension.  
+• Reference to the specific lines in the tutorial that require modification:  
+  - Remove the last dimension of the labels as indicated in [line 96](https://github.com/keras-team/keras-io/blob/master/examples/vision/oxford_pets_image_segmentation.py#L96).  
+  - Remove the additional dimension as indicated in [line 99](https://github.com/keras-team/keras-io/blob/master/examples/vision/oxford_pets_image_segmentation.py#L99).  
+• Suggestion that SparseCategoricalCrossentropy should accommodate the additional dimension without requiring a fix.
+
+EXPECTED BEHAVIOR  
+The model should train effectively with the correct label format, and SparseCategoricalCrossentropy should handle labels with an additional dimension seamlessly.
+
+REPRODUCTION STEPS  
+1. Follow the tutorial at [this link](https://keras.io/examples/vision/oxford_pets_image_segmentation/).  
+2. Use the default label format provided in the tutorial.  
+3. Train the model and observe the output quality.  
+4. Modify the label format by removing the last dimension as specified above.  
+5. Train the model again and compare the results.

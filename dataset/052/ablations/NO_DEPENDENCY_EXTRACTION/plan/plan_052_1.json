@@ -1,0 +1,28 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, Keras, NumPy, and datasets from Hugging Face.",
+    "Set the environment variable for Keras backend to TensorFlow: os.environ['KERAS_BACKEND'] = 'tensorflow'.",
+    "Define the NERModel class with the required layers: TokenAndPositionEmbedding, TransformerBlock, and custom loss function.",
+    "Load the CoNLL 2003 dataset using load_dataset('conll2003').",
+    "Export the training and validation data to tab-separated files: './data/conll_train.txt' and './data/conll_val.txt'.",
+    "Define a function to create a tag lookup table for NER labels, ensuring it includes padding.",
+    "Create a StringLookup layer for token IDs with a vocabulary size of 20000.",
+    "Create TensorFlow Dataset objects for training and validation data using tf.data.TextLineDataset.",
+    "Define a mapping function to transform the dataset records into tokens and tags.",
+    "Define a function to lowercase tokens and convert them to IDs using the StringLookup layer.",
+    "Set a batch size of 32 for the training dataset.",
+    "Apply the mapping function to the training and validation datasets, using padded_batch to handle variable lengths.",
+    "Instantiate the NERModel with parameters: num_tags, vocab_size, embed_dim=32, num_heads=4, ff_dim=64.",
+    "Compile the NER model with the Adam optimizer and the custom loss function.",
+    "Enable eager execution mode by calling tf.config.run_functions_eagerly(True).",
+    "Fit the model on the training dataset for 10 epochs using ner_model.fit(train_dataset, epochs=10).",
+    "Define a function to tokenize and convert sample input text to IDs.",
+    "Prepare a sample input text: 'eu rejects german call to boycott british lamb'.",
+    "Tokenize and convert the sample input text to IDs using the defined function.",
+    "Reshape the sample input tensor to have shape [1, -1].",
+    "Call ner_model.predict on the reshaped sample input tensor.",
+    "Capture the output of the prediction and apply np.argmax to get the predicted class indices.",
+    "Map the predicted class indices back to their corresponding NER labels using the lookup table.",
+    "Verify that the output raises an OperatorNotAllowedInGraphError during the prediction step."
+]
+```

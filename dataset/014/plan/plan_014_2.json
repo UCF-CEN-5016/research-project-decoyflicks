@@ -1,0 +1,9 @@
+[
+    "Import TensorFlow and the Xception module from xception_test.py",
+    "Define a batch size of 2 and image dimensions of 65x65",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call xception function with num_classes=1000 and global_pool=False",
+    "Monitor the output tensor for any NaN values during execution",
+    "Assert that at least one value in the logits tensor is NaN"
+]
+

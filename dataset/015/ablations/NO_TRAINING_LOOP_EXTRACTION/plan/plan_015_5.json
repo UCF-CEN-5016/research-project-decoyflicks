@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.vision.modeling.layers including DetectionGenerator and MultilevelDetectionGenerator",
+    "Define a batch size of 1 and set image dimensions to 224x224",
+    "Create random uniform input data for class outputs with shape (1, 84, 4) representing 84 boxes and 4 classes",
+    "Create random uniform input data for box outputs with shape (1, 84, 4) representing 84 boxes",
+    "Create random uniform input data for anchor boxes with shape (1, 84, 4) representing 84 anchor boxes",
+    "Create image_info tensor with shape (1, 4) containing values [[[1000, 1000], [100, 100], [0.1, 0.1], [0, 0]]]",
+    "Define parameters for the DetectionGenerator including 'apply_nms': True, 'pre_nms_top_k': 5000, 'pre_nms_score_threshold': 0.01, 'nms_iou_threshold': 0.5, 'max_num_detections': 10, 'nms_version': 'v2', 'use_cpu_nms': False, 'soft_nms_sigma': None",
+    "Instantiate the DetectionGenerator with the defined parameters",
+    "Call the DetectionGenerator with the box outputs, class outputs, anchor boxes, and image_info",
+    "Check the output of the generator to ensure it contains keys 'detection_boxes', 'detection_classes', 'detection_scores', and 'num_detections'",
+    "Define a variable num_of_examples with a value of 5 and pass it to the show_batch function",
+    "Verify that the num_of_examples argument is not used within the show_batch function by checking the function's implementation",
+    "Assert that the output of the show_batch function does not depend on the num_of_examples argument"
+]
+```

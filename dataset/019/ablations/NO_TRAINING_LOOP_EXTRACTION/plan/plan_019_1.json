@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Model Garden module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Ensure TensorFlow version is 2.x by running 'print(tf.version.VERSION)'",
+    "Check if TensorFlow Text is installed by running 'pip show tensorflow-text'",
+    "If TensorFlow Text is not installed, install it using 'pip install tensorflow-text'",
+    "Define a batch size of 4 and image dimensions of 512x512",
+    "Create random input data for score outputs with shape (batch_size, height, width, num_anchors) where num_anchors = 9",
+    "Create random input data for labels with shape (batch_size, height, width, num_anchors) where values are in {0, 1, -1}",
+    "Instantiate the RpnScoreLoss class with rpn_batch_size_per_im set to 4",
+    "Call the RpnScoreLoss instance with the created score outputs and labels",
+    "Capture the output of the RpnScoreLoss call to verify if it executes without errors",
+    "If an ImportError occurs, check the traceback for the specific undefined symbol error related to 'tflite_registrar.so'",
+    "Log the error message to confirm the ImportError is due to the undefined symbol",
+    "Verify that the TensorFlow and TensorFlow Text versions are compatible by checking their release notes",
+    "Assert that the ImportError message contains the specific text 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'"
+]
+```

@@ -1,0 +1,18 @@
+[
+    "Import necessary modules from the provided list of dependencies",
+    "Define a batch size of 4 and model parameters such as d_model=128, d_ff=512, n_heads=16, d_k=16, chunk_len=16",
+    "Download the Tiny Shakespeare dataset using TextFileDataset function from labml_helpers.datasets.text",
+    "Create a RetroIndex instance for retrieving nearest neighbors",
+    "Load the Retro training dataset and create a DataLoader with batch size 4 and random sampling",
+    "Initialize a NearestNeighborEncoder with chunk_len=16, d_model=128, n_heads=16, and d_k=16",
+    "Create a RetroModel instance with specified parameters and encoder",
+    "Move the model to GPU by calling .to(device) where device is set to 'cuda:0'",
+    "Initialize an optimizer using Noam scheduler with learning rate 1., d_model=128, and warmup steps 2_000",
+    "Define a prompt as a string for sampling text from the model",
+    "Call the Trainer function with model, dataloader, and optimizer",
+    "Train the model for 32 epochs using the provided trainer instance",
+    "Monitor the output of the model during training to ensure it does not produce NaN values in loss calculations",
+    "Validate that the error occurs by checking if there is a tensor operation exception with size mismatch between cos_cached and sin_cached tensors",
+    "Verify that only a partial set of features (3) are being processed, causing a dimension mismatch when applying positional encodings"
+]
+

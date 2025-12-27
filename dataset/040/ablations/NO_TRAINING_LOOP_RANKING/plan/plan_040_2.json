@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and the Model class from labml_nn.rl.dqn.model",
+    "Set the device to CUDA if available, otherwise use CPU: device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')",
+    "Define a batch size of 32 and input dimensions of (4, 84, 84) for the observations",
+    "Create a random tensor for observations with shape (32, 4, 84, 84) using torch.rand",
+    "Instantiate the Model class: model = Model().to(device)",
+    "Pass the random observations tensor to the model: output = model(observations_tensor)",
+    "Extract the attention weights from the model output, assuming the model returns them as part of its output",
+    "Check the shape of the attention weights to ensure they are of the expected dimensions, e.g., (32, num_heads, seq_length, seq_length)",
+    "Apply the softmax operation on the attention weights along the wrong axis (dim=1) to simulate the bug: attn = attn.softmax(dim=1)",
+    "Verify the output of the attention weights after applying softmax to check for any unexpected behavior",
+    "Assert that the attention weights do not sum to 1 along the intended axis (dim=2) to confirm the bug: assert not torch.allclose(attn.sum(dim=2), torch.ones(attn.size(0), attn.size(1), device=device))",
+    "Run the model on a sample dataset (CIFAR-10) to ensure the bug is reproducible in a real training scenario",
+    "Monitor the training process and check for any anomalies in the attention weights during training",
+    "Log the attention weights and their sums to verify the bug persists throughout the training iterations"
+]
+```

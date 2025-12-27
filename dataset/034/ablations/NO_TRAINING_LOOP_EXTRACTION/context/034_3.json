@@ -1,0 +1,16 @@
+{
+  "bug_report": "034",
+  "rank": 3,
+  "score": 0.968740701675415,
+  "main_file": {
+    "path": "PyTorch/SpeechSynthesis/FastPitch/common/monkey_patch.py",
+    "content": "import re\nimport warnings\n\nimport torch\n\n\nmajor, minor, *_ = re.search('(\\d+)\\.(\\d+)', torch.__version__).groups()\n\nif int(major) >= 1 and int(minor) >= 12:\n    # Mutes 'UserWarning: positional arguments and argument \"destination\"\n    # are deprecated. nn.Module.state_dict will not accept them in the future.'\n\n    def state_dict(self, *args, **kwargs):\n        warnings.filterwarnings(\"ignore\")\n        ret = self._state_dict(*args, **kwargs)\n        warnings.filterwarnings(\"default\")\n        return ret\n\n    torch.nn.Module._state_dict = torch.nn.Module.state_dict\n    torch.nn.Module.state_dict = state_dict\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "warnings",
+      "function": "filterwarnings"
+    }
+  ]
+}

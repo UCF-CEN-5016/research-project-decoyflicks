@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import keras, import keras_nlp, import random, import tensorflow as tf",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define the model parameters: set vocab_size = 10000, embedding_dim = 256, hidden_units = 512, and max_length = 20",
+    "Create a sample English sentence for translation: input_sentence = 'Hello, how are you?'",
+    "Prepare the input data: create a list of test English texts: test_eng_texts = ['Hello, how are you?', 'What is your name?', 'Where are you from?']",
+    "Define the decode_sequences function that takes input_sentences as an argument",
+    "Inside decode_sequences, create a prompt tensor: start = tf.constant([[1]]) and pad = tf.constant([[0]])",
+    "Concatenate start and pad tensors: prompt = tf.concat((start, pad), axis=-1)",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and an unexpected keyword argument: generated_tokens = sampler(next, prompt, end_token_id=2)",
+    "Run the decode_sequences function with the input sentence: translated = decode_sequences([input_sentence])",
+    "Capture the TypeError exception: assert that the error message contains 'unexpected keyword argument 'end_token_id''",
+    "Print the error message to confirm the bug: print('Caught expected TypeError:', e)"
+]
+```

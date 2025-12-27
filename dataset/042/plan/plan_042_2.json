@@ -1,0 +1,18 @@
+```json
+[
+    "Install fairseq version 0.12.2 using pip: `pip install fairseq==0.12.2`",
+    "Import necessary modules: `import torch`, `from fairseq import checkpoint_utils`",
+    "Load the hubert model ensemble and task with a specified checkpoint file path: `hubert, _, _ = checkpoint_utils.load_model_ensemble_and_task(['./assets/hubert/hubert_base.pt'], suffix='')`",
+    "Assign the first model from the loaded ensemble to a variable and set its data type to half (FP16): `hubert_model = hubert[0]`, `hubert_model = hubert_model.half()`",
+    "Create a custom adapter class HuberAdapter that inherits from torch.nn.Module: `class HuberAdapter(torch.nn.Module): ...`",
+    "Define the forward method in HuberAdapter to accept feats and padding_mask as input, create an inputs dictionary with these values, and pass it to hubert_model.extract_features(): `def forward(self, feats, padding_mask): ...`",
+    "Load feature data from a file into a variable: `feats = torch.load('./feats.pt')`",
+    "Load padding mask data from a file into a variable: `padding_mask = torch.load('./padding_mask.pt')`",
+    "Create an instance of the HuberAdapter class, passing the hubert_model to it: `adapter = HuberAdapter(hubert_model)`",
+    "Call torch.onnx.export with the adapter and input data: `torch.onnx.export(adapter, (feats.cuda(), padding_mask.cuda()), 'hubert.onnx', ...)`",
+    "Specify input names as 'feats' and 'padding_mask': `input_names=['feats', 'padding_mask']`",
+    "Specify output names as 'logits' and 'mask': `output_names=['logits', 'mask']`",
+    "Set dynamic axes for feats and padding_mask: `dynamic_axes={'feats': {0: 'seq'}, 'padding_mask': {0: 'seq'}}`"
+]
+```
+

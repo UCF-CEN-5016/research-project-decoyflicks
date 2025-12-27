@@ -1,0 +1,32 @@
+TITLE  
+Multiplication Error in SE3Transformer Due to Input Feature Dimension Mismatch  
+
+SYMPTOMS  
+• The code modification for input features results in a runtime error.  
+• Error message: `RuntimeError: Expected size for first two dimensions of batch2 tensor to be: [8910, 1] but got: [8910, 3].`  
+• The model fails to execute as expected when handling multiple input types.  
+
+EXPECTED BEHAVIOR  
+The SE3Transformer should successfully process the modified input features without errors, performing self-attention across multiple input types as intended. The model should handle the input feature dimensions correctly and produce valid outputs.  
+
+REPRODUCTION STEPS  
+1. Modify the `data_loading/qm9.py` to split input features into two types as shown:  
+   ```python
+   node_feats = {'0': batched_graph.ndata['attr'][:, :5, None],  
+                 '1': batched_graph.ndata['attr'][:, 5:6, None]}
+   ```  
+2. Update the `runtime/training.py` to initialize the model with the modified feature dimensions:  
+   ```python
+   model = SE3TransformerPooled(  
+           fiber_in=Fiber({0: 5, 1: 1}),  
+           fiber_out=Fiber({0: args.num_degrees * args.num_channels}),  
+           fiber_edge=Fiber({0: datamodule.EDGE_FEATURE_DIM}),  
+           output_dim=1,  
+           tensor_cores=using_tensor_cores(args.amp),  
+           **vars(args)  
+   )
+   ```  
+3. Attempt to run the training process with the modified dataset.  
+4. Observe the runtime error indicating a mismatch in tensor dimensions.  
+
+By following these steps, the issue can be consistently reproduced, confirming the dimensionality mismatch in the model's input handling.

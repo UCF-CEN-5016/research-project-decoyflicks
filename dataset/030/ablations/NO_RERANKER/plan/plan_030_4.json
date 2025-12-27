@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import torch, import os, import sys",
+    "Set the device to GPU: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define the training parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10",
+    "Prepare the command to run the training script: command = '!python ../main.py --brats --brats22_model --scheduler --learning_rate ' + str(learning_rate) + ' --epochs ' + str(epochs) + ' --fold ' + str(fold) + ' --gpus ' + str(gpus) + ' --task ' + str(task) + ' --nfolds ' + str(nfolds) + ' --save_ckpt'",
+    "Ensure the environment is set up correctly: check if all packages in requirements.txt are installed and match the specified versions",
+    "Check the PyTorch version: assert torch.__version__ == '2.2.0+cu121'",
+    "Check the CUDA version: assert torch.version.cuda == '12.1'",
+    "Run the training command: os.system(command)",
+    "Capture the output of the training command to check for errors: output = os.popen(command).read()",
+    "Search for the specific error message in the output: assert 'MisconfigurationException' in output",
+    "Verify the error message contains the specific text: assert 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API' in output",
+    "Log the output for debugging: print(output)",
+    "Check the number of training examples: assert '1125 training' in output",
+    "Check the number of validation examples: assert '126 validation' in output",
+    "Check the number of test examples: assert '1251 test examples' in output"
+]
+```

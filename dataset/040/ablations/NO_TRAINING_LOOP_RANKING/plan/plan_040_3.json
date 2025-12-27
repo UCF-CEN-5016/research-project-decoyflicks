@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, DataLoader and RandomSampler from torch.utils.data, and the RetroModel from labml_nn.transformers.retro.model",
+    "Set the device to CUDA:0 using torch.device('cuda:0')",
+    "Load the Tiny Shakespeare dataset using TextFileDataset from labml_helpers with the path to the dataset and set it to a variable named tds",
+    "Define a chunk length of 16 and set it to a variable named chunk_len",
+    "Create a DataLoader for the dataset with a batch size of 4 and use RandomSampler for sampling",
+    "Define model hyperparameters: d_model = 128, d_ff = 512, n_heads = 16, d_k = 16",
+    "Create an instance of NearestNeighborEncoder with parameters (chunk_len, 6, {3}, d_model, n_heads, d_k, d_ff)",
+    "Create an instance of RetroModel with parameters (tds.n_tokens, d_model, 6, {3, 5}, chunk_len, n_heads, d_k, d_ff, encoder=nearest_neighbor_encoder)",
+    "Move the model to the device using model.to(device)",
+    "Create an optimizer using Noam with model.parameters(), lr=1.0, d_model=d_model, warmup=2000",
+    "Define a Trainer class that takes device, model, dataloader, and optimizer as parameters",
+    "In the Trainer class, implement a call method that iterates through the dataloader, moves data to the device, performs a forward pass, calculates loss using nn.CrossEntropyLoss, and performs backpropagation",
+    "Create an instance of the Trainer class with the device, model, train_dl, and optimizer",
+    "Define a prompt string: prompt = 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Start a training loop for a specified number of epochs (e.g., 1 epoch) and call the trainer's call method",
+    "After training, sample text from the model using the prompt and assert that the output is not empty",
+    "Modify the attention mechanism in the RetroModel to use attn.softmax(dim=2) instead of the current implementation",
+    "Run the training loop again and observe if the model still produces valid outputs despite the change in the attention mechanism",
+    "Log the outputs and check for any discrepancies or unexpected behavior in the generated text",
+    "Assert that the model's output is still valid and does not raise any errors during execution"
+]
+```

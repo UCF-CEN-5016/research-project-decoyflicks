@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official DETR project: 'from official.projects.detr.modeling import detr', 'from official.projects.detr.dataloaders import coco', 'from official.projects.detr.configs import detr as detr_cfg'",
+    "Set the model configuration to use 'efficientdet_d1_coco17_tpu-32' by defining a variable 'model_config' with appropriate parameters such as input size, number of classes, and backbone settings.",
+    "Define a batch size of 8 and image dimensions of 512x512 for the input data.",
+    "Prepare a custom dataset in COCO format with at least 100 images and corresponding annotations, ensuring that the dataset is accessible in the expected directory structure.",
+    "Create a data loader using 'coco.COCODataLoader' with the custom dataset path and set 'is_training=True'.",
+    "Initialize the model using 'detr.DETR' with the defined 'model_config' and input specifications.",
+    "Compile the model using 'model.compile(optimizer=tf.keras.optimizers.Adam(), loss='sparse_categorical_crossentropy')' without specifying any custom loss function.",
+    "Create random input data with shape (batch_size, height, width, 3) using 'tf.random.uniform(shape=(batch_size, 512, 512, 3))'.",
+    "Create random labels for the dataset with shape (batch_size, num_classes) using 'tf.random.uniform(shape=(batch_size, num_classes), minval=0, maxval=num_classes, dtype=tf.int32)'.",
+    "Call the model's 'fit' method with the data loader and a specified number of epochs (e.g., epochs=5).",
+    "Monitor the console output for the warning message: 'WARNING:tensorflow:Gradients do not exist for variables...' during the training process.",
+    "Assert that the warning message appears in the logs, indicating that gradients are not being computed for the specified variables."
+]
+```

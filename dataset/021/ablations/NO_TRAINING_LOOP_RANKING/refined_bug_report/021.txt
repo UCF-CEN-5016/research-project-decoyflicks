@@ -1,0 +1,19 @@
+TITLE
+ValueError: Empty List Argument in ConcatV2 Operation
+
+SYMPTOMS
+• Encountered a ValueError during the evaluation phase in the function '_generate_detections_v2_class_aware'.
+• Error message: "ValueError: List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2."
+• The function fails when input tensors for predicted boxes are provided with a length of 0.
+
+EXPECTED BEHAVIOR
+The function '_generate_detections_v2_class_aware' should handle cases where the number of predicted boxes is 0 or 1 without raising an error.
+
+REPRODUCTION STEPS
+1. Call the function '_generate_detections_v2_class_aware' with an input where the predicted boxes are represented as a tensor of length 0.
+2. Observe the resulting error during the evaluation phase. 
+
+ADDITIONAL CONTEXT
+- The issue occurs in the file: https://github.com/tensorflow/models/tree/master/official/vision/modeling/layers/detection_generator.py
+- The environment is running on Linux Ubuntu 20.04 with TensorFlow version 2.11.0 and Python 3.10.9.
+- GPU configuration includes 2 NVIDIA 3090 GPUs with 24GB memory each.

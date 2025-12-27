@@ -1,0 +1,18 @@
+TITLE  
+Incompatibility of object_detection_tutorial.ipynb with TensorFlow 1.x
+
+SYMPTOMS  
+• The `load_model` function fails to load the model correctly, resulting in empty tensors.  
+• The output of the `load_model` function includes the message: `INFO:tensorflow:Saver not created because there are no variables in the graph to restore`.  
+• The subsequent inference calls in the loop do not work as expected, leading to undefined behavior when processing images.  
+• The notebook does not provide a working example for TensorFlow 1.x, which complicates the migration process.
+
+EXPECTED BEHAVIOR  
+The `load_model` function should successfully load a TensorFlow 1.x model, allowing the subsequent inference code to function correctly and produce valid detection results on the provided images.
+
+REPRODUCTION STEPS  
+1. Open the `object_detection_tutorial.ipynb` notebook located in the `colab_tutorials` folder.  
+2. Attempt to run the `load_model` function with a valid model name for TensorFlow 1.x.  
+3. Execute the inference loop using `TEST_IMAGE_PATHS` to observe the output.  
+4. Check for any error messages or unexpected behavior during the execution of the notebook.  
+5. Review the output of the `load_model` function to confirm whether the model is loaded properly.

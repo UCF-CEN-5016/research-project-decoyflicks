@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and other necessary libraries for image processing from examples/vision/image_classification_with_vision_transformer.py",
+    "Set the batch size to 256 and image dimensions to 72x72 as specified in the code",
+    "Load the CIFAR-100 dataset using keras.datasets.cifar100.load_data()",
+    "Shuffle the training data with a buffer size of BATCH_SIZE * 2, where BATCH_SIZE is 256",
+    "Define an augmentation function augment_fn that includes normalization, resizing, horizontal flipping, random rotation, and random zoom as described in examples/vision/image_classification_with_vision_transformer.py",
+    "Apply the augmentation function to the training data using map(augment_fn, num_parallel_calls=AUTOTUNE)",
+    "Batch the augmented data with a batch size of BATCH_SIZE",
+    "Define the unpackage_inputs function that expects two outputs and is called as part of the pipeline",
+    "Pre-fetch the data with a buffer size set to tf.data.AUTOTUNE",
+    "Create an instance of the Vision Transformer model create_vit_classifier() as defined in examples/vision/image_classification_with_vision_transformer.py",
+    "Compile the ViT model using TFA AdamW optimizer with learning_rate=0.001 and weight_decay=0.0001, and SparseCategoricalCrossentropy loss function",
+    "Train the model on the augmented dataset for num_epochs=100 using validation_split=0.1 and save checkpoints during training",
+    "Load the best checkpoint after training",
+    "Evaluate the trained model on the test set to reproduce the error where a tensor of type float32 is compared with a tensor of type int64"
+]
+```
+

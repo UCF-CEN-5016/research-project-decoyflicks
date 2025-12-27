@@ -1,0 +1,87 @@
+### TITLE
+Segmentation Fault in `GreedySampler()` Due to Incorrect Tensor Shape Handling
+
+### SYMPTOMS
+• The code produces a segmentation fault when running the test script.
+• The error message indicates an issue with tensor shapes and dimensions, specifically mentioning an expected dimension of 1 at axis 0.
+• Error messages related to TensorFlow operations failing due to incorrect input shape are present.
+
+### EXPECTED BEHAVIOR
+The model should correctly handle token sequences for both English and Spanish inputs. It should be able to generate translated sentences without encountering a segmentation fault or invalid argument errors.
+
+### REPRODUCTION STEPS
+1. Ensure the environment is set up with TensorFlow 2.15, Keras-NLP, and NLTK installed.
+2. Set up the necessary environment variables for GPU usage.
+3. Prepare the test data `test_pairs` containing English-Spanish sentence pairs.
+4. Execute the provided code snippet to decode sequences and calculate the BLEU score.
+
+### ANALYSIS
+The core issue appears to be related to incorrect handling of tensor shapes, particularly in the context of the `GreedySampler()` function call within the `decode_sequences()` method. The error messages indicate that there are dimension mismatches, specifically expecting a dimension 1 at axis 0 but receiving a different shape.
+
+#### Key Points
+- **Tensor Shape Mismatch**: The code attempts to pass input tensors of varying lengths and shapes to the model, which might not be compatible with the expected dimensions.
+- **Segmentation Fault**: This suggests that the issue lies in how the tensor inputs are being handled by the `GreedySampler()` function or the underlying TensorFlow operations.
+
+#### Suggested Fixes
+1. **Check Tensor Shapes Before Model Inference**:
+- Ensure that the input tokens have a consistent shape before passing them to the model.
+- Add checks and padding for tensors with lengths exceeding 40, as indicated in the code.
+
+2. **Handle Cache Properly**:
+- The cache handling within the `next_fn` function should be carefully checked to ensure it is compatible with the model's architecture.
+- Ensure that `hidden_states` are correctly initialized and used if necessary.
+
+3. **Debugging Steps**:
+- Print out the shapes of tensors at various stages in the code to verify their correctness.
+- Use TensorFlow’s tensor shape checking tools to validate dimensions.
+
+#### Modified Code Snippet
+Here is a modified version of the relevant part of the code with added checks and debugging statements:
+
+```python
+def decode_sequences(input_sentences):
+batch_size = TEST_BATCH_SIZE
+
+# Tokenize the encoder input.
+encoder_input_tokens = tf.convert_to_tensor(eng_tokenizer(input_sentences).to_tensor())
+if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:
+pads = tf.fill((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)
+encoder_input_tokens = tf.concat([encoder_input_tokens, pads], 1)
+
+# Cannot handle sequences with token length > 40
+if encoder_input_tokens.shape[-1] > 40:
+encoder_input_tokens = encoder_input_tokens[:, :40]
+
+# Define a function that outputs the next token's probability given the
+# input sequence.
+def next_fn(prompt, cache, index):
+print("Input Token Shape:", encoder_input_tokens.shape)
+print("Prompt Shape:", prompt.shape)
+
+# Ensure the input shapes are as expected
+if prompt.shape[1] != 40:
+raise ValueError("Unexpected prompt shape: {}".format(prompt.shape))
+
+# Call the model to get the next token probability
+output = model([encoder_input_tokens, prompt])  # Example call, adjust according to your actual model
+
+# Get the top-1 token index as the next prediction
+next_token_index = tf.argmax(output, axis=-1)
+return [next_token_index]
+
+# Initialize the first prompt with <START> token(s) and feed through GreedySampler
+initial_prompt = ...  # Define your initial prompt here
+sampled_ids = tf.keras.preprocessing.sequence.pad_sequences([initial_prompt], maxlen=40, padding='post')
+
+# Use GreedySampler to generate translated sentences
+sampled_sequence = greedy_sampler.next_step(
+next_fn,
+initial_state=[encoder_input_tokens, sampled_ids],
+temperature=1.0
+)
+
+# Convert the sampled sequence back into text
+...
+```
+
+By adding these checks and ensuring consistent tensor shapes, you can prevent the segmentation fault and ensure proper model inference.

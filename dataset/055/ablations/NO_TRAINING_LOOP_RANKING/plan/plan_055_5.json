@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, random, and nltk.translate.bleu_score",
+    "Set the Keras version to 2.15 and ensure TensorFlow is compatible with it",
+    "Define constants: MAX_SEQUENCE_LENGTH, TEST_BATCH_SIZE = 1",
+    "Import the data preprocessing functions: eng_tokenizer, spa_tokenizer, and test_pairs from data_preprocessing",
+    "Import the transformer model from model",
+    "Define a function decode_sequences that takes input_sentences as an argument",
+    "Inside decode_sequences, convert input_sentences to a tensor using eng_tokenizer and ensure it is padded to MAX_SEQUENCE_LENGTH",
+    "Add a check to truncate encoder_input_tokens to a maximum length of 40 if it exceeds this length",
+    "Define a nested function next_fn that takes prompt, cache, and index as arguments",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, and extract logits for the given index",
+    "Set hidden_states to None in next_fn",
+    "Build a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Create a list test_eng_texts from the first element of each pair in test_pairs",
+    "Iterate over the range of test_pairs length, and for each index, call decode_sequences with the corresponding input_sentence",
+    "After decoding, process the translated output to remove special tokens and split into words",
+    "Calculate the BLEU score using modified_precision from nltk for the translated output against the expected Spanish text",
+    "Run the script and monitor for segmentation faults during the execution of the GreedySampler() call",
+    "Log the shapes of logits and cache in next_fn to identify potential issues",
+    "Ensure that the environment is set up with a compatible GPU (GeForce RTX 3070 Mobile) and sufficient memory (8 GB)",
+    "Verify that the segmentation fault occurs specifically after the next_fn returns logits, an empty tuple, and None for hidden_states"
+]
+```

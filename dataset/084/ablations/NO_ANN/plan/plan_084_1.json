@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torchvision.transforms",
+    "Set the device to 'cuda' if available, otherwise 'cpu'",
+    "Define the image size as 224 and patch size as 32",
+    "Define the number of classes as 2",
+    "Set the dimensions for the ViT model: dim=128, depth=12, heads=8, k=64",
+    "Create a Linformer instance with parameters: dim=128, seq_len=50 (49 patches + 1 cls-token), depth=12, heads=8, k=64",
+    "Create a ViT instance with parameters: dim=128, image_size=224, patch_size=32, num_classes=2, transformer=efficient_transformer, channels=3",
+    "Prepare a synthetic dataset with 1000 samples, each sample being a random tensor of shape (3, 224, 224)",
+    "Create random labels for the dataset, ensuring they are binary (0 or 1) with shape (1000)",
+    "Split the dataset into training and validation sets: 800 for training and 200 for validation",
+    "Define a DataLoader for the training set with batch size of 32 and shuffle=True",
+    "Define a DataLoader for the validation set with batch size of 32 and shuffle=False",
+    "Define a loss function using CrossEntropyLoss",
+    "Define an optimizer using Adam with learning rate set to 0.001",
+    "Run the training loop for 5 epochs, logging loss and accuracy for each epoch",
+    "During each epoch, assert that the training accuracy exceeds 0.99 after the first epoch",
+    "Log the training loss and accuracy after each epoch",
+    "After training, evaluate the model on the validation set and assert that validation accuracy is also 1.0",
+    "Print the final training and validation accuracy to confirm the bug"
+]
+```

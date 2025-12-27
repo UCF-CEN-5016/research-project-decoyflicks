@@ -1,0 +1,19 @@
+[
+  "Clone the repository from https://github.com/labmlai/annotated_deep_learning_paper_implementations.git",
+  "Navigate to the file labml_nn/rl/ppo/gae.py and open it for inspection",
+  "Identify the function or code block around line 36 where the Generalized Advantage Estimation (GAE) formula is implemented",
+  "Note the current implementation uses gamma^2 multiplied by r_{t+1} instead of r_{t+2}",
+  "Identify the calculation of weights wk around line 45 in the same file, which currently uses an incorrect formula for weighting: wk = lambda^(k-1) instead of wk = (1-lambda) * lambda^(k-1)",
+  "Create a minimal test script that imports the GAE function or class from labml_nn.rl.ppo.gae",
+  "Set up fixed input data for rewards and value estimates necessary to compute GAE, for example, create a reward sequence of length at least 4, e.g., rewards = [1.0, 2.0, 3.0, 4.0]",
+  "Set gamma (discount factor) to a known value such as 0.9 and lambda to 0.8 for the test",
+  "Manually compute expected GAE values assuming the correct formula with gamma^2 r_{t+2} and correct wk weights to serve as ground truth",
+  "Call the existing GAE implementation with the fixed inputs and capture the output advantage estimates",
+  "Compare the output advantages with the manually computed ground truth values and assert that a discrepancy exists due to the incorrect gamma^2 r_{t+1} usage",
+  "Specifically, assert that the advantage for time step t differs from the expected value by the contribution of the shifted reward index (r_{t+1} vs r_{t+2})",
+  "Similarly, verify the weighting factors wk computed internally or exposed by the function and assert that they do not match the expected (1-lambda)*lambda^(k-1) pattern",
+  "Add print statements or logging to output intermediate values of rewards multiplied by gamma powers and the computed weights to confirm the incorrect formula usage",
+  "Run the test script and observe the assertion failures or mismatches in computed advantages and weights confirming the bug",
+  "Optionally, isolate the function in a small environment without dependencies to ensure reproducibility independent of other code",
+  "Document the test inputs, outputs, and assertions clearly for future reference and bug fixing"
+]

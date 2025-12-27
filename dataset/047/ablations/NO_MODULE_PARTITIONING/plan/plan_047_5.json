@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the model path to the pre-trained model: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Define the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10",
+    "Sort the audio files to maintain a consistent order: audio_files.sort()",
+    "Run the inference command using the MMS ASR model: os.system(f'python -u examples/mms/asr/infer/mms_infer.py --model {model_path} --lang {lang} --audio {" ".join(audio_files)}')",
+    "Capture the output log from the inference command: output_log = os.popen(f'python -u examples/mms/asr/infer/mms_infer.py --model {model_path} --lang {lang} --audio {" ".join(audio_files)}').read()",
+    "Extract the output text from the inference log: output_texts = extract_output_text(output_log)",
+    "Define the expected order of output texts based on the sorted audio files: expected_texts = ['expected text for audio1', 'expected text for audio2', ..., 'expected text for audio10']",
+    "Compare the order of output texts with the expected order: assert output_texts == expected_texts, 'Output log order is incorrect'",
+    "Log the output texts and their order for verification: print('Output texts:', output_texts)",
+    "Log the expected texts for comparison: print('Expected texts:', expected_texts)",
+    "Verify that the output log does not match the expected order: assert output_texts != expected_texts, 'Output log order is correct, but it should be incorrect to reproduce the bug'"
+]
+```

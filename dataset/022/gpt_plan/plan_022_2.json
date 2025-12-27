@@ -1,0 +1,12 @@
+[
+  "Import TensorFlow and the RandAugment implementation from official.vision.ops.augment.py",
+  "Set up a controlled random seed for reproducibility, e.g., tf.random.set_seed(42)",
+  "Define a dummy input tensor with shape (batch_size=4, height=32, width=32, channels=3) filled with arbitrary values",
+  "Instantiate RandAugment augmentation with a fixed magnitude level, e.g., level=5, and set level_std=0.5 (non-zero to expect variation)",
+  "Apply the RandAugment transform to the dummy input tensor multiple times (e.g., 10 iterations) to observe variability in output",
+  "Extract or log the effective magnitude values used internally per augmentation call if accessible, or observe output differences",
+  "Check if the standard deviation of the applied magnitude values across iterations is exactly 1 or 0, indicating lack of scaling by level_std",
+  "Alternatively, compare outputs across iterations to verify that magnitude variation is not respecting the specified level_std",
+  "Assert that the observed standard deviation of magnitudes or output differences does not match the expected scaled variation (i.e., confirm std is either 0 or 1)",
+  "Document the exact line in augment.py where magnitude is incremented without multiplying by level_std to confirm the root cause"
+]

@@ -1,0 +1,16 @@
+```json
+[
+    "Clone the fairseq repository from GitHub using 'git clone https://github.com/pytorch/fairseq.git'",
+    "Navigate to the fairseq directory using 'cd fairseq'",
+    "Install the required dependencies using 'pip install -r requirements.txt'",
+    "Ensure that the fairseq-generate command is available by running 'fairseq-generate --help'",
+    "Set the environment variable DATA_ROOT to a valid path containing the necessary data files using 'export DATA_ROOT=/path/to/data'",
+    "Create a configuration YAML file at '/root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml' with the required structure for the speech_to_speech task",
+    "Ensure the model file '/root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt' exists and is a valid PyTorch model",
+    "Prepare the input data in the DATA_ROOT directory, ensuring it contains the expected audio files for the test subset",
+    "Run the fairseq-generate command with the specified parameters: 'fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results'",
+    "Monitor the console output for the error message 'Key 'input_feat_per_channel' is not in struct'",
+    "Verify that the error occurs consistently by running the command multiple times with the same parameters",
+    "Check the contents of the results directory '/root/autodl-tmp/results' to confirm that no output files are generated due to the error"
+]
+```

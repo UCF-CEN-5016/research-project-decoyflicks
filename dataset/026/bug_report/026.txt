@@ -1,0 +1,118 @@
+TypeError: Got an unexpected keyword argument 'box_ind'
+
+# Prerequisites
+
+Please answer the following questions for yourself before submitting an issue.
+
+- [x] I am using the latest TensorFlow Model Garden release and TensorFlow 2.
+- [x] I am reporting the issue to the correct repository. (Model Garden official or research directory)
+- [x] I checked to make sure that this issue has not been filed already.
+
+## 1. The entire URL of the file you are using
+
+https://github.com/tensorflow/models/blob/master/official/projects/waste_identification_ml/model_inference/TFHub_saved_model_inference.ipynb
+
+## 2. Describe the bug
+
+The bug surfaces when the code tries to visualize the results. It says: `TypeError: Got an unexpected keyword argument 'box_ind'`
+
+A similiar `unexpected keyword argument` error was opened around 4 years ago - [#5056](https://github.com/tensorflow/models/issues/5056). I do not know if they are relevant.
+
+
+## 3. Steps to reproduce
+
+I am running the notebook in Google colab. 
+
+There is already a piece of working code. You  can see the logs for yourself.
+
+Here is the Google colab link: https://colab.research.google.com/drive/1J_bIH_oeZeJ_VcF_xBm_yVaxYWEWdx6R?usp=sharing
+
+To reproduce run the existing code.
+
+Two images will be displayed in the output as shown in [TFHub_saved_model_inference.ipynb](https://github.com/tensorflow/models/blob/master/official/projects/waste_identification_ml/model_inference/TFHub_saved_model_inference.ipynb) notebook.
+
+When it comes to visualization, the images with labels are not displayed in output.
+
+## 4. Expected behavior
+
+I expect to visualize the results with labels. 
+
+## 5. Additional context
+
+Here are the logs:
+
+```
+
+dict_keys(['image_info', 'detection_classes', 'detection_scores', 'detection_boxes', 'detection_masks', 'num_detections'])
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+[<ipython-input-1-3bca61a30fc9>](https://localhost:8080/#) in <module>
+    168   detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(
+    169             detection_masks, detection_boxes,
+--> 170               image_np.shape[1], image_np.shape[2])
+    171   detection_masks_reframed = tf.cast(detection_masks_reframed > 0.5,
+    172                                       np.uint8)
+```
+```
+[/usr/local/lib/python3.7/dist-packages/object_detection/utils/ops.py](https://localhost:8080/#) in reframe_box_masks_to_image_masks_default()
+    821         box_ind=tf.range(num_boxes),
+    822         crop_size=[image_height, image_width],
+--> 823         extrapolation_value=0.0)
+    824   image_masks = tf.cond(
+    825       tf.shape(box_masks)[0] > 0,
+
+TypeError: Got an unexpected keyword argument 'box_ind'
+```
+
+Also, `!pip list | grep tensorflow` gave me the following: 
+
+```
+tensorflow                      2.10.0
+tensorflow-addons               0.18.0
+tensorflow-datasets             4.6.0
+tensorflow-estimator            2.10.0
+tensorflow-gcs-config           2.9.1
+tensorflow-hub                  0.12.0
+tensorflow-io-gcs-filesystem    0.27.0
+tensorflow-metadata             1.10.0
+tensorflow-model-optimization   0.7.3
+tensorflow-object-detection-api 0.1.1
+tensorflow-probability          0.17.0
+tensorflow-text-nightly         2.12.0.dev20221112
+```
+
+When I run `!python -c "import tensorflow as tf; print(tf.version.GIT_VERSION, tf.version.VERSION)"`
+
+I get the following errors:
+
+```2022-11-13 06:05:01.571542: W tensorflow/tsl/platform/default/dso_loader.cc:66] Could not load dynamic library 'libnvinfer.so.8'; dlerror: libnvinfer.so.8: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/dist-packages/cv2/../../lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64
+2022-11-13 06:05:01.571659: W tensorflow/tsl/platform/default/dso_loader.cc:66] Could not load dynamic library 'libnvinfer_plugin.so.8'; dlerror: libnvinfer_plugin.so.8: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/dist-packages/cv2/../../lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64
+2022-11-13 06:05:01.571683: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+v1.12.1-84680-g4e0e4254423 2.12.0-dev20221112
+```
+Python version is: `3.7.15`
+
+## 6. System information
+
+- OS Platform and Distribution (e.g., Linux Ubuntu 16.04): `Linux OS on Google Colab`
+- Mobile device name if the issue happens on a mobile device:
+- TensorFlow installed from (source or binary): installed using `pip install tensorflow`  command
+- TensorFlow version (use command below): `2.10.0`
+- Python version: `3.7.15`
+- Bazel version (if compiling from source):
+- GCC/Compiler version (if compiling from source):
+- CUDA/cuDNN version:
+- GPU model and memory: 
+
+<!-- 
+Collect system information using our environment capture script.
+https://github.com/tensorflow/tensorflow/tree/master/tools/tf_env_collect.sh
+
+You can also obtain the TensorFlow version with:
+
+1. TensorFlow 1.0
+`python -c "import tensorflow as tf; print(tf.GIT_VERSION, tf.VERSION)"`
+
+2. TensorFlow 2.0
+`python -c "import tensorflow as tf; print(tf.version.GIT_VERSION, tf.version.VERSION)"`
+-->

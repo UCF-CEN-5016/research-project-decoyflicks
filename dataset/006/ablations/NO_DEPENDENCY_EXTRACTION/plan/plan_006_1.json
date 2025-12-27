@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official EfficientDet repository.",
+    "Set the model name to 'efficientdet_d1_coco17_tpu-32'.",
+    "Define a batch size of 8 and image dimensions of 512x512.",
+    "Prepare a custom dataset with at least 100 images, ensuring they are labeled correctly for the EfficientDet model.",
+    "Create a data generator that yields batches of images and labels with shape (batch_size, height, width, 3) and (batch_size, num_classes) respectively.",
+    "Instantiate the EfficientDet model using the model_main_tf2.py script with the specified model name.",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., SparseCategoricalCrossentropy).",
+    "Ensure that the loss function is correctly passed to the model.compile() method.",
+    "Start training the model using model.fit() with the data generator, specifying steps_per_epoch as the number of batches in the dataset.",
+    "Monitor the training process for warnings, specifically looking for 'Gradients do not exist for variables...' messages.",
+    "Log the output of the training process to capture any warnings or errors.",
+    "Verify that the warning message includes the specific variables mentioned in the bug report.",
+    "Check the model summary to ensure that the layers corresponding to the variables in the warning are present and trainable.",
+    "Assert that the training loss does not decrease over epochs, indicating that gradients are not being computed."
+]
+```

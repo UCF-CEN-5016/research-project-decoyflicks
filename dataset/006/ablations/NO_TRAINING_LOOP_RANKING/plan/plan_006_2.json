@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official DETR project: 'from official.projects.detr.modeling import detr', 'from official.projects.detr.dataloaders import coco', 'from official.projects.detr.configs import detr as detr_cfg'",
+    "Set the model configuration to use 'efficientdet_d1_coco17_tpu-32' by defining a variable 'model_config' with appropriate parameters from detr_cfg.",
+    "Define a batch size of 8 and image dimensions of 512x512 for the input data.",
+    "Prepare a custom dataset in COCO format with at least 100 images and corresponding annotations, ensuring that the dataset is accessible in the expected directory structure.",
+    "Create a data loader using 'coco.COCODataLoader' with the custom dataset path and set 'is_training=True'.",
+    "Initialize the model using 'detr.DETR' with the specified model configuration and input specifications.",
+    "Compile the model using 'model.compile(optimizer=tf.keras.optimizers.Adam(), loss='sparse_categorical_crossentropy')' without specifying any metrics.",
+    "Create a dummy input tensor with shape (batch_size, height, width, 3) using 'tf.random.uniform((batch_size, 512, 512, 3))'.",
+    "Create a dummy label tensor with shape (batch_size, num_classes) using 'tf.random.uniform((batch_size,), minval=0, maxval=num_classes, dtype=tf.int32)'.",
+    "Run a training step by calling 'model.train_on_batch(dummy_input, dummy_labels)' and monitor the output for warnings.",
+    "Check the console output for the warning message: 'WARNING:tensorflow:Gradients do not exist for variables...' and ensure it includes the specified variable names.",
+    "Log the model's trainable variables before and after the training step to confirm that some variables are not being updated.",
+    "Assert that the warning message appears at least once during the training step execution."
+]
+```

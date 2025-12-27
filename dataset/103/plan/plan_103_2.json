@@ -1,0 +1,13 @@
+```json
+[
+    "Import torch and the ResidualLFQ module from residual_lfq.py",
+    "Define a batch size of 32 and input dimension of 1024",
+    "Create random uniform input data with shape (batch_size, input_dimension)",
+    "Initialize an instance of ResidualLFQ with dim=512, num_quantizers=5, codebook_size=64",
+    "Call forward method on the initialized ResidualLFQ instance with the input data and mask=None",
+    "Verify output contains NaN values in quantized_out tensor",
+    "Monitor GPU memory usage during execution of the forward pass",
+    "Assert GPU memory exceeds expected threshold for a batch size of 32"
+]
+```
+

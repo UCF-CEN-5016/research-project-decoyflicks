@@ -1,0 +1,5 @@
+[BUG] ResidualVQ always initializes MLPs
+
+MLPs in ResidualVQ are always initialized, even if `implicit_neural_codebook=False`.
+
+https://github.com/lucidrains/vector-quantize-pytorch/blob/54d29e8fba72443a29928e9f94ee52ca43eeb60a/vector_quantize_pytorch/residual_vq.py#L153

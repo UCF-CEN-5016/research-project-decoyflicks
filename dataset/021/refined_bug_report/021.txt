@@ -1,0 +1,42 @@
+### TITLE
+Zero-length Tensor Error in Detection Generator during Evaluation
+
+### SYMPTOMS
+• The `ConcatV2` operation throws a `ValueError` with the message: "List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2."
+• This error occurs when input tensors for predicted boxes have a length of 0 during the evaluation phase.
+
+### EXPECTED BEHAVIOR
+When no detections are made (i.e., the number of predicted boxes is 0 or 1), the function should handle this gracefully without raising an exception, possibly by returning empty results or handling it in a way that does not break the pipeline.
+
+### REPRODUCTION STEPS
+1. Ensure you are using the latest TensorFlow Model Garden release and TensorFlow 2.x.
+2. Clone the repository: `https://github.com/tensorflow/models.git`
+3. Navigate to the directory for the Detection Generator: `cd models/official/vision/modeling/layers/detection_generator.py`
+4. Run your inference code that passes an input tensor with a length of 0 for predicted boxes during the evaluation phase.
+
+### Analysis and Recommendations
+
+The issue arises because the `ConcatV2` operation in TensorFlow expects at least two tensors to concatenate, but when no detections are made, the list of values is empty (length 0), causing the error. To resolve this, you can implement a check within the `_generate_detections_v2_class_aware` function to handle cases where there are zero or one predicted boxes.
+
+Here's a proposed solution:
+
+1. **Add a Check for Zero-Length Tensors:**
+- Add an early exit condition in the function that checks if the input tensor has length 0.
+- If it does, return appropriate empty results instead of proceeding with the `ConcatV2` operation.
+
+Example Code Snippet:
+```python
+def _generate_detections_v2_class_aware(predicted_boxes):
+# Check for zero-length tensors
+if predicted_boxes is None or len(predicted_boxes) == 0:
+return [np.array([], dtype=np.float32), np.array([], dtype=np.int64)]
+
+# Proceed with the original logic
+# ... (rest of your function)
+```
+
+2. **Update Documentation and Tests:**
+- Ensure that the updated code is well-documented to reflect this change.
+- Add or update unit tests to cover scenarios where `predicted_boxes` are empty or contain a single box.
+
+By implementing these changes, you ensure that the Detection Generator can handle cases with zero detections without breaking due to the `ConcatV2` operation error.

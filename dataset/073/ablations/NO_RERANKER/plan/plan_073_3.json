@@ -1,0 +1,23 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Set the environment variable for CUDA device connections by executing 'export CUDA_DEVICE_MAX_CONNECTIONS=1'",
+    "Create a new shell script named 'pretrain_gpt3_2.7b.sh' with the following content:",
+    "    #!/bin/bash",
+    "    export WORLD_SIZE=2",
+    "    export MASTER_ADDR='localhost'",
+    "    export MASTER_PORT=12345",
+    "    python -m torch.distributed.launch --nproc_per_node=$WORLD_SIZE training/DeepSpeed-Domino/pretrain_gpt3.py --model_name_or_path='gpt3-2.7b' --train_file='path/to/train_data.json' --output_dir='output/' --do_train",
+    "Make the script executable by running 'chmod +x pretrain_gpt3_2.7b.sh'",
+    "Prepare a training dataset in JSON format with at least 1000 samples, ensuring it is compatible with the expected input format of the model.",
+    "Run the script using 'bash pretrain_gpt3_2.7b.sh'",
+    "Monitor the console output for any errors during execution, specifically looking for the error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce' '",
+    "If the error occurs, check the initialization of the 'cdb' object in the code, specifically in 'training/DeepSpeed-Domino/domino/tensor_parallel/partition.py'",
+    "Verify that the 'cdb' object is not initialized before it is used in the 'all_reduce' function call",
+    "Confirm that the environment is set up correctly by checking the output of 'echo $CUDA_DEVICE_MAX_CONNECTIONS' to ensure it is set to '1'",
+    "Check the PyTorch version by running 'python -c 'import torch; print(torch.__version__)'' to ensure compatibility with the DeepSpeed-Domino framework",
+    "Assert that the error is reproducible by running the script multiple times and consistently observing the same error message"
+]
+```

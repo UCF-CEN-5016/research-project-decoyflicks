@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and HourGlass from labml_nn.transformers.hour_glass",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 32 and sequence length of 256",
+    "Define the number of tokens (vocabulary size) as 1000 and model dimension (d_model) as 256",
+    "Create an instance of the HourGlass model with parameters: n_heads=8, d_model=256, dropout=0.1, d_ff=512, and shortening_factors=[8, 4]",
+    "Create an instance of the AutoregressiveTransformer with parameters: n_tokens=1000, d_model=256, dropout=0.1, and the previously created hour_glass model",
+    "Generate random input data with shape (seq_len, batch_size) using torch.randint(0, n_tokens, (seq_len, batch_size))",
+    "Pass the generated input data through the AutoregressiveTransformer instance to obtain output logits",
+    "Check the shape of the output logits to ensure it is (seq_len, batch_size, n_tokens)",
+    "Extract the attention weights from the HourGlass model during the forward pass to inspect their values",
+    "Perform a softmax operation on the attention weights along the incorrect axis (dim=1) instead of the expected axis (dim=2)",
+    "Verify that the attention weights do not sum to 1 along the incorrect axis by asserting that torch.sum(attn_weights, dim=1) is not close to 1",
+    "Log the attention weights to observe their distribution and confirm they do not behave as expected",
+    "Run the model on the CIFAR-10 dataset to ensure the bug is reproducible in a practical scenario",
+    "Monitor the training process and check for any unexpected behavior or performance issues during training"
+]
+```

@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the vision_transformer repository from GitHub using the command: git clone https://github.com/pytorch/examples.git",
+    "Navigate to the vision_transformer directory using: cd examples/vision_transformer",
+    "Install the required dependencies by running: pip install -r requirements.txt",
+    "Import necessary libraries in a new Python script: import torch, torchvision, torchvision.transforms as transforms, from torchvision.datasets import CIFAR10",
+    "Set the device to GPU by adding: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define a batch size of 64 and image dimensions of 32x32: batch_size = 64, image_size = (32, 32)",
+    "Load the CIFAR10 dataset with the following parameters: train_dataset = CIFAR10(root='./data', train=True, download=True, transform=transforms.Compose([transforms.Resize(image_size), transforms.ToTensor()]))",
+    "Create a DataLoader for the training dataset: train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)",
+    "Import the Vision Transformer model from the repository: from main import VisionTransformer",
+    "Instantiate the Vision Transformer model with num_classes set to 16: model = VisionTransformer(num_classes=16).to(device)",
+    "Run a forward pass with a sample batch from the DataLoader: for images, labels in train_loader: images = images.to(device); outputs = model(images); break",
+    "Check the shape of the output tensor: assert outputs.shape[1] == 16, 'Output should have 16 classes instead of 10'",
+    "Print the output shape to verify: print('Output shape:', outputs.shape)",
+    "Run the script to observe the output shape and confirm it is (batch_size, 16) instead of (batch_size, 10)",
+    "Log the output to a file for further analysis if needed: with open('output_log.txt', 'w') as f: f.write(str(outputs.shape))"
+]
+```

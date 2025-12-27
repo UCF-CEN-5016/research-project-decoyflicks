@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow, tf_keras, and other required modules from official/modeling/tf_utils_test.py",
+    "Set the strategy to 'cloud_tpu_strategy'",
+    "Define a batch size of 8 and image dimensions of (256, 256)",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using tf.random.uniform",
+    "Initialize a custom model by calling the 'efficientdet_d1_coco17_tpu-32' model from official/modeling/tf_utils_test.py",
+    "Compile the model with an optimizer (e.g., Adam), loss function (e.g., 'categorical_crossentropy'), and metrics (e.g., ['accuracy'])",
+    "Create random target data with shape (batch_size, num_classes) using tf.random.uniform",
+    "Call the compiled model on the input data to perform a forward pass and calculate the loss",
+    "Assert that the calculated loss is a floating-point number without NaN values",
+    "Monitor GPU memory usage during execution using TensorFlow's logging utilities",
+    "Assert GPU memory exceeds expected threshold based on the size of the model and batch"
+]
+```
+

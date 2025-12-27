@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: keras, keras_cv, numpy, matplotlib, and cv2",
+    "Set up the environment to use a GPU in Google Colab Pro by selecting Runtime > Change runtime type > Hardware accelerator > GPU",
+    "Define the image size as 224 and the patch size as 32",
+    "Download and extract the Caltech 101 dataset using keras.utils.get_file and shutil.unpack_archive",
+    "Prepare the dataset by defining paths for images and annotations: path_images = './101_ObjectCategories/airplanes/' and path_annot = './Annotations/Airplanes_Side_2/'",
+    "Load images and annotations into lists: images and targets, ensuring to resize images to (image_size, image_size)",
+    "Convert the lists of images and targets into numpy arrays: x_train and y_train, with 80% of the data for training and 20% for testing",
+    "Define the model parameters: input_shape = (image_size, image_size, 3), learning_rate = 0.001, weight_decay = 0.0001, batch_size = 32, num_epochs = 3, num_patches = (image_size // patch_size) ** 2, projection_dim = 64, num_heads = 4, transformer_units = [projection_dim * 2, projection_dim], transformer_layers = 4, mlp_head_units = [2048, 1024, 512, 64, 32]",
+    "Create the ViT object detector model using the create_vit_object_detector function with the defined parameters",
+    "Compile the model with AdamW optimizer and MeanSquaredError loss function",
+    "Fit the model on the training data (x_train, y_train) with validation_split=0.1 and epochs=3",
+    "Monitor the training process to ensure it runs for one epoch and reaches the point of error",
+    "Capture the output logs during training to verify the UnknownError occurs after the first epoch",
+    "Check the shapes of the ground truths and predictions in the logs to confirm the mismatch: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]",
+    "Assert that the error message contains 'InvalidArgumentError' and 'Dimension 1 in both shapes must be equal' to confirm the bug"
+]
+```

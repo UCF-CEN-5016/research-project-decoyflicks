@@ -1,0 +1,95 @@
+Dimension issues in Masked Patch Prediction
+
+First of all, could you give me the reference paper for: masked patch prediction..is it the same mechanism which is being used in BEiT?
+
+While running the demo code, I'm facing dimensions issues
+
+```
+import torch
+from vit_pytorch import ViT
+from vit_pytorch.mpp import MPP
+
+model = ViT(
+    image_size=256,
+    patch_size=32,
+    num_classes=1000,
+    dim=1024,
+    depth=6,
+    heads=8,
+    mlp_dim=2048,
+    dropout=0.1,
+    emb_dropout=0.1
+)
+
+mpp_trainer = MPP(
+    transformer=model,
+    patch_size=32,
+    dim=1024,
+    mask_prob=0.15,          # probability of using token in masked prediction task
+    random_patch_prob=0.30,  # probability of randomly replacing a token being used for mpp
+    replace_prob=0.50,       # probability of replacing a token being used for mpp with the mask token
+)
+
+opt = torch.optim.Adam(mpp_trainer.parameters(), lr=3e-4)
+
+def sample_unlabelled_images():
+    return torch.FloatTensor(20, 3, 256, 256).uniform_(0., 1.)
+
+for _ in range(100):
+    images = sample_unlabelled_images()
+    loss = mpp_trainer(images)
+    opt.zero_grad()
+    loss.backward()
+    opt.step()
+
+# save your improved network
+torch.save(model.state_dict(), './pretrained-net.pt')
+```
+
+
+Current issue that I'm getting:
+
+```
+│                                                                                                  │
+                                                             │
+│ ❱ 158 │   │   masked_input = transformer.to_patch_embedding[-1](masked_input)                    │
+│   159 │   │                                                                                      │
+│   160 │   │   # add cls token to input sequence                                                  │
+│   161 │   │   b, n, _ = masked_input.shape                                                       │
+│                                                                                                  │
+│ /data/opt/miniconda/envs/kie-deployment/lib/python3.9/site-packages/torch/nn/modules/module.py:1 │
+│ 501 in _call_impl                                                                                │
+│                                                                                                  │
+│   1498 │   │   if not (self._backward_hooks or self._backward_pre_hooks or self._forward_hooks   │
+│   1499 │   │   │   │   or _global_backward_pre_hooks or _global_backward_hooks                   │
+│   1500 │   │   │   │   or _global_forward_hooks or _global_forward_pre_hooks):                   │
+│ ❱ 1501 │   │   │   return forward_call(*args, **kwargs)                                          │
+│   1502 │   │   # Do not call functions when jit is used                                          │
+│   1503 │   │   full_backward_hooks, non_full_backward_hooks = [], []                             │
+│   1504 │   │   backward_pre_hooks = []                                                           │
+│                                                                                                  │
+│ /data/opt/miniconda/envs/kie-deployment/lib/python3.9/site-packages/torch/nn/modules/normalizati │
+│ on.py:190 in forward                                                                             │
+│                                                                                                  │
+│   187 │   │   │   init.zeros_(self.bias)                                                         │
+│   188 │                                                                                          │
+│   189 │   def forward(self, input: Tensor) -> Tensor:                                            │
+│ ❱ 190 │   │   return F.layer_norm(                                                               │
+│   191 │   │   │   input, self.normalized_shape, self.weight, self.bias, self.eps)                │
+│   192 │                                                                                          │
+│   193 │   def extra_repr(self) -> str:                                                           │
+│                                                                                                  │
+│ /data/opt/miniconda/envs/kie-deployment/lib/python3.9/site-packages/torch/nn/functional.py:2515  │
+│ in layer_norm                                                                                    │
+│                                                                                                  │
+│   2512 │   │   return handle_torch_function(                                                     │
+│   2513 │   │   │   layer_norm, (input, weight, bias), input, normalized_shape, weight=weight, b  │
+│   2514 │   │   )                                                                                 │
+│ ❱ 2515 │   return torch.layer_norm(input, normalized_shape, weight, bias, eps, torch.backends.c  │
+│   2516                                                                                           │
+│   2517                                                                                           │
+│   2518 def group_norm(                                                                           │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+RuntimeError: Given normalized_shape=[1024], expected input with shape [*, 1024], but got input of size[20, 64, 
+3072]
+```

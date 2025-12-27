@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary modules: torch, nn, DataLoader, RandomSampler from torch.utils.data, and the RotaryPositionalEmbeddings class from labml_nn.transformers.rope",
+    "Set the device to CUDA:0 using torch.device('cuda:0')",
+    "Prepare the Tiny Shakespeare dataset by creating a TextFileDataset instance with the path to the dataset: lab.get_data_path() / 'tiny_shakespeare.txt'",
+    "Create a DataLoader for the dataset with a batch size of 4 and use RandomSampler for sampling",
+    "Define hyperparameters: set chunk_len to 16, d_model to 128, d_ff to 512, n_heads to 16, and d_k to 16",
+    "Create an instance of NearestNeighborEncoder with parameters: chunk_len=chunk_len, 6, {3}, d_model=d_model, n_heads=n_heads, d_k=d_k, d_ff=d_ff",
+    "Create an instance of RetroModel with parameters: tds.n_tokens, d_model, 6, {3, 5}, chunk_len, n_heads, d_k, d_ff, encoder=nearest_neighbor_encoder",
+    "Replace the line rotary_pe = RotaryPositionalEmbeddings(3) with rotary_pe = RotaryPositionalEmbeddings(4) in the code",
+    "Move the model to the device using model.to(device)",
+    "Create an optimizer using Noam with model.parameters(), lr=1.0, d_model=d_model, warmup=2000",
+    "Create an instance of the Trainer class with parameters: device, model, train_dl, optimizer",
+    "Create an instance of the Sampler class with parameters: device, model, tds, chunk_len",
+    "Define a prompt string: prompt = 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Start the training loop for 1 epoch using a for loop with range(1)",
+    "Inside the loop, call trainer() to execute training for one epoch",
+    "After training, call sampler.sample(prompt, 128) to sample text from the prompt",
+    "Capture the output of the model and check for errors during execution",
+    "Assert that an error is raised due to the mismatch in the expected number of features in RotaryPositionalEmbeddings"
+]
+```

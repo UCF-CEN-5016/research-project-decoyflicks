@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and necessary modules from keras",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Set num_classes to 1000 for the classifier",
+    "Initialize model using build_classifier function with FNetLayer blocks",
+    "Call run_experiment function with fnet_classifier as argument",
+    "Verify output contains NaN values in loss calculation during training",
+    "Monitor GPU memory usage during execution of run_experiment",
+    "Assert GPU memory exceeds expected threshold to indicate potential bug"
+]
+```
+

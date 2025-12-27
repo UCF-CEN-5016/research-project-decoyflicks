@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary modules: torch, torch.nn, and labml_nn.diffusion.ddpm.utils (specifically gather function)",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 8 and image dimensions of 32x32 (CIFAR-10 image size)",
+    "Create a random tensor for x0 with shape (batch_size, 3, 32, 32) to simulate CIFAR-10 images",
+    "Create a random tensor for noise with the same shape as x0, using torch.randn_like(x0)",
+    "Instantiate the DenoiseDiffusion class with a dummy eps_model (e.g., a simple nn.Module that returns random noise) and n_steps set to 1000",
+    "Call the loss method of the DenoiseDiffusion instance with x0 and noise as parameters",
+    "Capture the output of the loss method to verify it does not raise any errors",
+    "Modify the attention mechanism in the UNet model by changing the softmax operation to attn.softmax(dim=2) instead of the current implementation",
+    "Re-run the loss method to check if the output changes significantly or if any errors occur",
+    "Assert that the output loss value is not NaN or inf after modifying the attention mechanism",
+    "Log the output loss value before and after the modification to compare results",
+    "Verify that the model can still generate outputs without crashing after the attention modification"
+]
+```

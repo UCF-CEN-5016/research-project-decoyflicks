@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, os, json, and any other required modules.",
+    "Define constants: set DEVICE to 'cuda' if available, otherwise 'cpu'. Set SAMPLING_FREQ to the sample rate of the audio files (e.g., 16000 Hz). Set EMISSION_INTERVAL to a specific value (e.g., 1.0 seconds).",
+    "Prepare a test audio file: Ensure you have an audio file in the correct format (e.g., .flac) located at a specific path (e.g., '/root/autodl-tmp/test_audio.flac').",
+    "Create a mock model: Define a simple mock model that mimics the expected output shape of the actual model. For example, create a class that returns a tensor of shape (T, N) where T is the number of frames and N is the number of features (e.g., N=256).",
+    "Load the mock model and set it to evaluation mode: Instantiate the mock model and call model.eval(). Move the model to the DEVICE.",
+    "Create a mock dictionary: Define a dictionary that maps characters to indices, including a '<blank>' key with a specific index (e.g., 0).",
+    "Define a function to simulate the generate_emissions function: This function should take the mock model and the test audio file as input, and return a tensor of emissions with shape (T, N) and a stride value.",
+    "Call the generate_emissions function with the mock model and test audio file, and store the returned emissions and stride.",
+    "Define a list of tokens: Create a list of tokens that corresponds to the expected output (e.g., ['hello', 'world']).",
+    "Call the get_alignments function with the test audio file, tokens, mock model, mock dictionary, and use_star set to False.",
+    "In the get_alignments function, assert that the emissions tensor is not empty and has the expected shape (T, N).",
+    "Check if the 'input_feat_per_channel' key is accessed in the model or emissions processing: If it is accessed, ensure that it raises a KeyError or similar exception indicating that the key is not found.",
+    "Log the error message or exception to verify that the bug is reproduced: Capture the output of the function calls and check for the specific error related to 'input_feat_per_channel'.",
+    "Validate that the output contains the expected error message indicating that the key 'input_feat_per_channel' is not in the struct."
+]
+```

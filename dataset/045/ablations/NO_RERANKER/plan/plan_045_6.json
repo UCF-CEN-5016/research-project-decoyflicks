@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, fairseq, and any other required modules.",
+    "Set the DATA_ROOT variable to the path of your dataset, e.g., DATA_ROOT = '/path/to/your/data'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech_to_speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the task.",
+    "Define the command to run fairseq-generate with the following parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Run the command in a terminal or script to execute the fairseq-generate process.",
+    "Monitor the output for the specific error message: 'Key 'input_feat_per_channel' is not in struct'.",
+    "If the error occurs, capture the full stack trace and any additional context provided by the fairseq library.",
+    "Verify that the model configuration does not include the 'input_feat_per_channel' key by checking the Wav2Vec2Config class definition.",
+    "Check the input data format and ensure it matches the expected input shape for the model, e.g., (batch_size, sequence_length, feature_dimension).",
+    "Log the dimensions of the input data being passed to the model to ensure they are correct.",
+    "Assert that the model's forward method is being called with the correct parameters and that the input data is not empty."
+]
+```

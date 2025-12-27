@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the official.nlp.modeling.layers.tn_expand_condense_test.py file",
+    "Define a batch size of 100 and input dimension of 768",
+    "Create random uniform input data with shape (batch_size, input_dim)",
+    "Build a sequential Keras model containing an instance of TNExpandCondense layer with proj_multiplier=2, use_bias=True, activation='relu', and input_shape=(input_dim,)",
+    "Add a dense layer to the model with 1 unit and sigmoid activation",
+    "Compile the model with optimizer='adam' and loss='binary_crossentropy'",
+    "Generate random binary labels for training data with shape (batch_size, 1)",
+    "Train the model on the input data for 5 epochs with batch size of 32",
+    "Assert that the first element of the training loss history is greater than the last element to verify loss decrease",
+    "Assert that the first element of the training accuracy history is less than the last element to verify accuracy increase"
+]
+```
+

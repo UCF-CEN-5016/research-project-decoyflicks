@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules: 'import tensorflow as tf' and 'from official.projects.efficientdet import model_main_tf2'",
+    "Set the model name to 'efficientdet_d1_coco17_tpu-32'",
+    "Define a batch size of 8 and image dimensions of 512x512",
+    "Prepare a custom dataset with images and annotations in COCO format, ensuring it has at least 100 images for training",
+    "Create a data loader function that returns a tf.data.Dataset object with the following properties: batch size of 8, shuffling enabled, and prefetching set to tf.data.experimental.AUTOTUNE",
+    "Define a loss function, for example, 'loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)'",
+    "Compile the model using 'model.compile(optimizer=tf.keras.optimizers.Adam(), loss=loss)'",
+    "Set the number of training steps to 1000 and define a training loop that calls 'model.fit(train_dataset, epochs=1, steps_per_epoch=1000)'",
+    "Run the training loop and monitor the console output for warnings",
+    "Verify that the warning 'Gradients do not exist for variables...' appears in the console output during training",
+    "Check the specific variables listed in the warning to ensure they match the ones in the bug report",
+    "Log the training loss and ensure it does not decrease, indicating that the model is not learning"
+]
+```

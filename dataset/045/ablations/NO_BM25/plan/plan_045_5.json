@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, os, json, and any other required modules.",
+    "Define constants: set DEVICE to 'cuda' if a GPU is available, otherwise set it to 'cpu'.",
+    "Set SAMPLING_FREQ to 16000 (or the sample rate used in your audio files).",
+    "Set EMISSION_INTERVAL to 1.0 (or the desired interval for processing audio segments).",
+    "Create a directory structure for the data: create a folder at $DATA_ROOT and place a test audio file (e.g., test.wav) inside it.",
+    "Create a config.yaml file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with necessary configurations for the fairseq-generate command.",
+    "Prepare a model checkpoint: ensure the model.pt file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt.",
+    "Create a text file at args.text_filepath (e.g., /root/autodl-tmp/transcripts.txt) containing a single line of text that corresponds to the audio file.",
+    "Run the fairseq-generate command with the specified parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Monitor the output for the error message indicating that the key 'input_feat_per_channel' is not in struct.",
+    "If the error does not appear, modify the input audio file or the model checkpoint to ensure they are compatible with the expected input format.",
+    "Validate that the error consistently occurs by repeating the fairseq-generate command multiple times with the same parameters.",
+    "Log the exact error message and any relevant stack trace information for further analysis."
+]
+```

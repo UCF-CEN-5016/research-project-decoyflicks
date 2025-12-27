@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the relevant modules from x_transformers (e.g., Attention, AlibiPositionalBias, etc.)",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 2 and sequence length of 10 for testing",
+    "Define the dimensions for the model: set dim=64, heads=8, and total_heads=8",
+    "Create random input data for queries and keys with shape (batch_size, sequence_length, dim) using torch.randn",
+    "Instantiate the Attention class with parameters: dim=64, heads=8, causal=True, and flash=True",
+    "Instantiate the AlibiPositionalBias class with parameters: heads=8 and total_heads=8",
+    "Prepare custom positions by creating a tensor with shape (batch_size, sequence_length, 3) using torch.randn",
+    "Call the forward method of the Attention instance with the following parameters: queries, keys, values (set to the same as queries), mask=None, attn_bias=None, and pos=custom_positions",
+    "Capture the output of the forward method call",
+    "Check the shape of the output to ensure it matches expected dimensions (should be (batch_size, sequence_length, dim))",
+    "Assert that the output does not contain NaN values",
+    "Verify that the output shape is (2, 10, 64) to confirm the attention mechanism is functioning correctly",
+    "Log the output tensor to observe its values and confirm that it is not as expected due to the bug",
+    "Check for any runtime warnings or errors during the execution of the forward method"
+]
+```

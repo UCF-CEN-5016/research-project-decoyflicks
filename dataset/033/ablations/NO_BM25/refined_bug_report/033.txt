@@ -1,0 +1,23 @@
+TITLE  
+Multiplication error in the ConvSE3 due to input feature dimension mismatch
+
+SYMPTOMS  
+• The model raises a runtime error during training when using modified input feature dimensions.  
+• Error message: `RuntimeError: Expected size for first two dimensions of batch2 tensor to be: [8910, 1] but got: [8910, 3].`  
+• The model fails to perform self-attention with multiple input types, leading to unexpected behavior.
+
+EXPECTED BEHAVIOR  
+The SE3-Transformer should successfully handle multiple input types and perform self-attention without raising errors. The model should be able to train on the QM9 dataset with the modified input feature dimensions.
+
+REPRODUCTION STEPS  
+1. Modify the `data_loading/qm9.py` file to change the node features as follows:  
+   ```python
+   node_feats = {'0': batched_graph.ndata['attr'][:, :5, None],  
+                 '1': batched_graph.ndata['attr'][:, 5:6, None]}
+   ```
+2. Update the `runtime/training.py` file to set the `fiber_in` parameter of the `SE3TransformerPooled` model to:  
+   ```python
+   fiber_in=Fiber({0: 5, 1: 1})
+   ```
+3. Attempt to train the model on the QM9 dataset with the modified configurations.  
+4. Observe the runtime error indicating a mismatch in tensor dimensions.

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules from TensorFlow and other dependencies.",
+    "Define a batch size of 64 and image dimensions of 256x256.",
+    "Create random uniform input data with shape (batch_size, height, width, 3) for images.",
+    "Create one-hot encoded labels with shape (batch_size, num_classes) using the same random values as inputs.",
+    "Load the tf_flowers dataset and split it into training and validation sets.",
+    "Preprocess the training and validation datasets according to the function defined in preprocess_dataset(is_training=True).",
+    "Create a MobileViT model with 5 classes by calling create_mobilevit(num_classes=5).",
+    "Compile the MobileViT model with Adam optimizer, CategoricalCrossentropy loss function, and accuracy metric.",
+    "Train the model on the training dataset for 30 epochs using the compiled model's fit method.",
+    "Verify that the validation accuracy is below 50% to confirm the bug occurs."
+]
+```
+

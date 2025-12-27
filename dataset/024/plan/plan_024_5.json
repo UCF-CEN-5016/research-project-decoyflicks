@@ -1,0 +1,15 @@
+```json
+[
+    "Clone the models/research/delf repository from GitHub to a local directory",
+    "Navigate to the /content/models/research/delf/delf/python/examples directory",
+    "Create a Python script named reproduce_bug.py with the following content:",
+    "Import TensorFlow and other necessary modules at the beginning of reproduce_bug.py",
+    "Define the required functions and classes, including RankingTask and related utility functions from the official/recommendation/ranking/task module",
+    "Set up the necessary data preparation steps to generate the input parameters for the extract_features.py script, such as creating a mock config_path, list_images_path, and output_dir",
+    "Call the extract_features.py script with the specified command-line arguments: --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features from within reproduce_bug.py using subprocess or os.system",
+    "Capture and print the output of the script to verify that it produces an error",
+    "Observe and document the specific error message produced by the script, which should include ModuleNotFoundError: No module named 'delf.python.datasets'",
+    "Assert that the error occurs during the execution of reproduce_bug.py"
+]
+```
+

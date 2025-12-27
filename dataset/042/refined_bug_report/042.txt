@@ -1,0 +1,82 @@
+TITLE
+Incompatible Model Interface for ONNX Export
+
+SYMPTOMS
+• `AttributeError: 'Tensor' object has no attribute 'is_integer'`
+• Failed to convert `hubert.extract_features()` into ONNX format.
+
+EXPECTED BEHAVIOR
+The `HuberAdapter` model should be successfully exported as an ONNX file with the expected input and output names.
+
+REPRODUCTION STEPS
+1. Install fairseq version 0.12.2 using pip.
+2. Load the Hubert model from the provided checkpoint.
+3. Convert the model to half precision.
+4. Define a custom `HuberAdapter` class for feature extraction.
+5. Load input features and padding masks.
+6. Attempt to export the adapter into an ONNX file with specific dynamic axes.
+
+BEGIN ANALYSIS
+
+The core issue lies in the model interface used by `hubert.extract_features()` which is not compatible with the requirements of the ONNX exporter, particularly due to the presence of a `Tensor` object that does not have the method `is_integer`.
+
+### Potential Solutions
+1. **Modify Model Interface**: Ensure that the custom `HuberAdapter` class and its forward method are consistent with what ONNX expects. This might involve simplifying or adapting the model's internal behavior.
+
+2. **ONNX Export Parameters**: Review and adjust the parameters passed to `torch.onnx.export()` to better match the expected input structure of the Hubert model.
+
+3. **Check for Additional Dependencies**: Ensure all dependencies required by fairseq for ONNX export are correctly set up, including any specific configurations or patches needed.
+
+### Suggested Code Adjustments
+Here is a revised version of your code with potential fixes:
+
+```python
+from fairseq import checkpoint_utils
+import torch
+
+# Load Hubert model
+hubert, _, _ = checkpoint_utils.load_model_ensemble_and_task(
+["./assets/hubert/hubert_base.pt"],
+suffix=""
+)
+hubert_model = hubert[0]
+hubert_model = hubert_model.half()
+
+class HuberAdapter(torch.nn.Module):
+def __init__(self, model):
+super(HuberAdapter, self).__init__()
+self.model = model
+
+def forward(self, feats, padding_mask):
+inputs = {
+"source": feats,
+"padding_mask": padding_mask,
+"output_layer": 12
+}
+return self.model.extract_features(**inputs)
+
+# Load input data
+feats = torch.load("./feats.pt")
+padding_mask = torch.load("./padding_mask.pt")
+
+# Instantiate the adapter and ensure it is in the same device as input data (GPU here)
+adapter = HuberAdapter(hubert_model).cuda()
+
+try:
+# Exporting Adapter into ONNX
+torch.onnx.export(
+adapter,
+(feats, padding_mask),
+"hubert.onnx",
+input_names=["feats", "padding_mask"],
+output_names=["logits", "mask"],
+dynamic_axes={
+"feats": {0: "seq"},
+"padding_mask": {0: "seq"}
+}
+)
+except Exception as e:
+print(f"Exporting to ONNX failed with the following error: {e}")
+```
+
+By ensuring that the `HuberAdapter` and its inputs are correctly defined, this should help in resolving the compatibility issues during the export process.

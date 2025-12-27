@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules including datasets, deepspeed, fire, functools, json, pathlib, pytz, random, torch, transformers and typing",
+    "Set random seeds for reproducibility (torch.manual_seed(42), np.random.seed(0), random.seed(0))",
+    "Define function parameters for the training script (mask_prob=0.15, random_replace_prob=0.1, unmask_replace_prob=0.8, tokenizer='bert-base-uncased', num_layers=6, num_heads=12, ff_dim=3072, h_dim=768, dropout=0.1, batch_size=16, num_iterations=1000, checkpoint_every=500)",
+    "Create a mock dataset using 'datasets.load_dataset' with specified parameters",
+    "Initialize the model using 'transformers.RobertaModel.from_pretrained' with the specified tokenizer and configuration",
+    "Define an optimizer using 'torch.optim.Adam' with a learning rate of 1e-4",
+    "Mock the data iterator by creating dummy batches of input tensors",
+    "Set the model to training mode using 'model.train()'",
+    "Initialize an empty list to store losses",
+    "Simulate the forward pass, backward pass, and optimizer step within a loop for a specified number of iterations (up to num_iterations)",
+    "After the loop, save the final model checkpoint using 'torch.save'",
+    "Verify that a NaN value occurs in the loss calculation at some point during training",
+    "Monitor memory usage before and after the training loop",
+    "Assert that memory usage exceeds expected threshold during training"
+]
+```
+

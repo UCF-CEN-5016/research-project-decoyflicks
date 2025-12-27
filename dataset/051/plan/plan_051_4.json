@@ -1,0 +1,19 @@
+```json
+[
+    "Install and import KerasNLP and TensorFlow 3.2.1",
+    "Download the English-to-Spanish translation dataset from the provided Colab link",
+    "Split the dataset into training and test sets with a test size of 0.1 and random state of 42",
+    "Load the Universal Sentence Encoder (USE) model from TensorFlow Hub",
+    "Create an input layer for raw text using Keras",
+    "Preprocess the text data by encoding it to USE embeddings",
+    "Define a transformer decoder architecture for sequence-to-sequence translation, including layers such as MultiHeadAttention and LayerNormalization",
+    "Compile the transformer decoder model with appropriate loss functions (e.g., SparseCategoricalCrossentropy) and optimizer (e.g., Adam)",
+    "Train the transformer decoder model on the training data for 10 epochs with a batch size of 32, using the USE embeddings as input and target sequences shifted by one token",
+    "Define a function to decode sequences using GreedySampler from KerasNLP",
+    "Initialize the GreedySampler without passing an 'end_token_id' argument",
+    "Create a prompt for decoding by concatenating start tokens with padding to match the model's expected input shape",
+    "Invoke the decode_sequences function, passing in a list of random English sentences from the test set as input",
+    "Assert that calling the GreedySampler with an unexpected 'end_token_id' keyword argument raises a TypeError"
+]
+```
+

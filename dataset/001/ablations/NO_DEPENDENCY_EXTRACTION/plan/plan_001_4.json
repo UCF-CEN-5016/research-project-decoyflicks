@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from syntaxnet and other dependencies",
+    "Set the GPU device to use the Tesla K40c by configuring TensorFlow to allow growth of GPU memory",
+    "Define a batch size of 10 and set the number of epochs to 5 for training",
+    "Create a task context file at 'testdata/context.pbtxt' with appropriate configurations for the MNIST dataset",
+    "Prepare the MNIST dataset by loading it using TensorFlow's tf.keras.datasets.mnist.load_data() function",
+    "Preprocess the MNIST data by normalizing the pixel values to the range [0, 1] and reshaping the input to (batch_size, 28, 28, 1)",
+    "Define the spatial transform network model architecture with appropriate layers and parameters",
+    "Compile the model with a loss function (e.g., 'sparse_categorical_crossentropy') and an optimizer (e.g., 'adam')",
+    "Start training the model using the fit method with the training data, specifying the batch size and number of epochs",
+    "During training, monitor the loss value and check for NaN values after each epoch",
+    "Log the GPU memory usage using TensorFlow's tf.config.experimental.get_memory_info() to track memory consumption",
+    "Assert that the loss value becomes NaN after a certain number of epochs (e.g., after 3 epochs)",
+    "Assert that the GPU memory usage exceeds 10G during the training process"
+]
+```

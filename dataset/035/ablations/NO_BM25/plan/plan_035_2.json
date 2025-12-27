@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the repository from GitHub using the command: git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git",
+    "Navigate to the directory containing the RoPE file: cd annotated_deep_learning_paper_implementations/labml_nn/transformers/rope",
+    "Open the __init__.py file in a code editor and locate line 226, which contains the code: rotary_pe = RotaryPositionalEmbeddings(3)",
+    "Change the line to: rotary_pe = RotaryPositionalEmbeddings(4) to simulate the intended fix.",
+    "Navigate to the directory containing the GLU variants implementation: cd ../glu_variants",
+    "Open the simple.py file in a code editor.",
+    "Import necessary libraries at the top of the simple.py file: import torch, from labml_nn.transformers.rope import RotaryPositionalEmbeddings",
+    "Define a batch size of 32 and sequence length of 128 in the Configs class.",
+    "Create a TinyShakespeareDataset instance with seq_len=128 to prepare the dataset.",
+    "Initialize a DataLoader with the dataset, batch_size=32, and shuffle=True.",
+    "Create an instance of the Trainer class with the defined configurations.",
+    "Call the train method of the Trainer instance to start training the model.",
+    "During training, monitor for any errors or exceptions that occur due to the mismatch in positional embedding dimensions.",
+    "Verify that an error is raised during the forward pass of the model indicating a dimension mismatch, specifically related to the RotaryPositionalEmbeddings.",
+    "Log the error message to confirm that it is related to the positional embedding size."
+]
+```

@@ -1,0 +1,18 @@
+[
+  "Open a new Python environment or notebook (e.g., Google Colab) with Python 3.10 or compatible version",
+  "Install TensorFlow and Keras using pip without specifying Keras version explicitly (e.g., `pip install tensorflow keras`), so the latest Keras version is installed",
+  "Import the following modules: `import tensorflow as tf`, `from tensorflow import keras`, `import keras_cv`, `from tqdm.auto import tqdm`, `import xml.etree.ElementTree as ET`",
+  "Attempt to import `data_utils` from `keras.utils` by running `from keras.utils import data_utils`",
+  "Observe and capture the ImportError: `cannot import name 'data_utils' from 'keras.utils'`",
+  "To confirm the bug context, clone or download the Fine-tuning Stable Diffusion example code from https://keras.io/examples/generative/finetune_stable_diffusion/",
+  "Run the example script or notebook in the same environment with the latest installed Keras version",
+  "Verify that the ImportError related to `data_utils` occurs during the import phase, specifically within `keras_cv/models/weights.py` line containing `from keras.utils import data_utils`",
+  "Record the full error traceback to confirm the source and nature of the import failure",
+  "Uninstall the current Keras version using `pip uninstall keras`",
+  "Install Keras version 2.12.0 explicitly using `pip install keras==2.12.0`",
+  "Re-run the Fine-tuning Stable Diffusion example script or notebook",
+  "Verify that the ImportError no longer appears and the code runs past the previous import failure point",
+  "Assert that the only difference causing the import issue is the Keras version, showing that `data_utils` module is missing in latest Keras but present in version 2.12.0",
+  "Summarize the conditions reproducing the bug: latest Keras version + Fine-tuning Stable Diffusion example leads to ImportError on `data_utils` import",
+  "Conclude that the bug can be reproduced by running the example with the latest Keras version and verifying the ImportError"
+]

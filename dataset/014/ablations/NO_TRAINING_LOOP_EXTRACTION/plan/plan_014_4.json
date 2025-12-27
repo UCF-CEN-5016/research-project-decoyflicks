@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the object detection API: 'import tensorflow as tf', 'from object_detection.utils import config_util', 'from object_detection.protos import pipeline_pb2', 'from google.protobuf import text_format'",
+    "Set the path to the pipeline.config file: 'configpath = \"path/to/pipeline.config\"'",
+    "Load the configuration from the pipeline.config file using 'config = config_util.get_configs_from_pipeline_file(configpath)'",
+    "Create an instance of TrainEvalPipelineConfig: 'pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()'",
+    "Read the contents of the pipeline.config file: 'with tf.io.gfile.GFile(configpath, \"r\") as f: proto_str = f.read()'",
+    "Merge the contents of the pipeline.config file into the pipeline_config object: 'text_format.Merge(proto_str, pipeline_config)'",
+    "Attempt to set 'pipeline_config.eval_input_reader.max_number_of_boxes = 500' and catch any exceptions: 'try: pipeline_config.eval_input_reader.max_number_of_boxes = 500 except AttributeError as e: print(e)'",
+    "Verify that the AttributeError is raised by checking the output of the exception handling",
+    "Check the default value of 'pipeline_config.eval_input_reader.max_number_of_boxes' before modification to confirm it is set to 100",
+    "Add the following lines to the pipeline_config object to ensure all necessary parameters are set: 'pipeline_config.train_config.max_number_of_boxes = 500', 'pipeline_config.eval_config.max_num_boxes_to_visualize = 500', 'pipeline_config.eval_config.num_visualizations = 500', 'pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_detections_per_class = 500', 'pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_total_detections = 500', 'pipeline_config.model.faster_rcnn.first_stage_max_proposals = 500'",
+    "Save the modified pipeline_config back to a new pipeline.config file to ensure changes are applied: 'with tf.io.gfile.GFile(\"modified_pipeline.config\", \"wb\") as f: f.write(text_format.MessageToString(pipeline_config))'",
+    "Run the training process with the modified pipeline.config file and monitor the training accuracy to confirm it does not converge when the max_number_of_boxes is not set correctly",
+    "Log the training steps and accuracy metrics to verify that the model does not settle on a good result when using images with over 100 objects"
+]
+```

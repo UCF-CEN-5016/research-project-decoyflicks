@@ -1,0 +1,78 @@
+import tensorflow_models as tfm
+
+# Prerequisites
+
+Please answer the following questions for yourself before submitting an issue.
+
+- [ ] I am using the latest TensorFlow Model Garden release and TensorFlow 2.
+- [x] I am reporting the issue to the correct repository. (Model Garden official or research directory)
+- [ ] I checked to make sure that this issue has not been filed already.
+
+## 1. The entire URL of the file you are using
+
+https://github.com/tensorflow/models/tree/master/official/...
+
+## 2. Describe the bug
+
+A clear and concise description of what the bug is.
+
+## 3. Steps to reproduce
+
+Steps to reproduce the behavior.
+
+## 4. Expected behavior
+
+A clear and concise description of what you expected to happen.
+
+## 5. Additional context
+
+Include any logs that would be helpful to diagnose the problem.
+
+## 6. System information
+
+- OS Platform and Distribution (e.g., Linux Ubuntu 16.04):
+- Mobile device name if the issue happens on a mobile device:
+- TensorFlow installed from (source or binary):
+- TensorFlow version (use command below):
+- Python version:
+- Bazel version (if compiling from source):
+- GCC/Compiler version (if compiling from source):
+- CUDA/cuDNN version:
+- GPU model and memory:
+
+<!-- 
+Collect system information using our environment capture script.
+https://github.com/tensorflow/tensorflow/tree/master/tools/tf_env_collect.sh
+
+You can also obtain the TensorFlow version with:
+
+1. TensorFlow 1.0
+`python -c "import tensorflow as tf; print(tf.GIT_VERSION, tf.VERSION)"`
+
+2. TensorFlow 2.0
+`python -c "import tensorflow as tf; print(tf.version.GIT_VERSION, tf.version.VERSION)"`
+-->
+```
+---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+[<ipython-input-18-3b7de3fd28ed>](https://localhost:8080/#) in <cell line: 1>()
+----> 1 import tensorflow_models as tfm
+
+4 frames
+[/usr/local/lib/python3.10/dist-packages/tensorflow_text/__init__.py](https://localhost:8080/#) in <module>
+     18 
+     19 # pylint: disable=wildcard-import
+---> 20 from tensorflow_text.core.pybinds import tflite_registrar
+     21 from tensorflow_text.python import keras
+     22 from tensorflow_text.python import metrics
+
+ImportError: /usr/local/lib/python3.10/dist-packages/tensorflow_text/core/pybinds/tflite_registrar.so: undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E
+
+---------------------------------------------------------------------------
+NOTE: If your import is failing due to a missing package, you can
+manually install dependencies using either !pip or !apt.
+
+To view examples of installing some common dependencies, click the
+"Open Examples" button below.
+---------------------------------------------------------------------------
+```

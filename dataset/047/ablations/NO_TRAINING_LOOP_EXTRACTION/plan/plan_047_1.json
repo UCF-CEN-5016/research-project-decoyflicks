@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary modules: argparse, soundfile, tempfile, pathlib, os, subprocess, sys, re",
+    "Define a function 'parser()' to handle command line arguments with the following parameters: --model (required), --audio (required, multiple), --lang (required), --format (optional, default='letter')",
+    "Create a temporary directory using tempfile.TemporaryDirectory() to store audio files and inference results",
+    "Prepare a list of audio files named audio1.wav to audio10.wav located in the directory '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/'",
+    "Ensure each audio file has a corresponding text output in the expected order, e.g., 1089-134686-0000.wav should correspond to the first line of text output",
+    "Write a function 'reorder_decode(hypos)' that extracts indices from the hypothesis strings and sorts them based on these indices",
+    "In the 'process(args)' function, create a manifest file 'dev.tsv' in the temporary directory that lists each audio file and its sample count",
+    "Create additional files 'dev.uid', 'dev.ltr', and 'dev.wrd' in the temporary directory with dummy data corresponding to the audio files",
+    "Construct a command string to run the inference script 'examples/speech_recognition/new/infer.py' with appropriate parameters including model path, dataset path, and decoding options",
+    "Execute the command using subprocess.run() and suppress stdout to avoid cluttering the console",
+    "Read the output from 'hypo.word' in the temporary directory to get the inference results",
+    "Call 'reorder_decode(hypos)' to reorder the inference results based on the indices extracted from the hypothesis strings",
+    "Print the input audio file paths and their corresponding outputs in the order returned by 'reorder_decode'",
+    "Run the script with the command: python -u examples/mms/asr/infer/mms_infer.py --model /path/to/mms1b_all.pt --lang 'eng' --audio /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/audio1.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/audio2.wav ... /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/audio10.wav",
+    "Verify that the printed output order does not match the order of the input audio files",
+    "Check the output log for discrepancies between the expected order of text outputs and the actual order of inference results"
+]
+```

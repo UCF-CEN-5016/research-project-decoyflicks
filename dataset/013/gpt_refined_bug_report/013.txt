@@ -1,0 +1,23 @@
+Matplotlib pyplot fails to display plots after importing tensorflow_models in Python 3.10 conda environment
+
+SYMPTOMS  
+• matplotlib.pyplot plots display correctly before importing tensorflow_models but do not display after the import.  
+• matplotlib backend changes to a non-interactive 'agg' backend after importing tensorflow_models, preventing plots from rendering interactively.  
+• Changing the backend to an interactive one (e.g., TkAgg) after importing tensorflow_models does not restore plotting functionality.  
+• Setting the matplotlib backend to an interactive backend before importing tensorflow_models resolves the issue, allowing plots to display correctly.  
+• No explicit error messages reported; the issue is silent failure to render plots.  
+
+EXPECTED BEHAVIOR  
+Plots created with matplotlib.pyplot should render and display interactively regardless of the import order of tensorflow_models, assuming the backend is interactive and properly configured.  
+
+REPRODUCTION STEPS  
+1. Install and set up VSCode.  
+2. Create a new conda environment with Python 3.10 (e.g., 3.10.13).  
+3. Install TensorFlow using the official pip instructions ([link](https://www.tensorflow.org/install/pip)).  
+4. Install TensorFlow Model Garden packages using `pip install tf-models-nightly`.  
+5. Download the "image_classification" notebook from [TensorFlow Model Garden Vision](https://www.tensorflow.org/tfmodels/vision/image_classification).  
+6. Add matplotlib plotting lines that invoke `plt` commands before and after importing tensorflow_models.  
+7. Run the notebook cells and observe that plots before importing tensorflow_models display correctly, while those after importing do not.  
+8. Check matplotlib backend using `matplotlib.get_backend()` before and after importing tensorflow_models; notice it switches to 'agg' after import.  
+9. Attempt to change matplotlib backend to 'TkAgg' after importing tensorflow_models and observe plots still do not display.  
+10. Change matplotlib backend to 'TkAgg' before importing tensorflow_models and confirm plots display as expected.

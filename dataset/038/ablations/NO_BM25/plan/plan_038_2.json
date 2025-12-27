@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: torch and nn from torch",
+    "Define a batch size of 4 and feature dimension of 4 for the input tensor x",
+    "Create a random input tensor x with shape (4, 3, 2, 4) using torch.randn",
+    "Define the RelativeMultiHeadAttention class with heads=2, d_model=4, and dropout_prob=0.1",
+    "Initialize the key_pos_embeddings with shape (2^12 * 2, 2, 4) using nn.Parameter",
+    "Initialize the key_pos_bias with shape (2^12 * 2, 2) using nn.Parameter",
+    "Initialize the query_pos_bias with shape (2, 4) using nn.Parameter",
+    "Create cos_cached and sin_cached tensors with shape (4, 2, 2, 4) using torch.randn",
+    "Set the cos_cached and sin_cached attributes of the RelativeMultiHeadAttention instance",
+    "Define a method get_scores in the RelativeMultiHeadAttention class that performs the operation x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Create a neg_half_x tensor with shape (4, 3, 2, 4) using torch.randn",
+    "Instantiate the RelativeMultiHeadAttention class",
+    "Call the get_scores method with the input tensor x and key tensor x",
+    "Capture the RuntimeError exception during the execution of get_scores method",
+    "Verify that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Check the dimensions of cos_cached and sin_cached to confirm they are (4, 2, 2, 4)",
+    "Check the dimensions of x to confirm it is (4, 3, 2, 4)",
+    "Assert that the dimensions of the tensors involved in the operation do not match, leading to the RuntimeError"
+]
+```

@@ -1,0 +1,3 @@
+argument `num_of_examples` of function `show_batch` is never used
+
+https://github.com/tensorflow/models/blame/9a2993d140841f37d73cded94c1295da4faab8b5/docs/vision/instance_segmentation.ipynb#L748

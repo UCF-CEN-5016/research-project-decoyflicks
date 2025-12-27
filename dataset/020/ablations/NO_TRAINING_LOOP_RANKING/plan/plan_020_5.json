@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the official model garden library: tfm",
+    "Set Python version to 3.8 in the environment",
+    "Pull the Docker image: tensorflow/tensorflow:2.12.0-gpu-jupyter",
+    "Create a new directory for the project and navigate into it",
+    "Install tf-models-official version 2.12.0 using pip: pip install tf-models-official==2.12.0",
+    "Import necessary modules: import tensorflow as tf, from official.core import train_lib",
+    "Define a distribution strategy: distribution_strategy = tf.distribute.MirroredStrategy()",
+    "Create a dummy task configuration dictionary: task = {'model': 'dummy_model', 'params': {}}",
+    "Define a model directory: model_dir = './model_dir'",
+    "Create a dummy experiment configuration dictionary: exp_config = {'train': {'steps': 10}, 'eval': {'steps': 2}}",
+    "Call the run_experiment function with parameters: model, eval_logs = train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)",
+    "Capture the output and error message during the execution",
+    "Verify that the output contains the error message: 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict''",
+    "Log the error message to confirm the bug has occurred"
+]
+```

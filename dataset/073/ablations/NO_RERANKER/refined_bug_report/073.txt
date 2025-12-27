@@ -1,0 +1,20 @@
+TITLE  
+Failure to execute Domino example due to uninitialized global object
+
+SYMPTOMS  
+• The script `pretrain_gpt3_2.7b.sh` fails to execute.  
+• The following error message is shown:  
+  ```
+  [rank0]:     return cdb.all_reduce(tensor, op, group, async_op)
+  [rank0]:            ^^^^^^^^^^^^^^
+  [rank0]: AttributeError: 'NoneType' object has no attribute 'all_reduce'
+  ```  
+• It appears that the global `cdb` object is not initialized properly, leading to the AttributeError.
+
+EXPECTED BEHAVIOR  
+The script `pretrain_gpt3_2.7b.sh` should execute successfully without errors, with the `cdb` object properly initialized, allowing the `all_reduce` method to be called on it.
+
+REPRODUCTION STEPS  
+1. Follow the guide provided in DeepSpeed-Domino.  
+2. Execute the command `bash pretrain_gpt3_2.7b.sh`.  
+3. Observe the error message indicating that the `cdb` object is `None`.

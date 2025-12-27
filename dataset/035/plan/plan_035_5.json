@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules from the specified libraries",
+    "Set up the environment by defining required constants (e.g., batch size, number of features)",
+    "Create a synthetic dataset or input data that triggers the bug (if applicable)",
+    "Initialize the `AMSGrad` class with the incorrect parameter value (`rotary_pe = RotaryPositionalEmbeddings(3)`)",
+    "Define the model architecture that uses the `AMSGrad` optimizer",
+    "Call the `_synthetic_experiment` function with `is_adam=False` to use AMSGrad",
+    "Execute the synthetic experiment and monitor the output for errors or unexpected behavior",
+    "Validate the bug by checking if an error is raised or if incorrect results are obtained",
+    "Capture any relevant logs, outputs, or exceptions that indicate the bug"
+]
+```
+

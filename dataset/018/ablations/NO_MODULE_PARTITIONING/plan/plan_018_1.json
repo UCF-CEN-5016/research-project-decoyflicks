@@ -1,0 +1,23 @@
+```json
+[
+    "Open a terminal on an Arch Linux system.",
+    "Ensure Python 3 and pip are installed by running 'python --version' and 'pip --version'.",
+    "Check the version of pip by running 'pip --version' to ensure it is up to date.",
+    "If pip is not up to date, upgrade it using 'python -m pip install --upgrade pip'.",
+    "Clone the TensorFlow models repository using 'git clone https://github.com/tensorflow/models.git'.",
+    "Navigate to the object detection directory using 'cd models/research/object_detection'.",
+    "Create a virtual environment using 'python -m venv tfod2_env'.",
+    "Activate the virtual environment using 'source tfod2_env/bin/activate'.",
+    "Install TensorFlow by running 'pip install tensorflow'.",
+    "Install the required dependencies by running 'pip install -r requirements.txt'.",
+    "Attempt to install the local package by running 'python -m pip install --use-feature=2020-resolver .'",
+    "Observe the output for the error message regarding the invalid choice for '--use-feature'.",
+    "Capture the exact error message output for documentation purposes.",
+    "Verify that the installed version of pip does not support the '2020-resolver' feature by running 'pip --help' and checking the available options.",
+    "Document the version of pip being used by running 'pip --version' and noting it down.",
+    "Check the Python version by running 'python --version' to ensure compatibility with TensorFlow.",
+    "Ensure that the current working directory is correct by running 'pwd' to confirm you are in 'models/research/object_detection'.",
+    "Attempt to run the command again to confirm the bug is reproducible.",
+    "Take a screenshot of the terminal output showing the error for further analysis."
+]
+```

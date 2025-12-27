@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and rotary_embedding_torch",
+    "Define a batch size of 8 and sequence length of 16",
+    "Create a random tensor input with shape (batch_size, sequence_length, embedding_dim) where embedding_dim is 64",
+    "Instantiate the RotaryEmbedding class with parameters: dim=64, learned_freq=True, freqs_for='lang'",
+    "Define a simple model that uses the rotary embedding in its forward pass",
+    "Create a random target tensor with shape (batch_size, sequence_length) for loss calculation",
+    "Define a loss function, e.g., nn.CrossEntropyLoss()",
+    "Set up an optimizer, e.g., torch.optim.Adam with model parameters",
+    "Run the training loop for 2 iterations",
+    "In the first iteration, perform the following steps:",
+    "1. Zero the gradients of the optimizer",
+    "2. Perform a forward pass through the model with the input tensor",
+    "3. Calculate the loss using the output and target tensor",
+    "4. Call loss.backward() to compute gradients",
+    "5. Update model parameters using optimizer.step()",
+    "In the second iteration, perform the following steps:",
+    "1. Zero the gradients of the optimizer",
+    "2. Perform a forward pass through the model with the same input tensor",
+    "3. Calculate the loss using the output and target tensor",
+    "4. Call loss.backward() to compute gradients again",
+    "5. Assert that a RuntimeError is raised with the message 'Trying to backward through the graph a second time'",
+    "Verify that the RuntimeError is indeed raised during the second backward pass"
+]
+```

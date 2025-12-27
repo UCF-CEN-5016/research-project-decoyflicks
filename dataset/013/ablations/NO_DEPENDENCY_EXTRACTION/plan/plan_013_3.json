@@ -1,0 +1,33 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'test_env' with Python 3.10 using the command: conda create -n test_env python=3.10",
+    "Activate the new environment with: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install Matplotlib using pip with the command: pip install matplotlib",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode).",
+    "Create a new Jupyter Notebook in VSCode.",
+    "In the first cell, import the necessary libraries by adding the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official.vision import model_training_utils",
+    "Run the first cell to ensure the libraries are imported without errors.",
+    "In the second cell, set the Matplotlib backend to 'Agg' by adding the following code: import matplotlib; matplotlib.use('Agg')",
+    "Run the second cell to set the backend.",
+    "In the third cell, import the TensorFlow Model Garden by adding the following code: from official.vision import tensorflow_models",
+    "Run the third cell to import the TensorFlow Model Garden.",
+    "In the fourth cell, create a simple plot using Matplotlib by adding the following code: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Run the fourth cell to generate the plot.",
+    "In the fifth cell, add the following code to display the plot: plt.show()",
+    "Run the fifth cell and observe that the plot does not display, indicating the bug.",
+    "In the sixth cell, check the current Matplotlib backend by adding the following code: print(matplotlib.get_backend())",
+    "Run the sixth cell to verify that the backend is 'Agg', confirming the issue with plotting.",
+    "In the seventh cell, attempt to change the backend to 'TkAgg' by adding the following code: matplotlib.use('TkAgg')",
+    "Run the seventh cell to change the backend.",
+    "In the eighth cell, re-run the plot code from the fourth cell and the display code from the fifth cell.",
+    "Run the eighth cell and observe that the plot still does not display, confirming the bug persists after changing the backend post-import.",
+    "In the ninth cell, change the backend to 'TkAgg' before importing TensorFlow Model Garden by adding the following code: import matplotlib; matplotlib.use('TkAgg')",
+    "Run the ninth cell to set the backend before importing TensorFlow Model Garden.",
+    "In the tenth cell, re-import TensorFlow Model Garden and create the plot again.",
+    "Run the tenth cell and observe that the plot displays correctly, confirming the bug is reproducible when the backend is set after importing TensorFlow Model Garden."
+]
+```

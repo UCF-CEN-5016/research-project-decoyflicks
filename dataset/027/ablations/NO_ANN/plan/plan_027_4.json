@@ -1,0 +1,28 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision, and torchvision.transforms",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the image size as 128x128 and set the batch size to 64",
+    "Load the CelebA dataset using torchvision.datasets.CelebA with the following parameters: root='data', split='train', transform=torchvision.transforms.Compose([torchvision.transforms.Resize((128, 128)), torchvision.transforms.ToTensor()])",
+    "Create a DataLoader for the CelebA dataset with batch_size=64 and shuffle=True",
+    "Define the Generator class with input dimensions of 100 and output dimensions of (3, 128, 128)",
+    "Define the Discriminator class with input dimensions of (3, 128, 128) and output dimensions of 1",
+    "Instantiate the Generator and Discriminator models",
+    "Define the loss function as torch.nn.BCELoss()",
+    "Create optimizers for both Generator and Discriminator using torch.optim.Adam with learning rate 0.0002 and beta values (0.5, 0.999)",
+    "Start the training loop for a specified number of epochs (e.g., 5)",
+    "Within the training loop, iterate over the DataLoader to get batches of real images",
+    "Generate random noise input for the Generator with shape (batch_size, 100)",
+    "Pass the random noise through the Generator to create fake images",
+    "Calculate the Discriminator's output for real images and fake images",
+    "Create labels for real images as torch.ones(batch_size) and for fake images as torch.zeros(batch_size)",
+    "Calculate the Discriminator loss using the criterion with the outputs and labels",
+    "Perform a backward pass and optimize the Discriminator",
+    "Calculate the Generator's output using the Discriminator on the fake images",
+    "Calculate the Generator loss using the criterion with the Discriminator's output and labels for fake images",
+    "Perform a backward pass and optimize the Generator",
+    "Print the loss values for both Discriminator and Generator at each epoch",
+    "Run the training loop and observe the output for the error: 'ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200])) is deprecated.'",
+    "Verify that the input size of the Discriminator output is 3200 instead of the expected size"
+]
+```

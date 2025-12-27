@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the RotaryEmbedding class from rotary_embedding_torch.py",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 8 and sequence length of 128",
+    "Set the embedding dimension to 64 and initialize the RotaryEmbedding with parameters: dim=64, learned_freq=True, use_xpos=True",
+    "Create random input tensor for queries and keys with shape (batch_size, seq_length, embedding_dim) using torch.randn",
+    "Create an instance of the RotaryEmbedding class with the specified parameters",
+    "Call the rotate_queries_and_keys method with the input tensors for queries and keys",
+    "Set the precision to fp8 by using torch.cuda.amp.autocast(enabled=True) context manager",
+    "Capture the output of the rotate_queries_and_keys method",
+    "Calculate a dummy loss using the output tensor and a random target tensor with the same shape",
+    "Verify if the loss is NaN by asserting torch.isnan(loss).any()",
+    "Print the loss value to confirm it is NaN",
+    "Monitor the GPU memory usage during execution to check for any anomalies",
+    "Log the output tensor shape and values to ensure they are within expected ranges before loss calculation"
+]
+```

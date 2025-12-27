@@ -1,0 +1,23 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n tf_env python=3.10",
+    "Activate the conda environment using the command: conda activate tf_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install Matplotlib using pip with the command: pip install matplotlib",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open Visual Studio Code and create a new Jupyter Notebook file.",
+    "Import the necessary libraries in the first cell of the notebook with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official.vision import model; from official.vision.modeling import layers",
+    "Set the Matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg') before importing tensorflow_models.",
+    "Import the TensorFlow Model Garden by adding the line: from official.vision import model",
+    "Create a simple plot using Matplotlib with the following code: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Run the cell to verify that the plot displays correctly.",
+    "Now, import the TensorFlow Model Garden by adding the line: from official.vision import model",
+    "Create another plot using Matplotlib with the following code: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Run the cell to verify that the plot does not display, indicating the bug.",
+    "Check the current Matplotlib backend by adding the line: print(plt.get_backend()) and run the cell to confirm it shows 'Agg'.",
+    "Attempt to change the backend to 'TkAgg' by adding the line: plt.switch_backend('TkAgg') after importing tensorflow_models.",
+    "Create a plot again using Matplotlib with the following code: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Run the cell to verify that the plot still does not display, confirming the bug persists even after changing the backend."
+]
+```

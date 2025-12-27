@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras.layers as KL, import keras.models as KM, import numpy as np",
+    "Define the model directory: set MODEL_DIR = './logs'",
+    "Define the COCO model path: set COCO_MODEL_PATH = './mask_rcnn_coco.h5'",
+    "Create a configuration class for Mask R-CNN: define a class Config with necessary attributes like NUM_CLASSES, IMAGES_PER_GPU, etc.",
+    "Instantiate the configuration: set config = Config()",
+    "Define the number of GPUs: set GPU_COUNT = 1",
+    "Create a Mask R-CNN model instance: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Attempt to load weights: call model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Prepare a dummy input image: create a numpy array with shape (1, 1024, 1024, 3) filled with random values to simulate an input image",
+    "Run inference on the dummy input: call model.detect([dummy_image], verbose=1)",
+    "Capture the output and check for errors: wrap the inference call in a try-except block to catch NotImplementedError",
+    "Print the error message if NotImplementedError is raised to confirm the bug is reproduced"
+]
+```

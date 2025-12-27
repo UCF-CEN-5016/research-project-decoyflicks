@@ -1,0 +1,18 @@
+[
+  "Import torch, numpy, and the GAE class from labml_nn.rl.ppo.gae module",
+  "Set gamma = 0.99 and lambda_ = 0.95 as floats for discount and GAE parameter",
+  "Create a batch size of 1 and a sequence length of 5 (time steps)",
+  "Prepare dummy rewards tensor of shape (1, 5) with specific values, e.g. rewards = torch.tensor([[1.0, 2.0, 3.0, 4.0, 5.0]])",
+  "Prepare dummy dones tensor of shape (1, 5) with all False (no episode termination)",
+  "Prepare dummy values tensor of shape (1, 6), i.e. values for time steps 0 to 5 (one extra for bootstrap), e.g. values = torch.tensor([[0.5, 1.0, 1.5, 2.0, 2.5, 3.0]])",
+  "Initialize the GAE object with n_workers=1, worker_steps=5, gamma=0.99, lambda_=0.95",
+  "Call the GAE object with dones, rewards, and values tensors to compute advantages",
+  "Manually compute expected advantage values using the buggy formula from gae.py (line 36) where the second reward term is gamma^2 * r_{t+1} instead of gamma^2 * r_{t+2}",
+  "Manually compute expected weights wk using the buggy formula from gae.py (line 45) where wk = (1 - lambda) * lambda^(k) instead of lambda^(k-1)",
+  "Assert that the computed advantages match the buggy calculation by comparing them to manual calculations showing the incorrect indexing and weights",
+  "Print or log the computed advantages and manual expected advantages to verify the gamma^2 * r_{t+1} term presence",
+  "Repeat the above with a different reward sequence to show the effect of the off-by-one indexing in the reward term",
+  "Repeat the above with a different lambda value to highlight the difference in weights calculation",
+  "Optionally, add assertions or checks that confirm the weight for k=1 is lambda^1 instead of lambda^0 as is correct",
+  "Document the discrepancy explicitly by comparing the buggy and correct formulas side-by-side in comments or logs"
+]

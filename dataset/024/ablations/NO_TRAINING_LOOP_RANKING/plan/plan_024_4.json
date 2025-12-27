@@ -1,0 +1,16 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Clone the delf repository from GitHub using the command: !git clone https://github.com/mirzaim/models.git",
+    "Change the working directory to the delf examples folder using: %cd /content/models/research/delf/delf/python/examples/",
+    "Ensure that the required dependencies are installed by running: !pip install tensorflow absl-py",
+    "Create a configuration file named 'delf_config_example.pbtxt' with the following content: 'model { name: \"delf\" }'",
+    "Create a text file named 'list_images.txt' containing the paths to at least 3 sample images, one per line, e.g.: '/content/sample_image1.jpg', '/content/sample_image2.jpg', '/content/sample_image3.jpg'",
+    "Run the feature extraction script using the command: !python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Observe the output for the error message: 'ModuleNotFoundError: No module named 'delf.python.datasets'",
+    "Verify that the 'datasets' directory exists at the path '/content/models/research/delf/delf/python/datasets' and does not contain an '__init__.py' file.",
+    "Confirm that the error traceback indicates the failure occurs when trying to import 'delf.python.datasets.google_landmarks_dataset' in 'export_model_utils.py'.",
+    "Take note of the specific line in 'extract_features.py' where the import fails, which is line 36: 'from delf import delf_config_pb2'.",
+    "Check the contents of the 'delf/python' directory to ensure that the 'datasets' folder is present but lacks an '__init__.py' file."
+]
+```

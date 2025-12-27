@@ -1,0 +1,41 @@
+TITLE
+NaN Values in Decoder Logits When Cross-Attention Context is All Padding
+
+SYMPTOMS
+• The decoder outputs NaN logits when the cross-attention context provided is all padding (i.e., `context_mask` is all `False`).
+• No error messages are shown, but the output tensor contains NaN values.
+
+EXPECTED BEHAVIOR
+When the cross-attention context is all padding, the model should not perform any cross-attention operations and should behave as if no context was provided. The decoder logits should be computed based on the self-attention within the decoder alone, without being influenced by the padded context.
+
+REPRODUCTION STEPS
+1. Initialize a transformer model with a decoder that supports cross-attention.
+2. Set up an input sequence `i` and a random context `context`.
+3. Create a padding mask for the context where all values are `False`, indicating no valid tokens in the context.
+4. Pass the input sequence and the padded context through the model to obtain the output logits.
+
+```python
+decoder = xt.TransformerWrapper(
+num_tokens=2049,
+max_seq_len=500,
+use_abs_pos_emb=True,
+scaled_sinu_pos_emb=True,
+attn_layers=xt.Decoder(
+dim=1024,
+depth=24,
+heads=16,
+attn_dim_head=64,
+attn_flash=True,
+ff_no_bias=True,
+cross_attend=True,
+),
+)
+i = torch.randint(0, 2048, (2, 20))
+context = torch.rand(2, 4, 1024)
+context_mask = torch.zeros(2, 4, dtype=torch.bool)
+out = d(i, context=context, context_mask=context_mask)
+
+# out should not be all NaN
+```
+
+Note: The `d` in the example above is a placeholder and should be replaced with the actual variable name for the model being used.

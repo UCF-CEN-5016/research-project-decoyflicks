@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning, import nnUNet, import torch, import os, import sys, import numpy as np",
+    "Set the environment variable for CUDA: os.environ['CUDA_VISIBLE_DEVICES'] = '0'",
+    "Define the model parameters: learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10",
+    "Create a function to initialize the nnUNet model with the specified parameters",
+    "Set the random seed for reproducibility: torch.manual_seed(42)",
+    "Prepare the dataset: load BraTS21 and BraTS22 datasets, ensuring they are in the correct format",
+    "Define the data module for nnUNet: create a class that inherits from nnUNetDataModule and implements the required methods",
+    "Instantiate the data module with the training, validation, and test datasets",
+    "Create a trainer instance from pytorch_lightning with the following parameters: max_epochs=epochs, gpus=gpus",
+    "Define a custom learning rate scheduler: use torch.optim.lr_scheduler.CosineAnnealingWarmRestarts",
+    "Add the custom learning rate scheduler to the trainer: trainer.lr_scheduler = custom_lr_scheduler",
+    "Call the trainer's fit method with the model and data module: trainer.fit(model, datamodule=data_module)",
+    "Capture the output and error messages during the training process",
+    "Verify that the output contains the MisconfigurationException related to the lr_scheduler",
+    "Check the specific error message: assert 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API' in output",
+    "Log the GPU memory usage during the training process to monitor resource allocation",
+    "Ensure that the training process is executed in a single GPU environment to replicate the issue accurately"
+]
+```

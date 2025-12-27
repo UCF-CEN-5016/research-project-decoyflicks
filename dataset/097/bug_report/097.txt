@@ -1,0 +1,9 @@
+Missing device in classifier_free_guidance.py
+
+Gaussian diffusion class in `classifier_free_guidance.py` missing 
+``` 
+   @property
+   def device(self):
+        return self.betas.device
+```
+so it fails when calling offset_noise_strength 

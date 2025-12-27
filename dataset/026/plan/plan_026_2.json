@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.models.hyperparameters.",
+    "Define a batch size of 64 and sequence length of 21, with width of 80 for the transformer layer.",
+    "Create random uniform input data with shape (batch_size, sequence_length, width, 3)",
+    "Call TransformerScaffold function with attention_cls=ValidatedAttentionLayer, num_attention_heads=10, inner_dim=2048, and inner_activation='relu'",
+    "Verify the output contains NaN values in the loss calculation by comparing the output shape to the input shape",
+    "Monitor GPU memory usage during execution using tf.config.experimental.list_physical_devices('GPU') to list GPU devices and check their memory",
+    "Assert GPU memory exceeds expected threshold for a transformer layer with these parameters"
+]
+```
+

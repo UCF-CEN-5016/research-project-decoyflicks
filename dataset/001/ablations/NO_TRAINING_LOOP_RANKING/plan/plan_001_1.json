@@ -1,0 +1,33 @@
+```json
+[
+    "Import TensorFlow and the spatial_transformer module from transformer/cluttered_mnist.py",
+    "Import numpy for data handling and tf_utils for utility functions",
+    "Load the MNIST dataset from './data/mnist_sequence1_sample_5distortions5x5.npz'",
+    "Extract training data: X_train = mnist_cluttered['X_train'], y_train = mnist_cluttered['y_train']",
+    "Convert y_train to one-hot encoding using dense_to_one_hot with n_classes=10",
+    "Define placeholders for input data: x = tf.placeholder(tf.float32, [None, 1600]) and y = tf.placeholder(tf.float32, [None, 10])",
+    "Reshape x to a 4-D tensor: x_tensor = tf.reshape(x, [-1, 40, 40, 1])",
+    "Initialize weights and biases for the localization network: W_fc_loc1, b_fc_loc1, W_fc_loc2, b_fc_loc2",
+    "Set initial transformation parameters to identity: initial = np.array([[1., 0, 0], [0, 1., 0]]).flatten()",
+    "Define the two-layer localization network using tanh activation and dropout",
+    "Create the spatial transformer module: h_trans = transformer(x_tensor, h_fc_loc2, out_size=(40, 40))",
+    "Define the first convolutional layer with 16 filters and a 3x3 kernel",
+    "Add a second convolutional layer with 16 filters and a 3x3 kernel",
+    "Flatten the output from the convolutional layers to connect to a fully connected layer",
+    "Define a fully connected layer with 1024 units and apply ReLU activation",
+    "Add a dropout layer to the fully connected layer",
+    "Define the output layer with softmax activation for 10 classes",
+    "Calculate the cross-entropy loss: cross_entropy = -tf.reduce_sum(y * tf.log(y_pred))",
+    "Set up the Adam optimizer to minimize the cross-entropy loss",
+    "Initialize a TensorFlow session and run variable initialization",
+    "Define training parameters: iter_per_epoch = 100, n_epochs = 500, train_size = 10000",
+    "Create an array of indices for batching: indices = np.linspace(0, 10000 - 1, iter_per_epoch).astype('int')",
+    "Start training loop for n_epochs, iterating over iter_per_epoch",
+    "In each iteration, create batches: batch_xs = X_train[indices[iter_i]:indices[iter_i+1]], batch_ys = Y_train[indices[iter_i]:indices[iter_i+1]]",
+    "Run the optimizer and feed the batch data with keep_prob set to 0.8",
+    "Monitor the loss every 10 iterations and print it to the console",
+    "Check for NaN values in the loss output after several epochs",
+    "Monitor GPU memory usage during training to verify it exceeds 10G",
+    "Assert that the loss contains NaN values after a number of epochs"
+]
+```

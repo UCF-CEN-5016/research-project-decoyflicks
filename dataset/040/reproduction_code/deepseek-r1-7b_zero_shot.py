@@ -1,0 +1,3 @@
+# ... some code ...
+
+attn = (x @ x_t).softmax(dim=2)

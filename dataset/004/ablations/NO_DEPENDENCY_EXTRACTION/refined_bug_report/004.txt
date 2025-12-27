@@ -1,0 +1,17 @@
+TITLE  
+Incorrect Implementation of Beta Sampling in MixUp + Cutmix
+
+SYMPTOMS  
+• The sampling from a beta distribution in `tfm.vision.augment.MixupAndCutmix._sample_from_beta` is incorrect, leading to erroneous mixup samples.  
+• The generated mixup samples do not conform to the expected distribution, resulting in poor quality outputs.  
+• The mixup samples visually appear incorrect, as shown in the attached image.  
+
+EXPECTED BEHAVIOR  
+When the software functions correctly, the `_sample_from_beta` method should generate samples from the beta distribution accurately, producing valid mixup samples that conform to the expected statistical properties of the beta distribution.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries: `tensorflow_models`, `tensorflow`, `numpy`, and `matplotlib`.  
+2. Call the `_sample_from_beta` method with parameters `alpha=0.2`, `beta=0.2`, and a shape derived from `tf.range(1000)`.  
+3. Visualize the output of the `_sample_from_beta` method using a kernel density estimate plot with `sns.kdeplot`.  
+4. Compare the output against samples generated using `np.random.beta(0.2, 0.2, 100000)` in a separate plot.  
+5. Observe the discrepancies between the two distributions.

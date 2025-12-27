@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, and tensorflow_datasets",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define the image size as 64 and batch size as 128",
+    "Load the Caltech Birds dataset using tfds.load with split='train' and split='test'",
+    "Define a preprocess_image function to normalize and crop images based on bounding boxes",
+    "Map the preprocess_image function to the training and validation datasets using .map()",
+    "Cache the datasets using .cache() and shuffle them with a buffer size of 10 times the batch size",
+    "Batch the datasets using .batch(batch_size, drop_remainder=True) and prefetch with buffer_size=tf.data.AUTOTUNE",
+    "Create a YOLOv8 model instance using keras_cv.models.YOLOv8()",
+    "Compile the YOLOv8 model with an optimizer (e.g., Adam) and loss function suitable for object detection",
+    "Define a custom callback class EvaluateCOCOMetricsCallback that computes metrics at the end of each epoch",
+    "Fit the YOLOv8 model on the training dataset with validation_data set to the validation dataset for 3 epochs",
+    "During the fit process, monitor the output for the UnknownError related to ConcatOp",
+    "Capture the specific error message that indicates dimension mismatch: 'Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]'",
+    "Log the training progress and error messages to verify the occurrence of the bug",
+    "Ensure that the training process is executed on a GPU in Google Colab Pro to replicate the environment"
+]
+```

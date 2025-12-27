@@ -1,0 +1,14 @@
+```json
+[
+    "Import pandas as pd",
+    "Create a DataFrame 'train_df' with 100 rows and 3 columns: 'A', 'B', 'C' filled with random integers using pd.DataFrame(np.random.randint(0, 100, size=(100, 3)), columns=['A', 'B', 'C'])",
+    "Create another DataFrame 'test_df' with 50 rows and 3 columns: 'A', 'B', 'C' filled with random integers using pd.DataFrame(np.random.randint(0, 100, size=(50, 3)), columns=['A', 'B', 'C'])",
+    "Attempt to concatenate 'train_df' and 'test_df' using the deprecated method: 'all_data = train_df.append(test_df)'",
+    "Run the code in a Jupyter Notebook cell to trigger the execution",
+    "Observe the output for the AttributeError: 'DataFrame' object has no attribute 'append'",
+    "Check for the FutureWarning: 'The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.'",
+    "Verify that the version of pandas is 2.0.3 by printing 'pd.__version__'",
+    "Confirm that the Python version is 3.10 by printing 'sys.version'",
+    "Ensure that TensorFlow version is 2.13 by printing 'tf.__version__'"
+]
+```

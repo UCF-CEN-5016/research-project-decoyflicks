@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and pandas libraries.",
+    "Load the dataset from a CSV file named 'train_data.csv'.",
+    "Define constants for batch size (256), number of trees (100), max depth (30), min examples per node (10), subsample ratio (0.8), and validation ratio (0.2).",
+    "Create a function to preprocess the dataset, which includes converting categorical features using target encoding.",
+    "Split the dataset into training and validation sets based on the defined validation ratio.",
+    "Define a function to create a Gradient Boosted Trees model with the specified parameters.",
+    "Call the function to build the model.",
+    "Compile the model with binary crossentropy loss, Adam optimizer, and accuracy metric.",
+    "Define a function to run an experiment, which includes fitting the model on the training data and evaluating its performance on the validation set.",
+    "Call the run_experiment function to train and evaluate the model.",
+    "Verify that the model's performance metrics include NaN values in the loss calculation by asserting that the accuracy is less than 0.1 (indicating an issue).",
+    "Monitor CPU memory usage during execution using a system monitoring tool like 'top' or 'htop'.",
+    "Assert that CPU memory usage exceeds the expected threshold (e.g., more than 80% of total available memory) to validate the bug occurs."
+]
+```
+

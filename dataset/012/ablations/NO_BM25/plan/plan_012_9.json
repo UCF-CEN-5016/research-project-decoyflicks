@@ -1,0 +1,14 @@
+```json
+[
+    "Install TensorFlow nightly version using pip: pip install tf-nightly-cpu==2.16.0.dev20231103",
+    "Clone the TensorFlow models repository: git clone https://github.com/tensorflow/models.git",
+    "Navigate to the image classification directory: cd models/official/legacy/image_classification",
+    "Create a directory for the ImageNet dataset: mkdir /dir_to_imagenet_data",
+    "Download the ImageNet dataset and place it in /dir_to_imagenet_data",
+    "Import TensorFlow and necessary modules in classifier_trainer.py: import tensorflow as tf, from official.legacy.image_classification import classifier_trainer",
+    "Set the mode to 'train_and_eval', model_type to 'resnet', dataset to 'imagenet', and data_dir to '/dir_to_imagenet_data'",
+    "Run the classifier_trainer.py script with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --data_dir=/dir_to_imagenet_data",
+    "Observe the console output for the AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'. Did you mean: 'optimizer_v2'?",
+    "Verify that the error occurs in the context of the ExponentialMovingAverage class definition in ema_optimizer.py"
+]
+```

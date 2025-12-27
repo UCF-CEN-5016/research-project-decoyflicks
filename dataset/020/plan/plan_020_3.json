@@ -1,0 +1,21 @@
+```json
+[
+    "Clone the TensorFlow Models repository from https://github.com/tensorflow/models.git",
+    "Checkout the tag tf-models-official==2.12.0",
+    "Pull the latest changes to ensure you have the correct version",
+    "Create a Docker container based on tensorflow/tensorflow:2.12.0-gpu-jupyter",
+    "Activate the Python 3.8 environment within the Docker container",
+    "Install any necessary dependencies for running the object detection tutorial",
+    "Download the necessary dataset files for the Object Detection tutorial",
+    "Set up a directory to store training and model output, e.g., /path/to/model_dir",
+    "Create a python script named 'run_detection.py' with the following content:",
+        "```python\nimport os\nfrom official.vision.detection.tasks import object_detection\ndistribution_strategy = tf.distribute.MirroredStrategy()\ntask = object_detection.ObjectDetectionTask(\n    config_path='/path/to/config.yaml'\n)\nparams = task.get_exp_config()\nexp_config = params['trainer']\nmodel_dir = '/path/to/model_dir'\n\nfrom official.core import train_lib\nmodel, eval_logs = train_lib.run_experiment(\n    distribution_strategy=distribution_strategy,\n    task=task,\n    mode='train_and_eval',\n    params=params,\n    model_dir=model_dir,\n    run_post_eval=True\n)\n```",
+        "Replace '/path/to/config.yaml' with the actual path to the config file for the Object Detection tutorial",
+    "Ensure the 'config.yaml' file is correctly configured for training and evaluation",
+    "Run the script using the following command within the Docker container:",
+        "```bash\npython run_detection.py\n```",
+    "Monitor the output during execution for any errors or exceptions",
+    "Assert that the error `TypeError: unsupported operand type(s) for |: 'dict' and 'dict'` is raised during evaluation"
+]
+```
+

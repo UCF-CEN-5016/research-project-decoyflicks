@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and Keras modules: import tensorflow as tf and from keras import layers, models",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define the batch size as 64 and image dimensions as 256x256",
+    "Load the tf_flowers dataset using tfds.load with split=['train[:90%]', 'train[90%:]'] and as_supervised=True",
+    "Define a preprocessing function that resizes images to (280, 280) and crops them to (256, 256) for training, and resizes to (256, 256) for validation",
+    "Map the preprocessing function to the training and validation datasets using dataset.map",
+    "Batch the datasets with batch size 64 and prefetch using dataset.prefetch(tf.data.AUTOTUNE)",
+    "Define a MobileViT model architecture using create_mobilevit function with num_classes=5",
+    "Compile the model with Adam optimizer and CategoricalCrossentropy loss function with label smoothing of 0.1",
+    "Call model.fit on the training dataset for 10 epochs with validation data set to the validation dataset",
+    "During model training, monitor the output for any errors, specifically looking for OperatorNotAllowedInGraphError",
+    "If the error occurs, capture the stack trace and log the error message",
+    "Verify that the input shape to the model during prediction is (None, 4, None, None) and assert that it matches the expected input shape",
+    "Check that the model's output shape after prediction is consistent with the number of classes defined (5 classes)",
+    "Log the output of the model prediction to confirm the error occurs during the softmax operation"
+]
+```

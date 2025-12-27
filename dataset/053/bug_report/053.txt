@@ -1,0 +1,98 @@
+Keras_NLP Getting Started Tutorial: Mixed Precision Error; AttributeError: 'LossScaleOptimizerV3'
+
+### Issue Type
+
+Bug
+
+### Source
+
+source
+
+### Keras Version
+
+Keras 2.15
+
+### Custom Code
+
+No
+
+### OS Platform and Distribution
+
+5.15.133.1-microsoft-standard-WSL2 on  (I think)Ubuntu 18.04.6 LTS
+
+### Python version
+
+3.9.18
+
+### GPU model and memory
+
+NVIDIA GeForce RTX 3080 Ti Laptop GPU 16GB GDDR6 VRAM
+
+### Current Behavior?
+
+I am running the code directly from the Keras_NLP getting started guide. 
+
+When I try to instantiate the `classifier = keras_nlp.models.BertClassifier.from_preset("bert_tiny_en_uncased_sst2")`, I run into an error. AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'
+
+There is a line in this tutorial that sets a mixed precision policy of mixed_float16. If I comment this out, everything works fine. Why is this error coming up in the documentation?
+
+The only meaningful difference I made to the code is changing `os.environ["Keras_Backend"] = 'jax'` to `os.environ["Keras_Backend"] = 'tensorflow'`. I tried it both ways and got the same error and the documentations aid it shouldn't make a difference anyway.
+
+### Standalone code to reproduce the issue or tutorial link
+
+```shell
+This is code directly from https://keras.io/guides/keras_nlp/getting_started/ up to and including the Inference with a pretrained classifier section of the tutorial.
+```
+
+
+### Relevant log output
+
+```shell
+AttributeError                            Traceback (most recent call last)
+Cell In[10], line 1
+----> 1 classifier = keras_nlp.models.BertClassifier.from_preset("bert_tiny_en_uncased_sst2")
+      2 classifier.predict(["I love modular workflows in keras-nlp"])
+
+File ~/miniconda3/envs/tf-gpu/lib/python3.9/site-packages/keras_nlp/src/models/task.py:236, in Task.__init_subclass__.<locals>.from_preset(calling_cls, *args, **kwargs)
+    235 def from_preset(calling_cls, *args, **kwargs):
+--> 236     return super(cls, calling_cls).from_preset(*args, **kwargs)
+
+File ~/miniconda3/envs/tf-gpu/lib/python3.9/site-packages/keras_nlp/src/models/task.py:221, in Task.from_preset(cls, preset, load_weights, **kwargs)
+    218     return cls(backbone=backbone, preprocessor=preprocessor, **kwargs)
+    220 # Task case.
+--> 221 return load_from_preset(
+    222     preset,
+    223     load_weights=load_weights,
+    224     config_overrides=kwargs,
+    225 )
+
+File ~/miniconda3/envs/tf-gpu/lib/python3.9/site-packages/keras_nlp/src/utils/preset_utils.py:184, in load_from_preset(preset, load_weights, config_file, config_overrides)
+    182 if load_weights:
+    183     weights_path = get_file(preset, config["weights"])
+--> 184     layer.load_weights(weights_path)
+    186 return layer
+
+File ~/miniconda3/envs/tf-gpu/lib/python3.9/site-packages/keras/src/utils/traceback_utils.py:70, in filter_traceback.<locals>.error_handler(*args, **kwargs)
+     67     filtered_tb = _process_traceback_frames(e.__traceback__)
+     68     # To get the full stack trace, call:
+     69     # `tf.debugging.disable_traceback_filtering()`
+---> 70     raise e.with_traceback(filtered_tb) from None
+     71 finally:
+     72     del filtered_tb
+
+File ~/miniconda3/envs/tf-gpu/lib/python3.9/site-packages/keras/src/optimizers/optimizer.py:820, in _BaseOptimizer.load_own_variables(self, store)
+    817 """Set the state of this optimizer object."""
+    818 if len(store.keys()) != len(self.variables):
+    819     msg = (
+--> 820         f"Skipping variable loading for optimizer '{self.name}', "
+    821         f"because it has {len(self.variables)} variables whereas "
+    822         f"the saved optimizer has {len(store.keys())} variables. "
+    823     )
+    824     if len(self.variables) == 0:
+    825         msg += (
+    826             "This is likely because the optimizer has not been "
+    827             "called/built yet."
+    828         )
+
+AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'
+```

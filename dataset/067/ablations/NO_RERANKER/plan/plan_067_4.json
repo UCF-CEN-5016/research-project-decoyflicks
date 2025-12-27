@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import tensorflow as tf, from keras import layers, from keras import Model, from keras.applications import resnet",
+    "Set the target image shape to (200, 200) for input images.",
+    "Define a batch size of 32 for training the model.",
+    "Create a function to preprocess images: def preprocess_image(filename) that reads, decodes, and resizes images to target_shape.",
+    "Create a function to preprocess triplets: def preprocess_triplets(anchor, positive, negative) that calls preprocess_image for each input.",
+    "Load the dataset by defining paths for anchor and positive images, ensuring they are sorted.",
+    "Create a tf.data.Dataset for anchor and positive images using tf.data.Dataset.from_tensor_slices.",
+    "Randomize and concatenate negative images from the anchor and positive datasets.",
+    "Create a tf.data.Dataset for negative images and shuffle it using negative_dataset.shuffle(buffer_size=4096).",
+    "Zip the datasets together using tf.data.Dataset.zip to create a dataset of triplets.",
+    "Shuffle the combined dataset and map it to the preprocess_triplets function.",
+    "Split the dataset into training and validation sets using dataset.take and dataset.skip.",
+    "Batch the training and validation datasets with a batch size of 32 and enable prefetching.",
+    "Define the Siamese Network architecture using ResNet50 as the base model, ensuring input shape is (200, 200, 3).",
+    "Create a custom DistanceLayer class to compute distances between anchor, positive, and negative embeddings.",
+    "Define the Siamese model using the custom DistanceLayer and compile it with Adam optimizer.",
+    "Train the model using siamese_model.fit with the training dataset for 10 epochs.",
+    "During training, monitor the loss values printed in the console to check for unexpected behavior.",
+    "After training, create a sample from the training dataset to visualize the triplets.",
+    "Compute the cosine similarity between anchor and positive embeddings and between anchor and negative embeddings.",
+    "Assert that the positive similarity is less than the negative similarity to validate the bug."
+]
+```

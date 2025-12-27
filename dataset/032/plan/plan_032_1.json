@@ -1,0 +1,30 @@
+```json
+[
+    "Import PyTorch, torch.nn.functional, numpy, and FusedLAMBAMP from their respective modules",
+    "Set the random seed to 0 for reproducibility",
+    "Define a batch size of 100",
+    "Define the number of features as 32",
+    "Generate synthetic classification data using make_classification with n_samples=10000 and n_features=32",
+    "Standardize the generated feature data using StandardScaler from sklearn",
+    "Convert the standardized feature data to a PyTorch tensor and move it to CUDA device in half precision",
+    "Create a target tensor from the synthetic labels, moving them to the same CUDA device in long precision",
+    "Define a model class TestMod with three layers: linear layer, ReLU activation, and another linear layer for classification",
+    "Implement a forward pass method for TestMod that returns the output of the last linear layer",
+    "Initialize an instance of FusedLAMBAMP optimizer with appropriate parameter groups",
+    "Create a DataLoader to load the synthetic data in batches of 100",
+    "Define a loss function as CrossEntropyLoss",
+    "Set up gradient scaler for automatic mixed precision training",
+    "Begin training loop for 20 epochs",
+    "Inside the training loop, perform forward pass with autocast enabled",
+    "Compute loss using the output and targets",
+    "Scale the loss with the grad_scaler and perform backward pass",
+    "Update optimizer parameters and clear gradients",
+    "Store the loss value for each batch",
+    "After each epoch, calculate the average loss and print it",
+    "Call print_param_diff function to check parameter differences between FP32 and FP16",
+    "Load the state dictionary of the optimizer and call print_param_diff again to verify no changes",
+    "Assert that a TypeError occurs during the gelu() function call in TestMod with the message 'gelu(): argument 'approximate' must be str, not bool'",
+    "Verify that the error originates from the line number specified in the bug report"
+]
+```
+

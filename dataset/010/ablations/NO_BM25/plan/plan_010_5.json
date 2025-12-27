@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary libraries for instance segmentation: 'import tensorflow as tf' and 'from official.vision.modeling import layers'",
+    "Set the random seed for reproducibility: 'tf.random.set_seed(42)'",
+    "Define a batch size of 8 and image dimensions of 640x640 for the input images",
+    "Load a sample dataset for instance segmentation, such as COCO or a custom dataset, ensuring it has the correct format for instance segmentation",
+    "Preprocess the dataset to ensure images are resized to (640, 640) and normalized appropriately",
+    "Create a model configuration dictionary with parameters: 'model_config = {\"num_classes\": 80, \"image_size\": [640, 640], \"batch_size\": 8}'",
+    "Instantiate the instance segmentation model using the Model Garden API: 'model = layers.DetectionGenerator(**model_config)'",
+    "Compile the model with an optimizer and loss function: 'model.compile(optimizer=tf.keras.optimizers.Adam(), loss='sparse_categorical_crossentropy')'",
+    "Train the model for a few epochs (e.g., 5 epochs) using the fit method: 'model.fit(train_dataset, validation_data=val_dataset, epochs=5)'",
+    "During training, monitor the validation loss output in the training logs",
+    "After training, evaluate the model on the validation dataset: 'eval_results = model.evaluate(val_dataset)'",
+    "Check the output of 'eval_results' for the key 'validation_loss' and assert that it equals 0.0: 'assert eval_results['validation_loss'] == 0.0'",
+    "Log the evaluation results to confirm the validation loss is consistently reported as 0.0",
+    "Repeat the evaluation step multiple times to ensure the bug is reproducible across different runs"
+]
+```

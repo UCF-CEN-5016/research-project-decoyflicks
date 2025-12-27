@@ -1,0 +1,17 @@
+TITLE  
+Potential Typo in MIRNet Example Code
+
+SYMPTOMS  
+• The variable `level2_dau_2` is declared but never used in the code.  
+• There is a potential mismatch in variable names that could lead to confusion or errors in functionality.  
+• The line of code using `level3_dau_2` may not produce the intended results if `level2_dau_2` is meant to be used instead.  
+
+EXPECTED BEHAVIOR  
+The code should correctly utilize the variable `level2_dau_2` in the selective kernel feature fusion function, ensuring that the intended data flow and model behavior are preserved.
+
+REPRODUCTION STEPS  
+1. Open the MIRNet example code in the provided GitHub link.  
+2. Navigate to line 347 to observe the declaration of `level2_dau_2`.  
+3. Check line 352 to see that `level3_dau_2` is being used instead of `level2_dau_2`.  
+4. Analyze the context of the code to determine if the usage of `level3_dau_2` is appropriate or if it should indeed be `level2_dau_2`.  
+5. Test the code to confirm functionality with the proposed change.

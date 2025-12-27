@@ -1,0 +1,29 @@
+TITLE
+UTF-8 Decoding Error During Configuration File Reading
+
+SYMPTOMS
+• `UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 107: invalid continuation byte` error during the execution of the training script.
+• TensorFlow and related libraries (such as CUDA and cuDNN) are not found, resulting in warnings about GPU support.
+
+EXPECTED BEHAVIOR
+The `model_main_tf2.py` script should read the pipeline configuration file without errors and proceed to start the model training process. The expected behavior includes proper handling of configuration files regardless of their encoding and usage of available hardware resources (GPU/CPU).
+
+REPRODUCTION STEPS
+1. Ensure you have TensorFlow version 2.10.1 installed.
+2. Verify that `tensorflow-addons` version 0.20.0 is correctly installed.
+3. Navigate to the directory containing your Object Detection model files: `C:\All\TF\models\research\object_detection`.
+4. Run the command provided in the tutorial:
+```shell
+python3.9 model_main_tf2.py --pipeline_config_path==ssd_efficientdet_d0_512x512_coco17_tpu-8.config --model_dir==training --alsologtostderr
+```
+5. Observe the error message indicating a UnicodeDecodeError in position 107 of the configuration file.
+
+Additional Analysis:
+The issue seems to be related to how the pipeline configuration file is being read and decoded by TensorFlow, specifically with UTF-8 encoding. The presence of non-UTF-8 characters or an incorrect byte sequence might be causing this problem.
+
+Potential Solutions:
+1. **Check File Encoding**: Ensure that the `ssd_efficientdet_d0_512x512_coco17_tpu-8.config` file is saved with a proper UTF-8 encoding (BOM if necessary).
+2. **Modify Code**: Temporarily modify the `model_main_tf2.py` script to explicitly handle different encodings or use a library that can handle non-standard byte sequences.
+3. **Update Dependencies**: Although not directly related, ensure all dependencies, including TensorFlow and CUDA/cuDNN, are up-to-date and properly configured for your environment.
+
+If these steps do not resolve the issue, you may need to inspect the specific content of the configuration file around position 107 to identify any problematic characters.

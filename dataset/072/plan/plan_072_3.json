@@ -1,0 +1,28 @@
+```json
+[
+    "Import accelerate, argparse, datasets, diffusers, gc, hashlib, huggingface_hub, itertools, logging, packaging, pathlib, torch, torchvision, tqdm, transformers, wandb, warnings modules",
+    "Define function parse_args() to handle command line arguments for model name, learning rate, batch size, etc.",
+    "Call check_min_version(diffusers.__version__) to ensure compatibility with required diffusers version",
+    "Create an instance of ArgumentParser and add necessary argument options for all parameters required by the script",
+    "Parse command-line arguments using args = parse_args() and set_seed(args.seed) for reproducibility",
+    "Import DiffusionPipeline, AutoencoderKL, UNet2DConditionModel, CLIPFeatureExtractor, CLIPTextModel from diffusers library",
+    "Load a pre-trained model from args.pretrained_model_name_or_path using from_pretrained function",
+    "Create an instance of Accelerator and initialize project configuration with ProjectConfiguration.from_model Hub(repo_id=args.repo_id)",
+    "Initialize logger with get_logger('train_dreambooth') to track training logs",
+    "Define custom data preprocessing steps for images and text, including resizing, normalization, etc.",
+    "Load dataset using load_dataset function from datasets library",
+    "Create DataLoader instances for training and validation sets",
+    "Set up learning rate scheduler using get_scheduler function based on args.scheduler_type",
+    "Initialize Optimizer instance with AdamW for model parameters",
+    "Define collate_fn function to handle batching of data during dataloader iteration",
+    "Log initial configuration and hyperparameters using logger.info()",
+    "Begin training loop with global_step = 0",
+    "Inside training loop, iterate through DataLoader instances for batches",
+    "Forward pass: compute predictions and loss between model predictions and teacher model predictions",
+    "Backward pass: compute gradients and update model parameters",
+    "Monitor GPU memory usage during each optimization step",
+    "Assert that the GPU memory exceeds a certain threshold at each step to verify bug occurs",
+    "At specified intervals, save model state using accelerator.save_state() and log validation metrics"
+]
+```
+

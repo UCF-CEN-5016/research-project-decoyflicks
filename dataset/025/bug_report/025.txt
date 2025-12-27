@@ -1,0 +1,49 @@
+AttributeError: module 'tensorflow_models.vision' has no attribute 'augment'
+
+# Prerequisites
+
+Please answer the following questions for yourself before submitting an issue.
+
+- [ ] I am using the latest TensorFlow Model Garden release and TensorFlow 2.
+- [x] I am reporting the issue to the correct repository. (Model Garden official or research directory)
+- [x] I checked to make sure that this issue has not been filed already.
+
+## 1. The entire URL of the file you are using
+
+https://github.com/tensorflow/models/blob/r2.9.0/official/vision/ops/augment.py
+
+## 2. Describe the bug
+
+I can not use tensorflow_models.vision.augment
+
+## 3. Steps to reproduce
+
+```
+import tensorflow_models as tfm
+
+tfm.vision.augment.RandAugment()
+```
+
+gives
+```
+AttributeError                            Traceback (most recent call last)
+Cell In[9], line 3
+      1 import tensorflow_models as tfm
+----> 3 tfm.vision.augment.RandAugment()
+
+AttributeError: module 'tensorflow_models.vision' has no attribute 'augment'
+```
+## 4. Expected behavior
+
+Being able to use everything.
+
+## 5. Additional context
+
+`tfm.vision.backbones`, `tfm.vision.configs` and a lot of others work but not `tfm.vision.augment`
+
+## 6. System information
+
+- OS Platform and Distribution (e.g., Linux Ubuntu 16.04): macOS Ventura Version 13.0.1 (22A400) and Ubuntu 20.04
+- TensorFlow installed from (source or binary): `pip install tensorflow-macos` and `pip install tensorflow`
+- TensorFlow version (use command below): 2.9.2
+- Python version: 3.9.15

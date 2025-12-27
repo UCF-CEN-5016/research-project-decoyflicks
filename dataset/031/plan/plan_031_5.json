@@ -1,0 +1,22 @@
+```json
+[
+    "Import required modules from the given list, including apex, argparse, data_utils, dllogger, functools, itertools, lamb, logging, mem_transformer, shutil, time, torch, utils, warnings, and yaml",
+    "Create an ArgumentParser object to handle command-line arguments for the script",
+    "Parse the command-line arguments to set up experiment parameters such as dataset, batch size, learning rate, etc.",
+    "Set a random seed for reproducibility using torch.manual_seed() with the parsed seed value",
+    "Load the LM corpus using data_utils.get_lm_corpus() with the specified dataset and path",
+    "Create an instance of MemTransformerLM with the model configuration passed as model_config",
+    "Initialize the optimizer (e.g., SGD, Adam) with the model's parameters and learning rate from arguments",
+    "Set up distributed training if required by creating DistributedDataParallel or DataParallel instances for the model",
+    "Prepare a DataLoader to iterate over the training dataset in batches of the specified size",
+    "Define a function train() that takes tr_iter, va_iter, model, para_model, train_mems, model_config, optimizer, scheduler, scaler, vocab, epoch, last_batch, last_iter, train_step, best_val_loss, meters, timeout_handler, device, and args as parameters",
+    "Within the train() function, iterate over the training dataset using tr_iter and perform forward and backward passes for each batch",
+    "Calculate the loss and update model parameters using the optimizer",
+    "During the first iteration of the loop, intentionally introduce an error by setting a parameter in the model to NaN (e.g., by calling .fill_(float('nan')) on a tensor)",
+    "Call train() function with necessary arguments to reproduce the bug",
+    "Monitor GPU memory usage during execution using torch.cuda.memory_allocated() and torch.cuda.max_memory_allocated()",
+    "Assert that GPU memory exceeds an expected threshold indicating the presence of NaN values in computations",
+    "Run the script by calling main() to execute the training loop"
+]
+```
+

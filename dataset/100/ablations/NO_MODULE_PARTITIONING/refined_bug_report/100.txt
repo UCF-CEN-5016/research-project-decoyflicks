@@ -1,0 +1,20 @@
+TITLE  
+RuntimeError during second backward pass with rotary embedding caching
+
+SYMPTOMS  
+• Encountered a `RuntimeError` when attempting to call `loss.backward()` for the second time during training.  
+• Error message: `RuntimeError: Trying to backward through the graph a second time (or directly access saved tensors after they have already been freed).`  
+• The issue arises specifically when using cached frequency values in rotary embedding.  
+• The model functions correctly when caching is disabled, and frequency is computed fresh during each forward pass.
+
+EXPECTED BEHAVIOR  
+The model should allow multiple backward passes without encountering runtime errors, especially when caching frequency values is enabled. The cached frequencies should be accessible and correctly utilized across multiple iterations of the training loop.
+
+REPRODUCTION STEPS  
+1. Initialize the rotary embedding library and set up the training environment using Hugging Face Accelerate.  
+2. Implement the forward method with caching of frequency values as shown in the original report.  
+3. Call `loss.backward()` for the first iteration of training.  
+4. Call `loss.backward()` again for the second iteration and observe the runtime error.  
+5. Comment out the caching logic and verify that the issue does not occur when computing frequencies directly in the forward method.  
+
+By following these steps, the issue can be consistently reproduced, leading to further investigation into whether this is a misuse of the library or a potential bug.

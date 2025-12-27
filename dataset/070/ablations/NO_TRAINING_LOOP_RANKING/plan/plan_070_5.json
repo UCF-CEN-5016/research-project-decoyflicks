@@ -1,0 +1,22 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the DeepSpeed-Domino training directory using 'cd DeepSpeedExamples/training/DeepSpeed-Domino'",
+    "Create a conda environment named 'deepspeed_env' using 'conda create -n deepspeed_env python=3.12'",
+    "Activate the conda environment using 'conda activate deepspeed_env'",
+    "Install required packages including DeepSpeed and PyTorch using 'pip install deepspeed torch torchvision'",
+    "Load necessary modules for the SLURM job using 'module load openmpi/4.1.1', 'module load cuda/11.8.0', and 'module load gcc/10.2.0'",
+    "Create a dataset directory at 'dataset/' and place a sample GPT-2 vocabulary file at 'dataset/gpt2-vocab.json'",
+    "Create a sample merge file at 'dataset/gpt2-merges.txt'",
+    "Create a sample text document at 'dataset/my-gpt2_text_document' with dummy text for training",
+    "Create a job script named 'deepspeed_example.sh' with the provided SLURM configuration",
+    "Set the number of GPUs per node to 2 in the job script by changing 'GPUS_PER_NODE=1' to 'GPUS_PER_NODE=2'",
+    "Set the global batch size to 64 in the job script by ensuring 'global-batch-size 64' is present in the GPT_ARGS",
+    "Set the micro batch size to 32 in the job script by ensuring 'micro-batch-size 32' is present in the GPT_ARGS",
+    "Run the job script using 'sbatch deepspeed_example.sh'",
+    "Monitor the job output and error files for any warnings or errors during execution",
+    "Verify that the warning messages about 'using GPU 0 to perform barrier as devices used by this process are currently unknown' appear in the error log",
+    "Check for the 'AttributeError: NoneType object has no attribute all_reduce' in the error log to confirm the bug occurrence",
+    "Assert that the job fails with the aforementioned error message to validate the bug reproduction"
+]
+```

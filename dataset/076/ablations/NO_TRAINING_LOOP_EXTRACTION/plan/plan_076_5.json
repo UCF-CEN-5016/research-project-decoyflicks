@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import numpy as np, from mrcnn import utils, from mrcnn import model as modellib",
+    "Set the model directory: MODEL_DIR = './logs'",
+    "Set the COCO model path: COCO_MODEL_PATH = 'path/to/mask_rcnn_coco.h5'",
+    "Define a configuration class for Mask R-CNN: class InferenceConfig(utils.Config): pass",
+    "Set the configuration parameters: config = InferenceConfig()",
+    "Set the mode to inference: config.GPU_COUNT = 1, config.IMAGES_PER_GPU = 1",
+    "Create an instance of the Mask R-CNN model: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Attempt to load the COCO weights: model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Ensure the COCO_MODEL_PATH points to a valid HDF5 file: assert os.path.exists(COCO_MODEL_PATH), 'COCO model path does not exist'",
+    "Run the code in a Jupyter notebook cell to trigger the NotImplementedError",
+    "Capture the output and error message to verify that NotImplementedError is raised",
+    "Check the error message for specific details: assert 'Save or restore weights that is not an instance of `tf.Variable`' in str(error), 'Expected NotImplementedError not raised'"
+]
+```

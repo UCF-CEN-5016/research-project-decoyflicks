@@ -1,0 +1,16 @@
+[
+    "Import required libraries (torch, einops)",
+    "Define a batch size of 1 and sequence lengths for x and context as 64 and 128 respectively",
+    "Create random tensor for x with shape (batch_size, seq_len_x, dim) where dim = 256",
+    "Create random tensor for context with shape (batch_size, seq_len_context, dim) where dim = 512",
+    "Set the mask and context_mask to all ones with shapes (batch_size, seq_len_x) and (batch_size, seq_len_context)",
+    "Define a model instance of Encoder with dimensions dim=256, depth=4, heads=4, rotary_pos_emb=True, cross_attend=True, cross_attn_dim_context=512",
+    "Create tensors for pos and context_pos. For pos, create a range tensor of length 64; for context_pos, set it to None if cross_attn_rotary is False, otherwise create a range tensor of length 128",
+    "Call the forward method of the model with x, mask, context, pos, context_pos, and context_mask",
+    "Capture the exception raised by the rearrange function within the forward pass",
+    "Verify that the error message contains 'Error while processing rearrange-reduction pattern 'n -> n 1''",
+    "Assert that the input tensor shape is torch.Size([1, 32])",
+    "Monitor the reduction operation to confirm it attempts to rearrange a 2-dim tensor into a 1-dim tensor",
+    "Log and capture the specific error details including the expected and received shapes"
+]
+

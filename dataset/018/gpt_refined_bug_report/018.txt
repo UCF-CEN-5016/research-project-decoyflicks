@@ -1,0 +1,21 @@
+TITLE  
+pip install fails with error "invalid choice: '2020-resolver'" when following TFOD2 installation instructions  
+
+SYMPTOMS  
+• Running the command `python -m pip install --use-feature=2020-resolver .` results in an error  
+• Error message:  
+```
+option --use-feature: invalid choice: '2020-resolver' (choose from 'fast-deps', 'truststore','no-binary-enable-wheel-cache')
+```  
+• The command does not complete the installation as expected  
+• The error suggests that the `2020-resolver` option is not recognized by the current pip version  
+
+EXPECTED BEHAVIOR  
+The command `python -m pip install --use-feature=2020-resolver .` should execute successfully, enabling the 2020 dependency resolver feature during installation, and install the package without errors.  
+
+REPRODUCTION STEPS  
+1. Follow the instructions at https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2.md for installing TensorFlow Object Detection API on an Arch Linux system.  
+2. Navigate to the appropriate directory containing the package to be installed.  
+3. Execute the command:  
+   `python -m pip install --use-feature=2020-resolver .`  
+4. Observe the error message about the invalid choice for `--use-feature`.

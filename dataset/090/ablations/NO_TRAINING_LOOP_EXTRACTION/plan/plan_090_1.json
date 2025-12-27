@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: pytest, torch, and the required modules from x_transformers (XTransformer, TransformerWrapper, Encoder, Decoder, MultiInputTransformerWrapper)",
+    "Define a function named test_encoder_to_logits_weight_update to encapsulate the test for the bug.",
+    "Within the test function, initialize a model using XTransformer with the following parameters: dim=512, enc_num_tokens=256, enc_depth=6, enc_heads=8, enc_max_seq_len=1024, dec_num_tokens=256, dec_depth=6, dec_heads=8, tie_token_emb=True.",
+    "Create a source tensor src with random integers in the range [0, 256) and shape (1, 1024).",
+    "Create a source mask src_mask with shape (1, 1024) filled with ones (torch.ones_like(src).bool()).",
+    "Create a target tensor tgt with random integers in the range [0, 256) and shape (1, 1024).",
+    "Perform a forward pass by calling model(src, tgt, mask=src_mask) and store the output in a variable named loss.",
+    "Call loss.backward() to compute gradients.",
+    "Access the encoder's to_logits weight parameter using model.encoder.to_logits.weight and store it in a variable named initial_weight.",
+    "Print the initial_weight tensor to verify its values before the optimizer step.",
+    "Initialize an optimizer (e.g., torch.optim.Adam) with model.parameters() to update the model's weights.",
+    "Perform an optimizer step by calling optimizer.step() to update the model's parameters.",
+    "Access the encoder's to_logits weight parameter again using model.encoder.to_logits.weight and store it in a variable named updated_weight.",
+    "Print the updated_weight tensor to verify if it has changed after the optimizer step.",
+    "Assert that the initial_weight and updated_weight tensors are not equal using assert not torch.equal(initial_weight, updated_weight) to confirm that the weights are not updating.",
+    "Run the test function using pytest to ensure the bug is reproducible."
+]
+```

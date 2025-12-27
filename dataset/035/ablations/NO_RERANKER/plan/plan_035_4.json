@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary modules: torch, nn, and the RotaryPositionalEmbeddings class from labml_nn.transformers.rope",
+    "Define a batch size of 64 and input feature dimensions of 4",
+    "Create a random tensor for input data with shape (batch_size, max_seq_len, input_features) where max_seq_len is 1024 and input_features is 4",
+    "Instantiate the RotaryPositionalEmbeddings class with 3 features: rotary_pe = RotaryPositionalEmbeddings(3)",
+    "Pass the input tensor through the rotary_pe to generate positional embeddings",
+    "Attempt to use the generated positional embeddings in a simple forward pass of a dummy model that expects 4 features",
+    "Capture any exceptions raised during the forward pass to verify the bug occurs",
+    "Assert that the exception message indicates a mismatch in expected input dimensions or features",
+    "Log the exception details to confirm the specific error related to the feature mismatch"
+]
+```

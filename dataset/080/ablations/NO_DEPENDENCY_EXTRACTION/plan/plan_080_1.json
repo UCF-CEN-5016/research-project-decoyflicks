@@ -1,0 +1,30 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision, and vit_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the batch size as 64 and image dimensions as 224x224",
+    "Load the cats and dogs dataset using torchvision.datasets.ImageFolder with appropriate transformations",
+    "Split the dataset into training and validation sets using torch.utils.data.random_split",
+    "Create DataLoader for training set with batch_size=64 and shuffle=True",
+    "Create DataLoader for validation set with batch_size=64 and shuffle=False",
+    "Define the ViT model with the following parameters: image_size=224, patch_size=16, num_classes=2, dim=1024, depth=6, heads=16, mlp_dim=2048, dropout=0.1, emb_dropout=0.1",
+    "Move the model to the appropriate device (CPU or GPU) using model.to(device)",
+    "Define the loss function as CrossEntropyLoss and the optimizer as Adam with learning rate 0.001",
+    "Initialize lists to store training and validation accuracies",
+    "For each epoch in range(10):",
+    "    Set model to training mode using model.train()",
+    "    For each batch of images, labels in training DataLoader:",
+    "        Zero the gradients using optimizer.zero_grad()",
+    "        Forward pass: Get model predictions using model(images)",
+    "        Calculate loss using loss_fn(predictions, labels)",
+    "        Backward pass: loss.backward()",
+    "        Update weights using optimizer.step()",
+    "    Calculate training accuracy by comparing predictions with labels and append to training accuracy list",
+    "    Set model to evaluation mode using model.eval()",
+    "    For each batch of images, labels in validation DataLoader:",
+    "        Forward pass: Get model predictions using model(images)",
+    "        Calculate validation accuracy by comparing predictions with labels and append to validation accuracy list",
+    "Plot training and validation accuracies using matplotlib to visualize the results",
+    "Assert that the last value of validation accuracy is greater than the last value of training accuracy to confirm the bug"
+]
+```

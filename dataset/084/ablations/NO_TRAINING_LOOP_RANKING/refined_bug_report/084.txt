@@ -1,0 +1,17 @@
+TITLE  
+Unexplained 100% Accuracy in Training with Example Dataset  
+
+SYMPTOMS  
+• The model achieves a 100% accuracy rate on both training and validation datasets from the first epoch.  
+• Loss values decrease to near zero, indicating potential overfitting or data leakage.  
+• No error messages are reported; however, the results appear suspiciously perfect.  
+
+EXPECTED BEHAVIOR  
+The accuracy should reflect a realistic performance metric, typically below 100%, especially in the initial epochs of training. The model should gradually improve its accuracy over multiple epochs without reaching perfect scores too quickly.  
+
+REPRODUCTION STEPS  
+1. Clone the example code repository.  
+2. Set up the environment and install required dependencies.  
+3. Run the provided code snippet for training the ViT model with the specified parameters.  
+4. Monitor the training output for accuracy and loss metrics across epochs.  
+5. Observe the results, particularly in the first few epochs, for any anomalies in accuracy.

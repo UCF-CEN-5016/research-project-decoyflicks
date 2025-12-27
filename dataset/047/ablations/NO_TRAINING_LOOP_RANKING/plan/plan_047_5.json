@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the model path to the pre-trained model: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Define the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10",
+    "Sort the audio files to maintain a consistent order: audio_files.sort()",
+    "Run the inference command using subprocess: subprocess.run(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files)",
+    "Capture the output logs from the inference command: output_logs = subprocess.check_output(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files, stderr=subprocess.STDOUT)",
+    "Decode the output logs to a string: output_logs = output_logs.decode('utf-8')",
+    "Split the output logs into lines: output_lines = output_logs.split('\\n')",
+    "Extract the input-output pairs from the output logs: for line in output_lines: if 'Input:' in line: extract the corresponding output line",
+    "Create a dictionary to map input file names to their outputs: output_dict = {input_file: output for input_file, output in zip(input_files, outputs)}",
+    "Compare the order of the input files with the order of the outputs: assert list(output_dict.keys()) == sorted(list(output_dict.keys()))",
+    "Print the output dictionary to verify the order: print(output_dict)",
+    "Check for any discrepancies in the order of the output logs: assert output_dict.keys() == sorted(audio_files)"
+]
+```

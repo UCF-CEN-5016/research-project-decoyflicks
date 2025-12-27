@@ -1,0 +1,32 @@
+```json
+[
+    "Import necessary libraries: import keras, import tensorflow as tf, import numpy as np, import pandas as pd, from keras import layers, from keras.layers import StringLookup, from urllib.request import urlretrieve, from zipfile import ZipFile",
+    "Set the Keras backend to TensorFlow by executing os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Download the Movielens dataset by executing urlretrieve('http://files.grouplens.org/datasets/movielens/ml-1m.zip', 'movielens.zip') and extract it using ZipFile('movielens.zip', 'r').extractall()",
+    "Load the users, ratings, and movies data into pandas DataFrames with appropriate column names using pd.read_csv for each dataset",
+    "Process the users DataFrame to format user_id, age_group, and occupation by applying lambda functions to each column",
+    "Process the movies DataFrame to format movie_id by applying a lambda function to the movie_id column",
+    "Process the ratings DataFrame to format user_id and movie_id by applying lambda functions to each column and convert rating to float",
+    "Split the genres in the movies DataFrame into separate columns for each genre",
+    "Sort the ratings DataFrame by unix_timestamp and group by user_id to create a new DataFrame with ordered lists of movie_ids and ratings",
+    "Define sequence_length as 4 and step_size as 2",
+    "Create a function create_sequences that generates sequences of movie_ids and ratings based on the defined sequence_length and step_size",
+    "Apply create_sequences function to the movie_ids and ratings columns of the ratings_data DataFrame",
+    "Explode the movie_ids and ratings columns to create separate records for each sequence in the ratings_data DataFrame",
+    "Join the user features with the ratings data in the ratings_data_transformed DataFrame",
+    "Split the ratings_data_transformed DataFrame into training and testing datasets with an 85-15 split and save them to CSV files",
+    "Define a function get_dataset_from_csv that reads the CSV file and processes the data into a tf.data.Dataset",
+    "Define model inputs using keras.Input for user_id, sequence_movie_ids, target_movie_id, and sequence_ratings with appropriate shapes",
+    "Define the encode_input_features function to encode user and movie features using layers.Embedding and concatenate them",
+    "Define the create_model function to build the model architecture using layers.MultiHeadAttention and other Keras layers",
+    "Compile the model using model.compile with optimizer='adam', loss='mean_squared_error', and metrics=['mean_absolute_error']",
+    "Load the training dataset using get_dataset_from_csv with the training CSV file path and batch_size=128",
+    "Fit the model using model.fit with the training dataset and epochs=10",
+    "Prepare a sample input for inference by defining a function tokenize_and_convert_to_ids that splits and processes a sample text",
+    "Create a sample input tensor using the tokenize_and_convert_to_ids function with the text 'eu rejects german call to boycott british lamb'",
+    "Reshape the sample input tensor to have shape [1, -1]",
+    "Call ner_model.predict with the sample input tensor and store the output",
+    "Attempt to execute np.argmax on the output to get predictions",
+    "Verify that the error 'OperatorNotAllowedInGraphError' occurs during the execution of the model prediction"
+]
+```

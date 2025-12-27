@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from vector_quantize_pytorch",
+    "Define a batch size of 2 and input dimensions of (2, 1024, 17) for the input tensor x",
+    "Instantiate the ResidualSimVQ class with parameters: dim=1024, num_quantizers=3, codebook_size=256, quantize_dropout=True, quantize_dropout_cutoff_index=1, and channel_first=True",
+    "Create a random input tensor x with shape (2, 1024, 17) using torch.randn",
+    "Call the forward method of the ResidualSimVQ instance with the input tensor x and return_all_codes set to False",
+    "Capture the output of the forward method, which should return quantized_out, all_indices, and all_losses",
+    "Check the variable 'return_loss' is not defined in the ResidualSimVQ class before the forward method is called",
+    "Verify that a NameError is raised when executing the forward method due to the undefined 'return_loss' variable",
+    "Log the error message to confirm the NameError is related to 'return_loss'",
+    "Assert that the error message contains 'name 'return_loss' is not defined'"
+]
+```

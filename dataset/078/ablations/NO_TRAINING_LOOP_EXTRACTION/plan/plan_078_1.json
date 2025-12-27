@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and vit_pytorch modules",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 5 and a feature dimension of 1024",
+    "Create a nested tensor input with shape (5, 2, 1024) using torch.randn()",
+    "Instantiate the navit_nest_3d model from vit_pytorch with appropriate parameters",
+    "Define a loss function, e.g., torch.nn.MSELoss()",
+    "Create a target tensor with shape (5, j2, 1024) where j2 is a variable dimension, e.g., set j2 to 3",
+    "Perform a forward pass through the model using the nested tensor input",
+    "Calculate the loss using the output from the model and the target tensor",
+    "Call loss.backward() to trigger the backward pass",
+    "Capture the output of the backward pass and check for errors",
+    "Assert that the gradient at index 0 has shape [5, 2, 1024] and not [5, j2, 1024]",
+    "Print the shape of the gradient to verify it matches the error message",
+    "Log the error message if the assertion fails to confirm the bug"
+]
+```

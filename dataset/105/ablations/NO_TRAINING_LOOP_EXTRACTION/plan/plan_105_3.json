@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the ResidualVQ class from vector_quantize_pytorch",
+    "Set the following constants: Z_CHANNELS = 512, NUM_QUANTIZERS = 2, CODEBOOK_SIZE = 16384 (16 * 1024)",
+    "Define a batch size of 32 and create random input data with shape (batch_size, Z_CHANNELS) = (32, 512)",
+    "Instantiate the ResidualVQ model with the defined parameters: ResidualVQ(dim=Z_CHANNELS, num_quantizers=NUM_QUANTIZERS, codebook_size=CODEBOOK_SIZE, stochastic_sample_codes=True, shared_codebook=True, commitment_weight=1.0, kmeans_init=True, threshold_ema_dead_code=2, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1)",
+    "Create a forward pass by calling the model with the random input data: output = model(input_data)",
+    "Wrap the forward pass in a try-except block to catch any RuntimeError exceptions",
+    "Run the training loop for a few iterations (e.g., 10 iterations) to increase the likelihood of encountering the bug due to randomness in dropout and sampling",
+    "In the except block, print the error message to confirm the RuntimeError is raised",
+    "Validate that the error message contains 'shape mismatch' to ensure it matches the reported bug",
+    "Log the shapes of the tensors involved in the operation that caused the error to provide context for debugging"
+]
+```

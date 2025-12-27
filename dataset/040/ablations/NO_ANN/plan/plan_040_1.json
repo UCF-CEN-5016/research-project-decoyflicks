@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and labml modules",
+    "Define a batch size of 64 and set the number of features per node to 1433 (based on Cora dataset)",
+    "Create a random tensor for features with shape (batch_size, in_features) using torch.rand(batch_size, in_features)",
+    "Create a random tensor for labels with shape (batch_size) using torch.randint(0, n_classes, (batch_size,))",
+    "Create an adjacency matrix with shape (batch_size, batch_size) using torch.eye(batch_size, dtype=torch.bool)",
+    "Add an empty third dimension to the adjacency matrix for heads using adjacency_matrix.unsqueeze(-1)",
+    "Instantiate the GAT model with in_features=1433, n_hidden=64, n_classes=7, n_heads=8, and dropout=0.6",
+    "Set the model to evaluation mode using model.eval()",
+    "Perform a forward pass through the model with the features and adjacency matrix as inputs",
+    "Capture the output of the model and check its shape to ensure it matches (batch_size, n_classes)",
+    "Extract the attention weights from the model's attention layer (if accessible) to verify their shape",
+    "Apply softmax to the attention weights along the correct axis (dim=2) and compare with the original attention weights",
+    "Assert that the attention weights after softmax do not contain NaN values",
+    "Log the output of the model and the attention weights to monitor for any unexpected behavior",
+    "Run the training loop for a few epochs (e.g., 5) to observe if the model converges despite the potential bug",
+    "Validate that the model's accuracy on the training set is above a certain threshold (e.g., 0.5) to confirm it is functioning",
+    "Check for any warnings or errors in the console output during the training process that may indicate issues with the attention mechanism"
+]
+```

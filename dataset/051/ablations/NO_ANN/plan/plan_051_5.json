@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras_nlp, import random, import numpy as np",
+    "Set the random seed for reproducibility: np.random.seed(42)",
+    "Define a sample English sentence for translation: input_sentence = 'Hello, how are you?'",
+    "Create a mock test_eng_texts list containing multiple English sentences: test_eng_texts = ['Hello, how are you?', 'What is your name?', 'Where are you from?']",
+    "Define a function decode_sequences that takes a list of input sentences as an argument",
+    "Inside decode_sequences, create a prompt tensor by concatenating a start token and padding: prompt = tf.concat([start_token, pad], axis=-1)",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the next token and prompt, passing an end_token_id argument: generated_tokens = sampler(next, prompt, end_token_id=2)",
+    "Wrap the call to decode_sequences in a try-except block to catch TypeError",
+    "Run a loop to call decode_sequences multiple times (e.g., for i in range(2)) and pass random sentences from test_eng_texts",
+    "Print the translated output or the error message if a TypeError occurs",
+    "Verify that the TypeError message matches the expected output: 'TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id''"
+]
+```

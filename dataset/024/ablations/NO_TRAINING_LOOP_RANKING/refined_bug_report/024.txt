@@ -1,0 +1,30 @@
+### TITLE
+ModuleNotFoundError when running extract_features.py in DELF repository
+
+### SYMPTOMS
+• Encountered a `ModuleNotFoundError` indicating that the module 'delf.python.datasets' cannot be found.
+• The following error message is produced:
+```
+ModuleNotFoundError: No module named 'delf.python.datasets'
+```
+• The script fails to execute, preventing feature extraction from images.
+
+### EXPECTED BEHAVIOR
+The script `extract_features.py` should run without errors, successfully importing all required modules and extracting features from images as specified in the configuration and input files.
+
+### REPRODUCTION STEPS
+1. Navigate to the directory containing the `extract_features.py` script:
+   ```
+   %cd /content/models/research/delf/delf/python/examples/
+   ```
+2. Execute the script with the following command:
+   ```
+   !python3 extract_features.py \
+     --config_path delf_config_example.pbtxt \
+     --list_images_path list_images.txt \
+     --output_dir data/oxford5k_features
+   ```
+3. Observe the error output indicating the missing module.
+
+### ADDITIONAL NOTES
+Adding an `__init__.py` file to the `delf/python/datasets` directory resolves the issue, suggesting that the absence of this file is preventing Python from recognizing the directory as a package.

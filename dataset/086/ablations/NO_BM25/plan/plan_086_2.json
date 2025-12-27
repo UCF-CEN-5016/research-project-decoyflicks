@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, nn, and einops from their respective modules.",
+    "Define a batch size of 1 and input dimensions of (64, 256) for the self-attention input.",
+    "Create a random tensor 'x' with shape (1, 64, 256) using torch.randn.",
+    "Create a mask tensor 'mask' with shape (1, 64) filled with ones using torch.ones.",
+    "Create a context tensor 'context' with shape (1, 128, 512) using torch.randn.",
+    "Create a context mask tensor 'context_mask' with shape (1, 128) filled with ones using torch.ones.",
+    "Set the 'self_attn_custom_pos' variable to True to enable custom positional encoding.",
+    "Set the 'cross_attn_rotary' variable to True to enable rotary positional encoding for cross-attention.",
+    "Instantiate the Encoder model with parameters: dim=256, depth=4, heads=4, rotary_pos_emb=True, cross_attend=True, cross_attn_dim_context=512.",
+    "Define 'pos' as a tensor containing values from 0 to 63 using torch.arange(64).",
+    "Define 'context_pos' as a tensor containing values from 0 to 127 using torch.arange(128).",
+    "Call the model with the following parameters: x, mask, context, pos, context_pos, and context_mask.",
+    "Capture any exceptions during the model call to check for errors.",
+    "Verify that the exception raised is einops.EinopsError and contains the message about the wrong shape.",
+    "Check that the input tensor shape in the error message is torch.Size([1, 32]).",
+    "Assert that the output of the model call does not match the expected shape, which should be (1, 64, 256) if no error occurred."
+]
+```

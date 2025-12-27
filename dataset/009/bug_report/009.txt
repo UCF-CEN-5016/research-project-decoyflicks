@@ -1,0 +1,17 @@
+`AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs'
+
+I trained `faster_rcnn_resnet50_v1_640x640_coco17_tpu-8`, with `model_main_tf2.py`.
+
+However, I tried to export the model with `exporter_main_v2.py,` and I receive the following error:
+
+`AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs'`
+
+
+```
+cuda: 11.5
+tensorflow-gpu: 2.4
+python: 3.7.16
+```
+
+your help will be appreciated! 
+

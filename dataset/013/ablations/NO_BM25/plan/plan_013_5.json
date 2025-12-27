@@ -1,0 +1,22 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n tf_env python=3.10.13",
+    "Activate the newly created conda environment using: conda activate tf_env",
+    "Install TensorFlow in the conda environment using the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode) and create a new Jupyter Notebook file.",
+    "Import the necessary libraries at the top of the notebook with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official import tf_models",
+    "Set the matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg') before importing tensorflow_models.",
+    "Import the TensorFlow Model Garden by adding the line: from official.vision import tf_models",
+    "Download the notebook from the provided link: https://www.tensorflow.org/tfmodels/vision/image_classification and open it in VSCode.",
+    "Add the following code to the notebook to create a simple plot: x = [1, 2, 3]; y = [1, 4, 9]; plt.plot(x, y); plt.show()",
+    "Run the cell containing the plot code and verify that the plot displays correctly.",
+    "Now, add the line: from official.vision import tf_models after the matplotlib import statements.",
+    "Run the cell again that contains the plot code and verify that the plot does not display.",
+    "Check the current matplotlib backend by adding the line: print(plt.get_backend()) after importing tensorflow_models and verify it shows 'Agg'.",
+    "Attempt to change the backend to 'TkAgg' by adding the line: plt.switch_backend('TkAgg') after importing tensorflow_models.",
+    "Run the cell again that contains the plot code and verify that the plot still does not display.",
+    "Finally, change the backend to 'TkAgg' before importing tensorflow_models and rerun the notebook to confirm that the plot displays correctly."
+]
+```

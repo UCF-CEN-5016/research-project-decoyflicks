@@ -1,0 +1,16 @@
+```json
+[
+    "Clone the fairseq repository from GitHub",
+    "Navigate to the directory examples/mms/tts/",
+    "Install fairseq in editable mode using pip (pip install --editable ./)",
+    "Create a Python script named infer.py with the following content:",
+    "Import logging, os, hydra, torch, and other required modules as listed in the import dependencies",
+    "Copy and paste the code from duration_predictor.py into infer.py",
+    "Ensure all functions and classes are properly defined within infer.py",
+    "Create a command line interface for infer.py with the following arguments:",
+    "model-dir: Path to the model directory (e.g., 'model/')",
+    "wav: Path to the input WAV file (e.g., 'test.wav')",
+    "txt: Text input as a string (e.g., '\"Heute ist ein schöner Tag.\"')"
+]
+```
+

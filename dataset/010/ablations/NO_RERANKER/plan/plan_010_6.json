@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden for instance segmentation.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define a batch size of 8 and image dimensions of 640x640 for the input images.",
+    "Load the COCO dataset using tfds.load('coco/2017', split='train', shuffle_files=True).",
+    "Preprocess the dataset to resize images to (640, 640) and normalize pixel values to [0, 1].",
+    "Create a data pipeline using tf.data API to batch the dataset with batch size of 8.",
+    "Define the model configuration for instance segmentation using the official Model Garden configuration.",
+    "Initialize the model with the specified configuration for instance segmentation.",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., SparseCategoricalCrossentropy).",
+    "Set up a validation dataset using tfds.load('coco/2017', split='validation', shuffle_files=True) with the same preprocessing.",
+    "Train the model for a few epochs (e.g., 5 epochs) using model.fit() with the training dataset and validation dataset.",
+    "During training, monitor the output logs for validation loss after each evaluation step.",
+    "Capture the output of the 'Train and Evaluate' section to check the validation loss value.",
+    "Assert that the validation loss is equal to 0.0 after each evaluation step.",
+    "Repeat the process using the official tutorial for semantic segmentation to confirm the same behavior.",
+    "Verify that the validation loss remains 0.0 across multiple runs to ensure consistency of the bug."
+]
+```

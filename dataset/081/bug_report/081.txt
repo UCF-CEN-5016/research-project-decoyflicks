@@ -1,0 +1,150 @@
+CrossViT does not handle other than three channel images
+
+
+**Code to reproduce error (adapted from the README)**
+
+```py
+import torch
+from vit_pytorch.cross_vit import CrossViT
+
+v = CrossViT(
+    image_size = 256,
+    num_classes = 1000,
+    depth = 4,               # number of multi-scale encoding blocks
+    sm_dim = 192,            # high res dimension
+    sm_patch_size = 16,      # high res patch size (should be smaller than lg_patch_size)
+    sm_enc_depth = 2,        # high res depth
+    sm_enc_heads = 8,        # high res heads
+    sm_enc_mlp_dim = 2048,   # high res feedforward dimension
+    lg_dim = 384,            # low res dimension
+    lg_patch_size = 64,      # low res patch size
+    lg_enc_depth = 3,        # low res depth
+    lg_enc_heads = 8,        # low res heads
+    lg_enc_mlp_dim = 2048,   # low res feedforward dimensions
+    cross_attn_depth = 2,    # cross attention rounds
+    cross_attn_heads = 8,    # cross attention heads
+    dropout = 0.1,
+    emb_dropout = 0.1
+)
+
+img = torch.randn(1, 1, 256, 256)  # Using 1 channel
+pred = v(img) # (1, 1000)
+```
+
+**Traceback**
+<details>
+<summary>Error</summary>
+<br>
+
+```bash
+---------------------------------------------------------------------------
+RuntimeError                              Traceback (most recent call last)
+Cell In[27], line 26
+      4 v = CrossViT(
+      5     image_size = 256,
+      6     num_classes = 1000,
+   (...)
+     21     emb_dropout = 0.1
+     22 )
+     24 img = torch.randn(1, 1, 256, 256)
+---> 26 pred = v(img) # (1, 1000)
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1518, in Module._wrapped_call_impl(self, *args, **kwargs)
+   1516     return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+   1517 else:
+-> 1518     return self._call_impl(*args, **kwargs)
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1527, in Module._call_impl(self, *args, **kwargs)
+   1522 # If we don't have any hooks, we want to skip the rest of the logic in
+   1523 # this function, and just call forward.
+   1524 if not (self._backward_hooks or self._backward_pre_hooks or self._forward_hooks or self._forward_pre_hooks
+   1525         or _global_backward_pre_hooks or _global_backward_hooks
+   1526         or _global_forward_hooks or _global_forward_pre_hooks):
+-> 1527     return forward_call(*args, **kwargs)
+   1529 try:
+   1530     result = None
+
+File /opt/conda/lib/python3.10/site-packages/vit_pytorch/cross_vit.py:258, in CrossViT.forward(self, img)
+    257 def forward(self, img):
+--> 258     sm_tokens = self.sm_image_embedder(img)
+    259     lg_tokens = self.lg_image_embedder(img)
+    261     sm_tokens, lg_tokens = self.multi_scale_encoder(sm_tokens, lg_tokens)
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1518, in Module._wrapped_call_impl(self, *args, **kwargs)
+   1516     return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+   1517 else:
+-> 1518     return self._call_impl(*args, **kwargs)
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1527, in Module._call_impl(self, *args, **kwargs)
+   1522 # If we don't have any hooks, we want to skip the rest of the logic in
+   1523 # this function, and just call forward.
+   1524 if not (self._backward_hooks or self._backward_pre_hooks or self._forward_hooks or self._forward_pre_hooks
+   1525         or _global_backward_pre_hooks or _global_backward_hooks
+   1526         or _global_forward_hooks or _global_forward_pre_hooks):
+-> 1527     return forward_call(*args, **kwargs)
+   1529 try:
+   1530     result = None
+
+File /opt/conda/lib/python3.10/site-packages/vit_pytorch/cross_vit.py:192, in ImageEmbedder.forward(self, img)
+    191 def forward(self, img):
+--> 192     x = self.to_patch_embedding(img)
+    193     b, n, _ = x.shape
+    195     cls_tokens = repeat(self.cls_token, '() n d -> b n d', b = b)
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1518, in Module._wrapped_call_impl(self, *args, **kwargs)
+   1516     return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+   1517 else:
+-> 1518     return self._call_impl(*args, **kwargs)
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1527, in Module._call_impl(self, *args, **kwargs)
+   1522 # If we don't have any hooks, we want to skip the rest of the logic in
+   1523 # this function, and just call forward.
+   1524 if not (self._backward_hooks or self._backward_pre_hooks or self._forward_hooks or self._forward_pre_hooks
+   1525         or _global_backward_pre_hooks or _global_backward_hooks
+   1526         or _global_forward_hooks or _global_forward_pre_hooks):
+-> 1527     return forward_call(*args, **kwargs)
+   1529 try:
+   1530     result = None
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/container.py:215, in Sequential.forward(self, input)
+    213 def forward(self, input):
+    214     for module in self:
+--> 215         input = module(input)
+    216     return input
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1518, in Module._wrapped_call_impl(self, *args, **kwargs)
+   1516     return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+   1517 else:
+-> 1518     return self._call_impl(*args, **kwargs)
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py:1527, in Module._call_impl(self, *args, **kwargs)
+   1522 # If we don't have any hooks, we want to skip the rest of the logic in
+   1523 # this function, and just call forward.
+   1524 if not (self._backward_hooks or self._backward_pre_hooks or self._forward_hooks or self._forward_pre_hooks
+   1525         or _global_backward_pre_hooks or _global_backward_hooks
+   1526         or _global_forward_hooks or _global_forward_pre_hooks):
+-> 1527     return forward_call(*args, **kwargs)
+   1529 try:
+   1530     result = None
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/modules/normalization.py:196, in LayerNorm.forward(self, input)
+    195 def forward(self, input: Tensor) -> Tensor:
+--> 196     return F.layer_norm(
+    197         input, self.normalized_shape, self.weight, self.bias, self.eps)
+
+File /opt/conda/lib/python3.10/site-packages/torch/nn/functional.py:2543, in layer_norm(input, normalized_shape, weight, bias, eps)
+   2539 if has_torch_function_variadic(input, weight, bias):
+   2540     return handle_torch_function(
+   2541         layer_norm, (input, weight, bias), input, normalized_shape, weight=weight, bias=bias, eps=eps
+   2542     )
+-> 2543 return torch.layer_norm(input, normalized_shape, weight, bias, eps, torch.backends.cudnn.enabled)
+
+RuntimeError: Given normalized_shape=[768], expected input with shape [*, 768], but got input of size[1, 256, 256]
+```
+
+</details>
+
+**Possible solution**
+Perhaps the only change required is to generalize the below line to handle any no, of channels, but not yet sure.
+
+https://github.com/lucidrains/vit-pytorch/blob/5578ac472faf3903d4739ba783f3875b77177e57/vit_pytorch/cross_vit.py#L178

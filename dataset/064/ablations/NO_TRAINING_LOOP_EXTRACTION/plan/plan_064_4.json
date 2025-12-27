@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, numpy, and any custom loss functions required for the NER model.",
+    "Define a configuration class CFG with parameters: preset='deberta_v3_extra_small_en', sequence_length=200, seed=42, epochs=5, batch_size=8.",
+    "Set random seed for reproducibility using keras.utils.set_random_seed(CFG.seed).",
+    "Load the NER model using keras.models.load_model with the path to the saved model and custom loss function.",
+    "Create a TFLite converter instance using tf.lite.TFLiteConverter.from_saved_model with the path to the saved model.",
+    "Convert the model to TFLite format using converter.convert() and save it to 'model.tflite'.",
+    "Define a function tokenize_and_convert_to_ids that takes a string input and returns a tokenized and converted ID array.",
+    "Prepare a sample input string: 'eu rejects german call to boycott british lamb'.",
+    "Tokenize the sample input using the tokenize_and_convert_to_ids function to get sample_input.",
+    "Load the TFLite model using tf.lite.Interpreter with the path to 'model.tflite'.",
+    "Allocate tensors for the interpreter using interpreter.allocate_tensors().",
+    "Get the input index from the interpreter using interpreter.get_input_details()[0]['index'].",
+    "Get the output index from the interpreter using interpreter.get_output_details()[0]['index'].",
+    "Set the input tensor using interpreter.set_tensor with the input index and np.expand_dims(sample_input, axis=0).",
+    "Invoke the interpreter using interpreter.invoke().",
+    "Attempt to get the output tensor using interpreter.get_tensor with the output index.",
+    "Capture the ValueError exception that occurs during the prediction step, specifically looking for the message 'Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0.'",
+    "Verify that the input tensor shape is (1, 9) and the expected shape is (1, 1) by checking the input details from the interpreter."
+]
+```

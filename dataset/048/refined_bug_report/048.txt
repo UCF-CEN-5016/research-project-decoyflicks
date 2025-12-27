@@ -1,0 +1,20 @@
+TITLE
+Array Shape Mismatch Error in Forced Alignment
+
+SYMPTOMS
+• The script runs into a `RuntimeError` during the forced alignment process.
+• The error message states that tensor sizes do not match, specifically for tensors with shapes 1649 and 1799.
+• The traceback indicates issues occur while generating emissions from the model.
+
+EXPECTED BEHAVIOR
+• The script should successfully align the text transcription with the audio file without encountering any runtime errors.
+• Properly aligned segments should be outputted to the specified directory.
+
+REPRODUCTION STEPS
+1. Ensure that `fairseq`, PyTorch, and torchaudio are installed in your environment.
+2. Prepare an audio file named `audio.wav` and a text file named `text.txt`.
+3. Run the command:
+```
+python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin
+```
+4. Observe if the script produces an error related to tensor size mismatches during the forced alignment process.

@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: argparse, torch, DataLoader, RandomSampler, and DeepSpeedRLHFEngine from dschat.",
+    "Set a random seed for reproducibility using set_random_seed with a value of 42.",
+    "Define a batch size of 16 for training and generation purposes.",
+    "Create a mock dataset for training with a sequence length of 256, containing 100 samples.",
+    "Prepare action_mask tensor with shape (batch_size, sequence_length) filled with ones, simulating valid actions.",
+    "Prepare actor_log_prob tensor with shape (batch_size, sequence_length) filled with random values to simulate log probabilities.",
+    "Prepare log_probs tensor with shape (batch_size, sequence_length) filled with random values to simulate log probabilities from the critic.",
+    "Prepare advantages tensor with shape (batch_size,) filled with random values to simulate advantages for each sample.",
+    "Set the start index to 1 to simulate the filtering of the first token.",
+    "Calculate actor_loss using the original mask: action_mask[:, start:] and assert that the output is a tensor.",
+    "Print the calculated actor_loss to verify it is computed without errors.",
+    "Modify the mask to action_mask[:, start-1:-1] to include the 'eos' token and recalculate actor_loss.",
+    "Print the recalculated actor_loss to verify it is computed without errors.",
+    "Compare the two actor_loss values to check if they differ, indicating the bug is present.",
+    "Assert that the actor_loss with the modified mask is different from the original actor_loss, confirming the bug."
+]
+```

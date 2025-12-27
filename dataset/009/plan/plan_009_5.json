@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and other required modules for object detection evaluation",
+    "Define the batch size as 2 and image dimensions as (None, None, None) for variable shape",
+    "Prepare ground truth classes with shape (batch_size, num_gt_masks_per_image)",
+    "Prepare ground truth instance masks with shape (batch_size, num_gt_masks_per_image, height, width)",
+    "Prepare ground truth is crowd labels with shape (batch_size, num_gt_masks_per_image)",
+    "Prepare detection classes with shape (batch_size, num_det_masks_per_image)",
+    "Prepare detection instance masks with shape (batch_size, num_det_masks_per_image, height, width)",
+    "Prepare number of ground truth masks per image with shape (batch_size)",
+    "Prepare number of detection masks per image with shape (batch_size)",
+    "Create a placeholder for input data fields",
+    "Create a placeholder for detection result fields",
+    "Construct the evaluation dictionary using placeholders and prepared data",
+    "Initialize the CocoPanopticSegmentationEvaluator with a list of categories",
+    "Get the estimator eval metric ops from the evaluator",
+    "Prepare feed dict with ground truth and detection data",
+    "Run the update operation to accumulate metrics",
+    "Extract the PanopticQuality@0.50IOU metric value",
+    "Assert that the PanopticQuality@0.50IOU value is NaN"
+]
+```
+

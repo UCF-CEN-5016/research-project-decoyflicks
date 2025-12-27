@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras_nlp, import random, import numpy as np",
+    "Set the random seed for reproducibility: np.random.seed(42)",
+    "Define a sample English sentence for translation: input_sentence = 'Hello, how are you?'",
+    "Create a mock function for the model's next token prediction: def mock_next_token_fn(inputs): return tf.constant([[1, 2, 3]])",
+    "Define a function to decode sequences: def decode_sequences(input_sentences): start = tf.constant([[0]])  # Start token; pad = tf.constant([[0]])  # Padding token; prompt = ops.concatenate((start, pad), axis=-1); generated_tokens = keras_nlp.samplers.GreedySampler()(next, prompt, end_token_id=2)  # This line should trigger the bug",
+    "Call the decode_sequences function with a list containing the input_sentence: translated = decode_sequences([input_sentence])",
+    "Wrap the call to decode_sequences in a try-except block to catch the TypeError: try: translated = decode_sequences([input_sentence]); except TypeError as e: print(e)",
+    "Run the code in a Google Colab environment with a T4 GPU runtime",
+    "Verify that the output contains the TypeError message: 'Sampler.__call__() got an unexpected keyword argument 'end_token_id''"
+]
+```

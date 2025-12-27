@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules for instance segmentation from the Model Garden library",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define the dataset path for the Sfm120k dataset, e.g., data_root = '/path/to/sfm120k'",
+    "Initialize the instance segmentation model using the Model Garden API, e.g., model = tf.keras.Model()",
+    "Set the training parameters: batch_size = 8, num_epochs = 10, learning_rate = 0.001",
+    "Load the training dataset using the Sfm120k dataset class with mode='train', e.g., train_dataset = Sfm120k(data_root, mode='train')",
+    "Load the validation dataset using the Sfm120k dataset class with mode='val', e.g., val_dataset = Sfm120k(data_root, mode='val')",
+    "Compile the model with a loss function suitable for instance segmentation, e.g., model.compile(optimizer='adam', loss='categorical_crossentropy')",
+    "Train the model using model.fit() with the training dataset, validation_data set to the validation dataset, and verbose=1",
+    "During training, monitor the output logs for validation loss values",
+    "After training, evaluate the model using model.evaluate() on the validation dataset",
+    "Check the output of the evaluation for the 'validation_loss' key",
+    "Assert that the 'validation_loss' value is equal to 0.0",
+    "Repeat the evaluation step multiple times to confirm the consistency of the validation loss being 0.0",
+    "Document the output of the evaluation step to verify the bug occurrence"
+]
+```

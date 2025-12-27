@@ -1,0 +1,20 @@
+TITLE
+ValueError Not Supported for TensorFlow 2.x Version
+
+SYMPTOMS
+• ValueError is encountered when attempting to use the Faster R-CNN Inception ResNet V2 640x640 pretrained model.
+• The error message does not specify a clear traceback, but indicates an issue with compatibility or parameter handling.
+
+EXPECTED BEHAVIOR
+The Faster R-CNN Inception ResNet V2 640x640 pretrained model should load and function correctly without any errors in TensorFlow 2.13.0 environment.
+
+REPRODUCTION STEPS
+1. Ensure you have a Google Colab environment set up.
+2. Import the necessary libraries: `import tensorflow as tf` and `from object_detection.utils import config_util`.
+3. Download and extract the pretrained model from the provided URL: `!wget http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_inception_resnet_v2_640x640_coco17_tpu-8.tar.gz` followed by `!tar -zxvf faster_rcnn_inception_resnet_v2_640x640_coco17_tpu-8.tar.gz`.
+4. Load the model configuration: `model_config = config_util.get_configs_from_pipeline_file('faster_rcnn_inception_resnet_v2_640x640/pipeline.config')`.
+5. Build the detection model using the configuration: `detection_model = model_builder.build(model_config=model_config.model, is_training=False)`.
+6. Load the saved model weights into the detection model: `ckpt = tf.train.Checkpoint(model=detection_model)`
+7. Attempt to run a test inference on an input image.
+
+Please note that if you encounter issues at any step, please provide the exact error messages or traceback for further analysis.

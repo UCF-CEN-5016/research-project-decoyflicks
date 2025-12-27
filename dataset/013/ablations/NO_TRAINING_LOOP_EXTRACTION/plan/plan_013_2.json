@@ -1,0 +1,26 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'test_env' with Python 3.10 using the command: conda create -n test_env python=3.10",
+    "Activate the new environment using: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install the TensorFlow Model Garden nightly version using pip with the command: pip install tf-models-nightly",
+    "Install Matplotlib using pip with the command: pip install matplotlib",
+    "Open a new Python script or Jupyter notebook in VSCode.",
+    "Import the necessary libraries at the top of the script: import tensorflow as tf, import matplotlib.pyplot as plt, from official.vision import model as tf_models",
+    "Set the Matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg')",
+    "Create a simple plot using Matplotlib: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Verify that the plot displays correctly before importing TensorFlow Model Garden.",
+    "Import the TensorFlow Model Garden with the command: from official.vision import model as tf_models",
+    "Create another simple plot using Matplotlib: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Observe that the second plot does not display after importing TensorFlow Model Garden.",
+    "Check the current Matplotlib backend by adding the line: print(plt.get_backend()) and verify it shows 'Agg'.",
+    "Attempt to change the backend to 'TkAgg' after importing TensorFlow Model Garden by adding the line: plt.switch_backend('TkAgg')",
+    "Create a plot again using Matplotlib: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Observe that the plot still does not display after changing the backend post-import.",
+    "Change the backend to 'TkAgg' before importing TensorFlow Model Garden by adding the line: plt.switch_backend('TkAgg') before the import statement.",
+    "Create a plot again using Matplotlib: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Verify that the plot displays correctly after changing the backend before the import."
+]
+```

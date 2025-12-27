@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary modules: torch, GaussianDiffusion from guided_diffusion.py, and any other required dependencies.",
+    "Define a batch size of 4 and image dimensions of 128x128.",
+    "Create a random tensor for input images with shape (batch_size, 3, 128, 128) using torch.randn.",
+    "Define a simple model class for the Unet architecture with the required parameters.",
+    "Instantiate the Unet model with dim=64 and dim_mults=(1, 2, 4, 8).",
+    "Instantiate the GaussianDiffusion class with the model, image_size=128, and timesteps=1000.",
+    "Define a classifier class with a forward method that takes an image and a time step as input.",
+    "Instantiate the classifier with image_size=128 and num_classes=1000.",
+    "Create a tensor for class labels with shape (batch_size,) filled with random integers between 0 and 999 using torch.randint.",
+    "Call the sample method of the GaussianDiffusion instance with batch_size=4, cond_fn set to the classifier_cond_fn, and guidance_kwargs containing the classifier and class labels.",
+    "Capture the output of the sample method to verify the output shape.",
+    "Check if the GaussianDiffusion instance's betas tensor is on the correct device by asserting betas.device matches the input tensor's device.",
+    "Attempt to call the offset_noise_strength method (or equivalent) to trigger the bug.",
+    "Verify that an error occurs due to the missing device property in the GaussianDiffusion class."
+]
+```

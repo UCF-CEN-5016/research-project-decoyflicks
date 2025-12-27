@@ -1,0 +1,24 @@
+TITLE  
+Uninitialized Bias Parameters in RelPositionMultiHeadedAttention
+
+SYMPTOMS  
+• Non-deterministic behavior when using the MHA layer with relative position encodings.  
+• Poor initialization leading to unexpected results.  
+• Generation of NaN values in certain conditions.  
+• Example outputs show uninitialized tensors leading to unexpected sums:  
+  - `torch.Tensor(1, 1).sum()` results in `tensor(0.)`  
+  - `torch.Tensor(10, 10).sum()` results in `tensor(4.9312e-38)`  
+  - `torch.Tensor(100, 100).sum()` results in `tensor(nan)`  
+
+EXPECTED BEHAVIOR  
+The bias parameters should be initialized to zero to ensure consistent and expected behavior, preventing non-deterministic outputs and NaN values during computations.
+
+REPRODUCTION STEPS  
+1. Import the required libraries:  
+   ```python
+   import torch
+   ```
+2. Create an instance of the RelPositionMultiHeadedAttention layer.  
+3. Call the forward pass with sample input data.  
+4. Observe the output for unexpected values or behaviors, particularly focusing on the bias terms.  
+5. Check the sums of the bias tensors to confirm initialization issues.

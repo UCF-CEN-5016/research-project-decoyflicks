@@ -1,0 +1,21 @@
+[
+  "Import torch, torch.nn, torch.utils.data.DataLoader, torchvision.transforms, torchvision.datasets, and tqdm.trange",
+  "Import VectorQuantize and ResidualVQ from vector_quantize_pytorch",
+  "Set random seed with torch.random.manual_seed(1234) for reproducibility",
+  "Define batch size as 256",
+  "Define number of training iterations as 1000",
+  "Define num_codes (codebook_size) as 256",
+  "Define device as 'cuda' if available, else 'cpu'",
+  "Create a torchvision transform pipeline with transforms.ToTensor() and transforms.Normalize(mean=(0.5,), std=(0.5,))",
+  "Load FashionMNIST training dataset with download=True and apply the transform pipeline",
+  "Create DataLoader for the FashionMNIST dataset with batch_size=256 and shuffle=True",
+  "Define a SimpleVQAutoEncoder class with the following layers: Conv2d(1,16,3,1,1), MaxPool2d(2,2), GELU(), Conv2d(16,32,3,1,1), MaxPool2d(2,2), ResidualVQ configured with dim=512, num_quantizers=2, codebook_size=16*1024, stochastic_sample_codes=True, shared_codebook=True, commitment_weight=1.0, kmeans_init=True, threshold_ema_dead_code=2, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1, Upsample(scale_factor=2), Conv2d(32,16,3,1,1), GELU(), Upsample(scale_factor=2), and Conv2d(16,1,3,1,1)",
+  "Initialize the ResidualVQ instance inside the SimpleVQAutoEncoder with the exact parameters from the bug report",
+  "Move the model to the selected device",
+  "Initialize AdamW optimizer with learning rate 3e-4 on model parameters",
+  "Define a training loop that iterates 1000 times, each iteration performing: zeroing optimizer gradients, fetching a batch from the DataLoader, moving inputs to device, forwarding inputs through the model, computing reconstruction loss as mean absolute error between output and input, computing total loss as reconstruction loss plus 10 times commitment loss, backpropagating total loss, and performing optimizer step",
+  "Inside the training loop, log or print the reconstruction loss, commitment loss, and percentage of unique code indices activated to monitor training progress",
+  "Run the training loop and observe for RuntimeError related to shape mismatch during the ResidualVQ embedding replacement step, specifically an error message indicating shape mismatch between value tensor of shape [9330, 512] and indexing result of shape [9331, 512]",
+  "Repeat the training run multiple times or run in a multinode or parallel environment if possible to increase the likelihood of reproducing the random shape mismatch bug",
+  "Verify that the RuntimeError occurs randomly during training and matches the reported error stack trace involving vector_quantize_pytorch's expire_codes_ and replace methods"
+]

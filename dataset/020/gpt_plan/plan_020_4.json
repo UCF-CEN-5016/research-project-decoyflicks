@@ -1,0 +1,17 @@
+[
+  "Create a new Python script or Jupyter notebook and import TensorFlow as tf and tf-models-official's core training library: from official import core as tfm.core",
+  "Set Python version to 3.8 environment explicitly (e.g., run the script inside a Python 3.8 virtual environment or Docker container with python:3.8)",
+  "Install tf-models-official version 2.12.0 via pip: pip install tf-models-official==2.12.0",
+  "Install TensorFlow 2.12.0 matching the tf-models-official version: pip install tensorflow==2.12.0",
+  "Clone the TensorFlow models repository from https://github.com/tensorflow/models.git and add it to PYTHONPATH or import from it directly",
+  "Prepare a minimal object detection experiment configuration dictionary (exp_config) that matches the tutorial example with typical batch size 4, input image size 640x640, and necessary model and training parameters",
+  "Create a dummy tf.distribute.MirroredStrategy for distribution_strategy to simulate multi-GPU environment on local machine",
+  "Create a minimal dummy task object 'task' implementing the required interface or import a standard task from tf-models-official matching the tutorial",
+  "Setup an empty or temporary directory string as model_dir to store checkpoints and logs",
+  "Call the training function as in the bug report exactly: model, eval_logs = tfm.core.train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)",
+  "Wrap the call inside a try-except block and capture exceptions",
+  "Verify that the exception raised is a TypeError with message containing \"unsupported operand type(s) for |: 'dict' and 'dict'\"",
+  "Assert that the error traceback points to official/core/base_trainer.py line 442 in eval_step function where 'passthrough_logs | logs' is executed",
+  "Optionally, print all logs and intermediate outputs before the failure to confirm the dictionary operands involved in the '|' operation are indeed dict instances",
+  "Confirm that the environment uses Python 3.8 (not >=3.9) by printing sys.version and that the error is reproducible only under this version"
+]

@@ -1,0 +1,16 @@
+```json
+[
+    "Import required libraries including PIL, labml and its helpers, torch, and other necessary modules.",
+    "Define configurations for the experiment including device, image size, batch size, log interval, etc.",
+    "Initialize the experiment with a unique name 'stylegan2'.",
+    "Create a configuration object using Configs class.",
+    "Set default configurations and override some values like CUDA device and image size based on input parameters.",
+    "Initialize the model components including discriminator, generator, mapping network, and loss functions using the provided classes.",
+    "Setup the data loader to generate fake images for training. Use cycle_dataloader function for continuous data streaming.",
+    "Define a training step function that performs forward pass through both the discriminator and generator, calculates losses, applies gradients, and updates model parameters.",
+    "Execute the training loop for a specified number of steps (training_steps). During each step, call the training step function and log relevant metrics like loss values and generated images.",
+    "After completing the training loop, save the model checkpoints using save_checkpoint method.",
+    "Monitor GPU memory usage during training to ensure it does not exceed expected thresholds. Assert GPU memory usage is within acceptable limits to validate the bug."
+]
+```
+

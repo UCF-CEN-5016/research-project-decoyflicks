@@ -1,0 +1,14 @@
+TITLE  
+ValueError in '_generate_detections_v2_class_aware' due to empty predicted boxes list  
+
+SYMPTOMS  
+• Encountered a `ValueError` during the evaluation phase.  
+• The exact error message is: `ValueError: List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2.`  
+• The function fails when the input consists of tensors with length 0 for predicted boxes.  
+
+EXPECTED BEHAVIOR  
+The function '_generate_detections_v2_class_aware' should handle cases where the predicted boxes list is empty or contains only one element, allowing for graceful execution without raising an error.  
+
+REPRODUCTION STEPS  
+1. Call the function '_generate_detections_v2_class_aware' with an empty list or a list containing a single tensor for predicted boxes.  
+2. Observe the error message generated during the evaluation phase.

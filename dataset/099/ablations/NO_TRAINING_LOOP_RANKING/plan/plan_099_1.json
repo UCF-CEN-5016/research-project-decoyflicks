@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the RotaryEmbedding class from rotary_embedding_torch/rotary_embedding_torch.py",
+    "Set the device to 'cuda' to utilize GPU for training",
+    "Define a batch size of 8 and sequence length of 128",
+    "Create random input tensors for queries and keys with shape (batch_size, sequence_length, embedding_dim) where embedding_dim is set to 64",
+    "Instantiate the RotaryEmbedding class with parameters: dim=64, learned_freq=True, use_xpos=True, and cache_if_possible=True",
+    "Define a simple transformer model that uses the RotaryEmbedding instance in its forward pass",
+    "Set the model to training mode and define a loss function (e.g., CrossEntropyLoss) and an optimizer (e.g., Adam)",
+    "Create a random target tensor with shape (batch_size,) containing class indices for the loss function",
+    "Perform a forward pass through the model with the input tensors and compute the loss",
+    "Check if the loss is NaN after the forward pass",
+    "If loss is NaN, print a message indicating the occurrence of NaN loss",
+    "Monitor the gradients of the model parameters after the backward pass to check for NaN values",
+    "Assert that at least one parameter gradient is NaN to confirm the bug is reproduced"
+]
+```

@@ -1,0 +1,17 @@
+TITLE
+Incorrect Type for `approximate` Parameter in Gelu Function
+
+SYMPTOMS
+• TypeError: gelu(): argument 'approximate' must be str, not bool
+• Code fails to execute due to type mismatch error
+
+EXPECTED BEHAVIOR
+The `gelu()` function should accept the `approximate` parameter as a string indicating the approximation method to use for the Gaussian Error Linear Unit activation function.
+
+REPRODUCTION STEPS
+1. Clone the repository: `git clone https://github.com/NVIDIA/DeepLearningExamples.git`
+2. Navigate to the BERT directory: `cd PyTorch/LanguageModeling/BERT`
+3. Open the `modeling.py` file and locate line 121 where the `gelu()` function is called with `approximate=True`.
+4. Run the model using any of the provided scripts or by manually executing the relevant code paths.
+
+Note: To resolve this issue, change the `approximate=True` to one of the valid string values ('tanh_approximation', 'sigmoid_approximation') as per PyTorch's documentation.

@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision, and torchvision.transforms",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the image size as 128x128 and set the batch size to 64",
+    "Load the CelebA dataset using torchvision.datasets.CelebA with the following parameters: root='path/to/celeba', split='train', transform=torchvision.transforms.Compose([torchvision.transforms.Resize((128, 128)), torchvision.transforms.ToTensor()])",
+    "Create a DataLoader for the CelebA dataset with batch_size=64 and shuffle=True",
+    "Define the Generator and Discriminator classes for the DCGAN, ensuring the input dimensions for the Generator are adjusted to accommodate the larger image size",
+    "In the Discriminator class, ensure the input layer accepts images of size (3, 128, 128)",
+    "Initialize the Generator and Discriminator models, and set them to use the appropriate device (CPU or GPU)",
+    "Define the loss function as Binary Cross Entropy Loss using torch.nn.BCELoss()",
+    "Set the optimizers for both the Generator and Discriminator using torch.optim.Adam with learning rates of 0.0002 and betas=(0.5, 0.999)",
+    "Start the training loop for a specified number of epochs (e.g., 5 epochs)",
+    "Within the training loop, iterate over the DataLoader to get batches of real images and create corresponding labels (real labels as torch.ones(batch_size))",
+    "Pass the real images through the Discriminator to get the output and calculate the loss using the criterion (Binary Cross Entropy) with the real labels",
+    "Print the output shape from the Discriminator to verify it is (batch_size, 1) before calculating the loss",
+    "Create random noise input for the Generator with shape (batch_size, 100) and generate fake images",
+    "Pass the fake images through the Discriminator to get the output and calculate the loss using the criterion with fake labels (torch.zeros(batch_size))",
+    "Print the output shape from the Discriminator for fake images to verify it is (batch_size, 1) before calculating the loss",
+    "Assert that the output shape from the Discriminator for real images is (64, 1) and for fake images is (64, 1)",
+    "Run the training loop and observe the output, expecting to encounter the ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200]))",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

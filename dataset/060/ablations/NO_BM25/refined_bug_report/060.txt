@@ -1,0 +1,39 @@
+TITLE  
+[KerasCV] Image segmentation with U-Net-like architecture fails during dataset creation
+
+SYMPTOMS  
+• The code fails to execute successfully when creating the training and validation datasets.  
+• The same issue occurs both in Google Colab and on a local machine.  
+• Error messages encountered include:  
+  ```
+  TypeError: Exception encountered when calling layer 'rand_augment' (type RandAugment).
+  ...
+  TypeError: branches[0] and branches[1] arguments to tf.switch_case must have the same number, type, and overall structure of return values.
+  ...
+  Call arguments received by layer 'random_choice' (type RandomChoice):
+    • inputs={'images': 'tf.Tensor(shape=(160, 160, 3), dtype=float32)', 'segmentation_masks': 'tf.Tensor(shape=(160, 160, 1), dtype=int64)'}
+  ```
+
+EXPECTED BEHAVIOR  
+The code should successfully create the augmented training and validation datasets without any errors, allowing for the subsequent training of the U-Net-like architecture.
+
+REPRODUCTION STEPS  
+1. Run the code provided in the article [here](https://keras.io/examples/vision/oxford_pets_image_segmentation/).  
+2. Ensure that the necessary libraries (KerasCV, TensorFlow, etc.) are installed and imported.  
+3. Execute the dataset creation code cells as shown:  
+   ```python
+   augmented_train_ds = (
+       train_ds.shuffle(BATCH_SIZE * 2)
+       .map(augment_fn, num_parallel_calls=AUTOTUNE)
+       .batch(BATCH_SIZE)
+       .map(unpackage_inputs)
+       .prefetch(buffer_size=tf.data.AUTOTUNE)
+   )
+   resized_val_ds = (
+       val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE)
+       .batch(BATCH_SIZE)
+       .map(unpackage_inputs)
+       .prefetch(buffer_size=tf.data.AUTOTUNE)
+   )
+   ```  
+4. Observe the errors that occur during execution.

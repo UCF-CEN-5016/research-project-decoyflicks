@@ -1,0 +1,18 @@
+[
+    "Ensure Python version 3.9 is installed on your system and accessible from the command line.",
+    "Clone the TensorFlow models repository from GitHub if you haven't already:",
+      "```bash\n git clone https://github.com/tensorflow/models.git\n```",
+    "Navigate to the object detection directory within the cloned repository:",
+      "```bash\ncd models/research/object_detection/\n```",
+    "Install required packages. Note: You might need specific versions of TensorFlow and other dependencies based on your setup. For this bug report, ensure you have TensorFlow version 2.10.1 and TensorFlow Addon version 0.20.0 installed:",
+      "```bash\npip install tensorflow==2.10.1 tensorflow-addons==0.20.0\n```",
+    "Prepare the pipeline configuration file by copying it from a working example or creating a new one that matches the error message's path (e.g., `ssd_efficientdet_d0_512x512_coco17_tpu-8.config`). Ensure this file contains valid configuration settings for your model.",
+    "Navigate to the directory containing the script you're trying to run:",
+      "```bash\ncd C:\\All\\TF\\models\\research\\object_detection\\\n```",
+    "Run the `model_main_tf2.py` script with the specified parameters. Pay close attention to the use of double equals (`==`) which is incorrect in Python and should be a single equal sign (`=`) for assignment:",
+      "```bash\npython3.9 model_main_tf2.py --pipeline_config_path=ssd_efficientdet_d0_512x512_coco17_tpu-8.config --model_dir=training --alsologtostderr\n```",
+    "Observe the output of the script closely. The presence of a `UnicodeDecodeError` in the error message indicates that there is an issue with decoding the pipeline configuration file using UTF-8 encoding.",
+    "To verify that the bug occurs, check if the `pipeline_config_path` points to a valid file and that the file does not contain any non-UTF-8 encoded characters. If you suspect the file contains non-UTF-8 characters, try opening it in a text editor with support for different encodings (e.g., Notepad++) and converting it to UTF-8 if necessary.",
+    "Monitor the command prompt or terminal where you are running the script. The `UnicodeDecodeError` should appear directly related to reading the pipeline configuration file at position 107, indicating that a byte with the hexadecimal value 0xe9 is not valid in UTF-8 encoding."
+]
+

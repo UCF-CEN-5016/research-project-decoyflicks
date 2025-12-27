@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: torch and nn from torch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the model parameters: heads = 4, d_model = 8, dropout_prob = 0.1",
+    "Create an instance of the relative multi-head attention class from 'labml_nn/transformers/xl/relative_mha.py'",
+    "Define a batch size of 3 and sequence length of 4",
+    "Create random input tensors for query and key with shapes (batch_size, sequence_length, d_model) using torch.randn(batch_size, sequence_length, d_model)",
+    "Call the get_scores method of the model instance with the query and key tensors as arguments",
+    "In the get_scores method, ensure that the key_pos_embeddings and key_pos_bias are initialized correctly with shapes (2 * P, heads, d_k) and (2 * P, heads) respectively, where P = 2 ** 12 and d_k = d_model / heads",
+    "Verify that the key tensor has shape (3, 4, 8) and the query tensor has shape (3, 4, 8)",
+    "Check the slicing operation for key_pos_embeddings: key_pos_emb = self.key_pos_embeddings[self.P - key.shape[0]:self.P + query.shape[0]]",
+    "Assert that the shape of key_pos_emb is (4, 4, 2) after slicing",
+    "Check the calculation of ac using torch.einsum: ac = torch.einsum('ibhd,jbhd->ijbh', query + query_pos_bias, key)",
+    "Check the calculation of b using torch.einsum: b = torch.einsum('ibhd,jhd->ijbh', query, key_pos_emb)",
+    "Verify that the shapes of ac and b are (3, 3, 4, 4) and (3, 3, 4, 4) respectively",
+    "Check the addition of b and d: bd = shift_right(b + d)",
+    "Assert that the shape of bd is (3, 3, 4, 4) after the addition",
+    "Call the final return statement: return ac + bd",
+    "Capture the RuntimeError that occurs during the execution of the return statement",
+    "Verify that the error message matches the expected RuntimeError regarding tensor size mismatch"
+]
+```

@@ -1,0 +1,16 @@
+**TITLE**  
+TypeError in gelu function due to incorrect parameter type
+
+**SYMPTOMS**  
+• TypeError is raised when calling the gelu function.  
+• Error message: `TypeError: gelu(): argument 'approximate' must be str, not bool`  
+• The gelu function fails to execute correctly due to the incompatible type of the `approximate` parameter.  
+
+**EXPECTED BEHAVIOR**  
+The gelu function should execute without raising a TypeError when the `approximate` parameter is provided as a string, either "none" or "tanh". The function should return the expected output based on the input tensor.
+
+**REPRODUCTION STEPS**  
+1. Open the file `modeling.py` in the BERT implementation.
+2. Locate the definition of the gelu function at line 121.
+3. Call the gelu function with an input tensor to trigger the error.
+4. Observe the TypeError message indicating the issue with the `approximate` parameter.

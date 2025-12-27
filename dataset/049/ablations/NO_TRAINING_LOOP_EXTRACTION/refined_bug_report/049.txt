@@ -1,0 +1,22 @@
+TITLE  
+Uninitialized Bias Parameters in RelPositionMultiHeadedAttention Lead to Non-Deterministic Behavior
+
+SYMPTOMS  
+• The (u, v) bias terms in the Multi-Head Attention (MHA) layer are uninitialized, which can lead to non-deterministic behavior.  
+• Observed outputs from uninitialized tensors can include unexpected values such as:  
+  - `tensor(0.)` for a 1x1 tensor  
+  - `tensor(4.9312e-38)` for a 10x10 tensor  
+  - `tensor(nan)` for a 100x100 tensor  
+• The model may produce NaN values during training or inference due to poor initialization.  
+• The behavior is inconsistent and can vary between runs, leading to unreliable model performance.
+
+EXPECTED BEHAVIOR  
+The bias parameters (u, v) in the MHA layer should be properly initialized to zeros using `torch.zeros`, ensuring consistent and deterministic behavior during model training and inference.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries and modules.  
+2. Instantiate the `RelPositionMultiHeadedAttention` class.  
+3. Call the forward method with sample input data.  
+4. Observe the outputs and note any NaN values or unexpected results.  
+5. Check the initialization of the bias parameters by printing their values.  
+6. Compare the outputs across multiple runs to confirm non-deterministic behavior.

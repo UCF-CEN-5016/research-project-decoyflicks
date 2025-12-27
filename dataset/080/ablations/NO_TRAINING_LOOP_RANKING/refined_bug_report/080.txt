@@ -1,0 +1,18 @@
+TITLE  
+Validation accuracy consistently exceeds training accuracy during model training
+
+SYMPTOMS  
+• Validation accuracy is consistently higher than training accuracy throughout the training process.  
+• This behavior occurs regardless of the use of dropout or dropout_emb parameters.  
+• The issue has been observed when using the ViT model on the cats and dogs dataset.  
+• No error messages are reported, but the unexpected behavior raises questions about model performance.
+
+EXPECTED BEHAVIOR  
+The training accuracy should ideally be equal to or higher than the validation accuracy, indicating that the model is learning effectively from the training data.
+
+REPRODUCTION STEPS  
+1. Set up the environment with the required dependencies for the ViT model.  
+2. Use the provided example script to train the ViT model on the cats and dogs dataset.  
+3. Monitor and plot both training and validation accuracy during the training process.  
+4. Observe the accuracy values and confirm that validation accuracy is consistently higher than training accuracy.  
+5. Compare the results with a CNN model using the same dataset for reference.

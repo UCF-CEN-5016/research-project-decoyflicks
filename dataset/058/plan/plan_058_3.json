@@ -1,0 +1,15 @@
+[
+    "Import TensorFlow, Keras, and necessary modules from the provided dependencies",
+    "Load the 'tf_flowers' dataset using TensorFlow Datasets",
+    "Define a batch size of 64 and image dimensions of 280x280",
+    "Create random uniform input data with shape (batch_size, height, width, 3) by sampling from [0, 1)",
+    "Preprocess the input data to match the expected format for MobileViT model using the `preprocess_dataset` function with is_training=True",
+    "Batch the preprocessed data into a dataset with a batch size of 64 and apply prefetching for optimization",
+    "Initialize a MobileViT model by calling the `create_mobilevit` function with num_classes=5",
+    "Compile the MobileViT model using Adam optimizer, categorical crossentropy loss with label smoothing factor of 0.1, and accuracy metric",
+    "Train the MobileViT model on the prepared dataset for 30 epochs with checkpointing to save the best model based on validation accuracy",
+    "Evaluate the trained model on the validation dataset to get the validation accuracy",
+    "Verify that the validation accuracy is less than expected (e.g., below 70%) and contains NaN values in loss calculation",
+    "Monitor GPU memory usage during training to observe if it exceeds a certain threshold"
+]
+

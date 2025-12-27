@@ -1,0 +1,41 @@
+AttributeError: module 'torch.backends' has no attribute 'mps'
+
+## Context
+<!--- How has this issue affected you? What are you trying to accomplish? -->
+<!--- Providing context helps us come up with a solution that is most useful in the real world -->
+* Pytorch version: 1.9.0+cu111
+* Operating System and version: Ubuntu 18.04 LTS
+
+## Your Environment
+<!--- Include as many relevant details about the environment you experienced the bug in -->
+* Installed using source? [yes/no]: No (installed using `pip`)
+* Are you planning to deploy it using docker container? [yes/no]: No
+* Is it a CPU or GPU environment?: GPU
+* Which example are you using: imagenet
+* Link to code or data to repro [if any]: [pytorch/examples/imagenet/main.py](https://github.com/pytorch/examples/blob/main/imagenet/main.py)
+
+## Expected Behavior
+<!--- If you're describing a bug, tell us what should happen -->
+There should be no exception.
+
+## Current Behavior
+<!--- If describing a bug, tell us what happens instead of the expected behavior -->
+```
+$ python3 main.py -a resnet18 --dummy
+=> creating model 'resnet18'
+Traceback (most recent call last):
+  File "main.py", line 511, in <module>
+    main()
+  File "main.py", line 120, in main
+    main_worker(args.gpu, ngpus_per_node, args)
+  File "main.py", line 171, in main_worker
+    elif torch.backends.mps.is_available():
+AttributeError: module 'torch.backends' has no attribute 'mps'
+```
+
+## Possible Solution
+<!--- Not obligatory, but suggest a fix/reason for the bug -->
+Set GPU ID to 0. This can be done at the default settings show below:
+https://github.com/pytorch/examples/pull/1135/commits/4bc313ea7c7287d8f6d9f7dfb5cbf3a192a4c6bc
+
+Created a pull request: https://github.com/pytorch/examples/pull/1135

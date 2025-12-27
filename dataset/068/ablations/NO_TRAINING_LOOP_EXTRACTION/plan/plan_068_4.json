@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf and from keras_cv import metrics",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define a batch size of 4 and image dimensions of 640x640",
+    "Create a dummy dataset with 8 images, each containing a varying number of bounding boxes: use tf.data.Dataset.from_tensor_slices()",
+    "Define ground truth bounding boxes (y_true) with shape (4, 2, 4) and predictions (y_pred) with shape (4, 1, 4)",
+    "Ensure y_true contains valid bounding box coordinates and class IDs: use tf.constant() to create y_true with values [[[0, 0, 10, 10, 1], [11, 12, 30, 30, 2]], [[0, 0, 10, 10, 1]], [[0, 0, 10, 10, 1], [11, 12, 30, 30, 2]], [[0, 0, 10, 10, 1]]]",
+    "Create predictions (y_pred) with shape (4, 1, 4) using tf.constant() with values [[[5, 5, 10, 10, 1, 0.9]], [[0, 0, 10, 10, 1, 1.0]], [[5, 5, 10, 10, 1, 0.9]], [[0, 0, 10, 10, 1, 1.0]]]",
+    "Initialize the COCORecall metric: metric = metrics.COCORecall(bounding_box_format='xyxy', class_ids=[1, 2, 3])",
+    "Call metric.update_state(y_true, y_pred) to simulate the training step",
+    "Attempt to fit a dummy model using yolo.fit() with train_ds and val_ds, specifying epochs=3 and callbacks=[EvaluateCOCOMetricsCallback(val_ds, 'model.h5')]",
+    "Capture the output and error during the fit call to verify if the UnknownError occurs",
+    "Check the error message for InvalidArgumentError related to ConcatOp and mismatched dimensions",
+    "Assert that the error message contains 'Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]'"
+]
+```

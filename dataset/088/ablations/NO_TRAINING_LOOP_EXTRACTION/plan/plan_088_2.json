@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: torch, einops, and the align_right function from x_transformers.autoregressive_wrapper",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 4 and a sequence length of 10",
+    "Create a tensor 't' with shape (batch_size, seq_len, feature_dim) filled with random values, where feature_dim is set to 8",
+    "Create a tensor 'lens' with shape (batch_size,) containing random lengths for each sequence, ensuring that all values are less than or equal to seq_len (e.g., [5, 7, 3, 9])",
+    "Set the pad_id to a value other than 0, for example, pad_id = 99",
+    "Call the align_right function with parameters: align_right(t, lens, pad_id=pad_id)",
+    "Capture the output of the align_right function in a variable named 'aligned_output'",
+    "Print the 'aligned_output' tensor to observe the results",
+    "Verify that the padding value used in F.pad is 0 instead of the specified pad_id by checking the output tensor 'aligned_output' for occurrences of 0 where padding is expected",
+    "Assert that the output tensor 'aligned_output' contains values equal to 0 in positions where padding should have been applied, indicating that pad_id was not used"
+]
+```

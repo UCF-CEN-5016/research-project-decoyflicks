@@ -1,0 +1,28 @@
+{
+  "bug_report": "026",
+  "module": {
+    "module": "official/projects/yolo/configs",
+    "files": [
+      {
+        "path": "official/projects/yolo/configs/yolo.py",
+        "snippets": [
+          {
+            "lines": "224-242",
+            "code": "class Box(hyperparams.Config):\n  box: List[int] = dataclasses.field(default=list)\n\nclass AnchorBoxes(hyperparams.Config):\n  boxes: Optional[List[Box]] = None\n  level_limits: Optional[List[int]] = None\n  anchors_per_scale: int = 3\n\n  generate_anchors: bool = False\n  scaling_mode: str = 'sqrt'\n  box_generation_mode: str = 'per_level'\n  num_samples: int = 1024\n\n  def get(self, min_level, max_level):\n    \"\"\"Distribute them in order to each level.\n\n    Args:\n      min_level: `int` the lowest output level.\n      max_level: `int` the heighest output level.\n    Returns:\n      anchors_per_level: A `Dict[List[int]]` of the anchor boxes for each level.\n      self.level_limits: A `List[int]` of the box size limits to link to each\n        level under anchor free conditions.\n    \"\"\"\n    if self.level_limits is None:\n      boxes = [box.box for box in self.boxes]\n    else:\n      boxes = [[1.0, 1.0]] * ((max_level - min_level) + 1)\n      self.anchors_per_scale = 1\n\n    anchors_per_level = dict()\n    start = 0\n    for i in range(min_level, max_level + 1):\n      anchors_per_level[str(i)] = boxes[start:start + self.anchors_per_scale]\n      start += self.anchors_per_scale\n    return anchors_per_level, self.level_limits\n\n  def set_boxes(self, boxes):\n    self.boxes = [Box(box=box) for box in boxes]\n\nclass Yolo(hyperparams.Config):\n  input_size: Optional[List[int]] = dataclasses.field(\n      default_factory=lambda: [512, 512, 3])\n  backbone: backbones.Backbone = backbones.Backbone(\n      type='darknet', darknet=backbones.Darknet(model_id='cspdarknet53'))\n  decoder: decoders.Decoder = decoders.Decoder(\n      type='yolo_decoder',\n      yolo_decoder=decoders.YoloDecoder(version='v4', type='regular'))\n  head: YoloHead = YoloHead()\n  detection_generator: YoloDetectionGenerator = YoloDetectionGenerator()\n  loss: YoloLoss = YoloLoss()\n  norm_activation: common.NormActivation = common.NormActivation(\n      activation='mish',\n      use_sync_bn=True,\n      norm_momentum=0.99,\n      norm_epsilon=0.001)\n  num_classes: int = 80\n  anchor_boxes: AnchorBoxes = AnchorBoxes()\n  darknet_based_model: bool = False"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/projects/yolo/configs/yolo.py",
+      "snippets": [
+        {
+          "lines": "224-242",
+          "code": "class Box(hyperparams.Config):\n  box: List[int] = dataclasses.field(default=list)\n\nclass AnchorBoxes(hyperparams.Config):\n  boxes: Optional[List[Box]] = None\n  level_limits: Optional[List[int]] = None\n  anchors_per_scale: int = 3\n\n  generate_anchors: bool = False\n  scaling_mode: str = 'sqrt'\n  box_generation_mode: str = 'per_level'\n  num_samples: int = 1024\n\n  def get(self, min_level, max_level):\n    \"\"\"Distribute them in order to each level.\n\n    Args:\n      min_level: `int` the lowest output level.\n      max_level: `int` the heighest output level.\n    Returns:\n      anchors_per_level: A `Dict[List[int]]` of the anchor boxes for each level.\n      self.level_limits: A `List[int]` of the box size limits to link to each\n        level under anchor free conditions.\n    \"\"\"\n    if self.level_limits is None:\n      boxes = [box.box for box in self.boxes]\n    else:\n      boxes = [[1.0, 1.0]] * ((max_level - min_level) + 1)\n      self.anchors_per_scale = 1\n\n    anchors_per_level = dict()\n    start = 0\n    for i in range(min_level, max_level + 1):\n      anchors_per_level[str(i)] = boxes[start:start + self.anchors_per_scale]\n      start += self.anchors_per_scale\n    return anchors_per_level, self.level_limits\n\n  def set_boxes(self, boxes):\n    self.boxes = [Box(box=box) for box in boxes]\n\nclass Yolo(hyperparams.Config):\n  input_size: Optional[List[int]] = dataclasses.field(\n      default_factory=lambda: [512, 512, 3])\n  backbone: backbones.Backbone = backbones.Backbone(\n      type='darknet', darknet=backbones.Darknet(model_id='cspdarknet53'))\n  decoder: decoders.Decoder = decoders.Decoder(\n      type='yolo_decoder',\n      yolo_decoder=decoders.YoloDecoder(version='v4', type='regular'))\n  head: YoloHead = YoloHead()\n  detection_generator: YoloDetectionGenerator = YoloDetectionGenerator()\n  loss: YoloLoss = YoloLoss()\n  norm_activation: common.NormActivation = common.NormActivation(\n      activation='mish',\n      use_sync_bn=True,\n      norm_momentum=0.99,\n      norm_epsilon=0.001)\n  num_classes: int = 80\n  anchor_boxes: AnchorBoxes = AnchorBoxes()\n  darknet_based_model: bool = False"
+        }
+      ]
+    }
+  ]
+}

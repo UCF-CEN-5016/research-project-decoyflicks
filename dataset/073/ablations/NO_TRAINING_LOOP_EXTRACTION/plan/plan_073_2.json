@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules from the DeepSpeed-Domino library, including 'DominoModule', 'get_language_model', 'parallel_lm_logits', and 'vocab_parallel_cross_entropy'",
+    "Define a configuration dictionary for the GPT model with necessary parameters such as 'num_layers', 'hidden_size', 'num_attention_heads', and 'vocab_size'",
+    "Set 'num_tokentypes' to 0 and 'parallel_output' to True in the configuration dictionary",
+    "Create an instance of the GPTModel class using the defined configuration dictionary",
+    "Prepare input tensors: Define 'input_ids' with shape (batch_size, sequence_length) filled with random integers representing token IDs, where batch_size is 2 and sequence_length is 128",
+    "Define 'position_ids' with shape (batch_size, sequence_length) as a tensor of sequential integers from 0 to sequence_length - 1",
+    "Create an 'attention_mask' tensor with shape (batch_size, 1, 1, sequence_length) filled with ones to indicate all tokens are attended to",
+    "Call the 'set_input_tensor' method of the GPTModel instance with the prepared 'input_ids' tensor",
+    "Invoke the 'forward' method of the GPTModel instance with 'input_ids', 'position_ids', and 'attention_mask', and capture the output",
+    "Verify that the global 'cdb' object is initialized by checking if 'cdb' is not None before calling 'cdb.all_reduce'",
+    "Assert that the output of the 'forward' method is None or raises an AttributeError indicating that 'cdb' is None",
+    "Log the error message to confirm the occurrence of the bug related to the 'NoneType' object"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import torch and the espnet_multihead_attention module from fairseq",
+    "Define the dimensions for the bias parameters: u_bias_shape = (10, 10) and v_bias_shape = (10, 10)",
+    "Create uninitialized bias tensors using u_bias = torch.Tensor(u_bias_shape) and v_bias = torch.Tensor(v_bias_shape)",
+    "Define a simple MultiHeadedAttention class that uses the uninitialized bias tensors",
+    "Instantiate the MultiHeadedAttention class with the uninitialized bias tensors",
+    "Create a random input tensor with shape (batch_size=2, seq_length=10, embed_dim=10)",
+    "Call the forward method of the MultiHeadedAttention instance with the random input tensor",
+    "Capture the output of the forward method",
+    "Verify the output tensor for NaN values using torch.isnan(output).any()",
+    "Assert that the output contains NaN values by checking if torch.isnan(output).any() is True"
+]
+```

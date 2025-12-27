@@ -1,0 +1,32 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary modules from transformers and tokenizers",
+    "Set the Keras version to 3.1.0.dev2024031303",
+    "Define the maximum sequence length as 384",
+    "Load the BERT tokenizer using BertTokenizer from transformers with the model 'bert-base-uncased'",
+    "Download the SQuAD training and evaluation datasets from the specified URLs",
+    "Load the training data from 'train-v1.1.json' and evaluation data from 'dev-v1.1.json'",
+    "Define a class 'SquadExample' to preprocess the data, including methods to tokenize context and question",
+    "Create a function 'create_squad_examples' to convert raw data into SquadExample objects",
+    "Create a function 'create_inputs_targets' to generate input and target arrays from SquadExample objects",
+    "Call 'create_squad_examples' on the training data and store the result in 'train_squad_examples'",
+    "Call 'create_inputs_targets' on 'train_squad_examples' to get x_train and y_train",
+    "Call 'create_squad_examples' on the evaluation data and store the result in 'eval_squad_examples'",
+    "Call 'create_inputs_targets' on 'eval_squad_examples' to get x_eval and y_eval",
+    "Define a function 'create_model' to build the BERT-based question-answering model using Keras Functional API",
+    "In 'create_model', define input layers for input_ids, token_type_ids, and attention_mask with shape (max_len,)",
+    "Load the BERT model using TFBertModel from transformers",
+    "Add Dense layers for start and end logits, followed by Flatten layers",
+    "Apply softmax activation to start and end logits to get start_probs and end_probs",
+    "Compile the model with Adam optimizer and SparseCategoricalCrossentropy loss",
+    "Set 'use_tpu' to True and create a TPU strategy if using TPU",
+    "Create the model within the TPU strategy scope",
+    "Print the model summary to verify the architecture",
+    "Define a callback class 'ExactMatch' to compute exact match scores after each epoch",
+    "Instantiate 'ExactMatch' with x_eval and y_eval",
+    "Call 'model.fit' with x_train, y_train, epochs=10, batch_size=64, and the ExactMatch callback",
+    "During training, monitor for the 'OperatorNotAllowedInGraphError' during the model fitting process",
+    "Verify that the error message contains 'Using a symbolic tf.Tensor as a Python bool is not allowed'",
+    "Check the shape of the inputs to the Softmax layer to ensure it matches (None, 4, None, None)"
+]
+```

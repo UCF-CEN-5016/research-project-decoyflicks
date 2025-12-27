@@ -1,0 +1,32 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, pandas, matplotlib, and jiwer",
+    "Set the TensorFlow random seed for reproducibility using tf.random.set_seed(42)",
+    "Download the LJSpeech dataset from 'https://data.keithito.com/data/speech/LJSpeech-1.1.tar.bz2' and extract it",
+    "Load the metadata.csv file from the dataset and read it into a pandas DataFrame",
+    "Set the DataFrame columns to ['file_name', 'transcription', 'normalized_transcription']",
+    "Shuffle the DataFrame and split it into training (90%) and validation (10%) sets",
+    "Define a character set for the transcription: characters = [x for x in 'abcdefghijklmnopqrstuvwxyz'?! ']",
+    "Create a StringLookup layer for mapping characters to integers and vice versa",
+    "Define the audio processing parameters: frame_length = 256, frame_step = 160, fft_length = 384",
+    "Define the function encode_single_sample that processes audio files and labels",
+    "In encode_single_sample, read a wav file and decode it to get the audio tensor",
+    "Squeeze the audio tensor to remove the last dimension, resulting in shape (samples,)",
+    "Compute the spectrogram using tf.signal.stft with the defined parameters",
+    "Normalize the spectrogram by subtracting the mean and dividing by the standard deviation",
+    "Convert the label to lowercase and split it into characters using tf.strings.unicode_split",
+    "Map the characters in the label to integers using the char_to_num layer",
+    "Return the spectrogram and label from the encode_single_sample function",
+    "Create a tf.data.Dataset object for the training set using the file names and normalized transcriptions",
+    "Map the encode_single_sample function to the training dataset and apply padding",
+    "Create a tf.data.Dataset object for the validation set in the same way as the training set",
+    "Define the CTCLoss function that computes the CTC loss using keras.backend.ctc_batch_cost",
+    "Define the build_model function to create a model similar to DeepSpeech2 with input shape (None, input_dim)",
+    "Compile the model with the Adam optimizer and the CTCLoss function",
+    "Train the model for 1 epoch using the training dataset and validation dataset",
+    "During training, monitor the loss values and check if they are significantly high or NaN",
+    "After training, evaluate the model on the validation dataset and check the predictions",
+    "Assert that the predictions are not meaningful (e.g., high Word Error Rate) indicating a bug in loss calculation",
+    "Check the shape of the labels passed to the loss function to ensure they have an extra dimension"
+]
+```

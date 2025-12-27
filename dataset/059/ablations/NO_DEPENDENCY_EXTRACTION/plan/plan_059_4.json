@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: import os, import numpy as np, import tensorflow as tf, import keras, from keras import layers, ops, import medmnist",
+    "Set a random seed for reproducibility: SEED = 42, os.environ['TF_CUDNN_DETERMINISTIC'] = '1', keras.utils.set_random_seed(SEED)",
+    "Define hyperparameters: DATASET_NAME = 'organmnist3d', BATCH_SIZE = 32, INPUT_SHAPE = (28, 28, 28, 1), NUM_CLASSES = 11, LEARNING_RATE = 1e-4, EPOCHS = 60",
+    "Define a function to download and prepare the dataset: def download_and_prepare_dataset(data_info: dict)",
+    "Inside the function, use keras.utils.get_file to download the dataset using the URL and MD5 hash from medmnist.INFO[DATASET_NAME]",
+    "Load the dataset using np.load and extract train, validation, and test videos and labels",
+    "Call the download_and_prepare_dataset function with medmnist.INFO[DATASET_NAME] to get the dataset",
+    "Prepare the dataloaders using the prepare_dataloader function for train, validation, and test sets",
+    "Define the TubeletEmbedding class with appropriate parameters: embed_dim and patch_size",
+    "Define the PositionalEncoder class to add positional information to the encoded video tokens",
+    "Define the create_vivit_classifier function to build the ViViT model architecture",
+    "Inside create_vivit_classifier, create input layer with shape INPUT_SHAPE",
+    "Add the TubeletEmbedding and PositionalEncoder layers to the model",
+    "Add multiple layers of the Transformer block with MultiHeadAttention and skip connections",
+    "Compile the model using keras.optimizers.Adam with LEARNING_RATE and loss function 'sparse_categorical_crossentropy'",
+    "Call model.fit with trainloader and validation data for EPOCHS to start training",
+    "Monitor the training process and capture any errors that occur during model fitting",
+    "Check for specific error messages in the output related to model fitting, such as shape mismatches or NaN values",
+    "Log the error message and the state of the model parameters at the time of the error",
+    "Verify that the model fitting process does not complete successfully and that an error is raised"
+]
+```

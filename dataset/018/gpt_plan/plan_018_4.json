@@ -1,0 +1,14 @@
+[
+  "Ensure you are running on an Arch Linux system or a comparable Linux environment with Python installed",
+  "Verify Python version is at least 3.6 (e.g., python --version)",
+  "Open a terminal and check pip version using 'python -m pip --version'",
+  "Confirm pip version is recent but does NOT support the '--use-feature=2020-resolver' flag by running 'python -m pip install --help' and inspecting the available --use-feature options",
+  "Clone the TensorFlow models repository using 'git clone https://github.com/tensorflow/models.git' and navigate to the 'research/object_detection' directory",
+  "Follow all setup instructions from the link https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2.md up to the Python Package Installation step",
+  "Ensure you have a local Python environment activated (e.g., a virtualenv or conda environment) where you try to install the current directory as a package",
+  "Attempt to run the command 'python -m pip install --use-feature=2020-resolver .' exactly as specified from the instructions in the 'research/object_detection' directory",
+  "Capture the output of the pip install command and observe that it fails with the error message: \"option --use-feature: invalid choice: '2020-resolver' (choose from 'fast-deps', 'truststore','no-binary-enable-wheel-cache')\"",
+  "Assert that the error message explicitly lists the invalid choice and the allowed options, confirming the bug reproduces as reported",
+  "Optionally, verify that running a similar pip install command without the '--use-feature=2020-resolver' flag succeeds or behaves differently",
+  "Document the exact pip version and Python version used, along with the full error output, to confirm the reproduction environment"
+]

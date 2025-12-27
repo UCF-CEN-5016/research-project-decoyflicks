@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, numpy, random, and matplotlib",
+    "Set the random seed for reproducibility using numpy.random.seed(42)",
+    "Define a batch size of 32 and set the image dimensions to 256x256",
+    "Load the English-to-Spanish translation dataset from the provided Keras example link",
+    "Preprocess the dataset to create training and testing sets, ensuring the test set contains at least 100 sentences",
+    "Define a function 'decode_sequences' that takes a list of input sentences and generates translations using a KerasNLP model",
+    "Within 'decode_sequences', initialize a KerasNLP model and a GreedySampler",
+    "Set the 'start_token_id' to a specific value (e.g., 1) and 'end_token_id' to a specific value (e.g., 2)",
+    "Create a prompt tensor by concatenating the start token and a padding tensor of appropriate shape",
+    "Call the GreedySampler with the prompt and other necessary parameters, including 'end_token_id'",
+    "Run a loop to randomly select 2 sentences from the test set and call 'decode_sequences' with each sentence",
+    "Capture the output of 'decode_sequences' and print the translated sentences",
+    "Verify that the TypeError occurs by checking the output for the error message 'Sampler.__call__() got an unexpected keyword argument 'end_token_id''",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

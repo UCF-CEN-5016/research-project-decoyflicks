@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn",
+    "Define a batch size of 4 and set the number of channels to 4 for the input tensor",
+    "Create a random input tensor 'x' with shape (batch_size, channels, height, width) = (4, 4, 32, 32)",
+    "Initialize the class that contains the positional embedding code, ensuring it has 'cos_cached' and 'sin_cached' tensors with shape (4, 4, 32, 32)",
+    "Set 'cos_cached' and 'sin_cached' to random tensors with shape (4, 4, 32, 32)",
+    "Create a tensor 'neg_half_x' with the same shape as 'x' (4, 4, 32, 32) filled with random values",
+    "Call the method that contains the line of code causing the bug, passing 'x' as the input tensor",
+    "In the method, execute the line: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Capture the RuntimeError exception that occurs during the execution of the above line",
+    "Verify that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the shapes of 'x_rope', 'self.cos_cached', and 'self.sin_cached' to confirm the mismatch in dimensions"
+]
+```

@@ -1,0 +1,28 @@
+```json
+[
+    "Import TensorFlow and necessary Keras modules: layers, losses, Model, metrics, and optimizers.",
+    "Set the target image shape to (200, 200).",
+    "Define a batch size of 32 for training and validation datasets.",
+    "Create a directory structure to store the Totally Looks Like dataset, including 'left' and 'right' subdirectories.",
+    "Download the Totally Looks Like dataset zip files and unzip them into the created directories.",
+    "Load the anchor and positive image paths from the respective directories and sort them.",
+    "Create a negative image dataset by shuffling the anchor and positive images and concatenating them.",
+    "Create a tf.data.Dataset for anchor, positive, and negative images using tf.data.Dataset.from_tensor_slices.",
+    "Map the preprocess_triplets function to the dataset to load and preprocess images.",
+    "Split the dataset into training (80%) and validation (20%) sets.",
+    "Batch the training and validation datasets with a batch size of 32 and enable prefetching.",
+    "Define a ResNet50 model with input shape (200, 200, 3) and include_top set to False.",
+    "Add Flatten and Dense layers to the ResNet50 model to create an embedding model.",
+    "Define a DistanceLayer class that computes the distance between anchor, positive, and negative embeddings.",
+    "Create input layers for anchor, positive, and negative images with shape (200, 200, 3).",
+    "Instantiate the DistanceLayer and connect it to the embedding model outputs.",
+    "Create a Siamese network model that takes the three inputs and outputs the distances.",
+    "Define a custom SiameseModel class that implements the triplet loss calculation in the train_step method.",
+    "Compile the SiameseModel with the Adam optimizer and a learning rate of 0.0001.",
+    "Fit the model on the training dataset for 10 epochs, using the validation dataset for evaluation.",
+    "During training, monitor the loss values and check if they are consistently high, indicating poor performance.",
+    "Verify that the model outputs a shape of (batch_size, 2) for the distances, which indicates the distances between anchor-positive and anchor-negative.",
+    "Check the loss calculation in the _compute_loss method to ensure it is using the distances correctly.",
+    "Assert that the loss values do not decrease significantly over epochs, indicating that the model is not learning."
+]
+```

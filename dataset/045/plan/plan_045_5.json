@@ -1,0 +1,13 @@
+```json
+[
+    "Install and import the necessary Python packages for fairseq, including torch, omegaconf, and logging.",
+    "Set up the data preparation step by defining a hypothetical configuration file (config.yaml) in the specified path with the required parameters such as task type, target size, vocoder, and model path.",
+    "Create a test dataset that mimics the structure expected by the speech_to_speech task. This should include input features (input_feat_per_channel) and any other necessary data.",
+    "Prepare the command-line arguments for the fairseq-generate function call using Python's subprocess or os module to match those provided in the bug report, including the path to the configuration file, model path, and test subset.",
+    "Ensure that the environment is set up with all dependencies installed and available, such as the xm_transformer_s2ut_en-hk model and its specific version.",
+    "Execute the fairseq-generate command using the prepared arguments to reproduce the bug.",
+    "Capture the output of the command, including any error messages or logs generated during execution.",
+    "Verify that the error message contains 'Key 'input_feat_per_channel' is not in struct', confirming that the bug has been reproduced."
+]
+```
+

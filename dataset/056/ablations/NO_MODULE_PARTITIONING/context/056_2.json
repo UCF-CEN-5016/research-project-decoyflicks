@@ -1,0 +1,150 @@
+{
+  "bug_report": "056",
+  "rank": 2,
+  "score": 0.8010827302932739,
+  "main_file": {
+    "path": "examples/vision/image_classification_with_vision_transformer.py",
+    "content": "\"\"\"\nTitle: Image classification with Vision Transformer\nAuthor: [Khalid Salama](https://www.linkedin.com/in/khalid-salama-24403144/)\nDate created: 2021/01/18\nLast modified: 2021/01/18\nDescription: Implementing the Vision Transformer (ViT) model for image classification.\nAccelerator: GPU\n\"\"\"\n\n\"\"\"\n## Introduction\n\nThis example implements the [Vision Transformer (ViT)](https://arxiv.org/abs/2010.11929)\nmodel by Alexey Dosovitskiy et al. for image classification,\nand demonstrates it on the CIFAR-100 dataset.\nThe ViT model applies the Transformer architecture with self-attention to sequences of\nimage patches, without using convolution layers.\n\n\"\"\"\n\n\"\"\"\n## Setup\n\"\"\"\n\nimport os\n\nos.environ[\"KERAS_BACKEND\"] = \"jax\"  # @param [\"tensorflow\", \"jax\", \"torch\"]\n\nimport keras\nfrom keras import layers\nfrom keras import ops\n\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n\"\"\"\n## Prepare the data\n\"\"\"\n\nnum_classes = 100\ninput_shape = (32, 32, 3)\n\n(x_train, y_train), (x_test, y_test) = keras.datasets.cifar100.load_data()\n\nprint(f\"x_train shape: {x_train.shape} - y_train shape: {y_train.shape}\")\nprint(f\"x_test shape: {x_test.shape} - y_test shape: {y_test.shape}\")\n\n\n\"\"\"\n## Configure the hyperparameters\n\"\"\"\n\nlearning_rate = 0.001\nweight_decay = 0.0001\nbatch_size = 256\nnum_epochs = 10  # For real training, use num_epochs=100. 10 is a test value\nimage_size = 72  # We'll resize input images to this size\npatch_size = 6  # Size of the patches to be extract from the input images\nnum_patches = (image_size // patch_size) ** 2\nprojection_dim = 64\nnum_heads = 4\ntransformer_units = [\n    projection_dim * 2,\n    projection_dim,\n]  # Size of the transformer layers\ntransformer_layers = 8\nmlp_head_units = [\n    2048,\n    1024,\n]  # Size of the dense layers of the final classifier\n\n\n\"\"\"\n## Use data augmentation\n\"\"\"\n\ndata_augmentation = keras.Sequential(\n    [\n        layers.Normalization(),\n        layers.Resizing(image_size, image_size),\n        layers.RandomFlip(\"horizontal\"),\n        layers.RandomRotation(factor=0.02),\n        layers.RandomZoom(height_factor=0.2, width_factor=0.2),\n    ],\n    name=\"data_augmentation\",\n)\n# Compute the mean and the variance of the training data for normalization.\ndata_augmentation.layers[0].adapt(x_train)\n\n\n\"\"\"\n## Implement multilayer perceptron (MLP)\n\"\"\"\n\n\ndef mlp(x, hidden_units, dropout_rate):\n    for units in hidden_units:\n        x = layers.Dense(units, activation=keras.activations.gelu)(x)\n        x = layers.Dropout(dropout_rate)(x)\n    return x\n\n\n\"\"\"\n## Implement patch creation as a layer\n\"\"\"\n\n\nclass Patches(layers.Layer):\n    def __init__(self, patch_size):\n        super().__init__()\n        self.patch_size = patch_size\n\n    def call(self, images):\n        input_shape = ops.shape(images)\n        batch_size = input_shape[0]\n        height = input_shape[1]\n        width = input_shape[2]\n        channels = input_shape[3]\n        num_patches_h = height // self.patch_size\n        num_patches_w = width // self.patch_size\n        patches = keras.ops.image.extract_patches(images, size=self.patch_size)\n        patches = ops.reshape(\n            patches,\n            (\n                batch_size,\n                num_patches_h * num_patches_w,\n                self.patch_size * self.patch_size * channels,\n            ),\n        )\n        return patches\n\n    def get_config(self):\n        config = super().get_config()\n        config.update({\"patch_size\": self.patch_size})\n        return config\n\n\n\"\"\"\nLet's display patches for a sample image\n\"\"\"\n\nplt.figure(figsize=(4, 4))\nimage = x_train[np.random.choice(range(x_train.shape[0]))]\nplt.imshow(image.astype(\"uint8\"))\nplt.axis(\"off\")\n\nresized_image = ops.image.resize(\n    ops.convert_to_tensor([image]), size=(image_size, image_size)\n)\npatches = Patches(patch_size)(resized_image)\nprint(f\"Image size: {image_size} X {image_size}\")\nprint(f\"Patch size: {patch_size} X {patch_size}\")\nprint(f\"Patches per image: {patches.shape[1]}\")\nprint(f\"Elements per patch: {patches.shape[-1]}\")\n\nn = int(np.sqrt(patches.shape[1]))\nplt.figure(figsize=(4, 4))\nfor i, patch in enumerate(patches[0]):\n    ax = plt.subplot(n, n, i + 1)\n    patch_img = ops.reshape(patch, (patch_size, patch_size, 3))\n    plt.imshow(ops.convert_to_numpy(patch_img).astype(\"uint8\"))\n    plt.axis(\"off\")\n\n\"\"\"\n## Implement the patch encoding layer\n\nThe `PatchEncoder` layer will linearly transform a patch by projecting it into a\nvector of size `projection_dim`. In addition, it adds a learnable position\nembedding to the projected vector.\n\"\"\"\n\n\nclass PatchEncoder(layers.Layer):\n    def __init__(self, num_patches, projection_dim):\n        super().__init__()\n        self.num_patches = num_patches\n        self.projection = layers.Dense(units=projection_dim)\n        self.position_embedding = layers.Embedding(\n            input_dim=num_patches, output_dim=projection_dim\n        )\n\n    def call(self, patch):\n        positions = ops.expand_dims(\n            ops.arange(start=0, stop=self.num_patches, step=1), axis=0\n        )\n        projected_patches = self.projection(patch)\n        encoded = projected_patches + self.position_embedding(positions)\n        return encoded\n\n    def get_config(self):\n        config = super().get_config()\n        config.update({\"num_patches\": self.num_patches})\n        return config\n\n\n\"\"\"\n## Build the ViT model\n\nThe ViT model consists of multiple Transformer blocks,\nwhich use the `layers.MultiHeadAttention` layer as a self-attention mechanism\napplied to the sequence of patches. The Transformer blocks produce a\n`[batch_size, num_patches, projection_dim]` tensor, which is processed via an\nclassifier head with softmax to produce the final class probabilities output.\n\nUnlike the technique described in the [paper](https://arxiv.org/abs/2010.11929),\nwhich prepends a learnable embedding to the sequence of encoded patches to serve\nas the image representation, all the outputs of the final Transformer block are\nreshaped with `layers.Flatten()` and used as the image\nrepresentation input to the classifier head.\nNote that the `layers.GlobalAveragePooling1D` layer\ncould also be used instead to aggregate the outputs of the Transformer block,\nespecially when the number of patches and the projection dimensions are large.\n\"\"\"\n\n\ndef create_vit_classifier():\n    inputs = keras.Input(shape=input_shape)\n    # Augment data.\n    augmented = data_augmentation(inputs)\n    # Create patches.\n    patches = Patches(patch_size)(augmented)\n    # Encode patches.\n    encoded_patches = PatchEncoder(num_patches, projection_dim)(patches)\n\n    # Create multiple layers of the Transformer block.\n    for _ in range(transformer_layers):\n        # Layer normalization 1.\n        x1 = layers.LayerNormalization(epsilon=1e-6)(encoded_patches)\n        # Create a multi-head attention layer.\n        attention_output = layers.MultiHeadAttention(\n            num_heads=num_heads, key_dim=projection_dim, dropout=0.1\n        )(x1, x1)\n        # Skip connection 1.\n        x2 = layers.Add()([attention_output, encoded_patches])\n        # Layer normalization 2.\n        x3 = layers.LayerNormalization(epsilon=1e-6)(x2)\n        # MLP.\n        x3 = mlp(x3, hidden_units=transformer_units, dropout_rate=0.1)\n        # Skip connection 2.\n        encoded_patches = layers.Add()([x3, x2])\n\n    # Create a [batch_size, projection_dim] tensor.\n    representation = layers.LayerNormalization(epsilon=1e-6)(encoded_patches)\n    representation = layers.Flatten()(representation)\n    representation = layers.Dropout(0.5)(representation)\n    # Add MLP.\n    features = mlp(representation, hidden_units=mlp_head_units, dropout_rate=0.5)\n    # Classify outputs.\n    logits = layers.Dense(num_classes)(features)\n    # Create the Keras model.\n    model = keras.Model(inputs=inputs, outputs=logits)\n    return model\n\n\n\"\"\"\n## Compile, train, and evaluate the mode\n\"\"\"\n\n\ndef run_experiment(model):\n    optimizer = keras.optimizers.AdamW(\n        learning_rate=learning_rate, weight_decay=weight_decay\n    )\n\n    model.compile(\n        optimizer=optimizer,\n        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),\n        metrics=[\n            keras.metrics.SparseCategoricalAccuracy(name=\"accuracy\"),\n            keras.metrics.SparseTopKCategoricalAccuracy(5, name=\"top-5-accuracy\"),\n        ],\n    )\n\n    checkpoint_filepath = \"/tmp/checkpoint.weights.h5\"\n    checkpoint_callback = keras.callbacks.ModelCheckpoint(\n        checkpoint_filepath,\n        monitor=\"val_accuracy\",\n        save_best_only=True,\n        save_weights_only=True,\n    )\n\n    history = model.fit(\n        x=x_train,\n        y=y_train,\n        batch_size=batch_size,\n        epochs=num_epochs,\n        validation_split=0.1,\n        callbacks=[checkpoint_callback],\n    )\n\n    model.load_weights(checkpoint_filepath)\n    _, accuracy, top_5_accuracy = model.evaluate(x_test, y_test)\n    print(f\"Test accuracy: {round(accuracy * 100, 2)}%\")\n    print(f\"Test top 5 accuracy: {round(top_5_accuracy * 100, 2)}%\")\n\n    return history\n\n\nvit_classifier = create_vit_classifier()\nhistory = run_experiment(vit_classifier)\n\n\ndef plot_history(item):\n    plt.plot(history.history[item], label=item)\n    plt.plot(history.history[\"val_\" + item], label=\"val_\" + item)\n    plt.xlabel(\"Epochs\")\n    plt.ylabel(item)\n    plt.title(\"Train and Validation {} Over Epochs\".format(item), fontsize=14)\n    plt.legend()\n    plt.grid()\n    plt.show()\n\n\nplot_history(\"loss\")\nplot_history(\"top-5-accuracy\")\n\n\n\"\"\"\nAfter 100 epochs, the ViT model achieves around 55% accuracy and\n82% top-5 accuracy on the test data. These are not competitive results on the CIFAR-100 dataset,\nas a ResNet50V2 trained from scratch on the same data can achieve 67% accuracy.\n\nNote that the state of the art results reported in the\n[paper](https://arxiv.org/abs/2010.11929) are achieved by pre-training the ViT model using\nthe JFT-300M dataset, then fine-tuning it on the target dataset. To improve the model quality\nwithout pre-training, you can try to train the model for more epochs, use a larger number of\nTransformer layers, resize the input images, change the patch size, or increase the projection dimensions.\nBesides, as mentioned in the paper, the quality of the model is affected not only by architecture choices,\nbut also by parameters such as the learning rate schedule, optimizer, weight decay, etc.\nIn practice, it's recommended to fine-tune a ViT model\nthat was pre-trained using a large, high-resolution dataset.\n\"\"\"\n"
+  },
+  "module_snippets": [
+    {
+      "file": "examples/vision/image_classification_with_vision_transformer.py",
+      "snippets": [
+        {
+          "lines": "303-311",
+          "code": "def create_vit_classifier():\n    inputs = keras.Input(shape=input_shape)\n    # Augment data.\n    augmented = data_augmentation(inputs)\n    # Create patches.\n    patches = Patches(patch_size)(augmented)\n    # Encode patches.\n    encoded_patches = PatchEncoder(num_patches, projection_dim)(patches)\n\n    # Create multiple layers of the Transformer block.\n    for _ in range(transformer_layers):\n        # Layer normalization 1.\n        x1 = layers.LayerNormalization(epsilon=1e-6)(encoded_patches)\n        # Create a multi-head attention layer.\n        attention_output = layers.MultiHeadAttention(\n            num_heads=num_heads, key_dim=projection_dim, dropout=0.1\n        )(x1, x1)\n        # Skip connection 1.\n        x2 = layers.Add()([attention_output, encoded_patches])\n        # Layer normalization 2.\n        x3 = layers.LayerNormalization(epsilon=1e-6)(x2)\n        # MLP.\n        x3 = mlp(x3, hidden_units=transformer_units, dropout_rate=0.1)\n        # Skip connection 2.\n        encoded_patches = layers.Add()([x3, x2])\n\n    # Create a [batch_size, projection_dim] tensor.\n    representation = layers.LayerNormalization(epsilon=1e-6)(encoded_patches)\n    representation = layers.Flatten()(representation)\n    representation = layers.Dropout(0.5)(representation)\n    # Add MLP.\n    features = mlp(representation, hidden_units=mlp_head_units, dropout_rate=0.5)\n    # Classify outputs.\n    logits = layers.Dense(num_classes)(features)\n    # Create the Keras model.\n    model = keras.Model(inputs=inputs, outputs=logits)\n    return model\n\ndef run_experiment(model):\n    optimizer = keras.optimizers.AdamW(\n        learning_rate=learning_rate, weight_decay=weight_decay\n    )\n\n    model.compile(\n        optimizer=optimizer,\n        loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),\n        metrics=[\n            keras.metrics.SparseCategoricalAccuracy(name=\"accuracy\"),\n            keras.metrics.SparseTopKCategoricalAccuracy(5, name=\"top-5-accuracy\"),\n        ],\n    )\n\n    checkpoint_filepath = \"/tmp/checkpoint.weights.h5\"\n    checkpoint_callback = keras.callbacks.ModelCheckpoint(\n        checkpoint_filepath,\n        monitor=\"val_accuracy\",\n        save_best_only=True,\n        save_weights_only=True,\n    )\n\n    history = model.fit(\n        x=x_train,\n        y=y_train,\n        batch_size=batch_size,\n        epochs=num_epochs,\n        validation_split=0.1,\n        callbacks=[checkpoint_callback],\n    )\n\n    model.load_weights(checkpoint_filepath)\n    _, accuracy, top_5_accuracy = model.evaluate(x_test, y_test)\n    print(f\"Test accuracy: {round(accuracy * 100, 2)}%\")\n    print(f\"Test top 5 accuracy: {round(top_5_accuracy * 100, 2)}%\")\n\n    return history\n\ndef plot_history(item):\n    plt.plot(history.history[item], label=item)\n    plt.plot(history.history[\"val_\" + item], label=\"val_\" + item)\n    plt.xlabel(\"Epochs\")\n    plt.ylabel(item)\n    plt.title(\"Train and Validation {} Over Epochs\".format(item), fontsize=14)\n    plt.legend()\n    plt.grid()\n    plt.show()"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "keras",
+      "function": "Add"
+    },
+    {
+      "module": "keras",
+      "function": "Dense"
+    },
+    {
+      "module": "keras",
+      "function": "Dropout"
+    },
+    {
+      "module": "keras",
+      "function": "Embedding"
+    },
+    {
+      "module": "keras",
+      "function": "Flatten"
+    },
+    {
+      "module": "keras",
+      "function": "Input"
+    },
+    {
+      "module": "keras",
+      "function": "LayerNormalization"
+    },
+    {
+      "module": "keras",
+      "function": "Model"
+    },
+    {
+      "module": "keras",
+      "function": "MultiHeadAttention"
+    },
+    {
+      "module": "keras",
+      "function": "Normalization"
+    },
+    {
+      "module": "keras",
+      "function": "RandomFlip"
+    },
+    {
+      "module": "keras",
+      "function": "RandomRotation"
+    },
+    {
+      "module": "keras",
+      "function": "RandomZoom"
+    },
+    {
+      "module": "keras",
+      "function": "Resizing"
+    },
+    {
+      "module": "keras",
+      "function": "Sequential"
+    },
+    {
+      "module": "keras",
+      "function": "arange"
+    },
+    {
+      "module": "keras",
+      "function": "convert_to_numpy"
+    },
+    {
+      "module": "keras",
+      "function": "convert_to_tensor"
+    },
+    {
+      "module": "keras",
+      "function": "expand_dims"
+    },
+    {
+      "module": "keras",
+      "function": "reshape"
+    },
+    {
+      "module": "keras",
+      "function": "shape"
+    },
+    {
+      "module": "matplotlib",
+      "function": "axis"
+    },
+    {
+      "module": "matplotlib",
+      "function": "figure"
+    },
+    {
+      "module": "matplotlib",
+      "function": "grid"
+    },
+    {
+      "module": "matplotlib",
+      "function": "imshow"
+    },
+    {
+      "module": "matplotlib",
+      "function": "legend"
+    },
+    {
+      "module": "matplotlib",
+      "function": "plot"
+    },
+    {
+      "module": "matplotlib",
+      "function": "show"
+    },
+    {
+      "module": "matplotlib",
+      "function": "subplot"
+    },
+    {
+      "module": "matplotlib",
+      "function": "title"
+    },
+    {
+      "module": "matplotlib",
+      "function": "xlabel"
+    },
+    {
+      "module": "matplotlib",
+      "function": "ylabel"
+    }
+  ]
+}

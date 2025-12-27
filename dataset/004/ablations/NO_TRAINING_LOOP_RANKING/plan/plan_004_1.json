@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from tensorflow_models and matplotlib",
+    "Define the parameters for the beta distribution: alpha = 0.2, beta = 0.2",
+    "Set the shape for the sample to be generated: shape = (1000,)",
+    "Call the original MixupAndCutmix._sample_from_beta method with parameters alpha, beta, and shape",
+    "Store the output of the original method in a variable named original_sample",
+    "Generate a reference sample using numpy's beta function: reference_sample = np.random.beta(alpha, beta, 100000)",
+    "Plot the kernel density estimate of the original_sample using seaborn's kdeplot",
+    "Plot the kernel density estimate of the reference_sample using seaborn's kdeplot",
+    "Add labels and title to the plot to indicate which is the original sample and which is the reference sample",
+    "Display the plot to visually compare the distributions of the original sample and the reference sample",
+    "Assert that the distributions of original_sample and reference_sample are significantly different",
+    "Log the results of the comparison to confirm the bug is present"
+]
+```

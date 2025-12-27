@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: torch, nn, einsum, rearrange from einops, and F from torch.nn.functional",
+    "Define a batch size of 2, height of 32, width of 32, and number of channels as 3",
+    "Create random input data for local tokens with shape (batch_size, channels, height, width) = (2, 3, 32, 32)",
+    "Create random input data for region tokens with shape (batch_size, channels, height, width) = (2, 3, 32, 32)",
+    "Instantiate the RegionViT model with parameters: dim=(64, 128, 256, 512), depth=(2, 2, 8, 2), window_size=7, num_classes=1000",
+    "Pass the local tokens and region tokens through the model: output = model(local_tokens, region_tokens)",
+    "Check the shape of the output to ensure it matches expected dimensions: assert output.shape == (2, 1000)",
+    "Modify the LayerNorm in the FeedForward and Attention classes to use incorrect dimensions: change nn.LayerNorm(dim) to nn.LayerNorm(dim, dim=1)",
+    "Re-run the model with the modified LayerNorm and capture any runtime errors or warnings",
+    "Assert that the output contains NaN values or raises an error due to incorrect normalization dimensions",
+    "Log the error message or NaN values to verify the bug occurrence"
+]
+```

@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary modules from labml, labml_helpers, and torch",
+    "Set up DeviceInfo with use_cuda=True and cuda_device=0",
+    "Create random input data for the model with shape (64, 1, 28, 28)",
+    "Define a target tensor of ones with shape (64, dtype=torch.long)",
+    "Initialize the loss function as CrossEntropyLoss",
+    "Instantiate the Model from labml_nn.optimizers.mnist_experiment",
+    "Create an instance of MyAdam optimizer with parameters from the model",
+    "Create an instance of TorchAdam optimizer with parameters from the model",
+    "Compute the loss between the model output and target using the defined loss function",
+    "Perform backpropagation to calculate gradients",
+    "Iterate 100 times calling the step method on MyAdam optimizer",
+    "Record the time taken for 100 steps of MyAdam optimizer",
+    "Iterate 1000 times calling the step method on MyAdam optimizer",
+    "Record the time taken for 1000 steps of MyAdam optimizer",
+    "Iterate 100 times calling the step method on TorchAdam optimizer",
+    "Record the time taken for 100 steps of TorchAdam optimizer",
+    "Iterate 1000 times calling the step method on TorchAdam optimizer",
+    "Record the time taken for 1000 steps of TorchAdam optimizer",
+    "Compare the recorded times to verify that MyAdam is slower than TorchAdam"
+]
+```
+

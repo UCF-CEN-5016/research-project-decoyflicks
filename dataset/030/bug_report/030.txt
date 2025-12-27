@@ -1,0 +1,66 @@
+pytorch_lightning.utilities.exceptions.MisconfigurationException when training
+
+Related to nnUNet. I am trying to use the BraTS21.ipynb and BraTS22.ipynb to train the nnUNet model yet they both raised an error about Pytorch Lightning. I have installed packages in requirements.txt and those not in it but required for the code.
+
+Here is the full error message:
+```plaintext
+1125 training, 126 validation, 1251 test examples
+Provided checkpoint None is not a file. Starting training from scratch.
+Filters: [64, 128, 256, 512, 768, 1024],
+Kernels: [[3, 3, 3], [3, 3, 3], [3, 3, 3], [3, 3, 3], [3, 3, 3], [3, 3, 3]]
+Strides: [[1, 1, 1], [2, 2, 2], [2, 2, 2], [2, 2, 2], [2, 2, 2], [2, 2, 2]]
+Trainer already configured with model summary callbacks: [<class 'pytorch_lightning.callbacks.model_summary.ModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+`Trainer(limit_train_batches=1.0)` was configured so 100% of the batches per epoch will be used..
+`Trainer(limit_val_batches=1.0)` was configured so 100% of the batches will be used..
+`Trainer(limit_test_batches=1.0)` was configured so 100% of the batches will be used..
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+1125 training, 126 validation, 1251 test examples
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Traceback (most recent call last):
+File "/mnt/c/Users/***/PycharmProjects/nnUNet_NVIDIA/notebooks/../main.py", line 128, in <module>
+main()
+File "/mnt/c/Users/***/PycharmProjects/nnUNet_NVIDIA/notebooks/../main.py", line 110, in main
+trainer.fit(model, datamodule=data_module)
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 696, in fit
+self._call_and_handle_interrupt(
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 648, in _call_and_handle_interrupt
+return self.strategy.launcher.launch(trainer_fn, *args, trainer=self, **kwargs)
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/strategies/launchers/subprocess_script.py", line 93, in launch
+return function(*args, **kwargs)
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 735, in _fit_impl
+results = self._run(model, ckpt_path=self.ckpt_path)
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1147, in _run
+self.strategy.setup(self)
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/strategies/ddp.py", line 184, in setup
+self.setup_optimizers(trainer)
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/strategies/strategy.py", line 141, in setup_optimizers
+self.optimizers, self.lr_scheduler_configs, self.optimizer_frequencies = _init_optimizers_and_lr_schedulers(
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 194, in _init_optimizers_and_lr_schedulers
+_validate_scheduler_api(lr_scheduler_configs, model)
+File "/home/***/miniconda3/envs/nnunet/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 351, in _validate_scheduler_api
+raise MisconfigurationException(
+pytorch_lightning.utilities.exceptions.MisconfigurationException: The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API. You should override the `LightningModule.lr_scheduler_step` hook with your own logic if you are using a custom LR scheduler.
+```
+
+To Reproduce
+Steps to reproduce the behavior:
+Just run the cell in the notebook for training the nnUNet model.
+```plaintext
+!python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0  --gpus 1 --task 11 --nfolds 10 --save_ckpt
+```
+
+Environment
+- All same-version packages as requirements.txt
+- Pytorch: 2.2.0+cu121
+- GPUs in the system: single RTX 3060 (12GB)
+- CUDA: Cuda compilation tools, release 12.1, V12.1.66; Build cuda_12.1.r12.1/compiler.32415258_0
+- Platform: WSL2 on Windows

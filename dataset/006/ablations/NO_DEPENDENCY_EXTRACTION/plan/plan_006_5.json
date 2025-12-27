@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official TensorFlow models repository.",
+    "Set the random seed for reproducibility using tf.random.set_seed(1).",
+    "Define a batch size of 5 and input dimensions of (3, 1) for shared, control, and treatment features.",
+    "Create input data for shared_feature, control_feature, and treatment_feature using tf.ones with appropriate shapes.",
+    "Define a treatment indicator tensor with shape (10, 1) containing binary values (1s and 0s) to indicate treatment status.",
+    "Create a target output tensor y based on the formula (shared_feature + treatment_feature) * treatment.",
+    "Construct a TensorFlow dataset using tf.data.Dataset.from_tensor_slices with the input features and target output, and batch it with the defined batch size.",
+    "Define a TwoTowerUpliftModel using the TwoTowerUpliftNetwork with default parameters.",
+    "Compile the model using tf.keras.optimizers.SGD with a learning rate of 0.1 and a loss function of true_logits_loss.TrueLogitsLoss.",
+    "Fit the model on the dataset for 100 epochs and capture the training history.",
+    "Check the training history for the presence of the 'loss' key to ensure the model attempted to compute loss.",
+    "Assert that the training history contains a loss value for each epoch by checking the length of history.history['loss'] is equal to 100.",
+    "Verify that the warning 'Gradients do not exist for variables...' appears in the console output during model training.",
+    "Capture the specific warning message and assert that it includes the variables listed in the bug report.",
+    "Evaluate the model on the same dataset and assert that the evaluation loss is not NaN or infinite."
+]
+```

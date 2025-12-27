@@ -1,0 +1,53 @@
+TITLE
+Maximum number of boxes configuration not recognized during pipeline creation
+
+SYMPTOMS
+• `AttributeError: 'google.protobuf.pyext._message.RepeatedCompositeContainer' object has no attribute 'max_number_of_boxes'` error when setting the maximum number of boxes via code.
+• Model training converges to poor results or fails to converge for images with over 100 objects per image if certain configuration parameters are not set correctly.
+
+EXPECTED BEHAVIOR
+- The model should be able to train on images containing a large number of objects (over 100) without convergence issues.
+- Setting the maximum number of boxes via code should work seamlessly and produce the same results as setting them directly in the `pipeline.config` file.
+
+REPRODUCTION STEPS
+1. Import necessary libraries:
+```python
+import tensorflow as tf
+from object_detection.utils import config_util
+from object_detection.protos import pipeline_pb2
+from google.protobuf import text_format
+```
+
+2. Define the path to the `pipeline.config` file.
+3. Load and parse the configuration file using `config_util.get_configs_from_pipeline_file`.
+4. Create a `TrainEvalPipelineConfig` instance from the loaded file.
+5. Attempt to set the maximum number of boxes via code:
+```python
+configpath = #Path to pipeline.config file
+
+config = config_util.get_configs_from_pipeline_file(configpath)
+
+pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()
+with tf.io.gfile.GFile(configpath, "r") as f:
+proto_str = f.read()
+text_format.Merge(proto_str, pipeline_config)
+
+# This line will throw an error
+pipeline_config.eval_input_reader.max_number_of_boxes = 500
+```
+
+6. Attempt to set the maximum number of boxes directly in the `pipeline.config` file by editing it manually.
+
+To resolve this issue:
+- Ensure that all necessary configuration parameters are correctly specified both in the code and in the `pipeline.config` file.
+- Alternatively, consider using the `model_config` object to modify the model settings more granularly:
+```python
+pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_detections_per_class = 500
+pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_total_detections = 500
+pipeline_config.model.faster_rcnn.first_stage_max_proposals = 500
+
+# Re-merge the updated model configuration back into the main pipeline config
+text_format.Merge(text_format.MessageToString(pipeline_config), pipeline_config)
+```
+
+By ensuring that all relevant parameters are correctly configured, both in code and in the `pipeline.config` file, this issue should be mitigated.

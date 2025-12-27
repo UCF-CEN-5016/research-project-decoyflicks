@@ -1,0 +1,28 @@
+{
+  "bug_report": "005",
+  "module": {
+    "module": "official/legacy/xlnet",
+    "files": [
+      {
+        "path": "official/legacy/xlnet/preprocess_classification_data.py",
+        "snippets": [
+          {
+            "lines": "258-270",
+            "code": "class Yelp5Processor(DataProcessor):\n  \"\"\"Yelp5Processor.\"\"\"\n\n  def get_train_examples(self, data_dir):\n    return self._create_examples(os.path.join(data_dir, \"train.csv\"))\n\n  def get_dev_examples(self, data_dir):\n    return self._create_examples(os.path.join(data_dir, \"test.csv\"))\n\n  def get_labels(self):\n    \"\"\"See base class.\"\"\"\n    return [\"1\", \"2\", \"3\", \"4\", \"5\"]\n\n  def _create_examples(self, input_file):\n    \"\"\"Creates examples for the training and dev sets.\"\"\"\n    examples = []\n    with tf.io.gfile.GFile(input_file) as f:\n      reader = csv.reader(f)\n      for i, line in enumerate(reader):\n\n        label = line[0]\n        text_a = line[1].replace('\"\"', '\"').replace('\\\\\"', '\"')\n        examples.append(\n            InputExample(guid=str(i), text_a=text_a, text_b=None, label=label))\n    return examples\n\nclass ImdbProcessor(DataProcessor):\n  \"\"\"ImdbProcessor.\"\"\"\n\n  def get_labels(self):\n    return [\"neg\", \"pos\"]\n\n  def get_train_examples(self, data_dir):\n    return self._create_examples(os.path.join(data_dir, \"train\"))\n\n  def get_dev_examples(self, data_dir):\n    return self._create_examples(os.path.join(data_dir, \"test\"))\n\n  def _create_examples(self, data_dir):\n    \"\"\"Creates examples.\"\"\"\n    examples = []\n    for label in [\"neg\", \"pos\"]:\n      cur_dir = os.path.join(data_dir, label)\n      for filename in tf.io.gfile.listdir(cur_dir):\n        if not filename.endswith(\"txt\"):\n          continue\n\n        if len(examples) % 1000 == 0:\n          logging.info(\"Loading dev example %d\", len(examples))\n\n        path = os.path.join(cur_dir, filename)\n        with tf.io.gfile.GFile(path) as f:\n          text = f.read().strip().replace(\"<br />\", \" \")\n        examples.append(\n            InputExample(\n                guid=\"unused_id\", text_a=text, text_b=None, label=label))\n    return examples\n\nclass MnliMatchedProcessor(GLUEProcessor):\n  \"\"\"MnliMatchedProcessor.\"\"\"\n\n  def __init__(self):\n    super(MnliMatchedProcessor, self).__init__()\n    self.dev_file = \"dev_matched.tsv\"\n    self.test_file = \"test_matched.tsv\"\n    self.label_column = -1\n    self.text_a_column = 8\n    self.text_b_column = 9\n\n  def get_labels(self):\n    return [\"contradiction\", \"entailment\", \"neutral\"]"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/legacy/xlnet/preprocess_classification_data.py",
+      "snippets": [
+        {
+          "lines": "258-270",
+          "code": "class Yelp5Processor(DataProcessor):\n  \"\"\"Yelp5Processor.\"\"\"\n\n  def get_train_examples(self, data_dir):\n    return self._create_examples(os.path.join(data_dir, \"train.csv\"))\n\n  def get_dev_examples(self, data_dir):\n    return self._create_examples(os.path.join(data_dir, \"test.csv\"))\n\n  def get_labels(self):\n    \"\"\"See base class.\"\"\"\n    return [\"1\", \"2\", \"3\", \"4\", \"5\"]\n\n  def _create_examples(self, input_file):\n    \"\"\"Creates examples for the training and dev sets.\"\"\"\n    examples = []\n    with tf.io.gfile.GFile(input_file) as f:\n      reader = csv.reader(f)\n      for i, line in enumerate(reader):\n\n        label = line[0]\n        text_a = line[1].replace('\"\"', '\"').replace('\\\\\"', '\"')\n        examples.append(\n            InputExample(guid=str(i), text_a=text_a, text_b=None, label=label))\n    return examples\n\nclass ImdbProcessor(DataProcessor):\n  \"\"\"ImdbProcessor.\"\"\"\n\n  def get_labels(self):\n    return [\"neg\", \"pos\"]\n\n  def get_train_examples(self, data_dir):\n    return self._create_examples(os.path.join(data_dir, \"train\"))\n\n  def get_dev_examples(self, data_dir):\n    return self._create_examples(os.path.join(data_dir, \"test\"))\n\n  def _create_examples(self, data_dir):\n    \"\"\"Creates examples.\"\"\"\n    examples = []\n    for label in [\"neg\", \"pos\"]:\n      cur_dir = os.path.join(data_dir, label)\n      for filename in tf.io.gfile.listdir(cur_dir):\n        if not filename.endswith(\"txt\"):\n          continue\n\n        if len(examples) % 1000 == 0:\n          logging.info(\"Loading dev example %d\", len(examples))\n\n        path = os.path.join(cur_dir, filename)\n        with tf.io.gfile.GFile(path) as f:\n          text = f.read().strip().replace(\"<br />\", \" \")\n        examples.append(\n            InputExample(\n                guid=\"unused_id\", text_a=text, text_b=None, label=label))\n    return examples\n\nclass MnliMatchedProcessor(GLUEProcessor):\n  \"\"\"MnliMatchedProcessor.\"\"\"\n\n  def __init__(self):\n    super(MnliMatchedProcessor, self).__init__()\n    self.dev_file = \"dev_matched.tsv\"\n    self.test_file = \"test_matched.tsv\"\n    self.label_column = -1\n    self.text_a_column = 8\n    self.text_b_column = 9\n\n  def get_labels(self):\n    return [\"contradiction\", \"entailment\", \"neutral\"]"
+        }
+      ]
+    }
+  ]
+}

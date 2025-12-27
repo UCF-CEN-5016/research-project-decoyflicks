@@ -1,0 +1,13 @@
+[
+    "Install TensorFlow Models Garden release version 2.4.1 and TensorFlow 2.4.1 using pip or conda",
+    "Clone the TensorFlow Models repository from https://github.com/tensorflow/models.git at commit hash abcdefg (assuming this is the latest commit where the bug was reported)",
+    "Navigate to the directory research/delf/delf/python/training/model/ and create a new Python file named delf_model_test.py",
+    "Copy and paste the code from the provided Code Context into delf_model_test.py",
+    "Ensure that the required dependencies are installed by running !pip install absl-py tensorflow-text==2.4.1 delf-python",
+    "Set up a virtual environment with Python 3.8 and activate it",
+    "Navigate to the directory research/delf/delf/python/training/model/ in your terminal or command prompt",
+    "Run the delf_model_test.py file using the command python -m unittest discover .",
+    "Verify that the test_build_model method fails with an ImportError, specifically: /usr/local/lib/python3.10/dist-packages/tensorflow_text/core/pybinds/tflite_registrar.so: undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E",
+    "Check the output logs for any additional error messages or stack traces related to the missing symbol"
+]
+

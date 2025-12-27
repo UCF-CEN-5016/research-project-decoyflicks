@@ -1,0 +1,39 @@
+TITLE  
+TensorFlow 2 Multi-worker Mirrored Strategy Not Scaling Across GPUs
+
+SYMPTOMS  
+• Throughput does not increase when using multi-node, multi-GPU setup with TensorFlow 2.11.  
+• Execution on single GPU achieves approximately 270 examples/sec.  
+• Execution on two GPUs within a single node achieves approximately 700 examples/sec.  
+• No increase in throughput when scaling to two nodes with two GPUs each; throughput remains the same as a single GPU.  
+• Logs do not indicate any errors, but the expected performance is not observed.  
+
+EXPECTED BEHAVIOR  
+When using the multi-worker mirrored strategy, the throughput should increase proportionally with the addition of more GPUs across multiple nodes, leading to higher overall performance in terms of examples processed per second.
+
+REPRODUCTION STEPS  
+1. Allocate resources using the command:  
+   `salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive`  
+2. On GPU node 1, navigate to the model directory and set environment variables:  
+   ```bash
+   cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+   export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+   export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+   export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+   source /home/apps/anaconda3/bin/activate && \
+   conda activate tf11
+   ```  
+3. Run the training script with the following command:  
+   ```bash
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml
+   ```  
+4. On GPU node 2, repeat steps 2 and 3, but use `gpu1.yaml` for the configuration file.  
+5. Verify the throughput results and compare them to single GPU and single node results.  
+
+SYSTEM INFORMATION  
+- OS Platform: CentOS 7  
+- TensorFlow Version: 2.11.0  
+- Python Version: 3.9.7  
+- GPU Model: Tesla V100-SXM2 with 16 GB memory  
+- Driver Version: 450.51.05  
+- CUDA Version: 11.0

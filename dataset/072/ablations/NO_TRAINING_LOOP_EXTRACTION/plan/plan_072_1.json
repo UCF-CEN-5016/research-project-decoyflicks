@@ -1,0 +1,22 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the DeepSpeed-Chat application directory using 'cd DeepSpeedExamples/applications/DeepSpeed-Chat'",
+    "Create a Python virtual environment using 'python -m venv deepspeed_env'",
+    "Activate the virtual environment using 'source deepspeed_env/bin/activate' (Linux/Mac) or 'deepspeed_env\\Scripts\\activate' (Windows)",
+    "Install required packages using 'pip install -r requirements.txt'",
+    "Install DeepSpeed using 'pip install deepspeed'",
+    "Import necessary libraries in a new Python script: 'import torch', 'import deepspeed', 'from dschat.utils.data import create_prompt_dataset'",
+    "Set the random seed for reproducibility using 'torch.manual_seed(42)'",
+    "Define a dataset name as 'Dahoas/rm-static' and set output path to './data'",
+    "Prepare the dataset by calling 'train_dataset, eval_dataset = create_prompt_dataset(local_rank=0, data_path=['Dahoas/rm-static'], data_split='10,0', output_path='./data', train_phase=1, seed=42, tokenizer=None, max_seq_len=512)'",
+    "Initialize a DeepSpeed model configuration with a batch size of 8 and gradient accumulation steps of 1",
+    "Create a model instance using 'model = deepspeed.initialize(model=model, model_parameters=model.parameters(), config_params=config)'",
+    "Start training for one epoch by calling 'for epoch in range(1): train(model, train_dataset)'",
+    "During training, ensure to call 'print_throughput(model.model, args, end - start)' at the end of each epoch",
+    "Run the script and monitor the output for the AttributeError: 'DeepSpeedEngine' object has no attribute 'model'",
+    "Verify that the error occurs specifically at the line where 'model.model' is accessed",
+    "Check the version of DeepSpeed and Transformers being used to ensure compatibility issues are not present",
+    "Log the complete error traceback to confirm the source of the AttributeError"
+]
+```

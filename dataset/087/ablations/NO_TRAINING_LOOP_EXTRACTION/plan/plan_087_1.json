@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: torch, einops, and the Attend class from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 2 and sequence length of 10",
+    "Define the number of heads for attention as 4 and the dimension of each head as 16",
+    "Create random input data with shape (batch_size, sequence_length, heads * dim_head) = (2, 10, 64)",
+    "Create random positional data for custom alibi positions with shape (batch_size, sequence_length) = (2, 10)",
+    "Instantiate the Attention class with parameters: dim=64, heads=4, flash=True, and other default parameters",
+    "Call the forward method of the Attention instance with the following parameters: input tensor, context=None, mask=None, attn_mask=None, rel_pos=None, attn_bias=None, pos=custom_position_tensor",
+    "Capture the output of the forward method call",
+    "Check the shape of the output tensor to ensure it matches expected dimensions (batch_size, sequence_length, heads * dim_head)",
+    "Assert that the output tensor is not None and has the shape (2, 10, 64)",
+    "Verify that the attention bias is being applied correctly by checking the internal state of the attention mechanism, specifically the bias tensor shape",
+    "Assert that the bias tensor shape is 4D when custom positions are passed in, which should be (batch_size, heads, sequence_length, sequence_length)",
+    "Log the output tensor and the bias tensor for debugging purposes",
+    "Run the test and observe if any errors or unexpected behavior occurs, particularly related to tensor shapes or NaN values in the output"
+]
+```

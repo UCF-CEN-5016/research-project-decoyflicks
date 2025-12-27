@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf and from mrcnn import model as modellib",
+    "Define constants: set MODEL_DIR to a valid directory path, set COCO_MODEL_PATH to a valid path of the pre-trained weights file (e.g., 'mask_rcnn_coco.h5')",
+    "Create a configuration class: subclass the Config class from mrcnn/config.py and set NUM_CLASSES to 1 and BACKBONE to 'resnet101'",
+    "Instantiate the configuration: config = YourConfigClass()",
+    "Set the mode to inference: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Load the pre-trained weights: call model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Run the code in a Jupyter notebook cell to trigger the error",
+    "Capture the output and verify that a NotImplementedError is raised",
+    "Check the error message to confirm it states 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead.'",
+    "Ensure that the TensorFlow version is compatible with the Mask R-CNN implementation (e.g., TensorFlow 2.x)",
+    "Validate that the environment is set up correctly with the required dependencies installed (e.g., Keras, NumPy, etc.)"
+]
+```

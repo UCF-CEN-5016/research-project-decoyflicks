@@ -1,0 +1,11 @@
+MMS - Forced Alignment: log_probs shapes problem
+
+## 🐛 Bug
+
+I want to make forced alignment an audio file with its text transcription, but I encounter this issue when I run this command: `python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang udm --outdir output --uroman uroman/bin`.
+
+I got this error: `RuntimeError: log_probs must be 3-D (batch_size, input length, num classes)`.
+
+It seems to have happened after this [commit](https://github.com/pytorch/audio/commit/cc164478f3031cc414f4938c3ec35e113063fded).
+
+Thanks! 

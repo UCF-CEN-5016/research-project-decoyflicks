@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary modules: torch, nn, einsum from torch, and Rearrange, repeat from einops",
+    "Define a batch size of 4 and image dimensions of 224x224",
+    "Set patch size to 16, resulting in 14 patches per dimension (224 / 16 = 14)",
+    "Define the number of classes as 10",
+    "Set model parameters: dim=512, depth=6, heads=8, mlp_dim=2048, dropout=0.1, emb_dropout=0.1",
+    "Create random input data with shape (batch_size, channels, height, width) = (4, 3, 224, 224)",
+    "Instantiate the DeepViT model with the defined parameters",
+    "Pass the random input data through the model to get the output",
+    "Capture the output shape and verify it is (batch_size, num_classes) = (4, 10)",
+    "Check for NaN values in the output using torch.isnan(output).any()",
+    "Assert that the output contains NaN values, indicating a bug in the model's forward pass",
+    "Log the output tensor to inspect its values and confirm the presence of NaNs",
+    "Monitor the training process to check for any runtime warnings or errors related to NaN values"
+]
+```

@@ -1,0 +1,18 @@
+**TITLE**  
+Error during execution of DeepSpeed training script pretrain_gpt3_2.7b.sh
+
+**SYMPTOMS**  
+• Warnings related to GPU barrier and nvfuser deprecation.  
+• UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended.  
+• Traceback errors indicating an `AttributeError: 'NoneType' object has no attribute 'all_reduce'`.  
+• Multiple ranks (rank0 and rank1) encounter the same errors during execution.  
+
+**EXPECTED BEHAVIOR**  
+The training script should run successfully without errors, utilizing the specified GPUs for distributed training and producing the expected outputs.
+
+**REPRODUCTION STEPS**  
+1. Set up a SLURM job script with the provided configuration.
+2. Activate the `deepspeed_env` conda environment.
+3. Load the required modules: `openmpi`, `cuda`, and `gcc`.
+4. Execute the command `srun bash pretrain_gpt3_2.7b.sh` to run the training script.
+5. Observe the output and error messages generated during execution.

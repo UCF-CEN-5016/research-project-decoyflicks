@@ -1,0 +1,14 @@
+```json
+[
+    "Import the necessary libraries including labml, torch, and related modules from their respective files",
+    "Set up the CoraDataset class to load and prepare the dataset with specific paths and configurations",
+    "Create an instance of Configs with specific parameters such as model type, training samples, dropout rate, etc.",
+    "Initialize the GAT model with specific hidden features, number of heads, and other hyperparameters",
+    "Prepare the input data (features and adjacency matrix) for a single batch by moving them to the device specified in the config",
+    "Set up the optimizer using Adam with a learning rate of 5e-3 and weight decay of 5e-4 as per the experiment configuration",
+    "Run one epoch of training by calling the model's forward method, computing loss, and performing backpropagation",
+    "Assert that the calculated loss contains NaN values indicating an error in the attention mechanism or elsewhere in the model",
+    "Monitor the GPU memory usage during the training loop to identify any unusual spikes or excessive consumption"
+]
+```
+

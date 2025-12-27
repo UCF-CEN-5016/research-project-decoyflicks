@@ -1,0 +1,21 @@
+[
+    "Ensure a Linux environment with at least 6 GPUs (e.g., 6x NVIDIA 3070 Ti) and proper CUDA setup",
+    "Clone the HuggingFace transformers repository: `git clone https://github.com/huggingface/transformers.git`",
+    "Navigate into the cloned transformers directory: `cd transformers`",
+    "Install transformers in editable mode with dependencies: `pip install -e .`",
+    "Create a new directory outside transformers, e.g., `mkdir ~/test && cd ~/test`",
+    "Install DeepSpeed and any other required dependencies: `pip install deepspeed`",
+    "Create a new shell script file named `test_tune.sh` in the test directory",
+    "Copy the exact content of `training/autotuning/hf/gpt2-xl/test_tune.sh` from the DeepSpeedExamples repository into `test_tune.sh`",
+    "Modify inside `test_tune.sh` the `HF_PATH` variable to point to the local transformers path, e.g., `HF_PATH=../transformers`",
+    "Set `NGPUS=6` inside `test_tune.sh` to match available GPUs",
+    "Ensure the script `test_tune.sh` is executable: `chmod +x test_tune.sh`",
+    "Run the script with tuning mode: `./test_tune.sh tune`",
+    "Observe the output logs and verify that it reaches the autotuning phase with logs similar to `[Start] Running autotuning`",
+    "Check for the error message in the logs: `ParquetConfig.__init__() got an unexpected keyword argument 'token'`",
+    "Validate that the error occurs during the model info profiling phase, typically after scheduler writes config files and tries to launch experiments",
+    "Confirm that the error is reproducible on multiple runs with the same setup and configuration",
+    "Optionally, capture the full error traceback and log output to validate the exact exception origin and message",
+    "Assert that no valid DeepSpeed autotuning configuration is found and the script ends with a message indicating no optimal config",
+    "Document the PyPI package versions of transformers and deepspeed installed to correlate with the bug reproducibility"
+]

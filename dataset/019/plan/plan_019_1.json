@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from TensorFlow Model Garden for the bug reproduction.",
+    "Set up the Python environment with TensorFlow 2.x installed to ensure compatibility.",
+    "Clone the TensorFlow Models repository from GitHub to get access to the required files.",
+    "Navigate to the directory containing the 'tn_expand_condense_test.py' file located at 'official/nlp/modeling/layers/tn_expand_condense_test.py'.",
+    "Import the necessary modules and functions for reproducing the bug, including 'absl' for parameters, and 'official' for TNExpandCondense and from_config.",
+    "Define a data batch size of 100 and input dimension of 768 to match the test cases in the code context.",
+    "Generate random input data with shape (batch_size, input_dim) using numpy, ensuring the values are within the valid range for the model inputs.",
+    "Create an instance of TNExpandCondense layer with a proj_multiplier of 2, use_bias set to True, activation as 'relu', and input_shape matching the data dimension.",
+    "Construct a simple Keras model by adding the TNExpandCondense layer followed by a Dense layer for binary classification.",
+    "Compile the model using the Adam optimizer and binary crossentropy loss function, with accuracy as a metric.",
+    "Train the model on the generated random data for 5 epochs with a batch size of 32, ensuring to capture the training process in variables or logs if necessary.",
+    "Verify that an ImportError occurs during the execution, specifically related to the undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E",
+    "Monitor the system resources (CPU and GPU) during model training to observe any unusual behavior or resource spikes that might be relevant.",
+    "Assert that the error message matches the one provided in the bug report to confirm that the specific bug is being reproduced."
+]
+```
+

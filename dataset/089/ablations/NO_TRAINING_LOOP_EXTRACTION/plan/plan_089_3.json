@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary modules: torch, deepcopy from copy, and rearrange from einops",
+    "Define a batch size of 4 and sequence length of 10",
+    "Set the number of heads to 8 and kv_heads to 4, ensuring kv_heads != heads",
+    "Create a random tensor for preferred_seq with shape (batch_size, sequence_length) filled with integers in the range [0, 100]",
+    "Create a random tensor for unpreferred_seq with the same shape as preferred_seq",
+    "Define a prompt_mask tensor with shape (batch_size, sequence_length) filled with boolean values (True/False)",
+    "Instantiate the TransformerWrapper model with the specified number of heads and kv_heads",
+    "Create an instance of the DPO class, passing the TransformerWrapper model as the policy_model",
+    "Call the forward method of the DPO instance with preferred_seq, unpreferred_seq, and prompt_mask as arguments",
+    "Capture the output of the forward method, which should return a loss value",
+    "Check if the loss value is finite; if it is NaN or inf, the bug is reproduced",
+    "Log the output loss value to verify the presence of the bug",
+    "Assert that the loss value is not equal to the expected value (e.g., 0) to confirm the bug's occurrence"
+]
+```

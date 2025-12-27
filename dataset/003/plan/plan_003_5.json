@@ -1,0 +1,13 @@
+[
+    "Import the necessary modules from TensorFlow and other dependencies as specified in the import section",
+    "Define a batch size of 32 and image dimensions of 224x224 for input data",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Load a pre-trained model using `build_model` function from `official` module, specifying num_classes=1000",
+    "Create fake labels for the batch of inputs with shape (batch_size, num_classes) and random values between 0 and 1",
+    "Call `train_step` method with the inputs and fake labels on the model, and a dummy optimizer that always returns zero gradients",
+    "Capture the output of the loss calculation in `all_losses[self.loss]` inside the `train_step` method",
+    "Verify if the calculated loss contains NaN values by asserting `np.isnan(all_losses[self.loss]).any()` is True",
+    "Monitor GPU memory usage during the execution of the `train_step` method",
+    "Assert that the GPU memory usage exceeds a predefined threshold indicating memory overflow or incorrect computation"
+]
+

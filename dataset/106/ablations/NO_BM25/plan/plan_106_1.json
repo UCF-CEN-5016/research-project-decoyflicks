@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 8 and input dimensions of 64x64 with 3 channels (e.g., RGB images)",
+    "Create random input data with shape (batch_size, 3, 64, 64) using torch.randn",
+    "Define a codebook size of 256 and codebook dimension of 64",
+    "Instantiate the VectorQuantize class with parameters: dim=3, codebook_size=256, codebook_dim=64",
+    "Create a random codebook with shape (256, 64) using torch.randn",
+    "Set the codebook of the VectorQuantize instance to the random codebook",
+    "Call the forward method of the VectorQuantize instance with the random input data",
+    "Capture the output of the forward method, which should include quantized output, indices, and distances",
+    "Check the distances tensor for NaN values using torch.isnan",
+    "Assert that any NaN values are present in the distances tensor",
+    "Print a message indicating that NaN values were found in the distances tensor"
+]
+```

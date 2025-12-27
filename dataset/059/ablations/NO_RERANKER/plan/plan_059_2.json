@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and Keras modules: import tensorflow as tf and from keras import layers, Model",
+    "Define a batch size of 32 and input dimensions of (32,)",
+    "Create random input data x with shape (1000, 32) and corresponding target data y with shape (1000, 1)",
+    "Define a custom model class CustomModel that subclasses keras.Model and overrides the train_step method",
+    "In the train_step method, unpack the data into x and y, and include a GradientTape context for gradient calculation",
+    "Inside the GradientTape, call self(x, training=True) to perform a forward pass and compute the loss using self.compute_loss(y=y, y_pred=y_pred)",
+    "Compute gradients using tape.gradient(loss, self.trainable_variables) and apply them with self.optimizer.apply_gradients",
+    "Update metrics in the train_step method, including loss and MAE metrics",
+    "Instantiate the CustomModel with keras.Input(shape=(32,)) and a Dense layer output",
+    "Compile the model with optimizer='adam', loss='mse', and metrics=['mae']",
+    "Call model.fit(x, y, epochs=3) to start training the model",
+    "Capture any errors that occur during the fitting process",
+    "Verify that the error message matches the one reported in the bug report",
+    "Log the error details to confirm the issue is reproducible"
+]
+```

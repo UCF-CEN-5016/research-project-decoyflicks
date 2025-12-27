@@ -1,0 +1,33 @@
+TITLE  
+Multi-worker Mirrored Strategy Not Scaling Across Nodes in TensorFlow 2.11
+
+SYMPTOMS  
+• Throughput remains constant when running on multiple nodes with multiple GPUs, similar to single GPU performance.  
+• No increase in throughput with two GPUs across two nodes; performance is approximately 270 examples/sec (single GPU) and 700 examples/sec (two GPUs in a single node).  
+• No error messages are encountered during execution.  
+• Logs do not indicate any issues, but expected scaling is not observed.
+
+EXPECTED BEHAVIOR  
+When using the multi-worker mirrored strategy with two GPUs across two nodes, the throughput should increase significantly compared to single GPU performance, ideally achieving close to double the performance.
+
+REPRODUCTION STEPS  
+1. Allocate resources for two nodes with two GPUs using the command:  
+   `salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive`  
+2. On the first GPU node (gpu1), navigate to the TensorFlow Model Garden directory and set environment variables:  
+   ```bash
+   cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+   export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+   export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+   export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+   source /home/apps/anaconda3/bin/activate && \
+   conda activate tf11
+   ```  
+3. Execute the training script with the following command:  
+   ```bash
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml
+   ```  
+4. On the second GPU node (gpu2), repeat steps 2 and 3, but use a different configuration file (gpu1.yaml):  
+   ```bash
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml
+   ```  
+5. Monitor the throughput and log outputs to verify performance.

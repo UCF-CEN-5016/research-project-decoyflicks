@@ -1,0 +1,7 @@
+nan encountered in `cdist()`
+
+https://github.com/lucidrains/vector-quantize-pytorch/blob/115558857db741b95029857275a8129971b3e407/vector_quantize_pytorch/vector_quantize_pytorch.py#L33
+
+`(x-y)^2` could be negative if computed as `x^2 + y^2 - 2xy` due to float precision overflow.
+so the resulted dist may contain some `nan`.
+`torch.clamp(..., min=0)` is required here.

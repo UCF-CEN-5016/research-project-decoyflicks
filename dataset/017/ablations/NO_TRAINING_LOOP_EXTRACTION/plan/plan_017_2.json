@@ -1,0 +1,26 @@
+```json
+[
+    "Import TensorFlow version 1.x and necessary libraries: tensorflow, pathlib, and matplotlib",
+    "Set the TensorFlow version to 1.x by using 'tf.compat.v1' for compatibility",
+    "Define a model name variable with a string value of 'ssd_mobilenet_v1_coco_2017_11_17'",
+    "Define a function 'load_model' that takes 'model_name' as a parameter",
+    "Inside 'load_model', set 'base_url' to 'http://download.tensorflow.org/models/research/object_detection/'",
+    "Concatenate 'model_name' with '.tar.gz' to create 'model_file'",
+    "Use 'tf.keras.utils.get_file' to download the model file, setting 'fname' to 'model_name' and 'origin' to 'base_url + model_file'",
+    "Extract the model directory by appending '/saved_model' to the path returned by 'tf.keras.utils.get_file'",
+    "Print the model directory to verify the correct path is being used",
+    "Attempt to load the model using 'tf.saved_model.load' with the model directory as the argument",
+    "Access the model signatures with 'model.signatures['serving_default']'",
+    "Return the loaded model from the 'load_model' function",
+    "Define a list 'TEST_IMAGE_PATHS' containing paths to test images, e.g., ['path/to/image1.jpg', 'path/to/image2.jpg']",
+    "Define a function 'show_inference' that takes 'detection_model' and 'image_path' as parameters",
+    "Inside 'show_inference', load the image using 'tf.io.read_file' and decode it with 'tf.image.decode_image'",
+    "Resize the image to the required input size for the model, e.g., (640, 640)",
+    "Run inference on the model with the preprocessed image",
+    "Print the output tensors to verify their values",
+    "Iterate over 'TEST_IMAGE_PATHS' and call 'show_inference' with the loaded model and each image path",
+    "Check for empty output tensors and assert that they contain '???' or similar placeholder values",
+    "Log the output of the model to confirm the presence of the warning 'INFO:tensorflow:Saver not created because there are no variables in the graph to restore'",
+    "Verify that the inference results do not produce valid detections by checking the output format and values"
+]
+```

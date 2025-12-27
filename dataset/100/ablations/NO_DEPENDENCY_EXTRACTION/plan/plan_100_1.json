@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.optim",
+    "Define a batch size of 8 and input dimensions of (8, 64, 128) for a sequence length of 64 and feature dimension of 128",
+    "Create a random tensor 'input_data' with shape (batch_size, seq_len, feature_dim) using torch.randn(batch_size, 64, 128)",
+    "Instantiate the RotaryEmbedding class with parameters: dim=128, learned_freq=True, freqs_for='lang'",
+    "Define a simple neural network model that uses the RotaryEmbedding in its forward pass",
+    "Create a random target tensor 'target' with shape (batch_size, 64) for loss calculation",
+    "Define a loss function, e.g., nn.CrossEntropyLoss()",
+    "Instantiate an optimizer, e.g., torch.optim.Adam(model.parameters(), lr=0.001)",
+    "Run the first training iteration: call model(input_data) to get predictions",
+    "Calculate the loss using loss_fn(predictions, target)",
+    "Call loss.backward() to compute gradients for the first iteration",
+    "Update model parameters using optimizer.step()",
+    "Clear gradients using optimizer.zero_grad()",
+    "Run the second training iteration: call model(input_data) again to get predictions",
+    "Calculate the loss again using loss_fn(predictions, target)",
+    "Attempt to call loss.backward() for the second time",
+    "Verify that a RuntimeError is raised with the message 'Trying to backward through the graph a second time'"
+]
+```

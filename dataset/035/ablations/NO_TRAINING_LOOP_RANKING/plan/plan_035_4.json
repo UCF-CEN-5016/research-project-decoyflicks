@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and RotaryPositionalEmbeddings from labml_nn.transformers.rope",
+    "Define a variable 'num_features' and set it to 3 to match the current bug in the code",
+    "Create an instance of RotaryPositionalEmbeddings with num_features as the parameter: rotary_pe = RotaryPositionalEmbeddings(num_features)",
+    "Prepare a dummy input tensor with shape (1, 4, 64) to simulate a batch size of 1, 4 features, and a sequence length of 64",
+    "Call the forward method of rotary_pe with the dummy input tensor to trigger the bug: output = rotary_pe(dummy_input)",
+    "Capture any exceptions raised during the execution of the forward method",
+    "Assert that the exception raised is of type RuntimeError, indicating that the input dimensions do not match the expected number of features",
+    "Log the error message to verify it corresponds to the mismatch in feature dimensions",
+    "Change the num_features variable to 4 to match the expected value and re-run the forward method to confirm that the error no longer occurs",
+    "Verify that the output shape of the forward method is as expected when num_features is set to 4"
+]
+```

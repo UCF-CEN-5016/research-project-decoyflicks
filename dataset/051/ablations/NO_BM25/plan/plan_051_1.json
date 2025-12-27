@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import keras, keras_nlp, numpy, random, and tensorflow",
+    "Set the random seed for reproducibility: np.random.seed(42) and random.seed(42)",
+    "Define the model parameters: set vocab_size = 10000, max_length = 20, and embedding_dim = 256",
+    "Create a dummy English sentence for testing: input_sentence = 'This is a test sentence.'",
+    "Prepare the input data: create a numpy array with shape (1, max_length) filled with random integers between 0 and vocab_size",
+    "Define the decode_sequences function that takes input_sentences as an argument",
+    "Inside decode_sequences, create a prompt tensor by concatenating a start token and padding: prompt = np.concatenate((start_token, pad_token), axis=-1)",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and other required parameters: generated_tokens = sampler(next, prompt, end_token_id=end_token_id)",
+    "Run the decode_sequences function with the dummy input: translated = decode_sequences([input_sentence])",
+    "Capture the output and check for TypeError: assert that the output raises a TypeError indicating 'unexpected keyword argument 'end_token_id''",
+    "Print the error message to confirm the bug is reproduced"
+]
+```

@@ -1,0 +1,20 @@
+[
+    "Install TensorFlow version 2.14.0",
+    "Navigate to the directory containing the Fine-tuning Stable Diffusion example",
+    "Open and review the `finetune_stable_diffusion.py` file",
+    "Ensure that all necessary dependencies are installed, including keras-cv and other required libraries",
+    "Set up a virtual environment if not already done: `python -m venv stable-diffusion-env` and activate it",
+    "Install dependencies within the virtual environment using pip: `pip install tensorflow==2.14.0 keras-cv`",
+    "Clone the keras-io repository from GitHub to your local machine: `git clone https://github.com/keras-team/keras-io.git`",
+    "Navigate into the cloned repository: `cd keras-io/examples/generative/finetune_stable_diffusion`",
+    "Create a Python script named `bug_reproducer.py` in this directory",
+    "Copy and paste the given code snippet into `bug_reproducer.py`, ensuring it is fully self-contained and imports all required modules from keras",
+    "Set specific values for any variables used within the code, such as image dimensions, batch size, learning rate, etc.",
+    "Call the main function or entry point of the example code to simulate running the fine-tuning process",
+    "Monitor the console output during execution to observe any errors or exceptions that occur",
+    "Take note of the exact error message and traceback if an exception is thrown",
+    "Ensure that all required input data, such as images or pre-trained models, are available in the correct format and location",
+    "Re-run the code multiple times if necessary to confirm the reproducibility of the bug",
+    "Verify that the issue can be consistently reproduced on different machines or environments (if applicable)"
+]
+

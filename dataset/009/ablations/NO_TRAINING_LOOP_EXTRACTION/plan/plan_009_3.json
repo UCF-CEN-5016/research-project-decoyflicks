@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules for model training and exporting.",
+    "Set CUDA version to 11.5 and TensorFlow version to 2.4.",
+    "Define the model architecture as 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'.",
+    "Prepare a training dataset with images in JPEG format and a corresponding CSV file containing image IDs and landmark IDs.",
+    "Set the training directory to '/tmp/train_directory' and the test directory to '/tmp/test_directory'.",
+    "Create a CSV file at '/tmp/train.csv' with the following structure: 'id,landmark_id' for training images.",
+    "Run the training script 'model_main_tf2.py' with the following command: 'python model_main_tf2.py --model_dir=/tmp/model_dir --pipeline_config_path=/tmp/pipeline.config --num_train_steps=1000'.",
+    "Verify that the model is trained successfully by checking the output logs for 'Training complete' message.",
+    "Run the export script 'exporter_main_v2.py' with the following command: 'python exporter_main_v2.py --input_type=image_tensor --pipeline_config_path=/tmp/pipeline.config --trained_checkpoint_dir=/tmp/model_dir --output_directory=/tmp/exported_model'.",
+    "Observe the output for any errors during the export process.",
+    "Check for the specific error message 'AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs'' in the console output.",
+    "Confirm that the error occurs consistently by repeating the export command multiple times.",
+    "Ensure that the TensorFlow environment is set up correctly by running 'python -c 'import tensorflow as tf; print(tf.__version__)' to verify the version is 2.4.",
+    "Validate that the model directory contains the expected checkpoint files after training.",
+    "Check the contents of the exported model directory to ensure it is created and contains the expected files."
+]
+```

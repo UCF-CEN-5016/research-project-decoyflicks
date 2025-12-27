@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, and numpy",
+    "Define a batch size of 20 for training and validation datasets",
+    "Prepare a custom dataset structured similarly to the demo dataset in keras_cv, ensuring it contains images and corresponding bounding box annotations",
+    "Create a training dataset (train_ds) and a validation dataset (eval_ds) using tf.data.Dataset.from_tensor_slices with the custom dataset",
+    "Ensure the images in the dataset are resized to the expected input shape of the RetinaNet model, e.g., (image_height, image_width, 3)",
+    "Define the RetinaNet model using keras_cv.models.object_detection.RetinaNet with appropriate input shape and number of classes",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function suitable for object detection",
+    "Call model.fit with train_ds.take(20) as the training data and eval_ds.take(20) as the validation data, setting epochs=1",
+    "Include a callback for EvaluateCOCOMetricsCallback with eval_ds.take(20) to monitor evaluation metrics during training",
+    "Run the model.fit command and observe the output for any errors",
+    "Capture the InvalidArgumentError that occurs during the model fitting process, specifically noting the error message related to 'GatherV2_1'",
+    "Verify that the error message indicates an issue with indices not being in the expected range, specifically 'indices[3,63949] = 0 is not in [0, 0)'",
+    "Log the complete stack trace of the error for further analysis"
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the official vision augment module from tensorflow_models",
+    "Import NumPy and Matplotlib for data visualization",
+    "Define alpha and beta parameters for the beta distribution: alpha = 0.2, beta = 0.2",
+    "Define the shape for the samples to be generated: shape = tf.shape(tf.range(1000))",
+    "Call the static method _sample_from_beta with parameters alpha, beta, and shape",
+    "Store the output of _sample_from_beta in a variable named mixup_samples",
+    "Convert mixup_samples to a NumPy array using .numpy() method",
+    "Generate a reference sample using NumPy's random.beta function: reference_samples = np.random.beta(alpha, beta, 100000)",
+    "Create a figure for plotting using Matplotlib",
+    "Plot the kernel density estimate of mixup_samples using sns.kdeplot with clip=(0, 1)",
+    "Plot the kernel density estimate of reference_samples using sns.kdeplot with clip=(0, 1)",
+    "Display the plot using plt.show()",
+    "Observe the output plot for discrepancies between mixup_samples and reference_samples",
+    "Assert that the distribution of mixup_samples is significantly different from reference_samples"
+]
+```

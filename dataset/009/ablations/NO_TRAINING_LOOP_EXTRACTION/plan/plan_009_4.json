@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official recommendation package",
+    "Set CUDA version to 11.5 and TensorFlow version to 2.4",
+    "Define a batch size of 5 and input dimensions of (640, 640, 3) for the Faster R-CNN model",
+    "Create a random input tensor with shape (batch_size, height, width, channels) using tf.random.uniform with values in the range [0, 255]",
+    "Define a dummy treatment indicator tensor with shape (batch_size, 1) using tf.constant with values [1, 0, 1, 0, 1]",
+    "Instantiate the TwoTowerUpliftModel with treatment_indicator_feature_name set to 'is_treatment' and a simple uplift network",
+    "Compile the model using SGD optimizer with a learning rate of 0.1 and a loss function of true_logits_loss.TrueLogitsLoss",
+    "Create a dataset using tf.data.Dataset.from_tensor_slices with the input tensor and dummy treatment indicator tensor, and batch it with batch_size",
+    "Attempt to fit the model on the dataset for 1 epoch",
+    "Capture any exceptions during model fitting and check if the exception is of type AttributeError",
+    "Verify that the exception message contains 'DetectionFromImageModule' object has no attribute 'outputs'",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

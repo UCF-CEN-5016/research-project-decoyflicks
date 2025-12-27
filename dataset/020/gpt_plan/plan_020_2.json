@@ -1,0 +1,15 @@
+[
+  "Set up a Python 3.8 environment with TensorFlow 2.12.0 and tf-models-official 2.12.0 installed",
+  "Clone the TensorFlow models repository from https://github.com/tensorflow/models.git",
+  "Navigate to the official vision object detection tutorial or example folder within the cloned repo",
+  "Import necessary modules: tensorflow as tf, tfm.core.train_lib, and any model/task related modules from tf-models-official",
+  "Prepare a distribution strategy object, e.g., tf.distribute.get_strategy() for single GPU or MirroredStrategy for multi-GPU",
+  "Prepare a task object according to the tutorial (e.g., object detection task) with valid configuration",
+  "Load or define experiment parameters (exp_config) as per the tutorial example or use a minimal valid config dictionary",
+  "Set a model directory path (model_dir) as a temporary writable directory for checkpoints and logs",
+  "Call the training and evaluation function exactly as in the bug report: tfm.core.train_lib.run_experiment with parameters distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True",
+  "Ensure the Python runtime is explicitly Python 3.8 (not 3.9 or above) to reproduce the dict union operator issue",
+  "Run the code and observe the TypeError triggered inside official/core/base_trainer.py at line 442 with message: 'unsupported operand type(s) for |: 'dict' and 'dict''",
+  "Capture the error stack trace to confirm the error occurs during the eval_step function when merging two dicts using the | operator",
+  "Assert that the error matches the TypeError for unsupported dict union on Python 3.8, confirming the incompatibility bug"
+]

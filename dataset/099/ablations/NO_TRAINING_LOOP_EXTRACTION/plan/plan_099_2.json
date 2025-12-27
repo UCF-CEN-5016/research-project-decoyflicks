@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, rotary_embedding_torch, and any other required modules from the Transformer Engine library.",
+    "Set the device to CUDA by executing: device = torch.device('cuda')",
+    "Define a batch size of 8 and sequence length of 128.",
+    "Create a random input tensor with shape (batch_size, sequence_length, embedding_dim) where embedding_dim is set to 64.",
+    "Initialize the RotaryEmbedding class with parameters: dim=64, learned_freq=True, and other default parameters.",
+    "Create a random tensor for the frequency input with shape (64,) to simulate custom frequencies.",
+    "Call the forward method of the RotaryEmbedding instance with the input tensor and assert that the output shape is (batch_size, sequence_length, embedding_dim).",
+    "Set the precision to fp8 by configuring the model and optimizer to use torch.cuda.amp.autocast with dtype=torch.float8.",
+    "Define a simple loss function, such as CrossEntropyLoss, and create a target tensor with random class indices for the batch size.",
+    "Compute the loss using the output from the RotaryEmbedding and the target tensor, and assert that the loss is a valid tensor.",
+    "Run the optimizer step to update the model parameters.",
+    "Monitor the loss value after each iteration and assert that it becomes NaN at some point during training.",
+    "Log the training steps and loss values to identify when the NaN occurs.",
+    "Verify that the NaN loss is reproducible by running the training loop multiple times and checking for consistency in the occurrence of NaN."
+]
+```

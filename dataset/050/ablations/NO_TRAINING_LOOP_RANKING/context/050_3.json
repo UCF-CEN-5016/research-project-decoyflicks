@@ -1,0 +1,44 @@
+{
+  "bug_report": "050",
+  "rank": 3,
+  "score": 1.0,
+  "main_file": {
+    "path": "examples/generative/real_nvp.py",
+    "content": "\"\"\"\nTitle: Density estimation using Real NVP\nAuthors: [Mandolini Giorgio Maria](https://www.linkedin.com/in/giorgio-maria-mandolini-a2a1b71b4/), [Sanna Daniele](https://www.linkedin.com/in/daniele-sanna-338629bb/), [Zannini Quirini Giorgio](https://www.linkedin.com/in/giorgio-zannini-quirini-16ab181a0/)\nDate created: 2020/08/10\nLast modified: 2020/08/10\nDescription: Estimating the density distribution of the \"double moon\" dataset.\nAccelerator: GPU\n\"\"\"\n\n\"\"\"\n## Introduction\n\nThe aim of this work is to map a simple distribution - which is easy to sample\nand whose density is simple to estimate - to a more complex one learned from the data.\nThis kind of generative model is also known as \"normalizing flow\".\n\nIn order to do this, the model is trained via the maximum\nlikelihood principle, using the \"change of variable\" formula.\n\nWe will use an affine coupling function. We create it such that its inverse, as well as\nthe determinant of the Jacobian, are easy to obtain (more details in the referenced paper).\n\n**Requirements:**\n\n* Tensorflow 2.9.1\n* Tensorflow probability 0.17.0\n\n**Reference:**\n\n[Density estimation using Real NVP](https://arxiv.org/abs/1605.08803)\n\"\"\"\n\n\"\"\"\n## Setup\n\n\"\"\"\nimport tensorflow as tf\nfrom tensorflow import keras\nfrom tensorflow.keras import layers\nfrom tensorflow.keras import regularizers\nfrom sklearn.datasets import make_moons\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport tensorflow_probability as tfp\n\n\"\"\"\n## Load the data\n\"\"\"\n\ndata = make_moons(3000, noise=0.05)[0].astype(\"float32\")\nnorm = layers.Normalization()\nnorm.adapt(data)\nnormalized_data = norm(data)\n\n\"\"\"\n## Affine coupling layer\n\"\"\"\n\n# Creating a custom layer with keras API.\noutput_dim = 256\nreg = 0.01\n\n\ndef Coupling(input_shape):\n    input = keras.layers.Input(shape=input_shape)\n\n    t_layer_1 = keras.layers.Dense(\n        output_dim, activation=\"relu\", kernel_regularizer=regularizers.l2(reg)\n    )(input)\n    t_layer_2 = keras.layers.Dense(\n        output_dim, activation=\"relu\", kernel_regularizer=regularizers.l2(reg)\n    )(t_layer_1)\n    t_layer_3 = keras.layers.Dense(\n        output_dim, activation=\"relu\", kernel_regularizer=regularizers.l2(reg)\n    )(t_layer_2)\n    t_layer_4 = keras.layers.Dense(\n        output_dim, activation=\"relu\", kernel_regularizer=regularizers.l2(reg)\n    )(t_layer_3)\n    t_layer_5 = keras.layers.Dense(\n        input_shape, activation=\"linear\", kernel_regularizer=regularizers.l2(reg)\n    )(t_layer_4)\n\n    s_layer_1 = keras.layers.Dense(\n        output_dim, activation=\"relu\", kernel_regularizer=regularizers.l2(reg)\n    )(input)\n    s_layer_2 = keras.layers.Dense(\n        output_dim, activation=\"relu\", kernel_regularizer=regularizers.l2(reg)\n    )(s_layer_1)\n    s_layer_3 = keras.layers.Dense(\n        output_dim, activation=\"relu\", kernel_regularizer=regularizers.l2(reg)\n    )(s_layer_2)\n    s_layer_4 = keras.layers.Dense(\n        output_dim, activation=\"relu\", kernel_regularizer=regularizers.l2(reg)\n    )(s_layer_3)\n    s_layer_5 = keras.layers.Dense(\n        input_shape, activation=\"tanh\", kernel_regularizer=regularizers.l2(reg)\n    )(s_layer_4)\n\n    return keras.Model(inputs=input, outputs=[s_layer_5, t_layer_5])\n\n\n\"\"\"\n## Real NVP\n\"\"\"\n\n\nclass RealNVP(keras.Model):\n    def __init__(self, num_coupling_layers):\n        super().__init__()\n\n        self.num_coupling_layers = num_coupling_layers\n\n        # Distribution of the latent space.\n        self.distribution = tfp.distributions.MultivariateNormalDiag(\n            loc=[0.0, 0.0], scale_diag=[1.0, 1.0]\n        )\n        self.masks = np.array(\n            [[0, 1], [1, 0]] * (num_coupling_layers // 2), dtype=\"float32\"\n        )\n        self.loss_tracker = keras.metrics.Mean(name=\"loss\")\n        self.layers_list = [Coupling(2) for i in range(num_coupling_layers)]\n\n    @property\n    def metrics(self):\n        \"\"\"List of the model's metrics.\n\n        We make sure the loss tracker is listed as part of `model.metrics`\n        so that `fit()` and `evaluate()` are able to `reset()` the loss tracker\n        at the start of each epoch and at the start of an `evaluate()` call.\n        \"\"\"\n        return [self.loss_tracker]\n\n    def call(self, x, training=True):\n        log_det_inv = 0\n        direction = 1\n        if training:\n            direction = -1\n        for i in range(self.num_coupling_layers)[::direction]:\n            x_masked = x * self.masks[i]\n            reversed_mask = 1 - self.masks[i]\n            s, t = self.layers_list[i](x_masked)\n            s *= reversed_mask\n            t *= reversed_mask\n            gate = (direction - 1) / 2\n            x = (\n                reversed_mask\n                * (x * tf.exp(direction * s) + direction * t * tf.exp(gate * s))\n                + x_masked\n            )\n            log_det_inv += gate * tf.reduce_sum(s, [1])\n\n        return x, log_det_inv\n\n    # Log likelihood of the normal distribution plus the log determinant of the jacobian.\n\n    def log_loss(self, x):\n        y, logdet = self(x)\n        log_likelihood = self.distribution.log_prob(y) + logdet\n        return -tf.reduce_mean(log_likelihood)\n\n    def train_step(self, data):\n        with tf.GradientTape() as tape:\n            loss = self.log_loss(data)\n\n        g = tape.gradient(loss, self.trainable_variables)\n        self.optimizer.apply_gradients(zip(g, self.trainable_variables))\n        self.loss_tracker.update_state(loss)\n\n        return {\"loss\": self.loss_tracker.result()}\n\n    def test_step(self, data):\n        loss = self.log_loss(data)\n        self.loss_tracker.update_state(loss)\n\n        return {\"loss\": self.loss_tracker.result()}\n\n\n\"\"\"\n## Model training\n\"\"\"\n\nmodel = RealNVP(num_coupling_layers=6)\n\nmodel.compile(optimizer=keras.optimizers.Adam(learning_rate=0.0001))\n\nhistory = model.fit(\n    normalized_data, batch_size=256, epochs=300, verbose=2, validation_split=0.2\n)\n\n\"\"\"\n## Performance evaluation\n\"\"\"\n\nplt.figure(figsize=(15, 10))\nplt.plot(history.history[\"loss\"])\nplt.plot(history.history[\"val_loss\"])\nplt.title(\"model loss\")\nplt.legend([\"train\", \"validation\"], loc=\"upper right\")\nplt.ylabel(\"loss\")\nplt.xlabel(\"epoch\")\n\n# From data to latent space.\nz, _ = model(normalized_data)\n\n# From latent space to data.\nsamples = model.distribution.sample(3000)\nx, _ = model.predict(samples)\n\nf, axes = plt.subplots(2, 2)\nf.set_size_inches(20, 15)\n\naxes[0, 0].scatter(normalized_data[:, 0], normalized_data[:, 1], color=\"r\")\naxes[0, 0].set(title=\"Inference data space X\", xlabel=\"x\", ylabel=\"y\")\naxes[0, 1].scatter(z[:, 0], z[:, 1], color=\"r\")\naxes[0, 1].set(title=\"Inference latent space Z\", xlabel=\"x\", ylabel=\"y\")\naxes[0, 1].set_xlim([-3.5, 4])\naxes[0, 1].set_ylim([-4, 4])\naxes[1, 0].scatter(samples[:, 0], samples[:, 1], color=\"g\")\naxes[1, 0].set(title=\"Generated latent space Z\", xlabel=\"x\", ylabel=\"y\")\naxes[1, 1].scatter(x[:, 0], x[:, 1], color=\"g\")\naxes[1, 1].set(title=\"Generated data space X\", label=\"x\", ylabel=\"y\")\naxes[1, 1].set_xlim([-2, 2])\naxes[1, 1].set_ylim([-2, 2])\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "matplotlib",
+      "function": "figure"
+    },
+    {
+      "module": "matplotlib",
+      "function": "legend"
+    },
+    {
+      "module": "matplotlib",
+      "function": "plot"
+    },
+    {
+      "module": "matplotlib",
+      "function": "subplots"
+    },
+    {
+      "module": "matplotlib",
+      "function": "title"
+    },
+    {
+      "module": "matplotlib",
+      "function": "xlabel"
+    },
+    {
+      "module": "matplotlib",
+      "function": "ylabel"
+    },
+    {
+      "module": "sklearn",
+      "function": "make_moons"
+    }
+  ]
+}

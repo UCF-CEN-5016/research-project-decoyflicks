@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and the necessary KerasCV modules",
+    "Define a batch size of 32 and image dimensions of 640x640",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call the YOLOV8Detector model's compile method with specified parameters including 'binary_crossentropy' for classification loss and 'ciou' for box loss",
+    "Train the model on a dummy dataset consisting of 10 batches of random data for each epoch up to 3 epochs",
+    "During training, monitor the loss values after each epoch",
+    "Assert that at least one epoch has a NaN value in its classification or box loss",
+    "Visualize predictions using a validation dataset to verify model output behavior",
+    "Check if any predictions contain NaN values",
+    "Assert that at least one prediction contains NaN values"
+]
+```
+

@@ -1,0 +1,26 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10.13",
+    "Activate the new conda environment using: conda activate test_env",
+    "Install TensorFlow in the conda environment using the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using the command: pip install tf-models-nightly",
+    "Install Matplotlib using the command: pip install matplotlib",
+    "Open Visual Studio Code (VSCode).",
+    "Create a new Jupyter Notebook in VSCode.",
+    "Import the necessary libraries at the top of the notebook with the following code: import tensorflow as tf, import matplotlib.pyplot as plt, from official import tf_models",
+    "Check the current Matplotlib backend by adding the line: print('Current backend:', plt.get_backend())",
+    "Run the cell to verify the backend is set to a default interactive backend (e.g., 'module://matplotlib_inline.backend_inline').",
+    "Import the TensorFlow Model Garden by adding the line: from official import tf_models",
+    "Check the Matplotlib backend again by adding the line: print('Current backend after importing tf_models:', plt.get_backend())",
+    "Run the cell to verify the backend has changed to a non-interactive backend (e.g., 'agg').",
+    "Create a simple plot using Matplotlib with the following code: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Add the line: plt.show() to display the plot.",
+    "Run the cell to verify that the plot does not display due to the non-interactive backend.",
+    "Attempt to change the backend to 'TkAgg' by adding the line: plt.switch_backend('TkAgg') after importing tf_models.",
+    "Run the cell again to check if the plot displays after changing the backend.",
+    "Verify that the plot still does not display, confirming the bug persists.",
+    "Add a comment in the notebook indicating the issue with Matplotlib not displaying plots after importing TensorFlow Model Garden."
+]
+```

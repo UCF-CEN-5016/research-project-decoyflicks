@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from syntaxnet, including GreedyParser, gold_parse_reader, and lexicon_builder",
+    "Set the batch size to 10 and define the corpus name as 'training-corpus'",
+    "Create a temporary directory for test data using tf.test.get_temp_dir()",
+    "Prepare the task context by copying the context.pbtxt file from the syntaxnet test data to the temporary directory, replacing 'SRCDIR' and 'OUTPATH' appropriately",
+    "Initialize a TensorFlow session using tf.Session()",
+    "Run gen_parser_ops.lexicon_builder with the task context and corpus name to create necessary term maps",
+    "Retrieve the number of features, feature IDs, and actions by calling gen_parser_ops.feature_size with the task context and arg_prefix='brain_parser'",
+    "Define the number of features as [6, 6, 4] and embedding sizes as [8, 8, 8]",
+    "Create an instance of GreedyParser with the number of actions, features, feature IDs, embedding sizes, and hidden layer sizes [32, 32]",
+    "Add training to the parser using the task context, batch size, and corpus name",
+    "Run the parser's initialization operations using sess.run(parser.inits.values())",
+    "Enter a loop to run the training operation, capturing the epochs and cost by calling sess.run on parser.training['epochs'] and parser.training['cost']",
+    "Assert that the cost is greater than or equal to 0 and check if the epoch is in [0, 1, 2]",
+    "Monitor the loss value during training and check for NaN values in the cost",
+    "Log the GPU memory usage before and after the training loop to verify if it exceeds 10G",
+    "Assert that the GPU memory usage exceeds 10G during the training process"
+]
+```

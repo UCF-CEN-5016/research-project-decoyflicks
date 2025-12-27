@@ -1,0 +1,15 @@
+TITLE  
+MAE Code Bug in Positional Embedding Calculation  
+
+SYMPTOMS  
+• The code fails to execute due to a syntax error.  
+• The line `tokens = tokens + self.encoder.pos_embedding[:, 1:(num_patches + 1)` is incomplete and will raise a `SyntaxError`.  
+• The program does not produce any output or expected results when run.  
+
+EXPECTED BEHAVIOR  
+The code should correctly calculate the positional embeddings for the tokens and concatenate them without raising any syntax errors.  
+
+REPRODUCTION STEPS  
+1. Open the MAE code as outlined in the README.md.  
+2. Locate the line of code `tokens = tokens + self.encoder.pos_embedding[:, 1:(num_patches + 1)`.  
+3. Attempt to run the code, observing the error message generated.

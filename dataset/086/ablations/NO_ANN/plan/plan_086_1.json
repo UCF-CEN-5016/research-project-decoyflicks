@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the relevant modules from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and sequence length of 32",
+    "Create a random input tensor x with shape (batch_size, sequence_length) filled with integers representing token IDs, e.g., x = torch.randint(0, 1000, (1, 32))",
+    "Create a random tensor for positional embeddings with shape (batch_size, sequence_length) filled with float values, e.g., pos = torch.randn(1, 32)",
+    "Instantiate the RotaryEmbedding class with parameters: dim=64, use_xpos=True, scale_base=512, interpolation_factor=1.0",
+    "Instantiate the Attention class with parameters: dim=64, heads=8, causal=True, rotary_embed_values=True, and any other necessary parameters",
+    "Instantiate the TransformerWrapper class with parameters: num_tokens=1000, max_seq_len=32, attn_layers=the previously created Attention instance",
+    "Call the forward method of the TransformerWrapper instance with the input tensor x and positional tensor pos, capturing the output",
+    "Enable rotary_xpos by setting the appropriate flag in the attention layer or transformer wrapper",
+    "Run the forward pass and capture any exceptions that occur",
+    "Verify that the exception raised is einops.EinopsError and contains the message 'Error while processing rearrange-reduction pattern \"n -> n 1\"'",
+    "Check the input tensor shape printed in the exception message to confirm it matches torch.Size([1, 32])",
+    "Log the exception details to confirm the bug is reproducible"
+]
+```

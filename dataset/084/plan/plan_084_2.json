@@ -1,0 +1,16 @@
+[
+    "Import PyTorch and the ViT module from vit.py",
+    "Define a batch size of 16 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, channels)",
+    "Initialize ViT model with parameters dim=128, seq_len=49+1, depth=12, heads=8, k=64",
+    "Set learning rate to 0.001 and use Adam optimizer",
+    "Define loss function as Cross-Entropy Loss",
+    "Prepare a dummy dataset with labels for the input images",
+    "Train the model for 5 epochs on the dummy dataset",
+    "Monitor the accuracy rate during training",
+    "Assert that in epoch 1, the accuracy rate is exactly 1.0000",
+    "Verify that there are no NaN values in loss calculation",
+    "Check if the model parameters remain unchanged throughout the training process",
+    "Collect and assert the final validation accuracy rate to be 1.0000"
+]
+

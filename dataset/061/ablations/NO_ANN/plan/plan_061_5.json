@@ -1,0 +1,22 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running: !pip install keras==2.13.0 keras_cv tensorflow.",
+    "Import the necessary libraries by adding the following code: import keras; import keras_cv; import tensorflow as tf.",
+    "Set the random seed for reproducibility by adding: keras.utils.set_random_seed(42).",
+    "Download the SWAG dataset by running: !wget 'https://github.com/rowanz/swagaf/archive/refs/heads/master.zip' -O swag.zip.",
+    "Unzip the downloaded dataset by running: !unzip -q swag.zip.",
+    "Load the training and validation data by adding the following code: train_df = pd.read_csv('swagaf-master/data/train.csv', index_col=0); valid_df = pd.read_csv('swagaf-master/data/val.csv', index_col=0).",
+    "Sample a small fraction of the training and validation data by adding: train_df = train_df.sample(frac=0.02); valid_df = valid_df.sample(frac=0.02).",
+    "Define a configuration class with the following parameters: class CFG: preset = 'deberta_v3_extra_small_en'; sequence_length = 200; seed = 42; epochs = 5; batch_size = 8; augment = True.",
+    "Create a preprocessor using KerasNLP by adding: preprocessor = keras_nlp.models.DebertaV3Preprocessor.from_preset(preset=CFG.preset, sequence_length=CFG.sequence_length).",
+    "Build a dataset using tf.data.Dataset by defining a function build_dataset with parameters texts, labels, batch_size, cache, augment, repeat, shuffle.",
+    "Inside the build_dataset function, create a dataset from the texts and labels using: ds = tf.data.Dataset.from_tensor_slices((texts, labels)).",
+    "Add a mapping for preprocessing by adding: ds = ds.map(preprocess_fn, num_parallel_calls=tf.data.AUTOTUNE).",
+    "Create the training and validation datasets by calling build_dataset with appropriate parameters: train_ds = build_dataset(train_texts, train_labels, batch_size=CFG.batch_size, cache=True, shuffle=True, repeat=True, augment=CFG.augment); valid_ds = build_dataset(valid_texts, valid_labels, batch_size=CFG.batch_size, cache=True, shuffle=False, repeat=False, augment=False).",
+    "Define a function to build the model by adding: def build_model(): ... (include the model architecture as per the example).",
+    "Call the build_model function to create the model instance: model = build_model().",
+    "Attempt to fit the model using: model.fit(train_ds, epochs=CFG.epochs, validation_data=valid_ds, steps_per_epoch=int(len(train_df) / CFG.batch_size), verbose=1).",
+    "Verify that the ImportError occurs during the execution of the model fitting step, specifically looking for the error message: 'ImportError: cannot import name 'data_utils' from 'keras.utils'."
+]
+```

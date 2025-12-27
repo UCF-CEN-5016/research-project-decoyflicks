@@ -1,0 +1,30 @@
+ModuleNotFoundError: No module named 'delf.python.datasets'
+
+I tried to use [models/research/delf repository](https://github.com/mirzaim/models/tree/master/research/delf) to extract features from images. But the following script produces an error in Google Colab.
+
+```
+%cd /content/models/research/delf/delf/python/examples/
+!python3 extract_features.py \
+  --config_path delf_config_example.pbtxt \
+  --list_images_path list_images.txt \
+  --output_dir data/oxford5k_features
+``` 
+
+The error is 
+```
+/content/models/research/delf/delf/python/examples
+Traceback (most recent call last):
+  File "extract_features.py", line 36, in <module>
+    from delf import delf_config_pb2
+  File "/usr/local/lib/python3.8/dist-packages/delf/__init__.py", line 38, in <module>
+    from delf.python.training import model
+  File "/usr/local/lib/python3.8/dist-packages/delf/python/training/model/__init__.py", line 23, in <module>
+    from delf.python.training.model import export_model_utils
+  File "/usr/local/lib/python3.8/dist-packages/delf/python/training/model/export_model_utils.py", line 25, in <module>
+    from delf.python.datasets.google_landmarks_dataset import googlelandmarks as gld
+ModuleNotFoundError: No module named 'delf.python.datasets'
+```
+
+When I add a `__init__.py` file to the https://github.com/mirzaim/models/tree/master/research/delf/delf/python/datasets folder, the problem will solve.
+
+

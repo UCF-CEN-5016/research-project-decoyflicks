@@ -1,0 +1,16 @@
+TITLE  
+ModuleNotFoundError when executing infer.py in examples/mms/tts
+
+SYMPTOMS  
+• Encountering a `ModuleNotFoundError` for the module `commons`  
+• Error message: `ModuleNotFoundError: No module named 'commons'`  
+• The expected output (generated wav file) is not produced  
+
+EXPECTED BEHAVIOR  
+The infer.py script should execute successfully and generate a wav file when provided with the correct model directory and input text.
+
+REPRODUCTION STEPS  
+1. Clone the fairseq repository.  
+2. Install the package using `pip install --editable ./`.  
+3. Change the directory to `examples/mms/tts/`.  
+4. Execute the command: `python infer.py --model-dir model/ --wav test.wav --txt "Heute ist ein schöner Tag."`.

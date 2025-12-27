@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: import pandas as pd, import numpy as np, import matplotlib.pyplot as plt, import tensorflow as tf",
+    "Create a sample DataFrame with a datetime column and a string column: df = pd.DataFrame({'date': ['01.01.2009 00:10:00', '01.01.2009 00:20:00'], 'value': ['10', '20']})",
+    "Convert the 'date' column to datetime format: df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y %H:%M:%S')",
+    "Add a numeric column to the DataFrame: df['numeric_value'] = [10.0, 20.0]",
+    "Define a function show_heatmap(data) that calls plt.matshow(data.corr())",
+    "Call show_heatmap(df) to trigger the correlation calculation",
+    "Run the script using python3 timeseries_weather_forecasting.py",
+    "Observe the output for ValueError: 'could not convert string to float: '01.01.2009 00:10:00''",
+    "Verify that the DataFrame contains both string and numeric data types",
+    "Check the DataFrame's dtypes using df.dtypes to confirm the presence of string types"
+]
+```

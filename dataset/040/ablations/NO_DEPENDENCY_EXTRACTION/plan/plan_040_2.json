@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: torch, nn, DataLoader, RandomSampler from torch.utils.data, and the RetroModel from labml_nn.transformers.retro.model",
+    "Set the device to CUDA:0 using torch.device('cuda:0')",
+    "Load the Tiny Shakespeare dataset using TextFileDataset from labml_helpers.datasets.text with the URL 'https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt'",
+    "Create a Retro dataset using Dataset from labml_nn.transformers.retro.dataset with the path to the retro_train_dataset.json and the loaded Tiny Shakespeare dataset",
+    "Define a batch size of 4 and create a DataLoader for the Retro dataset with the defined batch size and RandomSampler for replacement",
+    "Set hyper-parameters: chunk_len = 16, d_model = 128, d_ff = 512, n_heads = 16, d_k = 16",
+    "Create an instance of NearestNeighborEncoder with parameters (chunk_len, 6, {3}, d_model, n_heads, d_k, d_ff)",
+    "Create an instance of RetroModel with parameters (tds.n_tokens, d_model, 6, {3, 5}, chunk_len, n_heads, d_k, d_ff, encoder=nearest_neighbor_encoder)",
+    "Move the model to the device using model.to(device)",
+    "Create an optimizer using Noam with model.parameters(), lr=1., d_model=d_model, warmup=2000",
+    "Create an instance of Trainer with parameters (device, model, train_dl, optimizer)",
+    "Create an instance of Sampler with parameters (device, model, tds, chunk_len)",
+    "Define a prompt string: prompt = 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Start an experiment using experiment.create(name='retro_small')",
+    "Begin the experiment context with 'with experiment.start():'",
+    "Run a training loop for 1 epoch using 'for epoch in monit.loop(1):'",
+    "Call the trainer's training method: trainer()",
+    "Sample from the prompt using sampler.sample(prompt, 128) and store the result",
+    "Check the output of the model for NaN values by asserting 'assert not torch.isnan(res).any()'",
+    "Verify the attention weights by checking the shape of the output from the attention layer, expecting a shape of (batch_size, n_heads, seq_length, seq_length)",
+    "Print the attention weights to observe their values and confirm they are not all zeros or NaNs",
+    "Check if the softmax operation is applied correctly by asserting 'attn.softmax(dim=2)' and comparing it with the current implementation"
+]
+```

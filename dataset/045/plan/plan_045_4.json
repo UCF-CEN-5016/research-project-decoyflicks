@@ -1,0 +1,21 @@
+```json
+[
+    "Import the necessary modules from fairseq and other dependencies.",
+    "Define a batch size of 16 and vocabulary sizes for both source and target languages.",
+    "Create random integer input data for the source language with shape (batch_size, sequence_length) containing values between 0 and the source vocabulary size minus one.",
+    "Create random integer input data for the target language with shape (batch_size, sequence_length) containing values between 0 and the target vocabulary size minus one.",
+    "Initialize a LanguagePairDataset with the source and target datasets, setting the shuffle option to True.",
+    "Load an existing model checkpoint that does not include the special tokens for the new languages.",
+    "Call the prepare_datasets function with the new language codes and the loaded model to add the special tokens to the dictionary and extend the embedding layer.",
+    "Create a NoisingDataset with the prepared LanguagePairDataset, setting the noise_rate to 0.1 and specifying that only the source language should be noisy.",
+    "Create a PrependTokenDataset for the target language with the NoisingDataset, prepending the <mask> token at the beginning of each sequence.",
+    "Initialize a RoundRobinZipDatasets with the LanguagePairDataset and the PrependTokenDataset, setting the shuffle option to True.",
+    "Set up a SequenceGenerator with the model, source and target dictionaries, and other default parameters.",
+    "Define a function to generate predictions using the SequenceGenerator on a batch of input data.",
+    "Call the prediction function with a single batch of input data to trigger the backpropagation process.",
+    "Check if any of the gradients in the model's parameter tensors contain NaN values by iterating over them and printing their sum.",
+    "Monitor the memory usage during the backward pass using torch.cuda.memory_allocated() or similar functions.",
+    "Assert that the total allocated memory is significantly higher than before the backward pass, indicating a possible gradient explosion issue."
+]
+```
+

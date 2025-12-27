@@ -1,0 +1,27 @@
+```json
+[
+    "Install KerasCV by running the command '!pip install git+https://github.com/keras-team/keras-cv -q'",
+    "Import necessary libraries: 'import tensorflow as tf', 'import numpy as np', 'import os', 'from tensorflow import keras', 'from tensorflow.keras.layers import StringLookup'",
+    "Set random seeds for reproducibility: 'np.random.seed(42)', 'tf.random.set_seed(42)'",
+    "Download the IAM dataset by running the command 'wget -q https://github.com/sayakpaul/Handwriting-Recognizer-in-Keras/releases/download/v1.0.0/IAM_Words.zip'",
+    "Unzip the downloaded dataset using 'unzip -qq IAM_Words.zip'",
+    "Create a directory structure by running 'mkdir data' and 'mkdir data/words'",
+    "Extract the words from the dataset using 'tar -xf IAM_Words/words.tgz -C data/words'",
+    "Move the words.txt file to the data directory using 'mv IAM_Words/words.txt data'",
+    "Read the words from the 'data/words.txt' file and store them in a list, filtering out lines starting with '#' and those with 'err'",
+    "Shuffle the words list using 'np.random.shuffle(words_list)'",
+    "Split the dataset into training (90%), validation (5%), and test (5%) sets, asserting the total count matches the original list length",
+    "Define a function 'get_image_paths_and_labels(samples)' to generate image paths and labels from the training samples",
+    "Call 'get_image_paths_and_labels(train_samples)' to get training image paths and labels",
+    "Define image dimensions: 'image_width = 128', 'image_height = 32'",
+    "Define a function 'preprocess_image(image_path)' to read and preprocess images, ensuring they are resized correctly",
+    "Define a function 'vectorize_label(label)' to convert labels into integer vectors with padding",
+    "Define a function 'process_images_labels(image_path, label)' to combine image preprocessing and label vectorization",
+    "Prepare the training dataset using 'train_ds = prepare_dataset(train_img_paths, train_labels_cleaned)'",
+    "Build the model using the 'build_model()' function, ensuring it includes a CTC layer",
+    "Compile the model with an Adam optimizer",
+    "Attempt to fit the model using 'model.fit(train_ds, validation_data=validation_ds, epochs=10)'",
+    "Capture the error message that occurs during model fitting to verify the bug",
+    "Log the shapes of the input data and labels before fitting to ensure they match expected dimensions"
+]
+```

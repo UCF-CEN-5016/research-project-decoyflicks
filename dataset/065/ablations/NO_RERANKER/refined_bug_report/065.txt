@@ -1,0 +1,18 @@
+TITLE  
+ImportError when importing FeatureSpace from keras.utils
+
+SYMPTOMS  
+• Attempting to import `FeatureSpace` from `keras.utils` results in an ImportError.  
+• The error message displayed is:  
+  ```
+  ImportError: cannot import name 'FeatureSpace' from 'keras.utils' (/usr/local/lib/python3.8/dist-packages/keras/utils/__init__.py)
+  ```  
+• The expected functionality of using `FeatureSpace` is not achieved.
+
+EXPECTED BEHAVIOR  
+When the software works correctly, the import statement `from keras.utils import FeatureSpace` should execute without errors, allowing the user to utilize the `FeatureSpace` class in their code.
+
+REPRODUCTION STEPS  
+1. Open a Python environment (e.g., Jupyter Notebook, Google Colab).  
+2. Execute the line of code: `from keras.utils import FeatureSpace`.  
+3. Observe the ImportError that occurs.

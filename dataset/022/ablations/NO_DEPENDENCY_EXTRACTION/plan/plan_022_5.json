@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official.nlp.modeling.layers.tn_expand_condense",
+    "Define a batch size of 100 and input dimensions of 768 and 1024 for testing",
+    "Create random input data with shape (100, 768) and (100, 1024) using np.random.normal",
+    "Create binary labels for the input data with shape (100, 1) using np.concatenate",
+    "Define a function to build the TNExpandCondense model with proj_multiplier set to 6 and 2 respectively",
+    "Compile the model using 'adam' optimizer and 'binary_crossentropy' loss function",
+    "Train the model for 5 epochs with a batch size of 32 using the generated input data and labels",
+    "Capture the model's training history to analyze loss and accuracy metrics",
+    "Assert that the loss decreases over epochs by comparing the first and last values in history.history['loss']",
+    "Assert that the accuracy increases over epochs by comparing the first and last values in history.history['accuracy']",
+    "Modify the augmentation code to ensure that the standard deviation is incorrectly set to 1 by removing level_std* from the calculation",
+    "Re-run the model training with the modified augmentation code",
+    "Capture the model's training history again to analyze loss and accuracy metrics",
+    "Assert that the loss does not decrease as expected due to the incorrect standard deviation setting",
+    "Assert that the accuracy does not increase as expected due to the incorrect standard deviation setting",
+    "Log the output of the model's predictions to verify the impact of the bug on the model's performance"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and fairseq modules",
+    "Define a batch size of 2 and set the dimensions for the input tensor to (2, 10, 64) where 10 is the sequence length and 64 is the embedding dimension",
+    "Create a random input tensor with shape (batch_size, sequence_length, embedding_dimension) using torch.randn(batch_size, 10, 64)",
+    "Initialize the SequenceGenerator class from fairseq with dummy models and a target dictionary",
+    "Set the beam size to 1 and other parameters like max_len_a=0, max_len_b=200, min_len=1, and max_len=0",
+    "Prepare a sample input dictionary with 'net_input' containing 'src_tokens' as the random input tensor and 'src_lengths' as a tensor of shape (batch_size) with values [10, 10]",
+    "Call the forward method of the SequenceGenerator instance with the prepared sample input",
+    "Capture the output of the forward method to check for any NaN values",
+    "Assert that the output contains NaN values by checking if torch.isnan(output).any() is True",
+    "Print the output tensor to verify the presence of NaN values and confirm the bug"
+]
+```

@@ -1,0 +1,28 @@
+{
+  "bug_report": "014",
+  "module": {
+    "module": "research/object_detection/utils",
+    "files": [
+      {
+        "path": "research/object_detection/utils/patch_ops_test.py",
+        "snippets": [
+          {
+            "lines": "134-145",
+            "code": "  def testDynamicCoordinatesOutsideImageRaisesError(self):\n\n    def graph_fn():\n      image_shape = [15, 10]\n      x = tf.random_uniform([], minval=-2, maxval=-1, dtype=tf.int32)\n      y = tf.random_uniform([], minval=0, maxval=1, dtype=tf.int32)\n      mask = patch_ops.get_patch_mask(\n          y, x, patch_size=3, image_shape=image_shape)\n      return mask\n\n    with self.assertRaises(tf.errors.InvalidArgumentError):\n      self.execute(graph_fn, [])\n\n  def testStaticNonPositivePatchSizeRaisesError(self, patch_size):\n    image_shape = [6, 7]\n    with self.assertRaises(tf.errors.InvalidArgumentError):\n      patch_ops.get_patch_mask(\n          0, 0, patch_size=patch_size, image_shape=image_shape)\n\n  def testDynamicNonPositivePatchSizeRaisesError(self):\n\n    def graph_fn():\n      image_shape = [6, 7]\n      patch_size = -1 * tf.random_uniform([], minval=0, maxval=3,\n                                          dtype=tf.int32)\n      mask = patch_ops.get_patch_mask(\n          0, 0, patch_size=patch_size, image_shape=image_shape)\n      return mask\n\n    with self.assertRaises(tf.errors.InvalidArgumentError):\n      self.execute(graph_fn, [])"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "research/object_detection/utils/patch_ops_test.py",
+      "snippets": [
+        {
+          "lines": "134-145",
+          "code": "  def testDynamicCoordinatesOutsideImageRaisesError(self):\n\n    def graph_fn():\n      image_shape = [15, 10]\n      x = tf.random_uniform([], minval=-2, maxval=-1, dtype=tf.int32)\n      y = tf.random_uniform([], minval=0, maxval=1, dtype=tf.int32)\n      mask = patch_ops.get_patch_mask(\n          y, x, patch_size=3, image_shape=image_shape)\n      return mask\n\n    with self.assertRaises(tf.errors.InvalidArgumentError):\n      self.execute(graph_fn, [])\n\n  def testStaticNonPositivePatchSizeRaisesError(self, patch_size):\n    image_shape = [6, 7]\n    with self.assertRaises(tf.errors.InvalidArgumentError):\n      patch_ops.get_patch_mask(\n          0, 0, patch_size=patch_size, image_shape=image_shape)\n\n  def testDynamicNonPositivePatchSizeRaisesError(self):\n\n    def graph_fn():\n      image_shape = [6, 7]\n      patch_size = -1 * tf.random_uniform([], minval=0, maxval=3,\n                                          dtype=tf.int32)\n      mask = patch_ops.get_patch_mask(\n          0, 0, patch_size=patch_size, image_shape=image_shape)\n      return mask\n\n    with self.assertRaises(tf.errors.InvalidArgumentError):\n      self.execute(graph_fn, [])"
+        }
+      ]
+    }
+  ]
+}

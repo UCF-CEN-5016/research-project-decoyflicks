@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: pytest, torch, and LatentQuantize from vector_quantize_pytorch",
+    "Define a batch size of 2 and input dimensions of (17, 1024) for the features to simulate the shape inconsistencies",
+    "Create random input data for video features with shape (batch_size, 1024, 17) using torch.randn",
+    "Instantiate the LatentQuantize class with appropriate parameters: levels=[5, 5, 8], dim=1024, commitment_loss_weight=0.1, quantization_loss_weight=0.1",
+    "Call the LatentQuantize instance with the generated input data and capture the output: quantized, indices, _ = quantizer(video_feats)",
+    "Check if the output quantized tensor has the same shape as the input video_feats tensor",
+    "Verify that the quantized tensor shape is (2, 1024, 17) and assert that it matches the expected shape",
+    "Check for the presence of the variable return_loss in the forward method of the LatentQuantize class",
+    "Run the forward method of LatentQuantize while ensuring that the training flag is set to True and quantize_dropout is also True",
+    "Assert that a NameError is raised due to the undefined return_loss variable",
+    "Log the error message to confirm that the NameError is specifically related to return_loss not being defined"
+]
+```

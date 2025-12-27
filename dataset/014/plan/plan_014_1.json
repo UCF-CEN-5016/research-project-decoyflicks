@@ -1,0 +1,26 @@
+```json
+[
+    "Clone the TensorFlow models repository from GitHub",
+    "Navigate to the object_detection directory",
+    "Locate a sample pipeline.config file with default settings for training",
+    "Ensure TensorFlow version is 2.12 installed and imported in your environment",
+    "Import required modules: tensorflow, numpy, and six from the object_detection package",
+    "Read the sample pipeline.config file into a text string",
+    "Parse the text string into a TrainEvalPipelineConfig object using text_format.Merge()",
+    "Verify the default max_number_of_boxes is set to 100 in eval_input_reader section",
+    "Add the following lines to the config object: \
+      'pipeline_config.eval_input_reader.max_number_of_boxes = 500' \
+      'pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_detections_per_class = 500' \
+      'pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_total_detections = 500' \
+      'pipeline_config.model.faster_rcnn.first_stage_max_proposals = 500'",
+    "Attempt to save the modified config object back to a pipeline.config file using config_util.save_pipeline_config()",
+    "Verify an AttributeError is raised when saving the modified config object, specifically mentioning 'max_number_of_boxes' not being an attribute of RepeatedCompositeContainer",
+    "Read the original pipeline.config file directly into a text string without parsing it with text_format.Merge()",
+    "Write the modified text string back to the pipeline.config file using Python's built-in open and write functions",
+    "Load the modified config object from the pipeline.config file again using config_util.get_configs_from_pipeline_file()",
+    "Verify that all specified max_number_of_boxes settings are correctly applied in the loaded config object",
+    "Attempt to train a model using the loaded config object with an image dataset containing over 100 objects per image",
+    "Monitor training performance and verify that the model converges to a reasonable accuracy level"
+]
+```
+

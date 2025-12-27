@@ -1,0 +1,27 @@
+TITLE  
+RetinaNet Model Fit Error with Custom Dataset
+
+SYMPTOMS  
+• An error occurs when attempting to fit the RetinaNet model using a custom dataset.  
+• The error message displayed is:  
+  ```python
+  InvalidArgumentError: Graph execution error:
+  Detected at node retina_net_label_encoder_18/GatherV2_1 ...
+  indices[3,63949] = 0 is not in [0, 0)
+  ```
+
+EXPECTED BEHAVIOR  
+The model should successfully fit the custom dataset without any errors, allowing for training to proceed as intended.
+
+REPRODUCTION STEPS  
+1. Prepare a custom dataset structured according to the guidelines provided in the Keras documentation (https://keras.io/guides/keras_cv/object_detection_keras_cv/).  
+2. Execute the following code to fit the model:  
+   ```python
+   model.fit(
+       train_ds.take(20),
+       validation_data=eval_ds.take(20),
+       epochs=1,
+       callbacks=[EvaluateCOCOMetricsCallback(eval_ds.take(20))],
+   )
+   ```  
+3. Observe the output for any error messages during the fitting process.

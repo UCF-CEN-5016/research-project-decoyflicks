@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from tensorflow import keras",
+    "Import necessary modules for object detection: from keras_cv.models.object_detection import RetinaNet, LabelEncoder",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define a batch size of 2 and number of classes as 80",
+    "Create a function to preprocess the dataset, ensuring it matches the expected input format for RetinaNet",
+    "Load your custom dataset structured similarly to COCO format, ensuring it contains images and corresponding bounding boxes",
+    "Define the image dimensions for resizing: min_side=800 and max_side=1333",
+    "Create a function to generate anchor boxes using the AnchorBox class from the RetinaNet implementation",
+    "Instantiate the LabelEncoder class to encode the labels for training",
+    "Create a tf.data.Dataset for training and validation, using the preprocess function and ensuring it is batched with drop_remainder=True",
+    "Set up the model directory for saving weights: model_dir = 'retinanet/'",
+    "Initialize the RetinaNet model with a ResNet50 backbone: model = RetinaNet(num_classes=80, backbone=get_backbone())",
+    "Compile the model with a custom loss function: model.compile(loss=RetinaNetLoss(num_classes=80), optimizer=tf.keras.optimizers.SGD(learning_rate=0.001, momentum=0.9))",
+    "Set up a callback for model checkpointing: callbacks_list = [tf.keras.callbacks.ModelCheckpoint(filepath=os.path.join(model_dir, 'weights_epoch_{epoch}'), save_best_only=False)]",
+    "Call model.fit with train_dataset.take(20) and validation_data=val_dataset.take(20), epochs=1, and callbacks=callbacks_list",
+    "Monitor the output for InvalidArgumentError during model fitting, specifically looking for errors related to 'GatherV2' and index out of bounds",
+    "Verify that the dataset contains valid bounding box coordinates and class IDs, ensuring they are within the expected ranges",
+    "Check the shape of the input data being fed into the model to ensure it matches the expected input shape for RetinaNet",
+    "Log the shapes of the training and validation datasets before fitting the model to confirm they are as expected"
+]
+```

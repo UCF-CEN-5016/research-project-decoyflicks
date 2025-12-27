@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official models repository",
+    "Define a batch size of 8 and input dimensions of (input_length=10, embedding_width=128)",
+    "Create a random integer tensor for sources with shape (batch_size, input_length) filled with values in the range [0, vocab_size=10000]",
+    "Create a random boolean mask tensor for input_masks with shape (batch_size, input_length) filled with True values",
+    "Create a random float tensor for embedded_inputs with shape (batch_size, input_length, embedding_width)",
+    "Define a dictionary 'inputs' containing 'inputs', 'input_masks', and 'embedded_inputs'",
+    "Instantiate the Seq2SeqTransformer model from official/nlp/modeling/models/seq2seq_transformer.py",
+    "Call the model's 'call' method with the 'inputs' dictionary",
+    "Capture the output logits from the model call",
+    "Check the shape of the output logits to ensure it is (batch_size, target_length, vocab_size)",
+    "Verify that the standard deviation of the RandAugment magnitude is either 0 or 1 by inspecting the relevant augmentation parameters",
+    "Assert that the standard deviation is not varying as expected, indicating the bug is present",
+    "Log the values of the RandAugment parameters used during the model call for further inspection"
+]
+```

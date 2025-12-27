@@ -1,0 +1,16 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Clone the delf repository from GitHub using the command: !git clone https://github.com/mirzaim/models.git",
+    "Change the working directory to the delf examples folder using: %cd /content/models/research/delf/delf/python/examples/",
+    "Download the example configuration file 'delf_config_example.pbtxt' and the image list 'list_images.txt' to the current directory.",
+    "Ensure that the 'list_images.txt' contains paths to at least 5 images, formatted as one image path per line.",
+    "Run the command: !python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Observe the output for any errors, specifically looking for 'ModuleNotFoundError: No module named 'delf.python.datasets'".",
+    "Verify that the 'delf/python/datasets' directory exists and does not contain an '__init__.py' file.",
+    "Check the contents of the 'delf/python/datasets' directory to confirm it is empty or missing necessary files.",
+    "Confirm that the Python environment is using the correct version (Python 3.8 or compatible) by running: !python3 --version.",
+    "Ensure that the required dependencies for the delf module are installed by running: !pip install -r /content/models/research/delf/requirements.txt.",
+    "Re-run the extract_features.py script to confirm the bug persists after ensuring all dependencies are installed."
+]
+```

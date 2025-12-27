@@ -1,0 +1,13 @@
+[
+  "Import TensorFlow and necessary modules from the official TensorFlow models repository, specifically the RandAugment augmentation class from official/vision/ops/augment.py",
+  "Set a fixed random seed for reproducibility using tf.random.set_seed(42)",
+  "Create a batch of dummy image data with shape (10, 224, 224, 3) and dtype tf.float32 filled with random values between 0 and 1",
+  "Instantiate the RandAugment augmenter with a fixed magnitude level (e.g., level=5) and a non-zero magnitude standard deviation (e.g., level_std=0.5)",
+  "Apply the RandAugment augmenter to the dummy image batch to produce augmented images",
+  "Extract or log the magnitude values used internally during augmentation, if possible, or patch the code to expose the magnitude values before and after the line at official/vision/ops/augment.py:L1566",
+  "Verify that the standard deviation of the magnitudes applied is either exactly 0 or 1, indicating the missing multiplication of level_std in the magnitude standard deviation calculation",
+  "Repeat the augmentation multiple times (e.g., 100 augmentations) to collect a distribution of applied magnitudes",
+  "Calculate the empirical standard deviation of these magnitudes and assert that it does not scale with the specified level_std (i.e., it remains 1 regardless of level_std input)",
+  "Log or assert failure if the observed standard deviation deviates from the expected level_std value, confirming the bug reproducibility",
+  "Optionally, compare behavior by modifying the augmentation function locally to include the missing '* level_std' in the line with '+=' to confirm that the standard deviation of magnitudes then scales correctly with level_std"
+]

@@ -1,0 +1,16 @@
+TITLE  
+NaN Loss During Training with FP8 Precision in Transformer Engine  
+
+SYMPTOMS  
+• Loss value becomes NaN during training when using FP8 precision.  
+• No specific error messages are shown; the only indication is the NaN loss.  
+• Model training process halts due to the NaN loss, preventing further progress.  
+
+EXPECTED BEHAVIOR  
+The training process should complete without encountering NaN loss values, and the loss should decrease as expected throughout the training iterations.  
+
+REPRODUCTION STEPS  
+1. Set up a transformer model using the Transformer Engine library.  
+2. Configure the model to use FP8 precision for training.  
+3. Start the training process on a suitable dataset.  
+4. Monitor the loss values during training to observe when it becomes NaN.

@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, einsum from torch, and rearrange from einops",
+    "Define a batch size of 5 and set the input dimensions to (5, 3, 224, 224) for a 3-channel image",
+    "Create a random input tensor with shape (5, 3, 224, 224) using torch.randn",
+    "Instantiate the CCT model with default parameters: cct_model = CCT(img_size=224, embedding_dim=768, n_input_channels=3)",
+    "Set the model to training mode by calling cct_model.train()",
+    "Define a random target tensor with shape (5, 1000) for classification using torch.randn",
+    "Perform a forward pass by calling output = cct_model(input_tensor)",
+    "Define a loss function using nn.CrossEntropyLoss()",
+    "Calculate the loss by calling loss = loss_function(output, target_tensor)",
+    "Call loss.backward() to compute gradients and trigger the backward pass",
+    "Monitor the output of the backward pass for any errors or exceptions",
+    "Capture the error message and check if it matches the expected error: 'Function UnbindBackwardAutogradNestedTensor0 returned an invalid gradient at index 0 - got 1 1024 ... but expected shape compatible with [5, j2, 1024]'",
+    "Assert that the error message contains the specific text indicating the shape mismatch"
+]
+```

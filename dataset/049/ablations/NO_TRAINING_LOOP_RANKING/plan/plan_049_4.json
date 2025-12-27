@@ -1,0 +1,14 @@
+```json
+[
+    "Import torch and the espnet_multihead_attention module from fairseq",
+    "Define the dimensions for the bias parameters: u_dim = 10, v_dim = 10",
+    "Create an uninitialized tensor for the bias parameters using u_bias = torch.Tensor(u_dim) and v_bias = torch.Tensor(v_dim)",
+    "Initialize a MultiHeadedAttention instance with the uninitialized bias parameters",
+    "Set the number of heads to 2 and the embedding dimension to 10",
+    "Create a dummy input tensor with shape (batch_size=1, seq_length=5, embedding_dim=10)",
+    "Call the forward method of the MultiHeadedAttention instance with the dummy input tensor",
+    "Capture the output of the forward method",
+    "Check the output for NaN values using torch.isnan(output).any()",
+    "Assert that the output contains NaN values, indicating the bug is reproduced"
+]
+```

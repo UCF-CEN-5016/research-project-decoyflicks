@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, and matplotlib",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define constants: BATCH_SIZE = 4, IMG_HEIGHT = 256, IMG_WIDTH = 256, NUM_CLASSES = 12",
+    "Create a function to load and preprocess the dataset, ensuring it matches the expected input format for RetinaNet",
+    "In the data loading function, create a dataset of images and corresponding labels with shape (None, IMG_HEIGHT, IMG_WIDTH, 3) for images and (None, IMG_HEIGHT, IMG_WIDTH, NUM_CLASSES) for one-hot encoded labels",
+    "Ensure the dataset is shuffled and split into training and validation sets, with a validation split of 0.2",
+    "Create a tf.data.Dataset object for the training set and validation set, using the batch size defined earlier",
+    "Define a simple RetinaNet model using keras_cv.models.object_detection.RetinaNet with appropriate input shape (IMG_HEIGHT, IMG_WIDTH, 3) and number of classes (NUM_CLASSES)",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function suitable for object detection",
+    "Call model.fit() on the training dataset with parameters: train_ds.take(20), validation_data=eval_ds.take(20), epochs=1, and callbacks=[EvaluateCOCOMetricsCallback(eval_ds.take(20))]",
+    "Monitor the output for any errors during the model fitting process, specifically looking for InvalidArgumentError related to the label encoder",
+    "Check the shapes of the input data and labels before fitting the model to ensure they are consistent with the expected input dimensions",
+    "Log the shapes of the training and validation datasets to verify they match the expected dimensions",
+    "Assert that the model raises an InvalidArgumentError during the fitting process, indicating a mismatch in the expected input format or dimensions"
+]
+```

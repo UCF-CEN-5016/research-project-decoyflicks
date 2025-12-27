@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn",
+    "Define a batch size of 4 and an embedding size of 6_144",
+    "Create a random input tensor 'x' with shape (batch_size, seq_len, n_hidden) where seq_len is set to 3",
+    "Instantiate the model class that contains the Rotary Positional Embeddings implementation",
+    "Prepare the cos_cached and sin_cached tensors with shapes (1, 1, 1, seq_len) and (1, 1, 1, seq_len) respectively, where seq_len is set to 4",
+    "Assign the prepared cos_cached and sin_cached tensors to the model instance",
+    "Call the forward method of the model with the input tensor 'x'",
+    "Capture the output and any exceptions raised during the forward pass",
+    "Verify that a RuntimeError is raised with the message 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the shapes of the involved tensors (x_rope, cos_cached, sin_cached) to confirm their dimensions before the error occurs"
+]
+```

@@ -1,0 +1,22 @@
+```json
+[
+    "Import the necessary modules for Keras, Matplotlib, and other required dependencies",
+    "Define the preset configuration for DebertaV3Classifier with a batch size of 16",
+    "Prepare mock token_ids and padding_mask data with shapes (4, None) and dtype int32",
+    "Create an instance of DebertaV3Classifier with num_classes=1 and preprocessor=None",
+    "Initialize an empty list to store the logits for each option",
+    "Loop through 4 options (Q+A), (Q+B) etc., selecting each option using SelectOption layer",
+    "Compute the logit for each selected option using the classifier and append to the logits list",
+    "Concatenate all logit outputs along axis=-1",
+    "Apply Softmax function on the concatenated logits",
+    "Create a Keras Model instance with inputs token_ids and padding_mask, and output as the softmax layer",
+    "Compile the model with AdamW optimizer, CategoricalCrossentropy loss, and CategoricalAccuracy metric",
+    "Generate dummy training data train_ds with shapes compatible with model input requirements",
+    "Generate dummy validation data valid_ds with shapes compatible with model input requirements",
+    "Train the model on train_ds for 1 epoch with validation_data set to valid_ds",
+    "Check if the loss value during training contains NaN values",
+    "Monitor the GPU memory usage during model training",
+    "Assert that the peak GPU memory usage exceeds a predefined threshold indicating potential overflow"
+]
+```
+

@@ -1,0 +1,19 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n tf_env python=3.10.13",
+    "Activate the newly created conda environment using: conda activate tf_env",
+    "Install TensorFlow in the conda environment using the command: pip install tensorflow==2.13.10",
+    "Install the TensorFlow Model Garden using the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode) and create a new Jupyter Notebook file.",
+    "Import the necessary libraries in the Jupyter Notebook by adding the following lines at the top of the notebook: import matplotlib.pyplot as plt; import tensorflow as tf; from official import tf_models",
+    "Set the matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg') before importing tensorflow_models.",
+    "Import the TensorFlow Model Garden by adding the line: from official import tf_models.",
+    "Create a simple plot using matplotlib by adding the following lines: x = [1, 2, 3]; y = [1, 4, 9]; plt.plot(x, y); plt.show() and run the cell to verify the plot displays correctly.",
+    "Add a new cell and import the TensorFlow Model Garden again using: from official import tf_models.",
+    "Create another plot in the new cell using the same code as before: x = [1, 2, 3]; y = [1, 4, 9]; plt.plot(x, y); plt.show() and run the cell to verify the plot does not display.",
+    "Check the current matplotlib backend by adding the line: print(plt.get_backend()) after importing tensorflow_models and run the cell to verify the backend is 'Agg'.",
+    "Attempt to change the backend to 'TkAgg' by adding the line: plt.switch_backend('TkAgg') after importing tensorflow_models and run the cell to verify the plot still does not display.",
+    "Revert to the previous cell and change the backend to 'TkAgg' before importing tensorflow_models, then run the cells again to verify that the plot displays correctly."
+]
+```

@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries for the align_and_segment script, including torch, torchaudio, and fairseq modules.",
+    "Set up a virtual environment with Python 3.8 and install required packages: torch==2.0.1+cu118, torchaudio==2.0.2+cu118, and fairseq",
+    "Prepare an audio file named 'audio.wav' of duration approximately 5 seconds at a sampling rate of 16kHz.",
+    "Create a text transcription file named 'text.txt' with 63 lines of text corresponding to the audio content.",
+    "Ensure the language parameter is set to 'ful' as specified in the bug report.",
+    "Set the output directory as 'output'",
+    "Specify the uroman path as '/path/to/uroman/bin'",
+    "Run the script using the command: `python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman /path/to/uroman/bin`",
+    "Verify that the script downloads the model and dictionary without errors by checking for messages like 'Model path already exists. Skipping downloading....' and 'Dictionary path already exists. Skipping downloading....'",
+    "Observe the error message: `RuntimeError: Sizes of tensors must match except in dimension 1. Expected size 1649 but got size 1799 for tensor number 1 in the list.`",
+    "Confirm that the bug occurs by comparing the shapes of tensors involved in the concatenation operation in the script."
+]
+```
+

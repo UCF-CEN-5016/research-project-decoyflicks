@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and slim modules from tf_slim",
+    "Import DetectionModel, GraphContextOrNone, first_rows_close_as_set, ensure_binary, range from object_detection",
+    "Import numpy for data preparation",
+    "Define a batch size of 2 and image dimensions of 20x20",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Create ground truth boxes and classes for the given inputs",
+    "Initialize an instance of DetectionModel with num_classes=10",
+    "Set fine_tune_checkpoint_type='detection' for load_all_detection_checkpoint_vars=False in restore_map method call",
+    "Call restore_map method to get variable map dictionary",
+    "Create a session and run tf.train.Saver(var_map).restore(session, saved_model_path) where saved_model_path is the path to the detection checkpoint",
+    "Monitor GPU memory usage during execution of model prediction",
+    "Assert that there are no NaN values in the restored variables",
+    "Run the model with preprocessed inputs and true_image_shapes",
+    "Verify that the output contains uninitialized variables related to 'FeatureExtractor'",
+    "Report the final list of uninitialized variable names"
+]
+```
+

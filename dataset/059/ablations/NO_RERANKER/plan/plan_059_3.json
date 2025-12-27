@@ -1,0 +1,28 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, matplotlib, os",
+    "Set random seeds for reproducibility: np.random.seed(42) and tf.random.set_seed(42)",
+    "Define base path for data as 'data' and create an empty list 'words_list'",
+    "Download the IAM_Words.zip dataset using wget and unzip it into the current directory",
+    "Create a directory 'data' and extract 'words.tgz' into 'data/words'",
+    "Read 'data/words.txt' and filter out lines starting with '#' and those with 'err', appending valid lines to 'words_list'",
+    "Shuffle 'words_list' to randomize the dataset",
+    "Split 'words_list' into training (90%), validation (5%), and test (5%) sets",
+    "Assert that the total number of samples equals the sum of training, validation, and test samples",
+    "Define a function 'get_image_paths_and_labels(samples)' to generate image paths and labels from the samples",
+    "Call 'get_image_paths_and_labels' for training, validation, and test samples to get 'train_img_paths', 'train_labels', 'validation_img_paths', 'validation_labels', 'test_img_paths', 'test_labels'",
+    "Define a function 'clean_labels(labels)' to clean the labels by extracting the last part of each line",
+    "Call 'clean_labels' for validation and test labels to get 'validation_labels_cleaned' and 'test_labels_cleaned'",
+    "Define image dimensions: image_width = 128, image_height = 32, and batch_size = 64",
+    "Define a function 'preprocess_image(image_path)' to read, decode, and resize images while normalizing pixel values",
+    "Define a function 'vectorize_label(label)' to convert labels to integer sequences and pad them to max length",
+    "Define a function 'process_images_labels(image_path, label)' to preprocess images and vectorize labels",
+    "Define a function 'prepare_dataset(image_paths, labels)' to create a tf.data.Dataset from image paths and labels",
+    "Prepare datasets for training, validation, and testing using 'prepare_dataset'",
+    "Define a model architecture using Keras functional API with Conv2D, MaxPooling2D, LSTM layers, and a custom CTCLayer",
+    "Compile the model with Adam optimizer and CTC loss",
+    "Attempt to fit the model using model.fit() with training and validation datasets for 10 epochs",
+    "Capture and print any errors that occur during model fitting to verify the bug",
+    "Assert that the error message contains specific keywords indicating a fitting issue, such as 'InvalidArgumentError' or 'shape mismatch'"
+]
+```

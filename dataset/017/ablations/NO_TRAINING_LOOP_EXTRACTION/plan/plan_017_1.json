@@ -1,0 +1,24 @@
+```json
+[
+    "Import TensorFlow version 1.x and necessary libraries: import tensorflow as tf, import pathlib, import numpy as np, import matplotlib.pyplot as plt",
+    "Set the TensorFlow logging level to suppress warnings: tf.logging.set_verbosity(tf.logging.ERROR)",
+    "Define a function load_model that takes model_name as a parameter",
+    "Inside load_model, set base_url to 'http://download.tensorflow.org/models/research/object_detection/'",
+    "Set model_file to model_name + '.tar.gz'",
+    "Use tf.keras.utils.get_file to download and extract the model: model_dir = tf.keras.utils.get_file(fname=model_name, origin=base_url + model_file, untar=True)",
+    "Set model_dir to pathlib.Path(model_dir)/'saved_model'",
+    "Print model_dir to verify the path",
+    "Load the model using tf.saved_model.loader.load with the session: sess = tf.Session(), model = tf.saved_model.loader.load(sess, [tf.saved_model.tag_constants.SERVING], str(model_dir))",
+    "Return the loaded model",
+    "Define a list TEST_IMAGE_PATHS with at least one image path: TEST_IMAGE_PATHS = ['path/to/test/image.jpg']",
+    "Define a function show_inference that takes detection_model and image_path as parameters",
+    "Inside show_inference, read the image using tf.io.read_file and decode it: image = tf.image.decode_image(tf.io.read_file(image_path))",
+    "Resize the image to the required input size for the model: image = tf.image.resize(image, [height, width])",
+    "Run inference on the image using the detection_model: output_dict = detection_model(image)",
+    "Print output_dict to check if it contains valid detection results",
+    "Iterate over TEST_IMAGE_PATHS and call show_inference with the loaded model: for image_path in TEST_IMAGE_PATHS: show_inference(detection_model, image_path)",
+    "Check for empty tensors in output_dict after inference: assert output_dict is not None and len(output_dict) > 0",
+    "Verify that the output contains '???' or similar placeholder values indicating empty tensors",
+    "Log the output of the inference to confirm the presence of the bug"
+]
+```

@@ -1,0 +1,20 @@
+[
+  "Install Python 3.10.13 and create a new conda environment named 'tf-env' with Python 3.10.13",
+  "Activate the 'tf-env' conda environment",
+  "Install TensorFlow 2.13.0 using pip: pip install tensorflow==2.13.0",
+  "Install TensorFlow Model Garden nightly build using pip: pip install tf-models-nightly",
+  "Install matplotlib in the environment: pip install matplotlib",
+  "Open VSCode and create a new Python script or Jupyter notebook",
+  "Import matplotlib.pyplot as plt and print the current matplotlib backend: import matplotlib.pyplot as plt; print(plt.get_backend())",
+  "Create a simple plot and display it before importing tensorflow_models to verify plotting works, e.g., plt.plot([1,2,3],[4,5,6]); plt.show()",
+  "Import tensorflow_models: import tensorflow_models as tfm (or the specific import as per environment)",
+  "Check and print the matplotlib backend again after importing tensorflow_models: print(plt.get_backend())",
+  "Attempt to create and display the same simple plot again after importing tensorflow_models: plt.plot([1,2,3],[4,5,6]); plt.show()",
+  "Observe that the plot does not display after the import of tensorflow_models due to backend being set to 'agg' (non-interactive backend)",
+  "Verify that changing the backend to an interactive one (e.g., 'TkAgg') after importing tensorflow_models using plt.switch_backend('TkAgg') does NOT fix the plotting issue by plotting again",
+  "Restart the environment and this time set the matplotlib backend to 'TkAgg' BEFORE importing tensorflow_models by adding plt.switch_backend('TkAgg') before the import statement",
+  "Import tensorflow_models after backend switch, then plot again and observe that the plot displays correctly, confirming the bug reproduction and backend switching order importance",
+  "For validation, assert that plt.get_backend() returns 'agg' after the import if backend is not switched early, and 'TkAgg' if switched before import",
+  "Repeat plotting steps with specific plot commands such as plt.plot([0,1,2], [0,1,4]), plt.title('Test Plot'), plt.show() to visually confirm behavior",
+  "Optionally, capture stderr/stdout logs or matplotlib warnings during plotting to confirm no errors are thrown but plots do not display"
+]

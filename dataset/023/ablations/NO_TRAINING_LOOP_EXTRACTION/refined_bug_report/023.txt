@@ -1,0 +1,20 @@
+TITLE  
+Object Detection Notebook Fails During Library Import
+
+SYMPTOMS  
+• The notebook fails at the section "Import required libraries from tensorflow models."  
+• Error message: (Include the exact error message displayed in the notebook, if available)  
+• The notebook does not execute beyond the import step, halting further analysis or model training.
+
+EXPECTED BEHAVIOR  
+The notebook should run without any errors during the library import process, allowing the user to proceed with object detection tasks.
+
+REPRODUCTION STEPS  
+1. Open the notebook at the following URL: https://github.com/tensorflow/models/blob/master/docs/vision/object_detection.ipynb  
+2. Run all cells in the notebook until reaching the section titled "Import required libraries from tensorflow models."  
+3. Observe the failure at this specific import step.  
+
+ADDITIONAL CONTEXT  
+- Ensure that you are using the latest TensorFlow Model Garden release and TensorFlow 2.  
+- Provide any relevant logs or screenshots of the error encountered.  
+- Confirm the system information as requested in the original report to assist in diagnosing the issue.

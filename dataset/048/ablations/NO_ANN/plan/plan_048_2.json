@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, argparse, and any other required modules.",
+    "Set the CUDA device to ensure the script runs on GPU: torch.cuda.set_device(0).",
+    "Prepare an audio file named 'audio.wav' with a duration that is known to cause alignment issues (e.g., 10 seconds long).",
+    "Create a text transcription file named 'text.txt' with 63 lines of text that corresponds to the audio file, ensuring the text is not perfectly aligned with the audio.",
+    "Ensure the audio file is in the correct format (e.g., WAV) and sample rate (e.g., 16kHz) that the align_and_segment.py script expects.",
+    "Set the language parameter to 'ful' (Fulfulde) as specified in the command.",
+    "Create a directory named 'output' to store the results of the forced alignment.",
+    "Ensure the uroman/bin directory exists and contains the necessary files for the uroman conversion.",
+    "Run the command: python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin.",
+    "Monitor the output for any errors, specifically looking for the RuntimeError related to tensor sizes.",
+    "Capture the output of the command to verify the error message: 'Sizes of tensors must match except in dimension 1. Expected size 1649 but got size 1799 for tensor number 1 in the list.'",
+    "Log the dimensions of the tensors involved in the error to confirm the mismatch (e.g., print the sizes of emissions_arr before the torch.cat call).",
+    "Repeat the process with different audio files and text transcriptions to ensure the bug is consistently reproducible."
+]
+```

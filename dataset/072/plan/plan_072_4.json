@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary Python libraries including torch, DataLoader, TensorDataset, and tqdm.",
+    "Load the SQuAD dataset using the `read_squad_examples` function from the utils module.",
+    "Tokenize the SQuAD examples using a pre-trained tokenizer from pytorch_pretrained_bert library with max sequence length of 512.",
+    "Convert the tokenized examples into features using the `convert_examples_to_features` function from the utils module with specified parameters such as doc_stride and max_query_length.",
+    "Create a PyTorch DataLoader with the tokenized and feature dataset, setting batch size to 32.",
+    "Load a pre-trained BertForQuestionAnswering model from pytorch_pretrained_bert library using the 'bert-base-uncased' model name.",
+    "Move the model to a specified device (e.g., GPU if available).",
+    "Initialize an optimizer for the model's parameters using AdamW or another suitable optimizer from torch.optim.",
+    "Create a loop to iterate over the DataLoader, feeding batches of data into the model and computing loss.",
+    "During each iteration, check if any NaN values appear in the computed loss or model outputs by calling `torch.isnan()` on relevant tensors.",
+    "Monitor GPU memory usage during the training loop using tools like `torch.cuda.memory_allocated()` and `torch.cuda.max_memory_allocated()`. Record peak memory usage.",
+    "After completing a number of epochs (e.g., 3), assert that the peak GPU memory usage exceeds a certain threshold, indicating a potential memory leak or issue."
+]
+```
+

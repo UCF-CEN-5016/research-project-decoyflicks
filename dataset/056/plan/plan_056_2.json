@@ -1,0 +1,18 @@
+[
+    "Import necessary libraries including TensorFlow, imageio, io, and ipywidgets",
+    "Define input shape for videos as (batch_size, height, width, channels) where batch_size=32, height=100, width=100, and channels=3",
+    "Create random video data with the defined input shape using NumPy",
+    "Initialize TubeletEmbedding layer with embed_dim=PROJECTION_DIM=768 and patch_size=PATCH_SIZE=(5, 5)",
+    "Apply the initialized TubeletEmbedding layer to the random video data",
+    "Initialize PositionalEncoder layer with embed_dim=PROJECTION_DIM=768",
+    "Apply the initialized PositionalEncoder layer to the output of the TubeletEmbedding layer",
+    "Create a transformer block using the specified configuration including num_heads=NUM_HEADS, embed_dim=PROJECTION_DIM, and transformer_layers=NUM_LAYERS",
+    "Stack multiple transformer blocks to form the backbone of the ViViT model",
+    "Initialize the ViViT model with the tubelet_embedder, positional_encoder, and transformer block",
+    "Compile the model using Adam optimizer with learning_rate=LEARNING_RATE",
+    "Call the fit method on the compiled model using the training data (trainloader)",
+    "Verify that the loss during training contains NaN values by checking if any of the trainable variables have NaN gradients",
+    "Check GPU memory usage during model training by querying TensorFlow's runtime information",
+    "Assert that GPU memory usage exceeds a certain threshold indicating potential memory overflow or other issues"
+]
+

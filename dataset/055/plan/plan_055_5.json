@@ -1,0 +1,18 @@
+```json
+[
+    "Import the necessary libraries: tensorflow, matplotlib.pyplot as plt, random.randint",
+    "Define a configuration dictionary with 'image_size': 32, 'patch_size': 4, 'embed_dim': 192, 'chunk_size': 8, 'r': 16, 'num_layers': 8, 'ffn_drop': 0.5, 'attn_drop': 0.5, 'learning_rate': 0.001, 'weight_decay': 0.01, 'epochs': 10, 'batch_size': 4",
+    "Create a mock dataset using numpy with random patches of size (batch_size, chunk_size * patch_size, chunk_size * patch_size, 3)",
+    "Define the PatchEmbedding class with the provided parameters and forward method",
+    "Initialize an instance of CustomRecurrentCell with the configuration from the previous step",
+    "Create an instance of TemporalLatentBottleneckModel using the mock dataset's image size and the CustomRecurrentCell instance",
+    "Compile the model using AdamW optimizer with the specified learning rate and weight decay, and SparseCategoricalCrossentropy loss function",
+    "Generate dummy labels for the mock dataset with random integers between 0 and 999 (num_classes)",
+    "Train the model on the mock dataset for one epoch to initialize weights and states",
+    "Call the model's predict method on a batch of the mock data to generate outputs",
+    "Extract attention scores from the CustomRecurrentCell instance by setting get_attention_scores flag to True before running the predict method",
+    "Verify that the attention scores contain NaN values by checking for NaN in the extracted attention scores array",
+    "Print the attention scores to inspect their contents"
+]
+```
+

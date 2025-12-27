@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: argparse, torch, DataLoader, RandomSampler, and DeepSpeedRLHFEngine from dschat.",
+    "Set a random seed for reproducibility using set_random_seed with a value of 42.",
+    "Define a batch size of 16 for training and generation purposes.",
+    "Create a mock dataset with a sequence length of 256, containing input prompts and corresponding action masks.",
+    "Initialize the tokenizer using load_hf_tokenizer with a model path of 'gpt2' and add the end-of-sequence token '<|endoftext|>'.",
+    "Create a DataLoader for the mock dataset with the defined batch size and a RandomSampler.",
+    "Initialize the DeepSpeedRLHFEngine with actor_model_name_or_path set to 'gpt2', critic_model_name_or_path set to 'gpt2', and the tokenizer created earlier.",
+    "Generate a batch of experience using the trainer's generate_experience method with the mock DataLoader.",
+    "Call the train_rlhf method on the trainer with the generated experience to compute actor_loss and critic_loss.",
+    "Modify the action_mask to simulate the bug by using action_mask[:, start:] where start is set to 1.",
+    "Assert that the actor_loss is computed without the 'eos' token by checking the dimensions of actor_log_prob and action_mask.",
+    "Print the actor_loss value to verify it is computed correctly without the 'eos' token.",
+    "Change the action_mask to action_mask[:, start-1:-1] to include the 'eos' token in the loss calculation.",
+    "Re-run the train_rlhf method with the modified action_mask and assert that the actor_loss value changes.",
+    "Log the actor_loss values before and after the change to validate that the bug is reproducible."
+]
+```

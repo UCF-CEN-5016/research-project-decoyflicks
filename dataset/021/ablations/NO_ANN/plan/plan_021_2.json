@@ -1,0 +1,11 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official vision library: from official.vision.modeling.layers import detection_generator",
+    "Define a function to simulate the evaluation phase, named 'simulate_evaluation'",
+    "Inside 'simulate_evaluation', create an empty list named 'predicted_boxes' to simulate the case where no boxes are predicted",
+    "Call the '_generate_detections_v2_class_aware' function from the detection_generator module with 'predicted_boxes' as an argument",
+    "Set up a try-except block to catch the ValueError exception",
+    "In the except block, assert that the exception message contains 'List argument 'values' to 'ConcatV2' Op with length 0'",
+    "Run the 'simulate_evaluation' function to trigger the bug and verify the exception is raised"
+]
+```

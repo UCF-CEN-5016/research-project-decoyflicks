@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: keras, numpy, and keras_tuner",
+    "Set the random seed for reproducibility using numpy: np.random.seed(42)",
+    "Define the input shape for the model as (28, 28, 1)",
+    "Create a training dataset with 1000 samples of random data: x_train = np.random.rand(1000, 28, 28, 1) and y_train = np.random.randint(0, 10, (1000, 1))",
+    "Create a test dataset with 1000 samples of random data: x_test = np.random.rand(1000, 28, 28, 1) and y_test = np.random.randint(0, 10, (1000, 1))",
+    "Define a simple Keras model with an input layer, one dense layer, and an output layer for 10 classes",
+    "Compile the model with Adam optimizer and SparseCategoricalCrossentropy loss",
+    "Set the number of epochs to 20",
+    "Call model.fit() with train_dataset as x_train, y_train and validation_data as (x_test, y_test)",
+    "Monitor the training process and check the validation loss output",
+    "Assert that the validation loss is lower than expected, indicating overfitting due to using the test set as validation",
+    "Log the validation loss values during training to confirm the bug"
+]
+```

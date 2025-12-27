@@ -1,0 +1,27 @@
+attn_num_mem_kv > 0 and attn_one_kv_head = True error
+
+If you set both `attn_num_mem_kv` and `attn_one_kv_head`, you get an error.
+
+Repro:
+```
+lm = TransformerWrapper (
+    num_tokens          = 32,
+    max_seq_len         = 0,
+    num_memory_tokens   = 20,
+    attn_layers = Decoder (
+        dim             = 512,
+        depth           = 4,
+        heads           = 4,
+        rotary_pos_emb  = True,
+        attn_flash      = True,
+        attn_onnxable   = True,
+        attn_num_mem_kv  = 20,
+        attn_one_kv_head = True
+    )
+)
+
+x = torch.randint(0, 32, (8, 1024))
+logits = lm(x)
+print(x.shape, x.dtype)
+print(logits.shape, logits.dtype)
+```

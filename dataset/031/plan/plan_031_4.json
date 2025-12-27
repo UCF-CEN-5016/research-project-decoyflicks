@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and required modules from object_detection_test.py",
+    "Define a batch size of 2 and image dimensions of 300x300",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Set ground truth boxes with values that could lead to NaN during processing",
+    "Call matmul_crop_and_resize function with specified parameters",
+    "Verify output contains NaN values in the result tensor",
+    "Monitor CPU and GPU memory usage during execution",
+    "Assert CPU or GPU memory usage exceeds expected threshold due to the bug"
+]
+```
+

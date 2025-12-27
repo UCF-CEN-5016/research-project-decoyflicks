@@ -1,0 +1,19 @@
+TITLE
+Model Fitting Error with KerasCV
+
+SYMPTOMS
+• An error occurs when attempting to fit the model.
+• The exact error message is not provided, but it can be seen in the attached images.
+• Unexpected behavior includes the failure of the model training process.
+
+EXPECTED BEHAVIOR
+The model should train successfully without any errors, and the training process should proceed as expected, producing learning curves or other relevant outputs depending on how the training is set up.
+
+REPRODUCTION STEPS
+1. Ensure that KerasCV has been installed using the command: `!pip install git+https://github.com/keras-team/keras-cv -q`.
+2. Load and preprocess the dataset as required by your model.
+3. Define a model architecture compatible with your task (e.g., classification, segmentation).
+4. Compile the model with appropriate loss functions, optimizers, and metrics.
+5. Attempt to fit the model using the loaded or preprocessed data.
+
+Note: Please provide the exact error message from the images for more accurate analysis.

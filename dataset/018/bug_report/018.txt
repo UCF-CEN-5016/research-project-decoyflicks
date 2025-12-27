@@ -1,0 +1,26 @@
+python -m pip install --use-feature=2020-resolver .  results in an error option --use-feature: invalid choice: '2020-resolver' (choose from 'fast-deps', 'truststore','no-binary-enable-wheel-cache')
+
+This is the link that contains the instructions I followed.
+https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2.md
+
+1. I was following the above instructions to install TFOD2 in my arch linux system.
+2. Under the Python Package Installation heading I wasn't able to execute the last command alone.
+`python -m pip install --use-feature=2020-resolver .`
+4. It produces the following error.
+
+```
+Usage:
+/usr/bin/python -m pip install [options] <requirement specifier> [package-index-options] ...
+/usr/bin/python -m pip install [options] -r <requirements file> [package-index-options] ...
+/usr/bin/python -m pip install [options] [-e] <vcs project url> ...
+/usr/bin/python -m pip install [options] [-e] <local project path> ...
+/usr/bin/python -m pip install [options] <archive url/path> ...
+
+option --use-feature: invalid choice: '2020-resolver' (choose from 'fast-deps', 'truststore','no-binary-enable-wheel-cache')
+
+```
+So if you guys, have any idea how to solve this or, if you know the purpose of this command please enlighten me. Thanks.
+
+5. Are you willing to contribute it? (Yes or No)
+   Yes, I am willing to contribute. But I am kind of new to raising issues, but I got some decent experience with ML/DL. So if you got some errands please let me know, I would be glad to help.
+

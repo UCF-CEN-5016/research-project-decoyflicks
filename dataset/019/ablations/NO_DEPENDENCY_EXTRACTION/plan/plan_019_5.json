@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Model Garden modules: tensorflow_models and tensorflow_text",
+    "Set the Python version to 3.10 and ensure TensorFlow version is 2.x",
+    "Install the required packages using pip: !pip install tensorflow tensorflow-models tensorflow-text",
+    "Import the necessary modules: import tensorflow as tf, import tensorflow_models as tfm, import tensorflow_text",
+    "Define a batch size of 4 and image dimensions of 640x480 for the Mask R-CNN model",
+    "Create random input data for images with shape (batch_size, height, width, channels) = (4, 640, 480, 3)",
+    "Create random input data for labels with shape (batch_size, num_instances) = (4, 10) for class IDs",
+    "Define a dummy model configuration for Mask R-CNN with input size [640, 480, 3] and other necessary parameters",
+    "Instantiate the MaskRCNNTask class from the official vision tasks using the dummy model configuration",
+    "Call the build_model method of the MaskRCNNTask instance to build the model",
+    "Create a dummy input shape tensor with shape (4, 640, 480, 3) and a dummy image shape tensor with shape (4, 2)",
+    "Attempt to call the model with the dummy input data and image shape tensor, expecting it to run without errors",
+    "Import the necessary logging module from absl and set the logging level to INFO",
+    "Run the import statement: import tensorflow_models as tfm and observe the ImportError",
+    "Capture the ImportError message and check for the undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E",
+    "Log the error message to verify that the ImportError occurs as expected",
+    "Assert that the ImportError is raised during the import of tensorflow_models"
+]
+```

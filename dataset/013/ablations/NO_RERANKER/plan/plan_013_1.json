@@ -1,0 +1,30 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10",
+    "Activate the new conda environment using: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install the TensorFlow Model Garden nightly version using pip with the command: pip install tf-models-nightly",
+    "Install Matplotlib using pip with the command: pip install matplotlib",
+    "Open Visual Studio Code.",
+    "Create a new Python file or Jupyter notebook.",
+    "Import the necessary libraries at the top of the file: import tensorflow as tf, import matplotlib.pyplot as plt, from official.vision import model as tf_models",
+    "Set the Matplotlib backend to 'Agg' using: plt.switch_backend('Agg')",
+    "Create a random uniform input tensor with shape (1, 224, 224, 3) using: input_tensor = tf.random.uniform((1, 224, 224, 3))",
+    "Define a simple function to plot a random image using Matplotlib: def plot_image(image): plt.imshow(image); plt.axis('off'); plt.show()",
+    "Call the plot_image function with a random image before importing tf_models: plot_image(input_tensor.numpy()[0])",
+    "Verify that the plot displays correctly before importing tf_models.",
+    "Import the TensorFlow Model Garden module using: from official.vision import model as tf_models",
+    "Check the current Matplotlib backend using: print(plt.get_backend()) and assert it is not 'Agg'.",
+    "Attempt to plot the same random image again using: plot_image(input_tensor.numpy()[0])",
+    "Verify that the plot does not display after importing tf_models.",
+    "Change the Matplotlib backend to 'TkAgg' using: plt.switch_backend('TkAgg')",
+    "Attempt to plot the random image again using: plot_image(input_tensor.numpy()[0])",
+    "Verify that the plot still does not display after changing the backend post-import.",
+    "Change the Matplotlib backend to 'TkAgg' before importing tf_models using: plt.switch_backend('TkAgg')",
+    "Import the TensorFlow Model Garden module again using: from official.vision import model as tf_models",
+    "Attempt to plot the random image again using: plot_image(input_tensor.numpy()[0])",
+    "Verify that the plot displays correctly after changing the backend before the import."
+]
+```

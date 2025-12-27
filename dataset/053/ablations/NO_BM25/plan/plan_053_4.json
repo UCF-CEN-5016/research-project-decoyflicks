@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import os, import tensorflow as tf, import keras, import keras_nlp, import numpy as np",
+    "Set the environment variable for Keras backend: os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Set the mixed precision policy: tf.keras.mixed_precision.set_global_policy('mixed_float16')",
+    "Define a batch size of 32 for training data",
+    "Load the pretrained BERT classifier model: classifier = keras_nlp.models.BertClassifier.from_preset('bert_tiny_en_uncased_sst2')",
+    "Prepare a sample input for prediction: sample_input = ['I love modular workflows in keras-nlp']",
+    "Attempt to call classifier.predict(sample_input) to trigger the bug",
+    "Capture the output and error message when running the prediction",
+    "Verify that the output contains the AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'",
+    "Log the complete traceback of the error to confirm the source of the issue",
+    "Ensure that the TensorFlow version is compatible with Keras 2.15 by checking tf.__version__"
+]
+```

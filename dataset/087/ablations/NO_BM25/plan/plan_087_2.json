@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch and the TransformerWrapper and Decoder classes from the x_transformers module",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 2 and sequence length of 4 for the input tensor",
+    "Create an input tensor x with shape (batch_size, sequence_length) using torch.randint(0, 20000, (2, 4))",
+    "Create a custom position tensor pos with shape (batch_size, sequence_length) using torch.tensor([[0, 1, 2, 4], [1, 3, 5, 7]])",
+    "Initialize the TransformerWrapper model with num_tokens=20000, max_seq_len=1024, and attn_layers as a Decoder with dim=512, depth=2, heads=8, and alibi_pos_bias=True",
+    "Call the model with the input tensor x and the custom position tensor pos, storing the output in logits",
+    "Set attn_flash=True in the Decoder initialization to enable flash attention",
+    "Re-initialize the TransformerWrapper model with the same parameters but with attn_flash=True",
+    "Call the model again with the same input tensor x and custom position tensor pos, storing the output in logits_flash",
+    "Check if the output logits_flash is of shape (2, 4, 20000) to ensure the model executed without dimension errors",
+    "Assert that the output logits_flash contains NaN values to verify the bug occurs when using custom positions with flash attention"
+]
+```

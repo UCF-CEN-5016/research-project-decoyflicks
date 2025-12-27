@@ -1,0 +1,28 @@
+{
+  "bug_report": "039",
+  "module": {
+    "module": "labml_nn/gan/original",
+    "files": [
+      {
+        "path": "labml_nn/gan/original/__init__.py",
+        "snippets": [
+          {
+            "lines": "105-112",
+            "code": "    def __init__(self, smoothing: float = 0.2):\n        super().__init__()\n        # We use PyTorch Binary Cross Entropy Loss, which is\n        # $-\\sum\\Big[y \\log(\\hat{y}) + (1 - y) \\log(1 - \\hat{y})\\Big]$,\n        # where $y$ are the labels and $\\hat{y}$ are the predictions.\n        # *Note the negative sign*.\n        # We use labels equal to $1$ for $\\pmb{x}$ from $p_{data}$\n        # and labels equal to $0$ for $\\pmb{x}$ from $p_{G}.$\n        # Then descending on the sum of these is the same as ascending on\n        # the above gradient.\n        #\n        # `BCEWithLogitsLoss` combines softmax and binary cross entropy loss.\n        self.loss_true = nn.BCEWithLogitsLoss()\n        self.loss_false = nn.BCEWithLogitsLoss()\n\n        # We use label smoothing because it seems to work better in some cases\n        self.smoothing = smoothing\n\n        # Labels are registered as buffered and persistence is set to `False`.\n        self.register_buffer('labels_true', _create_labels(256, 1.0 - smoothing, 1.0), False)\n        self.register_buffer('labels_false', _create_labels(256, 0.0, smoothing), False)\n\n    def forward(self, logits_true: torch.Tensor, logits_false: torch.Tensor):\n        \"\"\"\n        `logits_true` are logits from $D(\\pmb{x}^{(i)})$ and\n        `logits_false` are logits from $D(G(\\pmb{z}^{(i)}))$\n        \"\"\"\n        if len(logits_true) > len(self.labels_true):\n            self.register_buffer(\"labels_true\",\n                                 _create_labels(len(logits_true), 1.0 - self.smoothing, 1.0, logits_true.device), False)\n        if len(logits_false) > len(self.labels_false):\n            self.register_buffer(\"labels_false\",\n                                 _create_labels(len(logits_false), 0.0, self.smoothing, logits_false.device), False)\n\n        return (self.loss_true(logits_true, self.labels_true[:len(logits_true)]),\n                self.loss_false(logits_false, self.labels_false[:len(logits_false)]))\n\n    def __init__(self, smoothing: float = 0.2):\n        super().__init__()\n        self.loss_true = nn.BCEWithLogitsLoss()\n        self.smoothing = smoothing\n        # We use labels equal to $1$ for $\\pmb{x}$ from $p_{G}.$\n        # Then descending on this loss is the same as descending on\n        # the above gradient.\n        self.register_buffer('fake_labels', _create_labels(256, 1.0 - smoothing, 1.0), False)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "labml_nn/gan/original/__init__.py",
+      "snippets": [
+        {
+          "lines": "105-112",
+          "code": "    def __init__(self, smoothing: float = 0.2):\n        super().__init__()\n        # We use PyTorch Binary Cross Entropy Loss, which is\n        # $-\\sum\\Big[y \\log(\\hat{y}) + (1 - y) \\log(1 - \\hat{y})\\Big]$,\n        # where $y$ are the labels and $\\hat{y}$ are the predictions.\n        # *Note the negative sign*.\n        # We use labels equal to $1$ for $\\pmb{x}$ from $p_{data}$\n        # and labels equal to $0$ for $\\pmb{x}$ from $p_{G}.$\n        # Then descending on the sum of these is the same as ascending on\n        # the above gradient.\n        #\n        # `BCEWithLogitsLoss` combines softmax and binary cross entropy loss.\n        self.loss_true = nn.BCEWithLogitsLoss()\n        self.loss_false = nn.BCEWithLogitsLoss()\n\n        # We use label smoothing because it seems to work better in some cases\n        self.smoothing = smoothing\n\n        # Labels are registered as buffered and persistence is set to `False`.\n        self.register_buffer('labels_true', _create_labels(256, 1.0 - smoothing, 1.0), False)\n        self.register_buffer('labels_false', _create_labels(256, 0.0, smoothing), False)\n\n    def forward(self, logits_true: torch.Tensor, logits_false: torch.Tensor):\n        \"\"\"\n        `logits_true` are logits from $D(\\pmb{x}^{(i)})$ and\n        `logits_false` are logits from $D(G(\\pmb{z}^{(i)}))$\n        \"\"\"\n        if len(logits_true) > len(self.labels_true):\n            self.register_buffer(\"labels_true\",\n                                 _create_labels(len(logits_true), 1.0 - self.smoothing, 1.0, logits_true.device), False)\n        if len(logits_false) > len(self.labels_false):\n            self.register_buffer(\"labels_false\",\n                                 _create_labels(len(logits_false), 0.0, self.smoothing, logits_false.device), False)\n\n        return (self.loss_true(logits_true, self.labels_true[:len(logits_true)]),\n                self.loss_false(logits_false, self.labels_false[:len(logits_false)]))\n\n    def __init__(self, smoothing: float = 0.2):\n        super().__init__()\n        self.loss_true = nn.BCEWithLogitsLoss()\n        self.smoothing = smoothing\n        # We use labels equal to $1$ for $\\pmb{x}$ from $p_{G}.$\n        # Then descending on this loss is the same as descending on\n        # the above gradient.\n        self.register_buffer('fake_labels', _create_labels(256, 1.0 - smoothing, 1.0), False)"
+        }
+      ]
+    }
+  ]
+}

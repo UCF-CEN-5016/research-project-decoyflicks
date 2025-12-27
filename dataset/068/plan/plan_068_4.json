@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow and the necessary modules for creating a model, preparing data, and training",
+    "Define a batch size of 2 and image dimensions of 512x512",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Load the COCO2017 dataset using TensorFlow Datasets and apply the preprocessing function to the samples",
+    "Create batches with fixed batch size using padded_batch to handle different image dimensions and object counts",
+    "Encode targets for each sample in the batch using LabelEncoder",
+    "Initialize and compile a RetinaNet model with 80 classes, ResNet50 backbone, and custom loss function",
+    "Define learning rates and learning rate boundaries for piecewise constant decay",
+    "Create an SGD optimizer with specified learning rate schedule and momentum",
+    "Set up ModelCheckpoint callback to save model weights",
+    "Train the model on a subset of the training dataset (100 steps) using the custom loss function",
+    "Load the latest checkpoint after training",
+    "Build inference model by applying DecodePredictions layer to the RetinaNet model output",
+    "Prepare an image from the validation dataset and use it to generate detections through the inference model",
+    "Visualize the detections and ensure that no NaN values are present in the output predictions",
+    "Monitor GPU memory usage during training and inference steps",
+    "Assert that GPU memory usage exceeds expected threshold during training and inference"
+]
+```
+

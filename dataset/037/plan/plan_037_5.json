@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules from labml and torch",
+    "Set the chunk_len to 16, d_model to 128, d_ff to 512, n_heads to 16, d_k to 16",
+    "Load Tiny Shakespeare dataset using TextFileDataset with path 'tiny_shakespeare.txt'",
+    "Create a RetroIndex instance for storing nearest neighbor indices",
+    "Define a batch size of 4",
+    "Initialize NearestNeighborEncoder with chunk_len=16, num_chunks={3}, d_model=128, n_heads=16, d_k=16, d_ff=512",
+    "Create RetroModel with vocab_size (from tds.n_tokens), d_model=128, num_layers=6, hidden_sizes={3, 5}, chunk_len=16, n_heads=16, d_k=16, d_ff=512, encoder as NearestNeighborEncoder",
+    "Move the model to GPU device 'cuda:0'",
+    "Create a random dataset with 4 samples where each sample is a tensor of shape (chunk_len + chunk_len * 2) filled with random integers between 0 and tds.n_tokens - 1",
+    "Initialize Noam optimizer with model parameters, learning rate=1.0, d_model=128, warmup=2000",
+    "Create DataLoader for the dataset with batch size of 4 and RandomSampler",
+    "Define a Trainer object with device 'cuda:0', model, dataloader, and optimizer",
+    "Call the Trainer object to perform one epoch of training on the dataset",
+    "Verify that the loss calculation contains NaN values after training for one epoch"
+]
+```
+

@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the TNExpandCondense module from official/vision/ops/augment.py",
+    "Define a batch size of 10 and input dimension of 768",
+    "Create random normal input data with shape (batch_size, input_dimension)",
+    "Call TNExpandCondense function with proj_multiplier=2, use_bias=True, activation='relu', and input_shape=(input_dimension,)",
+    "Verify output tensor contains values that are either 0 or 1",
+    "Monitor the applied standard deviation during execution",
+    "Assert the applied standard deviation is always 1"
+]
+```
+

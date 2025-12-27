@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn.functional as F",
+    "Define a batch size of 4 and a sequence length of 10",
+    "Create a random tensor 't' with shape (batch_size, seq_len, embedding_dim) using torch.randn, where embedding_dim is set to 16",
+    "Create a tensor 'lens' with shape (batch_size,) containing random integers between 1 and seq_len (inclusive) to simulate varying sequence lengths, e.g., torch.randint(1, seq_len + 1, (batch_size,))",
+    "Set the pad_id variable to 0, which will be used for padding in the align_right function",
+    "Define the align_right function as per the provided code context, ensuring it includes the F.pad call with value=0",
+    "Call the align_right function with parameters: t, lens, and pad_id",
+    "Capture the output of the align_right function in a variable called 'aligned_output'",
+    "Print the shape of 'aligned_output' to verify it matches the expected shape after alignment",
+    "Check if the 'aligned_output' contains any padding values (pad_id) in the positions where the original tensor 't' had valid data",
+    "Assert that the 'aligned_output' does not use the pad_id parameter in the F.pad call, indicating the bug is present",
+    "Log the output of 'aligned_output' to visually inspect the alignment and padding behavior"
+]
+```

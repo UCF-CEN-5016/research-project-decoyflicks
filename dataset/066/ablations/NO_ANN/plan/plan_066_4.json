@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and Keras modules: keras.layers, keras.models, and keras.utils",
+    "Define a batch size of 128 and set epochs to 5",
+    "Set input shape to (28, 28, 1) for grayscale images",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Scale images to the [0, 1] range by dividing by 255",
+    "Ensure images have shape (28, 28, 1) by using np.expand_dims on x_train and x_test",
+    "Convert class vectors to binary class matrices using keras.utils.to_categorical with num_classes=10",
+    "Define a custom convolution layer class StandardizedConv2DWithCall that overrides the call method",
+    "Define another custom convolution layer class StandardizedConv2DWithOverride that overrides the convolution_op method",
+    "Create a Sequential model with the following layers: Input layer, StandardizedConv2DWithCall, MaxPooling2D, StandardizedConv2DWithOverride, MaxPooling2D, Flatten, Dropout, Dense",
+    "Compile the model using categorical_crossentropy loss, adam optimizer, and accuracy metric",
+    "Fit the model on the training data (x_train, y_train) with validation_split=0.1",
+    "In the model definition, ensure to use level1_dau_2 and level3_dau_2 in the selective_kernel_feature_fusion function",
+    "Verify that level2_dau_2 is defined but never used in the model",
+    "Check the model summary to confirm the architecture and layer outputs",
+    "Run the model training and observe the output for any warnings or errors related to unused variables",
+    "Assert that the variable level2_dau_2 is not referenced in the selective_kernel_feature_fusion call"
+]
+```

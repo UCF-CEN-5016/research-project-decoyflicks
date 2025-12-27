@@ -1,0 +1,17 @@
+```json
+[
+    "Import torch and pytest modules",
+    "Import ResidualVQ from vector_quantize_pytorch",
+    "Define a function named test_residual_vq_initialization",
+    "Set implicit_neural_codebook to False",
+    "Set use_cosine_sim to False",
+    "Set train to True",
+    "Initialize ResidualVQ with parameters: dim=32, num_quantizers=8, codebook_size=128, implicit_neural_codebook=False, use_cosine_sim=False",
+    "Create random input tensor x with shape (1, 256, 32)",
+    "Call residual_vq.train(train) to set the model in training mode",
+    "Call residual_vq(x, freeze_codebook=train and not implicit_neural_codebook) and store the output in quantized, indices, commit_loss",
+    "Check if the MLPs are initialized by accessing the internal state of the ResidualVQ instance",
+    "Assert that the MLPs are initialized by checking if any of the MLP parameters are not None",
+    "Print a message indicating whether MLPs were initialized or not for verification"
+]
+```

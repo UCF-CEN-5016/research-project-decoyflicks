@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from vector_quantize_pytorch",
+    "Define a batch size of 2 and input dimensions of (1024, 17) for the tensor representing the input data",
+    "Create a random tensor with shape (batch_size, 1024, 17) using torch.randn to simulate input data",
+    "Instantiate the ResidualSimVQ class with parameters: dim=1024, num_quantizers=3, codebook_size=256, quantize_dropout=True",
+    "Set the model to training mode by calling model.train()",
+    "Call the forward method of the ResidualSimVQ instance with the input tensor and return_all_codes=False",
+    "Capture the output of the forward method to check for any exceptions",
+    "Verify that a NameError is raised indicating 'return_loss' is not defined",
+    "Log the error message to confirm the specific issue with the undefined variable",
+    "Check the shape of the output to ensure it matches expected dimensions, specifically for all_losses and all_indices",
+    "Assert that the output of all_losses contains tensors of inconsistent shapes, specifically checking for torch.Size([]) and torch.Size([1])"
+]
+```

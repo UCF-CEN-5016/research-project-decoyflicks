@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository",
+    "Set the environment variables for DATA_DIR and MODEL_DIR to point to the appropriate directories containing ImageNet TF records and model checkpoints",
+    "Define the number of nodes and GPUs: 2 nodes, 2 GPUs per node",
+    "Create a configuration file gpu.yaml for the first worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0",
+    "Create a configuration file gpu1.yaml for the second worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1",
+    "On the first GPU node (gpu1), activate the conda environment and run the classifier_trainer.py script with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml",
+    "On the second GPU node (gpu2), activate the conda environment and run the classifier_trainer.py script with the following command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml",
+    "Set the batch size to a value that is appropriate for the GPUs, e.g., 64, and ensure that the input data is properly formatted for the ResNet model",
+    "Monitor the throughput of the training process on both nodes and log the examples processed per second",
+    "Verify that the throughput on the multi-worker setup does not exceed the throughput of a single GPU setup, which is approximately 270 examples/sec",
+    "Check the logs for any warnings or errors related to the distribution strategy or GPU utilization",
+    "Assert that the total throughput for the multi-worker setup is equal to the throughput of a single GPU, indicating that scaling is not occurring as expected"
+]
+```

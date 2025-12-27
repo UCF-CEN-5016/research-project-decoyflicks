@@ -1,0 +1,19 @@
+[
+  "Import torch and necessary modules for tensor operations and logging",
+  "Define a minimal dummy actor loss function that takes (actor_log_prob, log_probs, advantages, mask) and returns a scalar loss using masked elements",
+  "Create synthetic input tensors with batch_size=2 and seq_len=6 for actor_log_prob, log_probs, advantages, and action_mask",
+  "Initialize actor_log_prob and log_probs as random log probabilities with shape (2, 6)",
+  "Initialize advantages as a random tensor with shape (2, 6)",
+  "Initialize action_mask as a binary mask tensor with shape (2, 6) with 1s for valid tokens and 0s where tokens should be masked (including the 'eos' token at the last position)",
+  "Set start index to 1 (simulating a decoder start offset)",
+  "Calculate actor loss using the provided buggy code: actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:])",
+  "Calculate actor loss using the proposed alternative mask slicing: actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start-1:-1])",
+  "Print both loss values for comparison",
+  "Assert that the loss values differ, indicating that masking action_mask[:, start:] excludes the last token's loss (e.g., 'eos'), while action_mask[:, start-1:-1] includes the 'eos' token",
+  "Manually verify that the last position (token 'eos') in action_mask is 1 and check if it is ignored in the first slicing but included in the second",
+  "Repeat the test with a controlled advantage tensor where 'eos' token has a non-zero reward to verify the effect of masking on loss computation",
+  "Log detailed shapes and slices of tensors involved to ensure correct indexing and masking behavior",
+  "Wrap the test in a function to allow re-execution with different start indices and mask shapes",
+  "Ensure the entire setup runs on CPU for simplicity and reproducibility",
+  "No external dependencies or datasets are needed; all data is synthetic and generated within the test"
+]

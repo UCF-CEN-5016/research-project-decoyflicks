@@ -1,0 +1,88 @@
+[KerasCV] Image segmentation with a U-Net-like architecture is not running successfuly.
+
+When trying to run the code from [this article](https://keras.io/examples/vision/oxford_pets_image_segmentation/), the error is encountered on creating the datasets. The same issue persists both in Colab and on local machine.
+
+Code Cell:
+
+```
+augmented_train_ds = (
+    train_ds.shuffle(BATCH_SIZE * 2)
+    .map(augment_fn, num_parallel_calls=AUTOTUNE)
+    .batch(BATCH_SIZE)
+    .map(unpackage_inputs)
+    .prefetch(buffer_size=tf.data.AUTOTUNE)
+)
+resized_val_ds = (
+    val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE)
+    .batch(BATCH_SIZE)
+    .map(unpackage_inputs)
+    .prefetch(buffer_size=tf.data.AUTOTUNE)
+)
+```
+Error:
+```
+
+---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+[<ipython-input-9-7a534e67b8f6>](https://localhost:8080/#) in <cell line: 2>()
+      1 augmented_train_ds = (
+----> 2     train_ds.shuffle(BATCH_SIZE * 2)
+      3     .map(augment_fn, num_parallel_calls=AUTOTUNE)
+      4     .batch(BATCH_SIZE)
+      5     .map(unpackage_inputs)
+
+27 frames
+
+[/usr/local/lib/python3.10/dist-packages/keras_cv/src/layers/preprocessing/random_choice.py](https://localhost:8080/#) in tf___augment(self, inputs, *args, **kwargs)
+     12                 try:
+     13                     do_return = True
+---> 14                     retval_ = ag__.converted_call(ag__.ld(tf).switch_case, (), dict(branch_index=ag__.ld(selected_op), branch_fns=ag__.ld(branch_fns), default=ag__.autograph_artifact(lambda : ag__.ld(inputs))), fscope)
+     15                 except:
+     16                     do_return = False
+
+TypeError: Exception encountered when calling layer 'rand_augment' (type RandAugment).
+
+in user code:
+
+    File "/usr/local/lib/python3.10/dist-packages/keras_cv/src/layers/preprocessing/base_image_augmentation_layer.py", line 420, in call  *
+        outputs = self._format_output(self._augment(inputs), metadata)
+    File "/usr/local/lib/python3.10/dist-packages/keras_cv/src/layers/preprocessing/rand_augment.py", line 127, in _augment  *
+        result = super()._augment(sample)
+    File "/usr/local/lib/python3.10/dist-packages/keras_cv/src/layers/preprocessing/random_augmentation_pipeline.py", line 104, in _augment  *
+        result = tf.cond(
+    File "/usr/local/lib/python3.10/dist-packages/keras/src/utils/traceback_utils.py", line 70, in error_handler
+        raise e.with_traceback(filtered_tb) from None
+    File "/tmp/__autograph_generated_filej0tk3t3e.py", line 46, in tf__call
+        ag__.if_stmt(ag__.ld(images).shape.rank == 3, if_body_1, else_body_1, get_state_1, set_state_1, ('outputs',), 1)
+    File "/tmp/__autograph_generated_filej0tk3t3e.py", line 24, in if_body_1
+        outputs = ag__.converted_call(ag__.ld(self)._format_output, (ag__.converted_call(ag__.ld(self)._augment, (ag__.ld(inputs),), None, fscope), ag__.ld(metadata)), None, fscope)
+    File "/tmp/__autograph_generated_fileytz6kjkc.py", line 14, in tf___augment
+        retval_ = ag__.converted_call(ag__.ld(tf).switch_case, (), dict(branch_index=ag__.ld(selected_op), branch_fns=ag__.ld(branch_fns), default=ag__.autograph_artifact(lambda : ag__.ld(inputs))), fscope)
+
+    TypeError: Exception encountered when calling layer 'random_choice' (type RandomChoice).
+    
+    in user code:
+    
+        File "/usr/local/lib/python3.10/dist-packages/keras_cv/src/layers/preprocessing/base_image_augmentation_layer.py", line 420, in call  *
+            outputs = self._format_output(self._augment(inputs), metadata)
+        File "/usr/local/lib/python3.10/dist-packages/keras_cv/src/layers/preprocessing/random_choice.py", line 110, in _augment  *
+            default=lambda: inputs,
+    
+        TypeError: branches[0] and branches[1] arguments to tf.switch_case must have the same number, type, and overall structure of return values.
+        
+        branches[0] output: {'images': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity:0' shape=(160, 160, 3) dtype=float32>, 'segmentation_masks': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0' shape=(160, 160, 1) dtype=float32>}
+        branches[1] output: {'images': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity:0' shape=(160, 160, 3) dtype=float32>, 'segmentation_masks': <tf.Tensor 'sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0' shape=(160, 160, 1) dtype=int64>}
+        
+        Error details:
+        Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types
+    
+    
+    Call arguments received by layer 'random_choice' (type RandomChoice):
+      • inputs={'images': 'tf.Tensor(shape=(160, 160, 3), dtype=float32)', 'segmentation_masks': 'tf.Tensor(shape=(160, 160, 1), dtype=int64)'}
+
+
+Call arguments received by layer 'rand_augment' (type RandAugment):
+  • inputs={'images': 'tf.Tensor(shape=(160, 160, 3), dtype=float32)', 'segmentation_masks': 'tf.Tensor(shape=(160, 160, 1), dtype=int64)'}
+```

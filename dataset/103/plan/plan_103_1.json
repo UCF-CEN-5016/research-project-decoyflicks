@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries (torch, torch.nn, torchvision)",
+    "Define a batch size of 32 and image dimensions of 512x512 for the ResidualVQ model",
+    "Load pre-trained ResidualVQ model with dim=32, num_quantizers=8, codebook_size=128",
+    "Create random input data with shape (batch_size, 256, 32)",
+    "Set up a device for execution (e.g., 'cuda' if available)",
+    "Move the model and input data to the specified device",
+    "Call the forward pass of the ResidualVQ model with freeze_codebook=False",
+    "Verify that there are no NaN values in the commit_loss tensor after the forward pass",
+    "Assert the shape of the quantized output is (batch_size, 256, 32)",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory does not exceed expected threshold for this input size and model"
+]
+```
+

@@ -1,0 +1,52 @@
+### TITLE
+Matplotlib's `pyplot` Not Working After Importing TensorFlow Models in Python 3.10 Conda Environment
+
+### SYMPTOMS
+• Matplotlib's `pyplot` does not work after importing the `tensorflow_models`.
+• The backend of matplotlib changes to 'agg' after importing `tensorflow_models`, which is a non-interactive backend.
+• Changing the backend to 'TkAgg' before importing `tensorflow_models` works, but changing it afterward doesn't.
+
+### EXPECTED BEHAVIOR
+Both cells that contain plotting commands should display plots when `matplotlib.pyplot` and `tensorflow_models` are used together. The backend of matplotlib should not affect plot rendering if properly configured.
+
+### REPRODUCTION STEPS
+1. Download VSCode.
+2. Create a new conda environment with Python 3.10 (version: 3.10.13).
+3. Install TensorFlow using the provided [link](https://www.tensorflow.org/install/pip) and install `tf-models-nightly` via pip.
+4. Follow the steps outlined in [this notebook](https://www.tensorflow.org/tfmodels/vision/image_classification) to download a sample notebook.
+5. Add extra lines of code that import necessary libraries, including `matplotlib.pyplot`.
+6. Import `tensorflow_models`.
+7. Attempt to create and display plots using `pyplot`.
+
+Here is the detailed script you can follow:
+
+```python
+# Step 1: Install required packages if not already installed
+!pip install tensorflow tensorflow-model-garden
+
+# Step 2: Import necessary libraries
+import matplotlib.pyplot as plt
+from tensorflow_models import ... # Import specific models or functionalities as needed
+
+# Step 3: Change the backend to 'TkAgg' before importing `tensorflow_models`
+plt.switch_backend('TkAgg')
+
+# Step 4: Import TensorFlow Models
+from tensorflow_models import ... # Import specific models or functionalities as needed
+
+# Step 5: Create and display a plot
+plt.plot([1, 2, 3], [4, 5, 6])
+plt.show()
+
+# If the above steps do not work, try importing `tensorflow_models` after changing the backend:
+plt.switch_backend('TkAgg') # Change to TkAgg or any other interactive backend
+
+from tensorflow_models import ... # Import specific models or functionalities as needed
+```
+
+### Additional Context and Observations
+
+- The backend of matplotlib changes to 'agg' after importing `tensorflow_models`, which might be the reason for not displaying plots.
+- Changing the backend to an interactive backend (`TkAgg`) before importing `tensorflow_models` works, but changing it afterward does not.
+
+This issue can be resolved by ensuring that the backend is set interactively before importing any heavy libraries like `tensorflow_models`.

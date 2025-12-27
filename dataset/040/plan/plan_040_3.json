@@ -1,0 +1,21 @@
+```json
+[
+    "Import the necessary libraries for training a RETRO model including labml, torch, and custom modules from labml_nn and labml_helpers.",
+    "Download and load the Tiny Shakespeare dataset using TextFileDataset located at 'lab.get_data_path() / 'tiny_shakespeare.txt''.",
+    "Create a NearestNeighborEncoder with parameters chunk_len=16, num_chunks=6, chunks={3}, d_model=128, n_heads=16, d_k=16, and d_ff=512.",
+    "Initialize the RetroModel with parameters vocab_size=the number of tokens in the Tiny Shakespeare dataset, d_model=128, num_layers=6, layers={3, 5}, chunk_len=16, n_heads=16, d_k=16, and d_ff=512.",
+    "Move the model to a CUDA device (device='cuda:0') if available, otherwise use CPU.",
+    "Define a batch size of 4 for DataLoader and create a RandomSampler with replacement=True for sampling.",
+    "Create a dataset instance by loading 'lab.get_data_path() / 'retro_train_dataset.json'' using the loaded Tiny Shakespeare dataset.",
+    "Initialize a DataLoader with the created dataset, batch size=4, and sampler=RandomSampler.",
+    "Define hyper-parameters such as chunk_len=16, d_model=128, d_ff=512, n_heads=16, and d_k=16.",
+    "Create an instance of Noam optimizer with parameters model.parameters(), lr=1., d_model=128, and warmup=2_000.",
+    "Initialize a Trainer object with the device, model, dataloader, and optimizer.",
+    "Define a prompt as 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Call the experiment.create function with the name 'retro_small'.",
+    "Start training for 32 epochs using the Trainer object inside monit.loop(32).",
+    "After each epoch, sample from the prompt using the Sampler object and log both the original prompt and the sampled text.",
+    "Assert that the loss calculation during training does not contain NaN values to verify the bug occurs."
+]
+```
+

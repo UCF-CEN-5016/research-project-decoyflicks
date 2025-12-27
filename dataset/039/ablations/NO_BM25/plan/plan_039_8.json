@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and numpy",
+    "Define a batch size of 4 and sequence length of 3 for the input tensor",
+    "Create a random input tensor 'x' with shape (batch_size, sequence_length, embedding_dim) where embedding_dim is set to 4",
+    "Initialize the Rotary Positional Embeddings class from the provided code",
+    "Set the cos_cached and sin_cached attributes of the class to random tensors with shape (1, 1, 1, 4) for cos_cached and (1, 1, 1, 4) for sin_cached",
+    "Call the forward method of the Rotary Positional Embeddings class with the input tensor 'x'",
+    "Inside the forward method, ensure that the x_rope tensor is computed using the line: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Run the code and capture the RuntimeError that occurs due to mismatched tensor sizes",
+    "Verify that the error message states: 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the dimensions of x_rope, cos_cached, and sin_cached before the error occurs to confirm the mismatch"
+]
+```

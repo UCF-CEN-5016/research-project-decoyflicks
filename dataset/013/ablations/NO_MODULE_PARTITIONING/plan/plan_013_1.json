@@ -1,0 +1,21 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'test_env' with Python 3.10 using the command: conda create -n test_env python=3.10",
+    "Activate the new conda environment using: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open a new Python script or Jupyter Notebook in VSCode.",
+    "Import the necessary libraries at the top of the script: import matplotlib.pyplot as plt, import tensorflow as tf, from official import tf_models",
+    "Check the current matplotlib backend using: print('Current backend:', plt.get_backend())",
+    "Create a random dataset for plotting: x = np.linspace(0, 10, 100), y = np.sin(x)",
+    "Plot the data before importing tensorflow_models: plt.plot(x, y), plt.title('Sine Wave'), plt.show()",
+    "Import the TensorFlow Model Garden module using: import official.nlp.modeling.layers.tn_expand_condense as tn_layers",
+    "Check the matplotlib backend again after importing tensorflow_models using: print('Current backend after import:', plt.get_backend())",
+    "Attempt to plot the same data again using: plt.plot(x, y), plt.title('Sine Wave After Import'), plt.show()",
+    "Observe that the second plot does not display, indicating the bug.",
+    "Verify the backend is set to 'agg' after importing tensorflow_models by checking: assert plt.get_backend() == 'agg'",
+    "Log the output of the backend check to confirm it is non-interactive."
+]
+```

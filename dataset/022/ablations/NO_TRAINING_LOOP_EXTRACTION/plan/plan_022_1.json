@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and the orbit.actions module",
+    "Define a variable for the RandAugment level standard deviation, set it to 0",
+    "Create a function to apply RandAugment with the defined level standard deviation",
+    "Generate a sample input tensor with shape (32, 224, 224, 3) representing a batch of 32 images",
+    "Call the RandAugment function with the sample input tensor and level standard deviation of 0",
+    "Capture the output of the RandAugment function",
+    "Assert that the output standard deviation is equal to 1, indicating the bug is present",
+    "Change the level standard deviation to 1 and repeat the RandAugment function call",
+    "Capture the output of the RandAugment function again",
+    "Assert that the output standard deviation is still equal to 1, confirming the bug persists",
+    "Log the results of the assertions to verify the bug is reproducible"
+]
+```

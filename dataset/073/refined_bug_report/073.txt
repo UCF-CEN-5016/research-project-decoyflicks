@@ -1,0 +1,18 @@
+TITLE
+Global `cdb` object not properly initialized leading to AttributeError
+
+SYMPTOMS
+• The script encounters an `AttributeError` when trying to call the `all_reduce` method on a `NoneType` object.
+• Error message: `[rank0]: AttributeError: 'NoneType' object has no attribute 'all_reduce'`
+• Expected behavior of the `all_reduce` method is not met, causing the script execution to fail.
+
+EXPECTED BEHAVIOR
+The global `cdb` object should be correctly initialized before any reduction operations are attempted. The script should successfully execute the `all_reduce` method without raising an error, allowing the pretraining process to proceed as expected.
+
+REPRODUCTION STEPS
+1. Ensure you have followed the DeepSpeed-Domino guide for setting up the environment.
+2. Navigate to the directory containing the `pretrain_gpt3_2.7b.sh` script.
+3. Run the command: `bash pretrain_gpt3_2.7b.sh`
+4. Observe if the error persists as described in the original bug report.
+
+Note: The issue might be related to missing or incorrect initialization of the `cdb` object, possibly due to configuration issues or environmental setup problems.

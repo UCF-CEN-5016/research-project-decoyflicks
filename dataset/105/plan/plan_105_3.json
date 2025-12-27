@@ -1,0 +1,19 @@
+```json
+[
+    "Import torch, nn, datasets, transforms, DataLoader from torch and torchvision modules",
+    "Import FSQ from vector_quantize_pytorch module",
+    "Define Z_CHANNELS as 512, NUM_QUANTIZERS as 2, CODEBOOK_SIZE as 16 * 1024",
+    "Set stochastic_sample_codes to True, shared_codebook to True, commitment_weight to 1.0, kmeans_init to True, threshold_ema_dead_code to 2, quantize_dropout to True, quantize_dropout_cutoff_index to 1, quantize_dropout_multiple_of to 1",
+    "Create a SimpleFSQAutoEncoder with the specified levels and FSQ layer",
+    "Define a training dataset for FashionMNIST with batch size of 256 and shuffle set to True",
+    "Set learning rate (lr) to 3e-4, number of training iterations (train_iter) to 1000, target sizes in levels as [8, 6, 5]",
+    "Initialize a random seed for reproducibility",
+    "Define an optimizer (opt) using AdamW with the model's parameters and lr=lr",
+    "Create a DataLoader (train_loader) from the FashionMNIST dataset",
+    "Train the SimpleFSQAutoEncoder for train_iter iterations using the defined training function",
+    "During each iteration, forward pass through the model with input data and calculate reconstruction loss",
+    "Backpropagate the reconstructed loss to update model parameters",
+    "Verify the presence of a RuntimeError with shape mismatch during the update process in certain training iterations"
+]
+```
+

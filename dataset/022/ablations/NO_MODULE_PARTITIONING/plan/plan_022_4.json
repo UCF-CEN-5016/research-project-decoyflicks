@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: `import tensorflow as tf` and `from official.vision.ops.augment import RandAugment`",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using `tf.random.uniform((32, 224, 224, 3), minval=0, maxval=255)`",
+    "Instantiate the RandAugment class with default parameters: `rand_augment = RandAugment()`",
+    "Set the magnitude standard deviation to 0: `rand_augment.level_std = 0`",
+    "Apply RandAugment to the input data: `augmented_data = rand_augment(input_data)`",
+    "Check the shape of the augmented data to ensure it matches the input shape: `assert augmented_data.shape == input_data.shape`",
+    "Set the magnitude standard deviation to 1: `rand_augment.level_std = 1`",
+    "Apply RandAugment again to the input data: `augmented_data_std1 = rand_augment(input_data)`",
+    "Verify that the output of the augmentation is consistent with the standard deviation set: `assert tf.reduce_std(augmented_data_std1) == 1`",
+    "Print the standard deviation of the augmented data: `print('Standard Deviation of Augmented Data:', tf.reduce_std(augmented_data_std1).numpy())`",
+    "Check if the standard deviation of the augmented data is always 1 regardless of input: `assert tf.reduce_std(augmented_data_std1) == 1`",
+    "Repeat the augmentation process with different random seeds to ensure consistency: `tf.random.set_seed(42)` and `augmented_data_seeded = rand_augment(input_data)`",
+    "Log the output of the augmentation to verify if the standard deviation is indeed always 1: `print('Augmented Data with Seed:', augmented_data_seeded.numpy())`",
+    "Conclude by asserting that the standard deviation of the augmented data is not varying as expected: `assert tf.reduce_std(augmented_data_seeded) == 1`"
+]
+```

@@ -1,0 +1,24 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the latest version of Keras by running the command: !pip install keras",
+    "Import the necessary libraries by adding the following code: import keras; import tensorflow as tf; from keras import layers; from keras.utils import to_categorical; import numpy as np; import imageio",
+    "Set the random seed for reproducibility by adding: np.random.seed(42)",
+    "Define constants for the MNIST dataset: batch_size = 64, num_classes = 10, image_size = 28",
+    "Load the MNIST dataset using: (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()",
+    "Concatenate the training and test datasets: all_digits = np.concatenate([x_train, x_test]), all_labels = np.concatenate([y_train, y_test])",
+    "Preprocess the images by scaling pixel values to [0, 1] range and reshaping: all_digits = all_digits.astype('float32') / 255.0; all_digits = np.reshape(all_digits, (-1, 28, 28, 1))",
+    "One-hot encode the labels using: all_labels = to_categorical(all_labels, num_classes)",
+    "Create a TensorFlow dataset from the images and labels: dataset = tf.data.Dataset.from_tensor_slices((all_digits, all_labels)).shuffle(buffer_size=1024).batch(batch_size)",
+    "Define the generator input channels: generator_in_channels = 128 + num_classes",
+    "Define the discriminator input channels: discriminator_in_channels = 1 + num_classes",
+    "Create the discriminator model using keras.Sequential with appropriate layers: layers.Conv2D, layers.LeakyReLU, layers.GlobalMaxPooling2D, layers.Dense",
+    "Create the generator model using keras.Sequential with appropriate layers: layers.Dense, layers.LeakyReLU, layers.Reshape, layers.Conv2DTranspose",
+    "Define the ConditionalGAN class that inherits from keras.Model and implements the necessary methods: __init__, compile, train_step",
+    "Instantiate the ConditionalGAN model: cond_gan = ConditionalGAN(discriminator=discriminator, generator=generator, latent_dim=128)",
+    "Compile the model with optimizers and loss function: cond_gan.compile(d_optimizer=keras.optimizers.Adam(learning_rate=0.0003), g_optimizer=keras.optimizers.Adam(learning_rate=0.0003), loss_fn=keras.losses.BinaryCrossentropy(from_logits=True))",
+    "Attempt to fit the model on the dataset for a number of epochs: cond_gan.fit(dataset, epochs=20)",
+    "Observe the output for ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Verify that the error message matches the reported bug in the bug report"
+]
+```

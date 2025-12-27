@@ -1,0 +1,13 @@
+```json
+[
+    "Import the required libraries: torch, torchvision.transforms, and torch.nn.functional",
+    "Define a batch size of 32 and image dimensions of 192x192",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using torch.randn",
+    "Define an inception_v3 model with num_classes=1000 from torchvision.models",
+    "Prepare a forward pass through the model with the generated input data",
+    "Verify if the output contains NaN values by checking for any non-finite values in the loss calculation",
+    "Monitor GPU memory usage during the execution of the model's forward pass",
+    "Assert that the GPU memory exceeds a specified threshold to confirm the bug occurs"
+]
+```
+

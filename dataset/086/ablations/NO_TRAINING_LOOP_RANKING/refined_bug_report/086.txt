@@ -1,0 +1,21 @@
+TITLE  
+Rotary xpos shape breaking due to custom rotary embedding hack
+
+SYMPTOMS  
+• The rotary xpos functionality is broken when the custom rotary embedding hack is enabled.  
+• Error message encountered:  
+  ```
+  einops.EinopsError:  Error while processing rearrange-reduction pattern "n -> n 1". 
+  Input tensor shape: torch.Size([1, 32]). Additional info: {}. 
+  Wrong shape: expected 1 dims. Received 2-dim tensor.
+  ```  
+• The application fails to process tensors correctly, resulting in shape mismatch errors during operations.
+
+EXPECTED BEHAVIOR  
+The rotary xpos functionality should operate correctly without errors, processing tensors of the expected shape and allowing for proper embedding functionality.
+
+REPRODUCTION STEPS  
+1. Enable the custom rotary embedding hack in the application.  
+2. Turn on the rotary xpos feature.  
+3. Execute the forward function in the x_transformers module.  
+4. Observe the error message related to the tensor shape mismatch.

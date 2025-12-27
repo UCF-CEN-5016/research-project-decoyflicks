@@ -1,0 +1,36 @@
+TITLE  
+Incorrect Implementation of Beta Sampling in MixUp + CutMix
+
+SYMPTOMS  
+• The sampling from the beta distribution in `tfm.vision.augment.MixupAndCutmix._sample_from_beta` is implemented incorrectly, leading to poor mixup samples.  
+• The generated samples do not follow the expected distribution, resulting in visually unappealing outputs.  
+• No explicit error messages are thrown, but the outputs deviate significantly from expected behavior.  
+
+EXPECTED BEHAVIOR  
+When the software functions correctly, the `_sample_from_beta` method should generate samples from a beta distribution using the correct parameters, producing valid mixup samples that adhere to the expected statistical properties of the beta distribution. The resulting samples should visually resemble a proper beta distribution when plotted.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries:  
+   ```python
+   import tensorflow_models as tfm  
+   import tensorflow as tf  
+   import numpy as np  
+   import matplotlib.pyplot as plt  
+   ```  
+2. Generate a range of values:  
+   ```python  
+   a = tf.range(1000)  
+   ```  
+3. Call the `_sample_from_beta` method with parameters `0.2` and `0.2`:  
+   ```python  
+   x = tfm.vision.augment.MixupAndCutmix._sample_from_beta(0.2, 0.2, tf.shape(tf.range(1000))).numpy()  
+   ```  
+4. Plot the generated samples alongside samples from a correctly implemented beta distribution:  
+   ```python  
+   import seaborn as sns  
+   sns.kdeplot(x, clip=(0, 1))  
+   x = np.random.beta(0.2, 0.2, 100000)  
+   sns.kdeplot(x, clip=(0, 1))  
+   plt.show()  
+   ```  
+5. Observe the differences in the visual outputs of the plotted distributions.

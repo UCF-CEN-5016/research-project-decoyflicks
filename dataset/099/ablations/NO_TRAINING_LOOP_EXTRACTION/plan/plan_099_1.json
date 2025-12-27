@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the transformer engine library from NVIDIA.",
+    "Set the device to 'cuda' to utilize GPU for training.",
+    "Define a batch size of 32 and input dimensions of (64, 512) for the transformer model, where 64 is the sequence length and 512 is the embedding dimension.",
+    "Create a random tensor for input data with shape (batch_size, sequence_length, embedding_dimension) using torch.randn(batch_size, 64, 512).",
+    "Create a random tensor for target labels with shape (batch_size, 64) using torch.randint(0, 100, (batch_size, 64)).",
+    "Initialize the transformer model using the transformer engine library with fp8 precision settings.",
+    "Set the model to training mode by calling model.train().",
+    "Define a loss function, such as CrossEntropyLoss, and an optimizer, such as Adam, with a learning rate of 1e-3.",
+    "Perform a forward pass by calling model(input_data) and store the output.",
+    "Calculate the loss by calling loss_function(output, target_labels).",
+    "Check if the loss value is NaN by asserting torch.isnan(loss).",
+    "If loss is NaN, print 'Loss is NaN, bug reproduced.'",
+    "Run the training loop for a few iterations (e.g., 5 epochs) to ensure the NaN loss persists across multiple iterations.",
+    "Log the loss values at each iteration to confirm that NaN values are consistently produced."
+]
+```

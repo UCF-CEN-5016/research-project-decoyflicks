@@ -1,0 +1,5 @@
+MAE bug!
+
+I ran the MAE written in README.md, but there was a bug. 
+Please check the code below.
+tokens = tokens + self.encoder.pos_embedding[:, 1:(num_patches + 1)

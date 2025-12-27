@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and any other required modules.",
+    "Define the image size as 224x224 and patch size as 16x16.",
+    "Set the number of classes to 10, depth of the transformer to 6, and heads to 8.",
+    "Define the maximum tokens per depth as a tuple: (256, 128, 64, 32, 16, 8).",
+    "Set the hidden dimension for the feedforward network to 512 and dropout rate to 0.1.",
+    "Create a random input tensor representing a batch of images with shape (batch_size, channels, height, width), e.g., (4, 3, 224, 224).",
+    "Initialize the ViT model with the defined parameters: image_size=(224, 224), patch_size=(16, 16), num_classes=10, dim=512, depth=6, max_tokens_per_depth=(256, 128, 64, 32, 16, 8), heads=8, mlp_dim=512, channels=3, dropout=0.1.",
+    "Call the forward method of the ViT model with the random input tensor and set return_sampled_token_ids to True.",
+    "Capture the output logits and token_ids from the model's forward pass.",
+    "Check the shape of token_ids to ensure it matches the expected shape (batch_size, num_patches) after the forward pass.",
+    "Verify that the token_ids contain values greater than or equal to 0 and less than the number of patches + 1.",
+    "Assert that the token_ids shape is (4, 8) for a batch size of 4 and output_num_tokens of 8.",
+    "Check if the output logits shape is (4, 10) for a batch size of 4 and num_classes of 10.",
+    "Introduce a print statement to output the token_ids and logits for debugging purposes.",
+    "Run the code and observe if any errors or unexpected behaviors occur, particularly related to the token_ids and their expected values."
+]
+```

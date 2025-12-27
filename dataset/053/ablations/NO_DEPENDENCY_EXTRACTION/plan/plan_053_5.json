@@ -1,0 +1,17 @@
+```json
+[
+    "Install the required packages: Keras, TensorFlow, and Keras-NLP using pip: 'pip install keras tensorflow keras-nlp'",
+    "Set up the environment variable for Keras backend to use TensorFlow: 'import os; os.environ[\"KERAS_BACKEND\"] = \"tensorflow\"'",
+    "Import necessary libraries: 'import keras; import keras_nlp; import tensorflow as tf'",
+    "Set the mixed precision policy to mixed_float16: 'tf.keras.mixed_precision.set_global_policy('mixed_float16')'",
+    "Instantiate a variable for the classifier using the Keras-NLP preset: 'classifier = keras_nlp.models.BertClassifier.from_preset(\"bert_tiny_en_uncased_sst2\")'",
+    "Run the code to instantiate the classifier and capture any exceptions: 'try: classifier.predict([\"I love modular workflows in keras-nlp\"]) except Exception as e: print(e)'",
+    "Verify that the output contains the AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'",
+    "Ensure that the GPU is being utilized by checking the TensorFlow logs or using a monitoring tool like nvidia-smi",
+    "Confirm that the Keras version is 2.15 by running 'print(keras.__version__)'",
+    "Check the TensorFlow version by running 'print(tf.__version__)'",
+    "Validate that the Python version is 3.9.18 by running 'import sys; print(sys.version)'",
+    "Ensure that the operating system is Ubuntu 18.04.6 LTS by running 'lsb_release -a'",
+    "Document the GPU model and memory by running 'nvidia-smi' and checking the output for the NVIDIA GeForce RTX 3080 Ti Laptop GPU"
+]
+```

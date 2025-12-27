@@ -1,0 +1,29 @@
+TITLE  
+Conflict between tf-models-official==2.12.0 and Python 3.8 causing TypeError during training and evaluation
+
+SYMPTOMS  
+• TypeError: unsupported operand type(s) for |: 'dict' and 'dict' occurs during the evaluation step of the training process.  
+• The error is triggered in the eval_step function located in base_trainer.py at line 442.  
+• The issue arises when running the experiment with the specified parameters, resulting in a failure during the training and evaluation phase.  
+
+EXPECTED BEHAVIOR  
+The training and evaluation process should complete successfully without any errors, merging logs as expected without type conflicts.
+
+REPRODUCTION STEPS  
+1. Follow the Object Detection with Model Garden tutorial at https://www.tensorflow.org/tfmodels/vision/object_detection.  
+2. Set up the environment using the Docker image: tensorflow/tensorflow:2.12.0-gpu-jupyter.  
+3. Execute the following code snippet:  
+   ```python
+   model, eval_logs = tfm.core.train_lib.run_experiment(
+       distribution_strategy=distribution_strategy,
+       task=task,
+       mode='train_and_eval',
+       params=exp_config,
+       model_dir=model_dir,
+       run_post_eval=True)
+   ```  
+4. Observe the error message generated during the execution.  
+
+ADDITIONAL CONTEXT  
+The issue appears to stem from an incompatibility between tf-models-official version 2.12.0 and Python 3.8, as indicated by the error message. Further investigation may be required to confirm the compatibility of these versions and to identify potential fixes or workarounds.  
+Logs and additional information can be found in the linked StackOverflow discussion: [TypeError when merging dictionaries](https://stackoverflow.com/questions/62498581/typeerror-when-merging-dictionaries-unsupported-operand-types-for-dict-a).

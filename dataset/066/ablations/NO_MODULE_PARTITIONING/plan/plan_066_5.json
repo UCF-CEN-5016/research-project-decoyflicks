@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: keras_nlp, keras, tensorflow, and matplotlib",
+    "Set the global mixed precision policy to 'mixed_float16' using keras.mixed_precision.set_global_policy()",
+    "Define hyperparameters: BATCH_SIZE = 32, NUM_BATCHES = 500, EPOCHS = 1, MAX_SEQUENCE_LENGTH = 128, MAX_GENERATION_LENGTH = 200, GPT2_PRESET = 'gpt2_base_en', RANK = 4, ALPHA = 32.0",
+    "Load the Reddit dataset using tfds.load('reddit_tifu', split='train', as_supervised=True)",
+    "Map the dataset to retain only the 'document' field and batch it with the defined BATCH_SIZE",
+    "Take a subset of the dataset using train_ds = train_ds.take(NUM_BATCHES)",
+    "Define a custom callback class GPUMemoryCallback to track GPU memory usage",
+    "Implement the _compute_memory_usage method to retrieve memory stats using tf.config.experimental.get_memory_info('GPU:0')",
+    "Create a function get_optimizer_and_loss() that returns an AdamW optimizer and SparseCategoricalCrossentropy loss",
+    "Load the GPT-2 model and preprocessor using keras_nlp.models.GPT2CausalLMPreprocessor.from_preset() and keras_nlp.models.GPT2CausalLM.from_preset()",
+    "Compile the GPT-2 model with the optimizer and loss defined earlier",
+    "Fit the GPT-2 model on the training dataset for EPOCHS epochs with the GPU memory callback",
+    "Define a function generate_text(model, input_text, max_length) to generate text using the model",
+    "Generate text using the GPT-2 model with input 'I like basketball' and max_length = MAX_GENERATION_LENGTH",
+    "Check the model summary to ensure the model is loaded correctly",
+    "Identify the variable 'level2_dau_2' in the MIRNet example code at line 347 and confirm it is not used in the code",
+    "Locate line 352 in the MIRNet example code and verify that 'level3_dau_2' is used instead of 'level2_dau_2'",
+    "Create a diff to replace 'level3_dau_2' with 'level2_dau_2' in the selective_kernel_feature_fusion function call",
+    "Run the modified code to observe if the output changes or if an error occurs due to the unused variable",
+    "Assert that the output of the selective_kernel_feature_fusion function does not match expected results due to the typo"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and fairseq modules",
+    "Define a batch size of 32 and input dimensions of (10, 100) for the attention mechanism",
+    "Create a random tensor for input data with shape (batch_size, sequence_length, embedding_dim) using torch.randn(batch_size, 10, 100)",
+    "Initialize the RelPositionMultiHeadedAttention module from fairseq with parameters: num_heads=8, embed_dim=100, and kdim=100, vdim=100",
+    "Set the bias parameters (u, v) in the attention module to uninitialized tensors using torch.Tensor(8, 100) for both u and v",
+    "Perform a forward pass by calling the attention module with the input tensor and a random tensor for the key and value with the same shape as the input tensor",
+    "Capture the output of the forward pass and check for NaN values using torch.isnan(output).any()",
+    "Assert that the output contains NaN values by checking if the result of the previous step is True",
+    "Log the output tensor to monitor its values and confirm the presence of NaNs",
+    "Run the script multiple times to observe the non-deterministic behavior of the output"
+]
+```

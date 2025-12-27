@@ -1,0 +1,15 @@
+```json
+[
+    "Import torch and the espnet_multihead_attention module from fairseq",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the dimensions for the multi-headed attention: num_heads = 8, embed_dim = 64, seq_length = 10",
+    "Create a random input tensor with shape (1, seq_length, embed_dim) using torch.randn(1, seq_length, embed_dim)",
+    "Create a random tensor for the relative position encodings with shape (seq_length, seq_length) using torch.randn(seq_length, seq_length)",
+    "Initialize the RelPositionMultiHeadedAttention class with num_heads, embed_dim, and the relative position encodings",
+    "In the initialization of RelPositionMultiHeadedAttention, set the bias parameters u and v using torch.Tensor(1, 1) to create uninitialized tensors",
+    "Perform a forward pass using the input tensor and the relative position encodings",
+    "Capture the output of the forward pass",
+    "Check the output tensor for NaN values using torch.isnan(output).any()",
+    "Assert that the output contains NaN values, indicating the presence of uninitialized bias parameters"
+]
+```

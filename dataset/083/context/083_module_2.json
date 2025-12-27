@@ -1,0 +1,28 @@
+{
+  "bug_report": "083",
+  "module": {
+    "module": "../../088/code/tests",
+    "files": [
+      {
+        "path": "../../088/code/tests/test.py",
+        "snippets": [
+          {
+            "lines": "4-20",
+            "code": "def test():\n    v = ViT(\n        image_size = 256,\n        patch_size = 32,\n        num_classes = 1000,\n        dim = 1024,\n        depth = 6,\n        heads = 16,\n        mlp_dim = 2048,\n        dropout = 0.1,\n        emb_dropout = 0.1\n    )\n\n    img = torch.randn(1, 3, 256, 256)\n\n    preds = v(img)\n    assert preds.shape == (1, 1000), 'correct logits outputted'"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "../../088/code/tests/test.py",
+      "snippets": [
+        {
+          "lines": "4-20",
+          "code": "def test():\n    v = ViT(\n        image_size = 256,\n        patch_size = 32,\n        num_classes = 1000,\n        dim = 1024,\n        depth = 6,\n        heads = 16,\n        mlp_dim = 2048,\n        dropout = 0.1,\n        emb_dropout = 0.1\n    )\n\n    img = torch.randn(1, 3, 256, 256)\n\n    preds = v(img)\n    assert preds.shape == (1, 1000), 'correct logits outputted'"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, and tqdm",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define hyperparameters: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 3",
+    "Create a list of class IDs: class_ids = ['car', 'pedestrian', 'trafficLight', 'biker', 'truck']",
+    "Define paths for images and annotations: path_images = '/path/to/images/', path_annot = '/path/to/annotations/'",
+    "Load XML annotation files and JPEG image files, ensuring they are sorted",
+    "Define a function parse_annotation(xml_file) to extract image paths, bounding boxes, and class IDs from XML files",
+    "Iterate over XML files and call parse_annotation to populate image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists to ragged tensors using tf.ragged.constant",
+    "Create a tf.data.Dataset from image_paths, classes, and bbox using tf.data.Dataset.from_tensor_slices",
+    "Split the dataset into training and validation sets based on SPLIT_RATIO",
+    "Define a function load_image(image_path) to read and decode images",
+    "Define a function load_dataset(image_path, classes, bbox) to prepare images and bounding boxes for training",
+    "Map load_dataset function to the training dataset and validation dataset",
+    "Define a data augmentation pipeline using keras_cv.layers for RandomFlip, RandomShear, and JitteredResize",
+    "Apply the data augmentation pipeline to the training dataset",
+    "Create a YOLOv8 model using keras_cv.models.YOLOV8Detector with num_classes = length of class_mapping, bounding_box_format = 'xyxy'",
+    "Compile the YOLOv8 model with Adam optimizer and loss functions: classification_loss = 'binary_crossentropy', box_loss = 'ciou'",
+    "Define a custom callback EvaluateCOCOMetricsCallback to evaluate model performance and save the model",
+    "Call yolo.fit() on the training dataset with validation_data set to the validation dataset and epochs = 3",
+    "Monitor the training process and capture the UnknownError during the first epoch",
+    "Verify that the error message contains 'InvalidArgumentError' and 'ConcatOp : Dimension 1 in both shapes must be equal'"
+]
+```

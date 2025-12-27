@@ -1,0 +1,24 @@
+TITLE  
+NameError for undefined variable `return_loss` in ResidualSimVQ
+
+SYMPTOMS  
+• The variable `return_loss` is not defined in the `ResidualSimVQ` class, leading to a `NameError`.  
+• Error message:  
+  ```
+  NameError: name 'return_loss' is not defined
+  ```  
+• There are shape inconsistencies when using quantizer dropout with `channels_first`, specifically with the following dimensions:  
+  ```
+  all_losses:  [torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([1]), torch.Size([1]), torch.Size([1])]
+  all_indicies:  [torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 1024, 17]), torch.Size([2, 1024, 17]), torch.Size([2, 1024, 17])]
+  ```
+
+EXPECTED BEHAVIOR  
+The `ResidualSimVQ` class should properly define and use the `return_loss` variable without causing a `NameError`. Additionally, the shape of the outputs should be consistent and as expected when using quantizer dropout with `channels_first`.
+
+REPRODUCTION STEPS  
+1. Implement the `ResidualSimVQ` class as shown in the provided GitHub link.  
+2. Set the training mode and quantize dropout parameters accordingly.  
+3. Attempt to call the `forward` method of the `ResidualSimVQ` class.  
+4. Observe the error message related to the undefined `return_loss` variable.  
+5. Test the model with quantizer dropout enabled and check the shapes of `all_losses` and `all_indicies` to identify inconsistencies.

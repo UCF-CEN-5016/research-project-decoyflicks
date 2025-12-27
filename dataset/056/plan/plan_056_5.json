@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and Keras modules from their respective libraries",
+    "Set the Keras version to 3.10",
+    "Define an image size of 72x72 pixels for processing",
+    "Create random uniform input data with shape (1, 72, 72, 3) using numpy, where each pixel value is between [0, 255]",
+    "Convert the input data to a float32 tensor and scale it by dividing by 255.0",
+    "Ensure the input tensor's dtype is set to int32 before passing it to the resize function to reproduce the bug",
+    "Call the resize function from Keras' ops.image module with size parameter as (72, 72) to resize the image",
+    "Assert that the resized image tensor has a shape of (1, 72, 72, 3) and dtype int32 after resizing",
+    "Create an instance of the Patches class with patch_size set to 16 as defined in the original code",
+    "Call the Patches instance with the resized image tensor",
+    "Assert that calling Patches causes an InvalidArgumentError stating 'cannot compute Conv2D as input #1(zero-based) was expected to be a int32 tensor but is a float tensor'",
+    "Monitor the input tensor's dtype during the call to ensure it remains int32"
+]
+```
+

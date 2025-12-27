@@ -1,0 +1,17 @@
+No module named 'transformers.deepspeed'
+
+when i run the script "python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu", it raise "ModuleNotFoundError: No module named 'transformers.deepspeed'".
+
+I am very certain that all required Python libraries listed in the requirements file were installed before running the script.
+
+error info:
+
+![Image](https://github.com/user-attachments/assets/e8492ff3-6bf6-4b39-9b13-afcb69b44f23)
+
+python package:
+
+![Image](https://github.com/user-attachments/assets/4bd35d8c-6be7-45ba-b7a1-5e36b2849300)
+
+![Image](https://github.com/user-attachments/assets/9cfd9f7c-ebb0-40a0-bb78-77c7e666ef36)
+
+note that python version == 3.12.3

@@ -1,0 +1,14 @@
+```json
+[
+    "Import torch and the espnet_multihead_attention module from fairseq",
+    "Define input dimensions: set batch_size to 2, seq_length to 10, and embed_dim to 64",
+    "Create a random tensor for input with shape (batch_size, seq_length, embed_dim)",
+    "Initialize the RelPositionMultiHeadedAttention layer with num_heads set to 8 and embed_dim set to 64",
+    "Set the bias parameters (u, v) in the RelPositionMultiHeadedAttention layer to uninitialized tensors using torch.Tensor",
+    "Call the forward method of the RelPositionMultiHeadedAttention layer with the input tensor",
+    "Capture the output of the forward method",
+    "Calculate the sum of the output tensor to check for NaN values",
+    "Assert that the output tensor contains NaN values using torch.isnan(output).any()",
+    "Print the output tensor to verify its contents and confirm the presence of NaN values"
+]
+```

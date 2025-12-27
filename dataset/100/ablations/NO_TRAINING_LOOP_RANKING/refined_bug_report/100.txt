@@ -1,0 +1,19 @@
+TITLE  
+Caching frequency results in RuntimeError: Trying to backward through the graph a second time
+
+SYMPTOMS  
+• Encountering a `RuntimeError` during the second call to `loss.backward()` in the training loop.  
+• Error message: `RuntimeError: Trying to backward through the graph a second time (or directly access saved tensors after they have already been freed). Saved intermediate values of the graph are freed when you call .backward() or autograd.grad(). Specify retain_graph=True if you need to backward through the graph a second time or if you need to access saved tensors after calling backward.`  
+• The caching mechanism for frequency appears to be causing this issue when used in conjunction with Hugging Face's Accelerate library.  
+
+EXPECTED BEHAVIOR  
+The rotary embedding library should allow for multiple backward passes without encountering a `RuntimeError`, particularly when utilizing cached frequency values. The expected behavior is that the model can compute gradients correctly across multiple iterations without needing to recompute all intermediate values.
+
+REPRODUCTION STEPS  
+1. Implement the rotary embedding library in a training loop using Hugging Face's Accelerate.  
+2. Enable the caching mechanism for frequency values in the `forward()` method.  
+3. Call `loss.backward()` for the first time, and then call it a second time within the same training iteration.  
+4. Observe the `RuntimeError` indicating issues with backward graph traversal.  
+5. Comment out the caching code in the `forward()` method and observe that the error does not occur, confirming that caching is likely the source of the problem.  
+
+In summary, the issue seems to stem from the interaction between the caching mechanism and the backward pass in the training loop, leading to the error when attempting to reuse the computational graph. Further investigation is needed to determine if this is a misuse of the library or a bug within the caching implementation.

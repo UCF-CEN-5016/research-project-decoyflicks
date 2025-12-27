@@ -1,0 +1,19 @@
+[
+  "Import torch and necessary modules from transformers (AutoTokenizer, AutoModelForCausalLM, AdamW, get_scheduler)",
+  "Set a fixed random seed for reproducibility using torch.manual_seed and transformers.set_seed with a specific integer (e.g., 42)",
+  "Initialize a GPT-2 tokenizer (AutoTokenizer) and model (AutoModelForCausalLM) from 'gpt2' pretrained checkpoint",
+  "Prepare a toy batch of input data with batch_size=2 and sequence_length=10 tokens, using tokenizer.encode on example sentences that include an end-of-sequence token (e.g., '' token id)",
+  "Manually create or extract action_mask tensor with shape (batch_size, sequence_length), where 1 indicates valid tokens and 0 indicates padding or ignored tokens; ensure that the mask includes the eos token position",
+  "Define a variable 'start' with a specific integer value to simulate the offset used in the bug (e.g., start=2)",
+  "Create dummy tensors for actor_log_prob and log_probs both with shape (batch_size, sequence_length), filled with random values (e.g., torch.randn), representing log probabilities per token",
+  "Create a dummy advantages tensor with shape (batch_size, sequence_length - start), filled with random values representing advantage estimates per token starting from 'start'",
+  "Implement or mock the actor_loss_fn function that takes slices of actor_log_prob, log_probs, advantages, and action_mask and returns a scalar loss; ensure it applies the mask to filter out tokens in the loss calculation",
+  "Calculate actor_loss by passing slices actor_log_prob[:, start:], log_probs[:, start:], advantages, and action_mask[:, start:] as per the original buggy code",
+  "Separately calculate actor_loss_alternate by passing action_mask sliced as action_mask[:, start-1:-1] instead, keeping other inputs sliced the same way",
+  "Print or log the mask slices used for both cases and the resulting actor losses",
+  "Assert that the loss calculated with action_mask[:, start:] excludes the eos token (verify eos token position is masked out), while the loss with action_mask[:, start-1:-1] includes eos token's contribution",
+  "Verify that the eos token reward is present in the advantages or log_probs tensors at the correct indices to confirm its exclusion or inclusion in the loss",
+  "Repeat the above with varying values of 'start' (e.g., start=1, start=3) to observe changes in mask coverage and loss values",
+  "Check that the difference in loss values corresponds to the inclusion or exclusion of the eos token tokenized position",
+  "Summarize findings that demonstrate the bug where using action_mask[:, start:] filters out the eos token loss which contains ground reward information"
+]

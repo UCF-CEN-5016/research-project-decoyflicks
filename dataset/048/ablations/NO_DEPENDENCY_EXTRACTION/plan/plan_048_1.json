@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, argparse, and any other required modules from the MMS package.",
+    "Set the CUDA device to ensure the script runs on GPU: torch.cuda.set_device(0).",
+    "Prepare an audio file named 'audio.wav' with a duration of at least 10 seconds and a sample rate of 16kHz.",
+    "Create a text file named 'text.txt' containing 63 lines of text that corresponds to the audio file, ensuring the text is in the 'ful' language.",
+    "Ensure the directory structure is correct: place 'audio.wav' and 'text.txt' in the same directory as 'align_and_segment.py'.",
+    "Set the output directory path as 'output' and ensure it exists or create it if it does not.",
+    "Set the path for the uroman binary as 'uroman/bin'.",
+    "Run the command: python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin.",
+    "Monitor the output for the message indicating the number of lines read from the text file.",
+    "Check for the message indicating the model and dictionary are being downloaded or skipped.",
+    "Wait for the script to reach the point where it attempts to concatenate tensors in the generate_emissions function.",
+    "Capture the RuntimeError that occurs, specifically looking for the message: 'Sizes of tensors must match except in dimension 1. Expected size 1649 but got size 1799 for tensor number 1 in the list.'",
+    "Verify that the error occurs consistently by rerunning the command multiple times with the same audio and text files.",
+    "Log the exact versions of torch and torchaudio being used to ensure reproducibility of the environment."
+]
+```

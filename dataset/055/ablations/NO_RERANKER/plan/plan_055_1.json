@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow, Keras, Keras NLP, and NLTK libraries",
+    "Set the Keras version to 2.15 and TensorFlow version compatible with it",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40, TEST_BATCH_SIZE = 1",
+    "Import necessary modules: from data_preprocessing import eng_tokenizer, spa_tokenizer, test_pairs; from model import transformer; from nltk.translate.bleu_score import modified_precision",
+    "Prepare test pairs by loading the dataset containing English and Spanish sentence pairs",
+    "Define a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input sentences to tensors using eng_tokenizer and pad them to MAX_SEQUENCE_LENGTH",
+    "Check if the length of encoder_input_tokens exceeds 40, if so, truncate it to 40 tokens",
+    "Define a nested function next_fn(prompt, cache, index) that takes a prompt and returns logits, hidden_states, and cache",
+    "Inside next_fn, call transformer([encoder_input_tokens, prompt]) and extract logits for the current index",
+    "Set hidden_states to None and print the shapes of logits and cache for debugging",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Prepare a list of test English texts and corresponding Spanish texts from test_pairs",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through each test pair, calling decode_sequences with the current English sentence",
+    "After decoding, process the translated output to remove special tokens and split into words",
+    "Calculate the BLEU score using modified_precision for n=4 and append to bleu_score list",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Check the output logs for any errors or warnings related to tensor shapes or GPU memory",
+    "Assert that a segmentation fault occurs during the execution of the decode_sequences function"
+]
+```

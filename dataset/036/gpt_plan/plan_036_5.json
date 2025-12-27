@@ -1,0 +1,20 @@
+[
+  "Import torch and the GAE function or class from labml_nn.rl.ppo.gae module",
+  "Set up example input data for rewards (r), values (v), gamma, and lambda with specific numeric values to trace discounting",
+  "Use a small sequence length, e.g., 4 or 5 timesteps, and batch size 1 for simplicity",
+  "Set gamma to a value like 0.9 and lambda to 0.8 to observe squared discounting clearly",
+  "Manually compute expected GAE terms for the sequence based on the correct formula (with gamma^2 * r_{t+2}) and the current buggy formula (with gamma^2 * r_{t+1})",
+  "Call the current GAE implementation with these inputs",
+  "Extract intermediate terms or computed advantages from the GAE output to inspect the contribution of rewards at each step",
+  "Assert that the computed terms use r_{t+1} for gamma squared discounting instead of r_{t+2} by comparing the values with the manual expected results",
+  "Set up a test to verify the weighting factors wk used in lambda-return calculation",
+  "Manually compute weights as wk = (1-lambda) * lambda^(k-1) for k in 1..n",
+  "Extract weights from the GAE implementation (or instrument the function to output weights)",
+  "Assert that the implementation currently uses incorrect weights (e.g., missing the (1-lambda) multiplier)",
+  "Print or log the computed weights from the implementation and the manual correct weights side by side",
+  "Document the discrepancy clearly showing the difference due to the missing or incorrect weighting term",
+  "Summarize the differences in outputs and weights to confirm the bug reproducibility",
+  "Ensure the inputs and outputs are tensors with explicit shapes, e.g., rewards shape (seq_len, batch_size), values shape (seq_len + 1, batch_size)",
+  "Include a step to run this test in an isolated script or notebook to reproduce the bug without external dependencies",
+  "Validate that the difference is not due to numerical precision but the formula used in the code"
+]

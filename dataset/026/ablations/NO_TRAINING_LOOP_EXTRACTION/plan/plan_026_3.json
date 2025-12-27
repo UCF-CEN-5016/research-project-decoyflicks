@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: import tensorflow as tf, import numpy as np, from object_detection.utils import visualization_utils as viz_utils, from object_detection.utils import ops as utils_ops",
+    "Set the TensorFlow version to 2.10.0 by running: tf.__version__",
+    "Define the image dimensions: set image_height = 640 and image_width = 480",
+    "Load a sample image into a NumPy array with shape (image_height, image_width, 3) using: image_np = np.random.rand(image_height, image_width, 3).astype(np.float32)",
+    "Create a mock detection output dictionary with keys: 'detection_boxes', 'detection_classes', 'detection_scores', 'detection_masks', 'num_detections'",
+    "Set 'detection_boxes' to a random array of shape (1, 10, 4) with values between 0 and 1: detection_boxes = np.random.rand(1, 10, 4)",
+    "Set 'detection_classes' to a random array of shape (1, 10) with integer values between 1 and 90: detection_classes = np.random.randint(1, 91, size=(1, 10))",
+    "Set 'detection_scores' to a random array of shape (1, 10) with values between 0 and 1: detection_scores = np.random.rand(1, 10)",
+    "Set 'detection_masks' to a random array of shape (1, 10, image_height, image_width) with values between 0 and 1: detection_masks = np.random.rand(1, 10, image_height, image_width)",
+    "Set 'num_detections' to 10: num_detections = np.array([10])",
+    "Create the detection output dictionary: detection_output = {'detection_boxes': detection_boxes, 'detection_classes': detection_classes, 'detection_scores': detection_scores, 'detection_masks': detection_masks, 'num_detections': num_detections}",
+    "Call the visualization function: viz_utils.visualize_boxes_and_labels_on_image_array(image_np, detection_output['detection_boxes'], detection_output['detection_classes'], detection_output['detection_scores'], category_index=None, use_normalized_coordinates=True, line_thickness=8)",
+    "Capture the output and check for errors during visualization",
+    "Assert that a TypeError is raised with the message 'Got an unexpected keyword argument 'box_ind'' during the visualization step"
+]
+```

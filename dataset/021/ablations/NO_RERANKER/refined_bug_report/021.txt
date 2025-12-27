@@ -1,0 +1,21 @@
+TITLE  
+ValueError in '_generate_detections_v2_class_aware' due to empty input tensors
+
+SYMPTOMS  
+• Encountered a ValueError during the evaluation phase.  
+• Error message: `ValueError: List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2.`  
+• The function fails when the predicted boxes are empty or contain only one element.  
+
+EXPECTED BEHAVIOR  
+The function '_generate_detections_v2_class_aware' should handle cases where the predicted boxes are empty or contain a single box without raising an error. It should ideally return an appropriate output or an empty result instead of failing.
+
+REPRODUCTION STEPS  
+1. Call the function '_generate_detections_v2_class_aware' with an input that includes predicted boxes of length 0 (e.g., an empty tensor).  
+2. Observe the resulting error during the evaluation phase.  
+
+ADDITIONAL CONTEXT  
+- The issue occurs in the file: [detection_generator.py](https://github.com/tensorflow/models/tree/master/official/vision/modeling/layers/detection_generator.py)  
+- TensorFlow version: 2.11.0  
+- Python version: 3.10.9  
+- OS: Linux Ubuntu 20.04  
+- GPU: 2 * 3090, 2 * 24G

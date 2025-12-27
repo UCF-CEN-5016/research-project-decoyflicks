@@ -1,0 +1,30 @@
+TITLE  
+Error in Named Entity Recognition Model Training with Transformers  
+
+SYMPTOMS  
+• An error occurs during the `ner_model.fit` method call.  
+• Error message:  
+  ```
+  OperatorNotAllowedInGraphError: Exception encountered when calling Softmax.call().
+  
+  Using a symbolic `tf.Tensor` as a Python `bool` is not allowed. You can attempt the following resolutions to the problem: If you are running in Graph mode, use Eager execution mode or decorate this function with @tf.function. If you are using AutoGraph, you can try decorating this function with @tf.function. If that does not work, then you may be using an unsupported feature or your source code may not be visible to AutoGraph. See https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/autograph/g3doc/reference/limitations.md#access-to-source-code for more information.
+  
+  Arguments received by Softmax.call():
+    • inputs=tf.Tensor(shape=(None, 4, None, None), dtype=float32)
+    • mask=None
+  ```  
+• The output from the model training does not provide the expected predictions as it raises an error instead.  
+
+EXPECTED BEHAVIOR  
+The `ner_model.fit` method should execute without errors, allowing the model to train properly. After training, predictions should be generated without encountering any exceptions.
+
+REPRODUCTION STEPS  
+1. Compile the NER model using `ner_model.compile(optimizer="adam", loss=loss)`.  
+2. Call `ner_model.fit(train_dataset, epochs=10)` to initiate training.  
+3. After training, run the `tokenize_and_convert_to_ids` function with a sample input string.  
+4. Reshape the sample input tensor using `tf.reshape(sample_input, shape=[1, -1])`.  
+5. Call `ner_model.predict(sample_input)` to generate predictions.  
+6. Observe the output for any errors or unexpected behaviors.  
+7. Check the provided executable Colab link for a complete reproduction of the issue.  
+
+[Executable Colab link: https://colab.research.google.com/drive/1WtG-3b78mJHppCptt_GwNKR97KiR_FwU?usp=sharing]

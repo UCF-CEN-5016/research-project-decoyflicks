@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, Keras, and KerasCV",
+    "Set the TensorFlow version to 2.10.0 to match the reported bug environment",
+    "Define hyperparameters: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 5",
+    "Create a list of class IDs: class_ids = ['car', 'pedestrian', 'trafficLight', 'biker', 'truck']",
+    "Define paths for images and annotations: path_images = '/kaggle/input/dataset/data/images/', path_annot = '/kaggle/input/dataset/data/annotations/'",
+    "Load XML annotation files and JPEG image files, ensuring they are sorted",
+    "Define a function parse_annotation(xml_file) to extract image paths, bounding boxes, and class IDs from XML files",
+    "Iterate over all XML files and call parse_annotation to populate image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists to ragged tensors: bbox = tf.ragged.constant(bbox), classes = tf.ragged.constant(classes)",
+    "Create a tf.data.Dataset from the image_paths, classes, and bbox tensors",
+    "Split the dataset into training and validation sets based on SPLIT_RATIO",
+    "Define a load_dataset function to read images and prepare bounding boxes for training",
+    "Create a training dataset using train_data.map(load_dataset, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Create a validation dataset using val_data.map(load_dataset, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Define a YOLOv8 model using keras_cv.models.YOLOV8Detector with num_classes set to len(class_mapping)",
+    "Compile the model with optimizer = tf.keras.optimizers.Adam and classification_loss set to 'sparse_categorical_crossentropy'",
+    "Train the model using yolo.fit with train_ds and validation_data set to val_ds for 3 epochs",
+    "Verify the model's output shape after training, expecting a shape of (BATCH_SIZE, num_classes) for predictions",
+    "Check the loss values during training to confirm they are not decreasing as expected",
+    "Assert that the model's predictions do not match the expected class labels due to incorrect label formatting"
+]
+```

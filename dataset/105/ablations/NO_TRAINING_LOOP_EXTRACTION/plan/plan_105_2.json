@@ -1,0 +1,13 @@
+```json
+[
+    "Import torch and ResidualVQ from vector_quantize_pytorch",
+    "Set the following constants: Z_CHANNELS = 512, NUM_QUANTIZERS = 2, CODEBOOK_SIZE = 16 * 1024",
+    "Create a ResidualVQ instance with parameters: dim=Z_CHANNELS, num_quantizers=NUM_QUANTIZERS, codebook_size=CODEBOOK_SIZE, stochastic_sample_codes=True, shared_codebook=True, commitment_weight=1.0, kmeans_init=True, threshold_ema_dead_code=2, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1",
+    "Define a batch size of 1 and sequence length of 9331, creating input tensor z with shape (1, 9331, Z_CHANNELS) using torch.randn",
+    "Run the forward pass of the ResidualVQ instance with input z, capturing the output in variables z_tilde, _, and commit_loss",
+    "Wrap the forward pass in a try-except block to catch RuntimeError exceptions",
+    "Print the error message if a RuntimeError occurs during the forward pass",
+    "Verify that the error message contains 'shape mismatch' to confirm the bug is reproduced",
+    "Log the shapes of the tensors involved in the operation that caused the error for further analysis"
+]
+```

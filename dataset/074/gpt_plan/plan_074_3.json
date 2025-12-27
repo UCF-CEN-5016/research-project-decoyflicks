@@ -1,0 +1,18 @@
+[
+  "Import necessary modules: torch, numpy, transformers (RobertaConfig, RobertaModel), and any other dependencies needed for model setup and tensor operations",
+  "Set random seeds for reproducibility using torch.manual_seed(42) and numpy.random.seed(0)",
+  "Initialize a RobertaConfig with vocab_size=50265, pad_token_id=1, bos_token_id=0, eos_token_id=2, and other parameters as per the code context (e.g., hidden_size=256, num_hidden_layers=6)",
+  "Instantiate a RobertaModel with the above configuration",
+  "Create a dummy batch of data with batch_size=2, seq_len=10 (or any small fixed length), containing token indices that include the eos_token_id (2) at a known position, e.g., position 8 or 9",
+  "Construct the action_mask tensor for the batch with shape (batch_size, seq_len), setting 1 for valid tokens and 0 for padding tokens, ensuring that the eos token position is masked as valid (1)",
+  "Define start index as 1 or 2 (to simulate the start offset used in the bug report)",
+  "Generate dummy tensors for actor_log_prob, log_probs, and advantages with shapes compatible with (batch_size, seq_len), filled with arbitrary but consistent values (e.g., torch.randn or torch.ones)",
+  "Implement two variants of the mask slicing: one using action_mask[:, start:] (the buggy version) and another using action_mask[:, start-1:-1] (the proposed alternative)",
+  "Calculate actor loss using the actor_loss_fn function (can be mocked or use a simple loss function like mean squared error for reproduction) with inputs sliced accordingly (actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask sliced as per the buggy version)",
+  "Repeat the actor loss calculation using the alternative mask slicing (action_mask[:, start-1:-1]) with correspondingly sliced inputs",
+  "Print or log the mask slices, especially the tokens corresponding to the eos position, to verify if eos token is included or excluded in each mask variant",
+  "Assert that the eos token is excluded from the loss calculation mask in the buggy case (action_mask[:, start:]) and included in the alternative mask case (action_mask[:, start-1:-1])",
+  "Verify that the difference in mask slices leads to a difference in loss values, indicating that eos token’s contribution is filtered out in the buggy version but present in the alternative",
+  "Optionally, add assertions or printouts to confirm that the eos token has a non-zero reward or advantage value in the inputs, ensuring the masking impacts the loss meaningfully",
+  "Summarize the observations to confirm that using action_mask[:, start:] filters out the eos token loss while the alternative mask keeps it, reproducing the bug as reported"
+]

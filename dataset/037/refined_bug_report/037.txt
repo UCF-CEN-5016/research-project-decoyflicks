@@ -1,0 +1,17 @@
+TITLE
+Potential Redundant Rotations in Value Embedding
+
+SYMPTOMS
+• The value embedding is rotated twice at lines 230 and 234.
+• There is no clear indication of why two rotations are necessary, suggesting a possible redundancy.
+
+EXPECTED BEHAVIOR
+• The value embedding should be rotated once if rotation is required. If the code intends to apply transformations in a specific order, then both rotations must serve distinct purposes which need clarification.
+
+REPRODUCTION STEPS
+1. Clone the repository from [https://github.com/labmlai/annotated_deep_learning_paper_implementations](https://github.com/labmlai/annotated_deep_learning_paper_implementations).
+2. Navigate to the directory containing `value_pe/__init__.py`.
+3. Examine lines 230 and 234 where both rotations are applied.
+4. Review the surrounding code to understand the context of these operations.
+
+Additional Information: The screenshot provided does not contain any error messages or unexpected behaviors, but it highlights the concern about redundant operations in the value embedding process.

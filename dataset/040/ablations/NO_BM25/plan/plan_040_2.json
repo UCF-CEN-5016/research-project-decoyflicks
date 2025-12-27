@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and the relevant modules from labml_nn and labml.",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'.",
+    "Define a batch size of 32 and image dimensions of 32x32 for CIFAR-10 dataset.",
+    "Load the CIFAR-10 dataset using torchvision.datasets and apply necessary transformations (e.g., normalization).",
+    "Create a DataLoader for the CIFAR-10 dataset with batch_size=32 and shuffle=True.",
+    "Define a simple UNet model that includes the self-attention mechanism as described in the bug report.",
+    "In the self-attention implementation, use einsum to compute attention scores with the shape (batch_size, num_heads, seq_length, seq_length).",
+    "Ensure the softmax operation is applied along the incorrect axis (dim=1) instead of the correct axis (dim=2) as per the bug report.",
+    "Initialize the model and move it to the defined device.",
+    "Define a loss function (e.g., CrossEntropyLoss) and an optimizer (e.g., Adam) with a learning rate of 1e-4.",
+    "Run a training loop for a few epochs (e.g., 5 epochs) where you pass batches of data through the model.",
+    "During the training loop, compute the output and loss, and perform a backward pass.",
+    "Log the loss values to monitor the training process.",
+    "After training, validate the model by running it on a test set and check for any anomalies in the output.",
+    "Assert that the output of the attention mechanism contains unexpected values (e.g., NaNs or infs) due to the incorrect softmax application.",
+    "Print the attention weights to verify their distribution and confirm the bug is present."
+]
+```

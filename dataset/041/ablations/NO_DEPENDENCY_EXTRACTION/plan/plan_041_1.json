@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: os, torch, and dalle_pytorch modules including DALLE and OpenAIDiscreteVAE.",
+    "Set the environment variables for the training script, including the image_text_folder path to a directory containing image and text pairs.",
+    "Define a batch size of 4 and set the number of epochs to 20.",
+    "Create a tokenizer instance using HugTokenizer or YttmTokenizer based on the presence of a BPE path.",
+    "Prepare a dataset using TextImageDataset with the specified image_text_folder, text_len of 256, and image_size based on the VAE.",
+    "Create a DataLoader instance with the dataset, using the defined batch size and enabling shuffling.",
+    "Initialize the VAE model using OpenAIDiscreteVAE.",
+    "Define DALL-E model parameters including num_text_tokens, text_seq_len, dim, depth, heads, and dim_head.",
+    "Initialize the DALL-E model using the VAE and the defined parameters.",
+    "Create an optimizer instance using Adam with a learning rate of 3e-4.",
+    "Define a fit function that takes the model, optimizer, and training data as parameters.",
+    "Within the fit function, set the model to training mode and zero the gradients of the optimizer.",
+    "Prepare training data by selecting a batch from the DataLoader.",
+    "Call the DALL-E model's forward method with the text and image codes from the training data, including a mask parameter.",
+    "Capture the output of the forward method and check for any exceptions.",
+    "Assert that a TypeError is raised indicating 'forward() got an unexpected keyword argument 'mask'.",
+    "Log the error message to confirm the occurrence of the bug."
+]
+```

@@ -1,0 +1,19 @@
+TITLE  
+Incorrect handling of label dimensions in Sparse Categorical Cross Entropy Loss
+
+SYMPTOMS  
+• The model produces poor training results, described as "absolute garbage."  
+• The labels are in an incorrect format, leading to ineffective training.  
+• The last dimension of the labels should be removed for proper functioning.  
+• The SparseCategoricalCrossentropy function does not handle the additional dimension, causing confusion.  
+
+EXPECTED BEHAVIOR  
+The model should train effectively when provided with correctly formatted labels, specifically without the last dimension. SparseCategoricalCrossentropy should ideally accommodate the additional dimension if possible, aligning with the output shape of the network.
+
+REPRODUCTION STEPS  
+1. Follow the tutorial linked in the original report: [Oxford Pets Image Segmentation](https://keras.io/examples/vision/oxford_pets_image_segmentation/).  
+2. Use the provided code to set up the model and labels.  
+3. Train the model with the default label format.  
+4. Observe the training performance and results.  
+5. Modify the label format by removing the last dimension as indicated in the report.  
+6. Retrain the model and compare the results to the initial training performance.

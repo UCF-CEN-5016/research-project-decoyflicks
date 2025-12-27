@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the official model library: 'import tensorflow as tf' and 'from official import core as tfm'",
+    "Set Python version to 3.8 in your environment to match the reported issue.",
+    "Pull the Docker image for TensorFlow 2.12.0 with GPU support: 'docker pull tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Run the Docker container with the command: 'docker run --gpus all -it --rm tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Install the official models package version 2.12.0 inside the Docker container: 'pip install tf-models-official==2.12.0'",
+    "Define a distribution strategy variable: 'distribution_strategy = tf.distribute.MirroredStrategy()'",
+    "Create a mock task object with necessary attributes: 'task = tfm.core.task.Task()'",
+    "Prepare a mock experiment configuration dictionary with required parameters: 'exp_config = {'param1': value1, 'param2': value2}'",
+    "Set the model directory path: 'model_dir = '/tmp/model_dir'",
+    "Call the function to run the experiment: 'model, eval_logs = tfm.core.train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)'",
+    "Capture the output and error message during the execution to verify the bug: 'try: model, eval_logs = ... except TypeError as e: print(e)'",
+    "Assert that the error message contains 'unsupported operand type(s) for |: 'dict' and 'dict'' to confirm the bug is reproduced."
+]
+```

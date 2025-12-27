@@ -1,0 +1,13 @@
+[
+    "Import TensorFlow, KerasCV, and other necessary modules from their respective libraries",
+    "Load the Pascal VOC dataset using tensorflow_datasets.load function with 'coco/2017/train' split and set shuffle_files=True",
+    "Preprocess the training data to convert images to desired dimensions (e.g., 640x640) and bounding boxes to KerasCV's bounding box format ('xywh')",
+    "Create a batch size of 32 for both training and evaluation datasets",
+    "Define an untrained RetinaNet model using keras_cv.models.RetinaNet.from_preset with 'resnet50_imagenet' preset, setting num_classes=len(class_mapping)",
+    "Compile the model with classification_loss='focal', box_loss='smoothl1', optimizer=optimizer (previously defined), and metrics=None",
+    "Train the model for 1 epoch using train_ds.take(20) as training data and eval_ds.take(20) as validation data, including EvaluateCOCOMetricsCallback(eval_ds.take(20)) in callbacks",
+    "Create a visualization dataset by unbatching, raggarding into batches of 16, shuffling, and taking the first batch for demonstration purposes",
+    "Define a function visualize_detections to plot model predictions on the visualization dataset using keras_cv.visualization.plot_bounding_box_gallery",
+    "Call visualize_detections with model, bounding_box_format='xywh', and visualization_dataset as parameters to trigger the bug reproduction"
+]
+

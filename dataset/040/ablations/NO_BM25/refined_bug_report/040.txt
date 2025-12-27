@@ -1,0 +1,16 @@
+TITLE  
+Potential Bug in Self-Attention Implementation for DDPM UNet
+
+SYMPTOMS  
+• The softmax operation in the Self-Attention module may not be applied correctly along the expected axis.  
+• The current implementation uses `attn.softmax(dim=1)` instead of the suggested `attn.softmax(dim=2)`.  
+• The Attention module appears to function correctly during training on the CIFAR-10 dataset, despite the potential issue.
+
+EXPECTED BEHAVIOR  
+The softmax operation should be applied along the correct axis (dimension 2) for the Self-Attention mechanism to ensure appropriate attention weights are computed. This should lead to more accurate attention results and improved model performance.
+
+REPRODUCTION STEPS  
+1. Navigate to the DDPM UNet implementation in the repository: [unet.py](https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/05632f9f8e0de4657c210a13954a81f9556fd1ed/labml_nn/diffusion/ddpm/unet.py).  
+2. Locate the line of code where the softmax operation is applied (Line 190).  
+3. Verify the current implementation of the softmax operation: `attn.softmax(dim=1)`.  
+4. Modify the code to use `attn.softmax(dim=2)` and observe any changes in model behavior or performance during training on the CIFAR-10 dataset.

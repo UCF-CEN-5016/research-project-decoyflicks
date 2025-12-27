@@ -1,0 +1,23 @@
+TITLE  
+Dimension Mismatch in Masked Patch Prediction Implementation  
+
+SYMPTOMS  
+• Encountering dimension issues while running the masked patch prediction demo code.  
+• Error message:  
+  `RuntimeError: Given normalized_shape=[1024], expected input with shape [*, 1024], but got input of size[20, 64, 3072]`  
+• The model fails to process the input correctly, leading to a runtime error during the forward pass.  
+
+EXPECTED BEHAVIOR  
+The model should correctly process the input images and compute the loss without any dimension mismatch errors. The output should be a valid loss value that can be used for backpropagation.  
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries: `torch`, `ViT` from `vit_pytorch`, and `MPP` from `vit_pytorch.mpp`.  
+2. Initialize the `ViT` model with specified parameters.  
+3. Initialize the `MPP` trainer with the `ViT` model.  
+4. Define a function `sample_unlabelled_images()` that generates a batch of random images.  
+5. Run a loop for 100 iterations where:  
+   a. Call `sample_unlabelled_images()` to get a batch of images.  
+   b. Pass the images to the `mpp_trainer` to compute the loss.  
+   c. Perform backpropagation and optimization steps.  
+6. Save the model state dictionary to a file.  
+7. Observe the runtime error during the forward pass of the model.

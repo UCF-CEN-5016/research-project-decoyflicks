@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official recommendation uplift models",
+    "Set TensorFlow version to 2.13.0 and Python version to 3.10.12 in Google Colab environment",
+    "Download the Faster R-CNN Inception ResNet V2 pretrained model from the provided URL",
+    "Extract the downloaded model files to a directory in the Colab environment",
+    "Import required libraries: numpy, tensorflow, and official.recommendation.uplift modules",
+    "Define a function to create a TwoTowerUpliftModel with a treatment indicator feature name",
+    "Set the treatment indicator feature name to 'is_treatment'",
+    "Create a dummy dataset with shared_feature, control_feature, and treatment_feature of shape (10, 1)",
+    "Set shared_feature to np.ones((10, 1)), control_feature to np.ones((10, 1)) * -2.0, and treatment_feature to np.ones((10, 1)) * 3.0",
+    "Create a treatment tensor with shape (10, 1) containing values [[1], [1], [0], [1], [1], [1], [0], [1], [0], [1]]",
+    "Calculate the target output y as (shared_feature + treatment_feature) * treatment",
+    "Create a TensorFlow dataset from the input features and target output with batch size of 5",
+    "Instantiate the TwoTowerUpliftModel using the defined function",
+    "Compile the model with SGD optimizer and TrueLogitsLoss using mean squared error",
+    "Attempt to fit the model on the dataset without providing the treatment indicator feature in the inputs",
+    "Capture the output of the model.fit() method to check for errors",
+    "Assert that a ValueError is raised during model fitting due to missing treatment indicator",
+    "Repeat the process for model evaluation by calling model.evaluate() with the same missing treatment indicator inputs",
+    "Assert that a ValueError is raised during model evaluation due to missing treatment indicator"
+]
+```

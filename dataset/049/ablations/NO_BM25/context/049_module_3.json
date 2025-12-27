@@ -1,0 +1,28 @@
+{
+  "bug_report": "049",
+  "module": {
+    "module": "examples/textless_nlp/gslm/speech2unit/pretrained",
+    "files": [
+      {
+        "path": "examples/textless_nlp/gslm/speech2unit/pretrained/cpc_feature_reader.py",
+        "snippets": [
+          {
+            "lines": "110-116",
+            "code": "    def __init__(self, num_features, epsilon=1e-05, affine=True):\n        super(ChannelNorm, self).__init__()\n        if affine:\n            self.weight = nn.parameter.Parameter(torch.Tensor(1, num_features, 1))\n            self.bias = nn.parameter.Parameter(torch.Tensor(1, num_features, 1))\n        else:\n            self.weight = None\n            self.bias = None\n        self.epsilon = epsilon\n        self.p = 0\n        self.affine = affine\n        self.reset_parameters()\n\n    def reset_parameters(self):\n        if self.affine:\n            torch.nn.init.ones_(self.weight)\n            torch.nn.init.zeros_(self.bias)\n\n    def forward(self, x):\n        cum_mean = x.mean(dim=1, keepdim=True)\n        cum_var = x.var(dim=1, keepdim=True)\n        x = (x - cum_mean) * torch.rsqrt(cum_var + self.epsilon)\n        if self.weight is not None:\n            x = x * self.weight + self.bias\n        return x"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "examples/textless_nlp/gslm/speech2unit/pretrained/cpc_feature_reader.py",
+      "snippets": [
+        {
+          "lines": "110-116",
+          "code": "    def __init__(self, num_features, epsilon=1e-05, affine=True):\n        super(ChannelNorm, self).__init__()\n        if affine:\n            self.weight = nn.parameter.Parameter(torch.Tensor(1, num_features, 1))\n            self.bias = nn.parameter.Parameter(torch.Tensor(1, num_features, 1))\n        else:\n            self.weight = None\n            self.bias = None\n        self.epsilon = epsilon\n        self.p = 0\n        self.affine = affine\n        self.reset_parameters()\n\n    def reset_parameters(self):\n        if self.affine:\n            torch.nn.init.ones_(self.weight)\n            torch.nn.init.zeros_(self.bias)\n\n    def forward(self, x):\n        cum_mean = x.mean(dim=1, keepdim=True)\n        cum_var = x.var(dim=1, keepdim=True)\n        x = (x - cum_mean) * torch.rsqrt(cum_var + self.epsilon)\n        if self.weight is not None:\n            x = x * self.weight + self.bias\n        return x"
+        }
+      ]
+    }
+  ]
+}

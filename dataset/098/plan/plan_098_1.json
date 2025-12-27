@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary libraries including PyTorch and any required modules from the VParamContinuousTimeGaussianDiffusion class",
+    "Define a batch size of 16, image dimensions of 256x256, channels as 3, and num_sample_steps as 500",
+    "Create random uniform input data with shape (batch_size, height, width, channels)",
+    "Initialize the model VParamContinuousTimeGaussianDiffusion with the specified parameters",
+    "Call the forward method of the initialized model with the random input data",
+    "Verify that the loss calculation involves an operation that results in NaN values",
+    "Monitor GPU memory usage during execution of the forward pass",
+    "Assert that GPU memory usage exceeds a predefined threshold indicating potential memory overflow or incorrect computations"
+]
+```
+

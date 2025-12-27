@@ -1,0 +1,25 @@
+```json
+[
+    "Install Python 3.12.3 if not already installed.",
+    "Create a new virtual environment using 'python -m venv venv'.",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows.",
+    "Install the required libraries by running 'pip install torch torchvision deepspeed transformers'.",
+    "Verify the installation of the transformers library by running 'pip show transformers' and check the version.",
+    "Create a new Python script named 'e2e_rlhf.py'.",
+    "In 'e2e_rlhf.py', import the necessary libraries: 'import argparse', 'import deepspeed', 'import torch', 'import torchvision', 'from deepspeed import add_config_arguments'.",
+    "Define a function 'add_argument()' to parse command line arguments using argparse.",
+    "Add the following arguments in 'add_argument()': '--actor-model', '--reward-model', '--deployment-type'.",
+    "Define a main function 'main(args)' that will be called when the script is executed.",
+    "Inside 'main(args)', initialize DeepSpeed with 'deepspeed.init_distributed()'.",
+    "Create a simple neural network class 'Net' that uses PyTorch, including at least one layer from deepspeed.",
+    "In the 'Net' class, use 'deepspeed.moe.layer.MoE' to create a mixture of experts layer if the argument '--moe' is set.",
+    "Define a 'get_ds_config(args)' function that returns a DeepSpeed configuration dictionary.",
+    "In 'main(args)', create an instance of the 'Net' class and initialize it with DeepSpeed using 'deepspeed.initialize()'.",
+    "Prepare the CIFAR-10 dataset using 'torchvision.datasets.CIFAR10' and create data loaders.",
+    "Run the training loop for a few epochs, ensuring to call 'model_engine.step()' after loss calculation.",
+    "Save the script and ensure it is executable.",
+    "Run the script using the command 'python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu'.",
+    "Observe the output for the error 'ModuleNotFoundError: No module named 'transformers.deepspeed''. ",
+    "Verify that the error message is displayed in the console output."
+]
+```

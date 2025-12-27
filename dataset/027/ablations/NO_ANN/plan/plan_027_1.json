@@ -1,0 +1,18 @@
+```json
+[
+    "Clone the PyTorch examples repository from GitHub using 'git clone https://github.com/pytorch/examples.git'",
+    "Navigate to the dcgan directory using 'cd examples/dcgan'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Download the CelebA dataset from the official website or use a script to download it, ensuring images are in the correct format and stored in a directory named 'data'",
+    "Open the 'dcgan_faces.py' file in a code editor",
+    "Locate the section of the code where the image size is defined, typically around line 188, and change the image size from 64 to 128 by modifying the line 'image_size = 64' to 'image_size = 128'",
+    "Locate the batch size definition in the code, typically set to 64, and ensure it remains unchanged or set it to a smaller value like 32 for testing purposes",
+    "Locate the generator and discriminator model definitions in the code and ensure that the input dimensions are updated to accommodate the new image size of 128x128",
+    "Locate the training loop in the code and ensure that the loss function is defined as 'criterion = nn.BCELoss()' or similar, which is appropriate for binary classification tasks",
+    "Run the modified DCGAN code using the command 'python dcgan_faces.py --batch_size 32 --image_size 128'",
+    "Monitor the console output for the 'Starting Training Loop...' message to confirm the training has begun",
+    "Wait for the error to occur, which should display a traceback indicating a mismatch between the target size and input size, specifically 'ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200]))'",
+    "Record the exact error message and traceback for validation of the bug occurrence",
+    "Verify that the input size of 3200 is indeed being produced by checking the output shape of the model before the loss calculation, using print statements or logging"
+]
+```

@@ -1,0 +1,18 @@
+TITLE  
+Unexpected 100% accuracy on training dataset
+
+SYMPTOMS  
+• The model achieves 100% accuracy on both training and validation datasets from the first epoch.  
+• Training accuracy remains consistently at 1.0000 across multiple epochs.  
+• Validation accuracy also remains at 1.0000, indicating possible overfitting or a data leak.  
+• No error messages are reported, but the results are unexpected and raise concerns about model generalization.  
+
+EXPECTED BEHAVIOR  
+The model should exhibit a gradual increase in accuracy over multiple epochs, with training and validation accuracies reflecting the model's ability to generalize to unseen data. A typical training process would show variations in accuracy and loss values, indicating learning and validation performance.
+
+REPRODUCTION STEPS  
+1. Set up the environment and install necessary dependencies.  
+2. Use the provided code snippet to initialize the `Linformer` and `ViT` models with the specified parameters.  
+3. Train the model on the example dataset provided in the code.  
+4. Observe the training and validation accuracies after each epoch.  
+5. Note the results for epochs 1 through 5, specifically looking for any anomalies in accuracy and loss values.

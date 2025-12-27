@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, random, numpy, and tensorflow",
+    "Set the random seed for reproducibility using numpy.random.seed(42)",
+    "Define a batch size of 32 for the input data",
+    "Prepare a list of English sentences for testing, e.g., test_eng_texts = ['Hello', 'How are you?', 'Goodbye']",
+    "Define a function decode_sequences(input_sentences) that takes a list of input sentences",
+    "Inside decode_sequences, create a prompt tensor by concatenating a start token and padding, e.g., start = tf.constant([[1]]) and pad = tf.constant([[0, 0, 0]])",
+    "Import keras_nlp.samplers.GreedySampler and instantiate it as sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and other required parameters, including an end_token_id, e.g., generated_tokens = sampler(next, prompt, end_token_id=2)",
+    "Create a loop to iterate over the range of 2 to generate translations for 2 random sentences",
+    "In each iteration, randomly select an input sentence from test_eng_texts using random.choice(test_eng_texts)",
+    "Call decode_sequences with the randomly selected input sentence wrapped in a list, e.g., translated = decode_sequences([input_sentence])",
+    "Run the code in a Google Colab environment with a T4 GPU runtime",
+    "Verify that the TypeError occurs with the message 'Sampler.__call__() got an unexpected keyword argument 'end_token_id''",
+    "Capture the traceback of the error to confirm the source of the issue"
+]
+```

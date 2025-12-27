@@ -1,0 +1,18 @@
+```json
+[
+    "Import the necessary libraries: fairseq, torch, and any other dependencies required for the speech-to-speech task.",
+    "Set the DATA_ROOT variable to the path where the dataset is located, e.g., DATA_ROOT='/root/autodl-tmp/FormattingData/DATA_ROOT'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech-to-speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the task.",
+    "Define the command to run fairseq-generate with the following parameters: --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml, --task speech_to_speech, --target-is-code, --target-code-size 100, --vocoder code_hifigan, --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt, --gen-subset test, --max-tokens 50000, --beam 10, --max-len-a 1, --results-path /root/autodl-tmp/results.",
+    "Execute the fairseq-generate command in the terminal to start the generation process.",
+    "Monitor the output for any error messages, specifically looking for the error related to the missing key 'input_feat_per_channel'.",
+    "If the error occurs, capture the full stack trace and any additional context provided in the output.",
+    "Verify that the model architecture includes the expected input features by checking the model definition in fairseq/model_parallel/models/pipeline_parallel_transformer/model.py.",
+    "Check the initialization of the TransformerDecoder class to ensure that all required parameters are being passed correctly.",
+    "Confirm that the input data being fed into the model matches the expected format and dimensions as defined in the model's forward method.",
+    "Log the dimensions of the input tensors being passed to the model to ensure they are correct.",
+    "Assert that the input tensor shapes match the expected shapes defined in the model's documentation or code comments.",
+    "Re-run the fairseq-generate command to confirm that the bug is reproducible under the same conditions."
+]
+```

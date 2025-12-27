@@ -1,0 +1,29 @@
+TITLE
+Unexpected Keyword Argument 'mask' in DALL-e Model's `forward()` Method
+
+SYMPTOMS
+• TypeError: forward() got an unexpected keyword argument 'mask'
+• The error occurs during the training of the DALL-e model through the rainbow_dalle notebook.
+• The error appears when attempting to call the `dalle.forward()` method with a `mask` argument.
+
+EXPECTED BEHAVIOR
+• The `forward()` method of the DALL-e model should accept the input parameters without raising an unexpected keyword error, and it should return the expected output.
+
+REPRODUCTION STEPS
+1. Ensure you have Ubuntu 18.04 installed.
+2. Set up a Python 3.9.13 environment with Torch 1.12.0 and torchvision 0.13.0.
+3. Follow the steps to generate a dataset and train VAE as described in the notebook.
+4. Attempt to train the DALL-e model using the `fit` function provided in the notebook, which includes calling the `train_dalle_batch` function.
+5. The error will occur when executing the line that calls `dalle(text[idx, ...], image_codes[idx, ...], mask=mask[idx, ...], return_loss=True)`.
+
+Further Analysis:
+The error suggests that the `forward()` method of the DALL-e model does not accept a `mask` keyword argument. This discrepancy could be due to one of the following reasons:
+
+1. The version of the DALL-e model or its dependencies may not match the expected API.
+2. There might be an issue with how the training data is being prepared and passed to the `dalle.forward()` method.
+
+Suggested Solutions:
+1. Verify that you are using the correct version of the DALLE2-pytorch library by checking the documentation and comparing it against the version installed (`torchvision 0.13.0` and `Torch 1.12.0`).
+2. Check if there is a newer or updated version of the DALL-e model that has been released since the issue was reported in https://github.com/lucidrains/DALLE2-pytorch/issues/167.
+3. Ensure that the training data preparation step (`captions_mask[train_idx, ...]`) does not include an unnecessary `mask` keyword argument when calling `dalle.forward()`.
+4. If the issue persists, consider reporting this as a new issue on the DALLE2-pytorch GitHub repository with detailed information about your environment and steps to reproduce the problem.

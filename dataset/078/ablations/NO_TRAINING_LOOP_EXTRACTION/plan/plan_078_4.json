@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, einsum from torch, rearrange and repeat from einops",
+    "Define a batch size of 5 and set the input dimensions for the model: num_frames=8, height=224, width=224, n_input_channels=3",
+    "Create a random input tensor with shape (batch_size, n_input_channels, num_frames, height, width) using torch.rand with values between 0 and 1",
+    "Instantiate the CCT model with parameters: img_size=224, num_frames=8, embedding_dim=768, n_input_channels=3, n_conv_layers=1",
+    "Set the model to training mode by calling model.train()",
+    "Perform a forward pass by calling model with the input tensor and store the output",
+    "Define a dummy target tensor with shape (batch_size, num_classes) using torch.randint to simulate classification targets",
+    "Define a loss function using nn.CrossEntropyLoss()",
+    "Calculate the loss by calling the loss function with the model output and the dummy target tensor",
+    "Call loss.backward() to compute gradients and trigger the backward pass",
+    "Monitor for any errors during the backward pass, specifically looking for the error message: 'Function UnbindBackwardAutogradNestedTensor0 returned an invalid gradient at index 0'",
+    "Assert that the error message is present in the output to confirm the bug has been reproduced"
+]
+```

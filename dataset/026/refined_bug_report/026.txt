@@ -1,0 +1,61 @@
+### TITLE
+Unexpected Keyword Argument 'box_ind' Error in Object Detection Visualization
+
+### SYMPTOMS
+• The code attempts to visualize the results but encounters a `TypeError` with an unexpected keyword argument `'box_ind'`.
+• The error trace indicates issues related to reframe box masks during visualization.
+• Two images are expected to be displayed, but only logs and errors are shown without visual outputs.
+
+**Error Trace:**
+```
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+[<ipython-input-1-3bca61a30fc9>](https://localhost:8080/#) in <module>
+168   detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(
+169             detection_masks, detection_boxes,
+--> 170               image_np.shape[1], image_np.shape[2])
+171   detection_masks_reframed = tf.cast(detection_masks_reframed > 0.5,
+172                                       np.uint8)
+TypeError: Got an unexpected keyword argument 'box_ind'
+```
+
+### EXPECTED BEHAVIOR
+The code should successfully visualize the results by displaying two images with labels.
+
+### REPRODUCTION STEPS
+1. Open the provided Google Colab notebook at https://colab.research.google.com/drive/1J_bIH_oeZeJ_VcF_xBm_yVaxYWEWdx6R?usp=sharing.
+2. Run all cells in the notebook to ensure the environment is set up correctly.
+3. Observe that two images are displayed with labels, which should indicate successful object detection and visualization.
+
+### ANALYSIS
+The error message suggests an issue with the `reframe_box_masks_to_image_masks` function call, specifically when it attempts to pass the `box_ind` parameter. This might be due to a change in TensorFlow's API or a compatibility issue between the version of TensorFlow being used and the expected function signature.
+
+#### Potential Causes:
+1. **API Change**: The `box_ind` argument may have been removed or deprecated in newer versions of TensorFlow.
+2. **Version Mismatch**: There could be a mismatch between the version of TensorFlow installed via pip (`2.10.0`) and any dependencies that expect an older API.
+
+#### Suggested Actions:
+1. **Check TensorFlow Version Compatibility**: Ensure that all components are compatible with each other, especially if you suspect an API change.
+- Verify the TensorFlow version compatibility in the `TFHub_saved_model_inference.ipynb` notebook.
+
+2. **Update or Downgrade TensorFlow**:
+- Attempt to install a different version of TensorFlow that is known to be compatible with the codebase.
+```bash
+!pip uninstall tensorflow
+!pip install tensorflow==2.9.1  # Example: Install a specific version
+```
+- Alternatively, if you need to use the latest version, ensure all dependencies are updated.
+
+3. **Review Documentation and Updates**:
+- Check the TensorFlow documentation or issue trackers for any known issues related to the `reframe_box_masks_to_image_masks` function.
+- Review recent changes in the codebase that might have introduced this error.
+
+4. **Update Dependencies**: Ensure that all dependencies are up-to-date, as they can sometimes introduce breaking changes.
+```bash
+!pip install --upgrade tensorflow-object-detection-api
+```
+
+5. **Check for Custom Code Modifications**:
+- If the notebook has been modified or customized, check if there were any changes to the `reframe_box_masks_to_image_masks` function call.
+
+By following these steps, you should be able to identify and resolve the issue with the unexpected keyword argument `'box_ind'`.

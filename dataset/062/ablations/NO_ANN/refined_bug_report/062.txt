@@ -1,0 +1,17 @@
+TITLE  
+AttributeError due to Deprecated DataFrame Method in pandas
+
+SYMPTOMS  
+• Encountered an `AttributeError` when trying to use the `append` method on a DataFrame.  
+• Error message: `AttributeError: 'DataFrame' object has no attribute 'append'`  
+• Warning message: `FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.`  
+
+EXPECTED BEHAVIOR  
+When the software functions correctly, the DataFrame `train_df` should be successfully combined with `test_df` using an appropriate method, resulting in a single DataFrame without errors or warnings.
+
+REPRODUCTION STEPS  
+1. Open the file `masked_language_modeling.ipynb`.  
+2. Ensure the environment is set up with Python 3.10, TensorFlow 2.13, and pandas 2.03.  
+3. Locate the line of code that attempts to append two DataFrames: `all_data = train_df.append(test_df)`.  
+4. Execute the code cell containing this line.  
+5. Observe the error and warning messages generated.

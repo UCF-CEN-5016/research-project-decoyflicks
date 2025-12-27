@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: torch, torch.nn.functional, and the CrossEntropyLoss class from torch.nn",
+    "Define a batch size of 2 and a sequence length of 10 for the input data",
+    "Create random input tensors for actor_log_prob, log_probs, advantages, and action_mask with the following shapes: actor_log_prob (batch_size, seq_length, vocab_size), log_probs (batch_size, seq_length, vocab_size), advantages (batch_size, seq_length), action_mask (batch_size, seq_length)",
+    "Set the vocab_size to 1000 for the random tensors to simulate a realistic scenario",
+    "Initialize the start variable to 1 to simulate the masking behavior in the loss calculation",
+    "Create a tensor for the advantages with random values, ensuring it has the shape (batch_size, seq_length)",
+    "Create a tensor for action_mask with random binary values (0 or 1) to represent valid actions, ensuring it has the shape (batch_size, seq_length)",
+    "Define the actor_loss_fn function using CrossEntropyLoss, which takes in actor_log_prob, log_probs, advantages, and action_mask as inputs",
+    "Call the actor_loss_fn function with the sliced tensors: actor_log_prob[:, start:], log_probs[:, start:], advantages, and action_mask[:, start:]",
+    "Capture the output of the actor_loss_fn function to check for loss values",
+    "Print the calculated loss value to verify it does not include the 'eos' token loss",
+    "Modify the action_mask slicing to action_mask[:, start-1:-1] and call the actor_loss_fn function again",
+    "Capture the output of the modified actor_loss_fn function to check for loss values",
+    "Print the new calculated loss value to verify it includes the 'eos' token loss",
+    "Assert that the loss value from the first call (with action_mask[:, start:]) is different from the loss value from the second call (with action_mask[:, start-1:-1]) to confirm the bug"
+]
+```

@@ -1,0 +1,22 @@
+```json
+[
+    "Import pandas, numpy, and TensorFlow libraries",
+    "Set Python version to 3.10, TensorFlow version to 2.13, and pandas version to 2.0.3",
+    "Define a base path for the dataset: BASE_PATH = 'https://kdd.ics.uci.edu/databases/census-income/census-income'",
+    "Define CSV_HEADER as a list of column names for the dataset",
+    "Load training data into a DataFrame: train_data = pd.read_csv(f'{BASE_PATH}.data.gz', header=None, names=CSV_HEADER)",
+    "Load testing data into a DataFrame: test_data = pd.read_csv(f'{BASE_PATH}.test.gz', header=None, names=CSV_HEADER)",
+    "Prepare the data by defining a function prepare_dataframe(dataframe) that maps target labels and converts categorical features to string",
+    "Call prepare_dataframe(train_data) to prepare the training data",
+    "Call prepare_dataframe(test_data) to prepare the testing data",
+    "Define a variable TARGET_COLUMN_NAME = 'income_level'",
+    "Define a variable WEIGHT_COLUMN_NAME = 'instance_weight'",
+    "Define NUMERIC_FEATURE_NAMES as a list of numeric feature names",
+    "Define CATEGORICAL_FEATURE_NAMES as a list of categorical feature names",
+    "Print the shapes of the training and test DataFrames: print(f'Train data shape: {train_data.shape}') and print(f'Test data shape: {test_data.shape}')",
+    "Attempt to append test_data to train_data using all_data = train_data.append(test_data)",
+    "Capture the output of the append operation to verify if it raises an AttributeError",
+    "Check for the FutureWarning message regarding the deprecation of the append method",
+    "Assert that the output contains the AttributeError: 'DataFrame' object has no attribute 'append'"
+]
+```

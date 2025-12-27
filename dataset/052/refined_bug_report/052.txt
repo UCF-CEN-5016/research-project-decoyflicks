@@ -1,0 +1,23 @@
+TITLE
+Model Training Error in Named Entity Recognition Example with Transformers
+
+SYMPTOMS
+• The `ner_model.fit` method throws a `OperatorNotAllowedInGraphError`.
+• The error message states that using a symbolic `tf.Tensor` as a Python `bool` is not allowed.
+• The issue occurs when running the model training code.
+
+EXPECTED BEHAVIOR
+The model should compile and fit without any errors, allowing for proper training on the dataset.
+
+REPRODUCTION STEPS
+1. Ensure you have Keras version 3.1.0.dev2024031303 installed.
+2. Run the provided custom code in a Colab environment with GPU support (specifically T4).
+3. Define and compile the `ner_model` as shown.
+4. Call the `fit` method on the training dataset for 10 epochs.
+5. Attempt to perform inference using the trained model by tokenizing input text and making predictions.
+
+Additional Notes:
+- The error message suggests that there might be an issue with how TensorFlow is handling symbolic tensors in a graph mode context.
+- The code provided does not include the definition of `mapping`, so it's assumed this is part of your custom preprocessing or post-processing logic. Ensure that all necessary components are correctly defined and imported.
+
+To resolve the issue, consider decorating functions involving model training with `@tf.function` to ensure they run in eager execution mode, as suggested by the error message.

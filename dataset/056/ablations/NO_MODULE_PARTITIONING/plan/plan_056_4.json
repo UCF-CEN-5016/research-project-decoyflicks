@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: keras, numpy, and matplotlib",
+    "Set the random seed for reproducibility using np.random.seed(42)",
+    "Load the CIFAR-100 dataset using keras.datasets.cifar100.load_data()",
+    "Extract x_train and y_train from the dataset and print their shapes",
+    "Define hyperparameters: image_size = 64, patch_size = 2",
+    "Select a random image from x_train using np.random.choice(range(x_train.shape[0]))",
+    "Resize the selected image to (image_size, image_size) using keras.layers.Resizing",
+    "Convert the resized image to a tensor using keras.ops.convert_to_tensor",
+    "Create an instance of the Patches class with patch_size = 2",
+    "Call the Patches instance with the resized image tensor and store the output in 'patches'",
+    "Print the shape of 'patches' to verify the number of patches and their dimensions",
+    "Attempt to visualize the patches using matplotlib by iterating over 'patches'",
+    "Assert that the shape of 'patches' is as expected: (1, num_patches, patch_size * patch_size * 3)",
+    "Run the code cell to trigger the InvalidArgumentError during the call to Patches.call()",
+    "Capture the error message and verify it matches the expected InvalidArgumentError regarding tensor types"
+]
+```

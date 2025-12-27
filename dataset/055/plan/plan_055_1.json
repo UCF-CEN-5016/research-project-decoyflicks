@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow, keras_cv, and keras as tf from their respective modules.",
+    "Define a batch size of 16 and image dimensions of 640x640 for the dataset.",
+    "Load the YOLOV8 backbone model with preset 'yolo_v8_s_backbone_coco' from keras_cv.models.",
+    "Create random uniform input data `images` with shape (batch_size, height, width, 3) using tf.random.uniform",
+    "Define a ground truth bounding box tensor `y_true` with shape (batch_size, num_boxes, 5) for the format 'xyxy'.",
+    "Use the YOLOV8 model to predict bounding boxes on the input images and store the predictions in `y_pred`.",
+    "Calculate the classification loss using binary crossentropy between predicted probabilities and ground truth class labels from `y_true`.",
+    "Calculate the box loss using CIoU between predicted bounding boxes and ground truth bounding boxes from `y_true`.",
+    "Verify that both classification and box losses contain NaN values by checking if tf.math.is_nan(loss).any() returns True for each loss tensor.",
+    "Monitor GPU memory usage during model prediction and loss calculation using TensorFlow's GPU profiling tools.",
+    "Assert that the peak GPU memory usage exceeds a specific expected threshold to reproduce the memory overflow issue."
+]
+```
+

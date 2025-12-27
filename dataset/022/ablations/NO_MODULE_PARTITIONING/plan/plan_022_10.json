@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.vision.ops.augment",
+    "Define a batch size of 4 and image dimensions of 128x128x3 for the input data",
+    "Create random uniform input data for logits with shape (batch_size, height, width, num_classes) where num_classes = 2",
+    "Create random uniform input data for labels with shape (batch_size, height, width, num_classes) where num_classes = 2",
+    "Instantiate the SegmentationLossDiceScore class with metric_type='generalized'",
+    "Call the __call__ method of the SegmentationLossDiceScore instance with the logits and labels as arguments",
+    "Capture the output loss value from the call",
+    "Verify that the output loss value is not NaN or Inf",
+    "Check the internal state of the SegmentationLossDiceScore instance to ensure that the computed dice score is being calculated with a standard deviation of 1",
+    "Assert that the output loss value is greater than or equal to 0, indicating a valid loss calculation",
+    "Modify the input data to include cases where the labels and logits are all zeros to test the filtering mechanism",
+    "Re-run the __call__ method and assert that the output loss value is 0 when all samples are filtered out",
+    "Log the output loss value and any relevant internal state to confirm the behavior matches the expected bug description"
+]
+```

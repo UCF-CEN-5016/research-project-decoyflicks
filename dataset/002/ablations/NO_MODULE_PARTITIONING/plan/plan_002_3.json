@@ -1,0 +1,15 @@
+```json
+[
+    "Set up a Debian 12 environment with Miniforge3 and install TensorFlow 2.x using 'conda install tensorflow=2.x'",
+    "Create a new Python script named 'model_main_tf2.py' in the working directory.",
+    "Import TensorFlow and the necessary modules at the top of 'model_main_tf2.py': 'import tensorflow as tf' and 'from object_detection import exporter'",
+    "Define a model directory path as 'models/centernet_mobilenetv2fp' and a pipeline config path as 'models/centernet_mobilenetv2fp/pipeline.config'",
+    "Create a placeholder function in 'model_main_tf2.py' that simulates the model training process, including a call to 'exporter.export_inference_graph()'",
+    "In the placeholder function, attempt to import 'graph_matcher' from 'tensorflow.contrib.quantize.python' to simulate the bug: 'from tensorflow.contrib.quantize.python import graph_matcher'",
+    "Run the script using the command: 'python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config'",
+    "Capture the output of the script execution to check for the 'ModuleNotFoundError: No module named 'tensorflow.conrtib' error message",
+    "Verify that the error message is printed to the console, indicating that the bug has been successfully reproduced",
+    "Check the file path '/home/server/miniforge3/envs/ML/lib/python3.9/site-packages/object_detection/exporter.py' to ensure it contains the import statement for 'graph_matcher'",
+    "Confirm that TensorFlow 2.x is installed by running 'pip show tensorflow' and checking the version"
+]
+```

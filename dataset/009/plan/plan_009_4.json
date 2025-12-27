@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow, tf_version, standard_fields, and the object_detection module from object_detection_test.py",
+    "Define a batch size of 2 and image dimensions of 600x600",
+    "Create random uniform input data with shape (batch_size, height, width, 3) for ground truth classes and masks",
+    "Call CocoMaskEvaluator function with num_classes=80",
+    "Verify output contains NaN values in PanopticQuality@0.50IOU calculation",
+    "Monitor CPU memory usage during execution",
+    "Assert CPU memory exceeds expected threshold"
+]
+```
+

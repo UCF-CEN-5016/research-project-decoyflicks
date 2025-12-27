@@ -1,0 +1,14 @@
+[
+  "Verify the current Python environment's pip version by running `python -m pip --version` to check for support of the '--use-feature=2020-resolver' option",
+  "Create a new empty directory to act as a local Python package for installation",
+  "Inside this directory, create a minimal `setup.py` file with basic metadata (e.g., name='testpackage', version='0.1')",
+  "Also create an empty `__init__.py` file inside a subdirectory matching the package name to allow pip installation",
+  "Open a terminal in this directory and run the command `python -m pip install --use-feature=2020-resolver .` exactly as stated in the bug report",
+  "Capture the full stdout and stderr output of the command",
+  "Assert that the output contains the error message `option --use-feature: invalid choice: '2020-resolver'` and lists valid choices as 'fast-deps', 'truststore', and 'no-binary-enable-wheel-cache'",
+  "Repeat the command without the `--use-feature=2020-resolver` option to verify it succeeds or produces a different output",
+  "Check the pip version again to confirm it is older than the version that introduced the 2020 resolver feature (pip < 20.3)",
+  "Document the exact pip version and Python version used for reproduction",
+  "Optionally attempt the command with `--use-feature=fast-deps` to verify that other features are recognized by pip",
+  "Collect all log outputs, command lines, and environment details into a reproducible bug report"
+]

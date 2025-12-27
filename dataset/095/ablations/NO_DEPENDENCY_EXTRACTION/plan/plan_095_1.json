@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, tqdm, and the LearnedGaussianDiffusion and GaussianDiffusion classes from denoising_diffusion_pytorch.py",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 4 and image dimensions of 64x64",
+    "Create a random tensor 'img' with shape (batch_size, 3, height, width) using torch.randn()",
+    "Set the number of timesteps to 1000 and define sampling_timesteps as 100",
+    "Instantiate the model by creating an instance of the LearnedGaussianDiffusion class with appropriate parameters",
+    "Call the ddim_sample() method on the model instance with shape (batch_size, 3, height, width) and return_all_timesteps set to False",
+    "In the ddim_sample() method, ensure that the model_predictions() function is called with the parameters: img, time_cond, self_cond, clip_x_start=True, rederive_pred_noise=True",
+    "Override the model_predictions() method in the LearnedGaussianDiffusion class to only accept parameters: x, t, clip_x_start=False",
+    "Run the code and observe the output for any errors",
+    "Verify that a TypeError is raised with the message 'model_predictions() got multiple values for argument 'clip_x_start''",
+    "Log the error message to confirm the bug has been reproduced"
+]
+```

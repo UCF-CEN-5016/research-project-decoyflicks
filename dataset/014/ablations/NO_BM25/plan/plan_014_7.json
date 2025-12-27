@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules from object_detection.utils and object_detection.protos",
+    "Set the path to the pipeline.config file as 'configpath = /path/to/your/pipeline.config'",
+    "Load the pipeline configuration using config_util.get_configs_from_pipeline_file(configpath)",
+    "Create an instance of pipeline_pb2.TrainEvalPipelineConfig()",
+    "Open the pipeline.config file in read mode using tf.io.gfile.GFile(configpath, 'r')",
+    "Read the contents of the pipeline.config file into a variable 'proto_str'",
+    "Use text_format.Merge(proto_str, pipeline_config) to parse the contents into the pipeline_config object",
+    "Set pipeline_config.eval_input_reader.max_number_of_boxes = 500",
+    "Attempt to access pipeline_config.eval_input_reader.max_number_of_boxes to trigger the bug",
+    "Catch the AttributeError exception and print the error message to confirm the bug occurs",
+    "Prepare a dataset of images with over 100 objects per image, ensuring they are in the correct format for the model",
+    "Set the training parameters: max_number_of_boxes = 500, eval_config.max_num_boxes_to_visualize = 500, eval_config.num_visualizations = 500",
+    "Train the model using the dataset for a minimum of 1000 steps to observe convergence behavior",
+    "Log the training accuracy and loss values during training to confirm they do not improve beyond 0.04",
+    "Verify that the model does not converge by checking the final accuracy after training"
+]
+```

@@ -1,0 +1,22 @@
+[
+  "Set up a multi-node cluster environment with 2 nodes, each having 2 Tesla V100 GPUs (16GB memory) and CUDA 11.0 installed",
+  "Install TensorFlow 2.11 GPU version and ensure Python 3.9.7 environment is active",
+  "Clone the TensorFlow Models repository at release branch or latest commit matching TensorFlow Model Garden used in the bug report",
+  "Export PYTHONPATH to include the root models directory, e.g., /home/cdacapp1/scaling/models-master",
+  "Prepare ImageNet dataset in TFRecord format stored in /scratch/cdacapp1/sowmya/actual_imagenet/tf_records with standard ImageNet preprocessing",
+  "Create model checkpoint directory at /home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss ensuring write permissions",
+  "Prepare two YAML config files for multi-worker distributed training with multi_worker_mirrored strategy: gpu.yaml for task_index 0 and gpu1.yaml for task_index 1, both specifying 2 GPUs and worker_hosts as 'ip1:6655,ip2:6655'",
+  "On node 1 (gpu1), run the following commands sequentially: change directory to official/legacy/image_classification, set environment variables PYTHONPATH, DATA_DIR, MODEL_DIR, activate conda environment tf11, and execute python3 classifier_trainer.py with flags --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml",
+  "On node 2 (gpu2), repeat the above commands but use --config_file=configs/examples/resnet/imagenet/gpu1.yaml and set task_index to 1 in the config",
+  "Verify that both nodes successfully connect and initialize the multi_worker_mirrored strategy by inspecting logs for lines indicating detected devices, cluster configuration, and number of replicas in sync (should be 4 devices total)",
+  "Measure training throughput (examples/sec) on single GPU to establish baseline (~270 examples/sec)",
+  "Measure training throughput on single node with 2 GPUs using MirroredStrategy (not multi_worker) to confirm intra-node scaling (~700 examples/sec)",
+  "Measure training throughput on multi-node multi-GPU setup as above, expecting increased throughput but observe same throughput as single GPU (~270 examples/sec), indicating no scaling across nodes",
+  "Log and assert that the throughput from multi-node run is approximately equal to the single-GPU throughput within a 10% margin, confirming that distributed training is not scaling",
+  "Check training logs for messages about cluster configuration from distribute_utils.configure_cluster confirming worker_hosts and task_index are correctly set on each node",
+  "Validate that the global batch size is correctly computed as num_gpus * replicas_in_sync * per_device_batch_size and log it at start of training",
+  "Assert that all GPUs are visible on each node by running 'nvidia-smi' during training and confirm GPU utilization is present but throughput does not increase across nodes",
+  "Ensure that the datasets are sharded correctly per worker by verifying dataset_builder.global_batch_size and per-replica batch sizes",
+  "Confirm that no errors or warnings about cluster connection or device placement appear in logs",
+  "Validate that the training loop executes normally but throughput does not scale, confirming the reproduction of the reported bug"
+]

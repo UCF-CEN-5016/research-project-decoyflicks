@@ -1,0 +1,16 @@
+TITLE  
+RandAugment magnitude standard deviation is incorrectly set to 1
+
+SYMPTOMS  
+• The applied standard deviation for RandAugment is always 1, regardless of input parameters.  
+• The code does not include a `level_std*` term after the `+=` operator, leading to a static standard deviation.  
+• This results in a lack of variability in augmentations, affecting model training performance.
+
+EXPECTED BEHAVIOR  
+The standard deviation for RandAugment should be dynamically calculated based on the `level_std*` parameter, allowing for a range of values rather than being fixed at 1.
+
+REPRODUCTION STEPS  
+1. Access the RandAugment implementation in the specified GitHub repository.  
+2. Review the code at the provided link: https://github.com/tensorflow/models/blob/9fb4a4fbcd888616586ceffa1b8806ffe1126f54/official/vision/ops/augment.py#L1566  
+3. Verify the calculation of the standard deviation for RandAugment and observe that it does not incorporate the `level_std*` term.  
+4. Run a test using RandAugment with varying levels to confirm that the standard deviation remains constant at 1.

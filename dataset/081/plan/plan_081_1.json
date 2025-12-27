@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and the DistilBertModel from transformers library",
+    "Define a batch size of 32 and sequence length of 512",
+    "Create random uniform input data with shape (batch_size, sequence_length)",
+    "Initialize a DistilBertModel with default parameters",
+    "Call the model forward method with the created input data",
+    "Verify output contains NaN values in loss calculation by comparing against a threshold",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold for batch_size 32"
+]
+```
+

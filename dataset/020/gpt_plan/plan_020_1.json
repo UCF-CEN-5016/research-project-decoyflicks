@@ -1,0 +1,16 @@
+[
+  "Use Python 3.8 environment (e.g., verify with python --version) to ensure compatibility context",
+  "Install TensorFlow Model Garden official package version 2.12.0 using pip: pip install tf-models-official==2.12.0",
+  "Use the Docker image tensorflow/tensorflow:2.12.0-gpu-jupyter or equivalent environment with TensorFlow 2.12.0 installed",
+  "Clone the TensorFlow models repository from https://github.com/tensorflow/models.git",
+  "Navigate to the object detection tutorial directory or set up a script replicating the object detection training pipeline as per https://www.tensorflow.org/tfmodels/vision/object_detection tutorial",
+  "Import required modules including tensorflow as tf and tfm.core.train_lib from tf-models-official",
+  "Construct or load the experiment configuration (exp_config) according to the tutorial, ensuring parameters are consistent with the example",
+  "Set up distribution_strategy and task objects as per the tutorial's training and evaluation example script",
+  "Define model_dir as a writable directory for model checkpoints and logs",
+  "Run the training and evaluation by executing the function call: model, eval_logs = tfm.core.train_lib.run_experiment(distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True)",
+  "Observe the runtime error during evaluation phase, specifically a TypeError at line 442 in base_trainer.py in eval_step with message: unsupported operand type(s) for |: 'dict' and 'dict'",
+  "Confirm that the error occurs because Python 3.8 does not support the dict union operator '|' introduced in Python 3.9",
+  "Assert that the error traceback points to the line: return passthrough_logs | logs in base_trainer.py",
+  "End test confirming that the TypeError is reproducible in this environment with tf-models-official==2.12.0 and Python 3.8"
+]

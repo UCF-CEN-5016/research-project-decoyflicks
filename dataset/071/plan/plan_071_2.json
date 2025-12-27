@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries including accelerate, diffusers, inspect and torch",
+    "Define function signatures for prepare_latents, decode_latents, run_safety_checker from the pipeline",
+    "Create a dummy pipeline object with mock implementations of these functions",
+    "Set up a batch size of 1 and image dimensions of 512x512",
+    "Generate random input latents of shape (batch_size * num_images_per_prompt, num_channels_latents, height, width) using randn_tensor function",
+    "Mock the scheduler's set_timesteps and step functions to return fixed values for testing",
+    "Call the main denoising loop with the specified parameters",
+    "Verify that the output latents contain NaN values by checking if they are not equal to themselves",
+    "Monitor the memory usage of the pipeline during execution using a profiler or manual memory checks",
+    "Assert that the memory usage exceeds an expected threshold indicating potential bug"
+]
+```
+

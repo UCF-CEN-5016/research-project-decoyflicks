@@ -1,0 +1,20 @@
+```json
+[
+    "Install TensorFlow version 2.13.0",
+    "Clone the TensorFlow Models repository from GitHub",
+    "Navigate to the 'research/object_detection/models' directory",
+    "Download and extract the Faster R-CNN Inception ResNet V2 640x640 model checkpoint",
+    "Set up a Google Colab environment with Python version 3.10.12",
+    "Import necessary modules: unittest, numpy, tensorflow.compat.v1 as tf, from object_detection.models import faster_rcnn_resnet_v1_feature_extractor as faster_rcnn_resnet_v1, and from object_detection.utils import tf_version",
+    "Define a batch size of 4 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Build the FasterRcnnResnetV1FeatureExtractorTest class by calling the _build_feature_extractor method with 'resnet_v1_101' architecture and first_stage_features_stride of 16",
+    "Extract proposal features using the extract_proposal_features method on the preprocessed inputs",
+    "Capture the shape of the extracted rpn_feature_map",
+    "Initialize TensorFlow variables",
+    "Run the session to evaluate the feature map shape",
+    "Assert that the evaluated shape is [4, 14, 14, 1024]",
+    "If assertion fails, reproduce the error by checking for a ValueError or InvalidArgumentError"
+]
+```
+

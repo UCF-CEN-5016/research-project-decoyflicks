@@ -1,0 +1,19 @@
+```json
+[
+    "Import unittest and tf.test.TestCase from the specified module path",
+    "Import parameterized from absl.testing",
+    "Import np for numpy operations",
+    "Import random for generating test data",
+    "Define a batch size of 1000 and input dimensions of 10x10",
+    "Create random normal input data with shape (batch_size, height, width) using np.random.normal",
+    "Set the standard deviation of the magnitude to 0 or 1 (this step is intentionally incorrect as per the bug report)",
+    "Define training_mean and training_var for training batch normalization",
+    "Call _train_freezable_batch_norm with use_sync_batch_norm=False and the previously defined parameters",
+    "Load the batch norm weights back up, freezing training to False",
+    "Apply the batch norm layer to testing data and ensure it is normalized according to the training data's statistics",
+    "Set training_arg to True and call _test_batchnorm_layer and verify that the standard deviation applied is not as expected",
+    "Repeat step 8 with training_arg set to False and verify that the standard deviation applied is not as expected",
+    "Test the layer in various Keras learning phase scopes (True, False, None) and verify that the standard deviation applied is not as expected"
+]
+```
+

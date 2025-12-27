@@ -1,0 +1,17 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required TensorFlow packages by running '!pip install tensorflow==2.10.0 tensorflow-object-detection-api==0.1.1'.",
+    "Import necessary libraries: 'import tensorflow as tf', 'import numpy as np', 'import matplotlib.pyplot as plt', 'from object_detection.utils import ops as utils_ops', 'from object_detection.utils import label_map_util', 'from object_detection.utils import visualization_utils as vis_util'.",
+    "Set the model URL to 'https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1' and load the model using 'model = tf.saved_model.load(model_url)'.",
+    "Prepare a sample image by loading it from a URL or local path, resizing it to (640, 640), and normalizing pixel values to [0, 1].",
+    "Create a batch of images by stacking the sample image into a numpy array with shape (1, 640, 640, 3).",
+    "Run the model on the batch of images to get detection results: 'detections = model(batch_images)'.",
+    "Extract the detection results: 'detection_boxes = detections['detection_boxes'].numpy()', 'detection_classes = detections['detection_classes'].numpy()', 'detection_scores = detections['detection_scores'].numpy()', 'num_detections = detections['num_detections'].numpy()'.",
+    "Check the keys in the detection results by printing 'print(detections.keys())' to ensure 'detection_masks' is included.",
+    "If 'detection_masks' is present, proceed to visualize the results by calling 'vis_util.visualize_boxes_and_labels_on_image_array(image_np, detection_boxes, detection_classes, detection_scores, category_index, use_normalized_coordinates=True, line_thickness=8)'.",
+    "Run the visualization code and observe the output to trigger the TypeError: 'Got an unexpected keyword argument 'box_ind'' during the execution of 'utils_ops.reframe_box_masks_to_image_masks'.",
+    "Capture the error message and stack trace to confirm the TypeError occurred, specifically looking for the line that mentions 'box_ind'.",
+    "Verify that the TensorFlow version is 2.10.0 by running '!pip list | grep tensorflow' and ensure it matches the expected version."
+]
+```

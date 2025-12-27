@@ -1,0 +1,21 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Set the environment variable for CUDA device connections by executing 'export CUDA_DEVICE_MAX_CONNECTIONS=1'",
+    "Create a new shell script named 'pretrain_gpt3_2.7b.sh' with the following content:",
+    "    #!/bin/bash",
+    "    export WORLD_SIZE=2",
+    "    export MASTER_ADDR='localhost'",
+    "    export MASTER_PORT=12345",
+    "    python -m torch.distributed.launch --nproc_per_node=$WORLD_SIZE training/DeepSpeed-Domino/pretrain_gpt3.py --model_name_or_path='gpt3-2.7b' --train_file='path/to/train_data.json' --output_dir='output/'",
+    "Make the script executable by running 'chmod +x pretrain_gpt3_2.7b.sh'",
+    "Create a dummy training data file 'train_data.json' with a simple JSON structure containing at least 1000 entries, each with a 'text' field.",
+    "Run the script using './pretrain_gpt3_2.7b.sh'",
+    "Monitor the console output for any errors during execution, specifically looking for the 'AttributeError: 'NoneType' object has no attribute 'all_reduce'' message.",
+    "If the error occurs, confirm that the global 'cdb' object was not initialized by checking the initialization code in 'training/DeepSpeed-Domino/domino/tensor_parallel/partition.py'.",
+    "Log the output of the error message to a file for further analysis by redirecting the output: './pretrain_gpt3_2.7b.sh > error_log.txt 2>&1'",
+    "Verify that the error message appears in 'error_log.txt' to confirm the bug is reproducible."
+]
+```

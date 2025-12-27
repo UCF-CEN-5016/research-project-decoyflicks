@@ -1,0 +1,16 @@
+TITLE  
+Error in cross_vit.py file leading to incorrect functionality
+
+SYMPTOMS  
+• The program fails to execute properly when attempting to run cross_vit.py.  
+• Error message: "AttributeError: 'NoneType' object has no attribute 'forward'"  
+• The output does not match the expected results for the given input data.  
+
+EXPECTED BEHAVIOR  
+The cross_vit.py script should execute without errors and produce correct output based on the provided input data.
+
+REPRODUCTION STEPS  
+1. Clone the vit_pytorch repository from GitHub.  
+2. Navigate to the directory containing cross_vit.py.  
+3. Run the script using the command: `python cross_vit.py --input <input_data>`.  
+4. Observe the output and any error messages generated.

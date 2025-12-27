@@ -1,0 +1,16 @@
+TITLE  
+RandAugment magnitude standard deviation incorrectly set to 1
+
+SYMPTOMS  
+• The standard deviation for RandAugment magnitudes is always 1, regardless of input.  
+• This leads to a lack of variability in the augmentation applied to images.  
+• No error messages are generated, but the output does not reflect expected variability.  
+
+EXPECTED BEHAVIOR  
+The standard deviation for RandAugment magnitudes should be adjustable and reflect the `level_std*` value, allowing for a range of standard deviations from 0 to 1, resulting in diverse augmentations.
+
+REPRODUCTION STEPS  
+1. Access the RandAugment implementation in the specified file: [augment.py](https://github.com/tensorflow/models/blob/9fb4a4fbcd888616586ceffa1b8806ffe1126f54/official/vision/ops/augment.py#L1566).  
+2. Review the code where the magnitude standard deviation is set.  
+3. Observe the absence of the `level_std*` variable being added to the magnitude calculation.  
+4. Run the augmentation process with various inputs and note the lack of standard deviation variability in the output.

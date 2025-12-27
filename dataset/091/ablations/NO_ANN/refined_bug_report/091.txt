@@ -1,0 +1,19 @@
+TITLE  
+Bug in `model.generate` when decoding sequences shorter than encoding sequences
+
+SYMPTOMS  
+• The `model.generate` function fails when attempting to decode a sequence that is shorter than the encoding sequence.  
+• Error message:  
+  ```
+  RuntimeError: The size of tensor a (258) must match the size of tensor b (230) at non-singleton dimension 3
+  ```  
+• The code does not produce any output when the input sequence length conditions are not met, leading to confusion about whether the function is working as intended.
+
+EXPECTED BEHAVIOR  
+The `model.generate` function should successfully generate a decoded sequence regardless of whether the decoding sequence length is shorter than the encoding sequence length. It should handle such cases gracefully without raising runtime errors.
+
+REPRODUCTION STEPS  
+1. Clone the repository containing the toy tasks example from [this link](https://github.com/lucidrains/x-transformers/tree/main/examples/toy_tasks).  
+2. Run the example script located in `example.py`.  
+3. Call the `model.generate` function with a source sequence (`src`) and a set of start tokens (`start_tokens`) where the length of `src` is greater than the length of the generated sequence (`ENC_SEQ_LEN`).  
+4. Observe the runtime error that occurs during execution.

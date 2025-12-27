@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary modules: argparse, os, deepspeed, torch, torch.nn, torch.nn.functional, torchvision, and torchvision.transforms",
+    "Define a function add_argument() to parse command line arguments with the following parameters: --epochs (default=30), --local_rank (default=-1), --log-interval (default=2000), --dtype (default='fp16'), --stage (default=0), --moe (default=False), --ep-world-size (default=1), --num-experts (default=[1]), --mlp-type (default='standard'), --top-k (default=1), --min-capacity (default=0), --noisy-gate-policy (default=None), --moe-param-group (default=False)",
+    "Call deepspeed.add_config_arguments(parser) within add_argument() to include DeepSpeed configuration arguments",
+    "Parse the arguments and return them from add_argument()",
+    "Define a function get_ds_config(args) to create a DeepSpeed configuration dictionary with train_batch_size=16, steps_per_print=2000, and other necessary parameters",
+    "Define a class Net that inherits from nn.Module, initializing a simple CNN architecture with two convolutional layers, two fully connected layers, and optional MoE layers based on the input arguments",
+    "In the main function, call deepspeed.init_distributed() to initialize the DeepSpeed distributed backend",
+    "Set the local device using get_accelerator().set_device(int(os.environ.get('LOCAL_RANK')))",
+    "Prepare CIFAR10 dataset by defining a transform to normalize the images and loading the dataset using torchvision.datasets.CIFAR10 with train=True for training and train=False for testing",
+    "Create a Net instance with the parsed arguments",
+    "Filter parameters of the model that require gradients and create separate parameter groups for MoE if args.moe_param_group is True",
+    "Initialize the DeepSpeed engine using deepspeed.initialize with the model, parameters, training data, and configuration",
+    "Set local_device to the device name obtained from get_accelerator().device_name(model_engine.local_rank)",
+    "Define a CrossEntropyLoss criterion",
+    "Run a training loop for args.epochs, iterating over the training data loader",
+    "In each iteration, get inputs and labels from the data, move them to local_device, and convert inputs to target_dtype if necessary",
+    "Call model_engine(inputs) to get outputs and compute the loss using criterion(outputs, labels)",
+    "Call model_engine.backward(loss) and model_engine.step() to perform backpropagation and optimization",
+    "Add a print statement to log the loss every args.log_interval iterations",
+    "Run the script with bash pretrain_gpt3_2.7b.sh and observe for the AttributeError related to 'NoneType' object has no attribute 'all_reduce'",
+    "Verify that the global cdb object is not initialized by checking if cdb is None before the all_reduce call"
+]
+```

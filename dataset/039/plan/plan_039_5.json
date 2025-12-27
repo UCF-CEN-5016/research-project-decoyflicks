@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries including dataclasses, torch, and labml modules",
+    "Define model parameters such as d_model, n_heads, n_layers, batch_size, seq_len, and num_classes",
+    "Create an instance of the MultiHeadAttention module with specified parameters",
+    "Initialize a TransformerLayer using the MultiHeadAttention and predefined feed-forward network",
+    "Create an AutoregressiveModel with EmbeddingsWithPositionalEncoding, initialized Transformer encoder, and a linear layer for output logits",
+    "Define the training loop with data loading, model evaluation, loss calculation, gradient backpropagation, and optimizer steps",
+    "Ensure that the batch size is set to 32 and seq_len is set to 10 for the example input data",
+    "Create synthetic input data of shape (batch_size, seq_len) filled with random integers between 0 and num_classes - 1",
+    "Feed the synthetic input data through the model during a training iteration",
+    "Verify that the output logits contain NaN values due to division by zero in the feed-forward network",
+    "Monitor the loss calculation step to check if the loss tensor contains NaN values",
+    "Assert that the presence of NaN values is expected behavior for the given inputs and parameters"
+]
+```
+

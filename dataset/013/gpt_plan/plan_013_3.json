@@ -1,0 +1,18 @@
+[
+  "Create a new conda environment with Python 3.10.13 using `conda create -n tf310 python=3.10.13` and activate it with `conda activate tf310`",
+  "Install TensorFlow 2.13.0 using `pip install tensorflow==2.13.0`",
+  "Install TensorFlow Model Garden nightly version using `pip install tf-models-nightly`",
+  "Download the TensorFlow Model Garden Vision Image Classification notebook from https://www.tensorflow.org/tfmodels/vision/image_classification",
+  "Open the downloaded notebook in VSCode or Jupyter",
+  "In the first cell, import matplotlib.pyplot as plt and check the current matplotlib backend by running `import matplotlib; print(matplotlib.get_backend())`; assert that the backend is interactive (e.g., 'TkAgg' or 'Qt5Agg')",
+  "Plot a simple figure before importing tensorflow_models to verify matplotlib works, e.g., `plt.plot([1,2,3],[4,5,6]); plt.show()`; assert that the plot window appears or plot is rendered inline",
+  "Import tensorflow_models module (e.g., `import tensorflow_models` or `from tensorflow_models import vision`) as done in the notebook",
+  "Immediately after importing tensorflow_models, check the matplotlib backend again with `print(matplotlib.get_backend())`; assert that it has switched to 'agg' backend indicating a non-interactive backend",
+  "Attempt to plot again using `plt.plot([1,2,3],[4,5,6]); plt.show()`; assert that the plot does not render or the plot window does not appear",
+  "Try changing the backend *after* importing tensorflow_models using `matplotlib.use('TkAgg')` and then plot again with `plt.plot([1,2,3],[4,5,6]); plt.show()`; assert that the plot still does not render",
+  "Restart the environment/kernel, and this time set the backend to 'TkAgg' before importing tensorflow_models using `import matplotlib; matplotlib.use('TkAgg')`",
+  "Then import tensorflow_models and repeat the plotting steps; assert that the plot renders correctly after importing tensorflow_models",
+  "Verify that the backend remains 'TkAgg' after importing tensorflow_models by printing `matplotlib.get_backend()`",
+  "Run the notebook cells that contain the additional plotting lines starting with 'plt' as shown in the bug report screenshot; assert that the first plotting cell shows the plot, but the second plotting cell after importing tensorflow_models does not",
+  "Document all backend values and plot rendering results at each step to confirm the bug reproduction"
+]

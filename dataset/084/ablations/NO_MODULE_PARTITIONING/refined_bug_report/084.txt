@@ -1,0 +1,16 @@
+TITLE  
+Unexpected 100% Accuracy Rate on Example Dataset
+
+SYMPTOMS  
+• The model achieves 100% accuracy in the first epoch using the provided example dataset.  
+• Training and validation accuracy remains at 100% across multiple epochs.  
+• Loss values are extremely low (e.g., 0.0000), indicating potential overfitting or issues with the dataset.  
+
+EXPECTED BEHAVIOR  
+The model should show a gradual increase in accuracy with a corresponding decrease in loss over several epochs, without reaching 100% accuracy too quickly. This indicates that the model is learning effectively and generalizing well to the dataset, rather than memorizing it.
+
+REPRODUCTION STEPS  
+1. Clone the repository containing the example code.  
+2. Install the necessary dependencies as outlined in the documentation.  
+3. Run the example code on a local machine with the provided parameters for the ViT model and Linformer transformer.  
+4. Observe the training logs for accuracy and loss metrics during the training process.

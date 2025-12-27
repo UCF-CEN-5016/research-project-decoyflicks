@@ -1,0 +1,11 @@
+{
+  "bug_report": "041",
+  "rank": 3,
+  "score": 0.8393514752388,
+  "main_file": {
+    "path": "dalle_pytorch/distributed_backends/horovod_backend.py",
+    "content": "import torch\n\nfrom .distributed_backend import DistributedBackend\n\n\nclass HorovodBackend(DistributedBackend):\n    \"\"\"Distributed backend using Horovod.\"\"\"\n\n    BACKEND_MODULE_NAME = 'horovod.torch'\n    BACKEND_NAME = 'Horovod'\n\n    def wrap_arg_parser(self, parser):\n        return parser\n\n    def check_batch_size(self, batch_size):\n        # Horovod uses the local batch size to determine the effective\n        # batch size.\n        pass\n\n    def _initialize(self):\n        self.backend_module.init()\n        if torch.cuda.is_available():\n            torch.cuda.set_device(self._get_local_rank())\n\n    def _get_world_size(self):\n        return self.backend_module.size()\n\n    def _get_rank(self):\n        return self.backend_module.rank()\n\n    def _get_local_rank(self):\n        return self.backend_module.local_rank()\n\n    def _local_barrier(self):\n        # Actually a global barrier but works for our purposes.\n        self.backend_module.join()\n\n    def _distribute(\n            self,\n            _args=None,\n            model=None,\n            optimizer=None,\n            _model_parameters=None,\n            training_data=None,\n            lr_scheduler=None,\n            **_kwargs,\n    ):\n        optimizer = self.backend_module.DistributedOptimizer(optimizer)\n        self.backend_module.broadcast_parameters(\n            model.state_dict(), root_rank=self.ROOT_RANK)\n        self.backend_module.broadcast_optimizer_state(\n            optimizer, root_rank=self.ROOT_RANK)\n        return (model, optimizer, training_data, lr_scheduler)\n\n    def _average_all(self, tensor):\n        # Reduce op is average by default\n        averaged = self.backend_module.allreduce(tensor)\n        return averaged\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

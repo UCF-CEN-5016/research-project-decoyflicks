@@ -1,0 +1,18 @@
+TITLE  
+Incorrect LayerNorm Dimension in RegionViT Implementation
+
+SYMPTOMS  
+• The LayerNorm implementation in RegionViT does not conform to the expected input dimensions.  
+• Potential errors related to tensor shape mismatch may occur during model training or inference.  
+• The output may not normalize correctly across the specified dimensions, leading to degraded model performance.  
+
+EXPECTED BEHAVIOR  
+The LayerNorm should correctly normalize the input tensor based on the specified dimensions, either across the channels `C` or across all dimensions `[C, H, W]`, ensuring that the model performs as intended without errors.
+
+REPRODUCTION STEPS  
+1. Clone the RegionViT repository from GitHub.  
+2. Navigate to the `regionvit.py` file located in `vit_pytorch`.  
+3. Locate the LayerNorm implementation between lines 212-221.  
+4. Check the input tensor dimensions being passed to LayerNorm.  
+5. Run the model with a sample input tensor that has channel-first and channel-last formats.  
+6. Observe the output and any error messages related to tensor shape mismatches.

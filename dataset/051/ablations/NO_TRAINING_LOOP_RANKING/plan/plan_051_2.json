@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, tensorflow, and random",
+    "Set the random seed for reproducibility using random.seed(42)",
+    "Define a batch size of 32 and a maximum sequence length of 128",
+    "Load the English-to-Spanish translation dataset using tfds.load('ted_hrlr_translate/pt_to_en')",
+    "Preprocess the dataset to extract English sentences and their corresponding Spanish translations",
+    "Create a KerasNLP GPT-2 model using keras_nlp.models.GPT2CausalLM.from_preset with preset 'gpt2_base_en'",
+    "Create a KerasNLP preprocessor using keras_nlp.models.GPT2CausalLMPreprocessor.from_preset with preset 'gpt2_base_en' and sequence_length=128",
+    "Compile the model with AdamW optimizer and SparseCategoricalCrossentropy loss",
+    "Train the model on the preprocessed dataset for 1 epoch",
+    "Define a function decode_sequences that takes a list of input sentences",
+    "Inside decode_sequences, concatenate a start token and padding to the input sentences",
+    "Call keras_nlp.samplers.GreedySampler() with the model and the concatenated input",
+    "Pass the prompt to the sampler with the unexpected keyword argument 'end_token_id'",
+    "Run a loop to randomly select 2 input sentences from the test dataset and call decode_sequences",
+    "Capture the TypeError exception when decode_sequences is called, asserting that the error message contains 'unexpected keyword argument 'end_token_id''",
+    "Print the error message to confirm the bug has been reproduced"
+]
+```

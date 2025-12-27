@@ -1,0 +1,30 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, os, xml.etree.ElementTree, and tqdm",
+    "Define constants: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 1",
+    "Create a list of class IDs: class_ids = ['car', 'pedestrian', 'trafficLight', 'biker', 'truck']",
+    "Create a class mapping dictionary: class_mapping = dict(zip(range(len(class_ids)), class_ids))",
+    "Set paths for images and annotations: path_images = '/path/to/images/', path_annot = '/path/to/annotations/'",
+    "Collect all XML annotation file paths: xml_files = sorted([os.path.join(path_annot, file_name) for file_name in os.listdir(path_annot) if file_name.endswith('.xml')])",
+    "Collect all JPEG image file paths: jpg_files = sorted([os.path.join(path_images, file_name) for file_name in os.listdir(path_images) if file_name.endswith('.jpg')])",
+    "Define a function parse_annotation(xml_file) to extract image paths, bounding boxes, and class IDs from XML files",
+    "Iterate over xml_files and call parse_annotation to populate image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists to ragged tensors: bbox = tf.ragged.constant(bbox), classes = tf.ragged.constant(classes), image_paths = tf.ragged.constant(image_paths)",
+    "Create a tf.data.Dataset from the image_paths, classes, and bbox: data = tf.data.Dataset.from_tensor_slices((image_paths, classes, bbox))",
+    "Split the dataset into training and validation sets: num_val = int(len(xml_files) * SPLIT_RATIO), val_data = data.take(num_val), train_data = data.skip(num_val)",
+    "Define a function load_image(image_path) to read and decode images",
+    "Define a function load_dataset(image_path, classes, bbox) to prepare images and bounding boxes for training",
+    "Map load_dataset function to train_data to create train_ds: train_ds = train_data.map(load_dataset, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Shuffle and batch train_ds: train_ds = train_ds.shuffle(BATCH_SIZE * 4).ragged_batch(BATCH_SIZE, drop_remainder=True)",
+    "Define a data augmentation pipeline using keras_cv.layers and create an augmenter: augmenter = keras.Sequential([...])",
+    "Apply the augmenter to train_ds: train_ds = train_ds.map(augmenter, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Map load_dataset function to val_data to create val_ds: val_ds = val_data.map(load_dataset, num_parallel_calls=tf.data.AUTOTUNE)",
+    "Shuffle and batch val_ds: val_ds = val_ds.shuffle(BATCH_SIZE * 4).ragged_batch(BATCH_SIZE, drop_remainder=True)",
+    "Define a YOLOv8 model using keras_cv.models.YOLOV8Detector with num_classes = len(class_mapping), bounding_box_format = 'xyxy', and a backbone",
+    "Compile the model with an optimizer and loss functions: optimizer = tf.keras.optimizers.Adam(...), model.compile(...)",
+    "Define a callback class EvaluateCOCOMetricsCallback to evaluate the model during training",
+    "Call model.fit with train_ds and val_ds for 1 epoch: model.fit(train_ds, validation_data=val_ds, epochs=1, callbacks=[EvaluateCOCOMetricsCallback(val_ds, 'model.h5')])",
+    "Capture the output and check for InvalidArgumentError during model fitting",
+    "Assert that the error message contains 'InvalidArgumentError' indicating a graph execution error"
+]
+```

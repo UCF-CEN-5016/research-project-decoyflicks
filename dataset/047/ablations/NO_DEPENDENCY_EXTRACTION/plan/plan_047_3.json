@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the model path to the pre-trained model: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Define the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10",
+    "Sort the audio files to maintain a specific order: audio_files.sort()",
+    "Run the inference command using subprocess: subprocess.run(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files)",
+    "Capture the output logs from the inference command: output_logs = subprocess.check_output(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files, stderr=subprocess.STDOUT)",
+    "Decode the output logs to a string: output_logs_str = output_logs.decode('utf-8')",
+    "Split the output logs into lines: output_lines = output_logs_str.split('\\n')",
+    "Extract the input audio file paths from the output logs: input_audio_paths = [line for line in output_lines if 'Input:' in line]",
+    "Extract the corresponding output transcriptions from the output logs: output_transcriptions = [line for line in output_lines if 'Output:' in line]",
+    "Create a mapping of audio file names to their expected transcriptions based on the sorted audio files: expected_transcriptions = {os.path.basename(audio_file): expected_transcription for audio_file, expected_transcription in zip(audio_files, ['expected transcription 1', 'expected transcription 2', 'expected transcription 3', 'expected transcription 4', 'expected transcription 5', 'expected transcription 6', 'expected transcription 7', 'expected transcription 8', 'expected transcription 9', 'expected transcription 10'])}",
+    "Validate the order of the output transcriptions against the expected order: for i, audio_file in enumerate(audio_files): assert output_transcriptions[i] == expected_transcriptions[os.path.basename(audio_file)]",
+    "Log the results of the validation to confirm the order is incorrect: print('Output transcriptions are in the wrong order!') if any(output_transcriptions[i] != expected_transcriptions[os.path.basename(audio_files[i])] for i in range(len(audio_files))) else print('Output transcriptions are in the correct order.')"
+]
+```

@@ -1,0 +1,17 @@
+[
+  "Clone or download the keras-io repository to access the MIRNet example file located at examples/vision/mirnet.py",
+  "Open the file examples/vision/mirnet.py and locate line 347 where the variable level2_dau_2 is defined",
+  "Confirm that level2_dau_2 is assigned a value (e.g., a tensor from a previous layer) but is not used anywhere else in the code",
+  "Locate line 352 where the function selective_kernel_feature_fusion is called with arguments (level1_dau_2, level3_dau_2, level3_dau_2)",
+  "Note that level2_dau_2 is not used as an argument in this call, which might be a typo",
+  "Prepare a minimal test script that imports the mirnet.py model or copies the relevant model-building code, specifically the code block containing level1_dau_2, level2_dau_2, level3_dau_2, and the selective_kernel_feature_fusion call",
+  "Create dummy input data as a TensorFlow tensor with shape compatible with MIRNet input, for example shape=(1, 128, 128, 3), dtype=tf.float32",
+  "Build the MIRNet model instance or call the function that constructs the model up to the point where level2_dau_2 is defined and selective_kernel_feature_fusion is called",
+  "Run a forward pass on the dummy input and capture the outputs of selective_kernel_feature_fusion or intermediate tensors level1_dau_2, level2_dau_2, level3_dau_2 to compare their shapes and values",
+  "Specifically verify if the outputs differ when substituting level3_dau_2 twice versus using level2_dau_2 in the second argument, by patching the code to replace selective_kernel_feature_fusion(level1_dau_2, level3_dau_2, level3_dau_2) with selective_kernel_feature_fusion(level1_dau_2, level2_dau_2, level3_dau_2)",
+  "Assert that the original code's output with repeated level3_dau_2 arguments is different from the output with level2_dau_2 included, indicating that the unused variable level2_dau_2 was supposed to be used",
+  "Log or print the tensor shapes and values of level1_dau_2, level2_dau_2, level3_dau_2 and the selective_kernel_feature_fusion output for both cases to demonstrate the impact of the potential typo",
+  "Check for any warnings, errors, or unexpected behavior during the forward pass that might hint at the variable misuse",
+  "Summarize that level2_dau_2 is computed but never used, and the selective_kernel_feature_fusion call likely contains a typo by passing level3_dau_2 twice instead of level2_dau_2 and level3_dau_2",
+  "Include specific versions of TensorFlow and Keras used (e.g., TensorFlow 2.11.0, Keras 2.11.0) to ensure reproducibility"
+]

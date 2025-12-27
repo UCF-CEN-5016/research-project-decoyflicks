@@ -1,0 +1,17 @@
+```json
+[
+    "Set up a Python environment with TensorFlow 2.16.0.dev20231103 and tf-keras 2.16.0",
+    "Clone the TensorFlow models repository from https://github.com/tensorflow/models.git at the latest commit",
+    "Navigate to the directory 'official/legacy/image_classification'",
+    "Create a Python script named 'test_classifier_trainer.py'",
+    "Import necessary modules including tensorflow, keras.optimizers, and any other dependencies required by classifier_trainer.py",
+    "Define command-line arguments for mode='train_and_eval', model_type='resnet', dataset='imagenet', and data_dir='/dir_to_imagnet_data'",
+    "Create a mock data directory '/dir_to_imagnet_data' containing valid imagenet images or use a placeholder for demonstration purposes",
+    "Implement the necessary code to parse command-line arguments in 'test_classifier_trainer.py'",
+    "Call the 'train_and_eval' function from classifier_trainer.py with the defined arguments",
+    "Run the script using the command: python3 test_classifier_trainer.py --mode=train_and_eval  --model_type=resnet  --dataset=imagenet --data_dir=/dir_to_imagnet_data",
+    "Observe the output of the script and validate that an AttributeError occurs due to 'AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'",
+    "Check the traceback for specific lines in 'classifier_trainer.py' and 'ema_optimizer.py' where the error originates"
+]
+```
+

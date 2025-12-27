@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras.backend as K, import keras.layers as KL, import keras.models as KM, import numpy as np, import os",
+    "Define the model directory: set MODEL_DIR = os.path.join(os.getcwd(), 'logs')",
+    "Define the COCO model path: set COCO_MODEL_PATH = os.path.join(MODEL_DIR, 'mask_rcnn_coco.h5')",
+    "Create a configuration class for Mask R-CNN: define a class Config with necessary attributes like NUM_CLASSES, IMAGES_PER_GPU, etc.",
+    "Instantiate the configuration: set config = Config()",
+    "Set the mode to inference: set mode = 'inference'",
+    "Create an instance of the Mask R-CNN model: set model = modellib.MaskRCNN(mode=mode, model_dir=MODEL_DIR, config=config)",
+    "Attempt to load weights: call model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Catch the NotImplementedError: wrap the load_weights call in a try-except block to catch NotImplementedError",
+    "Print the error message to confirm the bug: print the error message when the NotImplementedError is caught",
+    "Verify the TensorFlow version: assert that tf.__version__ is compatible with the Mask R-CNN implementation (e.g., TensorFlow 2.x)",
+    "Check the Keras version: assert that K.__version__ is compatible with the Mask R-CNN implementation (e.g., Keras 2.x)",
+    "Ensure the COCO_MODEL_PATH points to a valid HDF5 file: assert os.path.exists(COCO_MODEL_PATH) to confirm the file exists",
+    "Run the notebook cell to reproduce the bug and observe the output for the NotImplementedError"
+]
+```

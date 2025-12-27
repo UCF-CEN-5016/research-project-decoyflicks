@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries for reproducing the bug, including torch, transformers, and apex.",
+    "Set up a reproducible random seed to ensure consistent results across runs.",
+    "Load the pre-trained BERT model from 'pytorch_pretrained_bert' using a specified configuration.",
+    "Create a dummy dataset with a batch size of 16 and a sequence length of 512, filled with random integers between 0 and 30522 (BERT vocabulary size).",
+    "Define a label tensor with the same batch size as the input data, containing randomly chosen integer values between 0 and 9.",
+    "Move the input and label tensors to a CUDA device if available, ensuring the model and data are on the same device.",
+    "Initialize the BERT model for sequence classification using 'BertForSequenceClassification' with a configuration loaded from a specified path.",
+    "Call the forward method of the BERT model with the dummy input tensor and label tensor.",
+    "Capture the output logits and calculate the loss using 'CrossEntropyLoss'.",
+    "Verify that the calculated loss contains NaN values by checking if any element in the loss tensor is Not a Number (np.isnan(loss.item())).",
+    "Monitor GPU memory usage during the forward pass and model initialization.",
+    "Assert that the peak GPU memory usage exceeds a specified threshold to confirm memory-related issues."
+]
+```
+

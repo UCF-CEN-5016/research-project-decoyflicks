@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the device to CUDA if available: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define the model path: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Set the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are at least 10 audio files: assert len(audio_files) >= 10, 'Not enough audio files for testing'",
+    "Select the first 10 audio files for inference: selected_audio_files = audio_files[:10]",
+    "Construct the command to run the inference script: command = f'python -u examples/mms/asr/infer/mms_infer.py --model {model_path} --lang {lang} --audio ' + ' '.join(selected_audio_files)",
+    "Run the inference command using os.system(command)",
+    "Capture the output logs from the inference command: output_logs = os.popen(command).read()",
+    "Extract the output text from the inference logs: output_text = extract_output_text(output_logs)",
+    "Extract the expected order of output from the text file: expected_output = read_expected_output('/path/to/expected_output.txt')",
+    "Compare the order of output logs with the expected output: assert output_text == expected_output, 'Output order is incorrect'",
+    "Print the output logs and expected output for debugging: print('Output Logs:', output_text, 'Expected Output:', expected_output)",
+    "Verify that the output logs are not in the same order as the expected output: assert output_text != expected_output, 'Output logs are in the correct order'"
+]
+```

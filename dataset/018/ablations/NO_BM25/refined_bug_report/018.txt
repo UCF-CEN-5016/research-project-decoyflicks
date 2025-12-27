@@ -1,0 +1,19 @@
+TITLE  
+Invalid choice for --use-feature option in pip installation command
+
+SYMPTOMS  
+• Unable to execute the command `python -m pip install --use-feature=2020-resolver .`  
+• Error message received:  
+  ```
+  option --use-feature: invalid choice: '2020-resolver' (choose from 'fast-deps', 'truststore','no-binary-enable-wheel-cache')
+  ```  
+• The command fails to install TensorFlow Object Detection API (TFOD2) as per the provided instructions.
+
+EXPECTED BEHAVIOR  
+The command should successfully install the TensorFlow Object Detection API (TFOD2) without any errors, utilizing the 2020 resolver feature.
+
+REPRODUCTION STEPS  
+1. Follow the instructions from the provided link: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2.md  
+2. Attempt to execute the command:  
+   `python -m pip install --use-feature=2020-resolver .`  
+3. Observe the error message indicating an invalid choice for the `--use-feature` option.

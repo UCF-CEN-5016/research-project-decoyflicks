@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and Keras modules: keras.layers, keras.models, and keras.utils",
+    "Set the random seed for reproducibility using numpy: np.random.seed(42)",
+    "Define a batch size of 32 and image dimensions of 128x128 with 3 color channels",
+    "Create random uniform input data with shape (batch_size, height, width, channels) = (32, 128, 128, 3)",
+    "Create random integer labels for 10 classes with shape (batch_size, height, width) = (32, 128, 128)",
+    "Define a simple model using Sequential API with Conv2D layers and a final Dense layer for classification",
+    "Compile the model using SparseCategoricalCrossentropy as the loss function and Adam optimizer",
+    "Fit the model on the input data and labels for 5 epochs with validation split of 0.1",
+    "Capture the training loss and accuracy during the fit process",
+    "Verify that the model's training loss is significantly high (e.g., > 2.0) indicating poor performance",
+    "Check the shape of the labels before fitting the model to ensure it is (32, 128, 128) and not (32, 128, 128, 1)",
+    "Assert that the model's output shape is (32, 10) after the final Dense layer",
+    "Log the model summary to confirm the architecture matches expectations",
+    "Print the final training loss and accuracy to confirm the model is not learning effectively"
+]
+```

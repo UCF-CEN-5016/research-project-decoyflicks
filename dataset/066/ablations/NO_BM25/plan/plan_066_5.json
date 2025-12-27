@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, pandas, matplotlib, and rdkit",
+    "Set random seed for reproducibility using np.random.seed(42) and tf.random.set_seed(42)",
+    "Download the BBBP dataset from 'https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/BBBP.csv' using keras.utils.get_file",
+    "Load the dataset into a pandas DataFrame and select columns: name, label, and SMILES",
+    "Define the AtomFeaturizer and BondFeaturizer classes to encode atom and bond features respectively",
+    "Implement the molecule_from_smiles function to convert SMILES strings to RDKit molecule objects",
+    "Implement the graph_from_molecule function to convert RDKit molecule objects to graph representations (atom_features, bond_features, pair_indices)",
+    "Create a list of SMILES strings from the DataFrame and convert them to graphs using graphs_from_smiles function",
+    "Shuffle the indices of the dataset and split it into training (80%), validation (19%), and test (1%) sets",
+    "Define the MPNNModel function to create a message-passing neural network model with specified parameters",
+    "Compile the MPNN model with BinaryCrossentropy loss and Adam optimizer",
+    "Train the model using the training dataset and validate it using the validation dataset for 40 epochs",
+    "Modify line 352 in the model code to use level2_dau_2 instead of level3_dau_2 in the selective_kernel_feature_fusion function",
+    "Run the training process again to observe the model's behavior with the modified line",
+    "Check the model's output and training history for any discrepancies or errors related to the unused variable level2_dau_2",
+    "Assert that the variable level2_dau_2 is not utilized in the model's computations, confirming the bug"
+]
+```

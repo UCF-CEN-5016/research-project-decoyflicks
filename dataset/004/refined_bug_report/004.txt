@@ -1,0 +1,36 @@
+TITLE
+MixUp and CutMix Implementation Bug Results in Incorrect Beta Distribution Sampling
+
+SYMPTOMS
+• Very bad mixup samples as shown in the provided image.
+• Incorrect results when calling `_sample_from_beta` with specific parameters.
+
+EXPECTED BEHAVIOR
+The function `_sample_from_beta` should correctly sample from a beta distribution, producing values that are proportional to the given `alpha` and `beta` parameters. The output should be between 0 and 1, representing the mixup ratio for each sample.
+
+REPRODUCTION STEPS
+1. Import necessary libraries:
+```python
+import tensorflow_models as tfm
+import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
+```
+2. Generate a range of values and attempt to sample from the beta distribution using `MixupAndCutmix._sample_from_beta` with incorrect implementation.
+```python
+a = tf.range(1000)
+x = tfm.vision.augment.MixupAndCutmix._sample_from_beta(0.2, 0.2, tf.shape(tf.range(1000))).numpy()
+```
+3. Plot the KDE (Kernel Density Estimate) of the sampled values:
+```python
+import seaborn as sns
+sns.kdeplot(x, clip=(0, 1))
+```
+4. Compare with correct implementation using `np.random.beta`:
+```python
+x = np.random.beta(0.2, 0.2, 100000)
+sns.kdeplot(x, clip=(0, 1))
+plt.show()
+```
+
+Note: The provided image link should be used to visually compare the output from both methods.

@@ -1,0 +1,23 @@
+In ResidualSimVQ: return_loss is not defined
+
+See here: https://github.com/lucidrains/vector-quantize-pytorch/blob/ac5d63174dd234ab75259a68a4ab246774863f6e/vector_quantize_pytorch/residual_sim_vq.py#L153
+
+```
+[rank2]:   File "/home/ubuntu/sky_workdir/my_cool_project/sim_vq.py", line 313, in forward
+[rank2]:     should_quantize_dropout = self.training and self.quantize_dropout and not return_loss
+[rank2]:                                                                               ^^^^^^^^^^^
+[rank2]: NameError: name 'return_loss' is not defined
+```
+
+There appear to be no mentions of a return_loss variable elsewhere in the file, leftover from a previous commit?
+
+
+
+Edit:
+
+Also, there are some shape inconsistencies when using quantizer dropout and channels_first (17 timesteps, 1024 dim):
+
+```
+all_losses:  [torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([1]), torch.Size([1]), torch.Size([1])]
+all_indicies:  [torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 1024, 17]), torch.Size([2, 1024, 17]), torch.Size([2, 1024, 17])]
+```

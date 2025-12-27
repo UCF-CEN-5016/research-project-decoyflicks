@@ -1,0 +1,15 @@
+[
+  "Create a Python script or Jupyter notebook using Python 3.8 environment",
+  "Install the package tf-models-official version 2.12.0 (e.g., pip install tf-models-official==2.12.0)",
+  "Import TensorFlow (tf) and the official model garden training utilities, especially tfm.core.train_lib and any necessary task and config modules",
+  "Set up a distribution strategy, for example: distribution_strategy = tf.distribute.get_strategy()",
+  "Prepare or load an object detection task instance compatible with tf-models-official 2.12.0 (e.g., task = object_detection_task_object), ensure it uses default configuration parameters",
+  "Load or create an experiment configuration dictionary or object (exp_config) required by run_experiment, using values from the tutorial or minimal defaults",
+  "Set model_dir to a valid temporary or local directory path for checkpoints and logs",
+  "Call the function tfm.core.train_lib.run_experiment with parameters: distribution_strategy=distribution_strategy, task=task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True",
+  "Run the script and observe the execution until it reaches the evaluation step inside run_experiment",
+  "Verify that a TypeError is raised with the message: \"unsupported operand type(s) for |: 'dict' and 'dict'\" originating from official/core/base_trainer.py line 442 in eval_step",
+  "Specifically confirm that the error occurs when the code attempts to merge two dictionaries using the '|' operator (e.g., return passthrough_logs | logs) which is unsupported in Python 3.8",
+  "Assert that the error does not occur when running the same code in Python 3.10 or higher (optional for baseline comparison)",
+  "Document the stack trace and error message to confirm the exact failure location and cause"
+]

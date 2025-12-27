@@ -1,0 +1,16 @@
+[
+    "Import dataclasses and labml modules for configuration and tracking",
+    "Define a batch size of 10 and sequence length of 256",
+    "Create random input data with shape (batch_size, sequence_length)",
+    "Initialize AutoregressiveModel, MultiHeadAttention, and TransformerLayer with specific parameters",
+    "Move the model to a GPU device if available",
+    "Define loss function as CrossEntropyLoss",
+    "Set up Noam optimizer with initial learning rate of 1.0, warmup steps of 2000, and d_model size equal to model's embedding dimension",
+    "Create DataLoader for training data with specific dataset path",
+    "Train the model for 5 epochs using the DataLoader",
+    "During training, periodically generate samples from the model to capture output during training",
+    "Verify that loss values are not NaN after each epoch",
+    "Monitor GPU memory usage during training",
+    "Assert that GPU memory usage exceeds expected threshold indicating potential bug"
+]
+

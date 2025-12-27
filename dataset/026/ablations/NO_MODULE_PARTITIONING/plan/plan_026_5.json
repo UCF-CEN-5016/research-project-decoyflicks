@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, NumPy, and Matplotlib",
+    "Set the TensorFlow version to 2.10.0 by running '!pip install tensorflow==2.10.0'",
+    "Import the required modules from TensorFlow and object detection API: from object_detection.utils import ops as utils_ops, visualization_utils as vis_util",
+    "Load the pre-trained model from TensorFlow Hub using tf.saved_model.load() with the model URL: 'https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1'",
+    "Prepare two sample images for inference, ensuring they are in the correct format (e.g., 640x640 pixels, RGB)",
+    "Create a function to preprocess the images: resize them to (640, 640) and normalize pixel values to [0, 1]",
+    "Run inference on the images using the loaded model and store the results in a variable called 'detections'",
+    "Extract the detection results: 'detection_boxes', 'detection_classes', 'detection_scores', and 'num_detections' from the 'detections' variable",
+    "Create a function to visualize the results using the extracted detection data and the original images",
+    "In the visualization function, call utils_ops.reframe_box_masks_to_image_masks() with parameters: detection_masks, detection_boxes, image_np.shape[1], image_np.shape[2]",
+    "Ensure to pass the 'box_ind' argument to utils_ops.reframe_box_masks_to_image_masks() to trigger the TypeError",
+    "Run the visualization function with the original images and detection results",
+    "Capture the output and check for the TypeError: 'Got an unexpected keyword argument 'box_ind'' in the logs",
+    "Verify that the images with labels are not displayed in the output as expected due to the error"
+]
+```

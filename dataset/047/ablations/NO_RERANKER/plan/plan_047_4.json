@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the model path to the pre-trained model: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Define the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10, 'Expected 10 audio files'",
+    "Run the inference command using subprocess: subprocess.run(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files)",
+    "Capture the output logs from the inference command: output_logs = subprocess.check_output(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files, stderr=subprocess.STDOUT)",
+    "Decode the output logs to a string: output_logs = output_logs.decode('utf-8')",
+    "Split the output logs into lines: output_lines = output_logs.split('\\n')",
+    "Extract the expected output order from the text file: expected_output = ['1089-134686-0000', '1089-134686-0001', '1089-134686-0002', '1089-134686-0003', '1089-134686-0004', '1089-134686-0005', '1089-134686-0006', '1089-134686-0007', '1089-134686-0008', '1089-134686-0009']",
+    "Extract the actual output order from the output logs: actual_output = [line.split(' ')[-1] for line in output_lines if 'Input:' in line]",
+    "Assert that the actual output order matches the expected output order: assert actual_output == expected_output, 'Output order is incorrect'",
+    "Print the actual output order for verification: print('Actual output order:', actual_output)",
+    "Print the expected output order for verification: print('Expected output order:', expected_output)"
+]
+```

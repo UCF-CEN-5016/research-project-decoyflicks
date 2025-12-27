@@ -1,0 +1,20 @@
+[
+  "Clone or download the Keras-IO GitHub repository to access the file at path examples/vision/mirnet.py",
+  "Open the file examples/vision/mirnet.py and navigate to line 347 to locate the variable declaration of level2_dau_2",
+  "Confirm that level2_dau_2 is assigned a value (likely a layer output or a tensor), but is never used after its assignment in the code",
+  "Navigate to line 352 in the same file, where selective_kernel_feature_fusion is called with parameters level1_dau_2, level3_dau_2, level3_dau_2",
+  "Note that level2_dau_2 is not used in the selective_kernel_feature_fusion call, suggesting a potential typo where level3_dau_2 is repeated",
+  "Set up a Python environment with TensorFlow and Keras installed, matching the versions used by the example to avoid compatibility issues",
+  "Write a minimal script that imports the MIRNet model from examples/vision/mirnet.py or inlines the relevant code snippet containing the variables level1_dau_2, level2_dau_2, level3_dau_2, and the call to selective_kernel_feature_fusion",
+  "In this script, define dummy input tensors with specific shapes matching the expected input to the MIRNet model layers, for example with shape (1, 64, 64, 64) or as required by the example",
+  "Run the code segment that includes the selective_kernel_feature_fusion call with the original arguments (level1_dau_2, level3_dau_2, level3_dau_2)",
+  "Capture the output tensor from selective_kernel_feature_fusion and print its shape and content summary",
+  "Modify the code to replace the second argument in selective_kernel_feature_fusion from level3_dau_2 to level2_dau_2 as suggested in the bug report diff",
+  "Run the modified code and capture the output tensor similarly",
+  "Compare the outputs from the original and modified calls; assert that the original call does not incorporate level2_dau_2 output, and the modified call does",
+  "Verify that the variable level2_dau_2 is actually computed and non-null by printing its shape and checking for NaNs or zeros",
+  "Add assertions to confirm that level2_dau_2 tensor is different from level3_dau_2 tensor, to validate that the typo leads to redundant input usage",
+  "Optionally, write unit tests that check the presence of level2_dau_2 in the fusion function input parameters when modified, and absence when original",
+  "Document all observations, including that the original code never uses level2_dau_2 after its creation, confirming the bug",
+  "Conclude reproduction by running the full MIRNet example to confirm no runtime errors occur but the fusion layer input redundancy exists"
+]

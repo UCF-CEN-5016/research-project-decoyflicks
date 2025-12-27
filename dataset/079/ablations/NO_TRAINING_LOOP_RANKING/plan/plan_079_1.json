@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 2 and image dimensions of 224x224 with 3 channels (RGB)",
+    "Create random input data with shape (batch_size, channels, height, width) = (2, 3, 224, 224)",
+    "Instantiate the RegionViT model with default parameters: dim=(64, 128, 256, 512), depth=(2, 2, 8, 2), window_size=7, num_classes=1000, tokenize_local_3_conv=True, local_patch_size=4, use_peg=False, attn_dropout=0., ff_dropout=0.",
+    "Pass the random input data through the model by calling model.forward(input_data)",
+    "Capture the output from the model and check its shape",
+    "Verify that the output shape is (batch_size, num_classes) = (2, 1000)",
+    "Check if any LayerNorm layers are incorrectly applied by asserting the input to LayerNorm has the shape (batch_size, channels) or (batch_size, channels, height, width)",
+    "Assert that the input to LayerNorm in the local_encoder has shape (2, 64) after the first Conv2d layer",
+    "Check for any runtime errors or warnings during the forward pass, especially related to LayerNorm",
+    "Log the output of the model to verify if it contains unexpected values (e.g., NaNs or Infs)",
+    "Assert that the output contains NaN values to confirm the bug is reproduced"
+]
+```

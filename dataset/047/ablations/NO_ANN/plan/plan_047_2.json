@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the model path to the pre-trained model: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Define the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10, 'Expected 10 audio files'",
+    "Run the inference command using subprocess: subprocess.run(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files)",
+    "Capture the output logs from the inference command: output_logs = subprocess.check_output(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files, stderr=subprocess.STDOUT)",
+    "Decode the output logs to a string: output_logs_str = output_logs.decode('utf-8')",
+    "Split the output logs into lines: output_lines = output_logs_str.split('\\n')",
+    "Extract the expected output order from the text file: expected_output = ['1089-134686-0000 HE HOPED THERE WOULD BE STEW FOR DINNER TURNIPS AND CARROTS AND BRUISED POTATOES AND FAT MUTTON PIECES TO BE LADLED OUT IN THICK PEPPERED FLOUR FATTENED SAUCE', '1089-134686-0001 STUFF IT INTO YOU HIS BELLY COUNSELLED HIM', '1089-134686-0002 AFTER EARLY NIGHTFALL THE YELLOW LAMPS WOULD LIGHT UP HERE AND THERE THE SQUALID QUARTER OF THE BROTHELS', '1089-134686-0003 HELLO BERTIE ANY GOOD IN YOUR MIND', '1089-134686-0004 NUMBER TEN FRESH NELLY IS WAITING ON YOU GOOD NIGHT HUSBAND', '1089-134686-0005 THE MUSIC CAME NEARER AND HE RECALLED THE WORDS THE WORDS OF SHELLEY'S FRAGMENT UPON THE MOON WANDERING COMPANIONLESS PALE FOR WEARINESS', '1089-134686-0006 THE DULL LIGHT FELL MORE FAINTLY UPON THE PAGE WHEREON ANOTHER EQUATION BEGAN TO UNFOLD ITSELF SLOWLY AND TO SPREAD ABROAD ITS WIDENING TAIL', '1089-134686-0007 A COLD LUCID INDIFFERENCE REIGNED IN HIS SOUL', '1089-134686-0008 THE CHAOS IN WHICH HIS ARDOUR EXTINGUISHED ITSELF WAS A COLD INDIFFERENT KNOWLEDGE OF HIMSELF', '1089-134686-0009 AT MOST BY AN ALMS GIVEN TO A BEGGAR WHOSE BLESSING HE FLED FROM HE MIGHT HOPE WEARILY TO WIN FOR HIMSELF SOME MEASURE OF ACTUAL GRACE']",
+    "Extract the actual output from the logs: actual_output = [line for line in output_lines if 'Input:' in line]",
+    "Verify the order of the actual output against the expected output: assert actual_output == expected_output, 'Output order is incorrect'"
+]
+```

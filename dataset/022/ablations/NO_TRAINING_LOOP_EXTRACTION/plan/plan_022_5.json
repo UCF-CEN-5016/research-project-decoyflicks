@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official.vision.ops.augment",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Set the RandAugment parameters: num_layers=2, level_mean=0.5, level_std=0.0",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Instantiate the RandAugment class with the defined parameters",
+    "Apply RandAugment to the input data",
+    "Capture the output of the augmentation process",
+    "Check the standard deviation of the applied augmentations",
+    "Assert that the standard deviation is equal to 1, indicating the bug is present",
+    "Modify the level_std parameter to 1.0 and repeat the augmentation process",
+    "Capture the output of the augmentation process again",
+    "Check the standard deviation of the applied augmentations after modification",
+    "Assert that the standard deviation is still equal to 1, confirming the bug persists"
+]
+```

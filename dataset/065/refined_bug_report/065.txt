@@ -1,0 +1,23 @@
+TITLE
+Import Error for FeatureSpace from Keras_UTILS
+
+SYMPTOMS
+• ImportError: cannot import name 'FeatureSpace' from 'keras.utils'
+• The error occurs in the file `structured_data_classification_with_feature_space.py` located at <https://github.com/keras-team/keras-io/tree/master/examples/structured_data/structured_data_classification_with_feature_space.py>
+• Error message:
+```
+ImportError: cannot import name 'FeatureSpace' from 'keras.utils' (/usr/local/lib/python3.8/dist-packages/keras/utils/__init__.py)
+```
+
+EXPECTED BEHAVIOR
+• The code should be able to successfully import the `FeatureSpace` class from `keras.utils` and use it in the example.
+• No import errors or runtime exceptions are expected.
+
+REPRODUCTION STEPS
+1. Clone the Keras-IO repository: `git clone https://github.com/keras-team/keras-io.git`
+2. Navigate to the examples directory: `cd keras-io/examples/structured_data`
+3. Run the script `structured_data_classification_with_feature_space.py`:
+```
+python structured_data_classification_with_feature_space.py
+```
+4. Observe that an ImportError occurs when trying to import `FeatureSpace`.

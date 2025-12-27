@@ -1,0 +1,17 @@
+```json
+[
+    "Import the necessary modules from keras and tensorflow",
+    "Define a batch size of 16 and image dimensions of (28, 28, 3)",
+    "Create random uniform input data with shape (batch_size, height, width, channels)",
+    "Define the ViViT model architecture using the provided functions and classes",
+    "Compile the model with Adam optimizer, sparse_categorical_crossentropy loss, and accuracy metrics",
+    "Load test dataset from MedMNIST or a similar dataset with 25 samples for validation",
+    "Train the model on the training dataset for 1 epoch",
+    "Evaluate the trained model on the validation dataset",
+    "Capture the output of the model's predictions on the validation set",
+    "Assert that the loss during evaluation is NaN (Not a Number)",
+    "Monitor GPU memory usage during training and inference",
+    "Assert that the GPU memory usage exceeds a predefined threshold indicating potential overflow issues"
+]
+```
+

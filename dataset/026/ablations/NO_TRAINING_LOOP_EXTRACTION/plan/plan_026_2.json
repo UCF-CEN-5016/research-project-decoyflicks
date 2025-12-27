@@ -1,0 +1,14 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required TensorFlow and TensorFlow Object Detection API versions by running: !pip install tensorflow==2.10.0 tensorflow-object-detection-api==0.1.1",
+    "Import necessary libraries by executing: import tensorflow as tf, import numpy as np, from object_detection.utils import ops as utils_ops, from object_detection.utils import label_map_util, from object_detection.utils import visualization_utils as vis_util",
+    "Set the image dimensions and batch size by defining: image_height = 640, image_width = 480, batch_size = 1",
+    "Load a sample image into a NumPy array with shape (batch_size, image_height, image_width, 3) using: image_np = np.random.rand(batch_size, image_height, image_width, 3).astype(np.float32)",
+    "Create a mock detection output dictionary with the following keys and values: detection_boxes = np.array([[[0.1, 0.1, 0.5, 0.5]]]), detection_classes = np.array([[1]]), detection_scores = np.array([[0.9]]), detection_masks = np.array([[[1]]]), num_detections = np.array([[1]])",
+    "Call the visualization function with the mock detection output by executing: vis_util.visualize_boxes_and_labels_on_image_array(image_np[0], detection_boxes[0], detection_classes[0], detection_scores[0], category_index={1: {'id': 1, 'name': 'test'}}, use_normalized_coordinates=True, line_thickness=8)",
+    "Run the cell to execute the visualization code and trigger the bug.",
+    "Observe the output for the TypeError: Got an unexpected keyword argument 'box_ind' during the visualization step.",
+    "Verify that the error message appears in the output logs, confirming the bug has been reproduced."
+]
+```

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from vector_quantize_pytorch",
+    "Define a batch size of 2 and input dimensions of (2, 1024, 17) for the input tensor x",
+    "Instantiate the ResidualSimVQ class with parameters: dim=1024, num_quantizers=3, codebook_size=256, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1, channel_first=True",
+    "Create a random input tensor x with shape (2, 1024, 17) using torch.randn",
+    "Set the model to training mode by calling model.train()",
+    "Call the forward method of the ResidualSimVQ instance with the input tensor x and without the return_loss parameter",
+    "Capture the output of the forward method call",
+    "Verify that the output does not raise a NameError by checking for the presence of the variable return_loss in the forward method",
+    "If a NameError is raised, log the error message to confirm the bug is reproduced",
+    "Check the shapes of all_losses and all_indices returned from the forward method to ensure they match expected dimensions",
+    "Assert that the shapes of all_losses contain at least one empty tensor, indicating a potential issue with loss calculation"
+]
+```

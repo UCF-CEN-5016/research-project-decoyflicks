@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from object_detection.utils and object_detection.protos",
+    "Set the path to the pipeline.config file as 'configpath = /path/to/your/pipeline.config'",
+    "Load the configuration from the pipeline.config file using config_util.get_configs_from_pipeline_file(configpath)",
+    "Create an instance of pipeline_pb2.TrainEvalPipelineConfig()",
+    "Open the pipeline.config file in read mode using tf.io.gfile.GFile(configpath, 'r')",
+    "Read the contents of the pipeline.config file into a variable 'proto_str'",
+    "Use text_format.Merge(proto_str, pipeline_config) to parse the contents into the pipeline_config object",
+    "Attempt to set pipeline_config.eval_input_reader.max_number_of_boxes = 500",
+    "Catch the AttributeError exception and print the error message to confirm the bug",
+    "Prepare a dataset of images with over 100 objects per image, ensuring at least one image contains 500 objects",
+    "Set the training parameters: batch_size = 8, num_steps = 270000, and learning_rate = 0.001",
+    "Train the model using the dataset and the modified pipeline_config without the max_number_of_boxes line",
+    "Monitor the training accuracy and loss metrics during training to confirm they do not converge above 0.04",
+    "Log the training process and any errors encountered during the training phase",
+    "Verify that the model does not improve in accuracy when trained on images with high object counts without the specified config lines",
+    "Repeat the training process with the max_number_of_boxes line added directly to the pipeline.config file to confirm that it resolves the issue"
+]
+```

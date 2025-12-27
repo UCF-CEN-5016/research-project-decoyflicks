@@ -1,0 +1,44 @@
+TITLE  
+Issue with Model Convergence for Images with Over 100 Objects
+
+SYMPTOMS  
+• The model fails to converge when training on images containing more than 100 objects unless specific configurations are set.  
+• Adding the line `pipeline_config.eval_input_reader.max_number_of_boxes = 500` via `pipeline_pb2.TrainEvalPipelineConfig()` results in the error:  
+  `AttributeError: 'google.protobuf.pyext._message.RepeatedCompositeContainer' object has no attribute 'max_number_of_boxes'`  
+• The model only recognizes 100 bounding boxes per image, leading to poor accuracy (maximum of 0.04) after extensive training (over 270K steps) on highly clustered images.
+
+EXPECTED BEHAVIOR  
+When configured correctly, the model should effectively process images with a high number of objects (up to 500) and converge to a satisfactory accuracy level during training.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries:  
+   ```python  
+   import tensorflow as tf  
+   from object_detection.utils import config_util  
+   from object_detection.protos import pipeline_pb2  
+   from google.protobuf import text_format  
+   ```  
+2. Specify the path to the `pipeline.config` file:  
+   ```python  
+   configpath = #Path to pipeline.config file  
+   ```  
+3. Load the configuration from the pipeline file:  
+   ```python  
+   config = config_util.get_configs_from_pipeline_file(configpath)  
+   ```  
+4. Create a `TrainEvalPipelineConfig` object:  
+   ```python  
+   pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()  
+   ```  
+5. Read the `pipeline.config` file:  
+   ```python  
+   with tf.io.gfile.GFile(configpath, "r") as f:  
+       proto_str = f.read()  
+       text_format.Merge(proto_str, pipeline_config)  
+   ```  
+6. Attempt to set the maximum number of boxes:  
+   ```python  
+   pipeline_config.eval_input_reader.max_number_of_boxes = 500  
+   ```  
+7. Observe the error when running the code.  
+8. Modify the `pipeline.config` file directly to include the line and verify that the model trains without errors.

@@ -1,0 +1,23 @@
+TITLE
+ValueError: List argument 'values' to 'ConcatV2' Op with length 0
+
+SYMPTOMS
+• Encountered a ValueError during the evaluation phase in the function '_generate_detections_v2_class_aware'.
+• Error message: "ValueError: List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2."
+• The function fails when the predicted boxes input has a length of 0.
+
+EXPECTED BEHAVIOR
+The function '_generate_detections_v2_class_aware' should handle cases where the predicted boxes input has a length of 0 or 1 without raising an error.
+
+REPRODUCTION STEPS
+1. Pass an input with length 0 tensors as predicted boxes to the function '_generate_detections_v2_class_aware'.
+2. Observe the resulting ValueError during the evaluation phase. 
+
+ADDITIONAL CONTEXT
+- The issue occurs in the file: https://github.com/tensorflow/models/tree/master/official/vision/modeling/layers/detection_generator.py
+- System information:
+  - OS: Linux Ubuntu 20.04
+  - TensorFlow version: v2.11.0-rc2-17-gd5b57ca93e5 (2.11.0)
+  - Python version: 3.10.9
+  - CUDA/cuDNN version: 11.2 / 8.4.0
+  - GPU model: 2 * 3090, 2 * 24G

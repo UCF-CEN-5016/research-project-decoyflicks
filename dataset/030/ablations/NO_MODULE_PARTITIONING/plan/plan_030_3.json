@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import os, import argparse, import torch",
+    "Set the device to GPU: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define the command line arguments for the training script: parser = argparse.ArgumentParser()",
+    "Add arguments for the training script: parser.add_argument('--brats', action='store_true'), parser.add_argument('--brats22_model', action='store_true'), parser.add_argument('--scheduler', action='store_true'), parser.add_argument('--learning_rate', type=float, default=0.0003), parser.add_argument('--epochs', type=int, default=10), parser.add_argument('--fold', type=int, default=0), parser.add_argument('--gpus', type=int, default=1), parser.add_argument('--task', type=int, default=11), parser.add_argument('--nfolds', type=int, default=10), parser.add_argument('--save_ckpt', action='store_true')",
+    "Parse the arguments: args = parser.parse_args()",
+    "Set the environment variable for CUDA: os.environ['CUDA_VISIBLE_DEVICES'] = '0'",
+    "Create a dummy dataset for BraTS training: train_data = torch.randn(1125, 4, 128, 128, 128), val_data = torch.randn(126, 4, 128, 128, 128), test_data = torch.randn(1251, 4, 128, 128, 128)",
+    "Define a simple nnUNet model: class SimpleUNet(nn.Module): def __init__(self): super(SimpleUNet, self).__init__(), self.conv1 = nn.Conv3d(4, 64, kernel_size=3, padding=1), self.conv2 = nn.Conv3d(64, 1, kernel_size=3, padding=1), def forward(self, x): x = self.conv1(x), x = self.conv2(x), return x",
+    "Instantiate the model: model = SimpleUNet().to(device)",
+    "Define a PyTorch Lightning module: class LitModel(pl.LightningModule): def __init__(self, model): super(LitModel, self).__init__(), self.model = model, def forward(self, x): return self.model(x), def training_step(self, batch, batch_idx): x, y = batch, self.forward(x), loss = F.mse_loss(y, y), return loss",
+    "Instantiate the Lightning model: lit_model = LitModel(model)",
+    "Set up the PyTorch Lightning trainer: trainer = pl.Trainer(gpus=args.gpus, max_epochs=args.epochs)",
+    "Attempt to fit the model using the trainer: trainer.fit(lit_model, train_data)",
+    "Capture the output and error message during training: try: trainer.fit(lit_model, train_data) except Exception as e: print(e)",
+    "Verify that the error message contains 'MisconfigurationException' and specifically mentions 'CosineAnnealingWarmRestarts' not following the LRScheduler API",
+    "Check the version of PyTorch Lightning being used: print(pl.__version__)",
+    "Ensure that the installed version of PyTorch Lightning is compatible with the current PyTorch version: assert pl.__version__ == '2.2.0'",
+    "Log the GPU memory usage before and after training to confirm resource allocation: print(torch.cuda.memory_allocated())"
+]
+```

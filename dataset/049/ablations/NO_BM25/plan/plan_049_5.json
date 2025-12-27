@@ -1,0 +1,19 @@
+```json
+[
+    "Import torch and the necessary modules from fairseq",
+    "Define a batch size of 2 and set the dimensions for the input tensors: src_len = 10, tgt_len = 10, num_heads = 2",
+    "Create a random tensor for p_choose with shape (batch_size, tgt_len, src_len) using torch.rand(batch_size, tgt_len, src_len)",
+    "Create a padding mask tensor with shape (batch_size, src_len) using torch.randint(0, 2, (batch_size, src_len)).bool() to simulate padding",
+    "Define the expected_alignment_formula function as provided in the code context",
+    "Call expected_alignment_formula with p_choose, mass_perservation=True, and the created padding mask",
+    "Capture the output of expected_alignment_formula and check its shape to ensure it matches (batch_size, tgt_len, src_len)",
+    "Create a tensor for soft_energy with shape (batch_size, tgt_len, src_len) using torch.rand(batch_size, tgt_len, src_len)",
+    "Define the expected_soft_attention_formula function as provided in the code context",
+    "Call expected_soft_attention_formula with the output from expected_alignment_formula, soft_energy, and the created padding mask",
+    "Capture the output of expected_soft_attention_formula and check its shape to ensure it matches (batch_size, tgt_len, src_len)",
+    "Create a tensor for the bias terms in the RelPositionMultiHeadedAttention layer using torch.Tensor(2, 2) to simulate uninitialized bias parameters",
+    "Perform a simple operation with the uninitialized bias tensor, such as adding it to a zero tensor of the same shape using torch.zeros(2, 2) + bias_tensor",
+    "Check the output of the operation for NaN values using assert torch.isnan(output).any() to verify the bug occurs",
+    "Log the output of the uninitialized bias tensor to observe its values before the operation"
+]
+```

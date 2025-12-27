@@ -1,0 +1,14 @@
+```json
+[
+    "Import torch and the necessary modules from fairseq",
+    "Define the dimensions for the bias parameters: u_bias_dim = 10, v_bias_dim = 10",
+    "Create an instance of the RelPositionMultiHeadedAttention class from fairseq with the following parameters: num_heads=2, embed_dim=10, u_bias_dim=10, v_bias_dim=10",
+    "Initialize the model without setting the bias parameters explicitly to torch.zeros",
+    "Create a dummy input tensor with shape (batch_size=1, seq_length=5, embed_dim=10) filled with random values using torch.rand",
+    "Pass the dummy input tensor through the attention layer to trigger the initialization of the bias parameters",
+    "Capture the output of the attention layer",
+    "Check the values of the bias parameters u and v after the forward pass",
+    "Assert that the values of the bias parameters u and v are not initialized (i.e., they contain NaN or uninitialized values)",
+    "Print the values of the bias parameters u and v to verify the presence of NaN or uninitialized values"
+]
+```

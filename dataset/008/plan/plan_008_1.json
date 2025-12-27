@@ -1,0 +1,20 @@
+```json
+[
+    "Install TensorFlow version 2.13.0 and necessary dependencies using pip install tensorflow==2.13.0",
+    "Import the required modules including unittest for testing, numpy for numerical operations, and tensorflow.compat.v1 as tf for compatibility with TensorFlow 2.x",
+    "Set up Google Colab by navigating to https://colab.research.google.com/ and attaching a GPU runtime",
+    "Download the Faster R-CNN Inception ResNet V2 640x640 pretrained model from http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_inception_resnet_v2_640x640_coco17_tpu-8.tar.gz",
+    "Extract the downloaded model files to a local directory",
+    "Import the FasterRcnnResnetV1FeatureExtractorTest class from research/object_detection/models/faster_rcnn_resnet_v1_feature_extractor_tf1_test.py",
+    "Create a TensorFlow session using tf.test.TestCase as the test case class",
+    "Define a batch size of 4 and image dimensions of 224x224 with RGB format (3 channels)",
+    "Generate random uniform input data preprocessed_inputs with shape (batch_size, height, width, 3) where maxval=255 and dtype=tf.float32",
+    "Call the _build_feature_extractor method with architecture='resnet_v1_101' to create a feature extractor instance",
+    "Pass the preprocessed_inputs to the extract_proposal_features method of the feature extractor instance, using scope='TestScope'",
+    "Capture the output rpn_feature_map from the extract_proposal_features method",
+    "Run the TensorFlow session to execute the operations and obtain the shape of rpn_feature_map",
+    "Assert that the shape of rpn_feature_map is [4, 14, 14, 1024] using self.assertAllEqual(features_shape_out, [4, 14, 14, 1024])",
+    "Run the test suite and verify that the ValueError occurs when calling _build_feature_extractor with an invalid stride of 99"
+]
+```
+

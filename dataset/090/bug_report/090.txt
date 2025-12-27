@@ -1,0 +1,8 @@
+encoder.to_logits.weight doesn't update
+
+It seems that parameter `encoder.to_logits.weight` in an Encoder/Decoder is not part of the forward pass. This creates problems when running DDP. 
+
+Should these weights be removed in such case?
+
+Reproducible example:
+- https://gist.github.com/guillaumeguy/ff96c1f337d99109a6ab2666a896ad3c

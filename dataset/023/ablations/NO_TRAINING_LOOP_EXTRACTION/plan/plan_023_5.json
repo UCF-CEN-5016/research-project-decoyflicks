@@ -1,0 +1,15 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Import TensorFlow and necessary modules by running: import tensorflow as tf; from official.vision.utils.object_detection import box_list, balanced_positive_negative_sampler; from official.vision.ops import anchor_generator, box_matcher, iou_similarity, target_gather.",
+    "Set the TensorFlow version to 2.12 by running: !pip install tensorflow==2.12.",
+    "Define the parameters for the anchor generator: min_level = 3, max_level = 7, num_scales = 3, aspect_ratios = [0.5, 1.0, 2.0], anchor_size = 256.",
+    "Create a dummy image size: image_size = [640, 640].",
+    "Instantiate the anchor generator by running: anchor_gen = anchor_generator.AnchorGenerator(anchor_sizes={str(level): anchor_size * (2 ** level) for level in range(min_level, max_level + 1)}, scales=[2 ** (scale / float(num_scales)) for scale in range(num_scales)], aspect_ratios=aspect_ratios, strides={str(level): 2 ** level for level in range(min_level, max_level + 1)}).",
+    "Create a dummy ground truth box tensor: gt_boxes = tf.constant([[100, 100, 200, 200], [150, 150, 250, 250]], dtype=tf.float32).",
+    "Create a dummy ground truth label tensor: gt_labels = tf.constant([[1], [2]], dtype=tf.int32).",
+    "Call the label_anchors method of the RpnAnchorLabeler class with the anchor boxes generated and the dummy ground truth boxes and labels: rpn_labeler = RpnAnchorLabeler(); anchor_boxes = anchor_gen.generate_anchors(image_size); rpn_labeler.label_anchors(anchor_boxes, gt_boxes, gt_labels).",
+    "Run the cell and observe the output for any errors or exceptions.",
+    "Verify that an error occurs during the execution of the label_anchors method, indicating that the import of required libraries from TensorFlow models has failed."
+]
+```

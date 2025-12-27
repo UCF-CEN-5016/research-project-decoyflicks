@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules for EfficientDet from tensorflow_hub and tensorflow.keras",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 8 and image dimensions of 512x512",
+    "Load the EfficientDet model using tf.keras.applications.EfficientDet with model_name='efficientdet_d1_coco17_tpu-32'",
+    "Prepare a custom dataset with 100 images, ensuring they are resized to (512, 512, 3) and normalized to [0, 1]",
+    "Create a tf.data.Dataset from the custom dataset with batch size of 8 and shuffle the dataset",
+    "Define a loss function using tf.keras.losses.SparseCategoricalCrossentropy()",
+    "Compile the model using model.compile(optimizer='adam', loss=loss_function, metrics=['accuracy'])",
+    "Fit the model on the dataset using model.fit(dataset, epochs=5)",
+    "During training, monitor the console output for warnings related to gradients",
+    "Assert that the warning 'Gradients do not exist for variables...' appears in the console output",
+    "Log the specific variables mentioned in the warning to verify they match the reported variables in the bug report",
+    "Check the model summary to ensure the layers and their parameters are correctly initialized before training",
+    "Verify that the loss function is correctly passed to model.compile() and is not None"
+]
+```

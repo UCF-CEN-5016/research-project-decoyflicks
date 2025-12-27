@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import numpy as np, import matplotlib.pyplot as plt, from object_detection.utils import ops as utils_ops, from object_detection.utils import visualization_utils as vis_util",
+    "Set the TensorFlow version to 2.10.0 by running: tf.__version__",
+    "Define a batch size of 1 and image dimensions of 640x480",
+    "Load a sample image and preprocess it to have shape (1, height, width, 3) using: image_np = np.random.rand(1, 480, 640, 3)",
+    "Load the TensorFlow Hub model for object detection using: model = tf.saved_model.load('path_to_saved_model')",
+    "Run inference on the sample image using: detections = model(image_np)",
+    "Extract detection results: detection_boxes = detections['detection_boxes'], detection_classes = detections['detection_classes'], detection_scores = detections['detection_scores'], detection_masks = detections['detection_masks'], num_detections = detections['num_detections']",
+    "Check the keys of the detection results using: print(detections.keys()) to ensure all expected keys are present",
+    "Attempt to visualize the results by calling: vis_util.visualize_boxes_and_labels_on_image_array(image_np[0], detection_boxes, detection_classes, detection_scores, category_index, use_normalized_coordinates=True, line_thickness=8)",
+    "Capture the output and check for TypeError by wrapping the visualization call in a try-except block and printing the error message if it occurs",
+    "Assert that the error message contains 'unexpected keyword argument 'box_ind'' to confirm the bug is reproduced"
+]
+```

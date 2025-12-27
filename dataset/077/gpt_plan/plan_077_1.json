@@ -1,0 +1,20 @@
+[
+  "Import TensorFlow, Keras layers and models, and TensorFlow Hub",
+  "Set a fixed random seed for reproducibility",
+  "Mount or configure access to Google Drive or local filesystem where image files are stored",
+  "Define the directory path variable to 'drive/MyDrive/Dog Vision/train/' exactly as in the error message",
+  "Create a TensorFlow Dataset or Keras ImageDataGenerator that loads images from 'drive/MyDrive/Dog Vision/train/' with batch size 32 and target size (224, 224)",
+  "Ensure that the dataset or generator references the specific missing file '17e00d79ad69729522d8705e95939f01.jpg' in the training set",
+  "Define validation data similarly, pointing to an existing validation directory or dataset",
+  "Create a function 'create_model' that loads the MobileNetV2 model from TensorFlow Hub using the URL 'https://tfhub.dev/google/imagenet/mobilenet_v2_130_224/classification/5' with input shape (224, 224, 3)",
+  "Inside 'train_model', instantiate the model by calling 'create_model'",
+  "Create a TensorBoard callback instance with a fixed log directory",
+  "Define an EarlyStopping callback instance",
+  "Call 'model.fit' with the training dataset, epochs=100, validation_data as defined, validation_freq=1, and callbacks=[tensorboard, early_stopping]",
+  "Run 'train_model()' to start training",
+  "Observe that during the first epoch, a NotFoundError occurs indicating that 'drive/MyDrive/Dog Vision/train/17e00d79ad69729522d8705e95939f01.jpg' does not exist",
+  "Catch and log the exact error message from the TensorFlow graph execution",
+  "Assert that the error message contains 'No such file or directory' and references the missing image path",
+  "Confirm that changing the directory path to other locations that do not contain the specified missing file also results in similar NotFoundError",
+  "Validate that the error is reproducible on repeated runs without modifying the dataset or file paths"
+]

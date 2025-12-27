@@ -1,0 +1,91 @@
+Matplotlib pyplot not working on a python 3.10 conda environment (Fixed, but unsure how fix works)
+
+# Prerequisites
+
+Please answer the following questions for yourself before submitting an issue.
+
+- [ X ] I am using the latest TensorFlow Model Garden release and TensorFlow 2.
+- [ X ] I am reporting the issue to the correct repository. (Model Garden official or research directory)
+- [ X ] I checked to make sure that this issue has not been filed already.
+
+## 0. The fix
+
+(Also, one can read through 1-5 first.)
+
+Quoting some of my text / images in this report's part 5,
+
+"
+Changing to the backend before importing tensorflow_models, though, does work:
+<img width="1000" alt="Screen Shot 2023-09-16 at 10 52 43 AM" src="https://github.com/tensorflow/models/assets/118628756/8289ac87-1611-4b07-8737-9ad9c5844932">
+
+And after the rest works nicely.
+"
+
+## 1. The entire URL of the file you are using
+
+Not a file, but [this notebook.](https://www.tensorflow.org/tfmodels/vision/image_classification)
+
+## 2. Describe the bug
+
+matplotlib's pyplot does not seem to be working after importing tensorflow_models. On the other hand, it seems to be working before importing. 
+
+## 3. Steps to reproduce
+1. Download VSCode.
+2. Create a new conda environment with python 3.10 (3.10.13?); download tensorflow with [this link](https://www.tensorflow.org/install/pip)
+3. Install TF Model Garden using pip; also use pip3 install tf-models-nightly.
+4. On [this link](https://www.tensorflow.org/tfmodels/vision/image_classification), click the "Download notebook" icon that appears next to the "Run in Google Colab" and "View on Github" icons.
+5. Add some extra lines of code, each of which have "plt" as the first letters:
+<img width="800" alt="Screen Shot 2023-09-16 at 10 39 04 AM" src="https://github.com/tensorflow/models/assets/118628756/bc1e5c58-5ea9-46b1-a3e6-2efa8bd66ae4">
+6. Run the two lines in the screenshot. 
+
+
+## 4. Expected behavior
+
+Both cells should show the plot, but only the first one does:
+<img width="1000" alt="Screen Shot 2023-09-16 at 10 40 27 AM" src="https://github.com/tensorflow/models/assets/118628756/9bd12d6f-d3bd-4bd8-8c94-c67d8885daf2">
+
+## 5. Additional context
+
+These extra lines of code show below the plot, which doesn't show if the lines of code creating the plot aren't added.
+
+<img width="1000" alt="Screen Shot 2023-09-16 at 10 41 11 AM" src="https://github.com/tensorflow/models/assets/118628756/38f849bd-9452-449a-9f9c-e8064ebf6ee5">
+
+Checking the matplotlib backend after importing tensorflow_models shown below it seems to be agg, so it does not plot as it is a non-interactive backend.
+
+<img width="700" alt="Screen Shot 2023-09-16 at 10 43 45 AM" src="https://github.com/tensorflow/models/assets/118628756/536ba7b1-da75-49e8-99a4-8d5d5b9bac89">
+
+But before importing tensorflow_models, the backend is different:
+<img width="1000" alt="Screen Shot 2023-09-16 at 10 44 19 AM" src="https://github.com/tensorflow/models/assets/118628756/56e46117-8026-4681-a77e-68c0c5fe25be">
+
+Changing to TkAgg, an interactive backend, after importing tensorflow_models, doesn't work:
+<img width="1000" alt="Screen Shot 2023-09-16 at 10 51 04 AM" src="https://github.com/tensorflow/models/assets/118628756/660df1fb-3dd6-4be5-95ec-be7ef1ddf632">
+
+Changing to the backend before importing tensorflow_models, though, does work:
+<img width="1000" alt="Screen Shot 2023-09-16 at 10 52 43 AM" src="https://github.com/tensorflow/models/assets/118628756/8289ac87-1611-4b07-8737-9ad9c5844932">
+
+And after the rest works nicely.
+
+## 6. System information
+
+- OS Platform and Distribution (e.g., Linux Ubuntu 16.04): 2.13.0
+- Mobile device name if the issue happens on a mobile device:
+- TensorFlow installed from (source or binary): [this link](https://www.tensorflow.org/install/pip)
+- TensorFlow version (use command below): 2.13.10
+- Python version: 3.10.13 (3.10?)
+- Bazel version (if compiling from source): ?
+- GCC/Compiler version (if compiling from source): ?
+- CUDA/cuDNN version: From [this link,](https://www.tensorflow.org/install/pip) cuDNN version should be 8.6.0.163 (CUDA 12.0?)
+- GPU model and memory: NVIDIA GeForce RTX 3090, 24576 MiB (?)
+
+<!-- 
+Collect system information using our environment capture script.
+https://github.com/tensorflow/tensorflow/tree/master/tools/tf_env_collect.sh
+
+You can also obtain the TensorFlow version with:
+
+1. TensorFlow 1.0
+`python -c "import tensorflow as tf; print(tf.GIT_VERSION, tf.VERSION)"`
+
+5. TensorFlow 2.0
+`python -c "import tensorflow as tf; print(tf.version.GIT_VERSION, tf.version.VERSION)"`
+-->

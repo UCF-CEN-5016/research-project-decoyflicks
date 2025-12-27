@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch and nn from torch",
+    "Define a batch size of 4 and set d_model to 4 (the feature dimension)",
+    "Create a random tensor 'x' with shape (4, 3, 2, 4) to simulate input data, where 4 is the batch size, 3 is the number of heads, 2 is the sequence length, and 4 is the feature dimension",
+    "Create a RelativeMultiHeadAttention instance with heads=3, d_model=4, and dropout_prob=0.1",
+    "Initialize the key_pos_embeddings and key_pos_bias parameters with random values: key_pos_embeddings should have shape (2^12 * 2, 3, 4) and key_pos_bias should have shape (2^12 * 2, 3)",
+    "Set the query_pos_bias parameter with random values of shape (3, 4)",
+    "Call the get_scores method of the RelativeMultiHeadAttention instance with 'x' as both the query and key inputs",
+    "Inside the get_scores method, ensure that key_pos_emb is sliced correctly based on the shape of 'x' to have shape (2^12, 3, 4)",
+    "Create cos_cached and sin_cached tensors with shape (4, 3, 2, 4) to simulate the cached cosine and sine values",
+    "Perform the operation x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Capture the RuntimeError that occurs during the tensor operation, specifically looking for the message 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the shapes of x_rope, cos_cached, and sin_cached before the operation to verify the dimensions causing the error"
+]
+```

@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.nlp.modeling and absl.testing",
+    "Define a vocabulary size of 100 and a sequence length of 512",
+    "Create a test network using BertEncoder with vocab_size=100 and num_layers=2",
+    "Instantiate the BertSpanLabeler model with the created test network",
+    "Create input tensors for word_ids, mask, and type_ids with shape (2, sequence_length) using tf.keras.Input",
+    "Set word_ids to tf.constant([[1]*sequence_length, [2]*sequence_length], dtype=tf.int32)",
+    "Set mask to tf.constant([[1]*sequence_length, [1, 0] + [0]*(sequence_length-2)], dtype=tf.int32)",
+    "Set type_ids to tf.constant([[1]*sequence_length, [2]*sequence_length], dtype=tf.int32)",
+    "Invoke the bert_trainer_model with the input tensors: [word_ids, mask, type_ids]",
+    "Capture the output of the model invocation",
+    "Check the output length to ensure it is 2, indicating two outputs are produced",
+    "Verify that the shapes of the outputs are [None, sequence_length] for both outputs",
+    "Modify the augmentation logic in augment.py to remove level_std* from the calculation",
+    "Re-run the model invocation with the modified augment.py",
+    "Assert that the standard deviation of the applied augmentations is always 1",
+    "Log the output values to confirm the standard deviation behavior",
+    "Check for any runtime errors or unexpected behavior during the model invocation"
+]
+```

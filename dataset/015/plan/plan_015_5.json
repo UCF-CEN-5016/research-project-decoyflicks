@@ -1,0 +1,11 @@
+[
+    "Import TensorFlow and necessary functions from tf_slim and nets module",
+    "Set batch size to 2 and image dimensions to 65x65",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call resnet_v1 function using a pre-defined block configuration for resnet_v1_50",
+    "Specify num_classes as 10 and global_pool as True",
+    "Verify output logits contain NaN values during evaluation",
+    "Monitor GPU memory usage during execution of the model",
+    "Assert GPU memory usage exceeds expected threshold due to large model size and batch normalization"
+]
+

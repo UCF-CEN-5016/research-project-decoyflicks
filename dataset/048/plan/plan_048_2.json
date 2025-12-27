@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules from fairseq and torch",
+    "Define a batch size of 32",
+    "Create a language pair dataset with source and target vocab sizes of 10000 each",
+    "Initialize a SequenceGenerator model with embedding dimensions of 512",
+    "Create a NoisingDataset instance with the language pair dataset and noising probability of 0.1",
+    "Prepend special tokens to the dictionary and model using predefined mono_languages list",
+    "Set up an optimizer for the model parameters",
+    "Train the model on the noised dataset for 2 epochs",
+    "Assert that the weights of the model have changed during training"
+]
+```
+

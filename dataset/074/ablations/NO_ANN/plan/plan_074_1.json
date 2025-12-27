@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary modules: argparse, torch, DataLoader, RandomSampler, and DeepSpeedRLHFEngine from dschat.",
+    "Set the random seed for reproducibility using set_random_seed with a seed value of 42.",
+    "Define a batch size of 16 for training and a maximum sequence length of 256.",
+    "Create a mock dataset that simulates the training data structure, including prompts and action masks.",
+    "Define a function to generate random action masks with shape (batch_size, sequence_length) filled with 0s and 1s.",
+    "Create a mock function for the actor_loss_fn that takes actor_log_prob, log_probs, advantages, and action_mask as inputs.",
+    "Simulate the generation of actor_log_prob and log_probs with random values, ensuring they have the shape (batch_size, sequence_length).",
+    "Generate random advantages with shape (batch_size, sequence_length) using uniform distribution.",
+    "Create action_mask with shape (batch_size, sequence_length) using the previously defined function.",
+    "Set the start index to a value of 1 to simulate the bug condition.",
+    "Calculate actor_loss using the original mask: actor_loss = actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]).",
+    "Print the calculated actor_loss to observe its value.",
+    "Modify the mask to use the proposed alternative: action_mask[:, start-1:-1].",
+    "Recalculate actor_loss using the modified mask: actor_loss = actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start-1:-1]).",
+    "Print the recalculated actor_loss to observe its value.",
+    "Compare the two actor_loss values to verify if they differ, indicating the bug is present.",
+    "Assert that the actor_loss with the original mask is not equal to the actor_loss with the modified mask."
+]
+```

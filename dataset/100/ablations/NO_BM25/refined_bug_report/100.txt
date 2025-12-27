@@ -1,0 +1,20 @@
+TITLE  
+Caching frequency results in RuntimeError: Trying to backward through the graph a second time
+
+SYMPTOMS  
+• Encountered a `RuntimeError` during the second iteration of `loss.backward()`  
+• Error message: `RuntimeError: Trying to backward through the graph a second time (or directly access saved tensors after they have already been freed).`  
+• The issue arises specifically when using cached frequency in the rotary embedding implementation.  
+• Commenting out the caching logic allows the training process to proceed without errors.  
+
+EXPECTED BEHAVIOR  
+The library should allow for the use of cached frequencies without encountering a `RuntimeError` during the second call of `loss.backward()`. The expected behavior is that the model can successfully compute gradients through multiple backward passes when caching frequencies is implemented correctly.
+
+REPRODUCTION STEPS  
+1. Initialize the rotary embedding library with the appropriate parameters.  
+2. Implement caching of frequencies in the `forward()` method of the rotary embedding.  
+3. Execute the training loop, ensuring that `loss.backward()` is called twice.  
+4. Observe the occurrence of the `RuntimeError` during the second call to `loss.backward()`.  
+5. Comment out the caching logic and rerun the training loop to confirm that the error does not occur.  
+
+Please let me know if further clarification or assistance is needed!

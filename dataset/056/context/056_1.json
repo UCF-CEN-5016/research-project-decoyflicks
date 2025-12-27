@@ -1,0 +1,64 @@
+{
+  "bug_report": "056",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "examples/vision/bit.py",
+    "content": "\"\"\"\nTitle: Image Classification using BigTransfer (BiT)\nAuthor: [Sayan Nath](https://twitter.com/sayannath2350)\nDate created: 2021/09/24\nLast modified: 2021/09/24\nDescription: BigTransfer (BiT) State-of-the-art transfer learning for image classification.\nAccelerator: GPU\n\"\"\"\n\n\"\"\"\n## Introduction\n\nBigTransfer (also known as BiT) is a state-of-the-art transfer learning method for image\nclassification. Transfer of pre-trained representations improves sample efficiency and\nsimplifies hyperparameter tuning when training deep neural networks for vision. BiT\nrevisit the paradigm of pre-training on large supervised datasets and fine-tuning the\nmodel on a target task. The importance of appropriately choosing normalization layers and\nscaling the architecture capacity as the amount of pre-training data increases.\n\nBigTransfer(BiT) is trained on public datasets, along with code in\n[TF2, Jax and Pytorch](https://github.com/google-research/big_transfer). This will help anyone to reach\nstate of the art performance on their task of interest, even with just a handful of\nlabeled images per class.\n\nYou can find BiT models pre-trained on\n[ImageNet](https://image-net.org/challenges/LSVRC/2012/index) and ImageNet-21k in\n[TFHub](https://tfhub.dev/google/collections/bit/1) as TensorFlow2 SavedModels that you\ncan use easily as Keras Layers. There are a variety of sizes ranging from a standard\nResNet50 to a ResNet152x4 (152 layers deep, 4x wider than a typical ResNet50) for users\nwith larger computational and memory budgets but higher accuracy requirements.\n\n![](https://i.imgur.com/XeWVfe7.jpeg)\nFigure: The x-axis shows the number of images used per class, ranging from 1 to the full\ndataset. On the plots on the left, the curve in blue above is our BiT-L model, whereas\nthe curve below is a ResNet-50 pre-trained on ImageNet (ILSVRC-2012).\n\"\"\"\n\n\"\"\"\n## Setup\n\"\"\"\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\nimport tensorflow as tf\nfrom tensorflow import keras\nimport tensorflow_hub as hub\nimport tensorflow_datasets as tfds\n\ntfds.disable_progress_bar()\n\nSEEDS = 42\n\nnp.random.seed(SEEDS)\ntf.random.set_seed(SEEDS)\n\n\"\"\"\n## Gather Flower Dataset\n\"\"\"\n\ntrain_ds, validation_ds = tfds.load(\n    \"tf_flowers\",\n    split=[\"train[:85%]\", \"train[85%:]\"],\n    as_supervised=True,\n)\n\n\"\"\"\n## Visualise the dataset\n\"\"\"\n\nplt.figure(figsize=(10, 10))\nfor i, (image, label) in enumerate(train_ds.take(9)):\n    ax = plt.subplot(3, 3, i + 1)\n    plt.imshow(image)\n    plt.title(int(label))\n    plt.axis(\"off\")\n\n\"\"\"\n## Define hyperparameters\n\"\"\"\n\nRESIZE_TO = 384\nCROP_TO = 224\nBATCH_SIZE = 64\nSTEPS_PER_EPOCH = 10\nAUTO = tf.data.AUTOTUNE  # optimise the pipeline performance\nNUM_CLASSES = 5  # number of classes\nSCHEDULE_LENGTH = (\n    500  # we will train on lower resolution images and will still attain good results\n)\nSCHEDULE_BOUNDARIES = [\n    200,\n    300,\n    400,\n]  # more the dataset size the schedule length increase\n\n\"\"\"\nThe hyperparamteres like `SCHEDULE_LENGTH` and `SCHEDULE_BOUNDARIES` are determined based\non empirical results. The method has been explained in the [original\npaper](https://arxiv.org/abs/1912.11370) and in their [Google AI Blog\nPost](https://ai.googleblog.com/2020/05/open-sourcing-bit-exploring-large-scale.html).\n\nThe `SCHEDULE_LENGTH` is aslo determined whether to use [MixUp\nAugmentation](https://arxiv.org/abs/1710.09412) or not. You can also find an easy MixUp\nImplementation in [Keras Coding Examples](https://keras.io/examples/vision/mixup/).\n\n![](https://i.imgur.com/oSaIBYZ.jpeg)\n\"\"\"\n\n\"\"\"\n## Define preprocessing helper functions\n\"\"\"\n\nSCHEDULE_LENGTH = SCHEDULE_LENGTH * 512 / BATCH_SIZE\n\n\n@tf.function\ndef preprocess_train(image, label):\n    image = tf.image.random_flip_left_right(image)\n    image = tf.image.resize(image, (RESIZE_TO, RESIZE_TO))\n    image = tf.image.random_crop(image, (CROP_TO, CROP_TO, 3))\n    image = image / 255.0\n    return (image, label)\n\n\n@tf.function\ndef preprocess_test(image, label):\n    image = tf.image.resize(image, (RESIZE_TO, RESIZE_TO))\n    image = image / 255.0\n    return (image, label)\n\n\nDATASET_NUM_TRAIN_EXAMPLES = train_ds.cardinality().numpy()\n\nrepeat_count = int(\n    SCHEDULE_LENGTH * BATCH_SIZE / DATASET_NUM_TRAIN_EXAMPLES * STEPS_PER_EPOCH\n)\nrepeat_count += 50 + 1  # To ensure at least there are 50 epochs of training\n\n\"\"\"\n## Define the data pipeline\n\"\"\"\n\n# Training pipeline\npipeline_train = (\n    train_ds.shuffle(10000)\n    .repeat(repeat_count)  # Repeat dataset_size / num_steps\n    .map(preprocess_train, num_parallel_calls=AUTO)\n    .batch(BATCH_SIZE)\n    .prefetch(AUTO)\n)\n\n# Validation pipeline\npipeline_validation = (\n    validation_ds.map(preprocess_test, num_parallel_calls=AUTO)\n    .batch(BATCH_SIZE)\n    .prefetch(AUTO)\n)\n\n\"\"\"\n## Visualise the training samples\n\"\"\"\n\nimage_batch, label_batch = next(iter(pipeline_train))\n\nplt.figure(figsize=(10, 10))\nfor n in range(25):\n    ax = plt.subplot(5, 5, n + 1)\n    plt.imshow(image_batch[n])\n    plt.title(label_batch[n].numpy())\n    plt.axis(\"off\")\n\n\"\"\"\n## Load pretrained TF-Hub model into a `KerasLayer`\n\"\"\"\n\nbit_model_url = \"https://tfhub.dev/google/bit/m-r50x1/1\"\nbit_module = hub.KerasLayer(bit_model_url)\n\n\"\"\"\n## Create BigTransfer (BiT) model\n\nTo create the new model, we:\n\n1. Cut off the BiT model\u2019s original head. This leaves us with the \u201cpre-logits\u201d output.\nWe do not have to do this if we use the \u2018feature extractor\u2019 models (i.e. all those in\nsubdirectories titled `feature_vectors`), since for those models the head has already\nbeen cut off.\n\n2. Add a new head with the number of outputs equal to the number of classes of our new\ntask. Note that it is important that we initialise the head to all zeroes.\n\"\"\"\n\n\nclass MyBiTModel(keras.Model):\n    def __init__(self, num_classes, module, **kwargs):\n        super().__init__(**kwargs)\n\n        self.num_classes = num_classes\n        self.head = keras.layers.Dense(num_classes, kernel_initializer=\"zeros\")\n        self.bit_model = module\n\n    def call(self, images):\n        bit_embedding = self.bit_model(images)\n        return self.head(bit_embedding)\n\n\nmodel = MyBiTModel(num_classes=NUM_CLASSES, module=bit_module)\n\n\"\"\"\n## Define optimizer and loss\n\"\"\"\n\nlearning_rate = 0.003 * BATCH_SIZE / 512\n\n# Decay learning rate by a factor of 10 at SCHEDULE_BOUNDARIES.\nlr_schedule = keras.optimizers.schedules.PiecewiseConstantDecay(\n    boundaries=SCHEDULE_BOUNDARIES,\n    values=[\n        learning_rate,\n        learning_rate * 0.1,\n        learning_rate * 0.01,\n        learning_rate * 0.001,\n    ],\n)\noptimizer = keras.optimizers.SGD(learning_rate=lr_schedule, momentum=0.9)\n\nloss_fn = keras.losses.SparseCategoricalCrossentropy(from_logits=True)\n\n\"\"\"\n## Compile the model\n\"\"\"\n\nmodel.compile(optimizer=optimizer, loss=loss_fn, metrics=[\"accuracy\"])\n\n\"\"\"\n## Set up callbacks\n\"\"\"\n\ntrain_callbacks = [\n    keras.callbacks.EarlyStopping(\n        monitor=\"val_accuracy\", patience=2, restore_best_weights=True\n    )\n]\n\n\"\"\"\n## Train the model\n\"\"\"\n\nhistory = model.fit(\n    pipeline_train,\n    batch_size=BATCH_SIZE,\n    epochs=int(SCHEDULE_LENGTH / STEPS_PER_EPOCH),\n    steps_per_epoch=STEPS_PER_EPOCH,\n    validation_data=pipeline_validation,\n    callbacks=train_callbacks,\n)\n\n\"\"\"\n## Plot the training and validation metrics\n\"\"\"\n\n\ndef plot_hist(hist):\n    plt.plot(hist.history[\"accuracy\"])\n    plt.plot(hist.history[\"val_accuracy\"])\n    plt.plot(hist.history[\"loss\"])\n    plt.plot(hist.history[\"val_loss\"])\n    plt.title(\"Training Progress\")\n    plt.ylabel(\"Accuracy/Loss\")\n    plt.xlabel(\"Epochs\")\n    plt.legend([\"train_acc\", \"val_acc\", \"train_loss\", \"val_loss\"], loc=\"upper left\")\n    plt.show()\n\n\nplot_hist(history)\n\n\"\"\"\n## Evaluate the model\n\"\"\"\n\naccuracy = model.evaluate(pipeline_validation)[1] * 100\nprint(\"Accuracy: {:.2f}%\".format(accuracy))\n\n\"\"\"\n## Conclusion\n\nBiT performs well across a surprisingly wide range of data regimes\n-- from 1 example per class to 1M total examples. BiT achieves 87.5% top-1 accuracy on\nILSVRC-2012, 99.4% on CIFAR-10, and 76.3% on the 19 task Visual Task Adaptation Benchmark\n(VTAB). On small datasets, BiT attains 76.8% on ILSVRC-2012 with 10 examples per class,\nand 97.0% on CIFAR-10 with 10 examples per class.\n\n![](https://i.imgur.com/b1Lw5fz.png)\n\nYou can experiment further with the BigTransfer Method by following the\n[original paper](https://arxiv.org/abs/1912.11370).\n\n\n**Example available on HuggingFace**\n| Trained Model | Demo |\n| :--: | :--: |\n| [![Generic badge](https://img.shields.io/badge/%F0%9F%A4%97%20Model-bit-black.svg)](https://huggingface.co/keras-io/bit) | [![Generic badge](https://img.shields.io/badge/%F0%9F%A4%97%20Spaces-bit-black.svg)](https://huggingface.co/spaces/keras-io/siamese-contrastive) |\n\"\"\"\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "matplotlib",
+      "function": "axis"
+    },
+    {
+      "module": "matplotlib",
+      "function": "figure"
+    },
+    {
+      "module": "matplotlib",
+      "function": "imshow"
+    },
+    {
+      "module": "matplotlib",
+      "function": "legend"
+    },
+    {
+      "module": "matplotlib",
+      "function": "plot"
+    },
+    {
+      "module": "matplotlib",
+      "function": "show"
+    },
+    {
+      "module": "matplotlib",
+      "function": "subplot"
+    },
+    {
+      "module": "matplotlib",
+      "function": "title"
+    },
+    {
+      "module": "matplotlib",
+      "function": "xlabel"
+    },
+    {
+      "module": "matplotlib",
+      "function": "ylabel"
+    },
+    {
+      "module": "tensorflow_datasets",
+      "function": "disable_progress_bar"
+    },
+    {
+      "module": "tensorflow_datasets",
+      "function": "load"
+    },
+    {
+      "module": "tensorflow_hub",
+      "function": "KerasLayer"
+    }
+  ]
+}

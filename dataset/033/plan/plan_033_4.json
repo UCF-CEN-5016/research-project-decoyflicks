@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from inception_test.py",
+    "Define a batch size of 2 and image dimensions of 36x48",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call the postprocess function with specific parameter values including refined_box_encodings, class_predictions_with_background, num_proposals, proposal_boxes, image_shape, detection_boxes, detection_masks, detection_scores, and detection_classes all filled with zeros",
+    "Verify that the output contains NaN values in certain fields such as detection_scores or detection_classes",
+    "Monitor GPU memory usage during execution of the postprocess function",
+    "Assert that the GPU memory exceeds an expected threshold to confirm the bug occurs"
+]
+```
+

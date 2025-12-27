@@ -1,0 +1,26 @@
+[
+    "Clone the TensorFlow Models repository from https://github.com/tensorflow/models.git at the latest release tag",
+    "Navigate to the 'research/delf' directory within the cloned repository",
+    "Install necessary Python packages including `tensorflow` version 2.x and `absl-py` using pip",
+    "Ensure that the installed TensorFlow version is compatible with the code in the repository",
+    "Create a new Python script named `reproduce_bug.py`",
+    "Import the required modules: `tf`, `parameterized` from `absl.testing`, and `delf_model` from `delf.python.training.model`",
+    "Define a batch size of 2 and image dimensions of 321x321 in the script",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using TensorFlow's `tf.random.uniform` function",
+    "Call the `Delf` class from `delf.python.training.model.delf_model` with parameters `block3_strides=True` and `name='DELF'`",
+    "Initialize classifiers for the model by calling the `init_classifiers` method with `num_classes=1000`",
+    "Generate random uniform labels for training with shape (batch_size,) using TensorFlow's `tf.random.uniform` function",
+    "Define a loss object using `tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True, reduction=tf.keras.losses.Reduction.NONE)`",
+    "Create a gradient tape context manager to record operations for automatic differentiation",
+    "Forward propagate the input images through the model and calculate descriptor prelogits and attention prelogits",
+    "Calculate descriptor logits and compute loss using the defined loss object",
+    "Calculate attention logits and compute loss using the defined loss object",
+    "Sum the descriptor and attention losses to get the total loss",
+    "Compute gradients of the total loss with respect to trainable weights using `gradient_tape.gradient` method",
+    "Clip gradients by global norm to prevent exploding gradients",
+    "Apply the clipped gradients to the model's trainable weights using the optimizer",
+    "Run the script in a Google Colab environment with a T4 GPU",
+    "Observe if an `AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'` occurs during execution",
+    "Verify that the error is reproducible by running the script multiple times"
+]
+

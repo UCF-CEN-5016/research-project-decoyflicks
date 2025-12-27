@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, tqdm, and xml.etree.ElementTree",
+    "Set the TensorFlow version to 2.10.0 to match the reported bug environment",
+    "Define hyperparameters: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 5, GLOBAL_CLIPNORM = 10.0",
+    "Create a list of class IDs for object detection: class_ids = ['car', 'pedestrian', 'trafficLight', 'biker', 'truck']",
+    "Set paths for images and annotations: path_images = '/kaggle/input/dataset/data/images/', path_annot = '/kaggle/input/dataset/data/annotations/'",
+    "Load XML annotation files and JPEG image files, ensuring they are sorted correctly",
+    "Define a function parse_annotation(xml_file) to extract image paths, bounding boxes, and class IDs from XML files",
+    "Iterate over all XML files, calling parse_annotation for each, and store results in image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists to ragged tensors using tf.ragged.constant",
+    "Create a tf.data.Dataset from the image_paths, classes, and bbox ragged tensors",
+    "Split the dataset into training and validation sets based on SPLIT_RATIO",
+    "Define a load_dataset function to read images and prepare bounding boxes for training",
+    "Create a data augmentation pipeline using keras_cv.layers for bounding boxes",
+    "Map the load_dataset function to the training dataset and apply data augmentation",
+    "Map the load_dataset function to the validation dataset without augmentation",
+    "Define a YOLOv8 model using keras_cv.models.YOLOV8Detector with num_classes set to the length of class_mapping",
+    "Compile the YOLOv8 model with optimizer set to Adam and loss functions: classification_loss='binary_crossentropy' and box_loss='ciou'",
+    "Train the model using yolo.fit with the training dataset and validation dataset for 3 epochs",
+    "During training, monitor the loss values and check if they are significantly high or NaN",
+    "Verify the output of the model predictions after training to check for incorrect bounding box predictions",
+    "Assert that the model's predictions do not match the expected output format, indicating a potential bug in loss calculation"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import torch and the necessary modules from fairseq",
+    "Define a batch size of 2 and sequence length of 10",
+    "Create a random tensor for input with shape (batch_size, sequence_length, embedding_dim) where embedding_dim is set to 64",
+    "Create a random tensor for target with shape (batch_size, sequence_length) containing integer values representing token indices",
+    "Initialize the model class that contains the RelPositionMultiHeadedAttention layer",
+    "Set the bias parameters (u, v) in the RelPositionMultiHeadedAttention layer using torch.Tensor without initialization",
+    "Run a forward pass through the model with the input tensor",
+    "Capture the output of the model and check for NaN values",
+    "Assert that the output tensor contains NaN values using torch.isnan(output).any()",
+    "Print the output tensor to verify the presence of NaN values"
+]
+```

@@ -1,0 +1,17 @@
+TITLE
+Text Filter Results in Empty Output
+
+SYMPTOMS
+• Text after filtering out-of-vocabulary (OOV) words is empty.
+• No text output following the line "text after filtering OOV:" when running infer.py.
+
+EXPECTED BEHAVIOR
+• The software should filter out any out-of-vocabulary words from the input text and provide a filtered version of the text.
+• After running infer.py, the expected output would include the processed text, even if some words have been removed due to being OOV.
+
+REPRODUCTION STEPS
+1. Download the Japanese TTS model using the command: `wget https://dl.fbaipublicfiles.com/mms/tts/jvn.tar.gz`
+2. Extract the downloaded file by running: `tar -xzf jvn.tar.gz`
+3. Navigate to the extracted directory containing infer.py.
+4. Run the inference script with any input text, for example: `python infer.py --input_text "これはテストです"`
+5. Observe the output and note that there should be a line stating "text after filtering OOV:" followed by the filtered text if applicable.

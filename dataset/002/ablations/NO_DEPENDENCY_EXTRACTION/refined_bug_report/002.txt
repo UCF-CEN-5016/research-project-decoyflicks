@@ -1,0 +1,18 @@
+TITLE  
+ModuleNotFoundError: TensorFlow Contrib Module Not Found in TensorFlow 2.x
+
+SYMPTOMS  
+• Encountering a `ModuleNotFoundError` when trying to import `graph_matcher` from TensorFlow's contrib module.  
+• Exact error message: `ModuleNotFoundError: No module named 'tensorflow.conrtib'`  
+• The issue arises when executing the command to train the model using the script `model_main_tf2.py`.  
+• The error occurs specifically in the `exporter.py` file located at the specified path.  
+
+EXPECTED BEHAVIOR  
+The script should execute without errors, allowing the user to train the model successfully using TensorFlow 2.x, with all necessary modules and dependencies properly imported.
+
+REPRODUCTION STEPS  
+1. Open a terminal and navigate to the directory containing the model training script.  
+2. Run the command: `python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config`.  
+3. Observe the error message indicating that the module `tensorflow.contrib` cannot be found.  
+4. Check the `exporter.py` file for the import statement: `from tensorflow.contrib.quantize.python import graph_matcher`.  
+5. Verify the TensorFlow version installed in the environment to confirm it is 2.x.

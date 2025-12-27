@@ -1,0 +1,29 @@
+TITLE  
+ModuleNotFoundError when executing extract_features.py in Google Colab
+
+SYMPTOMS  
+• Encountering a `ModuleNotFoundError` when running the script in Google Colab.  
+• Error message:  
+  ```
+  ModuleNotFoundError: No module named 'delf.python.datasets'
+  ```  
+• The script fails to execute correctly, preventing feature extraction from images.
+
+EXPECTED BEHAVIOR  
+The script should successfully import all necessary modules and extract features from images without any errors.
+
+REPRODUCTION STEPS  
+1. Open Google Colab.  
+2. Change the directory to the Delf examples folder:  
+   ```
+   %cd /content/models/research/delf/delf/python/examples/
+   ```  
+3. Run the feature extraction script with the following command:  
+   ```
+   !python3 extract_features.py \
+     --config_path delf_config_example.pbtxt \
+     --list_images_path list_images.txt \
+     --output_dir data/oxford5k_features
+   ```  
+4. Observe the error message indicating the missing module.  
+5. (Optional) Add a `__init__.py` file to the `delf/python/datasets` folder to verify if the issue is resolved.

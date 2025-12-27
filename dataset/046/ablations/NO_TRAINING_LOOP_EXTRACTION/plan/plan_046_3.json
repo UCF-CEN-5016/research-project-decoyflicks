@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and any required modules from fairseq",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define the audio file path as 'audio.wav' and the text file path as 'text.txt'",
+    "Create a dummy audio file 'audio.wav' with a sample rate of 16kHz and duration of 5 seconds, ensuring it is mono-channel",
+    "Create a corresponding text file 'text.txt' with a simple transcription, e.g., 'This is a test.'",
+    "Set the language parameter to 'udm' and define the output directory as 'output'",
+    "Set the path for the uroman binary as 'uroman/bin'",
+    "Define a batch size of 1 for the forced alignment process",
+    "Run the command: 'python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang udm --outdir output --uroman uroman/bin'",
+    "Capture the output and error messages from the command execution",
+    "Check if the error message contains 'RuntimeError: log_probs must be 3-D (batch_size, input length, num classes)'",
+    "Assert that the captured error message matches the expected error message",
+    "Log the shapes of the inputs being passed to the model to verify they are not 3-D",
+    "Verify that the input audio tensor shape is (1, input_length) and the expected log_probs shape is (1, input_length, num_classes)",
+    "Confirm that the model's forward method is being called with the incorrect input shape"
+]
+```

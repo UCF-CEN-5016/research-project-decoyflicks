@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the official vision augment module from tensorflow_models",
+    "Import NumPy and Matplotlib for data visualization",
+    "Define parameters for the beta distribution: alpha = 0.2, beta = 0.2",
+    "Create a shape for the sample output using tf.shape on a range of 1000, resulting in shape (1000,)",
+    "Call the static method _sample_from_beta with parameters (alpha=0.2, beta=0.2, shape=tf.shape(tf.range(1000)))",
+    "Store the output of _sample_from_beta in a variable named 'mixup_samples'",
+    "Generate a reference sample using NumPy's random.beta function with parameters (0.2, 0.2, size=100000)",
+    "Store the reference sample in a variable named 'reference_samples'",
+    "Use Seaborn to create a kernel density plot of 'mixup_samples' with clipping set to (0, 1)",
+    "Use Seaborn to create a kernel density plot of 'reference_samples' with clipping set to (0, 1)",
+    "Display the plots using Matplotlib's plt.show() function",
+    "Observe the generated plots to visually confirm that 'mixup_samples' does not resemble the expected distribution of 'reference_samples'",
+    "Document the visual differences observed in the plots to validate the bug"
+]
+```

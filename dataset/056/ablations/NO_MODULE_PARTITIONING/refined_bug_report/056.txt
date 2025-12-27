@@ -1,0 +1,33 @@
+TITLE  
+Error encountered when running Image Classification with Vision Transformer in Keras
+
+SYMPTOMS  
+• The code fails to execute when attempting to generate image patches, resulting in an error.  
+• Error message:  
+  ```
+  InvalidArgumentError: Exception encountered when calling Patches.call().
+  cannot compute Conv2D as input #1(zero-based) was expected to be a int32 tensor but is a float tensor [Op:Conv2D] name: 
+  Arguments received by Patches.call():
+    • images=tf.Tensor(shape=(1, 72, 72, 3), dtype=int32)
+  ```
+• The output indicates a type mismatch where an int32 tensor was expected, but a float tensor was received.
+
+EXPECTED BEHAVIOR  
+The code should successfully generate image patches from the resized image without any type-related errors, allowing for further processing in the image classification pipeline.
+
+REPRODUCTION STEPS  
+1. Open the provided Google Colab link: [Colab Notebook](https://colab.research.google.com/drive/13vb4XaUgaPDAL_B2Ty2uH400hRJfrpPg?usp=sharing).  
+2. Run the code cell that includes the following snippet:  
+   ```python
+   plt.figure(figsize=(4, 4))
+   image = x_train[np.random.choice(range(x_train.shape[0]))]
+   plt.imshow(image.astype("uint8"))
+   plt.axis("off")
+
+   resized_image = ops.image.resize(
+       ops.convert_to_tensor([image]), size=(image_size, image_size)
+   )
+
+   patches = Patches(patch_size)(resized_image)
+   ```
+3. Observe the error message generated during the execution of the cell.

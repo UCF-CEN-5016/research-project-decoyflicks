@@ -1,0 +1,23 @@
+### TITLE
+MisconfigurationException raised during nnUNet training with PyTorch Lightning
+
+### SYMPTOMS
+• Encountering a `MisconfigurationException` while training the nnUNet model.
+• The error message indicates that the provided learning rate scheduler `CosineAnnealingWarmRestarts` does not adhere to PyTorch's LRScheduler API.
+• The training process fails to start due to the misconfiguration, preventing the model from training as expected.
+
+**Error Message:**
+```plaintext
+pytorch_lightning.utilities.exceptions.MisconfigurationException: The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API. You should override the `LightningModule.lr_scheduler_step` hook with your own logic if you are using a custom LR scheduler.
+```
+
+### EXPECTED BEHAVIOR
+The nnUNet model should train successfully using the specified learning rate scheduler without raising any exceptions. The training process should complete as per the defined parameters, and the model should be saved accordingly.
+
+### REPRODUCTION STEPS
+1. Open the BraTS21.ipynb or BraTS22.ipynb notebook.
+2. Ensure all packages listed in `requirements.txt` are installed, along with any additional required packages.
+3. Run the following command in a notebook cell to initiate training:
+   ```plaintext
+   !python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0 --gpus 1 --task 11 --nfolds 10 --save_ckpt
+   ```

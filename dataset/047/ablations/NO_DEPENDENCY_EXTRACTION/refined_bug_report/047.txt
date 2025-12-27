@@ -1,0 +1,40 @@
+**TITLE**  
+MMS ASR Inference Output Log Order Incorrect
+
+**SYMPTOMS**  
+• The output log from the MMS ASR inference does not match the order of the input audio files.  
+• The generated text file lists the outputs in the correct order, while the inference log outputs them in a different sequence.  
+• Example of output log disorder:  
+  ```
+  Input: /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0000.wav
+  Output: at most by an alms given to a beggar whose blessing he fled from he might hope wearily to win for himself some measure of actual grace
+  ```
+  (The above output does not correspond to the correct sequence of audio files.)
+
+**EXPECTED BEHAVIOR**  
+The output log should reflect the same order as the input audio files, ensuring that each audio file's output is logged sequentially as it is processed.
+
+**REPRODUCTION STEPS**  
+1. Run the following command to execute the MMS ASR inference:  
+   ```bash
+   python -u examples/mms/asr/infer/mms_infer.py \
+       --model `pwd`/../fairseq_resource/mms1b_all.pt \
+       --lang "eng" \
+       --audio audio1.wav audio2.wav audio3.wav ... audio10.wav
+   ```
+2. Observe the output log generated during the inference.
+3. Compare the order of the input audio files with the order of the outputs in the log.
+
+**ENVIRONMENT**  
+- Fairseq Version: [insert version]  
+- PyTorch Version: [insert version]  
+- OS: [insert OS]  
+- Installation method: [pip/source]  
+- Build command (if applicable): [insert command]  
+- Python version: [insert version]  
+- CUDA/cuDNN version: [insert version]  
+- GPU models and configuration: [insert details]  
+- Any other relevant information: [insert details]  
+
+**ADDITIONAL CONTEXT**  
+The issue seems to occur consistently when processing multiple audio files, leading to confusion during analysis of the results. Further investigation into the inference logging mechanism may be required to ensure proper ordering.

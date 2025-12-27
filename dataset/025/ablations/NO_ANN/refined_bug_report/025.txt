@@ -1,0 +1,29 @@
+TITLE  
+AttributeError when accessing `tensorflow_models.vision.augment`
+
+SYMPTOMS  
+• Attempting to use `tfm.vision.augment` results in an error.  
+• Error message:  
+  ```
+  AttributeError: module 'tensorflow_models.vision' has no attribute 'augment'
+  ```  
+• The user reports that other modules like `tfm.vision.backbones` and `tfm.vision.configs` work correctly, indicating that the issue is isolated to the `augment` module.
+
+EXPECTED BEHAVIOR  
+The user expects to successfully access and use the `RandAugment` class from the `tensorflow_models.vision.augment` module without encountering an `AttributeError`.
+
+REPRODUCTION STEPS  
+1. Import the TensorFlow Models library:  
+   ```python
+   import tensorflow_models as tfm
+   ```  
+2. Attempt to instantiate `RandAugment`:  
+   ```python
+   tfm.vision.augment.RandAugment()
+   ```  
+
+ADDITIONAL CONTEXT  
+- The user is running on macOS Ventura Version 13.0.1 and Ubuntu 20.04.  
+- TensorFlow version is 2.9.2, installed via `pip` for both macOS and Ubuntu.  
+- Python version is 3.9.15.  
+- The user has confirmed that they are using the correct repository and that this issue has not been previously reported.

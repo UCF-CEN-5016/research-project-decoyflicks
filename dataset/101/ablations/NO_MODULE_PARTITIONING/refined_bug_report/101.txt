@@ -1,0 +1,17 @@
+TITLE  
+NaNs in K after rotating Q and K with rotary_emb
+
+SYMPTOMS  
+• K contains a small fraction of NaNs after executing rotary_emb.rotate_queries_and_keys(Q, K)  
+• NaNs propagate through the transformer, leading to a NaN loss during training  
+• Unexpected behavior observed in model performance due to loss being NaN  
+
+EXPECTED BEHAVIOR  
+The rotation of queries and keys using rotary_emb.rotate_queries_and_keys(Q, K) should not introduce any NaN values in K or propagate them through the transformer, resulting in a valid loss value during training.
+
+REPRODUCTION STEPS  
+1. Initialize the transformer model with standard parameters.  
+2. Prepare input tensors for Q and K.  
+3. Call the function rotary_emb.rotate_queries_and_keys(Q, K).  
+4. Check the contents of K for NaN values after the function call.  
+5. Proceed with the transformer forward pass and observe the loss value.

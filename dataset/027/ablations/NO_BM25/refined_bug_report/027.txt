@@ -1,0 +1,19 @@
+TITLE  
+Incompatibility of Output and Target Sizes When Using Larger Image Dimensions in DCGAN
+
+SYMPTOMS  
+• The user attempts to modify the DCGAN code to handle larger image sizes (128x128) instead of the default (64x64).  
+• An error occurs during training, specifically when calculating the loss:  
+```
+ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200])) is deprecated. Please ensure they have the same size.
+```  
+• The user is confused about the origin of the output size (3200) and how to resolve the size mismatch.
+
+EXPECTED BEHAVIOR  
+When modifying the DCGAN code to accommodate larger image sizes, the training should proceed without errors. The output size should match the target size, allowing for successful computation of the loss function.
+
+REPRODUCTION STEPS  
+1. Clone the DCGAN example from the PyTorch tutorials repository.  
+2. Modify the image size parameter in the code from 64x64 to 128x128.  
+3. Run the training loop.  
+4. Observe the error message regarding the mismatch between the target size and the output size.

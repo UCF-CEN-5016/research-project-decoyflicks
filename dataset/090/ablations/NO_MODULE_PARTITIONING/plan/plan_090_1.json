@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the model classes from the relevant module.",
+    "Define a batch size of 2 and input dimensions of (2, 1024) for the input tensors.",
+    "Create a dictionary for input data with keys 'note', 'pitch', and 'tone' containing random integers: note with shape (2, 1024) and values in range [0, 20000], pitch with shape (2, 1024) and values in range [0, 32], tone with shape (2, 1024) and values in range [0, 16].",
+    "Instantiate the MultiInputTransformerWrapper model with num_tokens set to {'note': 20000, 'pitch': 32, 'tone': 16}, max_seq_len set to 1024, return_only_embed set to True, and attn_layers set to an instance of Decoder with dim=128, depth=6, and heads=8.",
+    "Pass the input dictionary to the model and store the output in a variable called 'embed'.",
+    "Assert that the shape of 'embed' is (2, 1024, 128) to ensure the model is functioning correctly.",
+    "Check if 'encoder.to_logits.weight' is part of the model parameters by printing the model parameters and checking for 'encoder.to_logits.weight'.",
+    "Run the model in Distributed Data Parallel (DDP) mode by wrapping the model with torch.nn.parallel.DistributedDataParallel.",
+    "Perform a forward pass with the same input data and check if 'encoder.to_logits.weight' has been updated by printing its value before and after the forward pass.",
+    "Assert that 'encoder.to_logits.weight' remains unchanged after the forward pass to confirm the bug."
+]
+```

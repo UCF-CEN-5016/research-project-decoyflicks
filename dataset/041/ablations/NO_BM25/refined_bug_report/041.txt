@@ -1,0 +1,29 @@
+TITLE  
+TypeError in DALL-e Training: Unexpected Keyword Argument 'mask'
+
+SYMPTOMS  
+• Encountered a `TypeError` while attempting to train DALL-e using the rainbow_dalle notebook.  
+• Error message: `TypeError: forward() got an unexpected keyword argument 'mask'`  
+• The training process successfully generated a dataset and trained the VAE but failed during DALL-e training.  
+
+EXPECTED BEHAVIOR  
+The DALL-e training process should execute without errors, allowing for successful training with the provided dataset and parameters, including the use of a mask.
+
+REPRODUCTION STEPS  
+1. Open the rainbow_dalle notebook.  
+2. Generate a dataset and train the VAE successfully.  
+3. Attempt to train DALL-e using the following code snippet:  
+   ```python
+   dalle, loss_history = fit(dalle, opt, None, scheduler, 
+                             (captions_array[train_idx, ...], all_image_codes[train_idx, ...], captions_mask[train_idx, ...]), None, 200, 256,
+                             dalle_model_file, train_dalle_batch)
+   ```  
+4. Observe the error message during the execution of the `fit` function.  
+5. Trace the error to the `train_dalle_batch` function where the `dalle` model is called with the `mask` argument.  
+
+ANALYSIS  
+The error suggests that the `forward()` method of the DALL-e model does not accept a keyword argument named `mask`. This indicates a potential mismatch between the expected input parameters of the model and those being provided during the training process. To resolve the issue, the following actions can be taken:
+
+1. Review the definition of the `forward()` method in the DALL-e model to confirm the expected input parameters.
+2. Modify the call to the `dalle` model in the `train_dalle_batch` function to exclude the `mask` argument if it is not supported.
+3. Check for any updates or documentation changes in the DALL-e repository that may address this issue or provide additional context on parameter usage.

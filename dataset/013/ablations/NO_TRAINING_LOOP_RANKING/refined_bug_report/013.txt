@@ -1,0 +1,22 @@
+TITLE  
+Matplotlib Pyplot Fails to Render After Importing TensorFlow Models in Conda Environment
+
+SYMPTOMS  
+• Matplotlib's pyplot does not render plots after importing `tensorflow_models`.  
+• The backend switches to `agg`, a non-interactive backend, after importing `tensorflow_models`.  
+• Plots render correctly when the backend is set to an interactive mode (like `TkAgg`) before importing `tensorflow_models`.  
+• No error messages are displayed, but the expected plots do not appear.  
+
+EXPECTED BEHAVIOR  
+Both cells in the notebook should display the generated plots when executed, regardless of the order of imports, as long as the appropriate backend for Matplotlib is set.
+
+REPRODUCTION STEPS  
+1. Download and install VSCode.  
+2. Create a new Conda environment with Python 3.10 (version 3.10.13 recommended).  
+3. Install TensorFlow using the instructions from the [TensorFlow installation guide](https://www.tensorflow.org/install/pip).  
+4. Install TensorFlow Model Garden using pip: `pip install tf-models-nightly`.  
+5. Download the notebook from the [TensorFlow Model Garden](https://www.tensorflow.org/tfmodels/vision/image_classification) page.  
+6. Add lines of code that use `plt` to generate plots.  
+7. Run the cells containing the plot commands after importing `tensorflow_models`.  
+
+By following these steps, the issue of Matplotlib not rendering plots should be reproducible.

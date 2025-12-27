@@ -1,0 +1,17 @@
+TITLE  
+TypeError in BERT's gelu function due to incorrect parameter type
+
+SYMPTOMS  
+• The function `gelu` in the BERT model implementation is called with an incorrect parameter type for `approximate`.  
+• Error message: `TypeError: gelu(): argument 'approximate' must be str, not bool`  
+• The model fails to execute properly when this function is invoked, leading to runtime errors.
+
+EXPECTED BEHAVIOR  
+The `gelu` function should accept the `approximate` parameter as a string, either `'none'` or `'tanh'`, as specified in the PyTorch documentation. The model should execute without errors when the correct type is provided.
+
+REPRODUCTION STEPS  
+1. Clone the repository from [NVIDIA/DeepLearningExamples](https://github.com/NVIDIA/DeepLearningExamples).  
+2. Navigate to the BERT implementation in PyTorch: `PyTorch/LanguageModeling/BERT/modeling.py`.  
+3. Locate the `gelu` function definition.  
+4. Attempt to run the model that utilizes the `gelu` function.  
+5. Observe the TypeError indicating that the `approximate` argument must be a string.

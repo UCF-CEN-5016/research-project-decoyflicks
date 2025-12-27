@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from tensorflow import keras",
+    "Define a custom loss function: class CustomNonPaddingTokenLoss(tf.keras.losses.Loss): pass",
+    "Set the model path to 'path_to_my_model' where the trained NER model is saved",
+    "Load the trained NER model using keras.models.load_model with custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False",
+    "Create a TFLite converter instance using tf.lite.TFLiteConverter.from_saved_model with the model path",
+    "Convert the model to TFLite format using converter.convert()",
+    "Save the converted TFLite model to 'model.tflite' using open('model.tflite', 'wb') as f: f.write(tflite_model)",
+    "Define a sample input string: sample_input = 'eu rejects german call to boycott british lamb'",
+    "Implement a function tokenize_and_convert_to_ids that tokenizes the sample input and converts it to IDs, ensuring the output shape is (9,)",
+    "Load the TFLite model using tf.lite.Interpreter with the model path 'model.tflite'",
+    "Allocate tensors for the interpreter using interpreter.allocate_tensors()",
+    "Get the input index from the interpreter using input_index = interpreter.get_input_details()[0]['index']",
+    "Get the output index from the interpreter using output_index = interpreter.get_output_details()[0]['index']",
+    "Set the input tensor using interpreter.set_tensor with the input index and np.expand_dims(sample_input, axis=0) to create a shape of (1, 9)",
+    "Invoke the interpreter using interpreter.invoke()",
+    "Capture the output tensor using prediction_mask = interpreter.get_tensor(output_index)",
+    "Verify that a ValueError is raised with the message 'Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0.'"
+]
+```

@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary libraries for instance segmentation: 'import tensorflow as tf' and 'from official.vision import instance_segmentation'",
+    "Set the random seed for reproducibility: 'tf.random.set_seed(42)'",
+    "Define the model configuration parameters, including 'num_classes' set to 2 (for background and one object class), 'batch_size' set to 8, and 'image_size' set to (512, 512)",
+    "Load the dataset for instance segmentation using TensorFlow Datasets: 'dataset = tfds.load('coco/2017', split='train', shuffle_files=True)'",
+    "Preprocess the dataset to ensure images are resized to (512, 512) and normalized: 'def preprocess(image, label): return tf.image.resize(image, (512, 512)) / 255.0, label'",
+    "Map the preprocessing function to the dataset: 'dataset = dataset.map(preprocess).batch(batch_size).prefetch(tf.data.experimental.AUTOTUNE)'",
+    "Define the model using the official instance segmentation API: 'model = instance_segmentation.create_model(num_classes=num_classes)'",
+    "Compile the model with a loss function: 'model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])'",
+    "Train the model for a few epochs: 'model.fit(dataset, epochs=5, validation_data=validation_dataset)'",
+    "During training, ensure to log the validation loss: 'tf.keras.callbacks.TensorBoard(log_dir='./logs', histogram_freq=1)'",
+    "After training, evaluate the model on the validation dataset: 'validation_loss = model.evaluate(validation_dataset)'",
+    "Print the validation loss: 'print(f'Validation Loss: {validation_loss}')'",
+    "Check the output of the validation loss and assert that it equals 0.0: 'assert validation_loss == 0.0, f'Expected validation loss to be 0.0, but got {validation_loss}'",
+    "Run the notebook cell that contains the 'Train and Evaluate' section to reproduce the bug",
+    "Observe the output logs for validation loss during evaluation and confirm it consistently shows 0.0"
+]
+```

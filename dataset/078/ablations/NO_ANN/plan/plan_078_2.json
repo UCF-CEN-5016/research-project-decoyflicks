@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from vit_pytorch",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 5 and set image dimensions to 224x224 (height and width)",
+    "Define the number of frames for the 3D model, set it to 8",
+    "Create random input data with shape (batch_size, 3, frames, height, width) using torch.randn",
+    "Instantiate the navit_nest_3d model from vit_pytorch with appropriate parameters: image_size=(224, 224), patch_size=(16, 16), num_classes=1000, dim=768, depth=12, heads=12, mlp_dim=3072",
+    "Set the model to training mode by calling model.train()",
+    "Define a loss function, e.g., nn.CrossEntropyLoss()",
+    "Define an optimizer, e.g., torch.optim.Adam(model.parameters(), lr=1e-4)",
+    "Perform a forward pass by calling model on the input data and store the output",
+    "Calculate the loss using the output and a random target tensor with shape (batch_size) containing class indices",
+    "Perform a backward pass by calling loss.backward()",
+    "Capture the output of the backward pass to check for gradients",
+    "Assert that the gradients have the expected shape, which should be compatible with [5, j2, 1024]",
+    "Check for any errors or exceptions raised during the backward pass",
+    "Log the shape of the gradients to verify they are [1, 1024] repeated 5 times, indicating the bug",
+    "Print the error message if the shape does not match the expected dimensions"
+]
+```

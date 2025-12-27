@@ -1,0 +1,21 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the DeepSpeed-Chat application directory using 'cd DeepSpeedExamples/applications/DeepSpeed-Chat'",
+    "Create a new Python virtual environment using 'python -m venv deepspeed_env'",
+    "Activate the virtual environment using 'source deepspeed_env/bin/activate' (Linux/Mac) or 'deepspeed_env\\Scripts\\activate' (Windows)",
+    "Install required packages using 'pip install -r requirements.txt'",
+    "Install DeepSpeed using 'pip install deepspeed'",
+    "Import necessary libraries in a new Python script: 'import deepspeed', 'import torch', 'from transformers import AutoModelForCausalLM, AutoTokenizer'",
+    "Set the model name to 'gpt2' and initialize the tokenizer: 'model_name = 'gpt2'; tokenizer = AutoTokenizer.from_pretrained(model_name)'",
+    "Load the model using 'model = AutoModelForCausalLM.from_pretrained(model_name)'",
+    "Wrap the model with DeepSpeed: 'model = deepspeed.initialize(model=model)[0]'",
+    "Define a dummy input tensor with shape (1, 10) using 'input_ids = torch.randint(0, tokenizer.vocab_size, (1, 10))'",
+    "Run a forward pass with the model: 'outputs = model(input_ids=input_ids)'",
+    "Set up a training loop with a single epoch: 'for epoch in range(1):'",
+    "Inside the loop, print throughput using 'print_throughput(model.model, args, end - start)'",
+    "Run the script to start training and observe the output for the AttributeError",
+    "Verify that the error message contains 'AttributeError: 'DeepSpeedEngine' object has no attribute 'model''",
+    "Check the line number in the traceback to confirm it matches the line where 'print_throughput' is called"
+]
+```

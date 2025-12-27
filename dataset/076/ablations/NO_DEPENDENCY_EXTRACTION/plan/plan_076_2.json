@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf and from mrcnn import modellib",
+    "Define constants: set MODEL_DIR to a valid directory path where model weights will be stored",
+    "Set COCO_MODEL_PATH to the path of the pre-trained COCO weights file, e.g., COCO_MODEL_PATH = 'path/to/mask_rcnn_coco.h5'",
+    "Create a configuration class instance: config = YourConfigClass() where YourConfigClass is a subclass of the Config class from mrcnn",
+    "Set the mode to 'inference': model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Attempt to load weights: call model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Prepare a dummy input image: create a random image tensor with shape (1, config.IMAGE_SHAPE[0], config.IMAGE_SHAPE[1], 3) where IMAGE_SHAPE is defined in the config",
+    "Run inference on the dummy image: call model.detect([dummy_image], verbose=1)",
+    "Capture the output and any exceptions raised during the inference call",
+    "Check for NotImplementedError in the output: assert that the exception message contains 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5'"
+]
+```

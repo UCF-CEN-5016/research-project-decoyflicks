@@ -1,0 +1,14 @@
+[
+    "Clone the TensorFlow models repository from https://github.com/tensorflow/models.git",
+    "Navigate to the 'docs/vision' directory containing the 'object_detection.ipynb' notebook",
+    "Set up a Python environment with TensorFlow 2.12 installed (e.g., via pip install tensorflow==2.12)",
+    "Open the 'object_detection.ipynb' notebook in Google Colab or a Jupyter environment with the configured TensorFlow 2.12 environment",
+    "Run all notebook cells sequentially until reaching the cell labeled 'Import required libraries from tensorflow models as image below'",
+    "In that cell, execute the import commands exactly as given in the notebook which typically include imports from 'object_detection' module under 'models/research'",
+    "Specifically observe the import statements that import from 'object_detection.utils' and 'object_detection.models' (e.g., from object_detection.utils import visualization_utils as vis_utils)",
+    "Note that the import step fails with an error (e.g., ModuleNotFoundError or ImportError) indicating that the 'object_detection' module cannot be found or has missing dependencies",
+    "Capture the exact error message and traceback produced during the import failure",
+    "Validate that no further cells can be executed due to missing dependencies or failed import",
+    "Optionally, verify that the error persists with the default TensorFlow 2.12 environment without additional manual installation of 'object_detection' dependencies",
+    "Assert that the import failure reproducibly occurs on a clean environment with only TensorFlow 2.12 installed and the notebook code unmodified"
+]

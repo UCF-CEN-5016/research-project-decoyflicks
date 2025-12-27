@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and numpy",
+    "Define the input tensor x with shape (4, 3, 2, 4) where 4 is the batch size, 3 is the number of features, 2 is the height, and 4 is the width",
+    "Create cos_cached tensor with shape (4, 3, 2, 4) filled with random values using torch.rand",
+    "Create sin_cached tensor with shape (4, 3, 2, 4) filled with random values using torch.rand",
+    "Define neg_half_x tensor with shape (4, 3, 2, 4) filled with random values using torch.rand",
+    "Initialize x_rope tensor with shape (4, 3, 2, 3) filled with random values using torch.rand to simulate the partial feature set",
+    "Attempt to execute the operation: x_rope = (x_rope * cos_cached[:x.shape[0]]) + (neg_half_x * sin_cached[:x.shape[0]])",
+    "Capture the RuntimeError exception that occurs during the tensor operation",
+    "Verify that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the shapes of x_rope, cos_cached, and sin_cached to confirm the mismatch in dimensions"
+]
+```

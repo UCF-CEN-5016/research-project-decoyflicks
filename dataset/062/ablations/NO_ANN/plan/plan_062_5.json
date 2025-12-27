@@ -1,0 +1,12 @@
+```json
+[
+    "Import pandas as pd and TensorFlow as tf",
+    "Set up Python environment with Python 3.10, TensorFlow 2.13, and pandas 2.0.3",
+    "Create a DataFrame train_df with 100 rows and 3 columns: 'A', 'B', 'C' filled with random integers",
+    "Create a DataFrame test_df with 50 rows and 3 columns: 'A', 'B', 'C' filled with random integers",
+    "Attempt to append test_df to train_df using the deprecated method: all_data = train_df.append(test_df)",
+    "Run the code in a Jupyter Notebook cell to trigger the AttributeError",
+    "Capture the output and verify that it raises an AttributeError stating 'DataFrame' object has no attribute 'append'",
+    "Check for a FutureWarning indicating that the append method is deprecated and will be removed in a future version"
+]
+```

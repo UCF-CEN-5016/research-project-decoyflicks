@@ -1,0 +1,14 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Clone the delf repository from GitHub using the command: !git clone https://github.com/mirzaim/models.git",
+    "Change the working directory to the delf examples folder using: %cd /content/models/research/delf/delf/python/examples/",
+    "Create a sample configuration file named 'delf_config_example.pbtxt' with the following content: 'model { name: \"delf\" }'",
+    "Create a sample image list file named 'list_images.txt' with the following content: 'image1.jpg\\nimage2.jpg\\nimage3.jpg'",
+    "Create a directory named 'data' to store output features using: !mkdir data",
+    "Run the feature extraction script using the command: !python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Observe the output for the error message: 'ModuleNotFoundError: No module named 'delf.python.datasets'",
+    "Verify that the 'datasets' directory exists at the path '/content/models/research/delf/delf/python/datasets' and does not contain an '__init__.py' file.",
+    "Confirm that the error traceback indicates the failure occurs when trying to import 'delf.python.datasets.google_landmarks_dataset'."
+]
+```

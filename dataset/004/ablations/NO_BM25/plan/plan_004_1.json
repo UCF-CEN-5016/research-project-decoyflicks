@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the MixupAndCutmix class from tfm.vision.augment",
+    "Define alpha and beta parameters for the beta distribution: alpha = 0.2, beta = 0.2",
+    "Set the shape for the sample to be generated: shape = (1000,)",
+    "Call the _sample_from_beta method with parameters: MixupAndCutmix._sample_from_beta(alpha, beta, shape)",
+    "Store the output of the _sample_from_beta method in a variable named 'sample'",
+    "Import Matplotlib for plotting: import matplotlib.pyplot as plt",
+    "Import Seaborn for density plotting: import seaborn as sns",
+    "Generate a reference sample using numpy's beta function: reference_sample = np.random.beta(alpha, beta, 100000)",
+    "Create a density plot for the output sample using sns.kdeplot(sample, clip=(0, 1))",
+    "Create a density plot for the reference sample using sns.kdeplot(reference_sample, clip=(0, 1))",
+    "Display the plot using plt.show()",
+    "Verify that the density plot of 'sample' does not resemble the expected beta distribution shape",
+    "Assert that the output sample contains values outside the expected range of [0, 1]"
+]
+```

@@ -1,0 +1,17 @@
+TITLE  
+RandAugment magnitude standard deviation incorrectly set to fixed value
+
+SYMPTOMS  
+• The magnitude standard deviation for RandAugment is always set to 1.  
+• There is a potential oversight in the code where `level_std*` is not included in the calculation, leading to a lack of variability.  
+• No error messages are generated, but the behavior of the augmentation is not as expected.
+
+EXPECTED BEHAVIOR  
+The magnitude standard deviation should vary based on the `level_std*` parameter, allowing for a range of standard deviation values rather than being fixed at 1.
+
+REPRODUCTION STEPS  
+1. Locate the RandAugment implementation in the augment.py file at the specified GitHub link.  
+2. Review the code at line 1566 to observe the current implementation of the magnitude standard deviation.  
+3. Confirm that the `level_std*` parameter is not included in the computation after the `+=` operation.  
+4. Test the augmentation with different settings to verify that the standard deviation remains constant at 1.  
+5. Modify the implementation to include `level_std*` and observe the changes in behavior.

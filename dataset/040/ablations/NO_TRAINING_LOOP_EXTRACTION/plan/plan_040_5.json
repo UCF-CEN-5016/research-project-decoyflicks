@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and tracker from labml",
+    "Define a batch size of 8 and input dimensions of 32x32 for CIFAR-10 dataset",
+    "Create a random tensor for input data with shape (batch_size, 3, 32, 32) to simulate CIFAR-10 images",
+    "Create a random tensor for attention weights with shape (batch_size, 8, 8) to simulate attention scores",
+    "Define a simple UNet model that includes the self-attention mechanism as described in the bug report",
+    "In the self-attention implementation, use einsum to compute attention scores with the following operation: attn = torch.einsum('b i j -> b j i', input_tensor)",
+    "Apply softmax operation on the attention scores using attn.softmax(dim=1) to simulate the current implementation",
+    "Change the softmax operation to attn.softmax(dim=2) to reflect the proposed fix in the bug report",
+    "Run a forward pass through the UNet model with the random input data and attention weights",
+    "Capture the output of the attention layer before and after applying softmax to validate the behavior",
+    "Assert that the output of the attention layer before softmax contains values that do not sum to 1 along the specified axis",
+    "Assert that the output of the attention layer after softmax sums to 1 along the specified axis (dim=1 for current implementation)",
+    "Log the outputs of the attention layer to verify the difference in behavior between the two softmax implementations",
+    "Check for any runtime errors or unexpected behavior during the forward pass to confirm the presence of the bug"
+]
+```

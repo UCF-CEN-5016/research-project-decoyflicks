@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules: import tensorflow as tf and from tensorflow import keras",
+    "Set the BATCH_SIZE to 16 and AUTOTUNE to tf.data.AUTOTUNE",
+    "Define the augment_fn function that performs random augmentations on input images",
+    "Define the unpackage_inputs function that unpacks the dataset into images and labels",
+    "Create a synthetic dataset train_ds using tf.data.Dataset.from_tensor_slices with shape (100, 160, 160, 1) filled with random float32 values",
+    "Shuffle the dataset train_ds using train_ds.shuffle(BATCH_SIZE * 2)",
+    "Map the augment_fn over the shuffled dataset with num_parallel_calls set to AUTOTUNE",
+    "Batch the dataset using .batch(BATCH_SIZE)",
+    "Map the unpackage_inputs function over the batched dataset",
+    "Prefetch the dataset using .prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Run the code block that creates augmented_train_ds and capture any errors",
+    "Verify that the error message contains 'different types' and check the tensor shapes and types in the error message",
+    "Assert that the error message includes the specific tensor shapes (160, 160, 1) and types (float32 and int64)"
+]
+```

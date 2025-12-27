@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn.functional as F, and any other required modules from the x_transformers package.",
+    "Define a batch size of 4 and a sequence length of 10.",
+    "Create a random tensor 't' with shape (batch_size, seq_len, embedding_dim) using torch.randn, where embedding_dim is set to 16.",
+    "Create a lens tensor with shape (batch_size,) containing random integers between 1 and seq_len (inclusive) to simulate varying lengths, e.g., torch.randint(1, seq_len + 1, (batch_size,)).",
+    "Set a pad_id value, e.g., pad_id = 0.",
+    "Call the align_right function with parameters: t, lens, and pad_id.",
+    "Inside the align_right function, assert that lens has the correct shape and dimensions: assert lens.ndim == 1 and lens.shape[0] == batch_size.",
+    "Calculate pad_lens as seq_len - lens and assert that pad_lens has the correct shape.",
+    "Calculate max_pad_len as pad_lens.amax() and assert that it is a valid integer.",
+    "Create batch_arange and prompt_len_arange tensors using torch.arange with appropriate dimensions.",
+    "Call F.pad on tensor 't' with parameters (t, (max_pad_len, 0), value=0) and assert that the pad_id is not used in this call.",
+    "Check the output of the align_right function and assert that it does not contain the expected pad_id value in the padded regions.",
+    "Print the output tensor from align_right to visually inspect the padding behavior.",
+    "Verify that the output tensor does not reflect the pad_id value in the padded regions, indicating the bug is present."
+]
+```

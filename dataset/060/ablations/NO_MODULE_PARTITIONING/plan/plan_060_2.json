@@ -1,0 +1,30 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary libraries: import tensorflow as tf, from keras import layers, from keras import Model, import matplotlib.pyplot as plt, from glob import glob",
+    "Set the batch size to 32 and image dimensions to 160x160: BATCH_SIZE = 32, IMG_HEIGHT = IMG_WIDTH = 160",
+    "Define AUTOTUNE for data loading: AUTOTUNE = tf.data.AUTOTUNE",
+    "Create a function to load the dataset: def load(image_files, batch_size, is_train=True):",
+    "Inside the load function, define a function to load images and segmentation maps: def _load_data_tf(image_file, segmentation_map_file, label_file):",
+    "In _load_data_tf, read image files using tf.io.read_file and decode them with tf.image.decode_png, ensuring channels=3 for images and channels=1 for segmentation masks.",
+    "Cast images to float32 and normalize them: image = tf.cast(image, tf.float32) / 127.5 - 1, segmentation_map = tf.cast(segmentation_map, tf.float32) / 127.5 - 1",
+    "Create a dataset from image files: dataset = tf.data.Dataset.from_tensor_slices((image_files, segmentation_map_files, label_files))",
+    "Shuffle the dataset if is_train is True: dataset = dataset.shuffle(batch_size * 10) if is_train else dataset",
+    "Map the loading function to the dataset: dataset = dataset.map(_load_data_tf, num_parallel_calls=AUTOTUNE)",
+    "Define a random crop function to crop images and segmentation maps: def _random_crop(segmentation_map, image, labels, crop_size=(IMG_HEIGHT, IMG_WIDTH))",
+    "In _random_crop, use tf.random.uniform to generate random crop coordinates and crop the images accordingly.",
+    "Map the random crop function to the dataset: dataset = dataset.map(_random_crop, num_parallel_calls=AUTOTUNE)",
+    "Define a one-hot encoding function for segmentation maps: def _one_hot(segmentation_maps, real_images, labels):",
+    "In _one_hot, use tf.one_hot to convert labels to one-hot encoding.",
+    "Map the one-hot function to the dataset: dataset = dataset.map(_one_hot, num_parallel_calls=AUTOTUNE)",
+    "Batch the dataset: dataset = dataset.batch(batch_size, drop_remainder=True)",
+    "Return the dataset from the load function: return dataset",
+    "Prepare a list of image files and segmentation map files: image_files = glob('path/to/images/*.jpg'), segmentation_map_files = glob('path/to/segmentation_maps/*.png')",
+    "Load the training and validation datasets: train_dataset = load(train_files, batch_size=BATCH_SIZE, is_train=True), val_dataset = load(val_files, batch_size=BATCH_SIZE, is_train=False)",
+    "Define an augment function that applies random augmentations to the dataset: def augment_fn(inputs):",
+    "In augment_fn, ensure the function returns a dictionary with 'images' and 'segmentation_masks' keys.",
+    "Create augmented training dataset: augmented_train_ds = train_dataset.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Create validation dataset: resized_val_ds = val_dataset.map(resize_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE",
+    "Run the code to create augmented_train_ds and resized_val_ds, expecting to encounter the TypeError related to mismatched tensor types.",
+    "Verify the error message contains 'TypeError: branches[0] and branches[1] arguments to tf.switch_case must have the same number, type, and overall structure of return values.'"
+]
+```

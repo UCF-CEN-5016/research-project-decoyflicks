@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, deepspeed, and any other required modules from dschat.",
+    "Set the device to GPU using torch.device('cuda') if available, otherwise use CPU.",
+    "Define a batch size of 16 and a maximum sequence length of 512.",
+    "Create a random tensor for actor_log_prob with shape (batch_size, max_seq_len) filled with values from a normal distribution.",
+    "Create a random tensor for log_probs with shape (batch_size, max_seq_len) filled with values from a normal distribution.",
+    "Create a random tensor for advantages with shape (batch_size) filled with values from a normal distribution.",
+    "Create a random tensor for action_mask with shape (batch_size, max_seq_len) filled with binary values (0 or 1).",
+    "Set the start index to a value of 1 to simulate the scenario where the first token is not included in the loss calculation.",
+    "Calculate actor_loss using the provided formula: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]).",
+    "Print the calculated actor_loss to verify it is computed without errors.",
+    "Modify the mask to use action_mask[:, start-1:-1] instead of action_mask[:, start:] and recalculate actor_loss.",
+    "Print the new actor_loss to compare with the previous value.",
+    "Assert that the actor_loss with the modified mask is different from the original actor_loss to confirm the bug exists.",
+    "Log the outputs of both actor_loss calculations to verify that the 'eos' token's ground reward is being filtered out in the original calculation."
+]
+```

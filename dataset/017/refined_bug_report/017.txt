@@ -1,0 +1,16 @@
+TITLE
+Model loading issue in `object_detection_tutorial.ipynb` for TensorFlow 1
+
+SYMPTOMS
+• The function `load_model` fails to load the model, resulting in empty final tensors with `???`.
+• Error message: `INFO:tensorflow:Saver not created because there are no variables in the graph to restore`. This is likely harmless but indicates that the model could not be loaded.
+• The `show_inference` function call does not produce expected output, instead producing an image without any object detection results.
+
+EXPECTED BEHAVIOR
+• The `load_model` function should correctly load a pre-trained TensorFlow 1 Object Detection model from the specified URL and return it for further use in the tutorial.
+• The `show_inference` function should display images with detected objects highlighted.
+
+REPRODUCTION STEPS
+1. Open the Jupyter notebook located at: [https://drive.google.com/file/d/1UcI0BZ4pjY5e1aOB6oVBTn8YXtsKS8hA/view?usp=sharing](https://drive.google.com/file/d/1UcI0BZ4pjY5e1aOB6oVBTn8YXtsKS8hA/view?usp=sharing)
+2. Run the `load_model` function with a valid model name, such as `'faster_rcnn_inception_v2_coco'`.
+3. Attempt to run the inference on test images using the line: ```python for image_path in TEST_IMAGE_PATHS: show_inference(detection_model, image_path)```.

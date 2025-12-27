@@ -1,0 +1,19 @@
+```json
+[
+    "Import PIL and labml modules",
+    "Set device.cuda_device to 0 for CUDA device configuration",
+    "Define image_size as 64",
+    "Create a Configs object for experiment configurations",
+    "Initialize experiment with name 'stylegan2'",
+    "Override device.cuda_device, image_size, and log_generated_interval in experiment.configs",
+    "Call configs.init() to initialize the experiment setup",
+    "Prepare a batch of generated images with shape (batch_size, height, width, 3)",
+    "Create real_images by generating random data and passing it through discriminator",
+    "Calculate fake_output from the discriminator for the generated images",
+    "Calculate discriminator_loss using discriminator_loss function",
+    "Check if discriminator_loss contains NaN values",
+    "Monitor memory usage during execution of step",
+    "Assert that GPU memory usage exceeds a certain threshold"
+]
+```
+

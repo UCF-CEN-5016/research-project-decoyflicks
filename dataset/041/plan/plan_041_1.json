@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries from the provided dependencies list.",
+    "Define constants such as EPOCHS, BATCH_SIZE, TEXT_SEQ_LEN, and SAVE_EVERY_N_STEPS.",
+    "Load the ChineseTokenizer and DiscreteVAE models from their respective classes.",
+    "Initialize a DistributedDataParallel model with 4 GPUs if available.",
+    "Set up data loaders using TextImageDataset for training and validation datasets.",
+    "Configure the Adam optimizer with learning rate 1e-3 and betas (0.9, 0.999).",
+    "Create a function to save models and artifacts using wandb.Artifact.",
+    "Start the training loop with a resume epoch counter.",
+    "For each epoch, update the data sampler epoch and iterate over data loaders.",
+    "Move input tensors to GPU if available and perform forward pass through DALLE model.",
+    "Calculate loss and backward propagate gradients using DeepSpeed functions.",
+    "Step optimizer and scheduler if not in evaluation mode.",
+    "Log training metrics including loss and images every 10 iterations.",
+    "Save models at specified intervals and log as artifacts.",
+    "Monitor GPU memory usage during training.",
+    "Assert that the model generates images with no NaN values.",
+    "Validate the correctness of the DALLE model by checking output dimensions."
+]
+```
+

@@ -1,0 +1,44 @@
+object_detection_tutorial.ipynb with TF1
+
+Hello guys,
+
+I know, that there is already an example for TF2, but I need it for TF1. I've done first two major fixes on the current `object_detection_tutorial.ipynb` which is available in the colab_tutorials folder and then try to migrate it step to step for being compatible with TF1. Unfortunately TensorFlow dont provide two version of this script for us.
+
+The problem is in the function `load_model` under the section **Loader**. As you can see I've tried several approaches too load the model, but the finals tensors are empty with `???` and so the rest of the code don't work properly. The old issues about the use of the `object_detection_tutorial.ipynb` didn't helped me to make it running.
+
+```python
+def load_model(model_name):
+  base_url = 'http://download.tensorflow.org/models/research/object_detection/'
+  model_file = model_name + '.tar.gz'
+  model_dir = tf.keras.utils.get_file(
+    fname=model_name, 
+    origin=base_url + model_file,
+    untar=True)
+
+  model_dir = pathlib.Path(model_dir)/"saved_model"
+  print(model_dir)
+  model = tf.saved_model.load_v2(str(model_dir))
+  model.signatures["serving_default"]
+    
+  return model
+```
+Output: `INFO:tensorflow:Saver not created because there are no variables in the graph to restore` . I guess that's harmless?
+
+
+The problem later occurs here:
+```python
+for image_path in TEST_IMAGE_PATHS:
+  show_inference(detection_model, image_path)
+```
+Output:
+![grafik](https://github.com/tensorflow/models/assets/62354721/e891f651-e2e0-4511-8f2c-132ad7bae1bc)
+
+
+
+
+
+
+the jupyter notebbok script can be found here:
+https://drive.google.com/file/d/1UcI0BZ4pjY5e1aOB6oVBTn8YXtsKS8hA/view?usp=sharing
+
+Thanks in advance.

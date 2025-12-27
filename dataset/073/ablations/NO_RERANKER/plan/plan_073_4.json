@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import torch, import deepspeed, import os",
+    "Set the environment variable for distributed training: os.environ['WORLD_SIZE'] = '1'",
+    "Set the environment variable for the local rank: os.environ['LOCAL_RANK'] = '0'",
+    "Initialize the PyTorch distributed process group: torch.distributed.init_process_group(backend='nccl', init_method='env://')",
+    "Define a model configuration for the GPT-3 model: model_config = {'model_type': 'gpt3', 'model_size': '2.7b'}",
+    "Create a dummy input tensor with shape (1, 1024, 768) to simulate a batch of size 1 and sequence length of 1024",
+    "Initialize the DeepSpeed engine with the model configuration: model = deepspeed.initialize(model=model_config)",
+    "Call the function that triggers the all_reduce operation: output = model(dummy_input_tensor)",
+    "Verify that the global cdb object is initialized: assert cdb is not None, 'cdb should be initialized'",
+    "Attempt to call cdb.all_reduce on a tensor: cdb.all_reduce(dummy_input_tensor, op='sum', group=None, async_op=False)",
+    "Capture the output and check for AttributeError: assert 'AttributeError' in str(e), 'Expected AttributeError not raised'"
+]
+```

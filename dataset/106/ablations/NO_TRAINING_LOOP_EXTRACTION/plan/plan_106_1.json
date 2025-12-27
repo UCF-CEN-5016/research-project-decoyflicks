@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and VectorQuantize from vector_quantize_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(0)",
+    "Define a batch size of 4 and input dimension of 64",
+    "Create random input data with shape (batch_size, input_dim) using torch.randn(batch_size, input_dim)",
+    "Instantiate the ResidualVQ class with parameters: dim=64, num_quantizers=2, codebook_dim=64, shared_codebook=False",
+    "Pass the random input data to the forward method of the ResidualVQ instance without providing indices",
+    "Capture the output of the forward method",
+    "Check the output for NaN values using torch.isnan(output).any()",
+    "If NaN values are found, print 'NaN values encountered in output'",
+    "Assert that the output contains NaN values using assert torch.isnan(output).any() == True"
+]
+```

@@ -1,0 +1,28 @@
+```json
+[
+    "Set up a Python environment with the necessary packages installed, including deepspeed and pytorch.",
+    "Create a script named `pretrain_gpt3_2.7b.sh`.",
+    "Import all required modules at the beginning of the script: argparse, torch, deepspeed, utils (LossTracker, get_dataset, etc.), random, time, warnings, and numpy as np.",
+    "Define an argument parser with parameters such as --data-dir, --order-dir, --arch, --dataset, --printfreq, --workers, --epochs, --batchsize, --optimizer, --scheduler, --token_scheduler, --warmup, --lr, --momentum, --wd, --seed, --half, and --local_rank.",
+    "Define a function `main()` that will handle the setup and execution of the script.",
+    "Within `main()`, call `set_seed(args.seed)` to initialize random seed if provided.",
+    "Call `get_dataset(args.dataset, args.data_dir, 'train')` to load the training dataset and store it in `tr_set`. Assume the dataset is CIFAR-10 for this example.",
+    "Call `get_dataset(args.dataset, args.data_dir, 'val')` to load the validation dataset and store it in `val_set`.",
+    "Create data loaders for the training and validation datasets using `torch.utils.data.DataLoader` with the specified batch size and other parameters.",
+    "Initialize the model by calling `get_model(args.arch, tr_set.nchannels, tr_set.imsize, len(tr_set.classes), args.half)`. Assume a ResNet-50 architecture for this example.",
+    "Define the total number of iterations based on the number of epochs and the length of the training loader.",
+    "Initialize the optimizer by calling `get_optimizer(args.optimizer, model.parameters(), args.lr, args.momentum, args.wd)` with SGD as the optimizer and a learning rate of 0.1.",
+    "Initialize the scheduler by calling `get_scheduler(args.scheduler, optimizer, num_epochs=total_iteration)` with cosine decay for the learning rate scheduler.",
+    "Call `deepspeed.initialize(model=model, optimizer=optimizer, args=args, lr_scheduler=scheduler, dist_init_required=True)` to initialize DeepSpeed. Assume deepspeed is configured correctly and initialized properly.",
+    "Check if `args.random_ltd` is true. If so, call `convert_to_random_ltd(model, Block)` to apply random limited training (RLT). Assume Block is defined elsewhere in the codebase.",
+    "Iterate through each epoch from 0 to args.epochs - 1. Within each epoch, perform the following steps:",
+    "   Call `train(train_loader, model, criterion, optimizer, scheduler, epoch, iterations)` to train the model. This function should return the average training loss and accuracy, as well as update the total number of iterations.",
+    "   Call `validate(val_loader, model, criterion)` to validate the model on the validation set. This function should return the average validation loss and accuracy.",
+    "   Print epoch information including reserved length, current iteration, learning rate, validation accuracy, and consumed layer tokens.",
+    "   Update the history dictionary with training and validation metrics.",
+    "Save the training history to a file named `stat.pt`.",
+    "After all epochs are completed, save the final model without random limited training to `last_checkpoint.pt` using `save_without_random_ltd(model)`.",
+    "Call the `main()` function if the script is run directly."
+]
+```
+

@@ -1,0 +1,27 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from tensorflow import keras",
+    "Import necessary modules: from transformers import AutoTokenizer and TFAutoModelForQuestionAnswering",
+    "Load the SQuAD dataset using datasets.load_dataset('squad')",
+    "Define a tokenizer using AutoTokenizer.from_pretrained('distilbert-base-cased')",
+    "Set max_length to 384 and doc_stride to 128 for tokenization",
+    "Define a function prepare_train_features that tokenizes the input examples with truncation and padding",
+    "Map the prepare_train_features function to the training dataset using datasets.map() with batched=True",
+    "Convert the tokenized dataset to a numpy format using with_format('numpy')",
+    "Load the model using TFAutoModelForQuestionAnswering.from_pretrained('distilbert-base-cased')",
+    "Compile the model with an Adam optimizer and a learning rate of 5e-5",
+    "Fit the model on the training dataset for 1 epoch",
+    "Save the trained model using model.save('path_to_my_model')",
+    "Load the saved model using keras.models.load_model('path_to_my_model', custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False)",
+    "Create a TFLite converter using tf.lite.TFLiteConverter.from_saved_model('path_to_my_model')",
+    "Convert the model to TFLite format using converter.convert()",
+    "Save the TFLite model to a file named 'model.tflite'",
+    "Prepare a sample input string: sample_input = tokenize_and_convert_to_ids('eu rejects german call to boycott british lamb')",
+    "Load the TFLite model using tf.lite.Interpreter(model_path='model.tflite')",
+    "Get input and output details from the interpreter: input_index = interpreter.get_input_details()[0]['index'] and output_index = interpreter.get_output_details()[0]['index']",
+    "Set the input tensor with the sample input using interpreter.set_tensor(input_index, np.expand_dims(sample_input, axis=0))",
+    "Invoke the interpreter using interpreter.invoke()",
+    "Attempt to get the output tensor using prediction_mask = interpreter.get_tensor(output_index)",
+    "Verify that a ValueError is raised with the message 'Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0.'"
+]
+```

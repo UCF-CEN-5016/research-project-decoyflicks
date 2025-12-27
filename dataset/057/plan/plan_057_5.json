@@ -1,0 +1,16 @@
+[
+    "Set environment variable `KERAS_BACKEND` to 'tensorflow'",
+    "Import the necessary libraries including TensorFlow, Keras, and other required modules",
+    "Create a random seed for reproducibility with value 42 using `random.seed(42)`",
+    "Load the MNIST dataset from keras.datasets.mnist using `keras.datasets.mnist.load_data()` and assign it to variables `x_train`, `y_train`, `x_test`, `y_test`",
+    "Normalize the image data by dividing each pixel value by 255.0",
+    "Expand the dimensions of `x_train` and `x_test` to include a channel dimension using `np.expand_dims()` with axis=-1",
+    "Convert the class vectors in `y_train` and `y_test` to binary class matrices using `keras.utils.to_categorical()` with 10 classes",
+    "Create a sequential model using `keras.Sequential()`",
+    "Add layers to the model including Conv2D, MaxPooling2D, Flatten, Dropout, and Dense layers as specified in the example code",
+    "Compile the model using 'categorical_crossentropy' loss, 'adam' optimizer, and 'accuracy' metric",
+    "Train the model on `x_train` and `y_train` with a batch size of 128 for 15 epochs",
+    "Evaluate the model on `x_test` and `y_test` and store the results in `score`",
+    "Assert that the test accuracy is less than 0.90 to indicate the bug occurs"
+]
+

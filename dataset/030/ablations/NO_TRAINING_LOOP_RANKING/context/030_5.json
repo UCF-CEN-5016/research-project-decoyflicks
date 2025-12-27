@@ -1,0 +1,28 @@
+{
+  "bug_report": "030",
+  "rank": 5,
+  "score": 1.0,
+  "main_file": {
+    "path": "PyTorch/LanguageModeling/BERT/triton/deployment_toolkit/warmup.py",
+    "content": "# Copyright (c) 2021, NVIDIA CORPORATION. All rights reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\nimport logging\nimport pathlib\nfrom distutils.version import LooseVersion\nfrom importlib.metadata import version\nfrom typing import List\n\nTRITON_CLIENT_VERSION = LooseVersion(version(\"tritonclient\"))\n\n# method from PEP-366 to support relative import in executed modules\nif __package__ is None:\n    __package__ = pathlib.Path(__file__).parent.name\n\nfrom .core import BatchingMode, EvaluationMode, MeasurementMode, OfflineMode\nfrom .perf_analyzer import PerfAnalyzer, PerfAnalyzerConfig\nfrom .utils import parse_server_url\n\nLOGGER = logging.getLogger(\"warmup\")\n\n\ndef performance_evaluation_warmup(\n    server_url: str,\n    model_name: str,\n    batch_sizes: List[int],\n    number_of_triton_instances: int,\n    number_of_model_instances: int,\n    input_data: str,\n    input_shapes: List[str],\n    measurement_mode: MeasurementMode,\n    measurement_interval: int,\n    measurement_request_count: int,\n    batching_mode: BatchingMode,\n    offline_mode: OfflineMode,\n    evaluation_mode: EvaluationMode,\n    output_shared_memory_size: int,\n):\n    protocol, host, port = parse_server_url(server_url)\n\n    measurement_interval = 2 * measurement_interval\n    measurement_request_count = 2 * measurement_request_count\n\n    if batching_mode == BatchingMode.STATIC:\n        batch_sizes = sorted({1, batch_sizes[-1]})\n        max_concurrency = 1\n        min_concurrency = 1\n        step = 1\n    elif batching_mode == BatchingMode.DYNAMIC:\n        max_batch_size = max(batch_sizes)\n        max_total_requests = 2 * max_batch_size * number_of_triton_instances * number_of_model_instances\n        max_concurrency = min(256, max_total_requests)\n        step = max(1, max_concurrency // 2)\n        min_concurrency = step\n        batch_sizes = [max(1, max_total_requests // 256)]\n    else:\n        raise ValueError(f\"Unsupported batching mode: {batching_mode}\")\n\n    for batch_size in batch_sizes:\n        for concurrency in range(min_concurrency, max_concurrency + step, step):\n            params = {\n                \"model-name\": model_name,\n                \"model-version\": 1,\n                \"batch-size\": batch_size,\n                \"url\": f\"{host}:{port}\",\n                \"protocol\": protocol,\n                \"input-data\": input_data,\n                \"measurement-interval\": measurement_interval,\n                \"concurrency-range\": f\"{concurrency}:{concurrency}:1\",\n                \"output-shared-memory-size\": output_shared_memory_size,\n            }\n\n            if TRITON_CLIENT_VERSION >= LooseVersion(\"2.11.0\"):\n                params[\"measurement-mode\"] = measurement_mode.value\n                params[\"measurement-request-count\"] = measurement_request_count\n\n            if evaluation_mode == EvaluationMode.OFFLINE:\n                params[\"shared-memory\"] = offline_mode.value\n                params[\"output-shared-memory-size\"] = output_shared_memory_size\n\n            config = PerfAnalyzerConfig()\n            for param, value in params.items():\n                config[param] = value\n\n            for shape in input_shapes:\n                config[\"shape\"] = shape\n\n            perf_analyzer = PerfAnalyzer(config=config)\n            perf_analyzer.run()\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "distutils",
+      "function": "LooseVersion"
+    },
+    {
+      "module": "importlib",
+      "function": "version"
+    },
+    {
+      "module": "logging",
+      "function": "getLogger"
+    },
+    {
+      "module": "pathlib",
+      "function": "Path"
+    }
+  ]
+}

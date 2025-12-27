@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: import torch, import domino.parallel_state as mpu, and import the DominoModule class from training.DeepSpeed-Domino.domino.modules.module",
+    "Define a configuration dictionary with necessary parameters: config = {'model_type': 'gpt3', 'num_layers': 24, 'hidden_size': 2560, 'num_attention_heads': 16, 'intermediate_size': 10240}",
+    "Instantiate the DominoModule with the defined configuration: model = DominoModule(config=config)",
+    "Set the share_embeddings_and_output_weights parameter to True: model.share_embeddings_and_output_weights = True",
+    "Prepare a dummy input tensor with shape (2, 1024, 2560) to simulate a batch of 2 sequences of length 1024 with hidden size 2560: input_tensor = torch.randn(2, 1024, 2560)",
+    "Initialize the global cdb object to None to simulate the bug: cdb = None",
+    "Call the forward method of the model with the dummy input tensor: output = model(input_tensor)",
+    "In the model's forward method, ensure that the all_reduce function is called on the cdb object: assert cdb.all_reduce is called",
+    "Capture the output and check for the AttributeError: 'NoneType' object has no attribute 'all_reduce' during execution",
+    "Log the error message to confirm the bug: print('Caught expected AttributeError:', str(e))"
+]
+```

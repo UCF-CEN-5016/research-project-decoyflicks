@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from tensorflow import keras and import tensorflow as tf",
+    "Import RDKit modules: from rdkit import Chem, RDLogger and from rdkit.Chem.Draw import MolsToGridImage",
+    "Disable RDKit logging: RDLogger.DisableLog('rdApp.*')",
+    "Define constants for the model: set NUM_ATOMS to 9, ATOM_DIM to 5, BOND_DIM to 5, and LATENT_DIM to 64",
+    "Create a function smiles_to_graph that converts SMILES strings to adjacency and feature tensors",
+    "In smiles_to_graph, initialize adjacency tensor with shape (BOND_DIM, NUM_ATOMS, NUM_ATOMS) and feature tensor with shape (NUM_ATOMS, ATOM_DIM)",
+    "Create a dataset by loading QM9 data from the URL 'https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/qm9.csv'",
+    "Extract the SMILES column from the dataset and store it in a list called data",
+    "Generate a training set by iterating over data and calling smiles_to_graph for every 10th SMILES string",
+    "Convert adjacency_tensor and feature_tensor to numpy arrays",
+    "Define a GraphGenerator model with a latent input shape of (LATENT_DIM,) and output shapes of (BOND_DIM, NUM_ATOMS, NUM_ATOMS) for adjacency and (NUM_ATOMS, ATOM_DIM) for features",
+    "Define a GraphDiscriminator model with input shapes matching adjacency_tensor and feature_tensor",
+    "Create a GraphWGAN model using the defined generator and discriminator",
+    "Compile the GraphWGAN model with Adam optimizers for both generator and discriminator",
+    "Fit the GraphWGAN model on the training data with epochs set to 10 and batch size set to 16",
+    "During training, monitor the loss values and check if they are consistently low or NaN",
+    "Assert that the output of the generator produces tensors with shape (batch_size, BOND_DIM, NUM_ATOMS, NUM_ATOMS) and (batch_size, NUM_ATOMS, ATOM_DIM)",
+    "Verify that the feature tensor has an extra dimension by checking its shape after the generator output",
+    "Check if the SparseCategoricalCrossentropy loss function is applied to the output with the incorrect shape",
+    "Log the shapes of the generated adjacency and feature tensors to confirm the presence of the extra dimension",
+    "Assert that the model fails to train effectively due to the incorrect shape of the labels"
+]
+```

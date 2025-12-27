@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torch.optim, and torchvision.datasets",
+    "Set the device to 'cuda' if available, otherwise 'cpu'",
+    "Define the parameters for the ViT model: dim=128, image_size=224, patch_size=32, num_classes=2, depth=12, heads=8, k=64",
+    "Create a dataset using torchvision.datasets.ImageFolder with a path to the example dataset and apply necessary transformations",
+    "Create a DataLoader for the dataset with a batch size of 32 and shuffle set to True",
+    "Define the Linformer transformer with parameters: dim=128, seq_len=49+1, depth=12, heads=8, k=64",
+    "Define the ViT model using the parameters specified earlier and move it to the defined device",
+    "Initialize the loss function as CrossEntropyLoss and the optimizer as Adam with a learning rate of 0.001",
+    "Set the number of epochs to 5",
+    "For each epoch, perform the following steps:",
+    "    Set the model to training mode",
+    "    For each batch in the DataLoader, perform the following:",
+    "        a. Get the inputs and labels from the batch and move them to the device",
+    "        b. Zero the gradients of the optimizer",
+    "        c. Forward pass: pass the inputs through the model to get predictions",
+    "        d. Calculate the loss using the CrossEntropyLoss function",
+    "        e. Backward pass: call loss.backward() to compute gradients",
+    "        f. Update the model parameters using optimizer.step()",
+    "    After each epoch, set the model to evaluation mode",
+    "    Calculate the accuracy on the validation set by comparing predictions with true labels",
+    "Log the loss and accuracy for each epoch",
+    "Assert that the accuracy is 100% after the first epoch",
+    "If the accuracy is not 100%, print the loss and accuracy values for debugging"
+]
+```

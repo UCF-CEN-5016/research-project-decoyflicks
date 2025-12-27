@@ -1,0 +1,36 @@
+Why the accuracy rate to 100% using its examples' dataset
+
+I run this example' code in my computer ,but  the accuracy rate is 100% in epoch1 .
+The parameter of ViT is the same of examples
+efficient_transformer = Linformer(
+    dim=128,
+    seq_len=49+1,  # 7x7 patches + 1 cls-token
+    depth=12,
+    heads=8,
+    k=64
+)
+model = ViT(
+    dim=128,
+    image_size=224,
+    patch_size=32,
+    num_classes=2,
+    transformer=efficient_transformer,
+    channels=3,
+).to(device)
+
+100%|██████████| 313/313 [02:06<00:00,  2.48it/s]
+Epoch : 1 - loss : 0.0075 - acc: 1.0000 - val_loss : 0.0002 - val_acc: 1.0000
+
+100%|██████████| 313/313 [02:05<00:00,  2.49it/s]
+Epoch : 2 - loss : 0.0001 - acc: 1.0000 - val_loss : 0.0001 - val_acc: 1.0000
+
+100%|██████████| 313/313 [02:05<00:00,  2.50it/s]
+Epoch : 3 - loss : 0.0001 - acc: 1.0000 - val_loss : 0.0001 - val_acc: 1.0000
+
+100%|██████████| 313/313 [02:13<00:00,  2.35it/s]
+Epoch : 4 - loss : 0.0001 - acc: 1.0000 - val_loss : 0.0000 - val_acc: 1.0000
+
+100%|██████████| 313/313 [02:14<00:00,  2.33it/s]
+Epoch : 5 - loss : 0.0000 - acc: 1.0000 - val_loss : 0.0000 - val_acc: 1.0000
+
+Thanks in advance

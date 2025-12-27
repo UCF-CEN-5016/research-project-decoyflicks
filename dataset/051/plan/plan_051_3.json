@@ -1,0 +1,14 @@
+```json
+[
+    "Import KerasNLP and TensorFlow libraries",
+    "Define a batch size of 32 and sequence length of 50",
+    "Create random uniform input data with shape (batch_size, sequence_length)",
+    "Create a simple tokenizer with vocabulary size of 1000",
+    "Encode the input data using the tokenizer",
+    "Initialize a GreedySampler from KerasNLP without specifying 'end_token_id'",
+    "Define a decoder model that takes encoded sequences as input and outputs tokens",
+    "Pass the encoded sequences to the GreedySampler in a decode_sequences function call",
+    "Verify if TypeError occurs with message: Sampler.__call__() got an unexpected keyword argument 'end_token_id'"
+]
+```
+

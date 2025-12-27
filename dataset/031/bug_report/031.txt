@@ -1,0 +1,25 @@
+[Resnet50/Classification] Error(s) in loading state_dict when using pretrained weights
+
+Inference on Resnet50 model with pretrained weights,
+using the command to run inference on imageNet:
+`python ./main.py --arch=resnet50 --evaluate --epochs=1 --pretrained-from-file=nvidia_resnet50_200821.pth.tar -b=256 /data/imagenet/`
+
+
+There are some bugs when loading pretrained weights in model.
+```
+RuntimeError: Error(s) in loading state_dict for ResNet:
+        Missing key(s) in state_dict: "layers.0.0.conv1.weight", "layers.0.0.bn1.weight", "layers.0.0.bn1.bias", "layers.0.0.bn1.running_mean", "layers.0.0.bn1.running_var", "layers.0.0.conv2.weight",...
+Unexpected key(s) in state_dict: "layer1.0.conv1.weight", "layer1.0.bn1.weight", "layer1.0.bn1.bias", "layer1.0.bn1.running_mean", "layer1.0.bn1.running_var", "layer1.0.bn1.num_batches_tracked", "layer1.0.conv2.weight", "layer1.0.bn2.weight", "layer1.0.bn2.bias", "layer1.0.bn2.running_mean",...
+```
+
+**To Reproduce**
+
+[https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets/resnet50v1.5#6-start-inference](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Classification/ConvNets/resnet50v1.5#6-start-inference)
+
+
+
+Steps to reproduce the behavior:
+1. download pretrained weights
+2. run command
+
+

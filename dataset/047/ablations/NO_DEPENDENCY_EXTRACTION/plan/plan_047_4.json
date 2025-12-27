@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import torch, import os, import subprocess, import tempfile, import argparse, import re, from scipy.io.wavfile import write",
+    "Set the model path to the fairseq model checkpoint: model_path = '../fairseq_resource/mms1b_all.pt'",
+    "Set the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = ['/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0000.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0001.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0002.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0003.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0004.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0005.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0006.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0007.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0008.wav', '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0009.wav']",
+    "Construct the command to run the inference script: cmd = f'python -u examples/mms/asr/infer/mms_infer.py --model {model_path} --lang {lang} --audio {' '.join(audio_files)}'",
+    "Execute the command using subprocess: process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)",
+    "Capture the output and error logs: stdout, stderr = process.communicate()",
+    "Check the return code of the process to ensure it ran successfully: assert process.returncode == 0, f'Error: {stderr.decode()}'",
+    "Parse the output logs to extract the order of inference results: output_lines = stdout.decode().splitlines()",
+    "Create a list to store the expected order of outputs based on audio file names: expected_order = ['1089-134686-0000', '1089-134686-0001', '1089-134686-0002', '1089-134686-0003', '1089-134686-0004', '1089-134686-0005', '1089-134686-0006', '1089-134686-0007', '1089-134686-0008', '1089-134686-0009']",
+    "Extract the actual order of outputs from the output logs: actual_order = [line.split(' ')[-1].split('/')[-1].split('.')[0] for line in output_lines if 'Input:' in line]",
+    "Compare the actual order with the expected order: assert actual_order == expected_order, f'Output order mismatch: expected {expected_order}, got {actual_order}'",
+    "Log the results of the comparison to verify the bug: print('Output order is incorrect, bug reproduced.')"
+]
+```

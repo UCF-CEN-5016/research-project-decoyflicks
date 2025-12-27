@@ -1,0 +1,36 @@
+{
+  "bug_report": "092",
+  "module": {
+    "module": "tests",
+    "files": [
+      {
+        "path": "tests/test_x_transformers.py",
+        "snippets": [
+          {
+            "lines": "61-74",
+            "code": "def test_readme():\n    model = XTransformer(\n        dim = 512,\n        enc_num_tokens = 256,\n        enc_depth = 6,\n        enc_heads = 8,\n        enc_max_seq_len = 1024,\n        dec_num_tokens = 256,\n        dec_depth = 6,\n        dec_heads = 8,\n        dec_max_seq_len = 1024,\n        tie_token_emb = True\n    )\n\n    src = torch.randint(0, 256, (1, 1024))\n    src_mask = torch.ones_like(src).bool()\n    tgt = torch.randint(0, 256, (1, 1024))\n\n    loss = model(src, tgt, mask = src_mask)\n    loss.backward()\n\ndef test_kv_cache():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 8,\n            depth = 2,\n            heads = 4,\n            cross_attend = True\n        )\n    )\n\n    model.eval()\n\n    prompts = torch.zeros((2, 16))\n    context = torch.randn(2, 8, 8)\n\n    logits, cache = model(\n        prompts,\n        context = context,\n        return_intermediates = True\n    )\n\n    sampled = logits[:, -1].argmax(dim = -1, keepdim = True)\n    prompts = torch.cat((prompts, sampled), dim = -1)\n\n    next_logits = model(prompts, context = context)\n    next_logits_with_cache = model(prompts, context = context, cache = cache)\n\n    assert torch.allclose(next_logits[:, -1], next_logits_with_cache[:, -1], atol = 1e-6)\n\ndef test_cope():\n    model = TransformerWrapper(\n        num_tokens = 256,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 8,\n            depth = 2,\n            heads = 4,\n            attn_use_cope = True\n        )\n    )\n\n    seq = torch.randint(0, 256, (1, 1024))\n    logits = model(seq)"
+          },
+          {
+            "lines": "114-129",
+            "code": "def test_adaptive_layernorm():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            use_adaptive_layernorm = True,\n            use_adaptive_layerscale = True\n        )\n    )\n\n    x = torch.randint(0, 256, (2, 1024))\n    condition = torch.randn(2, 768)\n\n    model(x, condition = condition)\n\ndef test_adaptive_rmsnorm():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            use_adaptive_rmsnorm = True,\n            adaptive_condition_mlp = True\n        )\n    )\n\n    x = torch.randint(0, 256, (2, 1024))\n    condition = torch.randn(2, 768)\n\n    model(x, condition = condition)\n\ndef test_attn_softclamp_logits():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            attn_softclamp_logits = True,\n        )\n    )\n\n    x = torch.randint(0, 256, (1, 1024))\n\n    model(x)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "tests/test_x_transformers.py",
+      "snippets": [
+        {
+          "lines": "61-74",
+          "code": "def test_readme():\n    model = XTransformer(\n        dim = 512,\n        enc_num_tokens = 256,\n        enc_depth = 6,\n        enc_heads = 8,\n        enc_max_seq_len = 1024,\n        dec_num_tokens = 256,\n        dec_depth = 6,\n        dec_heads = 8,\n        dec_max_seq_len = 1024,\n        tie_token_emb = True\n    )\n\n    src = torch.randint(0, 256, (1, 1024))\n    src_mask = torch.ones_like(src).bool()\n    tgt = torch.randint(0, 256, (1, 1024))\n\n    loss = model(src, tgt, mask = src_mask)\n    loss.backward()\n\ndef test_kv_cache():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 8,\n            depth = 2,\n            heads = 4,\n            cross_attend = True\n        )\n    )\n\n    model.eval()\n\n    prompts = torch.zeros((2, 16))\n    context = torch.randn(2, 8, 8)\n\n    logits, cache = model(\n        prompts,\n        context = context,\n        return_intermediates = True\n    )\n\n    sampled = logits[:, -1].argmax(dim = -1, keepdim = True)\n    prompts = torch.cat((prompts, sampled), dim = -1)\n\n    next_logits = model(prompts, context = context)\n    next_logits_with_cache = model(prompts, context = context, cache = cache)\n\n    assert torch.allclose(next_logits[:, -1], next_logits_with_cache[:, -1], atol = 1e-6)\n\ndef test_cope():\n    model = TransformerWrapper(\n        num_tokens = 256,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 8,\n            depth = 2,\n            heads = 4,\n            attn_use_cope = True\n        )\n    )\n\n    seq = torch.randint(0, 256, (1, 1024))\n    logits = model(seq)"
+        },
+        {
+          "lines": "114-129",
+          "code": "def test_adaptive_layernorm():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            use_adaptive_layernorm = True,\n            use_adaptive_layerscale = True\n        )\n    )\n\n    x = torch.randint(0, 256, (2, 1024))\n    condition = torch.randn(2, 768)\n\n    model(x, condition = condition)\n\ndef test_adaptive_rmsnorm():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            use_adaptive_rmsnorm = True,\n            adaptive_condition_mlp = True\n        )\n    )\n\n    x = torch.randint(0, 256, (2, 1024))\n    condition = torch.randn(2, 768)\n\n    model(x, condition = condition)\n\ndef test_attn_softclamp_logits():\n    model = TransformerWrapper(\n        num_tokens = 20000,\n        max_seq_len = 1024,\n        attn_layers = Decoder(\n            dim = 512,\n            dim_condition = 768,\n            depth = 12,\n            heads = 8,\n            attn_softclamp_logits = True,\n        )\n    )\n\n    x = torch.randint(0, 256, (1, 1024))\n\n    model(x)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: import os, import tensorflow as tf, from tensorflow import keras, import keras_cv, from keras_cv import visualization, from keras_cv import bounding_box",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define hyperparameters: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 5",
+    "Prepare paths for images and annotations: path_images = '/path/to/images/', path_annot = '/path/to/annotations/'",
+    "Create a list of XML file paths from the annotations directory: xml_files = sorted([os.path.join(path_annot, file_name) for file_name in os.listdir(path_annot) if file_name.endswith('.xml')])",
+    "Create a list of JPEG image file paths from the images directory: jpg_files = sorted([os.path.join(path_images, file_name) for file_name in os.listdir(path_images) if file_name.endswith('.jpg')])",
+    "Define a function parse_annotation(xml_file) to read XML files and extract image paths, bounding boxes, and class IDs",
+    "Call parse_annotation for each XML file and store results in image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists to ragged tensors: bbox = tf.ragged.constant(bbox), classes = tf.ragged.constant(classes), image_paths = tf.ragged.constant(image_paths)",
+    "Create a tf.data.Dataset from the image paths, classes, and bounding boxes: data = tf.data.Dataset.from_tensor_slices((image_paths, classes, bbox))",
+    "Split the dataset into training and validation sets: num_val = int(len(xml_files) * SPLIT_RATIO), val_data = data.take(num_val), train_data = data.skip(num_val)",
+    "Define a load_dataset function to read images and format bounding boxes for the dataset",
+    "Map load_dataset function to train_data and val_data to create training and validation datasets: train_ds = train_data.map(load_dataset), val_ds = val_data.map(load_dataset)",
+    "Define a YOLOv8 model using keras_cv.models.YOLOV8Detector with num_classes set to the length of class_mapping, bounding_box_format set to 'xyxy', and a backbone from keras_cv.models.YOLOV8Backbone",
+    "Compile the YOLOv8 model with an Adam optimizer and loss functions: yolo.compile(optimizer=optimizer, classification_loss='binary_crossentropy', box_loss='ciou')",
+    "Fit the model on the training dataset: yolo.fit(train_ds, validation_data=val_ds, epochs=3)",
+    "Check the model summary to ensure the architecture is as expected",
+    "Verify that the variable level2_dau_2 is defined but not used in the model by inspecting the model's layers and outputs",
+    "Assert that the output of the model does not include level2_dau_2 in any of the layers or outputs"
+]
+```

@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch and ContinuousTransformerWrapper from the appropriate module.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define the parameters for ContinuousTransformerWrapper: dim_out=259, max_seq_len=0, num_memory_tokens=20, max_mem_len=100.",
+    "Create an instance of the Decoder class with parameters: dim=512, depth=6, heads=4, rotary_pos_emb=True, shift_tokens=1, attn_flash=True, attn_onnxable=True, use_rmsnorm=True, sandwich_norm=True.",
+    "Instantiate the ContinuousTransformerWrapper with the defined parameters and the created Decoder instance.",
+    "Create a random input tensor x with shape (1, 1024, 512) using torch.randn.",
+    "Create a mask tensor m with shape (1, 1024) where all values are True using torch.randn(1, 1024) > 0.",
+    "Create a list of memory tensors mems, each with shape (1, 100, 512), using a list comprehension with torch.zeros.",
+    "Call the net instance with parameters x, mask=m, mems=mems, and return_mems=True.",
+    "Capture the output logits and mems from the net call.",
+    "Print the shape of logits to verify the output dimensions.",
+    "Print the shapes of each tensor in mems to verify their dimensions.",
+    "Repeat the previous steps but set mems=None instead of the list of memory tensors.",
+    "Print the shape of logits again to compare the outputs when mems is None.",
+    "Assert that the output shapes of logits and mems when mems is not None differ from when mems is None, indicating the bug."
+]
+```

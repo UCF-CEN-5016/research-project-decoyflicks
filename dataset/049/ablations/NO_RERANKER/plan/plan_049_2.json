@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, nn, and the relevant modules from fairseq",
+    "Define a batch size of 2 and set the input dimensions for the model (e.g., input_dim=10, output_dim=10)",
+    "Create a model class that includes the RelPositionMultiHeadedAttention layer with uninitialized bias parameters using torch.Tensor",
+    "Instantiate the model with the defined input and output dimensions",
+    "Create a random input tensor with shape (batch_size, sequence_length, input_dim) where sequence_length=5",
+    "Create a random target tensor with shape (batch_size, sequence_length, output_dim)",
+    "Pass the input tensor through the model to generate output",
+    "Capture the output and check for NaN values using torch.isnan()",
+    "Assert that the output contains NaN values, indicating the presence of uninitialized parameters",
+    "Log the output tensor to verify the presence of NaN values",
+    "Run the model multiple times to ensure non-deterministic behavior is observed"
+]
+```

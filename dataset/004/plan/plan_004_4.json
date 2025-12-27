@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from tf_slim and nets",
+    "Define a batch size of 2 and image dimensions of 65x65 with 3 channels",
+    "Create random uniform input data with shape (batch_size, height, width, channels)",
+    "Call resnet_v1.resnet_v1_50 function with num_classes=10",
+    "Verify output logits contain NaN values in the loss calculation",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold for the model size"
+]
+```
+

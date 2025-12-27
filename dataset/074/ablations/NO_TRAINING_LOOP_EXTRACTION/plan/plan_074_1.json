@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary modules: argparse, torch, DataLoader, RandomSampler, and DeepSpeedRLHFEngine from dschat.",
+    "Set the random seed for reproducibility using set_random_seed with a seed value of 42.",
+    "Define a batch size of 16 for training and a maximum sequence length of 256.",
+    "Create a mock dataset that simulates the training data, ensuring it contains sequences with an 'eos' token at the end.",
+    "Prepare the action mask tensor with shape (batch_size, sequence_length) where the last token is masked (0) and all others are unmasked (1).",
+    "Create a tensor for actor_log_prob with shape (batch_size, sequence_length) filled with random values.",
+    "Create a tensor for log_probs with shape (batch_size, sequence_length) filled with random values.",
+    "Create a tensor for advantages with shape (batch_size) filled with random values.",
+    "Set the start index to a value of 1 to simulate the scenario where the first token is not included in the loss calculation.",
+    "Initialize the DeepSpeedRLHFEngine with mock parameters for actor_model_name_or_path and critic_model_name_or_path.",
+    "Call the actor_loss_fn method with the following parameters: actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]",
+    "Capture the output of the actor_loss_fn to verify the loss value.",
+    "Modify the call to actor_loss_fn to use action_mask[:, start-1:-1] instead of action_mask[:, start:] and capture the new output.",
+    "Compare the two loss outputs to check if they differ, indicating the bug is present.",
+    "Log the outputs of both loss calculations for further analysis.",
+    "Assert that the loss calculated with action_mask[:, start:] is different from the loss calculated with action_mask[:, start-1:-1]."
+]
+```

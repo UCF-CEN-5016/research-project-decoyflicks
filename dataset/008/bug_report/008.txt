@@ -1,0 +1,16 @@
+Faster RCNN Pretrained model facing error: Value error is not supported for tf2 version
+
+<!--
+As per our GitHub Policy (https://github.com/tensorflow/models/blob/master/ISSUES.md), we only address code bugs, documentation issues, and feature requests on GitHub.
+
+We will automatically close questions and help related issues.
+
+Please go to Stack Overflow (http://stackoverflow.com/questions/tagged/tensorflow-model-garden) for questions and help.
+
+-->
+![Screenshot 2024-01-11 211728](https://github.com/tensorflow/models/assets/155506569/e823ff36-d10a-4344-97df-ff36b37121bd)
+Facing issue when using pretrained model[Faster R-CNN Inception ResNet V2 640x640](http://download.tensorflow.org/models/object_detection/tf2/20200711/faster_rcnn_inception_resnet_v2_640x640_coco17_tpu-8.tar.gz)
+Using Google Colab
+Tensorflow version: 2.13.0
+Python version 3.10.12
+Do anyone know how to solve it

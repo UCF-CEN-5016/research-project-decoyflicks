@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from keras import Input, Model, layers, optimizers, losses, metrics",
+    "Set the random seed for reproducibility: import numpy as np; np.random.seed(42)",
+    "Define a batch size of 32 and input shape of (784,) for a simple dense neural network",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Preprocess the data: reshape x_train and x_test to (-1, 784) and normalize by dividing by 255",
+    "Convert y_train and y_test to float32 type",
+    "Reserve 10,000 samples from x_train and y_train for validation: x_val = x_train[-10000:], y_val = y_train[-10000:]",
+    "Update x_train and y_train to exclude the validation samples: x_train = x_train[:-10000], y_train = y_train[:-10000]",
+    "Create TensorFlow datasets for training, validation, and testing: train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(batch_size), val_dataset = tf.data.Dataset.from_tensor_slices((x_val, y_val)).batch(batch_size), test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(batch_size)",
+    "Define a simple model architecture using Keras: model = Model(inputs=Input(shape=(784,)), outputs=layers.Dense(10)(layers.Dense(256, activation='relu')(layers.Dense(256, activation='relu')(Input(shape=(784,))))))",
+    "Compile the model with Adam optimizer, SparseCategoricalCrossentropy loss, and SparseCategoricalAccuracy metric",
+    "Fit the model using model.fit(train_dataset, epochs=20, validation_data=test_dataset) to intentionally use the test set as validation data",
+    "After training, evaluate the model on the test dataset using model.evaluate(test_dataset) to check for performance metrics",
+    "Assert that the validation accuracy is higher than expected, indicating potential overfitting due to using the test set as validation"
+]
+```

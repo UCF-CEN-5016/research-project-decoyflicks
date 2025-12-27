@@ -1,0 +1,17 @@
+```json
+[
+    "Install PyTorch version 1.9.0+cu111 using pip: 'pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 --extra-index-url https://download.pytorch.org/whl/cu111'",
+    "Ensure the operating system is Ubuntu 18.04 LTS.",
+    "Create a new Python script named 'reproduce_bug.py'.",
+    "Import necessary modules: 'import torch', 'import torch.nn.functional as F', 'from torch.utils.data import Dataset, DataLoader', 'import os'.",
+    "Define a custom dataset class 'MyTrainDataset' that inherits from 'Dataset' and returns random data: 'class MyTrainDataset(Dataset): def __init__(self, size): self.data = torch.randn(size, 20); self.labels = torch.randint(0, 2, (size,)); def __len__(self): return len(self.data); def __getitem__(self, idx): return self.data[idx], self.labels[idx]'.",
+    "Set the batch size to 32: 'batch_size = 32'.",
+    "Create an instance of 'MyTrainDataset' with 2048 samples: 'train_set = MyTrainDataset(2048)'.",
+    "Create a DataLoader for the dataset: 'train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)'.",
+    "Define a simple model: 'model = torch.nn.Linear(20, 2)'.",
+    "Check if MPS is available by adding a line: 'print(torch.backends.mps.is_available())'.",
+    "Attempt to access the MPS backend: 'if torch.backends.mps.is_available(): print(\"MPS is available\") else: print(\"MPS is not available\")'.",
+    "Run the script using the command: 'python3 reproduce_bug.py'.",
+    "Verify that the output contains the error message: 'AttributeError: module 'torch.backends' has no attribute 'mps'' if MPS is not available."
+]
+```

@@ -1,0 +1,31 @@
+TITLE  
+AttributeError: 'torch.backends' module lacks 'mps' attribute
+
+SYMPTOMS  
+• Encountering an `AttributeError` when running the imagenet example code with PyTorch.  
+• The following error message is displayed:  
+  ```
+  AttributeError: module 'torch.backends' has no attribute 'mps'
+  ```  
+• The program fails to execute the intended functionality of creating and training the model.
+
+EXPECTED BEHAVIOR  
+The code should execute without raising an exception, allowing for the successful creation and training of the 'resnet18' model.
+
+REPRODUCTION STEPS  
+1. Ensure that PyTorch version 1.9.0+cu111 is installed.
+2. Run the following command in the terminal:  
+   ```
+   python3 main.py -a resnet18 --dummy
+   ```
+3. Observe the execution and note the raised `AttributeError`.
+
+ADDITIONAL CONTEXT  
+- Operating System: Ubuntu 18.04 LTS  
+- Installation method: Installed via `pip`  
+- Environment: GPU  
+- Example used: imagenet  
+- Link to the code: [pytorch/examples/imagenet/main.py](https://github.com/pytorch/examples/blob/main/imagenet/main.py)
+
+POSSIBLE SOLUTION  
+To resolve the issue, ensure that the code checks for the availability of the 'mps' backend only if it is supported by the installed PyTorch version. Alternatively, set the GPU ID to 0 as suggested in the pull request: [Link to pull request](https://github.com/pytorch/examples/pull/1135).

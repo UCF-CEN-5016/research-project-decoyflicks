@@ -1,0 +1,16 @@
+TITLE
+Gamma Correction Error in General Advantage Estimation (GAE) Formula
+
+SYMPTOMS
+• Incorrect gamma correction applied in GAE formula at line 36.
+• Misaligned equation for lambda correction term at line 45.
+
+EXPECTED BEHAVIOR
+At line 36, the GAE calculation should use \(\gamma^2 r_{t+2}\) instead of \(\gamma^2 r_{t+1}\).
+At line 45, the working variable `wk` for lambda correction term should be calculated as \(w_k = (1-\lambda) \cdot \lambda^{(k-1)}\).
+
+REPRODUCTION STEPS
+1. Navigate to the file `labml_nn/rl/ppo/gae.py`.
+2. Locate line 36 and observe the formula used in GAE calculation.
+3. Verify that it should use \(\gamma^2 r_{t+2}\) instead of \(\gamma^2 r_{t+1}\).
+4. Similarly, check line 45 to ensure the lambda correction term is correctly calculated as \(w_k = (1-\lambda) \cdot \lambda^{(k-1)}\).

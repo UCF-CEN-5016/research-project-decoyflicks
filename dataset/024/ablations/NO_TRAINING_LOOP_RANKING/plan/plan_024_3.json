@@ -1,0 +1,13 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Clone the models repository using the command: !git clone https://github.com/mirzaim/models.git",
+    "Change the working directory to the delf examples folder using: %cd /content/models/research/delf/delf/python/examples/",
+    "Download the example configuration file using: !wget https://raw.githubusercontent.com/mirzaim/models/master/research/delf/delf/python/examples/delf_config_example.pbtxt",
+    "Create a list of images for feature extraction by creating a file named list_images.txt with the following content: 'image1.jpg\nimage2.jpg\nimage3.jpg' (ensure these images are available in the current directory).",
+    "Run the feature extraction script using the command: !python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Observe the output for the error message: 'ModuleNotFoundError: No module named 'delf.python.datasets''",
+    "Verify that the delf/python/datasets directory does not contain an __init__.py file by checking the directory structure using: !ls /content/models/research/delf/delf/python/datasets",
+    "Confirm that the error occurs specifically due to the absence of the __init__.py file by adding it and rerunning the script to see if the error persists."
+]
+```

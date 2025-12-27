@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: import tensorflow as tf, import tensorflow_datasets as tfds, import keras",
+    "Set the batch size to 32 and define input dimensions: BATCH_SIZE = 32, INPUT_HEIGHT = 224, INPUT_WIDTH = 224",
+    "Load the Oxford Pets dataset using TensorFlow Datasets: (train_ds, valid_ds, test_ds) = tfds.load('oxford_iiit_pet', split=['train[:85%]', 'train[85%:]', 'test'], batch_size=BATCH_SIZE, shuffle_files=True)",
+    "Define the augment_fn function that applies random augmentations to the images and masks, ensuring it returns tensors of different types (e.g., float32 for images and int64 for masks)",
+    "Create a dataset pipeline for training data: augmented_train_ds = (train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=tf.data.AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE))",
+    "Define the unpackage_inputs function that separates images and masks from the dataset, ensuring the output types are float32 for images and int64 for masks",
+    "Run the augmented_train_ds pipeline to trigger the error: augmented_train_ds = (train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=tf.data.AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Capture the error message during the execution of the augmented_train_ds pipeline, specifically looking for the type mismatch error between float32 and int64 tensors",
+    "Verify that the error message contains the specific text: 'have different types' indicating a type mismatch between tensors"
+]
+```

@@ -1,0 +1,21 @@
+TITLE  
+Timeseries Forecasting Script Fails Due to ValueError
+
+SYMPTOMS  
+• The script fails to execute properly when attempting to show a heatmap of the data.  
+• Error messages include:  
+  ```
+  2023-08-15 13:13:03.770912: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+  2023-08-15 13:13:06.226074: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+  2023-08-15 13:13:12.123887: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+  ValueError: could not convert string to float: '01.01.2009 00:10:00'
+  ```  
+• The script does not generate the expected heatmap visualization.
+
+EXPECTED BEHAVIOR  
+The script should successfully execute and display a heatmap of the correlation matrix for the timeseries data without errors.
+
+REPRODUCTION STEPS  
+1. Run the command: `python3 timeseries_weather_forecasting.py`  
+2. Ensure the input data is formatted correctly for processing.  
+3. Observe the output for error messages related to CUDA and TensorRT, followed by the ValueError when attempting to show the heatmap.

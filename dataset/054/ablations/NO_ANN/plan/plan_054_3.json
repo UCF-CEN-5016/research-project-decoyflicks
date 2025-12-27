@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary modules from Keras: layers, Model, and Sequential",
+    "Import numpy for data manipulation",
+    "Load the CIFAR-100 dataset using keras.datasets.cifar100.load_data()",
+    "Assign the training data to variables x_train and y_train, and the test data to x_test and y_test",
+    "Print the shapes of x_train, y_train, x_test, and y_test to verify data loading",
+    "Define a batch size of 128 and set num_epochs to 20",
+    "Define a function build_classifier that takes blocks as input and returns a Keras model",
+    "Inside build_classifier, create an input layer with shape (32, 32, 3)",
+    "Add data augmentation layers: Normalization, Resizing to (64, 64), RandomFlip, and RandomZoom",
+    "Create patches from the augmented data using a custom Patches layer",
+    "Define a Dense layer to encode patches with units set to 256",
+    "Add a GlobalAveragePooling1D layer to the model",
+    "Add a Dropout layer with a rate of 0.2",
+    "Add a final Dense layer with units equal to the number of classes (100) to compute logits",
+    "Compile the model using Adam optimizer with a learning rate of 0.005 and SparseCategoricalCrossentropy loss",
+    "Define a run_experiment function that fits the model using model.fit with validation_data set to test_dataset",
+    "Call run_experiment with the model built from build_classifier",
+    "Set validation_data to test_dataset in model.fit to reproduce the bug",
+    "Monitor the training process and print the validation accuracy after each epoch",
+    "After training, evaluate the model on the test set and print the test accuracy",
+    "Assert that the test accuracy is higher than expected, indicating overfitting due to using the test set as validation"
+]
+```

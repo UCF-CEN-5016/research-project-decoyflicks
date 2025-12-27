@@ -1,0 +1,27 @@
+```json
+[
+    "Import required modules from accelerate, diffusers, and other dependencies",
+    "Define constants for batch size (batch_size), image height (height), and width (width)",
+    "Create a dummy prompt of type str with a single element",
+    "Initialize negative_prompt as None",
+    "Generate random prompt_embeds tensor of shape (batch_size * num_images_per_prompt, prompt_embedding_dim) using randn_tensor",
+    "Set guidance_scale to 2.0 for classifier-free guidance",
+    "Call _encode_prompt method with the defined prompt, device, batch_size, do_classifier_free_guidance, negative_prompt, and prompt_embeds",
+    "Verify that the returned prompt_embeds tensor has a shape of (batch_size * num_images_per_prompt, 2 * prompt_embedding_dim)",
+    "Initialize timesteps using scheduler.set_timesteps(num_inference_steps, device=device) with num_inference_steps set to 50",
+    "Prepare latents tensor using prepare_latents method with batch_size * num_images_per_prompt, num_channels_latents, height, width, prompt_embeds.dtype, device, generator, and latents (None)",
+    "Verify that the returned latents tensor has a shape of (batch_size * num_images_per_prompt, num_channels_latents, height, width)",
+    "Prepare extra step kwargs using prepare_extra_step_kwargs method with generator and eta",
+    "Set up progress bar for denoising loop",
+    "Iterate over timesteps in denoising loop",
+    "For each timestep, check if do_classifier_free_guidance is True and compute noise_pred using unet",
+    "Update latents tensor using scheduler.step with noise_pred, t, latents, and extra_step_kwargs",
+    "Call callback function every callback_steps during denoising loop (for validation purposes)",
+    "After denoising loop, decode latents to image using decode_latents method",
+    "Run safety checker on the decoded image and prompt_embeds.dtype",
+    "Convert the final image to PIL format using numpy_to_pil method",
+    "Verify that the output image has a shape of (batch_size * num_images_per_prompt, height, width, 3)",
+    "Check if the nsfw_content_detected is None or not depending on the safety checker's result"
+]
+```
+

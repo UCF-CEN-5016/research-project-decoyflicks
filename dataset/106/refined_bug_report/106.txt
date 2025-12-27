@@ -1,0 +1,47 @@
+TITLE
+Floating Point Precision Issues in `cdist()` Leading to NaN Values
+
+SYMPTOMS
+• The function encounters NaN values when computing distances.
+• Error messages related to NaN may not be explicitly shown but can be inferred from subsequent errors or incorrect outputs.
+
+EXPECTED BEHAVIOR
+• The function `cdist()` should correctly compute the squared Euclidean distance between vectors without producing NaN values.
+
+REPRODUCTION STEPS
+1. Import the necessary libraries and modules.
+2. Prepare two sets of input tensors, `x` and `y`.
+3. Call the `cdist()` function from the provided code snippet with these tensors as arguments.
+4. Observe if any NaN values are present in the resulting distance matrix.
+
+Here is a detailed example based on the given information:
+
+```python
+import torch
+
+# Step 1: Import necessary libraries and modules
+from vector_quantize_pytorch.vector_quantize_pytorch import cdist
+
+# Step 2: Prepare two sets of input tensors
+x = torch.tensor([[1.0, 2.0], [3.0, 4.0]], dtype=torch.float64)  # Example tensor x
+y = torch.tensor([[5.0, 6.0], [7.0, 8.0]], dtype=torch.float64)  # Example tensor y
+
+# Step 3: Call the cdist() function with these tensors as arguments
+result = cdist(x, y)
+
+# Step 4: Observe if any NaN values are present in the resulting distance matrix
+print(result)
+```
+
+Note that the above example might not necessarily produce a NaN value without the specific conditions causing overflow. To ensure correctness, you can modify the `cdist()` function as suggested:
+
+```python
+def cdist(x, y):
+# Original implementation...
+dist = torch.cdist(x.unsqueeze(0), y.unsqueeze(0)) ** 2
+
+# Clamp to prevent negative values due to floating point precision issues
+return torch.clamp(dist, min=0)
+```
+
+By adding the `torch.clamp(..., min=0)` step, you ensure that any value below zero is adjusted to zero, preventing NaNs from occurring.

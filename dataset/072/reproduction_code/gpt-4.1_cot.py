@@ -1,0 +1,1 @@
+print_throughput(model.model, args, end - start, ...)

@@ -1,0 +1,49 @@
+TITLE
+Incorrect Attribute Access in DeepSpeed Engine
+
+SYMPTOMS
+• The error message indicates that the `DeepSpeedEngine` object does not have a `model` attribute, which is expected to be accessed.
+• The error occurs when attempting to print throughput using `print_throughput(model.model, args, end - start)`.
+• The stack trace shows the error originates from line 367 of `main.py`.
+
+EXPECTED BEHAVIOR
+- When calling `print_throughput`, it should correctly access the model's attribute and print throughput without raising an `AttributeError`.
+
+REPRODUCTION STEPS
+1. Clone the repository: `git clone https://github.com/microsoft/DeepSpeedExamples.git`
+2. Navigate to the relevant directory: `cd applications/DeepSpeed-Chat/training/step1_supervised_finetuning`
+3. Install dependencies and setup DeepSpeed environment.
+4. Run the training script: `python main.py` (or any other command used for training)
+5. Observe that the script trains one epoch, prints perplexity and loss, and then encounters an error when trying to print throughput.
+
+```markdown
+### Analysis
+
+The bug report describes a scenario where running a single epoch of training using DeepSpeed results in an `AttributeError` due to incorrect attribute access on the `DeepSpeedEngine` object. Specifically, the code attempts to access `model.model`, which is invalid because `DeepSpeedEngine` does not have such an attribute.
+
+#### Proposed Solution
+
+1. **Review and Correct the Code:**
+- Check line 367 of `main.py` where `print_throughput(model.model, args, end - start)` is called.
+- Instead of accessing `model.model`, it should be `model.module.model` if `module` is meant to access the underlying model. This change reflects that in DeepSpeed's context, `DeepSpeedEngine` wraps around a module which itself contains the actual model.
+
+2. **Update the Code:**
+```python
+# Before (incorrect)
+print_throughput(model.model, args, end - start)
+
+# After (corrected)
+print_throughput(model.module.model, args, end - start)
+```
+
+3. **Test and Verify:**
+- After making the changes, re-run the training script to ensure the error is resolved.
+- Confirm that the throughput printing works as expected without any errors.
+
+#### Example Fix
+The corrected line would look like this:
+```python
+print_throughput(model.module.model, args, end - start)
+```
+
+By ensuring `module` is correctly accessed, the `AttributeError` should be avoided and the script will execute as intended.

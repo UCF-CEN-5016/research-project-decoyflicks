@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the tensorflow_models module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Ensure TensorFlow version is 2.x by running 'print(tf.version.VERSION)'",
+    "Check that the absl module is installed by running 'pip install absl-py'",
+    "Create a Python script or Jupyter notebook to run the code",
+    "Define a batch size of 32 and input dimensions of [None, 100, 1280] for video classification",
+    "Prepare a dummy dataset with random input data using 'tf.random.uniform(shape=(32, 100, 1280))' for video features",
+    "Prepare corresponding labels using 'tf.random.uniform(shape=(32, 1), minval=0, maxval=2, dtype=tf.int32)' for binary classification",
+    "Create a mock input dictionary with keys 'video_matrix', 'labels', and 'num_frames' using the dummy dataset and labels",
+    "Set 'num_frames' to a tensor of shape (32,) with random integers between 1 and 100 using 'tf.random.uniform(shape=(32,), minval=1, maxval=100, dtype=tf.int32)'",
+    "Attempt to import the YT8MTask class from 'official.projects.yt8m.tasks.yt8m_task' using 'from official.projects.yt8m.tasks.yt8m_task import YT8MTask'",
+    "Instantiate the YT8MTask class with a mock configuration object that includes 'train_data' and 'model' attributes",
+    "Call the 'build_model' method of the YT8MTask instance to create the model",
+    "Call the 'train_step' method of the YT8MTask instance with the mock input dictionary, model, optimizer, and metrics set to None",
+    "Capture the output and check for ImportError related to 'tensorflow_text.core.pybinds.tflite_registrar.so'",
+    "Verify that the ImportError message contains 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

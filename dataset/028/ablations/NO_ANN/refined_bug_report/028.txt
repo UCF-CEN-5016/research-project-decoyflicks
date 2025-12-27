@@ -1,0 +1,18 @@
+TITLE  
+Incorrect Default `num_classes` for CIFAR10 Dataset in Vision Transformer
+
+SYMPTOMS  
+• The default `num_classes` is set to 16 instead of the expected 10 for the CIFAR10 dataset.  
+• This discrepancy may lead to incorrect model behavior and performance issues when training or evaluating the vision transformer on the CIFAR10 dataset.  
+
+EXPECTED BEHAVIOR  
+The default `num_classes` should be set to 10 in the vision transformer implementation when using the CIFAR10 dataset, as this dataset consists of 10 distinct classes.
+
+REPRODUCTION STEPS  
+1. Clone the repository from [vision_transformer](https://github.com/pytorch/examples/tree/6fc19c76b9f5550d8d3cb38284845ac7ed14223c/vision_transformer).  
+2. Navigate to the main.py file in the cloned repository.  
+3. Locate the line where `num_classes` is defined (Line 228).  
+4. Observe that `num_classes` is incorrectly set to 16.  
+5. Verify against the CIFAR10 dataset specifications to confirm it should be 10.  
+
+By following these steps, the issue can be reproduced, and the incorrect setting can be identified.

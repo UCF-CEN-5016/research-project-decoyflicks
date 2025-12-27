@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: os, torch, numpy, and any required modules from dalle_pytorch.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define the training parameters: set batch_size to 32, image dimensions to (256, 256), and number of epochs to 200.",
+    "Create a dummy dataset for training: generate random captions_array with shape (1000, 10) and random all_image_codes with shape (1000, 3, 256, 256).",
+    "Create a random captions_mask with shape (1000, 10) filled with 1s and 0s to simulate valid and invalid tokens.",
+    "Split the dataset into training indices: create train_idx as a range from 0 to 800 for training data.",
+    "Initialize the DALL-E model: dalle = Dalle(...) with appropriate parameters.",
+    "Initialize the optimizer: opt = torch.optim.Adam(dalle.parameters(), lr=0.001).",
+    "Define the fit function to train the model, ensuring it accepts the parameters as shown in the bug report.",
+    "Within the fit function, call the train_dalle_batch function with the model, training data, and other parameters.",
+    "In the train_dalle_batch function, extract text, image_codes, and mask from train_data.",
+    "Call the forward method of the DALL-E model with the extracted text, image_codes, and mask as keyword argument.",
+    "Run the fit function with the DALL-E model, optimizer, and training data, ensuring to pass the mask argument.",
+    "Execute the training loop for a few iterations to trigger the error.",
+    "Capture the output and check for TypeError indicating 'forward() got an unexpected keyword argument 'mask'.",
+    "Log the error message and the stack trace to confirm the bug is reproduced."
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and Orbit libraries: import orbit; import tensorflow as tf",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Create a synthetic dataset using tf.data.Dataset.from_tensor_slices with 1000 samples, each containing a dictionary with a 'label' key and a 'features' key (shape: (batch_size, height, width, channels))",
+    "Define a simple Keras model using tf.keras.Sequential with 2 convolutional layers followed by a dense layer, ensuring the output shape matches the number of classes in the dataset",
+    "Define a loss function using tf.keras.losses.SparseCategoricalCrossentropy()",
+    "Define an optimizer using tf.keras.optimizers.Adam()",
+    "Instantiate the SingleTaskTrainer class with the created dataset, label key as 'label', model, loss function, optimizer, and no additional metrics",
+    "Call the train_loop_begin method of the SingleTaskTrainer instance to reset states",
+    "Call the train_step method of the SingleTaskTrainer instance with an iterator created from the dataset",
+    "Modify the augment.py file to introduce a bug by removing the 'level_std*' from the line where the standard deviation is calculated, ensuring it always defaults to 1",
+    "Run the training loop for a few epochs (e.g., 5 epochs) to ensure the bug is triggered during training",
+    "Capture the output of the training process, specifically focusing on the standard deviation values used in the augmentation process",
+    "Assert that the standard deviation values logged during training are always 1, indicating the bug is present",
+    "Log the training loss and metrics to verify that they are being calculated correctly despite the bug"
+]
+```

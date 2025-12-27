@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and KerasCV modules: 'import tensorflow as tf' and 'import keras_cv'",
+    "Set the batch size: 'BATCH_SIZE = 4'",
+    "Define the AUTOTUNE variable for parallel processing: 'AUTOTUNE = tf.data.AUTOTUNE'",
+    "Create a function 'load_image' that reads and decodes JPEG images: 'def load_image(image_path): return tf.image.decode_jpeg(tf.io.read_file(image_path), channels=3)'",
+    "Create a function 'load_dataset' that loads images and bounding boxes: 'def load_dataset(image_path, classes, bbox): return {\"images\": load_image(image_path), \"bounding_boxes\": {\"classes\": tf.cast(classes, dtype=tf.float32), \"boxes\": bbox}}'",
+    "Prepare a list of image paths and bounding boxes for testing: 'image_paths = [\"path/to/image1.jpg\", \"path/to/image2.jpg\"]' and 'bbox = [[[0, 0, 1, 1]], [[0, 0, 1, 1]]]'",
+    "Create a TensorFlow dataset from the image paths and bounding boxes: 'data = tf.data.Dataset.from_tensor_slices((image_paths, tf.ragged.constant([[0], [0]]), tf.ragged.constant(bbox)))'",
+    "Split the dataset into training and validation sets: 'train_data = data.take(1)' and 'val_data = data.skip(1)'",
+    "Define an augmentation function 'augment_fn' that applies random transformations: 'def augment_fn(inputs): return inputs'",
+    "Create the training dataset with shuffling and mapping: 'augmented_train_ds = train_data.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE)'",
+    "Create the validation dataset with mapping: 'resized_val_ds = val_data.map(lambda x, y, z: load_dataset(x, y, z), num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE)'",
+    "Attempt to run the code that creates augmented_train_ds and resized_val_ds",
+    "Capture the error output when executing the dataset creation code",
+    "Verify that the error message contains 'TypeError' and mentions 'tf.switch_case must have the same number, type, and overall structure of return values'",
+    "Check that the error indicates a mismatch in tensor data types between 'segmentation_masks' in the augmented dataset"
+]
+```

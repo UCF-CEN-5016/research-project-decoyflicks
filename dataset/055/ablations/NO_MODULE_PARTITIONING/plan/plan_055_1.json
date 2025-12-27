@@ -1,0 +1,31 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary modules from keras_nlp and nltk",
+    "Set the Keras version to 2.15 and TensorFlow version to match compatibility",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40 and TEST_BATCH_SIZE = 1",
+    "Import the necessary tokenizers: eng_tokenizer and spa_tokenizer from data_preprocessing",
+    "Import test_pairs from data_preprocessing, which contains pairs of English and Spanish sentences",
+    "Define the transformer model by importing it from the model module",
+    "Create a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Ensure the encoder_input_tokens shape is (1, MAX_SEQUENCE_LENGTH) and truncate if necessary to 40 tokens",
+    "Define the next_fn function that takes prompt, cache, and index as parameters",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, expecting output shape (1, 40, 256)",
+    "Extract logits from the transformer output using logits = logits[:, index - 1, :] and set hidden_states to None",
+    "Print the shapes of logits and cache to verify dimensions before returning them",
+    "Build a prompt tensor of shape (1, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Create a list of test_eng_texts and test_spa_texts from test_pairs",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Iterate over the range of test_pairs length, using each English sentence for translation",
+    "Call decode_sequences with the current English sentence and store the result",
+    "Convert the translated tensor to a numpy array and decode it to a UTF-8 string",
+    "Clean the translated string by removing [PAD], [START], and [END] tokens",
+    "Split the cleaned translated string into a list of words",
+    "Calculate the BLEU score using nltk's modified_precision function with n=4",
+    "Append the calculated BLEU score to bleu_score list",
+    "Print the mean of the bleu_score list to display the final BLEU score",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Verify that the segmentation fault occurs specifically after the next_fn returns logits, an empty tuple, and None for hidden_states"
+]
+```

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, nn, and math",
+    "Define the model parameters: set d_model to 4, n_vocab to 10, and max_len to 5",
+    "Create an instance of EmbeddingsWithLearnedPositionalEncoding with d_model=4, n_vocab=10, and max_len=5",
+    "Prepare input tensor x with shape (3, 1) using torch.randint to simulate a batch of 3 tokens with vocabulary size 10",
+    "Call the forward method of the EmbeddingsWithLearnedPositionalEncoding instance with input tensor x",
+    "Inside the forward method, assert that positional_encodings has shape (max_len, 1, d_model) which should be (5, 1, 4)",
+    "Verify that the output tensor from the forward method has shape (3, 4) after applying the linear embedding and positional encodings",
+    "Create a tensor self.cos_cached with shape (1, 1, 1, 5) and self.sin_cached with shape (1, 1, 1, 5) to simulate cached cosine and sine values",
+    "Modify the forward method to include the line: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Run the modified forward method and capture the RuntimeError",
+    "Assert that the RuntimeError message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'"
+]
+```

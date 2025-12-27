@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch and x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 8 and input sequence length of 1024",
+    "Define the number of tokens as 32 and the number of memory tokens as 20",
+    "Create a TransformerWrapper instance with the following parameters: num_tokens=32, max_seq_len=0, num_memory_tokens=20",
+    "Define the attention layers as a Decoder with the following parameters: dim=512, depth=4, heads=4, rotary_pos_emb=True, attn_flash=True, attn_onnxable=True, attn_num_mem_kv=20, attn_one_kv_head=True",
+    "Pass the attention layers to the TransformerWrapper instance",
+    "Generate random input data using torch.randint with shape (batch_size, input_sequence_length) and values between 0 and num_tokens",
+    "Call the forward method of the TransformerWrapper instance with the generated input data",
+    "Print the shape and dtype of the input data to verify correct input format",
+    "Print the shape and dtype of the output logits to verify correct output format",
+    "Assert that the output logits shape is equal to (batch_size, input_sequence_length, num_tokens)",
+    "Monitor for any runtime errors during the execution of the forward method",
+    "Check for specific error messages related to 'attn_num_mem_kv > 0 and attn_one_kv_head = True'"
+]
+```

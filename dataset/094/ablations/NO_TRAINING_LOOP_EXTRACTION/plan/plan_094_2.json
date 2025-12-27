@@ -1,0 +1,21 @@
+```json
+[
+    "Import torch and the ContinuousTransformerWrapper class from the appropriate module",
+    "Set the output dimension dim_out to 259 and the maximum sequence length max_seq_len to 0",
+    "Set the number of memory tokens num_memory_tokens to 20 and the maximum memory length max_mem_len to 100",
+    "Create an instance of the Decoder class with the following parameters: dim=512, depth=6, heads=4, rotary_pos_emb=True, shift_tokens=1, attn_flash=True, attn_onnxable=True, use_rmsnorm=True, sandwich_norm=True",
+    "Instantiate the ContinuousTransformerWrapper with the previously defined parameters and the attn_layers set to the Decoder instance",
+    "Define a batch size of 1 and sequence length of 1024 for input tensor x",
+    "Create input tensor x using torch.randn with shape (1, 1024, 512)",
+    "Create a mask tensor m using torch.randn with shape (1, 1024) and apply a boolean condition to ensure it contains True values",
+    "Initialize a list of memory tensors mems with 6 elements, each being a tensor of zeros with shape (1, 100, 512)",
+    "Call the net instance with parameters x, mask=m, mems=mems, and return_mems=True",
+    "Capture the output logits and memory tensors mems from the net call",
+    "Print the shape of logits to verify the output dimensions",
+    "Print the shapes of each tensor in mems to verify the memory tensors are returned correctly",
+    "Repeat the call to net with mems set to None instead of the initialized mems list",
+    "Capture the output logits and memory tensors mems from the net call with mems=None",
+    "Print the shape of logits to verify the output dimensions when mems is None",
+    "Compare the outputs from both calls to assert that the behavior differs when using mems vs. None"
+]
+```

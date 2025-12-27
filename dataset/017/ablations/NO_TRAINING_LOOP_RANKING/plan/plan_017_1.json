@@ -1,0 +1,26 @@
+```json
+[
+    "Import TensorFlow version 1.x and necessary libraries: tensorflow, pathlib, and matplotlib",
+    "Set the TensorFlow version to 1.x by using 'tf.compat.v1' for compatibility",
+    "Define a model name variable with a string value of 'ssd_mobilenet_v1_coco_2017_11_17'",
+    "Create a function 'load_model' that takes 'model_name' as a parameter",
+    "Inside 'load_model', define 'base_url' as 'http://download.tensorflow.org/models/research/object_detection/'",
+    "Define 'model_file' as 'model_name + '.tar.gz''",
+    "Use 'tf.keras.utils.get_file' to download and extract the model, setting 'fname' to 'model_name' and 'origin' to 'base_url + model_file'",
+    "Set 'model_dir' to 'pathlib.Path(model_dir)/'saved_model''",
+    "Print 'model_dir' to verify the model directory path",
+    "Attempt to load the model using 'tf.saved_model.load' with 'str(model_dir)'",
+    "Access the model signature with 'model.signatures['serving_default']'",
+    "Return the loaded model from the 'load_model' function",
+    "Define a list 'TEST_IMAGE_PATHS' containing paths to test images, e.g., ['path/to/image1.jpg', 'path/to/image2.jpg']",
+    "Create a function 'show_inference' that takes 'detection_model' and 'image_path' as parameters",
+    "Inside 'show_inference', read the image using 'tf.io.read_file(image_path)' and decode it with 'tf.image.decode_image'",
+    "Resize the image to the required input size for the model, e.g., (640, 640)",
+    "Run inference on the image using 'detection_model(image)'",
+    "Print the output of the inference to check for empty tensors",
+    "Iterate over 'TEST_IMAGE_PATHS' and call 'show_inference(detection_model, image_path)' for each image path",
+    "Check the output of 'show_inference' for empty tensors or '???' values",
+    "Assert that the output of the model inference is not empty or contains valid detection results",
+    "Log any errors or unexpected outputs during the inference process"
+]
+```

@@ -1,0 +1,18 @@
+[
+  "Import TensorFlow (tf), Keras, KerasNLP, and necessary modules such as keras_nlp.samplers",
+  "Set up the environment in Google Colab with Python 3.10.12 and TensorFlow 2.x compatible with Keras 3.2.1",
+  "Clone or open the KerasNLP neural machine translation example notebook from https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/nlp/ipynb/neural_machine_translation_with_keras_nlp.ipynb",
+  "Ensure the runtime is set to GPU and specifically a T4 GPU in Colab",
+  "Run all the cells related to data loading, preprocessing, and model creation to successfully train the English-to-Spanish translation model",
+  "Verify the model trains without errors and the training logs complete normally",
+  "Locate the decode_sequences function in the notebook which attempts to generate translations using keras_nlp.samplers.GreedySampler",
+  "Modify or confirm the decode_sequences function calls GreedySampler instance with the method call including the argument end_token_id, e.g., keras_nlp.samplers.GreedySampler()(next, prompt, end_token_id=some_integer)",
+  "Define a test input batch of English sentences as a list with at least 1 or 2 sentences, for example ['The weather is nice today.', 'I like to eat apples.']",
+  "Run the decode_sequences function with the test input batch to generate translated Spanish sequences",
+  "Observe and capture the TypeError exception raised: 'Sampler.__call__() got an unexpected keyword argument 'end_token_id''",
+  "Assert that the error message matches exactly the TypeError and the message about 'end_token_id' being unexpected",
+  "Confirm that the error occurs specifically at the line invoking the GreedySampler call with end_token_id argument",
+  "Repeat the test with varying batch sizes (e.g., 1 and 2) to confirm consistent reproduction of the bug",
+  "Record environment details: Keras version 3.2.1, Python 3.10.12, running on Colab T4 GPU",
+  "Do not modify the Sampler or GreedySampler class to accept end_token_id; keep all code as-is to reproduce the bug faithfully"
+]

@@ -1,0 +1,16 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Clone the models repository using the command: !git clone https://github.com/mirzaim/models.git",
+    "Change the working directory to the delf examples folder using: %cd /content/models/research/delf/delf/python/examples/",
+    "Download the example configuration file delf_config_example.pbtxt and the list of images list_images.txt to the current directory.",
+    "Ensure that the list_images.txt file contains valid image paths, e.g., 'image1.jpg', 'image2.jpg', etc.",
+    "Run the command: !python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Observe the output for any errors, specifically looking for the ModuleNotFoundError related to 'delf.python.datasets'.",
+    "Verify that the delf/python/datasets directory exists and does not contain an __init__.py file.",
+    "Check the contents of the delf/python/datasets directory to confirm it is empty or missing necessary files.",
+    "Confirm that the error traceback indicates the failure occurs when trying to import from 'delf.python.datasets.google_landmarks_dataset'.",
+    "Take note of the specific line in extract_features.py where the import fails, which is line 36.",
+    "Record the full error message output to validate the occurrence of the bug."
+]
+```

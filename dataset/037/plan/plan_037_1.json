@@ -1,0 +1,25 @@
+```json
+[
+    "Clone the repository https://github.com/labmlai/annotated_deep_learning_paper_implementations.git at a specific commit that contains the mentioned files",
+    "Navigate to the directory labml_nn/neox/utils/trainer.py and ensure it has not been modified since the commit",
+    "Create a Python virtual environment and activate it",
+    "Install all required dependencies from requirements.txt or pip install -r requirements.txt in the root of the repository",
+    "Copy the content of [rope/value_pe/__init__.py](https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/transformers/rope/value_pe/__init__.py) into a new file named `value_pe_test.py` in your current working directory",
+    "Ensure that the import statements in `value_pe_test.py` are correct and match those in the original file, particularly for imports like `labml`, `torch.nn`, `torch.optim`, etc.",
+    "Open the newly created `value_pe_test.py` file in a text editor or IDE",
+    "Locate line 230 and line 234 where the value embedding is rotated. These lines should look something like `value_embedding = rotate(value_embedding)` twice",
+    "Modify these two lines to only include one rotation, e.g., `value_embedding = rotate(value_embedding)` once",
+    "Save the changes made in `value_pe_test.py`",
+    "Create a simple test script named `test_value_pe.py` in your current working directory",
+    "Import the necessary modules and classes from `value_pe_test.py` and create a basic model that uses the value embedding, for example:",
+    "```python\nimport torch.nn as nn\nclass TestModel(nn.Module):\n    def __init__(self):\n        super(TestModel, self).__init__()\n        self.value_embedding = RotateLayer()  # Assuming RotateLayer is defined in value_pe_test.py\n    \n    def forward(self, x):\n        return self.value_embedding(x)\n``",    
+    "Create a simple data loader that returns a batch of input data. For example:",
+    "```python\nclass SimpleDataset(torch.utils.data.Dataset):\n    def __init__(self, size=100, batch_size=32):\n        self.size = size\n        self.batch_size = batch_size\n        self.data = torch.randn(size, 10)  # Assuming the input data is of shape (size, 10)\n        \n    def __len__(self):\n        return self.size // self.batch_size\n    \n    def __getitem__(self, idx):\n        start = idx * self.batch_size\n        end = start + self.batch_size\n        return self.data[start:end], torch.randint(0, 2, (self.batch_size,))\n``",    
+    "In the `test_value_pe.py` script, create an instance of `SimpleDataset`, wrap it in a `DataLoader`, and pass it to the `TrainerConf`",
+    "Initialize an optimizer with a learning rate of 0.01 and call the `train` method on the `TrainerConf` instance",
+    "Run the `test_value_pe.py` script using Python from your terminal or command prompt",
+    "Observe the output during training to verify if there are any NaN values in the loss calculation or if any other errors occur related to the value embedding rotation",
+    "Monitor the behavior of the code and ensure that it reproduces the issue described in the bug report"
+]
+```
+

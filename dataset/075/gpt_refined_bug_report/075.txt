@@ -1,0 +1,40 @@
+TITLE  
+Running `gpt2-xl/test_tune.sh` fails due to unexpected keyword argument 'token' in ParquetConfig.__init__()
+
+SYMPTOMS  
+• Execution of `./test_tune.sh tune` results in failure during DeepSpeed autotuning.  
+• Error message: `ParquetConfig.__init__() got an unexpected keyword argument 'token'`  
+• SSH permission denied errors appear when launching experiments on localhost:  
+  ```
+  localhost: Permission denied, please try again.
+  localhost: daimyollc@localhost: Permission denied (publickey,password).
+  pdsh@ncai01: localhost: ssh exited with exit code 255
+  ```  
+• Autotuning terminates without finding an optimal DeepSpeed configuration.  
+• Logs indicate the model is not runnable with DeepSpeed due to the above error.  
+
+EXPECTED BEHAVIOR  
+The `test_tune.sh` script should complete autotuning without errors, successfully profiling and tuning the GPT-2 XL model using DeepSpeed. No unexpected keyword argument errors should occur, and the script should be able to launch experiments locally without SSH permission issues.
+
+REPRODUCTION STEPS  
+1. Clone the Hugging Face Transformers repository:  
+   ```bash  
+   git clone https://github.com/huggingface/transformers.git  
+   ```  
+2. Install the package:  
+   ```bash  
+   cd transformers  
+   pip install .  
+   ```  
+3. Create a test directory and install DeepSpeed and other dependencies:  
+   ```bash  
+   mkdir ../test && cd ../test  
+   pip install deepspeed  
+   ```  
+4. Create an executable `test_tune.sh` script by copying the content from `training/autotuning/hf/gpt2-xl/test_tune.sh` in the DeepSpeedExamples repository.  
+5. Modify `test_tune.sh` to set `HF_PATH=../` and `NGPUS=6` (matching six NVIDIA 3070 Ti GPUs).  
+6. Run the tuning script:  
+   ```bash  
+   ./test_tune.sh tune  
+   ```  
+7. Observe the error message about the unexpected keyword argument 'token' in `ParquetConfig.__init__()`, along with SSH permission denied errors.

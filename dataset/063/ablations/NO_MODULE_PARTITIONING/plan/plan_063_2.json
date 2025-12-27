@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and necessary modules: import tensorflow as tf and from tensorflow.data import AUTOTUNE",
+    "Define constants: BATCH_SIZE = 4, IMG_HEIGHT = 256, IMG_WIDTH = 256, NUM_CLASSES = 12",
+    "Create a function augment_fn that performs random augmentations on input images and segmentation maps",
+    "Create a function unpackage_inputs that unpacks the dataset into separate tensors for segmentation maps, images, and labels",
+    "Prepare a dataset by creating a list of image file paths and corresponding segmentation map file paths",
+    "Create a tf.data.Dataset from the image file paths and segmentation map file paths using tf.data.Dataset.from_tensor_slices",
+    "Shuffle the dataset with a buffer size of BATCH_SIZE * 10",
+    "Map the dataset to the _load_data_tf function to load and preprocess images and segmentation maps",
+    "Map the dataset to the _random_crop function to randomly crop images and segmentation maps to (IMG_HEIGHT, IMG_WIDTH)",
+    "Map the dataset to the _one_hot function to convert labels to one-hot encoded format",
+    "Batch the dataset with a batch size of BATCH_SIZE and drop the remainder",
+    "Create a training dataset by calling the load function with the training file paths and BATCH_SIZE",
+    "Create an augmented training dataset using the following code: augmented_train_ds = (train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Run the code to create augmented_train_ds and observe the output",
+    "Capture the error message that occurs during the execution of the augmented_train_ds creation",
+    "Verify that the error message contains the text 'have different types' indicating a type mismatch between tensors",
+    "Check the shapes of the tensors involved in the error to confirm they are (160, 160, 1) and (160, 160, 1) with different data types"
+]
+```

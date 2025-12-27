@@ -1,0 +1,19 @@
+[
+  "Import torch and necessary modules for tensor operations",
+  "Define a dummy actor_loss_fn that records input mask and returns a dummy loss tensor",
+  "Create a batch size of 2 and sequence length of 10 for testing",
+  "Generate random actor_log_prob tensor of shape (batch_size, seq_len) with requires_grad=True",
+  "Generate random log_probs tensor of shape (batch_size, seq_len)",
+  "Generate random advantages tensor of shape (batch_size, seq_len)",
+  "Create an action_mask tensor of shape (batch_size, seq_len) with binary values (0 or 1), ensuring the last token (index seq_len-1) is included and has value 1 to simulate 'eos' token being valid for reward",
+  "Define a start index, for example start = 3, to simulate slicing from this token onwards",
+  "Call actor_loss_fn with actor_log_prob[:, start:], log_probs[:, start:], advantages, and action_mask[:, start:] (the original buggy mask slicing)",
+  "Log or save the mask passed to actor_loss_fn and verify that the last token (eos) is excluded from the mask due to slicing from start to end",
+  "Call actor_loss_fn with actor_log_prob[:, start:], log_probs[:, start:], advantages, and action_mask[:, start-1:-1] (the proposed correct mask slicing)",
+  "Log or save the mask passed to actor_loss_fn and verify that the last token (eos) is included in the mask",
+  "Compare the two masks and assert that the original mask excludes the 'eos' token while the proposed mask includes it",
+  "Optionally, assert that the computed loss differs between the two mask usages, indicating that filtering out 'eos' changes loss calculation",
+  "Ensure that all tensors have consistent shapes and that slicing does not cause shape misalignment errors",
+  "Run the code within a torch.no_grad() context or with gradient tracking to observe any side effects",
+  "Print detailed tensor slices and mask values to confirm that the original slicing excludes the last token and the proposed slicing includes it"
+]

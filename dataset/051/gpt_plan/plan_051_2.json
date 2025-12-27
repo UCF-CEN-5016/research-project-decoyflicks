@@ -1,0 +1,15 @@
+[
+  "Set up a Colab environment with Python 3.10.12 and install TensorFlow and Keras 3.2.1",
+  "Import TensorFlow as tf and import keras_nlp from keras_nlp module",
+  "Import random module for sampling test sentences",
+  "Load or clone the KerasNLP English-to-Spanish translation example notebook from https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/nlp/ipynb/neural_machine_translation_with_keras_nlp.ipynb",
+  "Run all cells up to the model training section to successfully train the translation model",
+  "Define the decode_sequences function as in the example, ensuring it calls keras_nlp.samplers.GreedySampler() with arguments including end_token_id set to the Spanish tokenizer's end token id",
+  "Prepare a test set of English sentences (e.g., test_eng_texts) with at least 2 sample sentences to translate",
+  "Invoke decode_sequences on a batch containing one English sentence, e.g., decode_sequences([test_eng_texts[0]])",
+  "Observe that the function call to GreedySampler.__call__() includes the unexpected keyword argument 'end_token_id'",
+  "Verify that a TypeError is raised with the message: \"Sampler.__call__() got an unexpected keyword argument 'end_token_id'\"",
+  "Confirm the traceback points to the line where GreedySampler() is called inside decode_sequences",
+  "Repeat the call with a second sample sentence from test_eng_texts to confirm reproducibility",
+  "Assert that the error consistently occurs in the decode_sequences function when calling keras_nlp.samplers.GreedySampler() with end_token_id argument"
+]

@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and the x_transformers module",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define model parameters: set dim=128, heads=8, kv_heads=4, and dim_head=16",
+    "Create an instance of the Attention class from x_transformers with parameters: dim=dim, heads=heads, kv_heads=kv_heads, qk_norm=True",
+    "Generate random input data: create a tensor x with shape (batch_size=2, seq_len=10, dim=dim) using torch.randn",
+    "Create a context tensor context with the same shape as x: (batch_size=2, seq_len=10, dim=dim)",
+    "Define a mask tensor with shape (batch_size=2, seq_len=10) filled with True values using torch.ones",
+    "Call the forward method of the Attention instance with parameters: x, context, mask, and set return_intermediates=True",
+    "Capture the output and intermediates from the forward call",
+    "Check the shape of the output tensor: assert output.shape == (batch_size, seq_len, heads * dim_head)",
+    "Verify that the qk_norm_k_scale parameter is initialized as a tensor of shape (heads, 1, dim_head) using assert",
+    "Modify the qk_norm_k_scale parameter to have shape (kv_heads, 1, dim_head) using: attention_instance.qk_norm_k_scale = nn.Parameter(torch.ones(kv_heads, 1, dim_head))",
+    "Re-run the forward method of the Attention instance with the same input parameters",
+    "Capture the new output and intermediates from the second forward call",
+    "Compare the outputs from the first and second forward calls: assert not torch.equal(output1, output2)",
+    "Log the outputs to verify the difference in behavior caused by the change in qk_norm_k_scale",
+    "Assert that the outputs contain NaN values or unexpected results to confirm the bug is reproduced"
+]
+```

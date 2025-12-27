@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, random, and the ResidualFSQ class from vector_quantize_pytorch.residual_fsq",
+    "Set the random seed for reproducibility using random.seed(42)",
+    "Define a batch size of 4 and input dimension of 128",
+    "Create random input data with shape (batch_size, input_dim) using torch.randn(batch_size, input_dim)",
+    "Define levels for quantization as a list: levels = [256, 512, 1024]",
+    "Instantiate the ResidualFSQ class with parameters: dim=128, levels=levels, num_quantizers=3",
+    "Set the model to training mode by calling model.train()",
+    "Create a forward pass by calling model.forward(input_data) and store the output",
+    "Check the output for NaN values by asserting torch.isnan(output).any()",
+    "If no NaN values are found, increase the input data values significantly to trigger overflow, e.g., input_data = input_data * 1e10",
+    "Re-run the forward pass with the modified input data and check for NaN values again",
+    "Log the output to verify if NaN values are present in the result after the second forward pass"
+]
+```

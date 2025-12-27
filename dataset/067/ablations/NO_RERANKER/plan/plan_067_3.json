@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from tensorflow import keras and from tensorflow.keras import layers",
+    "Set the TensorFlow version to 2.10.0 to match the reported bug environment",
+    "Define the input shape for the model as (None, height, width, channels) where height=128, width=128, channels=3",
+    "Create a random uniform input dataset with shape (batch_size, height, width, channels) where batch_size=32",
+    "Create a random uniform label dataset with shape (batch_size, height, width, num_classes) where num_classes=3",
+    "Reshape the label dataset to have shape (batch_size, height, width) to simulate the incorrect label format",
+    "Define a model using keras.Sequential with layers: layers.Input(shape=(height, width, channels)), layers.Conv2D(32, (3, 3), activation='relu'), layers.Flatten(), layers.Dense(num_classes, activation='softmax')",
+    "Compile the model using model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])",
+    "Fit the model using model.fit(input_data, label_data, epochs=10, batch_size=32)",
+    "Capture the output of the model.fit() method to check for any warnings or errors during training",
+    "Verify that the model's training accuracy is significantly lower than expected (e.g., less than 50%)",
+    "Check the shape of the loss output to confirm it is not matching the expected shape for sparse categorical cross entropy",
+    "Assert that the model's loss value is not decreasing over epochs, indicating improper loss calculation"
+]
+```

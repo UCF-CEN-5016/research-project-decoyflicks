@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: keras_cv, matplotlib, numpy, pandas, tensorflow, and textwrap",
+    "Set the random seed for reproducibility using numpy and tensorflow",
+    "Define constants: RESOLUTION = 256, MAX_PROMPT_LENGTH = 77, BATCH_SIZE = 4, PADDING_TOKEN = 49407",
+    "Install keras-cv version 0.6.0 and TensorFlow version 2.11 using pip",
+    "Download the Pokémon BLIP captions dataset from Hugging Face using tf.keras.utils.get_file",
+    "Load the dataset CSV file into a pandas DataFrame and ensure it contains the correct columns: 'image_path' and 'caption'",
+    "Preprocess the 'image_path' column to create full paths by joining with the dataset directory",
+    "Define a function process_text to tokenize captions using SimpleTokenizer and pad them to MAX_PROMPT_LENGTH",
+    "Create an empty numpy array tokenized_texts with shape (len(data_frame), MAX_PROMPT_LENGTH)",
+    "Iterate over the captions in data_frame and fill tokenized_texts using process_text function",
+    "Define a function prepare_dataset that takes image paths and tokenized texts, shuffles, and batches them",
+    "Inside prepare_dataset, use tf.data.Dataset.from_tensor_slices to create a dataset from image_paths and tokenized_texts",
+    "Map the dataset to process images and apply augmentations using a keras.Sequential augmenter",
+    "Define a Trainer class that inherits from tf.keras.Model, implementing the train_step method",
+    "Initialize the Trainer class with a DiffusionModel, ImageEncoder, and NoiseScheduler",
+    "Compile the Trainer with an AdamW optimizer and mean squared error loss",
+    "Prepare the training dataset by calling prepare_dataset with the image paths and tokenized texts",
+    "Call diffusion_ft_trainer.fit on the training dataset for 1 epoch",
+    "Monitor the output for any errors during the fitting process",
+    "Assert that an error occurs during the model fitting process, indicating a bug in the implementation"
+]
+```

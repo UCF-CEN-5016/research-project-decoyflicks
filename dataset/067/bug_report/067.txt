@@ -1,0 +1,7 @@
+Wrong application of sparse categorical cross entropy loss in tutorial
+
+Hi, I followed [this tutorial](https://keras.io/examples/vision/oxford_pets_image_segmentation/) and found it trained absolute garbage for my case. After some searching I found the format of the labels is incorrect. The last dimension should be removed, i.e. [here](https://github.com/keras-team/keras-io/blob/master/examples/vision/oxford_pets_image_segmentation.py#L96) and remove [this](https://github.com/keras-team/keras-io/blob/master/examples/vision/oxford_pets_image_segmentation.py#L99).
+
+Of course even nicer would be nice if  SparseCategorical could just handle the additional dimension properly, it should be possible given the output shape of the net?
+
+version 2.10.0

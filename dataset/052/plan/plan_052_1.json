@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow and the StringLookup class from tensorflow.keras.layers",
+    "Define a vocabulary size of 20000",
+    "Create a counter object with a list of tokens",
+    "Get a list of all unique tokens from the counter and sort them",
+    "Create a StringLookup layer with the sorted token list as vocabulary",
+    "Prepare training data by creating a TextLineDataset from a file containing token sequences and labels",
+    "Define a map_record_to_training_data function to split each line into tokens and labels, convert tokens to lowercase, and convert labels to integer IDs",
+    "Create padded batches of the training data with batch size 32",
+    "Prepare validation data similarly to the training data",
+    "Define an NERModel class with specified architecture parameters",
+    "Compile the NERModel with the CustomNonPaddingTokenLoss function as the loss and 'adam' optimizer",
+    "Train the NERModel on the padded training dataset for 10 epochs",
+    "Create a sample input text sequence 'eu rejects german call to boycott british lamb'",
+    "Tokenize and convert the sample input text to IDs using the StringLookup layer",
+    "Reshape the sample input to a batch of size 32 with one sequence in the batch",
+    "Predict the labels for the sample input using the trained NERModel",
+    "Assert that there is no NaN value in the prediction output"
+]
+```
+

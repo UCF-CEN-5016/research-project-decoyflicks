@@ -1,0 +1,22 @@
+TITLE  
+Decoder logits output NaN when cross-attention context is entirely padding
+
+SYMPTOMS  
+• The output logits from the decoder are NaN when the context provided to the cross-attention block consists entirely of padding.  
+• The context mask is all False, indicating no valid context is provided.  
+• The output is consistently NaN across multiple runs with the same input configuration.  
+
+EXPECTED BEHAVIOR  
+The decoder should handle cases where the context is entirely padding without resulting in NaN logits. Ideally, it should either output valid logits indicating no effective cross-attention or handle the padding context gracefully without errors.
+
+REPRODUCTION STEPS  
+1. Initialize the transformer decoder using the provided code snippet with **x-transformers** version **1.26.0**.  
+2. Generate random input indices `i` with shape `(2, 20)`.  
+3. Create a context tensor filled with random values with shape `(2, 4, 1024)`.  
+4. Create a context mask tensor filled with zeros (all False) with shape `(2, 4)`.  
+5. Call the decoder with the input indices, context, and context mask.  
+6. Observe the output, which results in all NaN values.  
+
+ADDITIONAL NOTES  
+- The behavior raises a question about whether this is an intended feature of the decoder or an oversight.  
+- Suggestions for handling cases without conditioning when using cross-attention are requested.

@@ -1,0 +1,17 @@
+TITLE  
+Empty output after filtering OOV in Japanese TTS
+
+SYMPTOMS  
+• The output text is empty after the line "text after filtering OOV."  
+• No error messages are displayed during execution.  
+• The expected output is not generated, leading to confusion about the model's functionality.  
+
+EXPECTED BEHAVIOR  
+The program should produce a filtered output text after processing the input, with valid text content following the "text after filtering OOV" line.
+
+REPRODUCTION STEPS  
+1. Download the Japanese TTS model using the command:  
+   `wget https://dl.fbaipublicfiles.com/mms/tts/jvn.tar.gz`  
+2. Run the inference script with the command:  
+   `python infer.py`  
+3. Observe the output after the line "text after filtering OOV."

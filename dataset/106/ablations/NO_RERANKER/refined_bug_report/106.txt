@@ -1,0 +1,16 @@
+TITLE
+NaN values encountered in distance computation within `cdist()`
+
+SYMPTOMS
+• NaN values are produced in the output of the `cdist()` function.
+• Error messages may include "nan encountered in `cdist()`".
+• The distance calculation `(x-y)^2` can yield negative results due to float precision overflow, leading to unexpected NaN values.
+
+EXPECTED BEHAVIOR
+The `cdist()` function should compute the squared distances without producing NaN values, ensuring that all results are valid non-negative numbers.
+
+REPRODUCTION STEPS
+1. Call the `cdist()` function with two tensors `x` and `y` that lead to float precision overflow.
+2. Observe the output for NaN values in the resulting distance matrix.
+3. Verify the calculations by inspecting the intermediate steps, particularly the computation of `(x-y)^2` and its breakdown into `x^2 + y^2 - 2xy`.
+4. Check if applying `torch.clamp(..., min=0)` resolves the issue and prevents NaN values from appearing.

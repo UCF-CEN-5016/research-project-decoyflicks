@@ -1,0 +1,9 @@
+Qwen*/
+DeepSeek*/
+__pycache__
+hybrid_index
+venv
+code
+*attempt*
+*logs*
+*.DS_Store*

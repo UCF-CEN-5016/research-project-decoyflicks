@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, and nltk",
+    "Set the Keras version to 2.15 and ensure TensorFlow is compatible with it",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40 and TEST_BATCH_SIZE = 1",
+    "Load the English and Spanish tokenizers from data_preprocessing module",
+    "Load the test pairs from data_preprocessing module",
+    "Define the transformer model from the model module",
+    "Create a function decode_sequences that takes input_sentences as an argument",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Ensure the encoder_input_tokens shape is (1, MAX_SEQUENCE_LENGTH) after padding",
+    "Define a nested function next_fn that takes prompt, cache, and index as arguments",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt",
+    "Extract logits from the transformer output using logits = logits[:, index - 1, :] and print logits shape",
+    "Set hidden_states to None and print its value",
+    "Create a prompt tensor of shape (1, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Run the decode_sequences function with a test English sentence from test_pairs",
+    "Capture the output of decode_sequences and convert it to a numpy array",
+    "Remove special tokens from the translated output and split it into words",
+    "Calculate the BLEU score using nltk's modified_precision function with the translated output",
+    "Run the entire script to trigger the segmentation fault",
+    "Monitor the console output for segmentation fault messages",
+    "Check the shape of logits and cache in next_fn to ensure they are as expected",
+    "Verify that the segmentation fault occurs specifically after the next_fn returns logits, hidden_states, and cache"
+]
+```

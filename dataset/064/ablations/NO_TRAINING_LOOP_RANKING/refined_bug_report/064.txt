@@ -1,0 +1,16 @@
+### TITLE
+Dimension mismatch error when converting NER model to TFLite format
+
+### SYMPTOMS
+• Encountering a dimension mismatch error during prediction with the TFLite model.  
+• Error message: `ValueError: Cannot set tensor: Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0.`  
+• The input dimension of the saved TFLite model is fixed to **int64[1,1]**, which does not match the expected input shape.
+
+### EXPECTED BEHAVIOR
+The model should accept the input tensor with the appropriate shape and return predictions without any dimension mismatch errors.
+
+### REPRODUCTION STEPS
+1. Train the NER model following the guidelines in the Keras documentation (https://keras.io/examples/nlp/ner_transformers/).
+2. Convert the trained model to TFLite format using the provided conversion code.
+3. Attempt to make a prediction with the model using a sample input that is tokenized and converted to IDs.
+4. Observe the dimension mismatch error when invoking the interpreter with the input tensor.

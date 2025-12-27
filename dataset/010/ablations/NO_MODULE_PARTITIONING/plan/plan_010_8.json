@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: `import tensorflow as tf` and `import numpy as np`",
+    "Set the random seed for reproducibility: `tf.random.set_seed(42)`",
+    "Define the dataset path: `data_root = 'path/to/your/dataset'`",
+    "Set the model parameters: `num_negatives = 5`, `num_queries = 2000`, `pool_size = 20000`, `imsize = 512`",
+    "Initialize the TuplesDataset for training: `train_dataset = TuplesDataset(name='your_dataset_name', mode='train', data_root=data_root, imsize=imsize, num_negatives=num_negatives, num_queries=num_queries, pool_size=pool_size)`",
+    "Initialize the TuplesDataset for validation: `val_dataset = TuplesDataset(name='your_dataset_name', mode='val', data_root=data_root, imsize=imsize, num_negatives=num_negatives, num_queries=num_queries, pool_size=pool_size)`",
+    "Create a model for instance segmentation using TensorFlow Model Garden: `model = tf.keras.Model(...)` (fill in with appropriate model architecture)",
+    "Compile the model with a loss function: `model.compile(optimizer='adam', loss='your_loss_function')`",
+    "Train the model using the training dataset: `model.fit(train_dataset, validation_data=val_dataset, epochs=10, steps_per_epoch=100, validation_steps=10)`",
+    "During training, monitor the output for validation loss: `print('Validation loss:', model.evaluate(val_dataset))`",
+    "Check the output of the training logs for validation loss values after each epoch",
+    "Assert that the validation loss is consistently equal to 0.0 in the output logs",
+    "Repeat the process with the official tutorial for semantic segmentation to confirm the same behavior",
+    "Verify that the dataset used in the tutorial is correctly loaded and contains valid images",
+    "Log the output of the evaluation metrics to confirm that 'validation_loss' is always 0.0"
+]
+```

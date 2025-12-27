@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: import keras, import keras_cv, import numpy as np, import matplotlib.pyplot as plt, import tensorflow as tf",
+    "Set up the environment for KerasCV and TensorFlow: os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Define image size as 224 and patch size as 32: image_size = 224, patch_size = 32",
+    "Prepare the dataset by downloading the Caltech 101 dataset: use keras.utils.get_file to download and extract the dataset",
+    "Define paths for images and annotations: path_images = './101_ObjectCategories/airplanes/', path_annot = './Annotations/Airplanes_Side_2/'",
+    "Load images and annotations into lists: create empty lists for images and targets, loop through annotation files, load bounding box coordinates, and append images and normalized bounding box coordinates to the lists",
+    "Convert the lists of images and targets to numpy arrays: x_data = np.asarray(images), y_data = np.asarray(targets)",
+    "Split the dataset into training and testing sets: (x_train, y_train) = (x_data[:int(len(x_data) * 0.8)], y_data[:int(len(y_data) * 0.8)]), (x_test, y_test) = (x_data[int(len(x_data) * 0.8):], y_data[int(len(y_data) * 0.8):])",
+    "Define model parameters: input_shape = (image_size, image_size, 3), learning_rate = 0.001, weight_decay = 0.0001, batch_size = 32, num_epochs = 3, num_patches = (image_size // patch_size) ** 2, projection_dim = 64, num_heads = 4, transformer_units = [projection_dim * 2, projection_dim], transformer_layers = 4, mlp_head_units = [2048, 1024, 512, 64, 32]",
+    "Create the ViT object detector model using create_vit_object_detector function with the defined parameters",
+    "Compile the model with AdamW optimizer and MeanSquaredError loss function",
+    "Fit the model on the training data with validation split of 0.1 and callbacks for early stopping and model checkpointing",
+    "Run the model training for 1 epoch to reproduce the bug: history = model.fit(x=x_train, y=y_train, batch_size=batch_size, epochs=1, validation_split=0.1)",
+    "Capture the output and error during training to verify the UnknownError occurs",
+    "Check the shapes of the ground truths and predictions before the error occurs: assert shapes of y_true and y_pred are as expected",
+    "Log the error message to confirm the InvalidArgumentError related to ConcatOp occurs during the training process"
+]
+```

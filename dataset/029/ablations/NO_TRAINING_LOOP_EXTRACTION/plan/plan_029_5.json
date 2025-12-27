@@ -1,0 +1,17 @@
+```json
+[
+    "Install PyTorch version 1.9.0+cu111 using pip: 'pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 --extra-index-url https://download.pytorch.org/whl/cu111'",
+    "Ensure the operating system is Ubuntu 18.04 LTS.",
+    "Create a new Python script named 'reproduce_bug.py'.",
+    "Import the necessary modules: 'import torch', 'import torch.nn.functional as F', 'from torch.utils.data import Dataset, DataLoader', 'import os'.",
+    "Define a custom dataset class 'MyTrainDataset' that inherits from 'Dataset' and returns random data: 'class MyTrainDataset(Dataset): def __init__(self, size): self.data = torch.randn(size, 20); self.labels = torch.randint(0, 2, (size,)); def __len__(self): return len(self.data); def __getitem__(self, idx): return self.data[idx], self.labels[idx]'.",
+    "Instantiate the dataset with a size of 2048: 'train_set = MyTrainDataset(2048)'.",
+    "Define a simple model: 'model = torch.nn.Linear(20, 1)'.",
+    "Create an optimizer: 'optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)'.",
+    "Prepare a DataLoader with a batch size of 32: 'train_data = DataLoader(train_set, batch_size=32, pin_memory=True, shuffle=False)'.",
+    "Define a function 'main()' that will check for MPS availability: 'def main(): if torch.backends.mps.is_available(): print(\"MPS is available\") else: print(\"MPS is not available\")'.",
+    "Call the 'main()' function within the script: 'if __name__ == \"__main__\": main()'.",
+    "Run the script using the command: 'python3 reproduce_bug.py'.",
+    "Observe the output for the AttributeError: 'module 'torch.backends' has no attribute 'mps'' indicating that the MPS attribute is not available."
+]
+```

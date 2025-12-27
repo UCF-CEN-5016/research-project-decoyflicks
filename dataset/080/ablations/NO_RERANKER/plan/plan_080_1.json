@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision, and vit_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the batch size as 64 and image dimensions as 224x224",
+    "Load the cats and dogs dataset using torchvision.datasets.ImageFolder with appropriate transformations",
+    "Split the dataset into training and validation sets using torch.utils.data.random_split",
+    "Create DataLoader instances for both training and validation sets with batch_size=64",
+    "Define the ViT model with the following parameters: image_size=224, patch_size=16, num_classes=2, dim=1024, depth=6, heads=16, mlp_dim=2048, dropout=0.1, emb_dropout=0.1",
+    "Set the model to training mode using model.train()",
+    "Initialize the optimizer as torch.optim.Adam with model.parameters() and learning_rate=0.001",
+    "Train the model for a specified number of epochs (e.g., 10) using a for loop",
+    "Within the training loop, iterate over the training DataLoader and perform forward pass, loss calculation, and backward pass",
+    "Calculate training accuracy after each epoch by comparing predicted labels with true labels",
+    "Set the model to evaluation mode using model.eval()",
+    "Within the validation loop, iterate over the validation DataLoader and perform forward pass without updating weights",
+    "Calculate validation accuracy after each epoch by comparing predicted labels with true labels",
+    "Store both training and validation accuracies in separate lists for plotting",
+    "After training, plot the training and validation accuracies using matplotlib",
+    "Verify that validation accuracy is consistently higher than training accuracy throughout the training process",
+    "Assert that the validation accuracy list contains values greater than the training accuracy list for at least one epoch"
+]
+```

@@ -1,0 +1,14 @@
+```json
+[
+    "Import required libraries from the provided import dependencies list",
+    "Create a parameter `x` with shape (3, 128) and initialize it with random values using torch's `normal_` method",
+    "Define a parameter `cos_cached` with shape (3, 128, 4096, 4096) and initialize it with random values using torch's `normal_` method",
+    "Define a parameter `sin_cached` with shape (3, 128, 4096, 4096) and initialize it with random values using torch's `normal_` method",
+    "Compute `neg_half_x` by multiplying `x` with -0.5",
+    "Create a slice of `cos_cached` and `sin_cached` with the shape (3, 128, 4096, 3)",
+    "Assign the sliced values to `cos_cached_slice` and `sin_cached_slice` respectively",
+    "Multiply `x_rope` by `cos_cached_slice` element-wise and add it to the result of multiplying `neg_half_x` by `sin_cached_slice` element-wise",
+    "Verify that a RuntimeError occurs with the message 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'"
+]
+```
+

@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and other necessary modules from the provided code snippet",
+    "Create a graph using object_detection's build function with a TrainEvalPipelineConfig",
+    "Define placeholder inputs for boxes, scores, classes, and num_detections",
+    "Add a nearest_neighbor_upsampling operation to the graph",
+    "Define outputs for t_1, t_2, t_3, t_4 based on the given code snippet",
+    "Add operations for s_2 and s_3 using slim.conv2d with appropriate parameters",
+    "Create a session and initialize variables",
+    "Run the session with input data that triggers the bug (e.g., specific dimensions)",
+    "Verify the output of t_1 contains NaN values as expected in the bug description",
+    "Monitor GPU memory usage during execution of the session",
+    "Assert that the GPU memory usage exceeds a certain threshold to confirm the bug",
+    "If the assertion fails, raise an exception indicating the GPU memory threshold was not met"
+]
+```
+

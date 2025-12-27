@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the model classes from the provided gist",
+    "Define a batch size of 2 and input dimensions of (2, 1024) for the input tensors",
+    "Create input tensors for multiple input embeddings: x = dict(note = torch.randint(0, 20000, (2, 1024)), pitch = torch.randint(0, 32, (2, 1024)), tone = torch.randint(0, 16, (2, 1024)))",
+    "Instantiate the MultiInputTransformerWrapper model with parameters: num_tokens = dict(note = 20000, pitch = 32, tone = 16), max_seq_len = 1024, return_only_embed = True, attn_layers = Decoder(dim = 128, depth = 6, heads = 8)",
+    "Run the model with the input tensors: embed = model(x)",
+    "Assert the output shape of the embedding: assert embed.shape == (2, 1024, 128)",
+    "Instantiate the TransformerWrapper model with parameters: num_tokens = 20000, max_seq_len = 1024, num_memory_tokens = 2, average_pool_embed = True, attn_layers = Encoder(dim = 128, depth = 6, heads = 8)",
+    "Create input tensor for average pooling: x = torch.randint(0, 20000, (2, 1024)) and mask = torch.randint(0, 2, (2, 1024)).bool()",
+    "Run the model with the input tensor and mask: logits = model(x, mask = mask)",
+    "Assert the output shape of the logits: assert logits.shape == (2, 20000)",
+    "Instantiate the TransformerWrapper model with parameters: num_tokens = 20000, max_seq_len = 1024, num_memory_tokens = 2, use_cls_token = True, attn_layers = Encoder(dim = 128, depth = 6, heads = 8)",
+    "Create input tensor for CLS token: x = torch.randint(0, 20000, (2, 1024)) and mask = torch.randint(0, 2, (2, 1024)).bool()",
+    "Run the model with the input tensor and mask: logits = model(x, mask = mask)",
+    "Assert the output shape of the logits: assert logits.shape == (2, 20000)",
+    "Instantiate the TransformerWrapper model with parameters: num_tokens = 20000, max_seq_len = 1024, logits_dim = 1, average_pool_embed = True, squeeze_out_last_dim = True, attn_layers = Encoder(dim = 128, depth = 6, heads = 8)",
+    "Create input tensor for squeeze logit dimension: x = torch.randint(0, 20000, (2, 1024)) and mask = torch.randint(0, 2, (2, 1024)).bool()",
+    "Run the model with the input tensor and mask: logits = model(x, mask = mask)",
+    "Assert the output shape of the logits: assert logits.shape == (2,)",
+    "Instantiate the TransformerWrapper model with parameters: num_tokens = 20000, max_seq_len = 1024, attn_layers = Encoder(dim = 128, depth = depth, heads = 8, unet_skips = True)",
+    "Create input tensor for UNet skip: x = torch.randint(0, 20000, (2, 1024)) and mask = torch.randint(0, 2, (2, 1024)).bool()",
+    "Run the model with the input tensor and mask: model(x, mask = mask)",
+    "Check if encoder.to_logits.weight is part of the model parameters: assert 'to_logits.weight' in model.parameters()",
+    "Print the model parameters to verify if encoder.to_logits.weight is updating during training"
+]
+```

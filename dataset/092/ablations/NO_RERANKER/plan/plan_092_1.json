@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch and x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the batch size as 2 and the input dimensions: num_tokens=2049, max_seq_len=500, dim=1024, depth=24, heads=16, attn_dim_head=64",
+    "Create a decoder instance using xt.TransformerWrapper with the specified parameters: num_tokens=2049, max_seq_len=500, use_abs_pos_emb=True, scaled_sinu_pos_emb=True, attn_layers=xt.Decoder(dim=1024, depth=24, heads=16, attn_dim_head=64, attn_flash=True, ff_no_bias=True, cross_attend=True)",
+    "Generate random input data for the decoder input with shape (batch_size, 20) using torch.randint(0, 2048, (2, 20))",
+    "Create a context tensor filled with random values of shape (batch_size, 4, dim) using torch.rand(2, 4, 1024)",
+    "Create a context mask tensor filled with False values of shape (batch_size, 4) using torch.zeros(2, 4, dtype=torch.bool)",
+    "Call the decoder's forward method with the input data, context, and context_mask: out = decoder(input_data, context=context, context_mask=context_mask)",
+    "Check the output tensor 'out' for NaN values using torch.isnan(out).any()",
+    "Assert that the output contains NaN values by checking if the result of the previous step is True",
+    "Print a message indicating that NaN values were found in the output logits"
+]
+```

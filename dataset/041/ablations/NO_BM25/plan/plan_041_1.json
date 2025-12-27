@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: os, torch, and any other required modules from dalle_pytorch",
+    "Set the environment to use CUDA if available: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define the model file path: dalle_model_file = 'data/rainbow_dalle.model'",
+    "Check if the model file exists: if not os.path.exists(dalle_model_file): proceed to training",
+    "Prepare training data: create captions_array and all_image_codes with appropriate dimensions, e.g., captions_array.shape = (num_samples, text_seq_len) and all_image_codes.shape = (num_samples, image_seq_len)",
+    "Define train_idx as a range of indices for training samples, e.g., train_idx = range(0, num_samples)",
+    "Create a captions_mask tensor with shape (num_samples, text_seq_len) filled with ones or zeros based on your masking criteria",
+    "Define the optimizer: opt = torch.optim.Adam(params=dalle.parameters(), lr=1e-4)",
+    "Define the scheduler: scheduler = torch.optim.lr_scheduler.StepLR(opt, step_size=10, gamma=0.1)",
+    "Set the number of epochs: epochs = 200 and batch_size = 256",
+    "Define the fit function to train the model, ensuring it accepts the parameters as shown in the bug report",
+    "Call the fit function with the DALL-E model, optimizer, None for criterion, scheduler, and the training data tuple: fit(dalle, opt, None, scheduler, (captions_array[train_idx, ...], all_image_codes[train_idx, ...], captions_mask[train_idx, ...]), None, epochs, batch_size, dalle_model_file, train_dalle_batch)",
+    "In the train_dalle_batch function, ensure the input parameters are unpacked correctly: text, image_codes, mask = train_data",
+    "Call the DALL-E model's forward method with the mask parameter: loss = dalle(text[idx, ...], image_codes[idx, ...], mask=mask[idx, ...], return_loss=True)",
+    "Run the training loop and monitor for the TypeError: forward() got an unexpected keyword argument 'mask'",
+    "Log the error message to confirm the bug is reproduced",
+    "Validate that the error occurs consistently across multiple runs with the same setup"
+]
+```

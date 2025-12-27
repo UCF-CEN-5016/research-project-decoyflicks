@@ -1,0 +1,18 @@
+TITLE
+Potential Typo in MIRNet Example Code
+
+SYMPTOMS
+• The variable `level2_dau_2` is not used in the code.
+• There appears to be a typo at line 352, where `level3_dau_2` might instead be intended to be `level2_dau_2`.
+• No error messages are shown; however, unexpected behavior could include incorrect feature fusion results.
+
+EXPECTED BEHAVIOR
+- The `selective_kernel_feature_fusion` function should correctly use the variables `level1_dau_2`, `level2_dau_2`, and `level3_dau_2` to perform feature fusion without any typos or unused variables.
+
+REPRODUCTION STEPS
+1. Clone the Keras-IO repository from GitHub.
+2. Open the file located at `examples/vision/mirnet.py`.
+3. Inspect line 347 for the declaration of `level2_dau_2` and ensure it is not being used in the code.
+4. Check line 352 to verify that the function call uses `level2_dau_2`, `level1_dau_2`, and `level3_dau_2` as intended.
+
+Note: If there are no issues found during these steps, ensure that the variable names match the context in which they are used.

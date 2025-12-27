@@ -1,0 +1,28 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.optim",
+    "Define the device as 'cuda' if available, otherwise 'cpu'",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the model parameters: dim=128, image_size=224, patch_size=32, num_classes=2, depth=12, heads=8, k=64",
+    "Create an instance of Linformer with parameters: dim=128, seq_len=50 (49 patches + 1 cls-token), depth=12, heads=8, k=64",
+    "Create an instance of ViT with parameters: dim=128, image_size=224, patch_size=32, num_classes=2, transformer=efficient_transformer, channels=3",
+    "Define a batch size of 32 and create random input data with shape (batch_size, 3, 224, 224)",
+    "Create random target labels with shape (batch_size,) containing values 0 or 1 for binary classification",
+    "Define a loss function using torch.nn.CrossEntropyLoss()",
+    "Define an optimizer using torch.optim.Adam with model parameters and learning rate of 0.001",
+    "Set the number of epochs to 5",
+    "For each epoch, perform the following steps:",
+    "    Set the model to training mode using model.train()",
+    "    Zero the gradients using optimizer.zero_grad()",
+    "    Forward pass: compute the model output by calling model(input_data)",
+    "    Compute the loss by calling loss_function(output, target_labels)",
+    "    Backward pass: call loss.backward() to compute gradients",
+    "    Update model parameters using optimizer.step()",
+    "    Print the epoch number, loss, and accuracy after each epoch",
+    "After training, set the model to evaluation mode using model.eval()",
+    "Create validation data with the same shape as training data",
+    "Perform a forward pass on the validation data and compute the accuracy",
+    "Assert that the accuracy is equal to 1.0 (100%) after the first epoch",
+    "Log the loss and accuracy values for each epoch to verify the bug"
+]
+```

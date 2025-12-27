@@ -1,0 +1,36 @@
+{
+  "bug_report": "070",
+  "rank": 3,
+  "score": 0.9935397505760193,
+  "main_file": {
+    "path": "inference/huggingface/text-generation/ds-hf-compare.py",
+    "content": "import torch\nimport deepspeed\nfrom transformers import pipeline\nfrom difflib import SequenceMatcher\nfrom argparse import ArgumentParser\nfrom deepspeed.accelerator import get_accelerator\n\nparser = ArgumentParser()\n\nparser.add_argument(\"--model\", required=True, type=str, help=\"model_name\")\nparser.add_argument(\"--dtype\", default=\"float16\", type=str, choices=[\"float32\", \"float16\", \"int8\", \"bfloat16\"], help=\"data-type\")\nparser.add_argument(\"--num_inputs\", default=1, type=int, help=\"number of test inputs\")\nparser.add_argument(\"--min_length\", default=200, type=int, help=\"minimum tokens generated\")\nparser.add_argument(\"--max_length\", default=300, type=int, help=\"maximum tokens generated\")\nparser.add_argument(\"--print_outputs\", action='store_true', help=\"print generated text outputs\")\nparser.add_argument(\"--local_rank\", type=int, default=0, help=\"local rank\")\nparser.add_argument(\"--use_kernel\", action='store_true', help=\"enable kernel-injection\")\nargs = parser.parse_args()\n\ndef print_0(output):\n    if args.local_rank == 0:\n        print(output)\n\ndef string_similarity(str1, str2):\n    matcher = SequenceMatcher(None, str1, str2)\n    similarity_ratio = matcher.ratio()\n    return similarity_ratio\n\ntest_inputs = [\n    \"This is a test\",\n    \"One fish, two fish, red fish,\",\n    \"Microsoft is in Washington DC\",\n    \"The ancient art of basket weaving\",\n    \"Large language models are useful\",\n    \"You shouldn't buy a car without first checking\",\n    \"In today's lesson, we will cover the conflict between\",\n    \"Interestingly, the humble bumblebee is essential to our\",\n    \"How many blue buttons and yellow marbles are left in the\",\n    \"My favorite band is playing at a local music festival next month\",\n    \"Fortunately, I made it just in time to the event to tell her that\",\n    \"Once upon a time in a galaxy far away, there lived a boy named Anakin who\",\n    \"It is projected that by the year 3035, there will be more humans on the planet than \",\n    \"Many years ago, we were hiking in the Amazon rain forest when we stumbled upon an impressive\",\n    \"Let's discuss today's agenda. First, we will go around and introduce ourselves. Next, we will cover our 3 essential markers for success: 1) \",\n    \"These two historical figures \",\n    \"I saw a news article about a major scientific discovery \",\n    \"A poem about the beauty of the night sky\",\n    \"Improving mental health \",\n    \"Being a professional athlete\",\n    \"There are many exotic travel destinations\",\n    \"She needed a recipe for a unique and delicious dessert\",\n    \"The process of creating a work of art\",\n    \"The importance of renewable energy has been a popular topic among\",\n    \"Hiking to the top of a mountain is no easy task. It can takes several hours and \",\n    \"His latest clothing collection was all the rave at the last year's fashion week. Several \",\n    \"Here's a list of 10 thought-provoking discussion questions\",\n    \"The show last night had to be postponed due to weather. I heard that people waited hours in the rain\",\n    \"A successful small business can be evaluated these three performance metrics\",\n    \"My favorite motivational quotes to inspire others are\",\n    \"A magical creature living in a hidden forest\",\n    \"The preparation of a gourmet meal\",\n    \"I overheard two scientists discussing a groundbreaking scientific theory\",\n    \"He wrote a blog post about the benefits of mindfulness and meditation.\",\n    \"This set of instructions for assembling a piece of furniture\",\n    \"Training for a marathon\",\n    \"What are your hopes and dreams for the world?\",\n    \"Imagine you are a time traveler. Write a journal entry about your visit to a historical event.\",\n    \"Generate a list of 10 unique and exciting travel destinations.\",\n    \"She gave speech advocating for equal rights\",\n    \"The process of producing a documentary film \",\n    \"With a flick of a wand, the magician made the rabbit disappear\",\n    \"The bustling marketplace was a kaleidoscope of colors and sounds. There were at least 100 vendors and dozens of\"\n]\n\nif args.num_inputs < len(test_inputs):\n    inputs = test_inputs[:args.num_inputs]\nelse:\n    print_0(f\"Warning: num_inputs ({args.num_inputs}) is greater than the number of test inputs ({len(test_inputs)}). Using all test inputs.\")\n    inputs = test_inputs\n\ndata_type = getattr(torch, args.dtype)\npipe = pipeline('text-generation', args.model, torch_dtype=data_type, device=torch.device(get_accelerator().device_name(0)))\n\nbase_out_list = []\nmatch_count=0\nmismatch_count=0\n\n# Run the baseline model\nif args.local_rank == 0:\n    for prompt in inputs:\n        base_out_list += pipe(prompt, do_sample=False, min_length=args.min_length, max_length=args.max_length)\n\n# Initialize the model with DeepSpeed\npipe.model = deepspeed.init_inference(pipe.model, dtype=data_type, replace_with_kernel_inject=args.use_kernel)\n\n# Run the DeepSpeed model and compare outputs\nfor prompt, base_out in zip(inputs, base_out_list):\n    ds_out = pipe(prompt, do_sample=False, min_length=args.min_length, max_length=args.max_length)\n    if args.local_rank == 0:\n        if args.print_outputs:\n            print(f\"baseline output: {base_out}\")\n            print(f\"deepspeed output: {ds_out}\")\n            print(f\"{'-'*60}\")\n        if base_out == ds_out[0]:\n            if args.print_outputs: print(\"outputs match\")\n            match_count += 1\n        else:\n            if args.print_outputs: print(\"outputs do not match\")\n            mismatch_count += 1\n        similarity = string_similarity(base_out['generated_text'], ds_out[0]['generated_text'])\n        if args.print_outputs: print(f\"The similarity ratio is: {similarity*100}%\")\n\nprint_0(f\"Matches: {match_count}\\nMismatches: {mismatch_count}\")\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "deepspeed",
+      "function": "get_accelerator"
+    },
+    {
+      "module": "deepspeed",
+      "function": "init_inference"
+    },
+    {
+      "module": "difflib",
+      "function": "SequenceMatcher"
+    },
+    {
+      "module": "torch",
+      "function": "device"
+    },
+    {
+      "module": "transformers",
+      "function": "pipeline"
+    }
+  ]
+}

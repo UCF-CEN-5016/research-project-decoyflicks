@@ -1,0 +1,16 @@
+TITLE  
+Mistake in cross_vit.py leading to unexpected behavior
+
+SYMPTOMS  
+• The program crashes when attempting to run the cross_vit.py script.  
+• Error message displayed: "TypeError: 'NoneType' object is not callable"  
+• The output does not match the expected results when using specific input data.  
+
+EXPECTED BEHAVIOR  
+The cross_vit.py script should execute without errors, producing the correct output based on the provided input data.
+
+REPRODUCTION STEPS  
+1. Clone the vit_pytorch repository from GitHub.  
+2. Navigate to the directory containing cross_vit.py.  
+3. Run the script using the command: `python cross_vit.py --input <input_data>`.  
+4. Observe the output and any error messages that are displayed.

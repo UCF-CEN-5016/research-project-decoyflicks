@@ -1,0 +1,17 @@
+```json
+[
+    "Import PyTorch, SE3TransformerPooled from SE3Transformer.py",
+    "Import Fiber from Fiber.py",
+    "Define a batch size of 10 and node feature dimensions as {0: 5, 1: 1}",
+    "Create random uniform input data with shape (batch_size, num_nodes, feature_dim) for two types of nodes",
+    "Construct the graph with the defined input features",
+    "Initialize SE3TransformerPooled model with fiber_in={'0': 5, '1': 1}, fiber_out={'0': args.num_degrees * args.num_channels}, fiber_edge={'0': datamodule.EDGE_FEATURE_DIM}, output_dim=1",
+    "Set datamodule.NODE_FEATURE_DIM to 6 for compatibility",
+    "Define a training loop with one epoch and batch size of 10",
+    "Calculate loss using CrossEntropyLoss on the model's output",
+    "Run the training loop and verify if it raises RuntimeError: Expected size for first two dimensions of batch2 tensor to be [8910, 1] but got: [8910, 3]",
+    "Check the shape of the tensor in question during the forward pass to confirm the error",
+    "Monitor GPU memory usage during execution and assert it remains stable without unexpected increases"
+]
+```
+

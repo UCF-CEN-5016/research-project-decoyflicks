@@ -1,0 +1,13 @@
+```json
+[
+    "Import necessary modules: pytest, torch, and the TransformerWrapper from x_transformers",
+    "Define a batch size of 1 and sequence length of 32 for the input tensor",
+    "Create a random input tensor 'x' with shape (1, 32) using torch.randint(0, 20000, (1, 32))",
+    "Create a position tensor 'pos' using einops.repeat to repeat a range tensor: pos = repeat(torch.arange(32), 'n -> b n', b=1)",
+    "Instantiate the TransformerWrapper model with rotary_pos_emb set to True: model = TransformerWrapper(num_tokens=20000, max_seq_len=1024, attn_layers=Decoder(dim=512, depth=2, heads=8, rotary_pos_emb=True))",
+    "Call the model with the input tensor 'x' and position tensor 'pos': logits1 = model(x, pos=pos)",
+    "Call the model again without the position tensor: logits2 = model(x)",
+    "Assert that logits1 and logits2 are not close to each other using torch.allclose(logits1, logits2, atol=1e-6) to verify the bug occurs",
+    "Capture the error traceback when rotary_xpos is turned on to confirm the specific EinopsError is raised"
+]
+```

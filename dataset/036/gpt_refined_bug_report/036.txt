@@ -1,0 +1,17 @@
+TITLE  
+Incorrect exponent and coefficient in GAE formula implementation
+
+SYMPTOMS  
+• Line 36 uses γ² * r_{t+1} instead of the correct γ² * r_{t+2}  
+• Line 45 defines the weight wk incorrectly as wk = (1 - λ) * λ^k instead of wk = (1 - λ) * λ^(k-1)  
+• Potential inaccuracies in generalized advantage estimation calculations due to these formula errors
+
+EXPECTED BEHAVIOR  
+The code should implement the Generalized Advantage Estimation (GAE) formula correctly, using γ² * r_{t+2} for the reward term at line 36, and defining the weight wk as wk = (1 - λ) * λ^(k-1) at line 45, ensuring mathematically accurate advantage computations.
+
+REPRODUCTION STEPS  
+1. Navigate to the file `labml_nn/rl/ppo/gae.py` in the specified commit.  
+2. Review line 36 to observe the power of gamma applied to the reward term.  
+3. Review line 45 to observe the calculation of the weight wk.  
+4. Compare these implementations against the canonical GAE formula from literature.  
+5. Identify discrepancies in exponentiation and coefficient application as described.

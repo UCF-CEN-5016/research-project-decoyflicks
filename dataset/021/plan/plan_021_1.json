@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and the xception module from inception_test.py",
+    "Define a batch size of 2 and image dimensions of 65x65",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Set global_pool to False",
+    "Set num_classes to 10",
+    "Call xception_65 function with the created input data, global_pool, and num_classes",
+    "Verify output contains NaN values in loss calculation by checking if any output tensor has NaN values",
+    "Monitor GPU memory usage during execution using TensorFlow's profiler or similar tool",
+    "Assert GPU memory usage is significantly higher than expected for a model of this size and complexity"
+]
+```
+

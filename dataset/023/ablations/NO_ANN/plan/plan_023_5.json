@@ -1,0 +1,20 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Import TensorFlow and necessary libraries by running: import tensorflow as tf, import tensorflow_hub as hub, import tensorflow_datasets as tfds.",
+    "Set the TensorFlow version to 2.12 by running: tf.__version__.",
+    "Clone the TensorFlow models repository by running: !git clone https://github.com/tensorflow/models.git.",
+    "Navigate to the object detection directory by running: %cd models/research/object_detection.",
+    "Install the required dependencies by running: !pip install -r requirements.txt.",
+    "Import the required libraries from the TensorFlow models by running: from official.vision import modeling.",
+    "Define a function to load a sample image for testing: def load_image(image_path): return tf.io.decode_image(tf.io.read_file(image_path), channels=3).numpy().astype('float32')",
+    "Load a sample image by running: sample_image = load_image('path/to/sample/image.jpg'). Replace 'path/to/sample/image.jpg' with a valid image path.",
+    "Define the input shape for the model by setting: input_shape = (None, None, 3).",
+    "Create an instance of the SpineNetMobile model by running: model = modeling.SpineNetMobile(input_specs=tf.keras.layers.InputSpec(shape=input_shape)).",
+    "Attempt to call the model with a random input tensor by running: random_input = tf.random.uniform((1, 224, 224, 3)), output = model(random_input).",
+    "Capture the output and any exceptions by wrapping the model call in a try-except block.",
+    "Print the exception message if an error occurs to verify the bug: print('Error:', e).",
+    "Check the output shape of the model by running: print('Output shape:', output.shape) if no error occurs.",
+    "Assert that an error is raised during the model call to confirm the bug: assert 'Error:' in str(e)."
+]
+```

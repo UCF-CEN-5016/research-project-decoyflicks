@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, random, and the Attend class from denoising_diffusion_pytorch/attend.py",
+    "Set the random seed for reproducibility using random.seed(42) and torch.manual_seed(42)",
+    "Define a batch size of 4 and input tensor dimensions of (batch_size, channels, height, width) = (4, 3, 64, 64)",
+    "Create a random input tensor x with shape (4, 3, 64, 64) using torch.rand()",
+    "Instantiate the Attend class with default parameters: attend = Attend()",
+    "Set self.self_condition to True in the Attend instance: attend.self_condition = True",
+    "Define a time step t as a random integer between 0 and 100: t = random.randint(0, 100)",
+    "Wrap the inference code in a try-except block to catch RuntimeError: 'Inference tensors cannot be saved for backward'",
+    "Within the try block, add the following code: if attend.self_condition and random.random() < 0.5: with torch.inference_mode(): x_self_cond = attend.model_predictions(x.clone().detach(), t).pred_x_start",
+    "Run the code and expect a RuntimeError to be raised during the execution of the inference block",
+    "In the except block, print the error message to confirm the RuntimeError was raised",
+    "Validate that the error message matches 'Inference tensors cannot be saved for backward' to confirm the bug is reproduced"
+]
+```

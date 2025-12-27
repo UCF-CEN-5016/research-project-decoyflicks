@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from official.legacy.detection.modeling and official.legacy.detection.ops",
+    "Define a batch size of 4 and image dimensions of 640x640 with 3 color channels",
+    "Create random input data for images with shape (batch_size, height, width, channels) = (4, 640, 640, 3)",
+    "Create random input data for image_info with shape (batch_size, 4, 2) = (4, 4, 2)",
+    "Create random ground truth boxes with shape (batch_size, max_num_instances, 4) = (4, 50, 4)",
+    "Create random ground truth classes with shape (batch_size, max_num_instances) = (4, 50)",
+    "Create random ground truth masks with shape (batch_size, max_num_instances, mask_crop_size, mask_crop_size) = (4, 50, 28, 28)",
+    "Define parameters for the OlnMaskModel including architecture settings and loss functions",
+    "Instantiate the OlnMaskModel with the defined parameters",
+    "Build the model using the build_model method of OlnMaskModel",
+    "Prepare the input layer using the build_input_layers method with mode set to TRAIN",
+    "Pass the prepared input data to the model's call method to simulate a forward pass",
+    "Capture the model outputs and check for the presence of the 'rpn_center_outputs' key in the output dictionary",
+    "Verify that the standard deviation for RandAugment is set to 1 by checking the relevant output values",
+    "Assert that the standard deviation is not influenced by any level_std* parameter, confirming it remains at 1",
+    "Log the output values of the 'rpn_center_outputs' to observe the behavior during the forward pass",
+    "Run the model multiple times to ensure consistent reproduction of the bug"
+]
+```

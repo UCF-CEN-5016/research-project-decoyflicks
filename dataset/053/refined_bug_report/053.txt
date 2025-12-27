@@ -1,0 +1,36 @@
+TITLE
+Keras_NLP BertClassifier Initialization Error with Mixed Precision Policy
+
+SYMPTOMS
+• `AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'` when attempting to initialize the `BertClassifier`.
+• The error occurs specifically in the context of running the Keras_NLP getting started tutorial.
+• Commenting out the line that sets a mixed precision policy resolves the issue.
+
+EXPECTED BEHAVIOR
+The code should successfully instantiate and use the `BertClassifier` without errors, as described in the official Keras_NLP documentation.
+
+REPRODUCTION STEPS
+1. Ensure you have the correct versions of Keras and other dependencies installed.
+2. Run the following commands to set up your environment:
+```shell
+os.environ["Keras_Backend"] = 'tensorflow'
+mixed_precision.set_global_policy('mixed_float16')
+```
+3. Import the necessary libraries and run the code from the Keras_NLP getting started guide, specifically the section for pre-trained model initialization.
+4. Attempt to instantiate the `BertClassifier` with:
+```python
+classifier = keras_nlp.models.BertClassifier.from_preset("bert_tiny_en_uncased_sst2")
+```
+5. Observe the `AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'`.
+
+Note that if you comment out the line `mixed_precision.set_global_policy('mixed_float16')`, the code should execute without errors and successfully initialize the classifier.
+
+ANALYSIS
+The issue arises from the interaction between Keras_NLP and TensorFlow's mixed precision policy. The `LossScaleOptimizerV3` object, which is part of TensorFlow's mixed precision support, does not have a `name` attribute required by some internal operations in Keras or Keras_NLP when the global policy is set to mixed precision.
+
+RECOMMENDED SOLUTIONS
+1. Temporarily comment out the line that sets the mixed precision policy if you do not require it for your use case.
+2. If using mixed precision is necessary, check for updates in both Keras and Keras_NLP to see if this bug has been addressed in newer versions.
+3. Alternatively, modify the relevant code in Keras or Keras_NLP to handle the absence of the `name` attribute gracefully.
+
+By addressing the mixed precision setup, you can ensure compatibility with Keras_NLP's model initialization processes.

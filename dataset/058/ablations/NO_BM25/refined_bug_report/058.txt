@@ -1,0 +1,28 @@
+TITLE  
+InvalidArgumentError during model fitting with RetinaNet on custom dataset
+
+SYMPTOMS  
+• Encountering an `InvalidArgumentError` while fitting the RetinaNet model.  
+• The error message includes:  
+  ```python
+  InvalidArgumentError: Graph execution error: Detected at node retina_net_label_encoder_18/GatherV2_1 ...
+  indices[3,63949] = 0 is not in [0, 0)
+  ```  
+• The model fails to execute the training step and does not produce any training output or metrics.
+
+EXPECTED BEHAVIOR  
+The model should successfully fit to the provided custom dataset without any errors, allowing for training to proceed and metrics to be calculated.
+
+REPRODUCTION STEPS  
+1. Prepare a custom dataset structured as shown in the Keras CV object detection guide at https://keras.io/guides/keras_cv/object_detection_keras_cv/.  
+2. Load the dataset into `train_ds` and `eval_ds` variables.  
+3. Execute the following code to fit the model:  
+   ```python
+   model.fit(
+       train_ds.take(20),
+       validation_data=eval_ds.take(20),
+       epochs=1,
+       callbacks=[EvaluateCOCOMetricsCallback(eval_ds.take(20))],
+   )
+   ```  
+4. Observe the output for any errors during execution.

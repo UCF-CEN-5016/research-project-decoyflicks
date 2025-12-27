@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository",
+    "Set the environment variable for PYTHONPATH to include the path to the TensorFlow Model Garden",
+    "Define the DATA_DIR variable to point to the location of the ImageNet TF records",
+    "Define the MODEL_DIR variable to point to the location where model checkpoints will be saved",
+    "Activate the conda environment for TensorFlow 2.11 using 'source /home/apps/anaconda3/bin/activate && conda activate tf11'",
+    "Create a configuration file gpu.yaml for the first worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0",
+    "Create a configuration file gpu1.yaml for the second worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1",
+    "On the first GPU node (gpu1), run the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml",
+    "On the second GPU node (gpu2), run the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml",
+    "Set the batch size to 64 in both configuration files to ensure sufficient workload for testing scaling",
+    "Monitor the throughput of the training process on both nodes and record the examples per second processed",
+    "Verify that the throughput on the multi-worker setup does not exceed the throughput of a single GPU node, which is approximately 270 examples/sec",
+    "Log the training output to check for any warnings or errors related to distributed training",
+    "Check the GPU utilization on both nodes using 'nvidia-smi' to ensure both GPUs are being utilized during training",
+    "Assert that the total throughput on the multi-worker setup is equal to the throughput of a single GPU node, indicating no scaling",
+    "Collect logs from both nodes to analyze any discrepancies in the training process"
+]
+```

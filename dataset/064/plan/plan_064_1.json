@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and the GradientBoostedTreesModel class from tensorflow_decision_forests.keras",
+    "Define a batch size of 256 and image dimensions of 128x128 for categorical features",
+    "Create random uniform input data with shape (batch_size, 128, 128, 3) for numerical features",
+    "Encode the random input data using the create_embedding_encoder function with embedding size of 64",
+    "Define a binary crossentropy loss function and compile the GradientBoostedTreesModel with Adam optimizer and the defined loss function",
+    "Train the GradientBoostedTreesModel on the encoded input data for 10 epochs with batch size 256",
+    "Verify that the loss during training contains NaN values by asserting np.isnan(loss).any() is True",
+    "Monitor CPU memory usage during execution using TensorFlow's profiling tools",
+    "Assert CPU memory usage exceeds expected threshold indicating high memory consumption"
+]
+```
+

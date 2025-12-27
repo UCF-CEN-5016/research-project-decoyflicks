@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the inception module from inception/inception/slim/losses_test.py",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 64 and image dimensions of 28x28 for MNIST dataset",
+    "Load the MNIST dataset using tf.keras.datasets.mnist.load_data()",
+    "Preprocess the MNIST data by normalizing the images to the range [0, 1] and reshaping them to (batch_size, height, width, channels) where channels=1",
+    "Create a placeholder for the input images with shape (batch_size, 28, 28, 1)",
+    "Create a placeholder for the labels with shape (batch_size, 10) using one-hot encoding for the 10 classes",
+    "Define a simple spatial transform network model using TensorFlow/Keras layers",
+    "Compile the model with a loss function using inception.slim.losses.cross_entropy_loss and an optimizer (e.g., Adam)",
+    "Train the model for a number of epochs (e.g., 10) using model.fit() with the MNIST training data",
+    "During training, monitor the loss value and check for NaN values in the loss output",
+    "Log the loss values at each epoch to verify if NaN appears after a certain number of epochs",
+    "Monitor GPU memory usage using a tool like nvidia-smi before and during training",
+    "Assert that GPU memory usage exceeds 10GB during the training process",
+    "If NaN loss is detected, print the epoch number and the corresponding loss value for debugging purposes"
+]
+```

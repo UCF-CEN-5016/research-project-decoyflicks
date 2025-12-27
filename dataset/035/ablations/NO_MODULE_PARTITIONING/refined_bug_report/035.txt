@@ -1,0 +1,18 @@
+TITLE  
+Incorrect Parameter in RotaryPositionalEmbeddings Initialization  
+
+SYMPTOMS  
+• The code on line 226 initializes `rotary_pe` with 3 features instead of the required 4 features.  
+• The current implementation leads to an error when running the example that expects 4 features.  
+• Users may encounter a runtime error or unexpected behavior due to the mismatch in feature count.  
+
+EXPECTED BEHAVIOR  
+The code should initialize `rotary_pe` with 4 features to align with the example's requirements, allowing it to function correctly without errors.  
+
+REPRODUCTION STEPS  
+1. Access the file at the provided GitHub link: https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/transformers/rope/__init__.py  
+2. Locate line 226 in the code.  
+3. Run the code as it currently stands with `rotary_pe = RotaryPositionalEmbeddings(3)`.  
+4. Observe the error that occurs due to the mismatch in feature count.  
+5. Modify the line to `rotary_pe = RotaryPositionalEmbeddings(4)` and rerun the code.  
+6. Confirm that the code now executes without errors.

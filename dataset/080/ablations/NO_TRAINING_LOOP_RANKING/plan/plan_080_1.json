@@ -1,0 +1,32 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision, and vit_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the batch size as 64 and image dimensions as 224x224",
+    "Load the cats and dogs dataset using torchvision.datasets.ImageFolder with appropriate transformations",
+    "Split the dataset into training and validation sets using torch.utils.data.random_split",
+    "Create DataLoader instances for both training and validation sets with batch_size=64",
+    "Define the ViT model with the following parameters: image_size=224, patch_size=16, num_classes=2, dim=1024, depth=6, heads=16, mlp_dim=2048, dropout=0.1, emb_dropout=0.1",
+    "Set the model to training mode using model.train()",
+    "Define a loss function using torch.nn.CrossEntropyLoss",
+    "Define an optimizer using torch.optim.Adam with model.parameters() and lr=0.001",
+    "Run a training loop for a specified number of epochs (e.g., 10 epochs)",
+    "Within the training loop, iterate over the training DataLoader, performing the following steps:",
+    "1. Zero the gradients using optimizer.zero_grad()",
+    "2. Forward pass: Get model predictions by passing the input batch through the model",
+    "3. Calculate the training loss using the loss function",
+    "4. Backward pass: Call loss.backward() to compute gradients",
+    "5. Update model parameters using optimizer.step()",
+    "6. Calculate training accuracy by comparing predictions with true labels",
+    "Log training accuracy after each epoch",
+    "Set the model to evaluation mode using model.eval()",
+    "Within the validation loop, iterate over the validation DataLoader, performing the following steps:",
+    "1. Forward pass: Get model predictions by passing the input batch through the model",
+    "2. Calculate the validation loss using the loss function",
+    "3. Calculate validation accuracy by comparing predictions with true labels",
+    "Log validation accuracy after each epoch",
+    "After training, plot the training and validation accuracy over epochs using matplotlib",
+    "Verify that validation accuracy is consistently higher than training accuracy by checking logged values",
+    "Assert that the validation accuracy is greater than the training accuracy for at least one epoch"
+]
+```

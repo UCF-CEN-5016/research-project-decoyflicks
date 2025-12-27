@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import os, import argparse, import torch",
+    "Set the device to GPU: device = 'cuda' if torch.cuda.is_available() else 'cpu'",
+    "Define the command line arguments for the training script: parser = argparse.ArgumentParser()",
+    "Add arguments for the training script: parser.add_argument('--brats', action='store_true'), parser.add_argument('--brats22_model', action='store_true'), parser.add_argument('--scheduler', action='store_true'), parser.add_argument('--learning_rate', type=float, default=0.0003), parser.add_argument('--epochs', type=int, default=10), parser.add_argument('--fold', type=int, default=0), parser.add_argument('--gpus', type=int, default=1), parser.add_argument('--task', type=int, default=11), parser.add_argument('--nfolds', type=int, default=10), parser.add_argument('--save_ckpt', action='store_true')",
+    "Parse the arguments: args = parser.parse_args()",
+    "Set the environment variable for CUDA: os.environ['CUDA_VISIBLE_DEVICES'] = '0'",
+    "Create a dummy dataset for BraTS21 with 1125 training, 126 validation, and 1251 test examples",
+    "Initialize the nnUNet model with the specified parameters: model = nnunet.NNUNet(args)",
+    "Set the learning rate and epochs: model.learning_rate = args.learning_rate, model.epochs = args.epochs",
+    "Call the training function: trainer = pl.Trainer(gpus=args.gpus), trainer.fit(model)",
+    "Run the training script: !python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0 --gpus 1 --task 11 --nfolds 10 --save_ckpt",
+    "Capture the output and error messages during execution",
+    "Verify that the output contains the MisconfigurationException related to lr_scheduler",
+    "Check the specific error message: assert 'MisconfigurationException' in output",
+    "Log the error message for further analysis"
+]
+```

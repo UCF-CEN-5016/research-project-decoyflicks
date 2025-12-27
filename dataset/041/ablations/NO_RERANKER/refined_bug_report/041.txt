@@ -1,0 +1,33 @@
+TITLE
+TypeError: Unexpected keyword argument 'mask' during DALL-e training
+
+SYMPTOMS
+• Encountered a TypeError when attempting to train the DALL-e model.
+• Error message: `TypeError: forward() got an unexpected keyword argument 'mask'`
+• The issue arises specifically during the `train_dalle_batch` function when calling the `dalle` model.
+
+EXPECTED BEHAVIOR
+The DALL-e model should train successfully without raising any errors, and the `forward()` function should accept all expected arguments, including 'mask'.
+
+REPRODUCTION STEPS
+1. Set up the environment with the following specifications:
+   - OS: Ubuntu 18.04
+   - Python: 3.9.13
+   - Torch: 1.12.0
+   - torchvision: 0.13.0
+2. Generate a dataset and train the VAE using the rainbow_dalle notebook.
+3. Attempt to train the DALL-e model using the following code snippet:
+   ```python
+   dalle_model_file = "data/rainbow_dalle.model"
+   if not os.path.exists(dalle_model_file):
+       dalle, loss_history = fit(dalle, opt, None, scheduler, 
+                                 (captions_array[train_idx, ...], all_image_codes[train_idx, ...], captions_mask[train_idx, ...]), None, 200, 256,
+                                 dalle_model_file, train_dalle_batch)
+   ```
+4. Observe the error when executing the training function.
+
+SUGGESTED SOLUTIONS
+• Verify that the `forward()` method in the DALL-e model is defined to accept the 'mask' argument.
+• Check for any recent updates or changes in the DALL-e implementation that may have altered the expected function signatures.
+• Review the documentation or issues on the GitHub repository for any related discussions or fixes.
+• If the 'mask' argument is not intended to be used, remove it from the `train_dalle_batch` function call.

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn",
+    "Define a batch size of 2 and embedding dimensions of 64",
+    "Create a random tensor for query with shape (1, batch_size, embed_dim) and key with shape (10, batch_size, embed_dim)",
+    "Initialize the MonotonicInfiniteLookbackAttention class with dummy arguments, ensuring waitk_lagging is set to 1",
+    "Call the init_soft_attention method to initialize the soft attention parameters",
+    "Create a random tensor for value with shape (10, batch_size, embed_dim)",
+    "Call the forward method of the MonotonicInfiniteLookbackAttention instance with the query, key, and value tensors",
+    "Capture the output of the forward method",
+    "Check the output for NaN values by asserting that torch.isnan(output).any() is True",
+    "Print a message indicating whether NaN values were found in the output"
+]
+```

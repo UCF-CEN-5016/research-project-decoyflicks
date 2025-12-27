@@ -1,0 +1,28 @@
+TITLE
+Error Occurs During Training of GAN Model Using Official Keras3 Code
+
+SYMPTOMS
+• An `AttributeError` is raised with the message `'list' object has no attribute 'shape'`.
+• The error occurs when attempting to access the shape attribute of a list object.
+
+EXPECTED BEHAVIOR
+The code should train the Generative Adversarial Network (GAN) without errors, and proceed through the training steps as expected.
+
+REPRODUCTION STEPS
+1. Clone the Keras repository from GitHub: `https://github.com/keras-team/keras-io`.
+2. Navigate to the directory containing the custom train step example.
+3. Run the provided code snippet:
+```python
+https://github.com/keras-team/keras-io/blob/master/guides/custom_train_step_in_torch.py
+```
+4. Ensure that all necessary dependencies are installed, including Keras 3.4.1 and compatible versions of other required libraries.
+5. Run the code to train the GAN model.
+
+The error occurs because `real_images` is being assigned a list instead of an array or tensor with shape information accessible via `.shape`.
+
+SUGGESTED RESOLUTION
+1. Verify that `dataloader` returns tensors rather than lists for `real_images`.
+2. Ensure that data preprocessing steps, if any, correctly convert input data into arrays or tensors.
+3. If necessary, modify the code to explicitly convert list elements to numpy arrays or tensors before accessing their shape.
+
+By ensuring consistent data types and proper handling of data structures, the error should be resolved, allowing the GAN model to train successfully.

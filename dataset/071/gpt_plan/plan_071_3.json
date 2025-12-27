@@ -1,0 +1,19 @@
+[
+    "Create a new Python virtual environment using Python 3.12.3 to isolate dependencies",
+    "Activate the virtual environment",
+    "Install the required Python packages exactly as specified in the requirements file used by the project, including transformers, diffusers, accelerate, datasets, huggingface_hub, torch, torchvision, tqdm, and others",
+    "Verify installed versions by running 'pip list' and confirm transformers is installed but does not contain a 'deepspeed' submodule",
+    "Write a minimal Python script or use the provided 'e2e_rlhf.py' script exactly as-is without modification",
+    "Ensure that the script imports transformers and attempts to import or use any features that depend on 'transformers.deepspeed' internally or indirectly, for example by running 'python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu'",
+    "Set the command-line arguments exactly as: '--actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu' when running the script",
+    "Run the script in the activated environment with Python 3.12.3 interpreter",
+    "Observe the script execution and capture the error output",
+    "Verify that the error raised is 'ModuleNotFoundError: No module named 'transformers.deepspeed'' immediately on script start or at the point where transformers is imported or used",
+    "Confirm that no other dependency error occurs before or after this error",
+    "Assert that the traceback explicitly points to the failure to import 'transformers.deepspeed'",
+    "Optionally, inspect the installed 'transformers' package directory to confirm absence of 'deepspeed' submodule",
+    "Do not install or upgrade transformers to versions known to include deepspeed support, to reproduce the bug as reported",
+    "Ensure no additional environment variables or deepspeed installations are present to avoid masking the bug",
+    "Document the exact versions of transformers and other libraries installed that lead to this error",
+    "Conclude reproduction when running the script with provided arguments consistently raises 'ModuleNotFoundError: No module named 'transformers.deepspeed''"
+]

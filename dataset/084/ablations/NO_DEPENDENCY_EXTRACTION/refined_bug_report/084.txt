@@ -1,0 +1,16 @@
+TITLE  
+Unreasonably High Accuracy Rate on Example Dataset
+
+SYMPTOMS  
+• The model achieves a 100% accuracy rate from the first epoch.  
+• Training and validation losses are extremely low (e.g., loss: 0.0075, val_loss: 0.0002) across multiple epochs.  
+• The accuracy remains at 100% for all epochs without any signs of overfitting or variability.  
+
+EXPECTED BEHAVIOR  
+The model should demonstrate a more realistic accuracy rate that reflects typical training behavior, with possible fluctuations in accuracy and loss values across epochs. The accuracy should not reach 100% so quickly, indicating that the model is generalizing well rather than memorizing the training data.
+
+REPRODUCTION STEPS  
+1. Set up the environment to run the provided example code.  
+2. Use the specified parameters for the Linformer and ViT models as shown in the report.  
+3. Train the model on the example dataset provided.  
+4. Observe the accuracy and loss metrics after each epoch.

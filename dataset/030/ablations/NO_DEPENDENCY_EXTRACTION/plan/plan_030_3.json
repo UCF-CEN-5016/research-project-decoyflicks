@@ -1,0 +1,17 @@
+```json
+[
+    "Install the required packages from requirements.txt using pip, ensuring compatibility with PyTorch 2.2.0+cu121.",
+    "Set up a Python environment with WSL2 on Windows and ensure a single RTX 3060 GPU is available.",
+    "Clone the nnUNet repository from GitHub to your local machine.",
+    "Navigate to the cloned nnUNet directory and open BraTS21.ipynb or BraTS22.ipynb in a Jupyter Notebook.",
+    "Import necessary libraries in the notebook: import pytorch_lightning as pl, import nnunet, import os, import torch.",
+    "Define the training parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10.",
+    "Prepare the dataset by ensuring the BraTS dataset is correctly formatted and accessible in the expected directory structure.",
+    "Run the following command in a notebook cell to start training: !python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0 --gpus 1 --task 11 --nfolds 10 --save_ckpt.",
+    "Monitor the output for the initialization of the PyTorch Lightning Trainer and ensure it indicates the use of a single GPU.",
+    "Wait for the training process to begin and observe the logs for the message indicating the number of training, validation, and test examples.",
+    "Verify that the error message 'MisconfigurationException' is raised during the training process, specifically looking for the line that states 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API.'",
+    "Check the traceback to confirm that the error originates from the _validate_scheduler_api function in the PyTorch Lightning library.",
+    "Assert that the training process does not complete successfully and that the MisconfigurationException is the final output."
+]
+```

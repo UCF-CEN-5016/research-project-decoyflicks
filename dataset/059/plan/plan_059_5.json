@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries including TensorFlow, Keras, NumPy, and Matplotlib",
+    "Set the batch size to 32 and image dimensions to (128, 128)",
+    "Load or create a synthetic dataset of random images with shape (batch_size, height, width, 3) using NumPy",
+    "Create a model architecture consisting of a convolutional base followed by a dense layer for classification using Keras Sequential API",
+    "Compile the model with 'adam' optimizer and 'categorical_crossentropy' loss function",
+    "Train the model on the synthetic dataset for 10 epochs without any regularization or dropout to ensure overfitting occurs",
+    "Monitor the training process during epochs, especially focusing on GPU memory usage using TensorFlow's profiler",
+    "After training, assert that the validation loss is significantly higher than expected due to overfitting",
+    "Validate that the model predictions for the synthetic dataset contain NaN values by checking the output of model.predict() method"
+]
+```
+

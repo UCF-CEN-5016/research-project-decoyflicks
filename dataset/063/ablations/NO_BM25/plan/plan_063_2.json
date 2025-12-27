@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow, Keras, and TensorFlow Datasets modules",
+    "Set the following constants: NUM_CLASSES = 4, INPUT_HEIGHT = 224, INPUT_WIDTH = 224, BATCH_SIZE = 32, AUTOTUNE = tf.data.AUTOTUNE",
+    "Load the Oxford Pets dataset using tfds.load with split=['train[:85%]', 'train[85%:]', 'test'] and batch_size=BATCH_SIZE",
+    "Define a function unpack_resize_data that resizes images and segmentation masks to (INPUT_HEIGHT, INPUT_WIDTH)",
+    "Map the unpack_resize_data function to the train_ds, valid_ds, and test_ds datasets using num_parallel_calls=AUTOTUNE",
+    "Define an augment_fn function that applies random augmentations to the images and masks",
+    "Create an augmented_train_ds by shuffling train_ds with buffer size BATCH_SIZE * 2, mapping augment_fn with num_parallel_calls=AUTOTUNE, batching with BATCH_SIZE, mapping unpackage_inputs, and prefetching with buffer_size=tf.data.AUTOTUNE",
+    "Define a function unpackage_inputs that separates images and masks from the dataset",
+    "Run the augmented_train_ds pipeline to trigger the error",
+    "Capture the error message and verify it matches the expected error: 'Tensor(...) have different types'",
+    "Check the shapes of the tensors involved in the error to confirm they are (160, 160, 1) and (160, 160, 1) for float32 and int64 types respectively"
+]
+```

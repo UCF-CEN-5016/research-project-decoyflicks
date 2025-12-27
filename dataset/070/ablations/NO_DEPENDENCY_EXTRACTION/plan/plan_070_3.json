@@ -1,0 +1,25 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the DeepSpeed-Domino training directory using 'cd DeepSpeedExamples/training/DeepSpeed-Domino'",
+    "Create a conda environment named 'deepspeed_env' using 'conda create -n deepspeed_env python=3.12'",
+    "Activate the conda environment using 'conda activate deepspeed_env'",
+    "Install required packages including PyTorch and DeepSpeed using 'pip install torch deepspeed'",
+    "Load necessary modules for the SLURM job using 'module load openmpi/4.1.1', 'module load cuda/11.8.0', and 'module load gcc/10.2.0'",
+    "Create a dataset directory at 'dataset/my-gpt2_text_document' and populate it with sample text data for training",
+    "Create a vocabulary file at 'dataset/gpt2-vocab.json' and a merges file at 'dataset/gpt2-merges.txt' for the tokenizer",
+    "Create a job script named 'deepspeed_job.sh' with the following content: '#!/bin/bash -l\n#SBATCH --job-name=\"deepspeed_example\"\n#SBATCH --time=24:00:00\n#SBATCH --partition=amdrtx\n#SBATCH --nodelist=ault[41-42]\n#SBATCH --ntasks-per-node=1\n#SBATCH --gpus-per-task=2\n#SBATCH --mem=240G\n#SBATCH --output=deepspeed_example.%j.o\n#SBATCH --error=deepspeed_example.%j.e\n#SBATCH --account=g34\n\nconda activate deepspeed_env\n\nsrun nvidia-smi -L\n\nsrun bash pretrain_gpt3_2.7b.sh'",
+    "Create the bash script 'pretrain_gpt3_2.7b.sh' with the provided content, ensuring the paths and parameters are correct",
+    "Set the environment variable 'CUDA_DEVICE_MAX_CONNECTIONS' to 1 in 'pretrain_gpt3_2.7b.sh'",
+    "Set 'GPUS_PER_NODE' to 1 in 'pretrain_gpt3_2.7b.sh'",
+    "Set 'MASTER_ADDR' to the first hostname from the SLURM job node list in 'pretrain_gpt3_2.7b.sh'",
+    "Set 'MASTER_PORT' to 29500 in 'pretrain_gpt3_2.7b.sh'",
+    "Set 'NNODES' to the number of nodes allocated by SLURM in 'pretrain_gpt3_2.7b.sh'",
+    "Set 'NODE_RANK' to the SLURM process ID in 'pretrain_gpt3_2.7b.sh'",
+    "Set 'WORLD_SIZE' to the product of 'GPUS_PER_NODE' and 'NNODES' in 'pretrain_gpt3_2.7b.sh'",
+    "Run the job script using 'sbatch deepspeed_job.sh'",
+    "Monitor the job output files 'deepspeed_example.%j.o' and 'deepspeed_example.%j.e' for errors",
+    "Verify that the warning messages about 'using GPU 0 to perform barrier' appear in the output logs",
+    "Check for the 'AttributeError: NoneType object has no attribute all_reduce' in the error logs to confirm the bug occurrence"
+]
+```

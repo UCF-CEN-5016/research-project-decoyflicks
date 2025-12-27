@@ -1,0 +1,76 @@
+{
+  "bug_report": "055",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "examples/vision/xray_classification_with_tpus.py",
+    "content": "\"\"\"\nTitle: Pneumonia Classification on TPU\nAuthor: Amy MiHyun Jang\nDate created: 2020/07/28\nLast modified: 2020/08/24\nDescription: Medical image classification on TPU.\nAccelerator: TPU\n\"\"\"\n\n\"\"\"\n## Introduction + Set-up\n\nThis tutorial will explain how to build an X-ray image classification model\nto predict whether an X-ray scan shows presence of pneumonia.\n\"\"\"\n\nimport re\nimport os\nimport random\nimport numpy as np\nimport pandas as pd\nimport tensorflow as tf\nimport matplotlib.pyplot as plt\n\ntry:\n    tpu = tf.distribute.cluster_resolver.TPUClusterResolver.connect()\n    print(\"Device:\", tpu.master())\n    strategy = tf.distribute.TPUStrategy(tpu)\nexcept:\n    strategy = tf.distribute.get_strategy()\nprint(\"Number of replicas:\", strategy.num_replicas_in_sync)\n\n\"\"\"\nWe need a Google Cloud link to our data to load the data using a TPU.\nBelow, we define key configuration parameters we'll use in this example.\nTo run on TPU, this example must be on Colab with the TPU runtime selected.\n\"\"\"\n\nAUTOTUNE = tf.data.AUTOTUNE\nBATCH_SIZE = 25 * strategy.num_replicas_in_sync\nIMAGE_SIZE = [180, 180]\nCLASS_NAMES = [\"NORMAL\", \"PNEUMONIA\"]\n\n\"\"\"\n## Load the data\n\nThe Chest X-ray data we are using from\n[*Cell*](https://www.cell.com/cell/fulltext/S0092-8674(18)30154-5) divides the data into\ntraining and test files. Let's first load in the training TFRecords.\n\"\"\"\n\ntrain_images = tf.data.TFRecordDataset(\n    \"gs://download.tensorflow.org/data/ChestXRay2017/train/images.tfrec\"\n)\ntrain_paths = tf.data.TFRecordDataset(\n    \"gs://download.tensorflow.org/data/ChestXRay2017/train/paths.tfrec\"\n)\n\nds = tf.data.Dataset.zip((train_images, train_paths))\n\n\"\"\"\nLet's count how many healthy/normal chest X-rays we have and how many\npneumonia chest X-rays we have:\n\"\"\"\n\nCOUNT_NORMAL = len(\n    [\n        filename\n        for filename in train_paths\n        if \"NORMAL\" in filename.numpy().decode(\"utf-8\")\n    ]\n)\nprint(\"Normal images count in training set: \" + str(COUNT_NORMAL))\n\nCOUNT_PNEUMONIA = len(\n    [\n        filename\n        for filename in train_paths\n        if \"PNEUMONIA\" in filename.numpy().decode(\"utf-8\")\n    ]\n)\nprint(\"Pneumonia images count in training set: \" + str(COUNT_PNEUMONIA))\n\n\"\"\"\nNotice that there are way more images that are classified as pneumonia than normal. This\nshows that we have an imbalance in our data. We will correct for this imbalance later on\nin our notebook.\n\"\"\"\n\n\"\"\"\nWe want to map each filename to the corresponding (image, label) pair. The following\nmethods will help us do that.\n\nAs we only have two labels, we will encode the label so that `1` or `True` indicates\npneumonia and `0` or `False` indicates normal.\n\"\"\"\n\n\ndef get_label(file_path):\n    # convert the path to a list of path components\n    parts = tf.strings.split(file_path, \"/\")\n    # The second to last is the class-directory\n    if parts[-2] == \"PNEUMONIA\":\n        return 1\n    else:\n        return 0\n\n\ndef decode_img(img):\n    # convert the compressed string to a 3D uint8 tensor\n    img = tf.image.decode_jpeg(img, channels=3)\n    # resize the image to the desired size.\n    return tf.image.resize(img, IMAGE_SIZE)\n\n\ndef process_path(image, path):\n    label = get_label(path)\n    # load the raw data from the file as a string\n    img = decode_img(image)\n    return img, label\n\n\nds = ds.map(process_path, num_parallel_calls=AUTOTUNE)\n\n\"\"\"\nLet's split the data into a training and validation datasets.\n\"\"\"\n\nds = ds.shuffle(10000)\ntrain_ds = ds.take(4200)\nval_ds = ds.skip(4200)\n\n\"\"\"\nLet's visualize the shape of an (image, label) pair.\n\"\"\"\n\nfor image, label in train_ds.take(1):\n    print(\"Image shape: \", image.numpy().shape)\n    print(\"Label: \", label.numpy())\n\n\"\"\"\nLoad and format the test data as well.\n\"\"\"\n\ntest_images = tf.data.TFRecordDataset(\n    \"gs://download.tensorflow.org/data/ChestXRay2017/test/images.tfrec\"\n)\ntest_paths = tf.data.TFRecordDataset(\n    \"gs://download.tensorflow.org/data/ChestXRay2017/test/paths.tfrec\"\n)\ntest_ds = tf.data.Dataset.zip((test_images, test_paths))\n\ntest_ds = test_ds.map(process_path, num_parallel_calls=AUTOTUNE)\ntest_ds = test_ds.batch(BATCH_SIZE)\n\n\"\"\"\n## Visualize the dataset\n\nFirst, let's use buffered prefetching so we can yield data from disk without having I/O\nbecome blocking.\n\nPlease note that large image datasets should not be cached in memory. We do it here\nbecause the dataset is not very large and we want to train on TPU.\n\"\"\"\n\n\ndef prepare_for_training(ds, cache=True):\n    # This is a small dataset, only load it once, and keep it in memory.\n    # use `.cache(filename)` to cache preprocessing work for datasets that don't\n    # fit in memory.\n    if cache:\n        if isinstance(cache, str):\n            ds = ds.cache(cache)\n        else:\n            ds = ds.cache()\n\n    ds = ds.batch(BATCH_SIZE)\n\n    # `prefetch` lets the dataset fetch batches in the background while the model\n    # is training.\n    ds = ds.prefetch(buffer_size=AUTOTUNE)\n\n    return ds\n\n\n\"\"\"\nCall the next batch iteration of the training data.\n\"\"\"\n\ntrain_ds = prepare_for_training(train_ds)\nval_ds = prepare_for_training(val_ds)\n\nimage_batch, label_batch = next(iter(train_ds))\n\n\"\"\"\nDefine the method to show the images in the batch.\n\"\"\"\n\n\ndef show_batch(image_batch, label_batch):\n    plt.figure(figsize=(10, 10))\n    for n in range(25):\n        ax = plt.subplot(5, 5, n + 1)\n        plt.imshow(image_batch[n] / 255)\n        if label_batch[n]:\n            plt.title(\"PNEUMONIA\")\n        else:\n            plt.title(\"NORMAL\")\n        plt.axis(\"off\")\n\n\n\"\"\"\nAs the method takes in NumPy arrays as its parameters, call the numpy function on the\nbatches to return the tensor in NumPy array form.\n\"\"\"\n\nshow_batch(image_batch.numpy(), label_batch.numpy())\n\n\"\"\"\n## Build the CNN\n\nTo make our model more modular and easier to understand, let's define some blocks. As\nwe're building a convolution neural network, we'll create a convolution block and a dense\nlayer block.\n\nThe architecture for this CNN has been inspired by this\n[article](https://towardsdatascience.com/deep-learning-for-detecting-pneumonia-from-x-ray-images-fc9a3d9fdba8).\n\"\"\"\n\nimport os\n\nos.environ[\"KERAS_BACKEND\"] = \"tensorflow\"\n\nimport keras\nfrom keras import layers\n\n\ndef conv_block(filters, inputs):\n    x = layers.SeparableConv2D(filters, 3, activation=\"relu\", padding=\"same\")(inputs)\n    x = layers.SeparableConv2D(filters, 3, activation=\"relu\", padding=\"same\")(x)\n    x = layers.BatchNormalization()(x)\n    outputs = layers.MaxPool2D()(x)\n\n    return outputs\n\n\ndef dense_block(units, dropout_rate, inputs):\n    x = layers.Dense(units, activation=\"relu\")(inputs)\n    x = layers.BatchNormalization()(x)\n    outputs = layers.Dropout(dropout_rate)(x)\n\n    return outputs\n\n\n\"\"\"\nThe following method will define the function to build our model for us.\n\nThe images originally have values that range from [0, 255]. CNNs work better with smaller\nnumbers so we will scale this down for our input.\n\nThe Dropout layers are important, as they\nreduce the likelikhood of the model overfitting. We want to end the model with a `Dense`\nlayer with one node, as this will be the binary output that determines if an X-ray shows\npresence of pneumonia.\n\"\"\"\n\n\ndef build_model():\n    inputs = keras.Input(shape=(IMAGE_SIZE[0], IMAGE_SIZE[1], 3))\n    x = layers.Rescaling(1.0 / 255)(inputs)\n    x = layers.Conv2D(16, 3, activation=\"relu\", padding=\"same\")(x)\n    x = layers.Conv2D(16, 3, activation=\"relu\", padding=\"same\")(x)\n    x = layers.MaxPool2D()(x)\n\n    x = conv_block(32, x)\n    x = conv_block(64, x)\n\n    x = conv_block(128, x)\n    x = layers.Dropout(0.2)(x)\n\n    x = conv_block(256, x)\n    x = layers.Dropout(0.2)(x)\n\n    x = layers.Flatten()(x)\n    x = dense_block(512, 0.7, x)\n    x = dense_block(128, 0.5, x)\n    x = dense_block(64, 0.3, x)\n\n    outputs = layers.Dense(1, activation=\"sigmoid\")(x)\n\n    model = keras.Model(inputs=inputs, outputs=outputs)\n    return model\n\n\n\"\"\"\n## Correct for data imbalance\n\nWe saw earlier in this example that the data was imbalanced, with more images classified\nas pneumonia than normal. We will correct for that by using class weighting:\n\"\"\"\n\ninitial_bias = np.log([COUNT_PNEUMONIA / COUNT_NORMAL])\nprint(\"Initial bias: {:.5f}\".format(initial_bias[0]))\n\nTRAIN_IMG_COUNT = COUNT_NORMAL + COUNT_PNEUMONIA\nweight_for_0 = (1 / COUNT_NORMAL) * (TRAIN_IMG_COUNT) / 2.0\nweight_for_1 = (1 / COUNT_PNEUMONIA) * (TRAIN_IMG_COUNT) / 2.0\n\nclass_weight = {0: weight_for_0, 1: weight_for_1}\n\nprint(\"Weight for class 0: {:.2f}\".format(weight_for_0))\nprint(\"Weight for class 1: {:.2f}\".format(weight_for_1))\n\n\"\"\"\nThe weight for class `0` (Normal) is a lot higher than the weight for class `1`\n(Pneumonia). Because there are less normal images, each normal image will be weighted\nmore to balance the data as the CNN works best when the training data is balanced.\n\"\"\"\n\n\"\"\"\n## Train the model\n\"\"\"\n\n\"\"\"\n### Defining callbacks\n\nThe checkpoint callback saves the best weights of the model, so next time we want to use\nthe model, we do not have to spend time training it. The early stopping callback stops\nthe training process when the model starts becoming stagnant, or even worse, when the\nmodel starts overfitting.\n\"\"\"\n\ncheckpoint_cb = keras.callbacks.ModelCheckpoint(\"xray_model.keras\", save_best_only=True)\n\nearly_stopping_cb = keras.callbacks.EarlyStopping(\n    patience=10, restore_best_weights=True\n)\n\n\"\"\"\nWe also want to tune our learning rate. Too high of a learning rate will cause the model\nto diverge. Too small of a learning rate will cause the model to be too slow. We\nimplement the exponential learning rate scheduling method below.\n\"\"\"\n\ninitial_learning_rate = 0.015\nlr_schedule = keras.optimizers.schedules.ExponentialDecay(\n    initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True\n)\n\n\"\"\"\n### Fit the model\n\nFor our metrics, we want to include precision and recall as they will provide use with a\nmore informed picture of how good our model is. Accuracy tells us what fraction of the\nlabels is correct. Since our data is not balanced, accuracy might give a skewed sense of\na good model (i.e. a model that always predicts PNEUMONIA will be 74% accurate but is not\na good model).\n\nPrecision is the number of true positives (TP) over the sum of TP and false positives\n(FP). It shows what fraction of labeled positives are actually correct.\n\nRecall is the number of TP over the sum of TP and false negatves (FN). It shows what\nfraction of actual positives are correct.\n\nSince there are only two possible labels for the image, we will be using the\nbinary crossentropy loss. When we fit the model, remember to specify the class weights,\nwhich we defined earlier. Because we are using a TPU, training will be quick - less than\n2 minutes.\n\"\"\"\n\nwith strategy.scope():\n    model = build_model()\n\n    METRICS = [\n        keras.metrics.BinaryAccuracy(),\n        keras.metrics.Precision(name=\"precision\"),\n        keras.metrics.Recall(name=\"recall\"),\n    ]\n    model.compile(\n        optimizer=keras.optimizers.Adam(learning_rate=lr_schedule),\n        loss=\"binary_crossentropy\",\n        metrics=METRICS,\n    )\n\nhistory = model.fit(\n    train_ds,\n    epochs=100,\n    validation_data=val_ds,\n    class_weight=class_weight,\n    callbacks=[checkpoint_cb, early_stopping_cb],\n)\n\n\"\"\"\n## Visualizing model performance\n\nLet's plot the model accuracy and loss for the training and the validating set. Note that\nno random seed is specified for this notebook. For your notebook, there might be slight\nvariance.\n\"\"\"\n\nfig, ax = plt.subplots(1, 4, figsize=(20, 3))\nax = ax.ravel()\n\nfor i, met in enumerate([\"precision\", \"recall\", \"binary_accuracy\", \"loss\"]):\n    ax[i].plot(history.history[met])\n    ax[i].plot(history.history[\"val_\" + met])\n    ax[i].set_title(\"Model {}\".format(met))\n    ax[i].set_xlabel(\"epochs\")\n    ax[i].set_ylabel(met)\n    ax[i].legend([\"train\", \"val\"])\n\n\"\"\"\nWe see that the accuracy for our model is around 95%.\n\"\"\"\n\n\"\"\"\n## Predict and evaluate results\n\nLet's evaluate the model on our test data!\n\"\"\"\n\nmodel.evaluate(test_ds, return_dict=True)\n\n\"\"\"\nWe see that our accuracy on our test data is lower than the accuracy for our validating\nset. This may indicate overfitting.\n\nOur recall is greater than our precision, indicating that almost all pneumonia images are\ncorrectly identified but some normal images are falsely identified. We should aim to\nincrease our precision.\n\"\"\"\n\nfor image, label in test_ds.take(1):\n    plt.imshow(image[0] / 255.0)\n    plt.title(CLASS_NAMES[label[0].numpy()])\n\nprediction = model.predict(test_ds.take(1))[0]\nscores = [1 - prediction, prediction]\n\nfor score, name in zip(scores, CLASS_NAMES):\n    print(\"This image is %.2f percent %s\" % ((100 * score), name))\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "keras",
+      "function": "BatchNormalization"
+    },
+    {
+      "module": "keras",
+      "function": "Conv2D"
+    },
+    {
+      "module": "keras",
+      "function": "Dense"
+    },
+    {
+      "module": "keras",
+      "function": "Dropout"
+    },
+    {
+      "module": "keras",
+      "function": "Flatten"
+    },
+    {
+      "module": "keras",
+      "function": "Input"
+    },
+    {
+      "module": "keras",
+      "function": "MaxPool2D"
+    },
+    {
+      "module": "keras",
+      "function": "Model"
+    },
+    {
+      "module": "keras",
+      "function": "Rescaling"
+    },
+    {
+      "module": "keras",
+      "function": "SeparableConv2D"
+    },
+    {
+      "module": "matplotlib",
+      "function": "axis"
+    },
+    {
+      "module": "matplotlib",
+      "function": "figure"
+    },
+    {
+      "module": "matplotlib",
+      "function": "imshow"
+    },
+    {
+      "module": "matplotlib",
+      "function": "subplot"
+    },
+    {
+      "module": "matplotlib",
+      "function": "subplots"
+    },
+    {
+      "module": "matplotlib",
+      "function": "title"
+    }
+  ]
+}

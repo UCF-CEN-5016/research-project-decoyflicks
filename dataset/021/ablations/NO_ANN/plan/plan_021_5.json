@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and necessary modules: import tensorflow as tf and from official.projects.triviaqa import prediction, inputs, modeling",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Define a batch size of 1 for testing: batch_size = 1",
+    "Create an empty tensor for predicted boxes with shape (0, 4) to simulate no detections: predicted_boxes = tf.constant([], shape=(0, 4), dtype=tf.float32)",
+    "Create a dummy input feature dictionary with required keys: features = {'token_ids': tf.constant([[1, 2, 3, 4]]), 'qid': tf.constant(['1']), 'token_offsets': tf.constant([[0, 1, 2, 3]])}",
+    "Define a dummy logits function that returns an empty tensor: def dummy_logits_fn(x): return tf.constant([], shape=(0, 2), dtype=tf.float32)",
+    "Define a dummy decode_logits function that returns empty values: def dummy_decode_logits_fn(logits, end_limit): return tf.constant([], shape=(0,), dtype=tf.int32), tf.constant([], shape=(0,), dtype=tf.int32), tf.constant([], shape=(0,), dtype=tf.float32)",
+    "Create a dummy validation dataset with a single element: validation_dataset = tf.data.Dataset.from_tensor_slices((features, tf.constant([0]))).batch(batch_size)",
+    "Call the evaluate function with the dummy inputs: evaluate_fn = functools.partial(evaluate, sp_processor=None, features_map_fn=None, labels_map_fn=None, logits_fn=dummy_logits_fn, decode_logits_fn=dummy_decode_logits_fn, split_and_pad_fn=None, distribute_strategy=None, validation_dataset=validation_dataset, ground_truth={})",
+    "Run the evaluate function and capture the output: metrics = evaluate_fn()",
+    "Verify that a ValueError is raised during the execution of the evaluate function: assert 'ValueError' in str(context.exception) when using pytest or similar testing framework"
+]
+```

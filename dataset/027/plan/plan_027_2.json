@@ -1,0 +1,15 @@
+```json
+[
+    "Clone the PyTorch repository from https://github.com/pytorch/tutorials.git",
+    "Navigate to the directory containing the DCGAN tutorial code at beginner_source/dcgan_faces_tutorial.py",
+    "Open the file and locate the section where data is loaded for training",
+    "Modify the data loading parameters to use a different dataset that has higher dimensions than the default (e.g., CelebA with 256x256 images)",
+    "Ensure the batch size in the training loop is set to a value large enough to trigger memory issues (e.g., batch_size=32)",
+    "Modify the generator and discriminator architectures to accept input images of higher dimensions",
+    "Set up the loss function and optimizers as per the original tutorial",
+    "Start the training process by calling the train() function in the script",
+    "Monitor the console output during training to observe if any NaN values appear in the loss calculation or other error messages",
+    "Check the GPU memory usage during training to see if it exceeds expected thresholds, indicating a potential memory overflow issue"
+]
+```
+

@@ -1,0 +1,16 @@
+```json
+[
+    "Import torch and nn from torch library",
+    "Define the dimensions for the multi-head attention: set n_feat to 64, n_head to 8, and dropout to 0.1",
+    "Create a random input tensor for query with shape (batch_size, seq_length, n_feat) where batch_size is 2 and seq_length is 10",
+    "Create a random input tensor for key with shape (batch_size, seq_length, n_feat)",
+    "Create a random input tensor for value with shape (batch_size, seq_length, n_feat)",
+    "Instantiate the RelPositionMultiHeadedAttention class with parameters n_feat=64, n_head=8, dropout=0.1",
+    "Access the pos_bias_u and pos_bias_v attributes of the instantiated RelPositionMultiHeadedAttention object",
+    "Print the initial values of pos_bias_u and pos_bias_v to verify they are uninitialized",
+    "Call the forward method of the RelPositionMultiHeadedAttention instance with the query, key, value, and a random positional embedding tensor of shape (batch_size, 2*seq_length-1, n_feat)",
+    "Capture the output of the forward method",
+    "Check the output tensor for NaN values using torch.isnan()",
+    "Assert that the output tensor contains NaN values, indicating the presence of uninitialized bias parameters causing non-deterministic behavior"
+]
+```

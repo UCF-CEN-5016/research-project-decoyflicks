@@ -1,0 +1,33 @@
+```json
+[
+    "Import necessary libraries: keras, numpy, tensorflow, nibabel, zipfile, os, random, scipy, and matplotlib.",
+    "Set the random seed for reproducibility using numpy: np.random.seed(42).",
+    "Install kerasCV by running the command: !pip install git+https://github.com/keras-team/keras-cv -q.",
+    "Define the URLs for downloading the CT scan datasets: normal scans from 'https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-0.zip' and abnormal scans from 'https://github.com/hasibzunair/3D-image-classification-tutorial/releases/download/v0.2/CT-23.zip'.",
+    "Download the normal CT scans using keras.utils.get_file and save it as 'CT-0.zip'.",
+    "Download the abnormal CT scans using keras.utils.get_file and save it as 'CT-23.zip'.",
+    "Create a directory named 'MosMedData' to store the unzipped data.",
+    "Unzip 'CT-0.zip' into the 'MosMedData' directory.",
+    "Unzip 'CT-23.zip' into the 'MosMedData' directory.",
+    "Define a function 'read_nifti_file' that reads a Nifti file using nibabel and returns the raw data.",
+    "Define a function 'normalize' that normalizes the volume data to the range [0, 1] using the specified min and max values (-1000 and 400).",
+    "Define a function 'resize_volume' that resizes the input volume to dimensions (128, 128, 64) and rotates it by 90 degrees.",
+    "Define a function 'process_scan' that reads, normalizes, and resizes a CT scan using the previously defined functions.",
+    "Read the paths of normal CT scans from the 'MosMedData/CT-0' directory and store them in 'normal_scan_paths'.",
+    "Read the paths of abnormal CT scans from the 'MosMedData/CT-23' directory and store them in 'abnormal_scan_paths'.",
+    "Process the abnormal scans using the 'process_scan' function and store the results in 'abnormal_scans'.",
+    "Process the normal scans using the 'process_scan' function and store the results in 'normal_scans'.",
+    "Create labels for the abnormal scans as 1 and for the normal scans as 0.",
+    "Concatenate the first 70 abnormal scans and 70 normal scans to create the training dataset 'x_train'.",
+    "Concatenate the remaining scans to create the validation dataset 'x_val'.",
+    "Define a batch size of 2 for training.",
+    "Create a TensorFlow Dataset for training using 'train_loader' from 'x_train' and 'y_train'.",
+    "Create a TensorFlow Dataset for validation using 'validation_loader' from 'x_val' and 'y_val'.",
+    "Define a function 'get_model' that builds a 3D CNN model with the specified architecture.",
+    "Build the model by calling 'get_model' with input dimensions (128, 128, 64, 1).",
+    "Compile the model using binary crossentropy loss and Adam optimizer with a learning rate schedule.",
+    "Define callbacks for model checkpointing and early stopping.",
+    "Attempt to fit the model using 'model.fit' with the training dataset and validation dataset for 100 epochs.",
+    "Monitor the output for any errors during model fitting, specifically looking for issues related to input shapes or data types."
+]
+```

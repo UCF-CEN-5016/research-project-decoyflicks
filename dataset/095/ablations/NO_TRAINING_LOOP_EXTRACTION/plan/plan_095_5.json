@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules: torch, tqdm, and the LearnedGaussianDiffusion and GaussianDiffusion classes from denoising_diffusion_pytorch.v_param_continuous_time_gaussian_diffusion",
+    "Define a batch size of 4 and image dimensions of 64x64",
+    "Create a random tensor 'img' with shape (batch_size, 3, height, width) using torch.randn with values in the range [-1, 1]",
+    "Create a random tensor 'time_pairs' with shape (num_steps, 2) where num_steps is 10, using torch.linspace to generate values between 0 and 1",
+    "Instantiate the GaussianDiffusion class and the LearnedGaussianDiffusion class with the same model, image_size=64, channels=3, and num_sample_steps=10",
+    "Override the model_predictions method in the LearnedGaussianDiffusion class to match the signature: def model_predictions(self, x, t, clip_x_start=False):",
+    "Call the ddim_sample method from the GaussianDiffusion class using the instance of LearnedGaussianDiffusion with the created 'img' and 'time_pairs'",
+    "Wrap the call to ddim_sample in a try-except block to catch exceptions",
+    "Print the exception message if a TypeError occurs, specifically looking for the message 'model_predictions() got multiple values for argument 'clip_x_start''",
+    "Assert that the caught exception is of type TypeError to confirm the bug is reproduced"
+]
+```

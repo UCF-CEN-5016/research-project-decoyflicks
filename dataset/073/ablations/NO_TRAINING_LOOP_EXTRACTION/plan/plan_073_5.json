@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary modules: torch, domino.parallel_state, and the DistributedDataParallel class from training/DeepSpeed-Domino/domino/modules/distributed.py",
+    "Set the environment variable for distributed training by running 'export WORLD_SIZE=2' in the terminal",
+    "Initialize a PyTorch distributed process group with 'torch.distributed.init_process_group(backend='nccl', world_size=2, rank=0)' for the first process and 'rank=1' for the second process in a separate terminal",
+    "Define a simple neural network model using torch.nn.Module with at least one layer, e.g., 'class SimpleModel(torch.nn.Module): def __init__(self): super(SimpleModel, self).__init__(); self.fc = torch.nn.Linear(10, 10); def forward(self, x): return self.fc(x)'",
+    "Instantiate the model: 'model = SimpleModel()'",
+    "Set the model to use DistributedDataParallel: 'ddp_model = DistributedDataParallel(model, accumulate_allreduce_grads_in_fp32=True, use_contiguous_buffers=True)'",
+    "Create a random input tensor with shape (32, 10) to simulate a batch size of 32 and input dimension of 10: 'input_tensor = torch.randn(32, 10).cuda()'",
+    "Create a random target tensor with shape (32, 10) to simulate the target output: 'target_tensor = torch.randn(32, 10).cuda()'",
+    "Run a forward pass by calling 'output = ddp_model(input_tensor)'",
+    "Attempt to compute the loss using Mean Squared Error: 'loss = torch.nn.functional.mse_loss(output, target_tensor)'",
+    "Call 'loss.backward()' to trigger the backward pass and check for errors",
+    "Verify that the error message 'AttributeError: 'NoneType' object has no attribute 'all_reduce'' is raised during the backward pass",
+    "Check the initialization of the global 'cdb' object by printing its value before the backward pass to confirm it is None"
+]
+```

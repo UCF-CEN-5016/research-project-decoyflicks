@@ -1,0 +1,10 @@
+Question about value_pe
+
+In the file, [rope/value_pe/__init__.py](https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/transformers/rope/value_pe/__init__.py)
+<img width="1524" alt="image" src="https://github.com/labmlai/annotated_deep_learning_paper_implementations/assets/64700468/491067d1-993c-43d8-b733-cbaee0424d0f">
+
+It seems the value embedding is rotated twice in line 230 and line 234.
+From my understanding, only one rotation is enough.
+Please let me know whether I misunderstood this. 
+Thanks.
+

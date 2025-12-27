@@ -1,0 +1,23 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10.13",
+    "Activate the new conda environment with: conda activate test_env",
+    "Install TensorFlow in the conda environment using pip with the command: pip install tensorflow==2.13.10",
+    "Install the TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode) and create a new Jupyter Notebook file.",
+    "Import the necessary libraries in the first cell of the notebook with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official import tf_models",
+    "Check the current matplotlib backend by adding the line: print('Current backend:', plt.get_backend()) and run the cell.",
+    "Import the TensorFlow Model Garden by adding the line: from official.vision import image_classification and run the cell.",
+    "Check the matplotlib backend again by adding the line: print('Current backend after importing tf_models:', plt.get_backend()) and run the cell.",
+    "Create a simple plot in the next cell with the following code: plt.plot([1, 2, 3], [1, 4, 9]); plt.title('Test Plot'); plt.show() and run the cell.",
+    "Verify that the plot does not display after importing the TensorFlow Model Garden.",
+    "Add a line to change the backend to 'TkAgg' with the code: plt.switch_backend('TkAgg') and run the cell.",
+    "Attempt to create and display another plot with the same code: plt.plot([1, 2, 3], [1, 4, 9]); plt.title('Test Plot After Backend Change'); plt.show() and run the cell.",
+    "Verify that the plot still does not display after changing the backend post-import.",
+    "Add a line to change the backend before importing TensorFlow Model Garden with the code: plt.switch_backend('TkAgg') and run the cell.",
+    "Re-import the TensorFlow Model Garden with the line: from official.vision import image_classification and run the cell.",
+    "Create and display a plot again with the same code: plt.plot([1, 2, 3], [1, 4, 9]); plt.title('Test Plot After Correct Backend Change'); plt.show() and run the cell.",
+    "Verify that the plot displays correctly after changing the backend before importing TensorFlow Model Garden."
+]
+```

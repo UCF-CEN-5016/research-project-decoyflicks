@@ -1,0 +1,52 @@
+### TITLE
+Runtime Error: Loss Value Becomes NaN During Resnet_Rs_ImageNet Training
+
+### SYMPTOMS
+• The training process of the `resnet_rs_imagenet` model on GPU using TensorFlow 2.6.3 results in a `RuntimeError` indicating that the loss value is NaN.
+• The error occurs after several steps during the training loop, as evidenced by the output logs showing multiple instances where the loss value becomes nan.
+
+### EXPECTED BEHAVIOR
+The training process should proceed without errors and loss values should remain finite throughout the specified number of train steps (100 in this case).
+
+### REPRODUCTION STEPS
+1. Download the NVIDIA Docker image: `nvcr.io/nvidia/tensorflow:21.12-tf2-py3`.
+2. Install additional Python modules listed above.
+3. Check out the TensorFlow Model Garden repository at tag `r2.6.0` and navigate to the appropriate directory containing the `resnet_rs_imagenet` model files.
+4. Run the training script with the provided parameters, ensuring that all environment variables and paths are correctly set.
+
+### Analysis
+The core issue appears to be related to the loss function or data preprocessing pipeline where NaN values start appearing in the loss computation after a few steps. The following points can help further investigate and resolve this issue:
+
+1. **NaN Values in Loss Calculation**:
+- Check if any input data is corrupted, leading to invalid values (e.g., NaNs) being fed into the model.
+- Ensure that no operations produce NaN results within the loss function or during gradient computations.
+
+2. **Data Preprocessing**:
+- Verify that all image preprocessing steps, including normalization and augmentation, are correctly implemented without causing data anomalies.
+- Validate that the input data paths (`train*` and `valid*`) point to valid datasets with no missing or corrupted files.
+
+3. **Model Configuration**:
+- Review the model configuration parameters for any potential issues, such as incorrect batch size settings, learning rate schedules, or weight decay values that might lead to unstable gradients.
+- Ensure that the loss function is appropriate and configured correctly (e.g., `label_smoothing`, `l2_weight_decay`).
+
+4. **TensorFlow Version Compatibility**:
+- Although TensorFlow 2.6.3 should be compatible with most models, ensure there are no known bugs or compatibility issues specific to this version.
+
+5. **Debugging Steps**:
+- Add logging and visualization during the training process to monitor intermediate outputs (e.g., loss values, gradients) for early detection of anomalies.
+- Use gradient tape (`tf.GradientTape`) to trace operations and identify where NaNs first appear in the computation graph.
+
+### Potential Solutions
+1. **Data Validation**:
+- Implement data validation checks before feeding into the model to ensure all inputs are valid (not NaN, within expected ranges).
+
+2. **Loss Function Review**:
+- Double-check that the loss function is correctly implemented and handle edge cases where NaNs might arise.
+
+3. **Gradient Descent Adjustments**:
+- Experiment with different optimization settings such as learning rates, momentum values, or enabling gradient clipping to stabilize training.
+
+4. **Model Initialization**:
+- Ensure proper initialization of model weights and biases to avoid issues like exploding gradients.
+
+By systematically addressing these potential issues, the core problem leading to NaN loss values can be identified and resolved, allowing for successful completion of the training process.

@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from vit_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the image size as 224 and the number of classes as 10",
+    "Define small and large dimensions for the CrossViT model: sm_dim = 64, lg_dim = 128",
+    "Set small and large patch sizes: sm_patch_size = 12, lg_patch_size = 16",
+    "Define the number of encoder depths: sm_enc_depth = 1, lg_enc_depth = 4",
+    "Set the number of attention heads: sm_enc_heads = 8, lg_enc_heads = 8, cross_attn_heads = 8",
+    "Define the MLP dimensions: sm_enc_mlp_dim = 2048, lg_enc_mlp_dim = 2048",
+    "Set the dimension of the attention heads: sm_enc_dim_head = 64, lg_enc_dim_head = 64, cross_attn_dim_head = 64",
+    "Set dropout rates: dropout = 0.1, emb_dropout = 0.1",
+    "Instantiate the CrossViT model with the defined parameters",
+    "Create a random input tensor with shape (batch_size, 3, image_size, image_size) where batch_size = 8",
+    "Pass the random input tensor through the CrossViT model to obtain the output logits",
+    "Check the output shape to ensure it matches (batch_size, num_classes)",
+    "Introduce an assertion to check if the output contains any NaN values",
+    "Log the output values to verify if any NaN values are present",
+    "If NaN values are found, print a message indicating the bug has been reproduced"
+]
+```

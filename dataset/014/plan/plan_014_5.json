@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and required modules from object_detection and related libraries",
+    "Specify the path to the pipeline.config file for a model trained on images with over 100 objects per image",
+    "Load the pipeline.config file into a TrainEvalPipelineConfig object using config_util.get_configs_from_pipeline_file() method",
+    "Open the pipeline.config file again in read mode and parse its content into a second TrainEvalPipelineConfig object using text_format.Merge() from protobuf library",
+    "Attempt to set pipeline_config.eval_input_reader.max_number_of_boxes = 500 directly on the parsed config object and capture any AttributeError that occurs",
+    "Verify that the AttributeError message contains 'max_number_of_boxes' not being an attribute of 'RepeatedCompositeContainer'",
+    "Re-import the pipeline.config file as a text string",
+    "Create a new TrainEvalPipelineConfig object from this text string using text_format.Merge()",
+    "Directly set pipeline_config.eval_input_reader.max_number_of_boxes = 500 on this newly created config object without encountering an AttributeError",
+    "Output 'No error encountered when setting max_number_of_boxes' to indicate successful reproduction of the bug"
+]
+```
+

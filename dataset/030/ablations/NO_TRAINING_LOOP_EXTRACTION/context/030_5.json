@@ -1,0 +1,44 @@
+{
+  "bug_report": "030",
+  "rank": 5,
+  "score": 0.9036534428596497,
+  "main_file": {
+    "path": "PyTorch/Translation/GNMT/seq2seq/gpu_affinity.py",
+    "content": "import collections\nimport math\nimport os\nimport pathlib\nimport re\n\nimport pynvml\n\npynvml.nvmlInit()\n\n\ndef systemGetDriverVersion():\n    return pynvml.nvmlSystemGetDriverVersion()\n\n\ndef deviceGetCount():\n    return pynvml.nvmlDeviceGetCount()\n\n\nclass device:\n    # assume nvml returns list of 64 bit ints\n    _nvml_affinity_elements = math.ceil(os.cpu_count() / 64)\n\n    def __init__(self, device_idx):\n        super().__init__()\n        self.handle = pynvml.nvmlDeviceGetHandleByIndex(device_idx)\n\n    def getName(self):\n        return pynvml.nvmlDeviceGetName(self.handle)\n\n    def getCpuAffinity(self):\n        affinity_string = ''\n        for j in pynvml.nvmlDeviceGetCpuAffinity(\n            self.handle, device._nvml_affinity_elements\n        ):\n            # assume nvml returns list of 64 bit ints\n            affinity_string = '{:064b}'.format(j) + affinity_string\n        affinity_list = [int(x) for x in affinity_string]\n        affinity_list.reverse()  # so core 0 is in 0th element of list\n\n        ret = [i for i, e in enumerate(affinity_list) if e != 0]\n        return ret\n\n\ndef set_socket_affinity(gpu_id):\n    dev = device(gpu_id)\n    affinity = dev.getCpuAffinity()\n    os.sched_setaffinity(0, affinity)\n\n\ndef set_single_affinity(gpu_id):\n    dev = device(gpu_id)\n    affinity = dev.getCpuAffinity()\n    os.sched_setaffinity(0, affinity[:1])\n\n\ndef set_single_unique_affinity(gpu_id, nproc_per_node):\n    devices = [device(i) for i in range(nproc_per_node)]\n    socket_affinities = [dev.getCpuAffinity() for dev in devices]\n\n    siblings_list = get_thread_siblings_list()\n    siblings_dict = dict(siblings_list)\n\n    # remove siblings\n    for idx, socket_affinity in enumerate(socket_affinities):\n        socket_affinities[idx] = list(set(socket_affinity) - set(siblings_dict.values()))\n\n    affinities = []\n    assigned = []\n\n    for socket_affinity in socket_affinities:\n        for core in socket_affinity:\n            if core not in assigned:\n                affinities.append([core])\n                assigned.append(core)\n                break\n    os.sched_setaffinity(0, affinities[gpu_id])\n\n\ndef set_socket_unique_affinity(gpu_id, nproc_per_node, mode):\n    device_ids = [device(i) for i in range(nproc_per_node)]\n    socket_affinities = [dev.getCpuAffinity() for dev in device_ids]\n\n    siblings_list = get_thread_siblings_list()\n    siblings_dict = dict(siblings_list)\n\n    # remove siblings\n    for idx, socket_affinity in enumerate(socket_affinities):\n        socket_affinities[idx] = list(set(socket_affinity) - set(siblings_dict.values()))\n\n    socket_affinities_to_device_ids = collections.defaultdict(list)\n\n    for idx, socket_affinity in enumerate(socket_affinities):\n        socket_affinities_to_device_ids[tuple(socket_affinity)].append(idx)\n\n    for socket_affinity, device_ids in socket_affinities_to_device_ids.items():\n        devices_per_group = len(device_ids)\n        cores_per_device = len(socket_affinity) // devices_per_group\n        for group_id, device_id in enumerate(device_ids):\n            if device_id == gpu_id:\n                if mode == 'interleaved':\n                    affinity = list(socket_affinity[group_id::devices_per_group])\n                elif mode == 'continuous':\n                    affinity = list(socket_affinity[group_id*cores_per_device:(group_id+1)*cores_per_device])\n                else:\n                    raise RuntimeError('Unknown set_socket_unique_affinity mode')\n\n                # reintroduce siblings\n                affinity += [siblings_dict[aff] for aff in affinity if aff in siblings_dict]\n                os.sched_setaffinity(0, affinity)\n\n\ndef get_thread_siblings_list():\n    path = '/sys/devices/system/cpu/cpu*/topology/thread_siblings_list'\n    thread_siblings_list = []\n    pattern = re.compile(r'(\\d+)\\D(\\d+)')\n    for fname in pathlib.Path(path[0]).glob(path[1:]):\n        with open(fname) as f:\n            content = f.read().strip()\n            res = pattern.findall(content)\n            if res:\n                pair = tuple(map(int, res[0]))\n                thread_siblings_list.append(pair)\n    return thread_siblings_list\n\n\ndef set_affinity(gpu_id, nproc_per_node, mode='socket'):\n    if mode == 'socket':\n        set_socket_affinity(gpu_id)\n    elif mode == 'single':\n        set_single_affinity(gpu_id)\n    elif mode == 'single_unique':\n        set_single_unique_affinity(gpu_id, nproc_per_node)\n    elif mode == 'socket_unique_interleaved':\n        set_socket_unique_affinity(gpu_id, nproc_per_node, 'interleaved')\n    elif mode == 'socket_unique_continuous':\n        set_socket_unique_affinity(gpu_id, nproc_per_node, 'continuous')\n    else:\n        raise RuntimeError('Unknown affinity mode')\n\n    affinity = os.sched_getaffinity(0)\n    return affinity\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "collections",
+      "function": "defaultdict"
+    },
+    {
+      "module": "pathlib",
+      "function": "Path"
+    },
+    {
+      "module": "pynvml",
+      "function": "nvmlDeviceGetCount"
+    },
+    {
+      "module": "pynvml",
+      "function": "nvmlDeviceGetCpuAffinity"
+    },
+    {
+      "module": "pynvml",
+      "function": "nvmlDeviceGetHandleByIndex"
+    },
+    {
+      "module": "pynvml",
+      "function": "nvmlDeviceGetName"
+    },
+    {
+      "module": "pynvml",
+      "function": "nvmlInit"
+    },
+    {
+      "module": "pynvml",
+      "function": "nvmlSystemGetDriverVersion"
+    }
+  ]
+}

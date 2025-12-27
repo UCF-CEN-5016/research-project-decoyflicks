@@ -1,0 +1,17 @@
+TITLE  
+Clarification needed on slicing of action_mask in actor loss calculation excluding "eos" token loss
+
+SYMPTOMS  
+• Actor loss calculation uses action_mask[:, start:] which excludes the token at position start-1, typically the "eos" token  
+• The "eos" token contains ground truth reward from the Reward Model but is being filtered out from loss computation  
+• User suspects that the mask slicing should be action_mask[:, start-1:-1] to include "eos" token in loss calculation  
+• No explicit error messages reported, but unexpected exclusion of "eos" token from loss leads to potential training inaccuracies  
+
+EXPECTED BEHAVIOR  
+The mask applied during actor loss computation should correctly include all tokens for which rewards are available, including the "eos" token, to ensure the loss reflects the entire sequence and properly accounts for the ground truth reward signals from the Reward Model.
+
+REPRODUCTION STEPS  
+1. Use the current implementation where actor_loss is calculated with actor_log_prob[:, start:], log_probs[:, start:], advantages, and action_mask[:, start:]  
+2. Observe that the loss calculation excludes the "eos" token due to mask slicing  
+3. Compare with alternative slicing action_mask[:, start-1:-1] to verify inclusion of the "eos" token in the loss  
+4. Analyze impact on loss and training behavior when the "eos" token is excluded versus included

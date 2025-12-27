@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch and the ResidualSimVQ class from vector_quantize_pytorch.residual_sim_vq",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 2 and input dimensions of (17, 1024) for the input tensor",
+    "Create a random input tensor with shape (batch_size, 1024, 17) using torch.randn(batch_size, 1024, 17)",
+    "Instantiate the ResidualSimVQ class with default parameters, ensuring quantize_dropout is set to True",
+    "Set the model to training mode by calling model.train()",
+    "Call the forward method of the ResidualSimVQ instance with the input tensor, without passing return_loss parameter",
+    "Capture the output of the forward method to check for errors",
+    "Verify that a NameError is raised indicating 'return_loss' is not defined",
+    "Log the error message to confirm the bug occurrence",
+    "Check the shapes of the output losses and indices to validate shape inconsistencies",
+    "Assert that the shapes of all_losses contain at least one empty tensor and that all_indicies contain tensors with shape [2, 1024, 17]"
+]
+```

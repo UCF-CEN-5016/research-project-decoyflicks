@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn.functional as F, and any other required modules from the x_transformers package.",
+    "Define a batch size of 4 and a sequence length of 10.",
+    "Create a random tensor 't' with shape (batch_size, seq_len, embedding_dim), where embedding_dim is set to 16.",
+    "Create a lens tensor with shape (batch_size,) containing random integers between 1 and seq_len (inclusive). For example, use torch.randint(1, seq_len + 1, (batch_size,)).",
+    "Instantiate the AutoregressiveWrapper class with a dummy net (e.g., a simple nn.Linear layer) and set pad_value to a non-zero value, e.g., 1.",
+    "Call the generate method of the AutoregressiveWrapper instance with the following parameters: prompts set to 't', seq_len set to 5, and prompt_lens set to 'lens'.",
+    "Inside the generate method, ensure that the align_right function is called with the prompts and prompt_lens, passing the pad_id as self.pad_value.",
+    "In the align_right function, assert that the pad_id is not being used in the F.pad call, which should be using value=0 instead of value=self.pad_value.",
+    "After the call to align_right, check the output tensor to see if it contains the pad_value (1) in the padded areas.",
+    "Verify that the output tensor from align_right does not reflect the expected padding behavior, indicating that the pad_id is not being utilized correctly."
+]
+```

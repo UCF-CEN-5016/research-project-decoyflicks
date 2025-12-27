@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from TensorFlow Datasets and Keras",
+    "Set BATCH_SIZE to 64 and IMAGE_SIZE to 280",
+    "Load the 'tf_flowers' dataset using tfds.load with split=['train[:90%]', 'train[90%:]']",
+    "Define a preprocessing function _pp that resizes images, crops them randomly during training, and one-hot encodes labels",
+    "Map the preprocessing function to the train_dataset and val_dataset in parallel using num_parallel_calls=tf.data.AUTOTUNE",
+    "Batch the datasets with batch_size=64 and prefetch data using tf.data.AUTOTUNE",
+    "Define a create_mobilevit function that constructs a MobileViT model with 256x256 input images and 5 output classes",
+    "Call create_mobilevit to instantiate the mobilevit_xxs model",
+    "Compile the mobilevit_xxs model with an Adam optimizer, CategoricalCrossentropy loss function, and 'accuracy' metric",
+    "Define a validation dataset by calling prepare_dataset on the val_dataset with is_training=False",
+    "Start the training process using mobilevit_xxs.fit with train_dataset for 30 epochs and validation_data as the validation dataset",
+    "Monitor training performance to observe NaN values in loss calculation during training"
+]
+```
+

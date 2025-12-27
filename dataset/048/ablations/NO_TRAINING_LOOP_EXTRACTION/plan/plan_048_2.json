@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, and argparse",
+    "Set the CUDA device to ensure the script runs on GPU: torch.cuda.set_device(0)",
+    "Prepare an audio file named 'audio.wav' with a duration of approximately 10 seconds and a sample rate of 16kHz",
+    "Create a text file named 'text.txt' containing 63 lines of text that corresponds to the audio file",
+    "Ensure the audio file and text file are located in the same directory as the script or provide the correct relative paths",
+    "Set the language parameter to 'ful' for the forced alignment process",
+    "Create a directory named 'output' to store the results of the forced alignment",
+    "Ensure the uroman binary is located in 'uroman/bin' relative to the script's execution path",
+    "Run the command: python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin",
+    "Monitor the output for the message indicating the number of lines read from the text file",
+    "Check for the 'Downloading model and dictionary...' message to confirm model loading",
+    "Wait for the script to reach the point where it attempts to concatenate tensors in the generate_emissions function",
+    "Capture the RuntimeError that occurs, specifically looking for the message about tensor size mismatch",
+    "Verify that the expected size of 1649 does not match the actual size of 1799 for the tensor in the list",
+    "Log the dimensions of the tensors involved in the concatenation to confirm the mismatch",
+    "Repeat the process with different audio files and text transcriptions to ensure the bug is consistently reproducible"
+]
+```

@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and pandas modules",
+    "Load the CIFAR-10 dataset using keras.datasets.cifar10.load_data()",
+    "Define a batch size of 32",
+    "Create random integer input data with shape (batch_size, 32, 32, 3) within the range [0, 255]",
+    "Normalize the input data by dividing by 255.0 to scale it between [0, 1]",
+    "One-hot encode the labels using keras.utils.to_categorical() with num_classes=10",
+    "Define a function that creates a Gradient Boosted Trees model with parameters num_trees=100, max_depth=10, min_examples=20, subsample=0.8, validation_ratio=0.2, task=tfdf.keras.Task.CLASSIFICATION",
+    "Call the created function to create the Gradient Boosted Trees model",
+    "Compile the Gradient Boosted Trees model with metrics=[keras.metrics.BinaryAccuracy(name=\"accuracy\")]",
+    "Verify that compiling the model results in a ValueError with the message 'Input layer of type string found, but expected input types are: TensorType'",
+    "Monitor memory usage during execution to verify it exceeds the expected threshold"
+]
+```
+

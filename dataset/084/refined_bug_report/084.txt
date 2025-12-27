@@ -1,0 +1,23 @@
+TITLE
+Accuracy of 100% in all epochs for ViT model using example dataset
+
+SYMPTOMS
+• The accuracy rate is 100% in epoch 1 and remains at 100% in subsequent epochs.
+• There are no loss or validation loss values that indicate the model is learning.
+• The training process completes without any errors.
+
+EXPECTED BEHAVIOR
+For a typical machine learning model, especially when using an example dataset, we would expect:
+- Loss to decrease over time as the model learns from the data.
+- Accuracy to increase initially and then stabilize or plateau but not reach 100% in all epochs unless the dataset is perfectly separated.
+
+REPRODUCTION STEPS
+1. Ensure you have installed the necessary libraries including PyTorch and any other dependencies required for running ViT models.
+2. Copy and paste the provided code snippet into your Python environment.
+3. Replace `device` with an appropriate device (e.g., "cuda" if using a GPU, or "cpu").
+4. Run the training loop as shown in the original bug report.
+
+Note: It is important to verify that:
+- The dataset used for training and validation is correctly loaded and formatted.
+- There are no bugs or issues within the model definition itself (e.g., incorrect loss function usage).
+- The data labels are not all identical, which could lead to an unrealistic 100% accuracy.

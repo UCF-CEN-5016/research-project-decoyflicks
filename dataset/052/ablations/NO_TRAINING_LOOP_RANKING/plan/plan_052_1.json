@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow, Keras, and NumPy libraries",
+    "Set the TensorFlow version to 2.11.0 or higher to ensure compatibility with Keras 3.1.0.dev2024031303",
+    "Define a batch size of 32 and set the number of epochs to 10",
+    "Create a sample training dataset with shape (1000, 4) where 4 is the number of features",
+    "Create a sample training label array with shape (1000,) containing integer values for classification",
+    "Define a simple Keras model for Named Entity Recognition (NER) with an input shape of (None, 4)",
+    "Add a Dense layer with softmax activation to the model for multi-class classification",
+    "Compile the model using the Adam optimizer and categorical crossentropy loss",
+    "Create a TensorFlow dataset from the training data and labels with a batch size of 32",
+    "Call the model's fit method with the training dataset and specified epochs",
+    "Define a function 'tokenize_and_convert_to_ids' that splits input text into tokens and converts them to lowercase",
+    "Create a sample input string 'eu rejects german call to boycott british lamb'",
+    "Tokenize the sample input string using 'tokenize_and_convert_to_ids'",
+    "Reshape the tokenized input to have a shape of (1, -1)",
+    "Call the model's predict method with the reshaped input",
+    "Capture the output of the model prediction",
+    "Use np.argmax to get the predicted class indices from the output",
+    "Map the predicted indices to their corresponding entity labels using a predefined mapping dictionary",
+    "Print the predicted labels to verify the output",
+    "Assert that the output does not raise any exceptions during the model's fit and predict calls",
+    "Verify that the output contains the error 'OperatorNotAllowedInGraphError' when calling the softmax layer"
+]
+```

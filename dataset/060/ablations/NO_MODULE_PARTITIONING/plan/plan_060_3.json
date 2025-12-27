@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and KerasCV modules: import tensorflow as tf; from keras import layers; from keras_cv import layers as keras_cv_layers",
+    "Set the batch size: BATCH_SIZE = 32",
+    "Define AUTOTUNE for data loading: AUTOTUNE = tf.data.AUTOTUNE",
+    "Load the Oxford Pets dataset using tf.keras.utils.get_file and extract it: dataset_url = 'https://storage.googleapis.com/mledu-datasets/oxford_pet_dataset.zip'; path = tf.keras.utils.get_file('oxford_pet_dataset.zip', origin=dataset_url, extract=True)",
+    "Set the path to the dataset: data_dir = pathlib.Path(path).parent / 'oxford_pet_dataset'",
+    "Create a training dataset from the images and masks: train_ds = tf.data.Dataset.list_files(str(data_dir / 'images/*.jpg'), shuffle=False); mask_ds = tf.data.Dataset.list_files(str(data_dir / 'annotations/*.png'), shuffle=False); train_ds = tf.data.Dataset.zip((train_ds, mask_ds))",
+    "Define the augment_fn function to apply random augmentations: def augment_fn(inputs): images, masks = inputs; return {'images': images, 'segmentation_masks': masks}",
+    "Define the unpackage_inputs function to separate images and masks: def unpackage_inputs(inputs): return inputs['images'], inputs['segmentation_masks']",
+    "Define the resize_fn function to resize images and masks: def resize_fn(inputs): images, masks = inputs; images = tf.image.resize(images, [160, 160]); masks = tf.image.resize(masks, [160, 160]); return images, masks",
+    "Create the augmented training dataset: augmented_train_ds = (train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE))",
+    "Create the resized validation dataset: resized_val_ds = (val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE))",
+    "Run the code cell to create augmented_train_ds and resized_val_ds",
+    "Capture the error output when executing the code cell, specifically looking for TypeError related to the augment_fn",
+    "Verify that the error message indicates a mismatch in tensor types between images and segmentation masks"
+]
+```

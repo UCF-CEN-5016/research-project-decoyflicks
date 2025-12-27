@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and the Model class from labml_nn.rl.ppo.experiment",
+    "Set the device to CUDA if available, otherwise set it to CPU",
+    "Define a batch size of 8 and image dimensions of 4x84x84 for the input observations",
+    "Create a random tensor for observations with shape (batch_size, 4, 84, 84) using torch.rand",
+    "Instantiate the Model class and move it to the defined device",
+    "Define a forward pass through the model using the random observations tensor",
+    "Capture the output of the model, which should include pi (policy distribution) and value (state value)",
+    "Sample actions from the pi output using the sample method of the Categorical distribution",
+    "Verify the shape of the output from the model, ensuring it matches expected dimensions: (batch_size, num_actions) for pi and (batch_size, 1) for value",
+    "Check the internal attention mechanism in the Model class by accessing the attention weights after the forward pass",
+    "Assert that the attention weights tensor has the expected shape, which should be (batch_size, num_heads, seq_length, seq_length)",
+    "Perform a softmax operation on the attention weights along the appropriate axis (axis 2) and store the result",
+    "Compare the original attention weights with the softmaxed weights to check for discrepancies",
+    "Log the original and softmaxed attention weights to verify if the softmax operation is being applied correctly",
+    "Run the model for a few iterations to ensure that the attention mechanism behaves consistently across multiple forward passes",
+    "Assert that the model does not throw any errors during execution, indicating that it is functioning despite the potential bug in the attention mechanism"
+]
+```

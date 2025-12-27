@@ -1,0 +1,17 @@
+TITLE  
+Incorrect Number of Features in RoPE Implementation
+
+SYMPTOMS  
+• The code on line 226 of the RoPE file initializes `RotaryPositionalEmbeddings` with 3 features instead of the required 4.  
+• Running the code with the current implementation leads to an error due to the mismatch in expected features.  
+• The example provided in the documentation or usage context indicates that 4 features are necessary for correct functionality.
+
+EXPECTED BEHAVIOR  
+The code should correctly initialize `RotaryPositionalEmbeddings` with 4 features, allowing the implementation to run without errors and produce the expected results.
+
+REPRODUCTION STEPS  
+1. Access the RoPE implementation file at the provided GitHub link.  
+2. Navigate to line 226 of the file.  
+3. Observe the initialization of `RotaryPositionalEmbeddings` with 3 features.  
+4. Attempt to run the code as is, leading to an error due to the mismatch in feature count.  
+5. Modify the line to use 4 features and rerun the code to confirm the error is resolved.

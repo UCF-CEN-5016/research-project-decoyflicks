@@ -1,0 +1,26 @@
+TITLE  
+Key 'input_feat_per_channel' is missing in the structure
+
+SYMPTOMS  
+• The software fails to execute due to a missing key in the configuration structure.  
+• Error message: "Key 'input_feat_per_channel' is not in struct."  
+• The process cannot continue, resulting in a halt of the expected operation.  
+
+EXPECTED BEHAVIOR  
+The software should execute the `fairseq-generate` command successfully, utilizing all required parameters from the configuration file without encountering missing key errors.
+
+REPRODUCTION STEPS  
+1. Run the command:  
+   `fairseq-generate $DATA_ROOT \`  
+2. Include the configuration file:  
+   `--config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml \`  
+3. Specify the task and its parameters:  
+   `--task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan \`  
+4. Provide the model path:  
+   `--path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test \`  
+5. Set additional parameters:  
+   `--max-tokens 50000 \`  
+   `--beam 10 --max-len-a 1 \`  
+6. Specify the results path:  
+   `--results-path /root/autodl-tmp/results`  
+7. Observe the error message indicating the missing key.

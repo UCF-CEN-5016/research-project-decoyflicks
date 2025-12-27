@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, glob, and PIL",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 2 and image dimensions of 256x256",
+    "Download and extract the dataset from 'https://hf.co/datasets/sayakpaul/sample-datasets/resolve/main/breast-cancer-dataset.tar.gz'",
+    "Load image paths and label paths using glob to get all images from 'images/*.png' and labels from 'labels/*.png'",
+    "Define a generator class 'Generator' that yields preprocessed images and segmentation masks",
+    "In the generator, implement a method 'get_bounding_box' to create bounding boxes from ground truth masks",
+    "Prepare the output signature for the tf.data.Dataset with appropriate shapes and data types",
+    "Create a tf.data.Dataset object from the generator with the defined output signature",
+    "Configure the dataset for performance: cache, shuffle, batch, and prefetch with buffer size set to tf.data.AUTOTUNE",
+    "Take a single batch from the dataset and print the shapes of the elements to verify correct loading",
+    "Import the Keras CV RetinaNet model from keras_cv.models.object_detection.retinanet",
+    "Initialize the RetinaNet model with appropriate parameters, ensuring it matches the dataset's number of classes",
+    "Compile the model with an optimizer and loss function suitable for object detection tasks",
+    "Call model.fit with train_ds.take(20) and validation_data set to eval_ds.take(20)",
+    "Set epochs to 1 and include a callback for evaluation metrics",
+    "Run the model.fit call and capture any exceptions raised during execution",
+    "Verify that the exception raised is an InvalidArgumentError related to the GatherV2 operation",
+    "Check the error message for specific details about the indices and shapes involved in the error"
+]
+```

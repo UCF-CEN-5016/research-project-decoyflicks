@@ -1,0 +1,22 @@
+```json
+[
+    "Open a terminal in WSL Ubuntu 22.04",
+    "Install PyTorch version 2.1.0 with CUDA 11.8 support using the command: pip install torch==2.1.0+cu118 torchvision==0.15.0+cu118 torchaudio==2.1.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html",
+    "Install fairseq version 0.12.2 using the command: pip install fairseq==0.12.2",
+    "Create a directory named 'assets' in the current working directory",
+    "Download the Hubert model checkpoint 'hubert_base.pt' and place it in the './assets/hubert/' directory",
+    "Create a file named 'feats.pt' with a tensor of shape (1, 10, 512) and save it using torch.save(torch.randn(1, 10, 512), './feats.pt')",
+    "Create a file named 'padding_mask.pt' with a tensor of shape (1, 10) and save it using torch.save(torch.ones(1, 10), './padding_mask.pt')",
+    "Open a Python script or interactive Python shell",
+    "Import the necessary modules: from fairseq import checkpoint_utils and import torch",
+    "Load the Hubert model using the command: hubert, _, _ = checkpoint_utils.load_model_ensemble_and_task(['./assets/hubert/hubert_base.pt'], suffix='')",
+    "Assign the first model to a variable: hubert_model = hubert[0]",
+    "Convert the model to half precision: hubert_model = hubert_model.half()",
+    "Define the HuberAdapter class with the provided code",
+    "Instantiate the HuberAdapter with the loaded model: adapter = HuberAdapter(hubert_model)",
+    "Load the features and padding mask tensors: feats = torch.load('./feats.pt') and padding_mask = torch.load('./padding_mask.pt')",
+    "Attempt to export the adapter to ONNX format using the command: torch.onnx.export(adapter, (feats.cuda(), padding_mask.cuda()), 'hubert.onnx', input_names=['feats','padding_mask'], output_names=['logits','mask'], dynamic_axes={'feats': {0: 'seq'}, 'padding_mask': {0: 'seq'}})",
+    "Observe the error message: AttributeError: 'Tensor' object has no attribute 'is_integer'",
+    "Verify that the error occurs consistently by rerunning the export command multiple times"
+]
+```

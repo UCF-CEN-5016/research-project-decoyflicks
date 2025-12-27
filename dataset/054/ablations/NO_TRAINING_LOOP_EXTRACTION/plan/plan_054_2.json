@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: import pandas as pd, import tensorflow as tf, from tensorflow import keras, import tensorflow_decision_forests as tfdf",
+    "Define the base path for the dataset: BASE_PATH = 'https://kdd.ics.uci.edu/databases/census-income/census-income'",
+    "Load the training data from the UCI Machine Learning Repository: train_data = pd.read_csv(f'{BASE_PATH}.data.gz', header=None)",
+    "Load the test data from the UCI Machine Learning Repository: test_data = pd.read_csv(f'{BASE_PATH}.test.gz', header=None)",
+    "Define the target column name: TARGET_COLUMN_NAME = 'income_level'",
+    "Define the target labels: TARGET_LABELS = [' - 50000.', ' 50000+.']",
+    "Prepare the data by mapping target labels to integers: train_data[TARGET_COLUMN_NAME] = train_data[TARGET_COLUMN_NAME].map(TARGET_LABELS.index)",
+    "Prepare the test data similarly: test_data[TARGET_COLUMN_NAME] = test_data[TARGET_COLUMN_NAME].map(TARGET_LABELS.index)",
+    "Define the model parameters: NUM_TREES = 250, MAX_DEPTH = 5, MIN_EXAMPLES = 6, SUBSAMPLE = 0.65, VALIDATION_RATIO = 0.1",
+    "Create a function to specify feature usages: def specify_feature_usages() that returns a list of feature usages for numeric and categorical features",
+    "Create a Gradient Boosted Trees model using tfdf.keras.GradientBoostedTreesModel with specified parameters",
+    "Define a function run_experiment(model, train_data, test_data) that converts train_data and test_data to TensorFlow datasets",
+    "In the run_experiment function, call model.fit(train_dataset, epochs=20, validation_data=test_dataset) to use the test dataset as validation data",
+    "Call run_experiment with the model, train_data, and test_data to start training",
+    "Print the test accuracy after evaluation to verify the model's performance",
+    "Assert that the test accuracy is overly optimistic, indicating the bug of using the test set as validation set"
+]
+```

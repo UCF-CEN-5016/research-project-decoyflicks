@@ -1,0 +1,28 @@
+TITLE  
+Validation accuracy exceeds training accuracy during model training
+
+SYMPTOMS  
+• Validation accuracy consistently higher than training accuracy throughout the training process  
+• Observed behavior occurs with and without dropout and dropout_emb  
+• Comparison made with a CNN model shows similar inconsistencies  
+• No error messages reported  
+
+EXPECTED BEHAVIOR  
+The training accuracy should generally be equal to or higher than the validation accuracy, indicating that the model is learning effectively from the training data.
+
+REPRODUCTION STEPS  
+1. Use the example script provided for training on the cats and dogs dataset.  
+2. Configure the model parameters as specified:  
+   - batch_size = 64  
+   - image_size = 224  
+   - patch_size = 16  
+   - num_classes = 2  
+   - dim = 1024  
+   - depth = 6  
+   - heads = 16  
+   - mlp_dim = 2048  
+   - dropout = 0.1  
+   - emb_dropout = 0.1  
+3. Train the model and monitor both training and validation accuracy.  
+4. Compare the results with those of a CNN model for reference.  
+5. Plot the training and validation accuracy over time to visualize the discrepancy.

@@ -1,0 +1,13 @@
+[BERT/PyTorch]TypeError: gelu(): argument 'approximate' must be str, not bool
+
+Related to **Model/Framework(s)** 
+*(e.g. GNMT/PyTorch or FasterTransformer/All)*
+
+**Describe the bug**
+At [this line](https://github.com/NVIDIA/DeepLearningExamples/blob/6610c05c330b887744993fca30532cbb9561cbde/PyTorch/LanguageModeling/BERT/modeling.py#L121), 
+```python
+def gelu(x):
+    return torch.nn.functional.gelu(x, approximate=True)
+```
+
+It passes the `approximate` parameter as True. However according to [PyTorch documentation](https://pytorch.org/docs/stable/generated/torch.nn.functional.gelu.html), this parameter should be of type `str`.

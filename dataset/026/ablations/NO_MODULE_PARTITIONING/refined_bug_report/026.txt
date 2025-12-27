@@ -1,0 +1,47 @@
+### TITLE
+TypeError: Got an unexpected keyword argument 'box_ind' during result visualization
+
+### SYMPTOMS
+• Encountering a `TypeError` when attempting to visualize results in the notebook.
+• Error message: `TypeError: Got an unexpected keyword argument 'box_ind'`
+• The images with labels do not display as expected in the output.
+
+### EXPECTED BEHAVIOR
+When the code is executed correctly, the images along with their corresponding labels should be visualized and displayed in the output.
+
+### REPRODUCTION STEPS
+1. Open the provided Google Colab notebook: [TFHub_saved_model_inference.ipynb](https://colab.research.google.com/drive/1J_bIH_oeZeJ_VcF_xBm_yVaxYWEWdx6R?usp=sharing).
+2. Run the existing code in the notebook.
+3. Observe the output where two images are expected to be displayed with labels.
+4. Note that the images with labels do not appear, and the TypeError occurs.
+
+### ADDITIONAL CONTEXT
+- The logs indicate that the error arises in the following code snippet:
+    ```
+    detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(
+        detection_masks, detection_boxes,
+        image_np.shape[1], image_np.shape[2])
+    ```
+- The error traceback points to the line that attempts to call `reframe_box_masks_to_image_masks_default()` with `box_ind` as an argument.
+- The TensorFlow version being used is `2.10.0`, and the Python version is `3.7.15`.
+- Relevant historical issue: A similar `unexpected keyword argument` error was reported in issue [#5056](https://github.com/tensorflow/models/issues/5056) approximately four years ago, although its relevance to this case is uncertain. 
+
+### SYSTEM INFORMATION
+- OS: Linux OS on Google Colab
+- TensorFlow version: 2.10.0
+- Python version: 3.7.15
+- TensorFlow installed via pip: `pip install tensorflow`
+- Additional TensorFlow packages:
+    - tensorflow-addons 0.18.0
+    - tensorflow-datasets 4.6.0
+    - tensorflow-estimator 2.10.0
+    - tensorflow-object-detection-api 0.1.1
+
+### ERRORS
+- When checking the TensorFlow version, the following warnings were noted:
+    ```
+    Could not load dynamic library 'libnvinfer.so.8'; dlerror: libnvinfer.so.8: cannot open shared object file: No such file or directory
+    Could not load dynamic library 'libnvinfer_plugin.so.8'; dlerror: libnvinfer_plugin.so.8: cannot open shared object file: No such file or directory
+    ``` 
+
+This structured format provides a clear and concise overview of the bug report, making it easier for developers to understand the issue and work towards a resolution.

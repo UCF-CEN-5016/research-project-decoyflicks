@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow, unittest, and numpy modules from the test file",
+    "Define a batch size of 4 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call _build_feature_extractor function with architecture='resnet_v1_101'",
+    "Set first_stage_features_stride to 16",
+    "Generate preprocessed_inputs using tf.random_uniform with maxval=255",
+    "Extract proposal features by calling feature_extractor.extract_proposal_features",
+    "Verify that the shape of rpn_feature_map is [4, 14, 14, 1024]",
+    "Call extract_box_classifier_features method on feature_extractor",
+    "Capture the output tensor from extract_box_classifier_features",
+    "Initialize TensorFlow variables by running tf.global_variables_initializer()",
+    "Run a test session to execute the graph and capture the output shape of proposal_classifier_features",
+    "Assert that the shape of proposal_classifier_features is [4, 14, 14, 2048]",
+    "Monitor GPU memory usage during execution",
+    "Assert that GPU memory usage exceeds expected threshold for a model of this size"
+]
+```
+

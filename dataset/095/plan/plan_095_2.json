@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries including PIL, torch, torchvision, and accelerate",
+    "Define the image size as 128x128 and batch size as 4",
+    "Create a sample batch of images using randn_like with shape (batch_size, 3, image_size, image_size)",
+    "Initialize the Unet model with dim=64 and dim_mults=(1, 2, 4, 8)",
+    "Instantiate the GaussianDiffusion class with the initialized model, image size of 128, and timesteps set to 1000",
+    "Define a classifier model using Classifier class with num_classes=1000 and t_dim=1",
+    "Set guidance scale for classifier_cond_fn as 1 and y as torch.full(torch.zeros(batch_size), 1).long()",
+    "Sample images from the diffusion model using sample function with cond_fn set to classifier_cond_fn, guidance_kwargs containing classifier, y, and classifier_scale",
+    "Verify if any of the sampled images contain NaN values or are not in the expected shape (batch_size, 3, image_size, image_size)",
+    "Monitor the memory usage during the sampling process",
+    "Assert that the memory usage exceeds a certain threshold indicating potential issues with the implementation"
+]
+```
+

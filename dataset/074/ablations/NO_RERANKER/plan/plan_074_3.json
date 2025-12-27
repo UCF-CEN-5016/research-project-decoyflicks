@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, deepspeed, and any other required modules from dschat.",
+    "Set the random seed for reproducibility using torch.manual_seed(1234).",
+    "Define a batch size of 16 and sequence length of 512.",
+    "Create a mock dataset that simulates the training data, ensuring it includes an 'eos' token in the action mask.",
+    "Prepare the action mask tensor with shape (batch_size, sequence_length) filled with 1s and 0s, where the last token is marked as 0 (indicating 'eos').",
+    "Create a tensor for actor_log_prob with shape (batch_size, sequence_length) filled with random values.",
+    "Create a tensor for log_probs with shape (batch_size, sequence_length) filled with random values.",
+    "Create a tensor for advantages with shape (batch_size) filled with random values.",
+    "Set the 'start' variable to a value that ensures the 'eos' token is included in the loss calculation, e.g., start = 0.",
+    "Calculate actor_loss using the provided formula: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]).",
+    "Verify that the calculated actor_loss does not include the ground reward associated with the 'eos' token by checking the values of the loss.",
+    "Change the mask to action_mask[:, start-1:-1] and recalculate the actor_loss.",
+    "Assert that the new actor_loss is different from the previous actor_loss, indicating that the 'eos' token is now included in the loss calculation.",
+    "Print both actor_loss values for comparison to confirm the bug."
+]
+```

@@ -1,0 +1,30 @@
+```json
+[
+    "Import TensorFlow, Keras, and NLTK libraries: tensorflow, keras_nlp, and nltk.translate.bleu_score",
+    "Import necessary functions from data_preprocessing: MAX_SEQUENCE_LENGTH, eng_tokenizer, spa_tokenizer, and test_pairs",
+    "Import the transformer model from model.py",
+    "Set the TEST_BATCH_SIZE variable to 1",
+    "Define the decode_sequences function to handle input sentences and generate translations",
+    "Inside decode_sequences, convert input sentences to tensor using eng_tokenizer and ensure the shape is (1, MAX_SEQUENCE_LENGTH)",
+    "Add padding to encoder_input_tokens if its length is less than MAX_SEQUENCE_LENGTH",
+    "Limit encoder_input_tokens to a maximum length of 40 by slicing if necessary",
+    "Define the next_fn function that takes prompt, cache, and index as parameters",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, expecting logits output",
+    "Slice logits to get the output for the current index and set hidden_states to None",
+    "Print the shapes of logits, cache, and hidden_states for debugging",
+    "Create a prompt tensor of shape (1, 40) with the start token followed by padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Prepare test_eng_texts and test_spa_texts from test_pairs for evaluation",
+    "Initialize an empty list for bleu_score",
+    "Loop through the range of test_pairs length, using each input_sentence from test_eng_texts",
+    "Call decode_sequences with the current input_sentence and store the result in translated",
+    "Convert translated to a numpy array and decode it to a UTF-8 string",
+    "Clean the translated string by removing special tokens and splitting into words",
+    "Calculate the BLEU score using modified_precision from NLTK with the reference and candidate translations",
+    "Append the calculated BLEU score to bleu_score list",
+    "Print the mean of the bleu_score array to display the final score",
+    "Run the script and monitor for segmentation fault during the execution of the GreedySampler() call",
+    "Check the output logs for any errors or warnings related to tensor shapes or GPU memory issues",
+    "Verify that the segmentation fault occurs specifically after the next_fn returns logits, an empty tuple, and None for hidden_states"
+]
+```

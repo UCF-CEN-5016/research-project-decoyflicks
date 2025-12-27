@@ -1,0 +1,15 @@
+[
+    "Import torch, torch.nn, torch.optim, torchvision.transforms, torchvision.datasets, torch.utils.data.DataLoader, and tqdm.trange",
+    "Import the ResidualVQ module from vector_quantize_pytorch or ensure it is available in the environment",
+    "Set constants: Z_CHANNELS = 512, NUM_QUANTIZERS = 2, CODEBOOK_SIZE = 16 * 1024 (16384), batch_size = 32, image_size = 64, train_iterations = 500",
+    "Define a dummy input tensor z with shape (batch_size, Z_CHANNELS, image_size // 4, image_size // 4) with random float32 values, e.g., torch.randn(batch_size, 512, 16, 16), simulating encoder output",
+    "Instantiate ResidualVQ with parameters: dim=Z_CHANNELS (512), num_quantizers=NUM_QUANTIZERS (2), codebook_size=CODEBOOK_SIZE (16384), stochastic_sample_codes=True, shared_codebook=True, commitment_weight=1.0, kmeans_init=True, threshold_ema_dead_code=2, quantize_dropout=True, quantize_dropout_cutoff_index=1, quantize_dropout_multiple_of=1",
+    "Move ResidualVQ model and input tensor z to CUDA if available",
+    "Run a training loop for train_iterations steps, in each iteration: zero optimizer gradients, forward pass ResidualVQ(z), backward pass on commitment loss or any returned loss, optimizer step",
+    "At each forward pass, catch RuntimeError exceptions, and check if error message contains 'shape mismatch' with details similar to 'value tensor of shape [9330, 512] cannot be broadcast to indexing result of shape [9331, 512]'",
+    "If RuntimeError is caught, log the iteration number and the exact error message",
+    "Validate reproducibility by running multiple training runs (at least 3) with the same random seed and batch size, to observe that the error occurs randomly during training",
+    "Optionally, simulate multi-node or distributed training environment by launching multiple processes with torch.distributed or using torch.nn.DataParallel to increase chance of triggering the bug",
+    "Confirm that the error occurs during the forward pass inside the ResidualVQ module, specifically in the replace function where self.embed.data[ind][mask] = sampled is called",
+    "Print shapes of ind, mask, and sampled tensors inside the replace function before the assignment to verify the mismatch in dimensions leading to the RuntimeError"
+]

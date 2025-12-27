@@ -1,0 +1,46 @@
+TITLE  
+Model fails to converge with images containing over 100 objects unless specific configurations are set
+
+SYMPTOMS  
+• The model does not settle on a good result when training on images with more than 100 objects unless specific configuration lines are included.  
+• The following error occurs when attempting to set `pipeline_config.eval_input_reader.max_number_of_boxes = 500` programmatically:  
+  `AttributeError: 'google.protobuf.pyext._message.RepeatedCompositeContainer' object has no attribute 'max_number_of_boxes'`  
+• Without the specified configuration lines, the model only processes 100 bounding boxes per image, leading to poor accuracy (e.g., accuracy remains below 0.04 after training for over 270K steps).  
+• The issue intensifies with images containing more clustered objects.
+
+EXPECTED BEHAVIOR  
+When the model is configured correctly, it should be able to process and learn from images containing more than 100 objects, converging to a reasonable accuracy level during training.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries:  
+   ```python  
+   import tensorflow as tf  
+   from object_detection.utils import config_util  
+   from object_detection.protos import pipeline_pb2  
+   from google.protobuf import text_format  
+   ```
+2. Specify the path to the `pipeline.config` file:  
+   ```python  
+   configpath = #Path to pipeline.config file  
+   ```
+3. Load the configurations from the pipeline file:  
+   ```python  
+   config = config_util.get_configs_from_pipeline_file(configpath)  
+   ```
+4. Create an instance of `TrainEvalPipelineConfig`:  
+   ```python  
+   pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()  
+   ```
+5. Read the pipeline configuration file:  
+   ```python  
+   with tf.io.gfile.GFile(configpath, "r") as f:  
+       proto_str = f.read()  
+       text_format.Merge(proto_str, pipeline_config)  
+   ```
+6. Attempt to set the maximum number of boxes for evaluation:  
+   ```python  
+   pipeline_config.eval_input_reader.max_number_of_boxes = 500  
+   ```  
+7. Observe the error message indicating that the attribute does not exist.  
+
+By following these steps, you should be able to reproduce the issue and observe the symptoms described.

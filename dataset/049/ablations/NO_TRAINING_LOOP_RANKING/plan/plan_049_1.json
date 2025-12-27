@@ -1,0 +1,14 @@
+```json
+[
+    "Import the necessary modules: torch and fairseq modules including BeamSearch, NGramRepeatBlock, and collate_tokens.",
+    "Define a batch size of 2 and set the input dimensions for the model, e.g., src_len = 10 and vocab_size = 100.",
+    "Create a tensor for source tokens with shape (batch_size, src_len) filled with random integers representing token indices, e.g., src_tokens = torch.randint(0, vocab_size, (batch_size, src_len)).",
+    "Create a tensor for source lengths with shape (batch_size) filled with the length of each source sequence, e.g., src_lengths = torch.tensor([src_len, src_len]).",
+    "Create a target dictionary mockup with a pad token, unk token, and eos token, e.g., tgt_dict = {'pad': 0, 'unk': 1, 'eos': 2}.",
+    "Instantiate the SequenceGenerator class with models set to None, tgt_dict, and default parameters.",
+    "Prepare the input sample dictionary with 'net_input' containing 'src_tokens' and 'src_lengths', e.g., sample = {'net_input': {'src_tokens': src_tokens, 'src_lengths': src_lengths}}.",
+    "Call the forward method of the SequenceGenerator instance with the prepared sample, e.g., output = sequence_generator.forward(sample).",
+    "Check the output for NaN values by asserting that torch.isnan(output).any() is True.",
+    "Print the output tensor to verify its contents and confirm the presence of NaN values."
+]
+```

@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import torch, import os, import numpy as np",
+    "Set the random seed for reproducibility: torch.manual_seed(42)",
+    "Define the training parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10",
+    "Create a directory for saving checkpoints: os.makedirs('checkpoints', exist_ok=True)",
+    "Prepare the dataset: load BraTS21 and BraTS22 datasets using nnUNet's data loading functions",
+    "Define a DataLoader for training with batch size = 2 and shuffle = True",
+    "Define a DataLoader for validation with batch size = 2 and shuffle = False",
+    "Initialize the nnUNet model: model = nnunet.NNUNet()",
+    "Set the model to training mode: model.train()",
+    "Create a PyTorch Lightning Trainer instance: trainer = pl.Trainer(max_epochs=epochs, gpus=gpus, default_root_dir='checkpoints')",
+    "Run the training process: trainer.fit(model, train_dataloader, val_dataloader)",
+    "Add a learning rate scheduler: scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2)",
+    "Pass the scheduler to the trainer: trainer.tune(model, lr_scheduler=scheduler)",
+    "Execute the training command: !python ../main.py --brats --brats22_model --scheduler --learning_rate learning_rate --epochs epochs --fold fold --gpus gpus --task task --nfolds nfolds --save_ckpt",
+    "Capture the output and error messages during execution",
+    "Verify that the output contains the MisconfigurationException related to the lr scheduler",
+    "Check the traceback to ensure it points to the _validate_scheduler_api function in PyTorch Lightning"
+]
+```

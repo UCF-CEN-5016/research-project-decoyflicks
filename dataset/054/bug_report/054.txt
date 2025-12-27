@@ -1,0 +1,47 @@
+using test set as validation set
+
+### Issue Type
+
+Bug
+
+### Source
+
+source
+
+### Keras Version
+
+Keras2.13
+
+### Custom Code
+
+Yes
+
+### OS Platform and Distribution
+
+Windows 11
+
+### Python version
+
+3.8.5
+
+### GPU model and memory
+
+_No response_
+
+### Current Behavior?
+
+In examples/vision/pointnet.py. You seem to use used your test set as validation set in line 263:
+`model.fit(train_dataset, epochs=20, validation_data=test_dataset)`
+This would cause the performance and predictive ability of your model to be overly optimistic, since the test set is not separate from your training process. The model is likely to perform poorly with unseen data/points.
+
+### Standalone code to reproduce the issue or tutorial link
+
+```shell
+examples/vision/pointnet.py line 263:
+`model.fit(train_dataset, epochs=20, validation_data=test_dataset)`
+```
+
+
+### Relevant log output
+
+_No response_

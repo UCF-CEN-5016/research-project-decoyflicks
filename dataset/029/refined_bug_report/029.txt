@@ -1,0 +1,50 @@
+TITLE
+No 'mps' attribute found in torch.backends
+
+SYMPTOMS
+• `AttributeError: module 'torch.backends' has no attribute 'mps'` is thrown when running the script.
+• The issue occurs with PyTorch version 1.9.0+cu111 on a GPU environment.
+
+EXPECTED BEHAVIOR
+There should be no exception, and the code should successfully create the model and proceed without errors.
+
+REPRODUCTION STEPS
+1. Ensure you have installed PyTorch using pip.
+2. Verify that your operating system is Ubuntu 18.04 LTS.
+3. Run the following command:
+```
+python3 main.py -a resnet18 --dummy
+```
+4. Observe the error message:
+```
+=> creating model 'resnet18'
+Traceback (most recent call last):
+File "main.py", line 511, in <module>
+main()
+File "main.py", line 120, in main
+main_worker(args.gpu, ngpus_per_node, args)
+File "main.py", line 171, in main_worker
+elif torch.backends.mps.is_available():
+AttributeError: module 'torch.backends' has no attribute 'mps'
+```
+
+ANALYSIS AND RECOMMENDATIONS
+
+The error `AttributeError: module 'torch.backends' has no attribute 'mps'` indicates that the script is attempting to use an attribute (`mps`) that does not exist in the current version of PyTorch (1.9.0+cu111). This could be due to a mismatch between the installed PyTorch version and the expected backend support.
+
+### Possible Solution
+1. **Check PyTorch Version**: Ensure you are using a version of PyTorch that supports the `mps` backend.
+2. **Update PyTorch**: Install or update PyTorch to a version that includes the `mps` backend, such as 1.9.0+cu113 or later versions that support MPS (Metal Performance Shaders) for macOS M1 chips.
+
+```sh
+pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 -f https://download.pytorch.org/whl/lts/1.10/torch_stable.html
+```
+
+3. **Alternative Backend**: If using MPS is necessary, consider setting the `TORCH_DEFAULT_DEVICE_TYPE` environment variable to use a different backend if available.
+
+```sh
+export TORCH_DEFAULT_DEVICE_TYPE=cpu  # or other supported types like cuda
+python main.py -a resnet18 --dummy
+```
+
+By ensuring that you have the correct version of PyTorch installed, this should resolve the `AttributeError`.

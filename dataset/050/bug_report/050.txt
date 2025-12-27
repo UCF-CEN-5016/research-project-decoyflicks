@@ -1,0 +1,78 @@
+Does not run when using the official sample code for Keras3
+
+### Issue Type
+
+Documentation Bug
+
+### Source
+
+binary
+
+### Keras Version
+
+Keras 3.4.1
+
+### Custom Code
+
+No
+
+### OS Platform and Distribution
+
+Windows
+
+### Python version
+
+3.12.4
+
+### GPU model and memory
+
+Nvidia A3000 
+
+### Current Behavior?
+
+I got an error when using the official Keras3 instance code. 
+When I took the last step of training I got the following error:
+AttributeError: 'list' object has no attribute 'shape'
+
+
+### Standalone code to reproduce the issue or tutorial link
+
+```shell
+Using the original code, no changes.
+https://github.com/keras-team/keras-io/blob/master/guides/custom_train_step_in_torch.py
+```
+
+
+### Relevant log output
+
+```shell
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+Cell In[5], line 22
+     15 gan = GAN(discriminator=discriminator, generator=generator, latent_dim=latent_dim)
+     16 gan.compile(
+     17     d_optimizer=keras.optimizers.Adam(learning_rate=0.0003),
+     18     g_optimizer=keras.optimizers.Adam(learning_rate=0.0003),
+     19     loss_fn=keras.losses.BinaryCrossentropy(from_logits=True),
+     20 )
+---> 22 gan.fit(dataloader, epochs=1)
+
+File c:\Users\C\miniconda3\envs\learn100\Lib\site-packages\keras\src\utils\traceback_utils.py:122, in filter_traceback.<locals>.error_handler(*args, **kwargs)
+    119     filtered_tb = _process_traceback_frames(e.__traceback__)
+    120     # To get the full stack trace, call:
+    121     # `keras.config.disable_traceback_filtering()`
+--> 122     raise e.with_traceback(filtered_tb) from None
+    123 finally:
+    124     del filtered_tb
+
+Cell In[4], line 27
+     25     real_images = real_images[0]
+     26 # Sample random points in the latent space
+---> 27 batch_size = real_images.shape[0]
+     28 random_latent_vectors = keras.random.normal(
+     29     shape=(batch_size, self.latent_dim), seed=self.seed_generator
+     30 )
+     32 # Decode them to fake images
+
+AttributeError: 'list' object has no attribute 'shape'
+```

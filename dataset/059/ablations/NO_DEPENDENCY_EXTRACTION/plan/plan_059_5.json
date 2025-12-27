@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: import os, import torch, import keras, from keras import layers, import numpy as np",
+    "Set the Keras backend to PyTorch by executing os.environ['KERAS_BACKEND'] = 'torch'",
+    "Define a batch size of 64 and input dimensions of (32,)",
+    "Create random training data: x = np.random.random((1000, 32)) and y = np.random.random((1000, 1))",
+    "Define a CustomModel class that subclasses keras.Model and overrides the train_step method",
+    "In the train_step method, unpack data into x and y, and call self.zero_grad() to clear gradients",
+    "Perform a forward pass by calling y_pred = self(x, training=True)",
+    "Compute loss using self.compute_loss(y=y, y_pred=y_pred)",
+    "Call loss.backward() to compute gradients for the weights",
+    "Retrieve trainable weights and their gradients: trainable_weights = [v for v in self.trainable_weights] and gradients = [v.value.grad for v in trainable_weights]",
+    "Update weights using self.optimizer.apply(gradients, trainable_weights) within a torch.no_grad() context",
+    "Define input and output layers for the model: inputs = keras.Input(shape=(32,)) and outputs = keras.layers.Dense(1)(inputs)",
+    "Instantiate the CustomModel: model = CustomModel(inputs, outputs)",
+    "Compile the model with optimizer='adam', loss='mse', and metrics=['mae']",
+    "Attempt to fit the model using model.fit(x, y, epochs=3)",
+    "Capture and print any errors that occur during model fitting to verify the bug",
+    "Check the error message to confirm it matches the reported issue in the bug report"
+]
+```

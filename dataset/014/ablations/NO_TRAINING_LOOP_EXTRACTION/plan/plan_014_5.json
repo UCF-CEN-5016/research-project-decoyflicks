@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and necessary modules from object_detection.utils and object_detection.protos",
+    "Set the TensorFlow version to 2.12 and ensure compatibility with CUDA 8.6",
+    "Define the path to the pipeline.config file as 'path/to/pipeline.config'",
+    "Load the pipeline configuration using config_util.get_configs_from_pipeline_file(configpath)",
+    "Create an instance of pipeline_pb2.TrainEvalPipelineConfig()",
+    "Read the contents of the pipeline.config file into a string variable 'proto_str'",
+    "Use text_format.Merge(proto_str, pipeline_config) to parse the pipeline configuration",
+    "Set pipeline_config.eval_input_reader.max_number_of_boxes to 500",
+    "Attempt to run the training process with the modified pipeline_config",
+    "Capture any exceptions during the training process",
+    "Verify that an AttributeError is raised with the message 'google.protobuf.pyext._message.RepeatedCompositeContainer' object has no attribute 'max_number_of_boxes'",
+    "Prepare a dataset of images containing over 100 objects per image, ensuring at least 10 images are used for training",
+    "Set the training parameters: batch size of 8, image dimensions of 640x640, and number of training steps to 270000",
+    "Run the training process without the line 'pipeline_config.eval_input_reader.max_number_of_boxes = 500'",
+    "Monitor the training accuracy and loss metrics during the training process",
+    "Assert that the model accuracy does not exceed 0.04 after 270000 steps when using images with over 100 objects",
+    "Log the training metrics to verify that the model does not converge",
+    "Repeat the training process with the line 'pipeline_config.eval_input_reader.max_number_of_boxes = 500' added directly to the pipeline.config file",
+    "Compare the training results to confirm that the model converges when the line is added directly to the config file"
+]
+```

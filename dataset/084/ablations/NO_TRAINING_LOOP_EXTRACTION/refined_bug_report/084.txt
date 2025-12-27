@@ -1,0 +1,16 @@
+TITLE  
+Unexpected 100% accuracy on example dataset
+
+SYMPTOMS  
+• The model achieves an accuracy of 100% in the first epoch, which is unusually high for a machine learning model.  
+• The training loss and validation loss reach very low values (e.g., 0.0000) after just a few epochs.  
+• The reported accuracy remains at 100% across multiple epochs without any signs of overfitting or fluctuations.
+
+EXPECTED BEHAVIOR  
+The model should show a gradual improvement in accuracy and loss metrics over multiple epochs, with realistic performance metrics that indicate it is learning from the dataset rather than memorizing it.
+
+REPRODUCTION STEPS  
+1. Run the provided code snippet on a local machine.  
+2. Ensure that the dataset used for training is the same as the example dataset.  
+3. Monitor the training and validation accuracy and loss metrics over several epochs.  
+4. Observe the results after each epoch to confirm the model's performance.

@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch and the ViT class from vit_pytorch.na_vit_nested_tensor_3d",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 5 and image dimensions of 256x256",
+    "Create random input data with shape (5, 3, 256, 256) using torch.randn",
+    "Instantiate the ViT model with parameters: image_size=256, patch_size=32, num_classes=1000, dim=1024, depth=6, heads=16, mlp_dim=2048, dropout=0.1, emb_dropout=0.1",
+    "Perform a forward pass by calling the model with the input data and store the output in a variable called preds",
+    "Check the shape of preds to ensure it is (5, 1000) using an assertion",
+    "Create a dummy target tensor with shape (5,) containing random class indices for the 1000 classes using torch.randint",
+    "Define a loss function, such as CrossEntropyLoss, and compute the loss using the preds and target tensors",
+    "Call backward on the loss tensor to trigger the backward pass and observe if the error occurs",
+    "Capture the error message during the backward pass and print it to verify it matches the reported bug",
+    "Log the shapes of the gradients before the error occurs to confirm they are (1, 1024) instead of the expected shape [5, j2, 1024]"
+]
+```

@@ -1,0 +1,31 @@
+```json
+[
+    "Import the necessary libraries: keras, tensorflow, numpy, and imageio.",
+    "Set the batch size to 64, image dimensions to 28x28, number of classes to 10, and latent dimension to 128.",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data() and unpack it into training and test sets.",
+    "Concatenate the training and test sets for both images and labels.",
+    "Scale the pixel values of all_digits to the range [0, 1] by dividing by 255.0.",
+    "Reshape all_digits to have a shape of (-1, 28, 28, 1) to add a channel dimension.",
+    "One-hot encode all_labels using keras.utils.to_categorical with num_classes=10.",
+    "Create a tf.data.Dataset from the concatenated images and labels, shuffle it with a buffer size of 1024, and batch it with the defined batch size.",
+    "Define the generator input channels as latent_dim + num_classes and discriminator input channels as num_channels + num_classes.",
+    "Create the discriminator model using keras.Sequential with the specified layers and input shape (28, 28, discriminator_in_channels).",
+    "Create the generator model using keras.Sequential with the specified layers and input shape (generator_in_channels).",
+    "Define the ConditionalGAN class that inherits from keras.Model, implementing the required methods: __init__, compile, and train_step.",
+    "In the train_step method, unpack the data into real_images and one_hot_labels.",
+    "Add dummy dimensions to one_hot_labels for concatenation with images, resulting in image_one_hot_labels.",
+    "Sample random points in the latent space and concatenate with one_hot_labels to create random_vector_labels.",
+    "Call the generator with random_vector_labels to generate fake images.",
+    "Concatenate generated_images and image_one_hot_labels to create fake_image_and_labels.",
+    "Concatenate real_images and image_one_hot_labels to create real_image_and_labels.",
+    "Combine fake_image_and_labels and real_image_and_labels into combined_images.",
+    "Assemble labels for the discriminator indicating real and fake images.",
+    "Train the discriminator using a GradientTape and compute the loss.",
+    "Sample random points in the latent space again for the generator training.",
+    "Assemble misleading_labels indicating that all images are real.",
+    "Train the generator using a GradientTape and compute the loss.",
+    "Create an instance of the ConditionalGAN with the discriminator and generator, and compile it with Adam optimizers and BinaryCrossentropy loss.",
+    "Call the fit method on the ConditionalGAN instance with the dataset and set epochs to 1.",
+    "Verify that the error 'AttributeError: 'list' object has no attribute 'shape'' occurs during the training step."
+]
+```

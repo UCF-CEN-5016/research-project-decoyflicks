@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: labml, labml.configs, labml_nn.experiments.arithmetic_dataset, labml_nn.transformers, labml_nn.transformers.rope.experiment",
+    "Define a class Configs that inherits from RoPEConfigs and ArithmeticAutoregression",
+    "Define a function _rotary_value_pe_mha that takes a TransformerConfigs object as input and returns RotaryValuePEMultiHeadAttention with parameters (c.n_heads, c.d_model, 1.0, 1.0)",
+    "Set up the experiment by calling experiment.create with name='roper_addition' and comment='rotary value 7'",
+    "Create an instance of Configs and store it in a variable conf",
+    "Override configurations in the experiment.configs call with the following parameters: max_digits=7, transformer.src_embed='no_pos', transformer.tgt_embed='no_pos', transformer.encoder_attn='rotary_value', model='rotary_pe_transformer', seq_len=512, epochs=20, batch_size=16, d_model=128, transformer.ffn.d_ff=512, transformer.n_heads=4, transformer.dropout=0.0, optimizer.optimizer='Adam', optimizer.learning_rate=2.5e-4",
+    "Add the model to the experiment using experiment.add_pytorch_models with {'model': conf.model}",
+    "Start the experiment with experiment.start()",
+    "Call conf.run() to initiate the training process",
+    "Monitor the output for any errors related to the RotaryPositionalEmbeddings initialization",
+    "Assert that an error is raised indicating a mismatch in the expected number of features for RotaryPositionalEmbeddings"
+]
+```

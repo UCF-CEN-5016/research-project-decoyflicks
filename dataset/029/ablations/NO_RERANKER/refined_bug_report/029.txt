@@ -1,0 +1,31 @@
+TITLE  
+AttributeError: Missing 'mps' Attribute in PyTorch Backends Module
+
+SYMPTOMS  
+• Encountered an `AttributeError` indicating that the module 'torch.backends' has no attribute 'mps'.  
+• Error message:  
+  ```
+  Traceback (most recent call last):
+    File "main.py", line 511, in <module>
+      main()
+    File "main.py", line 120, in main
+      main_worker(args.gpu, ngpus_per_node, args)
+    File "main.py", line 171, in main_worker
+      elif torch.backends.mps.is_available():
+  AttributeError: module 'torch.backends' has no attribute 'mps'
+  ```  
+• The program fails to execute the `main_worker` function due to the missing attribute.
+
+EXPECTED BEHAVIOR  
+The program should execute without raising an exception, allowing the model to be created and run as intended.
+
+REPRODUCTION STEPS  
+1. Install PyTorch version 1.9.0+cu111 using pip.
+2. Execute the script with the command:  
+   ```
+   python3 main.py -a resnet18 --dummy
+   ```
+3. Observe the error message indicating the absence of the 'mps' attribute in the 'torch.backends' module. 
+
+POSSIBLE SOLUTION  
+To resolve this issue, ensure that the appropriate GPU settings are configured. Specifically, set the GPU ID to 0. This adjustment can be made by following the changes proposed in the linked pull request: [Pull Request #1135](https://github.com/pytorch/examples/pull/1135).

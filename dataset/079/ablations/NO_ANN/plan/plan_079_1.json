@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 2 and image dimensions of 224x224 with 3 color channels",
+    "Create random input data with shape (batch_size, channels, height, width) = (2, 3, 224, 224)",
+    "Instantiate the RegionViT class with default parameters: dim=(64, 128, 256, 512), depth=(2, 2, 8, 2), window_size=7, num_classes=1000, tokenize_local_3_conv=True, local_patch_size=4, use_peg=False, attn_dropout=0., ff_dropout=0.",
+    "Pass the random input data through the local_encoder of the RegionViT instance to obtain local_tokens",
+    "Pass the same random input data through the region_encoder of the RegionViT instance to obtain region_tokens",
+    "Iterate through the layers of the RegionViT instance and perform forward passes on local_tokens and region_tokens",
+    "During the forward pass, assert that the shape of local_tokens after local_encoder is (2, 64, 56, 56) and region_tokens after region_encoder is (2, 256, 32, 32)",
+    "Call the to_logits method of the RegionViT instance with region_tokens as input",
+    "Check if the output of the to_logits method contains NaN values or raises an error due to incorrect LayerNorm dimensions",
+    "Log the output shape of the final logits to verify if it matches the expected shape of (2, 1000)",
+    "Assert that the output of the to_logits method is not equal to the expected shape or contains NaN values"
+]
+```

@@ -1,0 +1,41 @@
+### TITLE
+Module Attribute Error in `SyncBatchNormalization` Import
+
+### SYMPTOMS
+• `AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'`
+• Code fails to run due to the missing attribute.
+
+### EXPECTED BEHAVIOR
+1. No error encountered when importing `SyncBatchNormalization`.
+2. The code runs without any issues, and the `FreezableSyncBatchNorm` class is defined successfully.
+
+### REPRODUCTION STEPS
+1. Downgrade Protobuf from version 3.19 to 3.20.
+2. Import necessary libraries:
+```python
+from object_detection.utils import colab_utils
+from object_detection.utils import config_util
+from object_detection.builders import model_builder
+```
+3. Define the `FreezableSyncBatchNorm` class as follows:
+```python
+class FreezableSyncBatchNorm(tf.keras.layers.experimental.SyncBatchNormalization):
+"""Sync Batch normalization layer (Ioffe and Szegedy, 2014)."""
+```
+
+### Analysis Feedback
+
+The error suggests that the `experimental` attribute is not available in the `keras.layers` module. This could be due to an issue with the TensorFlow version or a compatibility problem between the versions of TensorFlow and Keras being used.
+
+Given that you are using the latest TensorFlow model garden release, it's possible there might be some discrepancies or changes in the API structure. Here are a few suggestions:
+
+1. **Check TensorFlow Version**: Ensure that your TensorFlow version is up-to-date and compatible with the codebase.
+2. **Verify Keras Version**: Confirm that the Keras version being used is appropriate for the TensorFlow version installed.
+3. **Update Dependencies**: Consider updating all related dependencies to their latest versions, especially Protobuf.
+
+### Suggested Actions
+1. Verify if `experimental` is still a valid attribute in the current version of `tf.keras.layers`.
+2. Check the official TensorFlow documentation or release notes for any recent changes that might affect this functionality.
+3. If necessary, modify the code to use an alternative approach or check if there are updated versions of the libraries.
+
+By following these steps, you should be able to identify and resolve the issue.

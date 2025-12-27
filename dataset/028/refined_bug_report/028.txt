@@ -1,0 +1,29 @@
+### TITLE
+`num_classes` Mismatch in Vision Transformer Example for CIFAR10 Dataset
+
+### SYMPTOMS
+• The `num_classes` parameter is set to 16 instead of the expected 10 for the CIFAR10 dataset.
+• There are no error messages, but the model performance may be incorrect due to this mismatch.
+
+### EXPECTED BEHAVIOR
+- When using the Vision Transformer example with the CIFAR10 dataset, `num_classes` should default to 10, which is the correct number of classes for CIFAR10.
+
+### REPRODUCTION STEPS
+1. Clone the PyTorch examples repository: `git clone https://github.com/pytorch/examples.git`
+2. Navigate to the Vision Transformer example directory: `cd vision_transformer`
+3. Run the training script with default settings:
+```bash
+python main.py --data /path/to/cifar10 --arch vit_tiny_patch16_224 --epochs 1
+```
+4. Observe that the model is trained for 10 classes, but the `num_classes` parameter value shows 16.
+
+### Possible Solution
+- Update the default `num_classes` setting in the Vision Transformer example to correctly reflect the CIFAR10 dataset by changing line 228 of `main.py` as follows:
+```python
+num_classes = 10  # Set this to 10 for CIFAR10
+```
+
+### Additional Notes
+- Ensure that any other parts of the code that might depend on `num_classes` are also adjusted if necessary.
+
+This restructuring should help clarify the issue and provide a clear path towards resolution.

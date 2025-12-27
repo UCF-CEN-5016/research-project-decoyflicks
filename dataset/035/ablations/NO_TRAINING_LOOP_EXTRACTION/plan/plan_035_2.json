@@ -1,0 +1,22 @@
+```json
+[
+    "Clone the repository from GitHub using the command: git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git",
+    "Navigate to the directory containing the RoPE implementation: cd annotated_deep_learning_paper_implementations/labml_nn/transformers/rope",
+    "Open the file __init__.py in a code editor and locate line 226 where 'rotary_pe = RotaryPositionalEmbeddings(3)' is defined.",
+    "Change the line to 'rotary_pe = RotaryPositionalEmbeddings(4)' to simulate the intended fix.",
+    "Create a new Python script named test_rope_bug.py in the same directory.",
+    "Import necessary modules in test_rope_bug.py: from labml import experiment, from labml.configs import calculate, from labml_nn.transformers import TransformerConfigs, from labml_nn.transformers.rope.experiment import Configs as RoPEConfigs.",
+    "Define a new class Configs that inherits from RoPEConfigs in test_rope_bug.py.",
+    "Define a function _rotary_value_pe_mha that takes a TransformerConfigs object and returns an instance of RotaryValuePEMultiHeadAttention with parameters (c.n_heads, c.d_model, 1., 1.).",
+    "Call the calculate function for encoder and decoder attention with the rotary_value parameter.",
+    "Define a main function in test_rope_bug.py to set up the experiment.",
+    "Inside the main function, create an experiment with experiment.create(name='rotary_shakespeare', comment='rotary value', writers={'screen', 'labml'}).",
+    "Instantiate the Configs class and store it in a variable named conf.",
+    "Override configurations in the experiment.configs call with the following parameters: 'transformer.src_embed': 'no_pos', 'transformer.tgt_embed': 'no_pos', 'transformer.encoder_attn': 'rotary_value', 'model': 'rotary_pe_transformer', 'tokenizer': 'character', 'prompt_separator': '', 'prompt': 'It is ', 'text': 'tiny_shakespeare', 'seq_len': 512, 'epochs': 24, 'batch_size': 16, 'inner_iterations': 4, 'd_model': 128, 'transformer.ffn.d_ff': 512, 'transformer.n_heads': 4, 'transformer.dropout': 0.0, 'optimizer.optimizer': 'Adam', 'optimizer.learning_rate': 2.5e-4, 'dataloader_shuffle_with_replacement': True.",
+    "Add the model to the experiment with experiment.add_pytorch_models({'model': conf.model}).",
+    "Start the experiment with a context manager: with experiment.start():, and call conf.run() to initiate training.",
+    "Run the script using the command: python test_rope_bug.py.",
+    "Observe the output for any errors related to the number of features in RotaryPositionalEmbeddings, specifically looking for an error indicating a mismatch in expected dimensions.",
+    "Assert that the output contains an error message indicating that the input dimensions do not match the expected dimensions for the RotaryPositionalEmbeddings."
+]
+```

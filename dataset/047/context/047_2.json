@@ -1,0 +1,321 @@
+{
+  "bug_report": "050",
+  "rank": 2,
+  "score": 0.6103467345237732,
+  "main_file": {
+    "path": "examples/textless_nlp/pgslm/eval/cont_metrics.py",
+    "content": "# Copyright (c) Facebook, Inc. and its affiliates.\n#\n# This source code is licensed under the MIT license found in the\n# LICENSE file in the root directory of this source tree.\n\nimport os\nimport numpy as np\nimport scipy\n\nimport torch\nimport torch.multiprocessing as mp\nfrom fairseq import checkpoint_utils, options\nfrom fairseq.data.codedataset import CodeDataset, ExpressiveCodeDataConfig\nfrom fairseq.dataclass.utils import convert_namespace_to_omegaconf\nfrom torch.utils.data import DataLoader, DistributedSampler\nfrom fairseq.utils import move_to_cuda\nfrom fairseq import utils\nfrom fairseq.criterions.speech_ulm_criterion import nll_loss, mae_loss\n\nimport time\nfrom types import SimpleNamespace\n\nimport sys, pathlib\n\nsys.path.append(str(pathlib.Path(__file__).parent.parent.resolve()))\n\nfrom naive_decoder import Naive_F0_Decoder\nfrom inference_dataset import InferenceDataset, explode_batch\nfrom sample.sample import do_sampling, TemperatureDecoder, FilterNamesDataset\n\ntry:\n    from nltk.translate.bleu_score import sentence_bleu\nexcept ImportError:\n    print(\"Please install nltk: `pip install --user -U nltk`\")\n    raise\n\n\n@torch.no_grad()\ndef teacher_force_everything(\n    args, dataset, model, criterion, tgt_dict, rank, world_size\n):\n    prefix = args.prefix_length\n\n    f0_decoder = None\n    if args.dequantize_prosody:\n        assert dataset.discrete_f0\n        print(\"Reporting MAE for a discrete model\")\n        f0_decoder = Naive_F0_Decoder(\n            args.f0_discretization_bounds, dataset.config.f0_vq_n_units\n        ).cuda()\n\n    dataset = InferenceDataset(\n        dataset,\n        prefix=args.prefix_length,\n        only_prefix=False,\n        filter_short=True,\n        presort_by_length=True,\n    )\n    sampler = (\n        None\n        if world_size == 1\n        else DistributedSampler(\n            dataset, num_replicas=world_size, rank=rank, shuffle=False\n        )\n    )\n    dataloader = DataLoader(\n        dataset,\n        args.batch_size,\n        shuffle=False,\n        collate_fn=dataset.collater,\n        sampler=sampler,\n    )\n\n    total_token_loss, total_duration_loss, total_f0_loss, total_tokens = (\n        0.0,\n        0.0,\n        0.0,\n        0.0,\n    )\n\n    i = 0\n    for batch in dataloader:\n        i += 1\n        batch = move_to_cuda(batch)\n        output = model(**batch[\"net_input\"])\n\n        tokens, durations, f0 = output[\"token\"], output[\"duration\"], output[\"f0\"]\n        durations, f0 = durations.squeeze(), f0.squeeze()\n\n        token_loss = nll_loss(\n            tokens[:, prefix - 1 :],\n            batch[\"target\"][:, prefix - 1 :].contiguous(),\n            batch[\"mask\"][:, prefix - 1 :].contiguous(),\n            reduce=True,\n        )\n\n        if args.dequantize_prosody:\n            durations = durations.argmax(dim=-1)\n            duration_loss = mae_loss(\n                durations[:, prefix - 1 :].contiguous().float(),\n                batch[\"dur_target\"][:, prefix - 1 :].contiguous().float(),\n                batch[\"dur_mask\"][:, prefix - 1 :].contiguous(),\n                reduce=True,\n            )\n        else:\n            duration_loss = criterion.dur_loss_fn(\n                durations[:, prefix - 1 :].contiguous(),\n                batch[\"dur_target\"][:, prefix - 1 :].contiguous(),\n                batch[\"dur_mask\"][:, prefix - 1 :].contiguous(),\n                reduce=True,\n            )\n\n        if f0_decoder:\n            f0 = f0.argmax(dim=-1)\n            f0 = f0_decoder(f0).squeeze(-1)\n\n            f0_target = batch[\"raw_f0\"]\n            f0_loss = mae_loss(\n                f0[:, prefix - 1 :].contiguous(),\n                f0_target[:, prefix - 1 :].contiguous(),\n                batch[\"f0_mask\"][:, prefix - 1 :].contiguous(),\n                reduce=True,\n            )\n        else:\n            f0_loss = criterion.f0_loss_fn(\n                f0[:, prefix - 1 :].contiguous(),\n                batch[\"f0_target\"][:, prefix - 1 :].contiguous(),\n                batch[\"f0_mask\"][:, prefix - 1 :].contiguous(),\n                reduce=True,\n            )\n\n        n_tokens = (~batch[\"dur_mask\"])[:, prefix - 1 :].sum()\n\n        total_token_loss += token_loss.item()\n        total_duration_loss += duration_loss.item()\n        total_f0_loss += f0_loss.item()\n\n        total_tokens += n_tokens.item()\n        if args.debug and i > 5:\n            break\n\n    values = torch.tensor([total_token_loss, total_duration_loss, total_f0_loss])\n    normalizers = torch.tensor([total_tokens for _ in range(3)])\n\n    return values, normalizers\n\n\ndef get_bleu(produced_tokens, target_tokens, tgt_dict):\n    assert target_tokens.ndim == 1\n    assert produced_tokens.size(1) == target_tokens.size(0)\n\n    # we can have padding due to shifted channels\n    shift = 0\n    for token in reversed(target_tokens.cpu().tolist()):\n        if token in [tgt_dict.pad(), tgt_dict.eos()]:\n            shift += 1\n        else:\n            break\n    target_tokens = target_tokens[:-shift]\n    produced_tokens = produced_tokens[:, :-shift]\n\n    string_target = tgt_dict.string(target_tokens).split()\n    string_candidates = [\n        tgt_dict.string(produced_tokens[i, :]).split()\n        for i in range(produced_tokens.size(0))\n    ]\n\n    bleu3 = sentence_bleu(\n        references=string_candidates,\n        hypothesis=string_target,\n        weights=(1.0 / 3, 1.0 / 3, 1.0 / 3),\n    )\n    return bleu3\n\n\n@torch.no_grad()\ndef continuation(args, dataset, model, criterion, tgt_dict, rank, world_size):\n    is_discrete_duration = dataset.discrete_dur\n    is_discrete_f0 = dataset.discrete_f0\n\n    f0_decoder = None\n    if args.dequantize_prosody:\n        assert dataset.discrete_f0\n        print(\"Reporting MAE F0 for a discrete model\")\n        f0_decoder = Naive_F0_Decoder(\n            args.f0_discretization_bounds, dataset.config.f0_vq_n_units\n        ).cuda()\n\n    dataset = InferenceDataset(\n        dataset, args.prefix_length, filter_short=True, presort_by_length=True\n    )\n    sampler = (\n        None\n        if world_size == 1\n        else DistributedSampler(\n            dataset, num_replicas=world_size, rank=rank, shuffle=False\n        )\n    )\n    dataloader = DataLoader(\n        dataset,\n        batch_size=1,\n        shuffle=False,\n        collate_fn=dataset.collater,\n        sampler=sampler,\n    )\n\n    Ts = args.T_token, args.T_duration, args.T_f0\n    decoder = TemperatureDecoder(\n        Ts, discrete_dur=is_discrete_duration, discrete_f0=is_discrete_f0\n    )\n\n    running_stats = SimpleNamespace(\n        token_bleu=0.0,\n        duration_nll=0.0,\n        duration_mae=0.0,\n        f0_nll=0.0,\n        f0_mae=0.0,\n        n_tokens=0.0,\n        n_sentences=0.0,\n        f0_sum=0.0,\n        f0_sum_sq=0.0,\n        dur_sum=0.0,\n        dur_sum_sq=0.0,\n    )\n\n    for i, batch in enumerate(dataloader):\n        batch = explode_batch(batch, args.batch_explosion_rate)\n        bsz = batch[\"target\"].size(0)\n\n        batch = move_to_cuda(batch)\n        prefix = batch[\"prefix\"][0]\n\n        max_length_to_unroll = batch[\"target\"].size(1)\n        prefix_length = batch[\"net_input\"][\"src_tokens\"].size(1)\n        steps = max_length_to_unroll - prefix_length + 1\n\n        assert steps > 0\n        produced_tokens, produced_durations, produced_f0, outputs = do_sampling(\n            model,\n            batch,\n            tgt_dict.eos(),\n            decoder,\n            autoregressive_steps=steps,\n            teacher_force_tokens=args.teacher_force_tokens,\n            teacher_force_duration=args.teacher_force_duration,\n            teacher_force_f0=args.teacher_force_f0,\n        )\n\n        if args.teacher_force_tokens:\n            assert (produced_tokens[:, 1:] == batch[\"target\"]).all()\n        if args.teacher_force_duration:\n            assert (produced_durations[:, 1:] == batch[\"dur_target\"]).all()\n        if args.teacher_force_f0:\n            assert (produced_f0[:, 1:] == batch[\"f0_target\"]).all()\n\n        dur_target = batch[\"dur_target\"][:, prefix - 1 :].contiguous()\n        f0_target = batch[\"f0_target\"][:, prefix - 1 :].contiguous()\n\n        f0_mask = batch[\"f0_mask\"][:, prefix - 1 :].contiguous()\n        dur_mask = batch[\"dur_mask\"][:, prefix - 1 :].contiguous()\n\n        duration_mae = mae_loss(\n            produced_durations[:, prefix:].float(),\n            dur_target.float(),\n            dur_mask,\n            reduce=False,\n        )\n        min_duration_mae = duration_mae.view(bsz, -1).sum(dim=-1).min(dim=0)[0]\n        running_stats.duration_mae += min_duration_mae\n\n        running_stats.dur_sum += (\n            produced_durations[:, prefix:].float() * (~dur_mask)\n        ).sum() / args.batch_explosion_rate\n        running_stats.dur_sum_sq += (\n            produced_durations[:, prefix:].float() * (~dur_mask)\n        ).pow(2.0).sum() / args.batch_explosion_rate\n\n        if is_discrete_duration:\n            duration_loss = criterion.dur_loss_fn(\n                torch.stack([x[1] for x in outputs], dim=1),\n                dur_target,\n                dur_mask,\n                reduce=False,\n            )\n            min_duration_loss = duration_loss.view(bsz, -1).sum(dim=-1).min(dim=0)[0]\n            running_stats.duration_nll += min_duration_loss\n\n        if f0_decoder:  # can only exist for discrete F0 models\n            decoded_produced_f0 = f0_decoder(produced_f0[:, prefix:])\n            decoded_f0_target = batch[\"raw_f0\"][:, prefix - 1 :].contiguous()\n\n            if produced_f0.ndim == 3:\n                decoded_produced_f0 = decoded_produced_f0.squeeze(2)\n                decoded_f0_target = decoded_f0_target.squeeze(2)\n\n            f0_mae = mae_loss(\n                decoded_produced_f0, decoded_f0_target, f0_mask, reduce=False\n            )\n            f0_mae = f0_mae.view(bsz, -1).sum(dim=-1).min(dim=0)[0]\n            running_stats.f0_mae += f0_mae\n\n            f0_loss = criterion.f0_loss_fn(\n                torch.stack([x[2] for x in outputs], dim=1),\n                f0_target.long(),\n                f0_mask,\n                reduce=False,\n            )\n            f0_loss = f0_loss.view(bsz, -1).sum(dim=-1).min(dim=0)[0]\n            running_stats.f0_nll += f0_loss\n\n            running_stats.f0_sum += (\n                decoded_produced_f0 * (~f0_mask)\n            ).sum() / args.batch_explosion_rate\n            running_stats.f0_sum_sq += (decoded_produced_f0 * (~f0_mask)).pow(\n                2.0\n            ).sum() / args.batch_explosion_rate\n\n        else:\n            assert not is_discrete_duration\n\n            f0_loss = mae_loss(\n                produced_f0[:, prefix:], f0_target, f0_mask, reduce=False\n            )\n            f0_loss = f0_loss.view(bsz, -1).sum(dim=-1).min(dim=0)[0]\n            running_stats.f0_mae += f0_loss\n\n            running_stats.f0_sum += (\n                produced_f0[:, prefix:].sum() / args.batch_explosion_rate\n            )\n            running_stats.f0_sum_sq += (\n                produced_f0[:, prefix:].pow(2.0).sum() / args.batch_explosion_rate\n            )\n\n        running_stats.n_tokens += (~dur_mask)[0, ...].sum()\n\n        token_loss = get_bleu(\n            produced_tokens[:, prefix:], batch[\"target\"][0, prefix - 1 :], tgt_dict\n        )\n        running_stats.token_bleu += token_loss\n        running_stats.n_sentences += 1\n\n        if args.debug:\n            break\n\n    values = torch.tensor(\n        [\n            running_stats.token_bleu,\n            running_stats.duration_nll,\n            running_stats.duration_mae,\n            running_stats.f0_nll,\n            running_stats.f0_mae,\n            running_stats.f0_sum,\n            running_stats.f0_sum_sq,\n            running_stats.dur_sum,\n            running_stats.dur_sum_sq,\n        ]\n    )\n    normalizers = torch.tensor(\n        [running_stats.n_sentences] + [running_stats.n_tokens] * 8\n    )\n\n    return values, normalizers\n\n\n@torch.no_grad()\ndef correlation(args, dataset, model, criterion, tgt_dict, rank, world_size):\n    is_discrete_duration = dataset.discrete_dur\n    is_discrete_f0 = dataset.discrete_f0\n\n    f0_decoder = None\n    if is_discrete_f0:\n        assert dataset.discrete_f0\n        f0_decoder = Naive_F0_Decoder(\n            args.f0_discretization_bounds, dataset.config.f0_vq_n_units\n        ).cuda()\n\n    if is_discrete_f0:\n        assert f0_decoder  # correlation on tokens is meaningless\n\n    dataset = InferenceDataset(\n        dataset,\n        args.prefix_length,\n        filter_short=True,\n        presort_by_length=True,\n        min_length=args.min_length,\n    )\n    sampler = (\n        None\n        if world_size == 1\n        else DistributedSampler(\n            dataset, num_replicas=world_size, rank=rank, shuffle=False\n        )\n    )\n    dataloader = DataLoader(\n        dataset,\n        batch_size=1,\n        shuffle=False,\n        collate_fn=dataset.collater,\n        sampler=sampler,\n    )\n\n    Ts = args.T_token, args.T_duration, args.T_f0\n    decoder = TemperatureDecoder(\n        Ts, discrete_dur=is_discrete_duration, discrete_f0=is_discrete_f0\n    )\n\n    mean_dur_prefix, mean_dur_cont = [], []\n    mean_f0_prefix, mean_f0_cont = [], []\n\n    for batch in dataloader:\n        batch = explode_batch(batch, args.batch_explosion_rate)\n        batch = move_to_cuda(batch)\n\n        assert len(batch[\"prefix\"]) == 1\n\n        if args.teacher_force_tokens:\n            autoregressive_steps = batch[\"target\"].size(1) - args.prefix_length - 1\n        else:\n            autoregressive_steps = args.max_length - args.prefix_length  # + max_shift?\n\n        if args.copy_target:\n            produced_durations, produced_f0 = batch[\"dur_target\"], batch[\"f0_target\"]\n        else:\n            _, produced_durations, produced_f0, outputs = do_sampling(\n                model,\n                batch,\n                tgt_dict.eos(),\n                decoder,\n                autoregressive_steps=autoregressive_steps,\n                teacher_force_tokens=args.teacher_force_tokens,\n                teacher_force_duration=args.teacher_force_duration,\n                teacher_force_f0=args.teacher_force_f0,\n            )\n\n            # first tokens actually correspond to BOS\n            produced_durations = produced_durations[:, 1:]\n            produced_f0 = produced_f0[:, 1:]\n\n        dur_target = batch[\"dur_target\"]\n        if is_discrete_duration:\n            produced_durations = produced_durations.float()\n            dur_target = dur_target.float()\n\n        if is_discrete_f0:\n            produced_f0 = f0_decoder(produced_f0).squeeze(-1)\n            f0_target = batch[\"raw_f0\"]\n        else:\n            f0_target = batch[\"f0_target\"]\n\n        # prefix values\n        prefix = batch[\"prefix\"][0]\n        dur_prefix_mean = dur_target[:, :prefix].sum(dim=-1) / (\n            (~batch[\"dur_mask\"][:, :prefix]).sum(dim=-1)\n        )\n\n        non_voiced = f0_target[:, :prefix] == 0.0\n        f0_mask = batch[\"f0_mask\"][:, :prefix].logical_or(non_voiced)\n        f0_prefix_mean = f0_target[:, :prefix].sum(dim=-1) / ((~f0_mask).sum(dim=-1))\n\n        # continuation values\n        dur_cont_mean = produced_durations[:, prefix:].sum(dim=-1) / (\n            (~batch[\"dur_mask\"][:, prefix:]).sum(dim=-1)\n        )\n\n        non_voiced = produced_f0[:, prefix:] == 0.0\n        f0_mask = non_voiced\n        f0_cont_mean = produced_f0[:, prefix:].sum(dim=-1) / ((~f0_mask).sum(dim=-1))\n\n        assert not f0_cont_mean.isnan().any()\n\n        mean_dur_prefix.append(dur_prefix_mean.cpu())\n        mean_dur_cont.append(dur_cont_mean.cpu())\n\n        mean_f0_prefix.append(f0_prefix_mean.cpu())\n        mean_f0_cont.append(f0_cont_mean.cpu())\n\n        if args.debug and len(mean_dur_prefix) > 10:\n            break\n\n    mean_dur_prefix, mean_dur_cont = torch.cat(mean_dur_prefix), torch.cat(\n        mean_dur_cont\n    )\n    mean_f0_prefix, mean_f0_cont = torch.cat(mean_f0_prefix), torch.cat(mean_f0_cont)\n\n    return mean_dur_prefix, mean_dur_cont, mean_f0_prefix, mean_f0_cont\n\n\ndef main(rank, world_size, args):\n    start = time.time()\n\n    if world_size > 1:\n        torch.distributed.init_process_group(\n            backend=\"gloo\", init_method=\"env://\", world_size=world_size, rank=rank\n        )\n        torch.cuda.set_device(rank % torch.cuda.device_count())\n\n    raw_args = args\n\n    args = convert_namespace_to_omegaconf(args)\n    if args.common.seed is not None:\n        np.random.seed(args.common.seed)\n        utils.set_torch_seed(args.common.seed)\n\n    models, model_args, task = checkpoint_utils.load_model_ensemble_and_task(\n        [raw_args.path], arg_overrides={\"data\": args.task.data}\n    )\n\n    tgt_dict = task.target_dictionary\n\n    for model in models:\n        model.prepare_for_inference_(args)\n        model.cuda().eval()\n        if raw_args.fp16:\n            model = model.half()\n    model = models[0]\n\n    config = ExpressiveCodeDataConfig(args.task.data)\n\n    dataset = CodeDataset(\n        manifest=config.manifests[raw_args.eval_subset],\n        dictionary=task.source_dictionary,\n        dur_dictionary=task.source_duration_dictionary,\n        f0_dictionary=task.source_f0_dictionary,\n        config=config,\n        discrete_dur=task.cfg.discrete_duration,\n        discrete_f0=task.cfg.discrete_f0,\n        log_f0=task.cfg.log_f0,\n        normalize_f0_mean=task.cfg.normalize_f0_mean,\n        normalize_f0_std=task.cfg.normalize_f0_std,\n        interpolate_f0=task.cfg.interpolate_f0,\n        shifts=task.cfg.stream_shifts,\n        return_filename=True,\n        strip_filename=False,\n        return_continuous_f0=raw_args.dequantize_prosody,\n    )\n\n    if raw_args.filter_names:\n        dataset = FilterNamesDataset(dataset, raw_args.filter_names)\n\n    criterion = task.build_criterion(model_args.criterion)\n\n    name2metric = {\n        \"continuation\": continuation,\n        \"teacher_force_everything\": teacher_force_everything,\n        \"correlation\": correlation,\n    }\n\n    name2keys = {\n        \"continuation\": (\n            \"Token BLEU3\",\n            \"Duration NLL\",\n            \"Duration MAE\",\n            \"F0 NLL\",\n            \"F0 MAE\",\n            \"F0 sum\",\n            \"F0 sum_sq\",\n            \"Dur sum\",\n            \"Dur sum_sq\",\n        ),\n        \"teacher_force_everything\": (\"token_loss\", \"duration_loss\", \"f0_loss\"),\n        \"correlation\": (\"Duration corr\", \"F0 corr\"),\n    }\n    metric_name = raw_args.metric\n\n    metric = name2metric[metric_name]\n    results = metric(raw_args, dataset, model, criterion, tgt_dict, rank, world_size)\n\n    values = None\n\n    if metric_name not in [\n        \"correlation\",\n    ]:\n        values, normalizers = results\n        values = maybe_aggregate_normalize(values, normalizers, world_size)\n    elif metric_name == \"correlation\":\n        values = maybe_aggregate_correlations(results, world_size)\n    else:\n        assert False\n\n    assert values is not None\n    summary = dict(zip(name2keys[raw_args.metric], values.tolist()))\n    if metric_name == \"continuation\":\n        summary[\"F0 Std\"] = np.sqrt(-summary[\"F0 sum\"] ** 2 + summary[\"F0 sum_sq\"])\n        summary[\"Dur Std\"] = np.sqrt(-summary[\"Dur sum\"] ** 2 + summary[\"Dur sum_sq\"])\n        del summary[\"F0 sum\"]\n        del summary[\"F0 sum_sq\"]\n        del summary[\"Dur sum\"]\n        del summary[\"Dur sum_sq\"]\n\n    summary[\"metric\"] = metric_name\n\n    if rank == 0:\n        print(summary)\n        if raw_args.wandb:\n            wandb_results(summary, raw_args)\n        print(\"# finished in \", time.time() - start, \"seconds\")\n\n\ndef wandb_results(summary, raw_args):\n    import wandb\n\n    run = wandb.init(\n        project=raw_args.wandb_project_name, tags=raw_args.wandb_tags.split(\",\")\n    )\n    run.config.metric = raw_args.metric\n    run.config.model = raw_args.path\n    run.config.data = raw_args.data\n\n    if raw_args.wandb_run_name:\n        run.name = raw_args.wandb_run_name\n        run.save()\n\n    wandb.log(summary)\n    wandb.finish()\n\n\ndef maybe_aggregate_normalize(values, normalizers, world_size):\n    if world_size > 1:\n        torch.distributed.barrier()\n\n        torch.distributed.all_reduce_multigpu([values])\n        torch.distributed.all_reduce_multigpu([normalizers])\n\n    return values / normalizers\n\n\ndef maybe_aggregate_correlations(results, world_size):\n    if world_size > 1:\n        output = [None for _ in range(world_size)]\n        torch.distributed.all_gather_object(output, results)\n        mean_dur_prefix, mean_dur_cont, mean_f0_prefix, mean_f0_cont = [\n            torch.cat([x[i] for x in output]) for i in range(4)\n        ]\n    else:\n        mean_dur_prefix, mean_dur_cont, mean_f0_prefix, mean_f0_cont = results\n\n    corr_dur = scipy.stats.pearsonr(mean_dur_prefix.numpy(), mean_dur_cont.numpy())[0]\n    corr_f0 = scipy.stats.pearsonr(mean_f0_prefix.numpy(), mean_f0_cont.numpy())[0]\n    values = torch.tensor([corr_dur, corr_f0])\n\n    return values\n\n\ndef cli_main():\n    parser = options.get_interactive_generation_parser()\n    parser.add_argument(\n        \"--prefix-length\",\n        type=int,\n        default=1,\n        help=\"Prompt prefix length (including <s>)\",\n    )\n    parser.add_argument(\n        \"--duration-scale\",\n        type=float,\n        default=1,\n        help=\"Multiply durations by the given scaler\",\n    )\n    parser.add_argument(\n        \"--debug\", action=\"store_true\", help=\"Process only the first batch\"\n    )\n    parser.add_argument(\"--n_hypotheses\", type=int, default=1)\n    parser.add_argument(\"--filter-names\", type=str, default=None)\n    parser.add_argument(\n        \"--max-length\", type=int, default=200, help=\"Maximal produced length\"\n    )\n\n    parser.add_argument(\"--teacher-force-tokens\", action=\"store_true\", default=False)\n    parser.add_argument(\"--teacher-force-duration\", action=\"store_true\", default=False)\n    parser.add_argument(\"--teacher-force-f0\", action=\"store_true\", default=False)\n\n    parser.add_argument(\"--copy-target\", action=\"store_true\", default=False)\n    parser.add_argument(\"--min-length\", type=int, default=None)\n    parser.add_argument(\"--f0-discretization-bounds\", type=str, default=None)\n    parser.add_argument(\"--dequantize-prosody\", action=\"store_true\")\n    parser.add_argument(\"--batch-explosion-rate\", type=int, default=1)\n\n    parser.add_argument(\n        \"--metric\",\n        choices=[\"continuation\", \"teacher_force_everything\", \"correlation\"],\n        required=True,\n    )\n\n    parser.add_argument(\"--wandb\", action=\"store_true\")\n    parser.add_argument(\"--wandb-project-name\", type=str, default=\"eslm\")\n    parser.add_argument(\"--wandb-tags\", type=str, default=\"\")\n    parser.add_argument(\"--wandb-run-name\", type=str, default=\"\")\n\n    parser.add_argument(\"--T-token\", type=float, default=1.0)\n    parser.add_argument(\"--T-duration\", type=float, default=1.0)\n    parser.add_argument(\"--T-f0\", type=float, default=1.0)\n\n    parser.add_argument(\"--n-workers\", type=int, default=1)\n\n    parser.add_argument(\n        \"--eval-subset\", type=str, default=\"valid\", choices=[\"valid\", \"test\"]\n    )\n\n    args = options.parse_args_and_arch(parser)\n\n    assert (\n        args.prefix_length >= 1\n    ), \"Prefix length includes bos token <s>, hence the minimum is 1.\"\n    assert args.temperature >= 0.0, \"T must be non-negative!\"\n\n    if args.dequantize_prosody:\n        assert args.f0_discretization_bounds\n\n    world_size = args.n_workers or torch.cuda.device_count()\n    if world_size > 1:\n        import random\n\n        mp.set_start_method(\"spawn\", force=True)\n        os.environ[\"MASTER_ADDR\"] = \"localhost\"\n        os.environ[\"MASTER_PORT\"] = str(random.randint(10_000, 50_000))\n\n        mp.spawn(\n            main,\n            nprocs=world_size,\n            args=(\n                world_size,\n                args,\n            ),\n            join=True,\n        )\n    else:\n        main(rank=0, world_size=world_size, args=args)\n\n\nif __name__ == \"__main__\":\n    cli_main()\n"
+  },
+  "module_snippets": [
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/data/audio/hubert_dataset.py",
+      "snippets": [
+        {
+          "lines": "205-206",
+          "code": "    def get_audio(self, index):\n        import soundfile as sf\n\n        wav_path = os.path.join(self.audio_root, self.audio_names[index])\n        _path, slice_ptr = parse_path(wav_path)\n        if len(slice_ptr) == 0:\n            wav, cur_sample_rate = sf.read(_path)\n        else:\n            assert _path.endswith(\".zip\")\n            data = read_from_stored_zip(_path, slice_ptr[0], slice_ptr[1])\n            f = io.BytesIO(data)\n            wav, cur_sample_rate = sf.read(f)\n        wav = torch.from_numpy(wav).float()\n        wav = self.postprocess(wav, cur_sample_rate)\n        return wav\n\n    def get_label(self, index, label_idx):\n        if self.store_labels:\n            label = self.label_list[label_idx][index]\n        else:\n            with open(self.label_paths[label_idx]) as f:\n                offset_s, offset_e = self.label_offsets_list[label_idx][index]\n                f.seek(offset_s)\n                label = f.read(offset_e - offset_s)\n\n        if self.label_processors is not None:\n            label = self.label_processors[label_idx](label)\n        return label\n\n    def get_labels(self, index):\n        return [self.get_label(index, i) for i in range(self.num_labels)]"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    },
+    {
+      "file": "fairseq/models/text_to_speech/hub_interface.py",
+      "snippets": [
+        {
+          "lines": "177-179",
+          "code": "    def __init__(self, cfg, model):\n        super().__init__()\n        self.vocoder = model\n        self.vocoder.eval()\n        self.sr = 16000\n        self.multispkr = self.vocoder.model.multispkr\n        if self.multispkr:\n            logger.info(\"multi-speaker vocoder\")\n            self.num_speakers = cfg.get(\n                \"num_speakers\",\n                200,\n            )  # following the default in codehifigan to set to 200\n\n    def get_model_input(\n        self,\n        text: str,\n        speaker: Optional[int] = -1,\n    ):\n        units = list(map(int, text.strip().split()))\n        x = {\n            \"code\": torch.LongTensor(units).view(1, -1),\n        }\n        if not speaker:\n            speaker = -1\n        if self.multispkr:\n            assert (\n                speaker < self.num_speakers\n            ), f\"invalid --speaker-id ({speaker}) with total #speakers = {self.num_speakers}\"\n            spk = random.randint(0, self.num_speakers - 1) if speaker == -1 else speaker\n            x[\"spkr\"] = torch.LongTensor([spk]).view(1, 1)\n        return x\n\n    def get_prediction(self, sample, dur_prediction: Optional[bool] = True):\n        wav = self.vocoder(sample, dur_prediction)\n        return wav, self.sr"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "fairseq",
+      "function": "CodeDataset"
+    },
+    {
+      "module": "fairseq",
+      "function": "ExpressiveCodeDataConfig"
+    },
+    {
+      "module": "fairseq",
+      "function": "convert_namespace_to_omegaconf"
+    },
+    {
+      "module": "fairseq",
+      "function": "get_interactive_generation_parser"
+    },
+    {
+      "module": "fairseq",
+      "function": "load_model_ensemble_and_task"
+    },
+    {
+      "module": "fairseq",
+      "function": "mae_loss"
+    },
+    {
+      "module": "fairseq",
+      "function": "move_to_cuda"
+    },
+    {
+      "module": "fairseq",
+      "function": "nll_loss"
+    },
+    {
+      "module": "fairseq",
+      "function": "parse_args_and_arch"
+    },
+    {
+      "module": "fairseq",
+      "function": "set_torch_seed"
+    },
+    {
+      "module": "inference_dataset",
+      "function": "InferenceDataset"
+    },
+    {
+      "module": "inference_dataset",
+      "function": "explode_batch"
+    },
+    {
+      "module": "naive_decoder",
+      "function": "Naive_F0_Decoder"
+    },
+    {
+      "module": "nltk",
+      "function": "sentence_bleu"
+    },
+    {
+      "module": "pathlib",
+      "function": "Path"
+    },
+    {
+      "module": "random",
+      "function": "randint"
+    },
+    {
+      "module": "sample",
+      "function": "FilterNamesDataset"
+    },
+    {
+      "module": "sample",
+      "function": "TemperatureDecoder"
+    },
+    {
+      "module": "sample",
+      "function": "do_sampling"
+    },
+    {
+      "module": "time",
+      "function": "time"
+    },
+    {
+      "module": "torch",
+      "function": "DataLoader"
+    },
+    {
+      "module": "torch",
+      "function": "DistributedSampler"
+    },
+    {
+      "module": "torch",
+      "function": "cat"
+    },
+    {
+      "module": "torch",
+      "function": "no_grad"
+    },
+    {
+      "module": "torch",
+      "function": "set_start_method"
+    },
+    {
+      "module": "torch",
+      "function": "spawn"
+    },
+    {
+      "module": "torch",
+      "function": "stack"
+    },
+    {
+      "module": "torch",
+      "function": "tensor"
+    },
+    {
+      "module": "types",
+      "function": "SimpleNamespace"
+    },
+    {
+      "module": "wandb",
+      "function": "finish"
+    },
+    {
+      "module": "wandb",
+      "function": "init"
+    },
+    {
+      "module": "wandb",
+      "function": "log"
+    }
+  ]
+}

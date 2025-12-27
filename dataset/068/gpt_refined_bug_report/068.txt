@@ -1,0 +1,27 @@
+Efficient Object Detection with YOLOV8 and KerasCV Training Issue  
+Dimension mismatch error during metric computation causes training to fail after first epoch in KerasCV YOLOv8 example.
+
+SYMPTOMS  
+• Training runs successfully for one epoch but fails at the end of epoch 1 during metric evaluation  
+• Error traceback shows failure inside `EvaluateCOCOMetricsCallback` while calling `self.metrics.result(force=True)`  
+• TensorFlow UnknownError related to `ConcatOp` with dimension mismatch:  
+  ```
+  UnknownError: {{function_node __wrapped__ConcatV2_N_317_device_/job:localhost/replica:0/task:0/device:CPU:0}} 
+  ConcatOp : Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4] [Op:ConcatV2] name: concat
+  ```  
+• Error originates from `keras_cv/metrics/object_detection/box_coco_metrics.py` in the `_box_concat` function where bounding box tensors from ground truths are concatenated along axis 0  
+• The shapes of bounding box tensors differ in dimension 1 (2 vs 1), causing the concat operation to fail  
+• Occurs specifically on TensorFlow 2.x environment in Colab Pro during training on the official KerasCV YOLOv8 example  
+
+EXPECTED BEHAVIOR  
+The training process should complete all specified epochs without error.  
+At each epoch end, evaluation metrics should compute successfully by concatenating bounding box data from ground truth and predictions without shape mismatches.  
+No dimension mismatch errors should occur during metric aggregation steps.  
+
+REPRODUCTION STEPS  
+1. Open Google Colab Pro environment  
+2. Load the official KerasCV YOLOv8 example from https://keras.io/examples/vision/yolov8/  
+3. Prepare the training and validation datasets as per example instructions  
+4. Run the model training using `yolo.fit()` with `EvaluateCOCOMetricsCallback` included as a callback  
+5. Observe that training completes epoch 1 but crashes at epoch end during metric evaluation with the above dimension mismatch error during tensor concatenation  
+6. Confirm error reproducibility by repeating training run in same environment and code setup

@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the TensorFlow Models repository from GitHub",
+    "Checkout the latest release branch",
+    "Set up a Python virtual environment and activate it",
+    "Install TensorFlow 2.16.0.dev20231103 using pip",
+    "Navigate to the 'official/legacy/image_classification' directory within the cloned repository",
+    "Create a symbolic link from '/workspace/official/modeling/optimization/ema_optimizer.py' to 'official/legacy/image_classification'",
+    "Set the environment variable PYTHONPATH to include the '/workspace/official' directory",
+    "Prepare Imagenet data in a directory, e.g., '/dir_to_imagnet_data'",
+    "Ensure the Imagenet data is in the correct format for training",
+    "Open a terminal and navigate to the 'official/legacy/image_classification' directory",
+    "Run the following command to reproduce the bug: 'python3 classifier_trainer.py --mode=train_and_eval  --model_type=resnet  --dataset=imagenet --data_dir=/dir_to_imagnet_data'",
+    "Check the output of the command for the AttributeError message",
+    "Verify that the error occurs during the execution of the training script",
+    "Ensure TensorFlow version is correctly set to 'tf-nightly-cpu 2.16.0.dev20231103'",
+    "Ensure Python version is correctly set to '3.11.6'"
+]
+```
+

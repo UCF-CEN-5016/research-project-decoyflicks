@@ -1,0 +1,33 @@
+```json
+[
+    "Import TensorFlow and the Faster R-CNN feature extractor module from faster_rcnn_resnet_v1_feature_extractor_tf1_test.py",
+    "Set TensorFlow version to 2.12 using pip install tensorflow==2.12 --upgrade if not already installed",
+    "Create a virtual environment and activate it for isolation (e.g., python3 -m venv tf_env; source tf_env/bin/activate)",
+    "Clone the TensorFlow Model Garden repository from https://github.com/tensorflow/models.git",
+    "Navigate to the research/object_detection directory within the cloned repository",
+    "Install all dependencies specified in the requirements.txt file located in the research directory (e.g., pip install -r requirements.txt)",
+    "Create a Python script named reproduce_bug.py with the following content:",
+    "import unittest",
+    "import numpy as np",
+    "import tensorflow.compat.v1 as tf",
+    "from object_detection.models import faster_rcnn_resnet_v1_feature_extractor as faster_rcnn_resnet_v1",
+    "class FasterRcnnResnetV1FeatureExtractorTest(tf.test.TestCase):",
+    "  def test_extract_proposal_features_returns_expected_size(self):",
+    "    feature_extractor = faster_rcnn_resnet_v1.FasterRCNNResnet50FeatureExtractor(is_training=False, first_stage_features_stride=16)",
+    "    preprocessed_inputs = tf.random_uniform([4, 224, 224, 3], maxval=255, dtype=tf.float32)",
+    "    rpn_feature_map, _ = feature_extractor.extract_proposal_features(preprocessed_inputs, scope='TestScope')",
+    "    features_shape = tf.shape(rpn_feature_map)",
+    "    init_op = tf.global_variables_initializer()",
+    "    with self.test_session() as sess:",
+    "      sess.run(init_op)",
+    "      features_shape_out = sess.run(features_shape)",
+    "      expected_shape = [4, 14, 14, 1024]",
+    "      print('Feature shape:', features_shape_out)",
+    "      self.assertAllEqual(features_shape_out, expected_shape)",
+    "if __name__ == '__main__':",
+    "  tf.test.main()",
+    "Run the reproduce_bug.py script using python reproduce_bug.py",
+    "Observe if there is an error or discrepancy in the output shape of rpn_feature_map compared to the expected shape [4, 14, 14, 1024]"
+]
+```
+

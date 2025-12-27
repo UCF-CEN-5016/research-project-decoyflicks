@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and necessary modules from keras and tensorflow_addons",
+    "Set the TensorFlow logger level to 'ERROR' to suppress warnings",
+    "Define hyperparameters: DESIRED_SAMPLES = 8192, LEARNING_RATE_GEN = 1e-5, LEARNING_RATE_DISC = 1e-6, BATCH_SIZE = 16",
+    "Download the LJSpeech dataset using wget and extract it",
+    "Create a list of audio file paths from the extracted dataset using tf.io.gfile.glob",
+    "Define a preprocess function that reads a WAV file and returns two instances of the audio tensor",
+    "Create a tf.data.Dataset object from the list of audio file paths and apply the preprocess function",
+    "Define a custom MelSpec layer for converting audio to mel-spectrograms",
+    "Define a generator model using the create_generator function with input shape (None, 1)",
+    "Define a discriminator model using the create_discriminator function with input shape (None, 1)",
+    "Define the generator loss function using Mean Squared Error and feature matching loss",
+    "Define the discriminator loss function using Mean Squared Error",
+    "Create an instance of the MelGAN class with the generator and discriminator",
+    "Compile the MelGAN model with optimizers and loss functions",
+    "Fit the MelGAN model on the training dataset with a single epoch and batch size of BATCH_SIZE",
+    "During training, monitor the output of the generator and discriminator to check for loss values",
+    "Assert that the generator loss is significantly high (e.g., greater than 1.0) indicating poor performance",
+    "Check the shape of the output from the generator to ensure it has an unexpected last dimension",
+    "Log the shape of the output from the generator to verify it does not match the expected shape for SparseCategoricalCrossentropy"
+]
+```

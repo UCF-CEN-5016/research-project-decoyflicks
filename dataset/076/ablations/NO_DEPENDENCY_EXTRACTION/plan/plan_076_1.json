@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras.backend as K, import keras.layers as KL, import keras.models as KM, import numpy as np, import os",
+    "Define the model directory: set MODEL_DIR = os.path.join(os.getcwd(), 'logs')",
+    "Define the COCO model path: set COCO_MODEL_PATH = os.path.join(MODEL_DIR, 'mask_rcnn_coco.h5')",
+    "Create a configuration class for Mask R-CNN: define a class Config with necessary attributes like NUM_CLASSES, IMAGES_PER_GPU, etc.",
+    "Instantiate the configuration: config = Config()",
+    "Set the mode to inference: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Attempt to load weights: call model.load_weights(COCO_MODEL_PATH, by_name=True)",
+    "Ensure the COCO_MODEL_PATH points to a valid HDF5 file: create a dummy HDF5 file if necessary with the expected structure",
+    "Run the code in a Jupyter Notebook cell to trigger the NotImplementedError",
+    "Capture the output and error message: assert that the output contains 'NotImplementedError' and the specific message about tf.Variable",
+    "Verify the stack trace includes the line where the error occurs: check that the traceback points to the load_weights function in the model.py file"
+]
+```

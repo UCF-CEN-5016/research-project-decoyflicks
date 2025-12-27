@@ -1,0 +1,15 @@
+[
+    "Import TensorFlow and keras_cv modules required for the task",
+    "Define constants for batch size, image dimensions, and number of classes",
+    "Load a sample dataset (if available) or create a synthetic dataset with random images that have bounding boxes in 'xyxy' format",
+    "Initialize YOLOV8 backbone using `keras_cv.models.YOLOV8Backbone.from_preset(\"yolo_v8_s_backbone_coco\")`",
+    "Build the YOLOV8 detector model using `keras_cv.models.YOLOV8Detector(num_classes=num_classes, bounding_box_format=\"xyxy\", backbone=backbone, fpn_depth=1)`",
+    "Compile the YOLOV8 model with Adam optimizer and `binary_crossentropy` for classification loss and `ciou` for box loss",
+    "Create a synthetic dataset generator that yields batches of images with corresponding bounding boxes",
+    "Prepare training and validation datasets (if using real data) or use the synthetic dataset generator",
+    "Initialize the COCO metric callback with the validation dataset and define save path for the best model",
+    "Train the YOLOV8 model on the synthetic dataset for a specified number of epochs, monitoring mAP score in the callback logs",
+    "Visualize detections using `visualize_detections(yolo, dataset=val_ds, bounding_box_format=\"xyxy\")` to inspect if predictions are as expected",
+    "Assert that the model training results in an unexpected behavior or error (e.g., high loss values, infinite loop, etc.) during execution"
+]
+

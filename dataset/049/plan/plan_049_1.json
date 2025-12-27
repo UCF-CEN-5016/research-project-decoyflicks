@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries for the bug reproduction",
+    "Define a configuration dictionary for the RelPositionMultiHeadedAttention module with relative position encodings",
+    "Initialize u and v bias parameters using torch.Tensor without initialization",
+    "Create dummy input data for testing, such as a batch of sequences with shape (batch_size, sequence_length)",
+    "Invoke the forward method of the RelPositionMultiHeadedAttention layer with the dummy input data",
+    "Assert that the sum of the uninitialised u and v bias parameters is non-deterministic and results in NaN values when added together",
+    "Verify that calling a function like `sum()` on these tensors yields unexpected and inconsistent results across different runs",
+    "Monitor the behavior of the layer during forward pass for any signs of instability or errors, such as loss becoming NaN",
+    "Record the output of the layer to confirm that it does not handle uninitialised bias parameters gracefully"
+]
+```
+

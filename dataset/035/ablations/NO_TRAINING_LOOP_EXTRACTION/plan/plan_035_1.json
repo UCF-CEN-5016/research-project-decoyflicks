@@ -1,0 +1,13 @@
+```json
+[
+    "Import the necessary modules: torch and inspect from labml",
+    "Define a tensor x with shape (3, 1, 1, 4) using torch.tensor([[1, 2, 3, 4], [4, 5, 6, 7], [7, 8, 9, 10]], dtype=torch.float)",
+    "Reshape tensor x to have the shape (3, 1, 1, 4) to match the expected input dimensions for RotaryPositionalEmbeddings",
+    "Instantiate the RotaryPositionalEmbeddings class with d=3: rotary_pe = RotaryPositionalEmbeddings(3)",
+    "Call the forward method of rotary_pe with x as input: output = rotary_pe(x)",
+    "Capture the output and check its shape to ensure it matches the expected output dimensions",
+    "Verify that the output tensor has the shape (3, 1, 1, 4) which is incorrect for the intended use case",
+    "Check for any runtime errors or exceptions raised during the execution of rotary_pe(x)",
+    "Log the output tensor to inspect its values and confirm that it does not produce valid results due to the incorrect number of features"
+]
+```

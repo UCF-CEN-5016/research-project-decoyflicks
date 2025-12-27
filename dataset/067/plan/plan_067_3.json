@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: glob, pprint, tensorflow, keras",
+    "Set up data preparation: load IMDb dataset and split into training and testing sets",
+    "Define hyperparameters: batch_size=32, max_len=100, vocab_size=50000",
+    "Create a function to vectorize the text data using TextVectorization layer from Keras",
+    "Generate dummy input data for training and validation sets with shape (batch_size, max_len)",
+    "Define the MaskedLanguageModel class with custom train_step method as described in the code snippet",
+    "Instantiate the MaskedLanguageModel model by calling create_masked_language_bert_model() function",
+    "Compile the model with SparseCategoricalCrossentropy loss and Adam optimizer",
+    "Train the model on dummy training data for 5 epochs using fit method of MaskedLanguageModel instance",
+    "Capture intermediate results during training to verify NaN values in loss calculation"
+]
+```
+

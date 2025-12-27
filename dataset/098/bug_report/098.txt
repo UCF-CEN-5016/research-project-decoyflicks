@@ -1,0 +1,68 @@
+BUG in SinusoidalPosEmb
+
+In the implementation of SinusoidalPosEmb in file `denoising_diffusion_pytorch/denoising_diffusion_pytorch.py`, the `theta` is passed in the `__init__` function, but not assigned as a member variable or passed in the `forward` function.
+
+Therefore, the interpretor will throw a NameError when excuting the `forward` function.
+
+```python
+# sinusoidal positional embeds
+
+class SinusoidalPosEmb(nn.Module):
+    def __init__(self, dim, theta = 10000):
+        super().__init__()
+        self.dim = dim
+
+    def forward(self, x):
+        device = x.device
+        half_dim = self.dim // 2
+        emb = math.log(theta) / (half_dim - 1)
+        emb = torch.exp(torch.arange(half_dim, device=device) * -emb)
+        emb = x[:, None] * emb[None, :]
+        emb = torch.cat((emb.sin(), emb.cos()), dim=-1)
+        return emb
+```
+Below is the error raised when excuting:
+
+```
+Traceback (most recent call last):
+  File "/Users/alan/projects/denoising-diffusion-pytorch/test2.py", line 40, in <module>
+    out = emb(x)
+          ^^^^^^
+  File "/Users/alan/opt/miniconda3/envs/enn/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/alan/projects/denoising-diffusion-pytorch/test2.py", line 31, in forward
+    emb = math.log(theta) / (half_dim - 1)
+                   ^^^^^
+NameError: name 'theta' is not defined
+```
+
+The correct code should be 
+
+```python
+class SinusoidalPosEmb(nn.Module):
+    def __init__(self, dim, theta = 10000):
+        super().__init__()
+        self.dim = dim
+        self.theta = theta
+
+    def forward(self, x):
+        device = x.device
+        half_dim = self.dim // 2
+        emb = math.log(self.theta) / (half_dim - 1)
+        emb = torch.exp(torch.arange(half_dim, device=device) * -emb)
+        emb = x[:, None] * emb[None, :]
+        emb = torch.cat((emb.sin(), emb.cos()), dim=-1)
+        return emb
+```
+
+And this is my test scripts
+
+```python
+emb = SinusoidalPosEmb(dim = 4)
+
+x = torch.ones((10))
+out = emb(x)
+
+print(out, out.shape)
+```

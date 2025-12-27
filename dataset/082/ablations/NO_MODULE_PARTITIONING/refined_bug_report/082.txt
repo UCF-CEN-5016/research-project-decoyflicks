@@ -1,0 +1,23 @@
+TITLE  
+Dimension mismatch error in Masked Patch Prediction
+
+SYMPTOMS  
+• Encountering dimension issues while running the demo code for Masked Patch Prediction.  
+• Error message:  
+  ```
+  RuntimeError: Given normalized_shape=[1024], expected input with shape [*, 1024], but got input of size[20, 64, 3072]
+  ```  
+• The input to the layer normalization has an unexpected shape of `[20, 64, 3072]`, which does not match the expected shape.
+
+EXPECTED BEHAVIOR  
+The model should process the input images correctly, with the masked input having the appropriate dimensions, allowing the forward pass to complete without errors. The output should be a loss value that can be used for backpropagation.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries and define the ViT model and MPP trainer as shown in the demo code.  
+2. Implement the `sample_unlabelled_images` function to generate random images of shape `[20, 3, 256, 256]`.  
+3. Run a loop for 100 iterations where:
+   - Random images are sampled.
+   - The MPP trainer is called with these images to compute the loss.
+   - Perform optimization steps using the Adam optimizer.
+4. Observe the output for any dimension-related errors during the forward pass.  
+5. Check the shape of `masked_input` before it is passed to the transformer to identify discrepancies in dimensions.

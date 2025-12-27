@@ -1,0 +1,60 @@
+{
+  "bug_report": "049",
+  "rank": 3,
+  "score": 0.09087458997964859,
+  "main_file": {
+    "path": "examples/wav2vec/xlsr/scripts/eval_speaker_clf_task.py",
+    "content": "\"\"\"\nUsage:\n    This scripts it to evaluate the classification accuracy/error rate from the embedding extracted\n    by gen_audio_embedding.py \n    Example (LID classification)\n\n    PYTHONPATH='.' python examples/wav2vec/eval_speaker_clf_task.py \\\n            --data /fsx/androstj/exps/lid_voxlingua/infer/atj_xlsr2_100pct_300M_mean_fast_upd_100k_new.npz \\\n            --task cls --merge mean_logit\n\"\"\"\nimport numpy as np\nimport sklearn\nfrom sklearn.metrics.pairwise import cosine_similarity\nfrom sklearn.preprocessing import StandardScaler\nfrom tqdm import tqdm\nimport ipdb\nimport logging\nimport argparse\nfrom scipy.special import softmax\n\nlog=logging.getLogger(__name__)\nlog.setLevel(logging.INFO)\n\ndef calculate_eer(y_label, y_score):\n    # y denotes groundtruth scores,\n    # y_score denotes the prediction scores.\n    from scipy.optimize import brentq\n    from sklearn.metrics import roc_curve\n    from scipy.interpolate import interp1d\n\n    fpr, tpr, thresholds = roc_curve(y_label, y_score, pos_label=1)\n    eer = brentq(lambda x : 1. - x - interp1d(fpr, tpr)(x), 0., 1.)\n    optimal_threshold = interp1d(fpr, thresholds)(eer)\n    return eer, optimal_threshold\n\ndef calculate_minDCF(y_label, y_score, p_target=0.01, c_miss=1, c_fa=1):\n    # https://github.com/kaldi-asr/kaldi/blob/master/egs/sre08/v1/sid/compute_min_dcf.py\n    from sklearn.metrics import det_curve\n    fpr, fnr, thresholds = det_curve(y_label, y_score, pos_label=1)\n    min_c_det = float(\"inf\")\n    min_c_det_threshold = thresholds[0]\n    for i in range(0, len(fpr)):\n        # See Equation (2).  it is a weighted sum of false negative\n        # and false positive errors.\n        c_det = c_miss * fnr[i] * p_target + c_fa * fpr[i] * (1 - p_target)\n        if c_det < min_c_det:\n            min_c_det = c_det\n            min_c_det_threshold = thresholds[i]\n    # See Equations (3) and (4).  Now we normalize the cost.\n    c_def = min(c_miss * p_target, c_fa * (1 - p_target))\n    min_dcf = min_c_det / c_def\n    return min_dcf, min_c_det_threshold\n\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument('--data', help='npz contains name & latent file')\n    parser.add_argument('--task', choices=['cls', 'veri', 'cls_voxlingua'])\n    parser.add_argument('--merge', choices=['mean_logit', 'first_logit', 'mean_latent_sim', 'first_latent_sim', 'mean_logit_sim', 'first_logit_sim'])\n    parser.add_argument('--veri-pair', help='verification file contains 1/0 utt_x utt_y')\n    parser.add_argument('--scaler', type=str, choices=['mean_var'])\n    parser.add_argument('--compress-method', choices=['pca'])\n    parser.add_argument('--compress-dim', type=int)\n    args = parser.parse_args()\n\n    if args.task in ['cls', 'cls_voxlingua']:\n        print('| run classification evaluation')\n        data = np.load(args.data)\n        data_logit = data['logit']\n        data_target = data['target']\n        data_src_len = data['src_len']\n        assert data_logit.shape[0] ==  data_target.shape[0]\n        B = data_logit.shape[0]\n        correct = 0\n        total = 0\n        data_prob = softmax(data_logit, axis=2)\n        correct_vs_len = np.empty((B, 2))\n        for ii in range(B):\n            _target = data_target[ii]\n            if args.merge == 'mean_logit':\n                _prob = np.mean(data_prob[ii], axis=0)\n                top_1 = np.argmax(_prob)\n            elif args.merge == 'first_logit':\n                _prob = data_prob[ii][0]\n                top_1 = np.argmax(_prob)\n            else :\n                raise ValueError()\n            is_top_1 = (1 if top_1 == _target else 0)\n            correct += is_top_1\n            total += 1\n            _src_len = data_src_len[ii] / 16000\n            correct_vs_len[ii] = [is_top_1, _src_len]\n\n        acc = correct / total * 100\n        t_5 = correct_vs_len[:, 1] <= 5\n        t_20 = correct_vs_len[:, 1] > 5\n        c_5 = correct_vs_len[t_5, 0].sum()\n        c_20 = correct_vs_len[t_20, 0].sum()\n        t_5 = t_5.sum()\n        t_20 = t_20.sum()\n        acc_5 = c_5 / t_5 * 100\n        acc_20 = c_20 / t_20 * 100\n        print(f'| acc = {acc:.2f}% -- err = {100-acc:.2f}% -- {correct=} {total=}')\n        print(f'| acc 0to5 = {acc_5:.2f}% -- err = {100-acc_5:.2f}% -- {c_5=} {t_5=}')\n        print(f'| acc 5to20 = {acc_20:.2f}% -- err = {100-acc_20:.2f}% -- {c_20=} {t_20=}')\n\n        \n\n    if args.task == 'veri':\n        print('| run verification evaluation')\n        veri_pairs = []\n        with open(args.veri_pair) as ff:\n            for fi in ff:\n                a,b,c = fi.split()\n                a = int(a)\n                veri_pairs.append([a,b,c])\n        \n        data = np.load(args.data)\n        if 'logit' in args.merge:\n            data_latent = data['logit']\n        elif 'latent' in args.merge:\n            data_latent = data['latent']\n        else :\n            raise ValueError()\n\n        data_name  = data['name']\n        assert len(data_name) == len(data_latent)\n        map_name_latent = {}\n\n        from sklearn.pipeline import make_pipeline\n        pipe = []\n        if args.scaler == 'mean_var':\n            print(f'| apply StandardScaler')\n            pipe.append(StandardScaler())\n\n        if args.compress_method == 'pca':\n            n_comp = args.compress_dim\n            print(f'| apply PCA with {n_comp=}')\n            from sklearn.decomposition import PCA\n            pipe.append(PCA(n_components=n_comp))\n        if len(pipe) > 0 :\n            pipe = make_pipeline(*pipe)\n            data_latent_2d = data_latent.reshape(-1, data_latent.shape[-1])\n            pipe.fit(data_latent_2d)\n            data_latent_2d = pipe.transform(data_latent_2d)\n            data_latent = data_latent_2d.reshape(data_latent.shape[0], data_latent.shape[1], -1)\n\n        for ii in range(len(data_name)):\n            map_name_latent[data_name[ii]] = data_latent[ii]\n        labels = []\n        scores = []\n        for lbl, pair_a, pair_b in tqdm(veri_pairs):\n            labels.append(lbl)\n            pair_a = map_name_latent[pair_a]\n            pair_b = map_name_latent[pair_b]\n            assert pair_a.ndim == pair_b.ndim == 2\n            score = cosine_similarity(pair_a, pair_b)\n            if args.merge.startswith('mean'):\n                score = np.mean(score)\n            elif args.merge.startswith('first'):\n                score = score[0, 0]\n            else :\n                raise ValueError()\n            scores.append(score)\n        labels = np.array(labels)\n        scores = np.array(scores)\n        eer, eer_threshold = calculate_eer(labels, scores)\n        minDCF, minDCF_threshold = calculate_minDCF(labels, scores)\n        print('='*40)\n        print(f'| EER = {eer*100:.2f}%\\tthreshold = {eer_threshold:.2f}')\n        print(f'| minDCF = {minDCF:.2f}\\tthreshold = {minDCF_threshold:.2f}')\n\n\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "logging",
+      "function": "getLogger"
+    },
+    {
+      "module": "scipy",
+      "function": "brentq"
+    },
+    {
+      "module": "scipy",
+      "function": "interp1d"
+    },
+    {
+      "module": "scipy",
+      "function": "softmax"
+    },
+    {
+      "module": "sklearn",
+      "function": "PCA"
+    },
+    {
+      "module": "sklearn",
+      "function": "StandardScaler"
+    },
+    {
+      "module": "sklearn",
+      "function": "cosine_similarity"
+    },
+    {
+      "module": "sklearn",
+      "function": "det_curve"
+    },
+    {
+      "module": "sklearn",
+      "function": "make_pipeline"
+    },
+    {
+      "module": "sklearn",
+      "function": "roc_curve"
+    },
+    {
+      "module": "tqdm",
+      "function": "tqdm"
+    }
+  ]
+}

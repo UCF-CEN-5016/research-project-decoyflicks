@@ -1,0 +1,23 @@
+S2UT: Key 'input_feat_per_channel' is not in struct
+
+## 🐛 Bug
+
+<img width="401" alt="image" src="https://github.com/facebookresearch/fairseq/assets/46919062/596f8fb6-5ba4-460e-af8e-7103ceb7ee60">
+
+
+### To Reproduce
+
+fairseq-generate $DATA_ROOT \
+  --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml \
+  --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan \
+  --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt  --gen-subset test \
+  --max-tokens 50000 \
+  --beam 10 --max-len-a 1 \
+  --results-path /root/autodl-tmp/results
+
+
+
+### Expected behavior
+
+how can I continue the process :(
+

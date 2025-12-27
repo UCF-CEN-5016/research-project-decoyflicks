@@ -1,0 +1,16 @@
+```json
+[
+    "Import the necessary modules from TensorFlow and Official project",
+    "Set the batch size to 32 and image dimensions to 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Define labels as a placeholder tensor of integer ids with shape (batch_size, num_classes)",
+    "Initialize a model using build_classification_model function with num_classes=1000",
+    "Set the optimizer to tf_keras.optimizers.Adam",
+    "Create a loss function using self.build_losses method with one_hot=True and soft_labels=False",
+    "Perform a forward pass through the model during training step",
+    "Assert that the output contains NaN values in the computed loss",
+    "Monitor GPU memory usage during execution",
+    "Assert that GPU memory exceeds expected threshold due to high gradient values"
+]
+```
+

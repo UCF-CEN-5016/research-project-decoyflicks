@@ -1,0 +1,23 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Ensure that PyTorch and DeepSpeed are installed with the correct versions compatible with your CUDA version",
+    "Create a new Python script named 'reproduce_bug.py'",
+    "Import necessary modules in 'reproduce_bug.py': 'import torch', 'from megatron import GPTModel', 'from megatron import parallel_state'",
+    "Set the device to CUDA by adding 'device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')'",
+    "Initialize the distributed process group by adding 'torch.distributed.init_process_group(backend='nccl')'",
+    "Define a configuration object for the GPT model with the following parameters: 'config = TransformerConfig(...)' (fill in with appropriate values such as vocab_size=50257, max_sequence_length=1024)",
+    "Instantiate the GPTModel with the defined configuration: 'model = GPTModel(config=config, vocab_size=50257, max_sequence_length=1024)'",
+    "Set the model to the appropriate device by adding 'model.to(device)'",
+    "Create a dummy input tensor with shape (1, 1024) for input_ids: 'input_ids = torch.randint(0, 50257, (1, 1024)).to(device)'",
+    "Create a dummy position_ids tensor with shape (1, 1024): 'position_ids = torch.arange(0, 1024).unsqueeze(0).to(device)'",
+    "Create a dummy attention_mask tensor with shape (1, 1, 1, 1024): 'attention_mask = torch.ones((1, 1, 1, 1024)).to(device)'",
+    "Call the model's forward method with the dummy inputs: 'output = model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask)'",
+    "Add a try-except block around the model call to catch exceptions: 'try: ... except AttributeError as e: print(e)'",
+    "Run the script using 'bash pretrain_gpt3_2.7b.sh' to execute the model training script",
+    "Verify that the output contains the error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce''",
+    "Log the output to a file for further analysis by adding 'with open('bug_log.txt', 'w') as f: f.write(str(e))' in the except block"
+]
+```

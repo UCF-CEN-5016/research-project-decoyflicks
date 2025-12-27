@@ -1,0 +1,16 @@
+[
+    "Import TensorFlow and necessary dependencies from the given module paths",
+    "Set up a Python 3.7 environment with TensorFlow version 2.10.0",
+    "Clone the TensorFlow models repository from GitHub using 'git clone https://github.com/tensorflow/models.git'",
+    "Navigate to the specific directory containing the TFHub saved model inference notebook: 'cd models/official/projects/waste_identification_ml/model_inference'",
+    "Install any missing dependencies listed in the logs, such as libnvinfer.so.8 and libnvinfer_plugin.so.8 by following system-specific installation instructions",
+    "Prepare a batch of two image inputs with dimensions 299x299 and RGB color channels",
+    "Load the pre-trained model from TFHub using 'tf.saved_model.load' method",
+    "Preprocess the input images to match the expected format for the model, typically resizing and normalizing the pixel values",
+    "Call the model inference function on the preprocessed image inputs, capturing the output tensors that include detection classes, scores, boxes, masks, etc.",
+    "Verify that the output dictionary contains keys 'image_info', 'detection_classes', 'detection_scores', 'detection_boxes', 'detection_masks', and 'num_detections'",
+    "Call the function responsible for visualization of results (likely part of a custom module or script in the project)",
+    "Assert that an exception is raised with the error message: 'TypeError: Got an unexpected keyword argument 'box_ind'" by adding a try-except block around the visualization call and asserting the exception type and message",
+    "Check the specific line number where the error occurs (likely related to utils/general_ops.py or ops/losses.py) by reviewing the stack trace printed in the console when the assertion fails"
+]
+

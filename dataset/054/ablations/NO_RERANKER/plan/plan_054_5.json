@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import tensorflow as tf, import keras, from keras import layers",
+    "Set a random seed for reproducibility: keras.utils.set_random_seed(42)",
+    "Define constants: set BATCH_SIZE to 32, set INPUT_SHAPE to (28, 28, 28, 1), set NUM_CLASSES to 11, set EPOCHS to 20",
+    "Create a function to download and prepare the dataset: define download_and_prepare_dataset(data_info) that returns train, validation, and test datasets",
+    "Use the MedMNIST dataset: set DATASET_NAME to 'organmnist3d' and call download_and_prepare_dataset with medmnist.INFO[DATASET_NAME]",
+    "Extract train, validation, and test datasets: unpack the returned dataset into train_videos, train_labels, valid_videos, valid_labels, test_videos, test_labels",
+    "Create a preprocessing function: define preprocess(frames, label) that normalizes frames and casts labels to float",
+    "Create a data loader function: define prepare_dataloader(videos, labels, loader_type) that creates a tf.data.Dataset from the videos and labels",
+    "Prepare the data loaders: call prepare_dataloader for train, valid, and test datasets with appropriate loader types",
+    "Define a model creation function: define create_model() that initializes a Keras model with the specified architecture",
+    "Compile the model: call model.compile with optimizer as Adam, loss as 'sparse_categorical_crossentropy', and metrics as accuracy",
+    "Train the model: call model.fit with trainloader, epochs set to EPOCHS, and validation_data set to testloader",
+    "Verify the bug: check the training output for validation metrics and ensure that validation_data is set to testloader",
+    "Assert that the validation accuracy is overly optimistic compared to expected performance on unseen data",
+    "Log the validation accuracy and compare it with the expected accuracy on a separate validation set"
+]
+```

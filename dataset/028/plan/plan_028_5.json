@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary modules from the fast_neural_style/neural_style.py file",
+    "Define a batch size of 4 and image dimensions of 256x256 for CIFAR10 images",
+    "Prepare CIFAR10 dataset using torchvision.datasets.ImageFolder with root directory pointing to CIFAR10 data",
+    "Create a DataLoader object with the prepared CIFAR10 dataset, setting batch_size=4",
+    "Initialize a TransformerNet model from transformer_net.py and move it to GPU",
+    "Define an Adam optimizer for the TransformerNet model with learning rate 1e-3",
+    "Load style image using utils.load_image function with style_image='images/style-images/mosaic.jpg'",
+    "Transform the style image into a tensor and repeat it for the batch size of 4, moving it to GPU",
+    "Extract style features from Vgg16 model and calculate gram matrices for style transfer",
+    "Train the TransformerNet model using DataLoader object for 2 epochs with content weight 1e5 and style weight 1e10",
+    "During training, monitor loss calculation for NaN values",
+    "Assert that during training, the loss calculation contains NaN values indicating a bug in the code"
+]
+```
+

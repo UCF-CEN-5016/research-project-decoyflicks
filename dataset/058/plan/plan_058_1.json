@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary modules from tfds and other dependencies",
+    "Define a batch size of 2 and image dimensions of 300x300",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Load the COCO2017 dataset using TensorFlow Datasets with splits ['train', 'validation']",
+    "Define a preprocessing function to match the one used in the training pipeline",
+    "Map the training and validation datasets with the preprocessing function",
+    "Create batches for both datasets with fixed batch size and padding values",
+    "Compile the RetinaNet model with the specified loss function and optimizer",
+    "Train the model on the training dataset for 1 epoch using the training parameters",
+    "Load the latest checkpoint from the model directory",
+    "Define a validation dataset with the same preprocessing steps as the training dataset",
+    "Prepare the validation data by applying the resize_and_pad_image function and preprocessing input",
+    "Run the inference model to generate detections on the prepared validation data",
+    "Visualize the generated detections on two samples from the validation dataset",
+    "Verify that the detections are generated without NaN values in the output"
+]
+```
+

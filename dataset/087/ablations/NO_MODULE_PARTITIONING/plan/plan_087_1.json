@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the relevant modules from x_transformers",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 2 and sequence length of 10",
+    "Define the model dimensions: dim = 64, heads = 8",
+    "Instantiate the AlibiPositionalBias class with heads = 8 and total_heads = 8",
+    "Create random input tensors for query and key with shape (batch_size, sequence_length, dim): query = torch.randn(batch_size, 10, dim), key = torch.randn(batch_size, 10, dim)",
+    "Create a random tensor for custom positions with shape (batch_size, sequence_length, 1): custom_pos = torch.randn(batch_size, 10, 1)",
+    "Set the attention parameters: attn_flash = True",
+    "Call the forward method of the AlibiPositionalBias instance with custom positions: bias = alibi_positional_bias.forward_custom_pos(custom_pos, custom_pos)",
+    "Check the shape of the bias tensor: assert bias.shape == (batch_size, 1, 10, 10)",
+    "Create a random tensor for attention logits with shape (batch_size, heads, sequence_length, sequence_length): attn_logits = torch.randn(batch_size, heads, 10, 10)",
+    "Call the flash attention function with the query, key, value, and bias: output, intermediates = flash_attn(query, key, attn_logits, attn_bias=bias)",
+    "Verify that the output tensor does not contain NaN values: assert not torch.isnan(output).any()",
+    "Log the output shape to ensure it matches expected dimensions: print('Output shape:', output.shape)",
+    "Assert that the output shape is correct: assert output.shape == (batch_size, heads, 10, dim)"
+]
+```

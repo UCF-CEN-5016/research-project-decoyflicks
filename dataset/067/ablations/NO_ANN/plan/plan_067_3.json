@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, from transformers import AutoTokenizer, TFAutoModelForQuestionAnswering, from datasets import load_dataset",
+    "Set the model checkpoint to 'distilbert-base-cased'",
+    "Load the SQUAD dataset using datasets = load_dataset('squad')",
+    "Print the first training example to verify the structure: print(datasets['train'][0])",
+    "Define a max_length of 384 and a doc_stride of 128 for tokenization",
+    "Create a function prepare_train_features that tokenizes the input data with truncation='only_second', max_length=max_length, stride=doc_stride, return_overflowing_tokens=True, return_offsets_mapping=True, and padding='max_length'",
+    "Inside prepare_train_features, ensure to append start_positions and end_positions to tokenized_examples",
+    "Use datasets.map to apply prepare_train_features on the training set with batched=True and remove_columns=datasets['train'].column_names",
+    "Convert the tokenized datasets to numpy format: train_set = tokenized_datasets['train'].with_format('numpy')",
+    "Initialize the model using model = TFAutoModelForQuestionAnswering.from_pretrained(model_checkpoint)",
+    "Set the optimizer to keras.optimizers.Adam with learning_rate=5e-5",
+    "Compile the model using model.compile(optimizer=optimizer) without specifying a loss function",
+    "Fit the model using model.fit(train_set, validation_data=validation_set, epochs=1)",
+    "Create a context and question for inference: context = 'Keras is an API designed for human beings...'; question = 'What is Keras?'",
+    "Tokenize the context and question using inputs = tokenizer([context], [question], return_tensors='np')",
+    "Run inference: outputs = model(inputs)",
+    "Extract start and end positions: start_position = tf.argmax(outputs.start_logits, axis=1); end_position = tf.argmax(outputs.end_logits, axis=1)",
+    "Print the start and end positions to verify the output: print(int(start_position), int(end_position[0]))",
+    "Check the shape of the model's output logits to confirm they match the expected dimensions",
+    "Assert that the model's output does not produce valid predictions due to incorrect label dimensions"
+]
+```

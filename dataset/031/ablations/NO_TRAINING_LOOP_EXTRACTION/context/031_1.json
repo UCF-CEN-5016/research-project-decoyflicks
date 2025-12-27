@@ -1,0 +1,11 @@
+{
+  "bug_report": "031",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "Tools/PyTorch/TimeSeriesPredictionPlatform/models/tft_pyt/triton/deployment_toolkit/perf_analyzer/exceptions.py",
+    "content": "class PerfAnalyzerException(Exception):\n    def __init__(self, message: str):\n        self._message = message\n\n    def __str__(self):\n        \"\"\"\n        Get the exception string representation.\n\n        Returns\n        -------\n        str\n            The message associated with this exception, or None if no message.\n        \"\"\"\n        return self._message\n\n    @property\n    def message(self):\n        \"\"\"\n        Get the exception message.\n\n        Returns\n        -------\n        str\n            The message associated with this exception, or None if no message.\n        \"\"\"\n        return self._message\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

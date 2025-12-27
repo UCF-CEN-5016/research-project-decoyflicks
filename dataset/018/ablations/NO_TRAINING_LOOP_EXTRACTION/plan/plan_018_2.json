@@ -1,0 +1,18 @@
+```json
+[
+    "Ensure Python 3.8 or higher is installed on your Arch Linux system.",
+    "Install pip if it is not already installed by running 'sudo pacman -S python-pip'.",
+    "Verify pip version is 20.3 or higher by running 'pip --version'.",
+    "Clone the TensorFlow models repository using 'git clone https://github.com/tensorflow/models.git'.",
+    "Navigate to the object detection directory using 'cd models/research/object_detection'.",
+    "Create a virtual environment using 'python -m venv tfod2_env'.",
+    "Activate the virtual environment using 'source tfod2_env/bin/activate'.",
+    "Upgrade pip to the latest version using 'pip install --upgrade pip'.",
+    "Attempt to install TensorFlow Object Detection API by running 'python -m pip install --use-feature=2020-resolver .'",
+    "Capture the output of the command to verify if the error occurs.",
+    "Check the error message for 'option --use-feature: invalid choice: '2020-resolver' (choose from 'fast-deps', 'truststore','no-binary-enable-wheel-cache')'.",
+    "Confirm that the error message matches the expected output indicating the bug.",
+    "Deactivate the virtual environment using 'deactivate'.",
+    "Remove the virtual environment using 'rm -rf tfod2_env'."
+]
+```

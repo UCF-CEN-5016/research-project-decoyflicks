@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and necessary modules: import tensorflow as tf and from official.vision.modeling.layers.detection_generator import _generate_detections_v2_class_aware",
+    "Define a batch size of 1 for testing purposes.",
+    "Create an empty tensor for predicted boxes with shape (batch_size, 0, 4) to simulate zero predicted boxes.",
+    "Create a dummy tensor for predicted classes with shape (batch_size, 0) to match the empty predicted boxes.",
+    "Create a dummy tensor for predicted scores with shape (batch_size, 0) to match the empty predicted boxes.",
+    "Prepare a dictionary to simulate the predictions input: predictions = {'detection_boxes': [empty_tensor], 'detection_classes': [empty_classes], 'detection_scores': [empty_scores]}",
+    "Call the _generate_detections_v2_class_aware function with the prepared predictions dictionary.",
+    "Wrap the function call in a try-except block to catch the ValueError.",
+    "Print the error message if ValueError is raised to confirm the bug occurrence.",
+    "Assert that the caught exception message contains 'List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2' to validate the specific bug."
+]
+```

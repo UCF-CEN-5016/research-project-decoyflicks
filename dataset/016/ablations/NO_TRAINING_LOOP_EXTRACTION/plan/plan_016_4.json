@@ -1,0 +1,21 @@
+```json
+[
+    "Set up a multi-node environment with at least 2 nodes, each with 2 Tesla V100 GPUs.",
+    "Install TensorFlow 2.11.0 with GPU support on both nodes using 'pip install tensorflow-gpu==2.11.0'.",
+    "Ensure CUDA 11.0 and cuDNN compatible with TensorFlow 2.11.0 are installed on both nodes.",
+    "Create a directory for the TensorFlow Model Garden on both nodes: '/home/cdacapp1/scaling/models-master'.",
+    "Clone the TensorFlow Model Garden repository from GitHub: 'git clone https://github.com/tensorflow/models.git'.",
+    "Navigate to the image classification directory on both nodes: 'cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification'.",
+    "Set the PYTHONPATH environment variable on both nodes: 'export PYTHONPATH=\"$PYTHONPATH:/home/cdacapp1/scaling/models-master\"'.",
+    "Prepare the dataset by ensuring the ImageNet TFRecords are available at '/scratch/cdacapp1/sowmya/actual_imagenet/tf_records' on both nodes.",
+    "Create a model directory for checkpoints on both nodes: 'mkdir -p /home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss'.",
+    "Activate the conda environment on both nodes: 'source /home/apps/anaconda3/bin/activate && conda activate tf11'.",
+    "Create a configuration file 'gpu.yaml' on node 1 with the following content: 'runtime:\n  distribution_strategy: multi_worker_mirrored\n  worker_hosts: ip1:6655,ip2:6655\n  num_gpus: 2\n  task_index: 0'.",
+    "Create a configuration file 'gpu1.yaml' on node 2 with the following content: 'runtime:\n  distribution_strategy: multi_worker_mirrored\n  worker_hosts: ip1:6655,ip2:6655\n  num_gpus: 2\n  task_index: 1'.",
+    "On node 1, run the training script with the command: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss --data_dir=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records --config_file=configs/examples/resnet/imagenet/gpu.yaml'.",
+    "On node 2, run the training script with the command: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss --data_dir=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records --config_file=configs/examples/resnet/imagenet/gpu1.yaml'.",
+    "Monitor the training logs on both nodes for throughput metrics during execution.",
+    "Record the throughput values observed on both nodes and compare them to the expected scaling throughput.",
+    "Validate that the throughput does not increase beyond the single GPU performance, indicating the bug is present."
+]
+```

@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: argparse, subprocess, re, tempfile, sys, and pathlib",
+    "Define a function 'parser()' to handle command line arguments with the following parameters: --model (str), --lang (str), --audio (list of str)",
+    "Set the model path to a valid MMS ASR model file, e.g., '../fairseq_resource/mms1b_all.pt'",
+    "Prepare a list of audio files for testing, e.g., ['audio1.wav', 'audio2.wav', 'audio3.wav', 'audio4.wav', 'audio5.wav', 'audio6.wav', 'audio7.wav', 'audio8.wav', 'audio9.wav', 'audio10.wav']",
+    "Create a temporary directory using tempfile.TemporaryDirectory() to store manifest files",
+    "Within the temporary directory, create a 'dev.tsv' file and write the paths of the audio files along with their sample counts",
+    "Create a 'dev.uid' file in the temporary directory and write the audio file paths to it",
+    "Create a 'dev.ltr' file in the temporary directory and write dummy data for the language model",
+    "Create a 'dev.wrd' file in the temporary directory and write dummy data for word recognition",
+    "Construct the command string for running the inference script, ensuring to include the model path, temporary directory, and audio language",
+    "Run the constructed command using subprocess.run() with shell=True and redirect stdout to subprocess.DEVNULL",
+    "Read the output from 'hypo.word' file in the temporary directory to capture the ASR outputs",
+    "Implement the 'reorder_decode()' function to parse and sort the ASR outputs based on their indices",
+    "Print the input audio file paths and their corresponding ASR outputs in the order they were processed",
+    "Run the script with the command: python -u examples/mms/asr/infer/mms_infer.py --model ../fairseq_resource/mms1b_all.pt --lang 'eng' --audio audio1.wav audio2.wav audio3.wav audio4.wav audio5.wav audio6.wav audio7.wav audio8.wav audio9.wav audio10.wav",
+    "Capture the output logs and compare the order of the ASR outputs with the order of the input audio files",
+    "Assert that the order of the ASR outputs does not match the order of the input audio files, indicating the bug is present"
+]
+```

@@ -1,0 +1,23 @@
+learned_gaussian_diffusion issue
+
+When you use LearnedGaussianDiffusion class, which inherits the GaussianDiffusion class, if you use DDIM sampling, you will get the following error
+```
+TypeError: model_predictions() got multiple values for argument 'clip_x_start'
+```
+
+This is because in the class function `ddim_sample()` in the GaussianDiffusion class, the `model_predictions()` function is called like this
+```python
+for time, time_next in tqdm(time_pairs, desc="sampling loop time step"):
+	time_cond = torch.full((batch,), time, device=device, dtype=torch.long)
+	self_cond = x_start if self.self_condition else None
+	pred_noise, x_start, *_ = self.model_predictions(
+	    img, time_cond, self_cond, clip_x_start=True, rederive_pred_noise=True
+	)
+```
+
+while the overridden `model_predictions()` function in the LearnedGaussianDiffusion class has the following signature
+```python
+def model_predictions(self, x, t, clip_x_start = False):
+```
+
+I'm wondering if there's a solution to this problem.

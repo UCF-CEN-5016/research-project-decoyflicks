@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from tensorflow import keras and from tensorflow.keras import layers",
+    "Set the TensorFlow version to 2.10.0 to match the reported bug environment",
+    "Define the base path for the Oxford Pets dataset: BASE_PATH = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'",
+    "Download and extract the dataset using tf.keras.utils.get_file()",
+    "Load the dataset into a training and validation set using keras.preprocessing.image_dataset_from_directory() with a batch size of 32 and image size of (128, 128)",
+    "Define the number of classes based on the dataset: num_classes = 3 (for background, cat, dog)",
+    "Create a model using keras.Sequential() with layers: Conv2D, MaxPooling2D, Flatten, Dense with num_classes output",
+    "Compile the model using model.compile() with loss='sparse_categorical_crossentropy', optimizer='adam', and metrics=['accuracy']",
+    "Prepare the labels by creating a one-hot encoded version of the labels with shape (num_samples, num_classes)",
+    "Modify the labels to have an extra dimension by reshaping them to (num_samples, num_classes, 1)",
+    "Train the model using model.fit() with the training dataset and validation dataset for 10 epochs",
+    "Verify the model's output shape after training to ensure it is (batch_size, num_classes, 1)",
+    "Check the loss value during training to confirm it is not decreasing as expected",
+    "Assert that the loss value is significantly higher than expected (e.g., > 1.0) indicating poor performance",
+    "Log the model summary to confirm the output layer shape is (None, num_classes, 1)",
+    "Print the first few predictions to verify the output shape is (batch_size, num_classes, 1) instead of (batch_size, num_classes)"
+]
+```

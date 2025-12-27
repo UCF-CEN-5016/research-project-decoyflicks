@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: numpy, matplotlib, keras, and keras.layers",
+    "Set the random seed for reproducibility using np.random.seed(42)",
+    "Define image dimensions: set image_size to 72 and patch_size to 16",
+    "Load the CIFAR-10 dataset using keras.datasets.cifar10.load_data()",
+    "Extract the training images and labels from the dataset: x_train, y_train = cifar10.load_data()",
+    "Normalize the training images by converting them to float32 and scaling to the range [0, 1]: x_train = x_train.astype('float32') / 255",
+    "Select a random image from x_train using np.random.choice(range(x_train.shape[0]))",
+    "Display the selected image using plt.imshow() and plt.axis('off')",
+    "Resize the selected image to (image_size, image_size) using keras.ops.image.resize()",
+    "Convert the resized image to a tensor using ops.convert_to_tensor()",
+    "Create an instance of the Patches class with patch_size as an argument",
+    "Call the Patches instance with the resized image tensor and store the result in patches",
+    "Print the shape of patches to verify the output dimensions",
+    "Calculate the number of patches per image and elements per patch using patches.shape",
+    "Set up a loop to iterate over the patches and display each patch using plt.imshow()",
+    "Inside the loop, reshape each patch to (patch_size, patch_size, 3) using ops.reshape()",
+    "Convert the reshaped patch to a numpy array using ops.convert_to_numpy()",
+    "Run the code cell to trigger the InvalidArgumentError when calling Patches.call()",
+    "Capture the error message and verify it matches the expected InvalidArgumentError regarding tensor types"
+]
+```

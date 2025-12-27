@@ -1,0 +1,18 @@
+TITLE  
+Pad value not utilized in `align_right` function
+
+SYMPTOMS  
+• The `pad_id` parameter is not being applied in the `align_right` function.  
+• The call to `F.pad(..., value=0)` does not incorporate the intended padding value.  
+• Results in incorrect padding behavior during tensor alignment.
+
+EXPECTED BEHAVIOR  
+The `align_right` function should utilize the `pad_id` parameter to set the padding value when calling `F.pad(...)`, ensuring that the specified padding is correctly applied to the tensor.
+
+REPRODUCTION STEPS  
+1. Open the `autoregressive_wrapper.py` file in the specified GitHub repository.  
+2. Navigate to the `align_right` function implementation.  
+3. Observe the usage of the `pad_id` parameter in the function.  
+4. Call the `align_right` function with a tensor and a specific `pad_id`.  
+5. Inspect the output tensor to verify the padding value used.  
+6. Confirm that the output does not reflect the expected `pad_id` value.

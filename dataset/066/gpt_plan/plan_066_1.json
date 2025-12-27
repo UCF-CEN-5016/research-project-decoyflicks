@@ -1,0 +1,19 @@
+[
+  "Clone or download the keras-io repository from GitHub to access the mirnet.py example file",
+  "Navigate to the file path examples/vision/mirnet.py in the repository",
+  "Open mirnet.py and locate line 347 where the variable level2_dau_2 is assigned",
+  "Confirm that level2_dau_2 is assigned a valid Keras tensor or layer output but is never subsequently used in the code",
+  "Locate line 352 where the function selective_kernel_feature_fusion is called with parameters level1_dau_2, level3_dau_2, level3_dau_2",
+  "Note the potential typo: the second argument should likely be level2_dau_2 instead of level3_dau_2",
+  "Modify line 352 to call selective_kernel_feature_fusion(level1_dau_2, level2_dau_2, level3_dau_2) to test the hypothesis",
+  "Set up a minimal test script that imports the mirnet model definition from mirnet.py or directly include the relevant code snippet containing level1_dau_2, level2_dau_2, level3_dau_2 and the selective_kernel_feature_fusion call",
+  "Define input tensors with concrete shapes matching the model expectations (e.g., batch size 1, spatial dimensions and channels consistent with the MIRNet architecture)",
+  "Run the model building process with the original line 352 (using level3_dau_2 twice) and capture the model summary and outputs",
+  "Check for any warnings or errors indicating unused variables or potential inefficiencies in the model graph",
+  "Run the model building process again with the modified line 352 using level2_dau_2 as the second argument",
+  "Compare model summaries, layer connections, and output tensor shapes between the original and modified versions",
+  "Assert that in the original version, level2_dau_2 does not contribute to the output graph (e.g., no inbound or outbound connections)",
+  "Assert that in the modified version, level2_dau_2 is correctly integrated into the selective_kernel_feature_fusion call and affects the output tensor",
+  "Optionally, run inference on dummy input data (e.g., random tensors with shape (1, H, W, C)) through both versions and compare outputs to confirm behavioral differences due to the typo",
+  "Document that the bug manifests as an unused variable assignment and a likely incorrect feature fusion call causing suboptimal network connectivity"
+]

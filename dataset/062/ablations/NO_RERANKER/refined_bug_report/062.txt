@@ -1,0 +1,20 @@
+TITLE  
+AttributeError: 'DataFrame' object has no attribute 'append' in masked_language_modeling.ipynb
+
+SYMPTOMS  
+• The code encounters an AttributeError when attempting to use the `append` method on a DataFrame.  
+• The following error message is displayed:  
+  `AttributeError: 'DataFrame' object has no attribute 'append'`  
+• A FutureWarning is issued indicating that the `frame.append` method is deprecated and will be removed in a future version of pandas:  
+  `FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.`  
+
+EXPECTED BEHAVIOR  
+The code should successfully append the `test_df` DataFrame to the `train_df` DataFrame, resulting in a combined DataFrame without raising any errors or warnings.
+
+REPRODUCTION STEPS  
+1. Open the `masked_language_modeling.ipynb` notebook.  
+2. Ensure the following libraries are imported: `pandas`, `TensorFlow`, etc.  
+3. Execute the cell containing the code:  
+   `all_data = train_df.append(test_df)`  
+4. Observe the resulting error message indicating the absence of the `append` attribute.  
+5. Note the FutureWarning about the deprecation of the `append` method.

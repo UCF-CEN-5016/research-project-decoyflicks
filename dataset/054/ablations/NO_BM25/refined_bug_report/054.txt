@@ -1,0 +1,17 @@
+TITLE  
+Using Test Set as Validation Set in PointNet Example
+
+SYMPTOMS  
+• The model is trained using the test dataset as the validation dataset, which can lead to overly optimistic performance metrics.  
+• This practice undermines the integrity of the model evaluation process.  
+• The model may exhibit poor performance on unseen data due to leakage of information from the test set into the training process.  
+
+EXPECTED BEHAVIOR  
+The model should be trained using a separate validation dataset to ensure that performance metrics accurately reflect the model's ability to generalize to unseen data. The validation set should not overlap with the test set to maintain the integrity of the evaluation process.
+
+REPRODUCTION STEPS  
+1. Open the file `examples/vision/pointnet.py`.  
+2. Navigate to line 263.  
+3. Observe the line of code: `model.fit(train_dataset, epochs=20, validation_data=test_dataset)`.  
+4. Note that `test_dataset` is incorrectly used as `validation_data`.  
+5. Modify the code to use a proper validation dataset that is distinct from the test dataset.

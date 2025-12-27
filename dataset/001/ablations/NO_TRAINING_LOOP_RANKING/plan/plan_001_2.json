@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from syntaxnet, including GreedyParser, StructuredGraphBuilder, and gen_parser_ops.",
+    "Set the task context path to a valid directory containing the required input data and parameters for feature extractors.",
+    "Define the model path to a pre-trained model file that exists in the specified directory.",
+    "Set the hidden layer sizes to '200,200' and batch size to 32.",
+    "Set the beam size to 8 and max steps to 1000.",
+    "Create a TensorFlow session to initialize the model.",
+    "Call the gen_parser_ops.feature_size function with the task context to retrieve feature_sizes, domain_sizes, embedding_dims, and num_actions.",
+    "Instantiate the GreedyParser with num_actions, feature_sizes, domain_sizes, embedding_dims, and hidden_layer_sizes.",
+    "Add evaluation to the parser using the AddEvaluation method with the input corpus name set to 'stdin' and output corpus name set to 'stdout'.",
+    "Run the session to initialize the parser and restore the model parameters from the specified model path.",
+    "Create a placeholder for sink_documents and set up the document_sink operation with the task context and output corpus name.",
+    "Start a loop to run the evaluation, capturing tf_eval_epochs, tf_eval_metrics, and tf_documents from the session.",
+    "Log the number of processed documents and update num_tokens and num_correct based on tf_eval_metrics.",
+    "Monitor the loss during training and check for NaN values in the loss calculation.",
+    "Log the GPU memory usage before and after the evaluation loop to check for excessive memory consumption.",
+    "Assert that the GPU memory usage exceeds 10G during the execution of the evaluation loop."
+]
+```

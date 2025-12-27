@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the official TensorFlow Object Detection API.",
+    "Set the CUDA version to 11.5 and TensorFlow version to 2.4 in the environment.",
+    "Create a Python virtual environment and activate it.",
+    "Install TensorFlow with GPU support using 'pip install tensorflow-gpu==2.4'.",
+    "Install additional dependencies: 'pip install pandas scikit-image sklearn webcolors'.",
+    "Download the Faster R-CNN ResNet50 model trained on COCO dataset using the TensorFlow Model Zoo.",
+    "Prepare a sample dataset of images for inference, ensuring they are in the correct format (e.g., JPEG or PNG).",
+    "Create a configuration file for the model export, ensuring it matches the trained model's parameters.",
+    "Run the training script 'model_main_tf2.py' with the appropriate flags to train the model on the sample dataset.",
+    "After training, verify that the model checkpoint is saved correctly in the specified directory.",
+    "Run the export script 'exporter_main_v2.py' with the trained model checkpoint path and the output directory.",
+    "Set the input parameters for the export script, including the input shape (640, 640) and the output directory.",
+    "Monitor the console output for any errors during the export process.",
+    "When the export script is executed, assert that the error 'AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs'' is raised.",
+    "Log the full stack trace of the error for further analysis.",
+    "Verify that the 'DetectionFromImageModule' class is correctly imported and instantiated in the export script.",
+    "Check the version compatibility of the TensorFlow Object Detection API with TensorFlow 2.4 to ensure no breaking changes exist."
+]
+```

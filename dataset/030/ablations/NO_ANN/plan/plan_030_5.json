@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import torch, import os, import sys",
+    "Set the environment variable for CUDA: os.environ['CUDA_VISIBLE_DEVICES'] = '0'",
+    "Define the training parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10",
+    "Prepare the command to run the training script: command = '!python ../main.py --brats --brats22_model --scheduler --learning_rate {} --epochs {} --fold {} --gpus {} --task {} --nfolds {} --save_ckpt'.format(learning_rate, epochs, fold, gpus, task, nfolds)",
+    "Create a mock dataset for BraTS21 and BraTS22 with dimensions: training examples = 1125, validation examples = 126, test examples = 1251",
+    "Ensure the dataset is structured correctly: create directories for training, validation, and test data under a base path",
+    "Run the command to start training: os.system(command)",
+    "Capture the output of the training command to check for errors: output = os.popen(command).read()",
+    "Check if the output contains the string 'MisconfigurationException': assert 'MisconfigurationException' in output",
+    "Verify the specific error message about the lr scheduler: assert 'CosineAnnealingWarmRestarts' in output",
+    "Log the output for debugging purposes: print(output)",
+    "Ensure that the PyTorch Lightning version is compatible: assert pl.__version__ == '2.2.0'",
+    "Check the installed CUDA version: assert torch.version.cuda == '12.1'",
+    "Confirm that the GPU is available: assert torch.cuda.is_available() == True",
+    "Validate that the model is initialized correctly before training: assert model is not None",
+    "Ensure that the lr_scheduler is set to 'CosineAnnealingWarmRestarts' in the model configuration"
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import tensorflow as tf, from keras import layers, Model, optimizers",
+    "Set a random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Define constants: set BATCH_SIZE to 32, set INPUT_SHAPE to (28, 28, 28, 1), set NUM_CLASSES to 11, set EPOCHS to 20",
+    "Create synthetic training data: generate train_videos with shape (100, 28, 28, 28, 1) and train_labels with shape (100,)",
+    "Create synthetic validation data: generate valid_videos with shape (20, 28, 28, 28, 1) and valid_labels with shape (20,)",
+    "Create synthetic test data: generate test_videos with shape (20, 28, 28, 28, 1) and test_labels with shape (20,)",
+    "Define a preprocess function that normalizes the input frames and casts labels to float32",
+    "Define a prepare_dataloader function that creates a tf.data.Dataset from videos and labels, shuffles if training, and applies the preprocess function",
+    "Prepare the data loaders: trainloader = prepare_dataloader(train_videos, train_labels, 'train'), validloader = prepare_dataloader(valid_videos, valid_labels, 'valid'), testloader = prepare_dataloader(test_videos, test_labels, 'test')",
+    "Define a simple model architecture using Keras: create a function create_model that returns a Model with an Input layer, a Conv3D layer, and a Dense output layer",
+    "Compile the model with Adam optimizer and sparse categorical crossentropy loss",
+    "Fit the model using model.fit with trainloader as the training data and testloader as the validation data",
+    "Verify that the model is trained using the test set as validation set by checking the output of model.fit for validation metrics",
+    "Assert that the validation accuracy is higher than expected, indicating potential overfitting due to using the test set as validation"
+]
+```

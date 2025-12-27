@@ -1,0 +1,21 @@
+```json
+[
+    "Ensure Python version is 3.12.3 by running 'python --version'",
+    "Create a new virtual environment using 'python -m venv venv'",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows",
+    "Install the required libraries from the requirements file using 'pip install -r requirements.txt'",
+    "Verify that the 'transformers' library is installed by running 'pip show transformers'",
+    "Check the installed version of 'transformers' using 'pip show transformers' and ensure it supports DeepSpeed",
+    "Create a new Python script named 'test_deepspeed_import.py'",
+    "In 'test_deepspeed_import.py', add the following import statement: 'from transformers.deepspeed import HfDeepSpeedConfig'",
+    "Run the script using 'python test_deepspeed_import.py' to check for ModuleNotFoundError",
+    "If the error occurs, create a new script named 'e2e_rlhf.py'",
+    "In 'e2e_rlhf.py', add the following import statements: 'import torch', 'from transformers import AutoConfig, AutoTokenizer, AutoModelForCausalLM', 'from transformers.deepspeed import HfDeepSpeedConfig'",
+    "Define a function 'main()' in 'e2e_rlhf.py' that includes the following parameters: actor_model='facebook/opt-1.3b', reward_model='facebook/opt-350m', deployment_type='single_gpu'",
+    "Inside 'main()', add a print statement to confirm the function is running: 'print(\"Running e2e_rlhf with models:\", actor_model, reward_model, deployment_type)'",
+    "Call the 'main()' function at the end of 'e2e_rlhf.py'",
+    "Run the script using 'python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu'",
+    "Observe the output for 'ModuleNotFoundError: No module named 'transformers.deepspeed' to confirm the bug is reproduced",
+    "Log the complete error message for further analysis"
+]
+```

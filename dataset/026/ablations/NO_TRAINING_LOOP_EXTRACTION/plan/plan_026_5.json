@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: tensorflow, numpy, and matplotlib",
+    "Set the TensorFlow version to 2.10.0 by running '!pip install tensorflow==2.10.0'",
+    "Import the object detection utilities from tensorflow: from object_detection.utils import ops as utils_ops",
+    "Load the pre-trained model from TensorFlow Hub using tf.saved_model.load()",
+    "Prepare a sample image for inference by loading an image using matplotlib and converting it to a numpy array",
+    "Ensure the image is resized to the expected input size of the model, e.g., (640, 640, 3)",
+    "Run the model on the prepared image to get the detection results",
+    "Extract the detection results: image_info, detection_classes, detection_scores, detection_boxes, detection_masks, num_detections",
+    "Check the shape of detection_boxes and ensure it matches the expected dimensions",
+    "Call the function utils_ops.reframe_box_masks_to_image_masks() with parameters: detection_masks, detection_boxes, image_np.shape[1], image_np.shape[2]",
+    "Verify that the function call raises a TypeError with the message 'Got an unexpected keyword argument 'box_ind''",
+    "Log the output of the detection results to confirm the presence of the expected keys: image_info, detection_classes, detection_scores, detection_boxes, detection_masks, num_detections",
+    "Print the shape of detection_masks and detection_boxes to validate their dimensions before the function call",
+    "Ensure that the environment is set up in Google Colab to replicate the issue, including the correct TensorFlow version and necessary imports"
+]
+```

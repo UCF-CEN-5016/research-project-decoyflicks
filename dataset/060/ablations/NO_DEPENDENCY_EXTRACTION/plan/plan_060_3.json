@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and KerasCV modules",
+    "Set the batch size to 32 and image dimensions to 160x160",
+    "Define the AUTOTUNE variable as tf.data.AUTOTUNE",
+    "Load the Oxford Pets dataset using tfds.load with split=['train[:90%]', 'train[90%:]']",
+    "Define the augment_fn function to apply random augmentations to images and masks",
+    "Define the unpackage_inputs function to separate images and masks from the dataset",
+    "Create the training dataset train_ds by applying the prepare_dataset function to the loaded dataset",
+    "Create the validation dataset val_ds by applying the prepare_dataset function to the validation split",
+    "Create augmented_train_ds by shuffling train_ds with BATCH_SIZE * 2, mapping augment_fn, batching with BATCH_SIZE, mapping unpackage_inputs, and prefetching with buffer_size=tf.data.AUTOTUNE",
+    "Create resized_val_ds by mapping resize_fn to val_ds, batching with BATCH_SIZE, mapping unpackage_inputs, and prefetching with buffer_size=tf.data.AUTOTUNE",
+    "Run the code cell that creates augmented_train_ds and resized_val_ds",
+    "Capture the output and check for TypeError in the console",
+    "Verify that the error message indicates a mismatch in tensor data types between branches in tf.switch_case"
+]
+```

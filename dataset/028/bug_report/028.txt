@@ -1,0 +1,40 @@
+`vision_transformer` `num_classes` 16 instead 10 for CIFAR10 dataset.
+
+## Context
+<!--- How has this issue affected you? What are you trying to accomplish? -->
+<!--- Providing context helps us come up with a solution that is most useful in the real world -->
+* Pytorch version: 2.0.1+cu117
+* Operating System and version: Window subsystem (Ubuntu 22.04.2 LTS)
+
+## Your Environment
+<!--- Include as many relevant details about the environment you experienced the bug in -->
+* Installed using source? [yes/no]: no
+* Are you planning to deploy it using docker container? [yes/no]: no
+* Is it a CPU or GPU environment?: GPU
+* Which example are you using: vision_transformer
+* Link to code or data to repro [if any]: [vision_transformer](https://github.com/pytorch/examples/tree/6fc19c76b9f5550d8d3cb38284845ac7ed14223c/vision_transformer)
+
+## Expected Behavior
+<!--- If you're describing a bug, tell us what should happen -->
+From there:
+
+https://github.com/pytorch/examples/blob/6fc19c76b9f5550d8d3cb38284845ac7ed14223c/vision_transformer/main.py#L228C1-L229C88
+
+The default `num_classes` should equal to 10 for CIFAR10 dataset.
+
+## Current Behavior
+<!--- If describing a bug, tell us what happens instead of the expected behavior -->
+The default `num_classes` equals to 16 instead.
+
+## Possible Solution
+<!--- Not obligatory, but suggest a fix/reason for the bug -->
+Just change `num_classes` to 10.
+
+## Steps to Reproduce
+<!--- Provide a link to a live example, or an unambiguous set of steps to -->
+<!--- reproduce this bug. Include code to reproduce, if relevant -->
+...
+
+## Failure Logs [if any]
+<!--- Provide any relevant log snippets or files here. -->
+

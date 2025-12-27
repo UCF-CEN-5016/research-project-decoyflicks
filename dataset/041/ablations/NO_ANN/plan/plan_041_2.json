@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: torch, dalle_pytorch, and any other required modules.",
+    "Set the environment to use Python 3.9.13 and install PyTorch 1.12.0 and torchvision 0.13.0.",
+    "Create a directory named 'data' to store the model file.",
+    "Generate a dataset of images and captions to be used for training DALL-e. Ensure the dataset is structured correctly.",
+    "Define a batch size of 8 and an image size of 128.",
+    "Create a variable 'dalle_model_file' and set it to 'data/rainbow_dalle.model'.",
+    "Check if 'dalle_model_file' exists. If not, proceed to the next step.",
+    "Prepare training data: Create 'captions_array' and 'all_image_codes' with appropriate dimensions (e.g., captions_array.shape = (num_samples, max_caption_length), all_image_codes.shape = (num_samples, num_image_tokens)).",
+    "Create a 'captions_mask' tensor with the same number of samples as 'captions_array' and appropriate dimensions (e.g., captions_mask.shape = (num_samples, max_caption_length)).",
+    "Define the 'fit' function that takes parameters: model, optimizer, criterion, scheduler, train_x, train_y, epochs, batch_size, model_file, trainer, and n_train_samples.",
+    "Inside the 'fit' function, set the model to training mode and zero the gradients of the optimizer.",
+    "Call the 'trainer' function with the model, train_x, train_y, and other parameters.",
+    "Define the 'train_dalle_batch' function that takes parameters: vae, train_data, _, idx, __.",
+    "Inside 'train_dalle_batch', unpack 'train_data' into 'text', 'image_codes', and 'mask'.",
+    "Call the DALL-e model with the parameters: text[idx, ...], image_codes[idx, ...], mask=mask[idx, ...], return_loss=True.",
+    "Run the training loop for a specified number of epochs (e.g., 200 epochs).",
+    "During the training loop, assert that the model is called with the 'mask' argument.",
+    "Execute the training script and monitor for the TypeError: 'forward() got an unexpected keyword argument 'mask'.",
+    "Log the error message and confirm that it matches the expected TypeError."
+]
+```

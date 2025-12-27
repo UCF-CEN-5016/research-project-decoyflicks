@@ -1,0 +1,11 @@
+{
+  "bug_report": "102",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "vector_quantize_pytorch/__init__.py",
+    "content": "from vector_quantize_pytorch.vector_quantize_pytorch import VectorQuantize\nfrom vector_quantize_pytorch.residual_vq import ResidualVQ, GroupedResidualVQ\nfrom vector_quantize_pytorch.random_projection_quantizer import RandomProjectionQuantizer\nfrom vector_quantize_pytorch.finite_scalar_quantization import FSQ\nfrom vector_quantize_pytorch.lookup_free_quantization import LFQ\nfrom vector_quantize_pytorch.residual_lfq import ResidualLFQ, GroupedResidualLFQ\nfrom vector_quantize_pytorch.residual_fsq import ResidualFSQ, GroupedResidualFSQ\nfrom vector_quantize_pytorch.latent_quantization import LatentQuantize\n\nfrom vector_quantize_pytorch.sim_vq import SimVQ\nfrom vector_quantize_pytorch.residual_sim_vq import ResidualSimVQ\n\nfrom vector_quantize_pytorch.utils import Sequential\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the model path to the pre-trained model: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Set the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10",
+    "Run the inference command using subprocess: subprocess.run(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files)",
+    "Capture the output logs from the inference command",
+    "Extract the output text from the inference logs and store it in a variable: output_text = extract_output_text_from_logs(logs)",
+    "Extract the expected text from the reference text file: expected_text = read_expected_text('/path/to/expected_output.txt')",
+    "Compare the order of output_text with expected_text: assert output_text == expected_text, 'Output log order is incorrect'",
+    "Print the output_text and expected_text for manual verification if the assertion fails"
+]
+```

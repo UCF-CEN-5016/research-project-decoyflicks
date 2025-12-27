@@ -1,0 +1,16 @@
+TITLE
+ModuleNotFoundError for 'transformers.deepspeed' when executing script
+
+SYMPTOMS
+• The error "ModuleNotFoundError: No module named 'transformers.deepspeed'" is raised when running the script.
+• The script execution command is: `python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu`.
+• The user has confirmed that all required Python libraries listed in the requirements file were installed prior to running the script.
+• The Python version being used is 3.12.3.
+
+EXPECTED BEHAVIOR
+The script should execute without errors, successfully loading the 'transformers.deepspeed' module and performing the intended operations.
+
+REPRODUCTION STEPS
+1. Ensure Python version is 3.12.3.
+2. Install all required libraries as specified in the requirements file.
+3. Run the command: `python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu`.

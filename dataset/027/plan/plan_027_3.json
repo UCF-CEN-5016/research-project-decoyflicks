@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries and modules from the provided code context, including llama2_model, log_utils, torch, and other required dependencies.",
+    "Define the image size to 128x128 and set a batch size of 32.",
+    "Prepare the Celeba dataset with images resized to 128x128. Ensure that the dataset is properly loaded and shuffled for training.",
+    "Create a generator model using DCGAN architecture, configured to handle 128x128 images. Ensure all layers are correctly defined with appropriate filters and kernel sizes.",
+    "Create a discriminator model using DCGAN architecture, also configured to handle 128x128 images. Ensure all layers are correctly defined with appropriate filters and kernel sizes.",
+    "Define the loss function as Binary Cross Entropy (BCE) Loss, which is commonly used for binary classification tasks like GANs.",
+    "Implement the training loop, iterating over a fixed number of epochs (e.g., 50). In each epoch, sample random noise vectors to generate images and pass real images through the discriminator to get predictions. Calculate both generator and discriminator loss and update their weights using Adam optimizer.",
+    "During the training process, ensure that the batch size is set to 32 for consistency with the dataset preparation step.",
+    "Monitor the training output during each epoch to observe if there are any NaN values in the loss calculation or unexpected errors. Pay special attention to the error message related to the target and input sizes not matching.",
+    "Assert that the error occurs exactly as described in the bug report, where a ValueError is raised due to a mismatch between the target size (torch.Size([128])) and the input size (torch.Size([3200])). This should be observed during the training loop."
+]
+```
+

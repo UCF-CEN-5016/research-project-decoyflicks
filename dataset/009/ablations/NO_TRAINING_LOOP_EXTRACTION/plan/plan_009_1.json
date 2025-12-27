@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from orbit.actions",
+    "Set CUDA version to 11.5 and TensorFlow version to 2.4",
+    "Define a model name as 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'",
+    "Create a temporary directory for saving the model using tempfile.TemporaryDirectory()",
+    "Set the base name for the model export as 'model_export'",
+    "Initialize an instance of ExportFileManager with base_name and max_to_keep=2",
+    "Create a mock model class that simulates DetectionFromImageModule with an __init__ method and a __call__ method",
+    "Assign a dummy output to the model's outputs attribute to simulate a valid state",
+    "Create an instance of the mock model class",
+    "Call the export_saved_model function with the mock model and file manager, passing the model's __call__ method as the signature",
+    "Attempt to access the 'outputs' attribute of the mock model after the export action",
+    "Capture the exception raised during the access of the 'outputs' attribute",
+    "Assert that the exception is of type AttributeError",
+    "Print the exception message to verify it matches 'DetectionFromImageModule' object has no attribute 'outputs'"
+]
+```

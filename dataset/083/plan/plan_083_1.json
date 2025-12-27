@@ -1,0 +1,11 @@
+[
+    "Import PyTorch and the MobileViT module from mobilevit.py",
+    "Define a batch size of 32 and image dimensions of 192x192",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Initialize MobileViT model with dims=(16, 32, 64), channels=(16, 16, 32, 64, 128, 256, 320, 512), num_classes=1000",
+    "Call forward pass of MobileViT model with input data",
+    "Verify output tensor contains NaN values",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold"
+]
+

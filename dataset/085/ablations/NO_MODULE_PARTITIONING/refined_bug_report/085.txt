@@ -1,0 +1,16 @@
+TITLE  
+MAE Code Error in Position Embedding Calculation
+
+SYMPTOMS  
+• The code fails to execute due to a syntax error in the line provided.  
+• The specific line of code is: `tokens = tokens + self.encoder.pos_embedding[:, 1:(num_patches + 1)`  
+• The missing closing bracket results in an incomplete expression, causing the program to crash.
+
+EXPECTED BEHAVIOR  
+The code should correctly concatenate the `tokens` variable with the positional embeddings from `self.encoder.pos_embedding`, allowing for the correct processing of input data without syntax errors.
+
+REPRODUCTION STEPS  
+1. Open the MAE code as described in `README.md`.  
+2. Locate the line containing the code: `tokens = tokens + self.encoder.pos_embedding[:, 1:(num_patches + 1)`  
+3. Attempt to run the code, leading to the syntax error.  
+4. Observe the error message indicating a syntax issue due to the unclosed bracket.

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch and x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the number of tokens as 2049 and the maximum sequence length as 500",
+    "Create a TransformerWrapper instance with the following parameters: num_tokens=2049, max_seq_len=500, use_abs_pos_emb=True, scaled_sinu_pos_emb=True, and attn_layers as a Decoder with dim=1024, depth=24, heads=16, attn_dim_head=64, attn_flash=True, ff_no_bias=True, cross_attend=True",
+    "Define a batch size of 2 and input sequence length of 20 for the decoder input",
+    "Generate random input data for the decoder with shape (2, 20) using torch.randint(0, 2048, (2, 20))",
+    "Create a context tensor filled with random values with shape (2, 4, 1024) using torch.rand(2, 4, 1024)",
+    "Create a context mask tensor filled with all False values with shape (2, 4) using torch.zeros(2, 4, dtype=torch.bool)",
+    "Call the decoder model with the input data, context, and context_mask: out = decoder(input_data, context=context, context_mask=context_mask)",
+    "Check the output tensor 'out' for NaN values using torch.isnan(out).any()",
+    "Assert that the output contains NaN values by checking if the result of the previous step is True"
+]
+```

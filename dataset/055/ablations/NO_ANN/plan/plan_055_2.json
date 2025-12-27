@@ -1,0 +1,30 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, random, and nltk.translate.bleu_score",
+    "Set the Python version to 3.9 and ensure Keras version is 2.15",
+    "Define constants: MAX_SEQUENCE_LENGTH with a value of 40 and TEST_BATCH_SIZE with a value of 1",
+    "Import the data preprocessing functions: eng_tokenizer, spa_tokenizer, and test_pairs from data_preprocessing",
+    "Import the transformer model from the model module",
+    "Define a function decode_sequences that takes input_sentences as a parameter",
+    "Inside decode_sequences, convert input_sentences to a tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH if necessary",
+    "Limit encoder_input_tokens to a maximum length of 40 by slicing if necessary",
+    "Define a nested function next_fn that takes prompt, cache, and index as parameters",
+    "Inside next_fn, call the transformer model with encoder_input_tokens and prompt, and extract logits for the given index",
+    "Set hidden_states to None in next_fn",
+    "Print the shapes of logits, cache, and hidden_states for debugging",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with the start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler with next_fn, prompt, end_token_id, and index=1",
+    "Prepare test_eng_texts and test_spa_texts by extracting from test_pairs",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through the range of test_pairs length, using index i",
+    "Inside the loop, set input_sentence to test_eng_texts[i]",
+    "Call decode_sequences with a list containing input_sentence and store the result in translated",
+    "Convert translated to a numpy array and decode to UTF-8, cleaning up the string",
+    "Split the cleaned translated string into a list of words",
+    "Calculate the BLEU score using modified_precision from nltk for n=4 and append to bleu_score",
+    "Print the mean of bleu_score to verify the output",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler",
+    "Check the output logs for any errors or warnings related to tensor shapes or GPU memory issues",
+    "Assert that a segmentation fault occurs during the execution of the script"
+]
+```

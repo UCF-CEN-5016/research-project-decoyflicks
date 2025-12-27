@@ -1,0 +1,16 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running: !pip install keras keras_cv tensorflow",
+    "Import the necessary libraries by adding the following code: import keras; import keras_cv; import tensorflow as tf; import numpy as np",
+    "Set the random seed for reproducibility by adding: np.random.seed(42); tf.random.set_seed(42)",
+    "Prepare the training data by creating random input data: x_train = np.random.rand(1000, 64, 64, 3) and y_train = np.random.randint(0, 10, (1000,))",
+    "Prepare the validation data by creating random input data: x_val = np.random.rand(200, 64, 64, 3) and y_val = np.random.randint(0, 10, (200,))",
+    "Define a function to load the Fine-tuning Stable Diffusion example code from the Keras website.",
+    "Run the Fine-tuning Stable Diffusion example code to trigger the ImportError by executing the loaded code.",
+    "Observe the output for the ImportError message: ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Verify that the error occurs in the output cell of the Colab notebook.",
+    "Attempt to fix the error by running: !pip install keras==2.12.0",
+    "Re-run the Fine-tuning Stable Diffusion example code to confirm that the error is resolved with the specified Keras version."
+]
+```

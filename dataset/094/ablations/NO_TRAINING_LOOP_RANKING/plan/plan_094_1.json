@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch and ContinuousTransformerWrapper from the appropriate module.",
+    "Set the output dimension to 259, maximum sequence length to 0, number of memory tokens to 20, and maximum memory length to 100.",
+    "Create an instance of ContinuousTransformerWrapper with the specified parameters, including a Decoder with dim=512, depth=6, heads=4, rotary_pos_emb=True, shift_tokens=1, attn_flash=True, attn_onnxable=True, use_rmsnorm=True, and sandwich_norm=True.",
+    "Generate random input tensor x with shape (1, 1024, 512) using torch.randn.",
+    "Create a mask tensor m with shape (1, 1024) where all values are True using torch.randn(1, 1024) > 0.",
+    "Initialize a list of memory tensors mems, each with shape (1, 100, 512), using a list comprehension with torch.zeros.",
+    "Call the net instance with parameters x, mask=m, mems=mems, and return_mems=True, and store the outputs in logits and mems.",
+    "Print the shape of logits to verify the output dimensions.",
+    "Print the shapes of each tensor in mems to verify the memory outputs.",
+    "Repeat the previous steps but set mems=None instead of the initialized mems list.",
+    "Print the shape of logits again to verify the output dimensions when mems is None.",
+    "Compare the outputs from both calls to check for discrepancies, indicating the bug in return_mems functionality."
+]
+```

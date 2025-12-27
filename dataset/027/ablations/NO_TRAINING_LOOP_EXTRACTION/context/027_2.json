@@ -1,0 +1,50 @@
+{
+  "bug_report": "027",
+  "rank": 2,
+  "score": 0.9584088921546936,
+  "main_file": {
+    "path": "distributed/rpc/rnn/rnn.py",
+    "content": "import torch\nimport torch.nn as nn\nimport torch.distributed.rpc as rpc\nfrom torch.distributed.rpc import RRef\n\n\ndef _call_method(method, rref, *args, **kwargs):\n    r\"\"\"\n    a helper function to call a method on the given RRef\n    \"\"\"\n    return method(rref.local_value(), *args, **kwargs)\n\n\ndef _remote_method(method, rref, *args, **kwargs):\n    r\"\"\"\n    a helper function to run method on the owner of rref and fetch back the\n    result using RPC\n    \"\"\"\n    return rpc.rpc_sync(\n        rref.owner(),\n        _call_method,\n        args=[method, rref] + list(args),\n        kwargs=kwargs\n    )\n\n\ndef _parameter_rrefs(module):\n    r\"\"\"\n    Create one RRef for each parameter in the given local module, and return a\n    list of RRefs.\n    \"\"\"\n    param_rrefs = []\n    for param in module.parameters():\n        param_rrefs.append(RRef(param))\n    return param_rrefs\n\n\nclass EmbeddingTable(nn.Module):\n    r\"\"\"\n    Encoding layers of the RNNModel\n    \"\"\"\n    def __init__(self, ntoken, ninp, dropout):\n        super(EmbeddingTable, self).__init__()\n        self.drop = nn.Dropout(dropout)\n        self.encoder = nn.Embedding(ntoken, ninp)\n        if torch.cuda.is_available():\n            self.encoder = self.encoder.cuda()\n        nn.init.uniform_(self.encoder.weight, -0.1, 0.1)\n\n    def forward(self, input):\n        if torch.cuda.is_available():\n            input = input.cuda()\n        return self.drop(self.encoder(input)).cpu()\n\n\nclass Decoder(nn.Module):\n    r\"\"\"\n    Decoding layers of the RNNModel\n    \"\"\"\n    def __init__(self, ntoken, nhid, dropout):\n        super(Decoder, self).__init__()\n        self.drop = nn.Dropout(dropout)\n        self.decoder = nn.Linear(nhid, ntoken)\n        nn.init.zeros_(self.decoder.bias)\n        nn.init.uniform_(self.decoder.weight, -0.1, 0.1)\n\n    def forward(self, output):\n        return self.decoder(self.drop(output))\n\n\nclass RNNModel(nn.Module):\n    r\"\"\"\n    A distributed RNN model which puts embedding table and decoder parameters on\n    a remote parameter server, and locally holds parameters for the LSTM module.\n    The structure of the RNN model is borrowed from the word language model\n    example. See https://github.com/pytorch/examples/blob/main/word_language_model/model.py\n    \"\"\"\n    def __init__(self, ps, ntoken, ninp, nhid, nlayers, dropout=0.5):\n        super(RNNModel, self).__init__()\n\n        # setup embedding table remotely\n        self.emb_table_rref = rpc.remote(ps, EmbeddingTable, args=(ntoken, ninp, dropout))\n        # setup LSTM locally\n        self.rnn = nn.LSTM(ninp, nhid, nlayers, dropout=dropout)\n        # setup decoder remotely\n        self.decoder_rref = rpc.remote(ps, Decoder, args=(ntoken, nhid, dropout))\n\n    def forward(self, input, hidden):\n        # pass input to the remote embedding table and fetch emb tensor back\n        emb = _remote_method(EmbeddingTable.forward, self.emb_table_rref, input)\n        output, hidden = self.rnn(emb, hidden)\n        # pass output to the remote decoder and get the decoded output back\n        decoded = _remote_method(Decoder.forward, self.decoder_rref, output)\n        return decoded, hidden\n\n    def parameter_rrefs(self):\n        remote_params = []\n        # get RRefs of embedding table\n        remote_params.extend(_remote_method(_parameter_rrefs, self.emb_table_rref))\n        # create RRefs for local parameters\n        remote_params.extend(_parameter_rrefs(self.rnn))\n        # get RRefs of decoder\n        remote_params.extend(_remote_method(_parameter_rrefs, self.decoder_rref))\n        return remote_params\n"
+  },
+  "module_snippets": [
+    {
+      "file": "distributed/rpc/rnn/rnn.py",
+      "snippets": [
+        {
+          "lines": "71-104",
+          "code": "class EmbeddingTable(nn.Module):\n    r\"\"\"\n    Encoding layers of the RNNModel\n    \"\"\"\n    def __init__(self, ntoken, ninp, dropout):\n        super(EmbeddingTable, self).__init__()\n        self.drop = nn.Dropout(dropout)\n        self.encoder = nn.Embedding(ntoken, ninp)\n        if torch.cuda.is_available():\n            self.encoder = self.encoder.cuda()\n        nn.init.uniform_(self.encoder.weight, -0.1, 0.1)\n\n    def forward(self, input):\n        if torch.cuda.is_available():\n            input = input.cuda()\n        return self.drop(self.encoder(input)).cpu()\n\nclass Decoder(nn.Module):\n    r\"\"\"\n    Decoding layers of the RNNModel\n    \"\"\"\n    def __init__(self, ntoken, nhid, dropout):\n        super(Decoder, self).__init__()\n        self.drop = nn.Dropout(dropout)\n        self.decoder = nn.Linear(nhid, ntoken)\n        nn.init.zeros_(self.decoder.bias)\n        nn.init.uniform_(self.decoder.weight, -0.1, 0.1)\n\n    def forward(self, output):\n        return self.decoder(self.drop(output))\n\nclass RNNModel(nn.Module):\n    r\"\"\"\n    A distributed RNN model which puts embedding table and decoder parameters on\n    a remote parameter server, and locally holds parameters for the LSTM module.\n    The structure of the RNN model is borrowed from the word language model\n    example. See https://github.com/pytorch/examples/blob/main/word_language_model/model.py\n    \"\"\"\n    def __init__(self, ps, ntoken, ninp, nhid, nlayers, dropout=0.5):\n        super(RNNModel, self).__init__()\n\n        # setup embedding table remotely\n        self.emb_table_rref = rpc.remote(ps, EmbeddingTable, args=(ntoken, ninp, dropout))\n        # setup LSTM locally\n        self.rnn = nn.LSTM(ninp, nhid, nlayers, dropout=dropout)\n        # setup decoder remotely\n        self.decoder_rref = rpc.remote(ps, Decoder, args=(ntoken, nhid, dropout))\n\n    def forward(self, input, hidden):\n        # pass input to the remote embedding table and fetch emb tensor back\n        emb = _remote_method(EmbeddingTable.forward, self.emb_table_rref, input)\n        output, hidden = self.rnn(emb, hidden)\n        # pass output to the remote decoder and get the decoded output back\n        decoded = _remote_method(Decoder.forward, self.decoder_rref, output)\n        return decoded, hidden\n\n    def parameter_rrefs(self):\n        remote_params = []\n        # get RRefs of embedding table\n        remote_params.extend(_remote_method(_parameter_rrefs, self.emb_table_rref))\n        # create RRefs for local parameters\n        remote_params.extend(_parameter_rrefs(self.rnn))\n        # get RRefs of decoder\n        remote_params.extend(_remote_method(_parameter_rrefs, self.decoder_rref))\n        return remote_params"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "torch",
+      "function": "Dropout"
+    },
+    {
+      "module": "torch",
+      "function": "Embedding"
+    },
+    {
+      "module": "torch",
+      "function": "LSTM"
+    },
+    {
+      "module": "torch",
+      "function": "Linear"
+    },
+    {
+      "module": "torch",
+      "function": "RRef"
+    },
+    {
+      "module": "torch",
+      "function": "remote"
+    },
+    {
+      "module": "torch",
+      "function": "rpc_sync"
+    }
+  ]
+}

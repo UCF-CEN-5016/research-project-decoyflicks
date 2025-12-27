@@ -1,0 +1,16 @@
+[
+  "Set up a Colab environment with Python 3.10.12 and TensorFlow 2.13+ to match Keras 3.2.1 compatibility",
+  "Import necessary modules: keras, keras_nlp, tensorflow, tensorflow_datasets, and other standard libraries such as random and numpy",
+  "Load the English-to-Spanish translation example notebook from https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/nlp/ipynb/neural_machine_translation_with_keras_nlp.ipynb",
+  "Run all cells up to and including the model training phase, ensuring the model trains successfully without errors",
+  "Prepare test English sentences dataset as per the example code to supply inputs for prediction",
+  "Define the decode_sequences function as in the example, which internally calls keras_nlp.samplers.GreedySampler() with parameters including end_token_id",
+  "In decode_sequences, call keras_nlp.samplers.GreedySampler() with the arguments that include the unexpected keyword argument 'end_token_id' (e.g., end_token_id=target_vocab['<END>'])",
+  "Call decode_sequences on a batch of test English sentences (e.g., input shape [1] or [2] sentences)",
+  "Execute the code cell that triggers the decode_sequences call and observe the TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id'",
+  "Assert that the error message exactly matches the reported TypeError indicating the unexpected keyword argument 'end_token_id'",
+  "Optionally, verify that the error occurs consistently across multiple runs with the same Keras and TensorFlow version",
+  "Document the exact line and call stack in the trace where keras_nlp.samplers.GreedySampler() is invoked with 'end_token_id'",
+  "Confirm that no modifications were done to the original example code except running it in the environment described",
+  "End the reproduction process after validating the occurrence of the TypeError"
+]

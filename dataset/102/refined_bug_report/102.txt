@@ -1,0 +1,18 @@
+TITLE
+Return Loss Variable Not Defined in ResidualSimVQ
+
+SYMPTOMS
+• `return_loss` is not defined, causing a `NameError`.
+• Shape inconsistencies observed when using quantizer dropout with channels_first data.
+
+EXPECTED BEHAVIOR
+• The code should handle the condition for `should_quantize_dropout` without raising a `NameError`.
+• All tensors in `all_losses` and `all_indicies` should have consistent shapes, especially when dealing with channels_first data.
+
+REPRODUCTION STEPS
+1. Clone or navigate to the repository: https://github.com/lucidrains/vector-quantize-pytorch.
+2. Checkout the commit at `ac5d63174dd234ab75259a68a4ab246774863f6e`.
+3. Run the file `sim_vq.py` which imports and uses the `ResidualSimVQ` class.
+4. Specifically, at line 313 of `sim_vq.py`, observe the condition involving `return_loss`.
+
+Note: The exact steps to reproduce may vary depending on how you are executing or testing this code in your environment.

@@ -1,0 +1,14 @@
+```json
+[
+    "Import the necessary modules: torch, Tensor and List from torch",
+    "Define a batch size of 4 and sequence length of 10",
+    "Create random uniform input data with shape (batch_size, sequence_length, embedding_dim)",
+    "Define an ensemble model with two models, each having a decoder",
+    "Call the forward_decoder function with tokens, encoder_outs, incremental_states from both models",
+    "Verify that the log_probs list contains tensors of shape (batch_size, vocab_size) for both models",
+    "Assert that avg_probs tensor has shape (batch_size, vocab_size)",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold due to large intermediate tensors"
+]
+```
+

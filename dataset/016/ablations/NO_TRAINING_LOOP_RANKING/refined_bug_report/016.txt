@@ -1,0 +1,44 @@
+TITLE  
+Multi-Worker Mirrored Strategy Not Scaling Across Nodes in TensorFlow 2.11
+
+SYMPTOMS  
+• Throughput does not increase when running ResNet50 on multiple nodes with multi-worker mirrored strategy.  
+• Single GPU execution yields approximately 270 examples/sec.  
+• Dual GPU execution within a single node achieves approximately 700 examples/sec.  
+• Multi-node execution maintains throughput equivalent to a single GPU.  
+• No error messages are reported; however, scaling behavior is inconsistent across nodes.
+
+EXPECTED BEHAVIOR  
+When using the multi-worker mirrored strategy, the throughput should increase proportionally with the addition of nodes and GPUs, resulting in higher examples processed per second.
+
+REPRODUCTION STEPS  
+1. Allocate resources using the following command:  
+   `salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive`
+
+2. On the first GPU node (gpu1), execute the following commands:  
+   ```bash
+   cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification
+   export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master"
+   export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records
+   export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss
+   source /home/apps/anaconda3/bin/activate
+   conda activate tf11
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml
+   ```
+
+3. On the second GPU node (gpu2), execute the following commands:  
+   ```bash
+   cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification
+   export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master"
+   export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records
+   export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss
+   source /home/apps/anaconda3/bin/activate
+   conda activate tf11
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml
+   ```
+
+4. Verify the configuration in `gpu.yaml` and `gpu1.yaml` to ensure correct settings for `worker_hosts`, `num_gpus`, and `task_index`.  
+
+5. Monitor the throughput during execution and compare the results across single and multi-node setups.  
+
+6. Check logs for any discrepancies that may indicate configuration issues or network problems affecting performance.

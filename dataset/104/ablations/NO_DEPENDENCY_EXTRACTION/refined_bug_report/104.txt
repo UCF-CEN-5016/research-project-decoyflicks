@@ -1,0 +1,15 @@
+TITLE
+ResidualVQ MLP Initialization Issue
+
+SYMPTOMS
+• MLPs are initialized in ResidualVQ regardless of the `implicit_neural_codebook` flag being set to False.
+• No error messages are generated, but the behavior is inconsistent with expected configuration settings.
+• The presence of initialized MLPs leads to unnecessary resource usage and potential performance degradation.
+
+EXPECTED BEHAVIOR
+When `implicit_neural_codebook` is set to False, MLPs should not be initialized in ResidualVQ, conserving resources and adhering to the intended functionality of the parameter.
+
+REPRODUCTION STEPS
+1. Set `implicit_neural_codebook` to False in the ResidualVQ configuration.
+2. Instantiate the ResidualVQ class.
+3. Observe the initialization of MLPs despite the flag being set to False.

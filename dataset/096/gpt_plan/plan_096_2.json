@@ -1,0 +1,14 @@
+[
+  "Import torch, random, and required modules from the denoising_diffusion_pytorch package, including GaussianDiffusion and Unet model",
+  "Set a fixed random seed for reproducibility using torch.manual_seed and random.seed",
+  "Initialize a Unet model instance with self_condition=True and a small dimension, e.g., dim=16, channels=3, image_size=32",
+  "Create a GaussianDiffusion instance wrapping the Unet model, with image_size=32, timesteps=10 (small for faster test), and default parameters",
+  "Generate a batch of dummy input images as a torch tensor with shape (batch_size=4, channels=3, height=32, width=32) with random normal values between 0 and 1",
+  "Call the diffusion model's forward method (which triggers p_losses) with the dummy images tensor",
+  "Because self_condition is enabled, the code path will hit the block where self_condition=True and random() < 0.5 triggers the self conditioning branch using torch.inference_mode() and calls model_predictions",
+  "Observe the RuntimeError: 'Inference tensors cannot be saved for backward' being raised during backpropagation when the model output is used for loss calculation",
+  "Wrap the forward call in a try-except block to catch the RuntimeError and confirm the exact error message contains 'Inference tensors cannot be saved for backward'",
+  "Assert that the error occurs reproducibly with the given inputs and model configuration",
+  "Optionally, log the stack trace or error message to verify the error originates from the line with 'with torch.inference_mode():' in the p_losses method",
+  "Do not modify the original code; only run as-is with self_condition=True and batch_size=4, image size 32, and objective='pred_v' (default) to trigger the bug"
+]

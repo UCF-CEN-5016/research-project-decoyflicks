@@ -1,0 +1,36 @@
+{
+  "bug_report": "010",
+  "module": {
+    "module": "official/vision/configs",
+    "files": [
+      {
+        "path": "official/vision/configs/common.py",
+        "snippets": [
+          {
+            "lines": "43-57",
+            "code": "class TfExampleDecoder(hyperparams.Config):\n  \"\"\"A simple TF Example decoder config.\"\"\"\n  regenerate_source_id: bool = False\n  mask_binarize_threshold: Optional[float] = None\n  attribute_names: List[str] = dataclasses.field(default_factory=list)\n\nclass TfExampleDecoderLabelMap(hyperparams.Config):\n  \"\"\"TF Example decoder with label map config.\"\"\"\n  regenerate_source_id: bool = False\n  mask_binarize_threshold: Optional[float] = None\n  label_map: str = ''\n\nclass DataDecoder(hyperparams.OneOfConfig):\n  \"\"\"Data decoder config.\n\n  Attributes:\n    type: 'str', type of data decoder be used, one of the fields below.\n    simple_decoder: simple TF Example decoder config.\n    label_map_decoder: TF Example decoder with label map config.\n  \"\"\"\n  type: Optional[str] = 'simple_decoder'\n  simple_decoder: TfExampleDecoder = dataclasses.field(\n      default_factory=TfExampleDecoder\n  )\n  label_map_decoder: TfExampleDecoderLabelMap = dataclasses.field(\n      default_factory=TfExampleDecoderLabelMap\n  )"
+          },
+          {
+            "lines": "145-159",
+            "code": "class PseudoLabelDataConfig(cfg.DataConfig):\n  \"\"\"Psuedo Label input config for training.\"\"\"\n  input_path: str = ''\n  data_ratio: float = 1.0  # Per-batch ratio of pseudo-labeled to labeled data.\n  is_training: bool = True\n  dtype: str = 'float32'\n  shuffle_buffer_size: int = 10000\n  cycle_length: int = 10\n  aug_rand_hflip: bool = True\n  aug_type: Optional[\n      Augmentation] = None  # Choose from AutoAugment and RandAugment.\n  file_type: str = 'tfrecord'\n\n  # Keep for backward compatibility.\n  aug_policy: Optional[str] = None  # None, 'autoaug', or 'randaug'.\n  randaug_magnitude: Optional[int] = 10\n\nclass TFLitePostProcessingConfig(hyperparams.Config):\n  \"\"\"TFLite Post Processing config for inference.\"\"\"\n  max_detections: int = 200\n  max_classes_per_detection: int = 5\n  # Regular NMS run in a multi-class fashion and is slow. Setting it to False\n  # uses class-agnostic NMS, which is faster.\n  use_regular_nms: bool = False\n  nms_score_threshold: float = 0.1\n  nms_iou_threshold: float = 0.5\n  # Whether to normalize coordinates of anchors to [0, 1]. If setting to True,\n  # coordinates of output boxes is also normalized but latency increases.\n  normalize_anchor_coordinates: Optional[bool] = False\n  # Whether to omit the final nms placeholder op. If set to True, the output\n  # will be a tuple of boxes, scores result right before the NMS operation.\n  omit_nms: Optional[bool] = False"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/vision/configs/common.py",
+      "snippets": [
+        {
+          "lines": "43-57",
+          "code": "class TfExampleDecoder(hyperparams.Config):\n  \"\"\"A simple TF Example decoder config.\"\"\"\n  regenerate_source_id: bool = False\n  mask_binarize_threshold: Optional[float] = None\n  attribute_names: List[str] = dataclasses.field(default_factory=list)\n\nclass TfExampleDecoderLabelMap(hyperparams.Config):\n  \"\"\"TF Example decoder with label map config.\"\"\"\n  regenerate_source_id: bool = False\n  mask_binarize_threshold: Optional[float] = None\n  label_map: str = ''\n\nclass DataDecoder(hyperparams.OneOfConfig):\n  \"\"\"Data decoder config.\n\n  Attributes:\n    type: 'str', type of data decoder be used, one of the fields below.\n    simple_decoder: simple TF Example decoder config.\n    label_map_decoder: TF Example decoder with label map config.\n  \"\"\"\n  type: Optional[str] = 'simple_decoder'\n  simple_decoder: TfExampleDecoder = dataclasses.field(\n      default_factory=TfExampleDecoder\n  )\n  label_map_decoder: TfExampleDecoderLabelMap = dataclasses.field(\n      default_factory=TfExampleDecoderLabelMap\n  )"
+        },
+        {
+          "lines": "145-159",
+          "code": "class PseudoLabelDataConfig(cfg.DataConfig):\n  \"\"\"Psuedo Label input config for training.\"\"\"\n  input_path: str = ''\n  data_ratio: float = 1.0  # Per-batch ratio of pseudo-labeled to labeled data.\n  is_training: bool = True\n  dtype: str = 'float32'\n  shuffle_buffer_size: int = 10000\n  cycle_length: int = 10\n  aug_rand_hflip: bool = True\n  aug_type: Optional[\n      Augmentation] = None  # Choose from AutoAugment and RandAugment.\n  file_type: str = 'tfrecord'\n\n  # Keep for backward compatibility.\n  aug_policy: Optional[str] = None  # None, 'autoaug', or 'randaug'.\n  randaug_magnitude: Optional[int] = 10\n\nclass TFLitePostProcessingConfig(hyperparams.Config):\n  \"\"\"TFLite Post Processing config for inference.\"\"\"\n  max_detections: int = 200\n  max_classes_per_detection: int = 5\n  # Regular NMS run in a multi-class fashion and is slow. Setting it to False\n  # uses class-agnostic NMS, which is faster.\n  use_regular_nms: bool = False\n  nms_score_threshold: float = 0.1\n  nms_iou_threshold: float = 0.5\n  # Whether to normalize coordinates of anchors to [0, 1]. If setting to True,\n  # coordinates of output boxes is also normalized but latency increases.\n  normalize_anchor_coordinates: Optional[bool] = False\n  # Whether to omit the final nms placeholder op. If set to True, the output\n  # will be a tuple of boxes, scores result right before the NMS operation.\n  omit_nms: Optional[bool] = False"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, pytorch_lightning, nnUNet, and any other required modules from the nnUNet package.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define the training parameters: set learning_rate to 0.0003, epochs to 10, and fold to 0.",
+    "Set the number of GPUs to 1 and specify the task ID as 11.",
+    "Prepare the dataset by ensuring the BraTS21 and BraTS22 datasets are correctly formatted and accessible.",
+    "Create a DataModule for the nnUNet model that includes training, validation, and test datasets.",
+    "Initialize the nnUNet model with the specified parameters for the BraTS dataset.",
+    "Set the learning rate scheduler to 'CosineAnnealingWarmRestarts'.",
+    "Create a Trainer instance from pytorch_lightning with gpus=1 and set the max_epochs to 10.",
+    "Run the training process by calling trainer.fit(model, datamodule=data_module).",
+    "Capture the output logs during training to check for any exceptions.",
+    "Verify that the output contains the MisconfigurationException related to the lr scheduler.",
+    "Check the specific error message to confirm it states: 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API.'",
+    "Ensure that the environment matches the specified versions in requirements.txt, particularly for pytorch_lightning and pytorch.",
+    "Validate that the GPU is being utilized by checking the output for 'GPU available: True (cuda), used: True'.",
+    "Confirm that the training process starts with the message 'Provided checkpoint None is not a file. Starting training from scratch.'"
+]
+```

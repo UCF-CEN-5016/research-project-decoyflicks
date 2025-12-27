@@ -1,0 +1,62 @@
+Bug when evaluating images with over 100 objects per image
+
+## 1. The entire URL of the file you are using
+
+https://github.com/tensorflow/models/tree/master/research/object_detection
+
+## 2. Describe the bug
+
+When training on images with large clusters of over 100 objects per image the model will NEVER settle on a good result if the pipeline.config file does not contain ALL these lines:
+
+    pipeline_config.train_config.max_number_of_boxes = 500
+
+    pipeline_config.eval_config.max_num_boxes_to_visualize = 500
+    pipeline_config.eval_config.num_visualizations = 500
+    pipeline_config.eval_input_reader.max_number_of_boxes = 500
+    
+    pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_detections_per_class = 500
+    pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_total_detections = 500
+    pipeline_config.model.faster_rcnn.first_stage_max_proposals = 500
+
+This line:
+` pipeline_config.eval_input_reader.max_number_of_boxes = 500`
+
+Throws this error when the line is added via pipeline_pb2.TrainEvalPipelineConfig():
+`AttributeError: 'google.protobuf.pyext._message.RepeatedCompositeContainer' object has no attribute 'max_number_of_boxes'`
+
+When adding the line directly to a pipeline.config file there is no error and the model will train as normal. 
+
+Without this line or any of the others mentioned above the model will only ever look for 100 BB per image, and if the image contains more objects the model will not converge whatsoever. This bug gets more extreme with more clustered images. I trained over 270K steps and never reached an accuracy above 0.04 due to my images containing close to 500 objects each.
+
+
+## 3. Steps to reproduce
+
+
+    import tensorflow as tf
+    from object_detection.utils import config_util
+    from object_detection.protos import pipeline_pb2
+    from google.protobuf import text_format 
+
+    configpath = #Path to pipeline.config file
+ 
+    config = config_util.get_configs_from_pipeline_file(configpath)
+
+    pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()
+    with tf.io.gfile.GFile(configpath, "r") as f:                                                                                                                                                                                                                     
+        proto_str = f.read()                                                                                                                                                                                                                                          
+        text_format.Merge(proto_str, pipeline_config)  
+    
+        pipeline_config.eval_input_reader.max_number_of_boxes = 500
+
+
+## 4. System information
+
+- Linux Ubuntu 20.04
+- Mobile device name if the issue happens on a mobile device:
+- Tensorflow from binary
+- TensorFlow 2.12
+- 3.8.10
+- CUDA/cuDNN version: 8.6
+- GPU model and memory: 12 GB A3000 Mobile, 32 GB RAM
+
+

@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official repository: 'official.nlp.modeling.layers.tn_expand_condense'",
+    "Set a random seed for reproducibility using 'tf.keras.utils.set_random_seed(0)'",
+    "Define input dimensions for the model: set 'input_dim' to 768 and 'proj_multiple' to 6",
+    "Create a dataset with 100 samples of random integers with shape (100, input_dim) using 'np.random.randint(10, size=(100, input_dim))'",
+    "Create labels for the dataset: concatenate 50 ones and 50 zeros to form a binary classification problem with shape (100, 1)",
+    "Build a Sequential model using 'tf.keras.models.Sequential()'",
+    "Add a TNExpandCondense layer to the model with parameters: 'proj_multiplier=proj_multiple', 'use_bias=True', 'activation='relu'', and 'input_shape=(data.shape[-1],)'",
+    "Add a Dense layer to the model with 1 unit and 'sigmoid' activation function",
+    "Compile the model using 'model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])'",
+    "Train the model using 'model.fit(data, labels, epochs=5, batch_size=32)'",
+    "Monitor the console output for warnings during training, specifically looking for 'WARNING:tensorflow:Gradients do not exist for variables...' messages",
+    "Check the list of variables in the warning to ensure they match the expected variables: ['stack_6/block_1/expand_bn/gamma:0', 'stack_6/block_1/expand_bn/beta:0', 'stack_6/block_1/depthwise_conv2d/depthwise_kernel:0', 'stack_6/block_1/depthwise_bn/gamma:0', 'stack_6/block_1/depthwise_bn/beta:0', 'stack_6/block_1/project_bn/gamma:0', 'stack_6/block_1/project_bn/beta:0', 'top_bn/gamma:0', 'top_bn/beta:0']",
+    "Assert that the warning message is printed during the training process to confirm the bug is reproduced"
+]
+```

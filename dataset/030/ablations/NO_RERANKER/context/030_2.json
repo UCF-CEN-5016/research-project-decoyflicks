@@ -1,0 +1,32 @@
+{
+  "bug_report": "030",
+  "rank": 2,
+  "score": 0.7388690710067749,
+  "main_file": {
+    "path": "PyTorch/LanguageModeling/BERT/lamb_amp_opt/main.py",
+    "content": "import copy\n\nimport apex\nimport torch\n\nimport numpy as np\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.datasets import make_classification, make_regression\n\nfrom fused_lamb import FusedLAMBAMP\n\nN_SAMPLES = 10000\nN_FEATURES = 32\nBATCH_SIZE = 100\n\n\ndef print_param_diff(optimizer):\n    with torch.no_grad():\n        for i, (group, master_group) in enumerate(zip(optimizer.param_groups, optimizer.param_groups_fp32)):\n            for ii, (p, master_p) in enumerate(zip(group['params'], master_group['params'])):\n                diff = (p - master_p.half()).float().abs().mean().item()\n                print(f\"  {i}th group, {ii}th param diff: {diff}\")\n\n\nclass TestMod(torch.nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.layers = torch.nn.Sequential(\n            torch.nn.Linear(N_FEATURES, N_FEATURES // 2),\n            torch.nn.ReLU(),\n            torch.nn.Linear(N_FEATURES // 2, 2),\n        )\n    def forward(self, inputs) :\n        return self.layers(inputs)\n\n\ndef main() :\n    loss = torch.nn.CrossEntropyLoss(ignore_index=-1)\n    model = TestMod()\n    model.cuda()\n    model.half()\n    model.train()\n    model = torch.jit.script(model)\n    param_optimizer = list(model.named_parameters())\n    no_decay = ['bias', 'gamma', 'beta', 'LayerNorm']\n    optimizer_grouped_parameters = [\n        {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},\n        {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}]\n    grad_scaler = torch.cuda.amp.GradScaler(enabled=True)\n    optimizer = FusedLAMBAMP(optimizer_grouped_parameters)\n\n    x, y = make_classification(n_samples=N_SAMPLES, n_features=N_FEATURES, random_state=0)\n    x = StandardScaler().fit_transform(x)\n    inputs = torch.from_numpy(x).cuda().half()\n    targets = torch.from_numpy(y).cuda().long()\n    del x, y\n    dataset = torch.utils.data.TensorDataset(inputs, targets)\n    loader = torch.utils.data.DataLoader(dataset, batch_size=BATCH_SIZE)\n    for epoch in range(20):\n        loss_values = []\n        for i, (x, y) in enumerate(loader):\n            with torch.cuda.amp.autocast():\n                out1 = model(x)\n                # Might be better to run `CrossEntropyLoss` in\n                # `with torch.cuda.amp.autocast(enabled=False)` context.\n                out2 = loss(out1, y)\n            grad_scaler.scale(out2).backward()\n            grad_scaler.step(optimizer)\n            grad_scaler.update()\n            optimizer.zero_grad(set_to_none=True)\n            loss_values.append(out2.item())\n\n        print(f\"Epoch: {epoch}, Loss avg: {np.mean(loss_values)}\")\n        print_param_diff(optimizer)\n\n    print(\"state dict check\")\n    optimizer.load_state_dict(optimizer.state_dict())\n    print_param_diff(optimizer)\n\nif __name__ == '__main__':\n    main()\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "fused_lamb",
+      "function": "FusedLAMBAMP"
+    },
+    {
+      "module": "sklearn",
+      "function": "StandardScaler"
+    },
+    {
+      "module": "sklearn",
+      "function": "make_classification"
+    },
+    {
+      "module": "torch",
+      "function": "from_numpy"
+    },
+    {
+      "module": "torch",
+      "function": "no_grad"
+    }
+  ]
+}

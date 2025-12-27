@@ -1,0 +1,21 @@
+```json
+[
+    "Set up a multi-node environment with two nodes, each equipped with 2 Tesla V100 GPUs.",
+    "Install TensorFlow 2.11.0 with GPU support on both nodes using conda: 'conda install tensorflow-gpu=2.11.0'.",
+    "Ensure CUDA 11.0 and cuDNN compatible with TensorFlow 2.11.0 are installed on both nodes.",
+    "On node 1 (gpu1), run the command: 'salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive'.",
+    "On node 1, navigate to the model directory: 'cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification'.",
+    "Set environment variables on node 1: 'export PYTHONPATH=\"$PYTHONPATH:/home/cdacapp1/scaling/models-master\"', 'export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records', 'export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss'.",
+    "Activate the conda environment on node 1: 'source /home/apps/anaconda3/bin/activate && conda activate tf11'.",
+    "Create a configuration file 'gpu.yaml' on node 1 with the following content: 'runtime:\n  distribution_strategy: \"multi_worker_mirrored\"\n  worker_hosts: \"ip1:6655,ip2:6655\"\n  num_gpus: 2\n  task_index: 0'.",
+    "Run the training script on node 1: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml'.",
+    "On node 2 (gpu2), navigate to the model directory: 'cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification'.",
+    "Set environment variables on node 2: 'export PYTHONPATH=\"$PYTHONPATH:/home/cdacapp1/scaling/models-master\"', 'export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records', 'export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss'.",
+    "Activate the conda environment on node 2: 'source /home/apps/anaconda3/bin/activate && conda activate tf11'.",
+    "Create a configuration file 'gpu1.yaml' on node 2 with the following content: 'runtime:\n  distribution_strategy: \"multi_worker_mirrored\"\n  worker_hosts: \"ip1:6655,ip2:6655\"\n  num_gpus: 2\n  task_index: 1'.",
+    "Run the training script on node 2: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml'.",
+    "Monitor the throughput of the training process on both nodes using a logging mechanism or print statements.",
+    "Collect and compare the throughput metrics from both nodes to verify that they do not scale beyond the single GPU performance.",
+    "Assert that the combined throughput of both nodes is approximately equal to the throughput of a single GPU, indicating the bug."
+]
+```

@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and TransformerWrapper from x_transformers.autoregressive_wrapper",
+    "Define constants: num_tokens = 20000, dim = 128, and max_seq_len = 1024",
+    "Create a random input tensor x with shape (2, 1024) using torch.randint(0, num_tokens, (2, 1024))",
+    "Define a logit_mapper as None to simulate the scenario where pad_id is not used in align_right function",
+    "Initialize the TransformerWrapper model with parameters: num_tokens = num_tokens, max_seq_len = max_seq_len, attn_layers = Decoder(dim = dim, depth = 6, heads = 8), to_logits = logit_mapper",
+    "Create a to_logits_kwargs dictionary as an empty dictionary to pass to the model",
+    "Call the model with the input tensor x and to_logits_kwargs, storing the output in a variable named output",
+    "Assert that the output shape is (2, 1024, 20000) to ensure the model runs without errors",
+    "Define a pad_id variable with a specific value, e.g., pad_id = 0, to check if it is being used in the align_right function",
+    "Modify the model call to include pad_id in the to_logits_kwargs dictionary, e.g., to_logits_kwargs['pad_id'] = pad_id",
+    "Re-run the model with the modified to_logits_kwargs and store the new output in a variable named new_output",
+    "Check if the output from the model changes when pad_id is included in the to_logits_kwargs",
+    "Assert that the output remains the same despite the inclusion of pad_id, indicating that the pad_id is not being used in the align_right function"
+]
+```

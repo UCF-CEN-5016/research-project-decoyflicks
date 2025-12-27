@@ -1,0 +1,20 @@
+TITLE  
+CrossViT Fails to Process Non-Three Channel Images
+
+SYMPTOMS  
+• The CrossViT model does not accept images with channels other than three.  
+• The following error message is produced:  
+  ```
+  RuntimeError: Given normalized_shape=[768], expected input with shape [*, 768], but got input of size[1, 256, 256]
+  ```  
+• The model crashes when attempting to process a single-channel image, leading to an unhandled exception.
+
+EXPECTED BEHAVIOR  
+The CrossViT model should be able to handle images with varying channel sizes (e.g., grayscale, RGB, RGBA) without raising runtime errors. It should appropriately process the input and return predictions based on the input image's channel configuration.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries and the CrossViT class from vit_pytorch.  
+2. Initialize the CrossViT model with the specified parameters.  
+3. Create a tensor representing a single-channel image with the shape (1, 1, 256, 256).  
+4. Pass the single-channel image tensor to the model to obtain predictions.  
+5. Observe the resulting runtime error.

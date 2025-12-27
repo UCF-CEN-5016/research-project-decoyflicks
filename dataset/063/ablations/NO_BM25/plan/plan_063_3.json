@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary Keras modules: layers, backend, and Model from keras",
+    "Import TensorFlow Datasets (tfds) and disable progress bar using tfds.disable_progress_bar()",
+    "Set hyperparameters: BATCH_SIZE = 64, AUTOTUNE = tf.data.AUTOTUNE, image_size = 256",
+    "Define the augment_fn function that applies random augmentations to images, ensuring it returns a tensor of shape (image_size, image_size, 3)",
+    "Define the unpackage_inputs function that takes a tuple of (image, label) and returns them separately",
+    "Load the Oxford Pets dataset using tfds.load with split parameters for training and validation datasets",
+    "Prepare the training dataset by shuffling it with a buffer size of BATCH_SIZE * 2, mapping it through augment_fn, and batching it with BATCH_SIZE",
+    "Add a second map call to the augmented training dataset using unpackage_inputs",
+    "Prefetch the dataset with buffer size set to tf.data.AUTOTUNE",
+    "Run the code block that creates augmented_train_ds using the defined dataset transformations",
+    "Capture the output of augmented_train_ds and assert that it is not empty",
+    "Attempt to iterate over augmented_train_ds to trigger the error",
+    "Verify that the error message contains 'different types' and check the shapes of the tensors involved in the error"
+]
+```

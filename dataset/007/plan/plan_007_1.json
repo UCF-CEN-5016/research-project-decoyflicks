@@ -1,0 +1,12 @@
+```json
+[
+    "Import necessary libraries including numpy, gzip, urllib.request, and tensorflow.compat.v1 as tf",
+    "Define the dataset directory where MNIST data will be stored or downloaded",
+    "Call the _download_dataset function to ensure MNIST data is downloaded if not already present",
+    "Create a temporary file path for the MNIST training images",
+    "Simulate opening the MNIST training images file in gzip mode and read 16 bytes from the beginning of the file (to skip header)",
+    "Read the next chunk of data equal to the image size multiplied by the number of channels for one image",
+    "Assert that reading this chunk does not raise a ValueError or Exception, indicating the bug occurs due to unexpected data format"
+]
+```
+

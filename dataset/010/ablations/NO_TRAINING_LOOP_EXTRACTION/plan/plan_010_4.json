@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official Model Garden for instance segmentation.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define the model configuration parameters, including 'num_classes' set to 2 for binary segmentation.",
+    "Set the batch size to 8 and image dimensions to 512x512.",
+    "Load the dataset for instance segmentation using tf.data API, ensuring it includes both training and validation splits.",
+    "Preprocess the dataset by normalizing images to the range [0, 1] and resizing them to (512, 512).",
+    "Create a training dataset with a specified batch size of 8 using dataset.batch(8).",
+    "Create a validation dataset with a specified batch size of 8 using dataset.batch(8).",
+    "Initialize the model using the official Model Garden API for instance segmentation.",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., SparseCategoricalCrossentropy).",
+    "Set up a callback to log metrics during training, including validation loss.",
+    "Train the model for a specified number of epochs (e.g., 10) using model.fit() with training and validation datasets.",
+    "During training, monitor the output logs for validation loss after each epoch.",
+    "Verify that the validation loss is consistently reported as 0.0 in the logs after each evaluation step.",
+    "Check the evaluation metrics output after training, specifically looking for 'validation_loss' to confirm it is 0.0.",
+    "Run the official tutorial for semantic segmentation and repeat the above steps to confirm the same behavior occurs.",
+    "Assert that the validation loss remains 0.0 across multiple runs to ensure the bug is reproducible."
+]
+```

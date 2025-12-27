@@ -1,0 +1,18 @@
+```json
+[
+    "Import torch and all necessary modules from the vector_quantize_pytorch library",
+    "Define Z_CHANNELS = 512, NUM_QUANTIZERS = 2, CODEBOOK_SIZE = 16 * 1024 for the ResidualVQ constructor",
+    "Create a mock codebook with shape [NUM_QUANTIZERS, Z_CHANNELS]",
+    "Define batch_size = 32 and input dimensions (height, width) as multiples of 8 to ensure proper padding in Conv2d layers",
+    "Create random input data x with shape (batch_size, height, width, 1)",
+    "Initialize the ResidualVQ module using the defined parameters and mock codebook",
+    "Encode the input data through a mock encode layer that outputs a tensor of shape [batch_size, Z_CHANNELS]",
+    "Simulate the quantize method call within ResidualVQ by generating a random sampled tensor with shape [batch_size, 1]",
+    "Manually trigger the replace method in the vector_quantize_pytorch library's ExpireCodes class",
+    "Prepare input data ind and mask such that they cause a shape mismatch when trying to assign the sampled tensor into self.embed.data[ind][mask]",
+    "Assert that the error 'RuntimeError: shape mismatch' occurs during execution",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory usage remains stable or does not increase unexpectedly"
+]
+```
+

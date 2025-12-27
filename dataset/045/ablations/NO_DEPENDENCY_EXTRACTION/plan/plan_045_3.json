@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, os, json, and any other required modules.",
+    "Define constants: set DEVICE to 'cuda' if available, otherwise 'cpu'. Set SAMPLING_FREQ to the sample rate of the audio files (e.g., 16000). Set EMISSION_INTERVAL to a specific value (e.g., 1.0 seconds).",
+    "Prepare a test audio file: Ensure you have an audio file in the correct format (e.g., .flac) located at a specific path (e.g., '/root/autodl-tmp/test_audio.flac').",
+    "Create a mock model: Define a simple mock model that mimics the expected output shape of the actual model. For example, create a class that returns a tensor of shape (T, N) where T is the number of frames and N is the number of features.",
+    "Load the mock model and set it to evaluation mode: Instantiate the mock model and call model.eval().",
+    "Create a mock dictionary: Define a dictionary that includes necessary tokens, including '<blank>' and any other required tokens for alignment.",
+    "Define a function to simulate the generation of emissions: Implement a function that takes the mock model and the test audio file, and returns a tensor of emissions with shape (T, N). Ensure the emissions tensor has the correct number of features.",
+    "Call the generate_emissions function with the mock model and test audio file: Pass the audio file path to the function and capture the emissions and stride.",
+    "Prepare a list of tokens: Create a list of tokens that will be used for alignment, ensuring it is non-empty (e.g., ['token1', 'token2']).",
+    "Call the get_alignments function with the test audio file, tokens, mock model, mock dictionary, and use_star set to False: Capture the segments and stride returned by the function.",
+    "Verify that the key 'input_feat_per_channel' is not present in the model's output: Check the output of the model to ensure it does not contain the key 'input_feat_per_channel'.",
+    "Assert that an error is raised or a specific condition is met indicating the bug: For example, check if the output contains an unexpected structure or if a KeyError is raised when trying to access 'input_feat_per_channel'.",
+    "Log the results of the test: Print or log the results to confirm that the bug has been reproduced."
+]
+```

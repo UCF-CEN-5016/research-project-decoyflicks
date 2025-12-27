@@ -1,0 +1,22 @@
+TITLE
+Incorrect Use of Test Set as Validation Data
+
+SYMPTOMS
+• The performance and predictive ability of the model are overly optimistic due to using the test set for validation.
+• The model is likely to perform poorly with unseen data/points.
+
+EXPECTED BEHAVIOR
+- The training, validation, and test datasets should be separate.
+- The model should be evaluated on a truly unseen dataset during testing to ensure accurate performance metrics.
+
+REPRODUCTION STEPS
+1. Navigate to the file `examples/vision/pointnet.py`.
+2. Locate line 263 where `model.fit(train_dataset, epochs=20, validation_data=test_dataset)` is defined.
+3. Replace `test_dataset` with a separate validation dataset that has not been used for training or testing.
+
+RECOMMENDATIONS
+1. Ensure the `train_dataset`, `validation_dataset`, and `test_dataset` are distinct.
+2. Use a proper validation set to evaluate the model's performance during training.
+3. If no existing validation dataset is available, consider splitting your data into train, validation, and test sets using functions like `train_test_split()` from scikit-learn.
+
+By following these steps, you can address the issue and ensure that the model's performance is accurately evaluated on truly unseen data.

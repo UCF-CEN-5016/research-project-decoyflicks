@@ -1,0 +1,28 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, os, and matplotlib",
+    "Set a random seed for reproducibility using np.random.seed(42) and tf.random.set_seed(42)",
+    "Define the base path for the dataset as 'data'",
+    "Download the IAM dataset using wget and unzip it into the 'data' directory",
+    "Read the 'words.txt' file from the 'data' directory and store the lines in a list called 'words_list'",
+    "Filter out lines starting with '#' and lines with 'err' in the second column from 'words_list'",
+    "Shuffle 'words_list' using np.random.shuffle()",
+    "Split 'words_list' into training (90%), validation (5%), and test (5%) sets",
+    "Assert that the total number of samples in 'words_list' equals the sum of training, validation, and test samples",
+    "Define a function 'get_image_paths_and_labels(samples)' to extract image paths and labels from the samples",
+    "Call 'get_image_paths_and_labels(train_samples)' to get training image paths and labels",
+    "Call 'get_image_paths_and_labels(validation_samples)' to get validation image paths and labels",
+    "Call 'get_image_paths_and_labels(test_samples)' to get test image paths and labels",
+    "Define image dimensions: image_width = 128 and image_height = 32",
+    "Define a function 'preprocess_image(image_path)' to read, decode, and resize images",
+    "Define a function 'vectorize_label(label)' to convert labels to integer sequences and pad them",
+    "Define a function 'process_images_labels(image_path, label)' to preprocess images and vectorize labels",
+    "Define a function 'prepare_dataset(image_paths, labels)' to create a tf.data.Dataset from image paths and labels",
+    "Prepare training, validation, and test datasets using 'prepare_dataset()'",
+    "Define a model architecture using Keras functional API with Conv2D, MaxPooling2D, LSTM, and a custom CTCLayer",
+    "Compile the model with Adam optimizer",
+    "Attempt to fit the model using model.fit() with training and validation datasets for 10 epochs",
+    "Capture any errors that occur during model fitting",
+    "Log the error message to verify the specific issue that arises during model fitting"
+]
+```

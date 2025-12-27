@@ -1,0 +1,35 @@
+TITLE  
+Matplotlib Pyplot Fails to Render After Importing TensorFlow Models in Python 3.10 Conda Environment
+
+SYMPTOMS  
+• Matplotlib's pyplot does not display plots after importing `tensorflow_models`  
+• Only the first plotting cell executes successfully; subsequent cells do not show plots  
+• The matplotlib backend changes to 'agg' after importing `tensorflow_models`, which is a non-interactive backend  
+• Attempting to change the backend to 'TkAgg' after importing `tensorflow_models` does not resolve the issue  
+• Changing the backend to 'TkAgg' before importing `tensorflow_models` successfully allows plots to render  
+
+EXPECTED BEHAVIOR  
+When using Matplotlib's pyplot in conjunction with TensorFlow models, all plotting cells should render their plots correctly regardless of the order of imports.
+
+REPRODUCTION STEPS  
+1. Download and install VSCode.  
+2. Create a new conda environment with Python 3.10 (3.10.13 recommended) and install TensorFlow using the official installation guide.  
+3. Install TensorFlow Model Garden using pip (`pip install tf-models-nightly`).  
+4. Download the notebook from the TensorFlow website for image classification.  
+5. Add additional lines of code that utilize `plt` for plotting.  
+6. Execute the cells containing the plotting code.
+
+ADDITIONAL CONTEXT  
+- The backend of Matplotlib is confirmed to be 'agg' after importing `tensorflow_models`, which prevents plots from rendering interactively.  
+- The backend is different (interactive) before importing `tensorflow_models`.  
+- The issue appears to be resolved when the backend is set to 'TkAgg' prior to the import of `tensorflow_models`.  
+
+SYSTEM INFORMATION  
+- OS Platform and Distribution: 2.13.0  
+- TensorFlow installed from: Official TensorFlow installation guide  
+- TensorFlow version: 2.13.10  
+- Python version: 3.10.13  
+- CUDA/cuDNN version: cuDNN version 8.6.0.163 (CUDA 12.0)  
+- GPU model and memory: NVIDIA GeForce RTX 3090, 24576 MiB  
+
+For further assistance, consider running the environment capture script provided by TensorFlow to collect detailed system information.

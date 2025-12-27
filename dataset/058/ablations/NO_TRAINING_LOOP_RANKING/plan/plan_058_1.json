@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: keras, keras_cv, tensorflow, and tensorflow_datasets",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define the input shape for the model as (96, 96, 3)",
+    "Set the batch size to 32 for training and validation datasets",
+    "Load the custom dataset structured similarly to the demo dataset using tfds.load()",
+    "Ensure the dataset contains images and corresponding bounding box annotations",
+    "Preprocess the dataset by normalizing images to the range [0, 1]",
+    "Create a training dataset using tf.data.Dataset from the loaded dataset, shuffling and batching it with the defined batch size",
+    "Create a validation dataset using tf.data.Dataset from the loaded dataset, shuffling and batching it with the defined batch size",
+    "Instantiate the RetinaNet model from keras_cv.models.object_detection",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function suitable for object detection",
+    "Call model.fit() with the training dataset, validation dataset, and set epochs to 1",
+    "Use callbacks to monitor training, such as EvaluateCOCOMetricsCallback",
+    "Capture the output of model.fit() to check for errors during training",
+    "Verify that the output contains an InvalidArgumentError related to the GatherV2 operation",
+    "Check the dimensions of the input data and labels to ensure they match the expected shapes",
+    "Assert that the error message includes 'indices[3,63949] = 0 is not in [0, 0)' indicating an issue with label encoding"
+]
+```

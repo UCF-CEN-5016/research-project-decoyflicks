@@ -1,0 +1,28 @@
+{
+  "bug_report": "012",
+  "module": {
+    "module": "official/projects/edgetpu/vision/serving",
+    "files": [
+      {
+        "path": "official/projects/edgetpu/vision/serving/tflite_imagenet_evaluator_test.py",
+        "snippets": [
+          {
+            "lines": "26-50",
+            "code": "class TfliteImagenetEvaluatorTest(tf.test.TestCase):\n\n  # Only tests the parallelization aspect. Mocks image evaluation and dataset.\n  def test_evaluate_all(self):\n    batch_size = 8\n    num_threads = 4\n    num_batches = 5\n\n    labels = tf.data.Dataset.range(batch_size * num_threads * num_batches)\n    images = tf.data.Dataset.range(batch_size * num_threads * num_batches)\n    dataset = tf.data.Dataset.zip((images, labels))\n    dataset = dataset.batch(batch_size)\n\n    with mock.patch.object(\n        tflite_imagenet_evaluator.AccuracyEvaluator,\n        'evaluate_single_image',\n        return_value=True,\n        autospec=True):\n      evaluator = tflite_imagenet_evaluator.AccuracyEvaluator(\n          model_content='MockModelContent'.encode('utf-8'),\n          dataset=dataset,\n          num_threads=num_threads)\n      num_evals, num_corrects = evaluator.evaluate_all()\n\n    expected_evals = num_batches * num_threads * batch_size\n\n    self.assertEqual(num_evals, expected_evals)\n    self.assertEqual(num_corrects, expected_evals)\n\n  def test_evaluate_all(self):\n    batch_size = 8\n    num_threads = 4\n    num_batches = 5\n\n    labels = tf.data.Dataset.range(batch_size * num_threads * num_batches)\n    images = tf.data.Dataset.range(batch_size * num_threads * num_batches)\n    dataset = tf.data.Dataset.zip((images, labels))\n    dataset = dataset.batch(batch_size)\n\n    with mock.patch.object(\n        tflite_imagenet_evaluator.AccuracyEvaluator,\n        'evaluate_single_image',\n        return_value=True,\n        autospec=True):\n      evaluator = tflite_imagenet_evaluator.AccuracyEvaluator(\n          model_content='MockModelContent'.encode('utf-8'),\n          dataset=dataset,\n          num_threads=num_threads)\n      num_evals, num_corrects = evaluator.evaluate_all()\n\n    expected_evals = num_batches * num_threads * batch_size\n\n    self.assertEqual(num_evals, expected_evals)\n    self.assertEqual(num_corrects, expected_evals)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/projects/edgetpu/vision/serving/tflite_imagenet_evaluator_test.py",
+      "snippets": [
+        {
+          "lines": "26-50",
+          "code": "class TfliteImagenetEvaluatorTest(tf.test.TestCase):\n\n  # Only tests the parallelization aspect. Mocks image evaluation and dataset.\n  def test_evaluate_all(self):\n    batch_size = 8\n    num_threads = 4\n    num_batches = 5\n\n    labels = tf.data.Dataset.range(batch_size * num_threads * num_batches)\n    images = tf.data.Dataset.range(batch_size * num_threads * num_batches)\n    dataset = tf.data.Dataset.zip((images, labels))\n    dataset = dataset.batch(batch_size)\n\n    with mock.patch.object(\n        tflite_imagenet_evaluator.AccuracyEvaluator,\n        'evaluate_single_image',\n        return_value=True,\n        autospec=True):\n      evaluator = tflite_imagenet_evaluator.AccuracyEvaluator(\n          model_content='MockModelContent'.encode('utf-8'),\n          dataset=dataset,\n          num_threads=num_threads)\n      num_evals, num_corrects = evaluator.evaluate_all()\n\n    expected_evals = num_batches * num_threads * batch_size\n\n    self.assertEqual(num_evals, expected_evals)\n    self.assertEqual(num_corrects, expected_evals)\n\n  def test_evaluate_all(self):\n    batch_size = 8\n    num_threads = 4\n    num_batches = 5\n\n    labels = tf.data.Dataset.range(batch_size * num_threads * num_batches)\n    images = tf.data.Dataset.range(batch_size * num_threads * num_batches)\n    dataset = tf.data.Dataset.zip((images, labels))\n    dataset = dataset.batch(batch_size)\n\n    with mock.patch.object(\n        tflite_imagenet_evaluator.AccuracyEvaluator,\n        'evaluate_single_image',\n        return_value=True,\n        autospec=True):\n      evaluator = tflite_imagenet_evaluator.AccuracyEvaluator(\n          model_content='MockModelContent'.encode('utf-8'),\n          dataset=dataset,\n          num_threads=num_threads)\n      num_evals, num_corrects = evaluator.evaluate_all()\n\n    expected_evals = num_batches * num_threads * batch_size\n\n    self.assertEqual(num_evals, expected_evals)\n    self.assertEqual(num_corrects, expected_evals)"
+        }
+      ]
+    }
+  ]
+}

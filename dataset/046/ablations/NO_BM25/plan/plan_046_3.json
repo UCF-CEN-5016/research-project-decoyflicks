@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, and any other required modules from the project.",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'.",
+    "Define the audio file path as 'audio.wav' and the text file path as 'text.txt'.",
+    "Create a dummy audio file 'audio.wav' with a sample rate of 16000 Hz and duration of 5 seconds using torchaudio.",
+    "Create a corresponding text file 'text.txt' with a simple transcription, e.g., 'This is a test.'",
+    "Set the language parameter to 'udm' and define the output directory as 'output'.",
+    "Set the uroman path to 'uroman/bin'.",
+    "Define a batch size of 1 for testing purposes.",
+    "Prepare a dummy tensor input for the model with shape (batch_size, input_length, num_classes) where input_length is 16000 (1 second of audio) and num_classes is set to 10.",
+    "Call the function align_and_segment.py with the command: 'python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang udm --outdir output --uroman uroman/bin'.",
+    "Capture the output and error messages from the command execution.",
+    "Verify that the output contains the error message: 'RuntimeError: log_probs must be 3-D (batch_size, input length, num classes)'.",
+    "Check the shape of the log_probs tensor before the error occurs to confirm it is not 3-D.",
+    "Assert that the shape of log_probs is not equal to (1, input_length, num_classes)."
+]
+```

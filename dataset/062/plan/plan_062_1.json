@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and pandas libraries for data handling",
+    "Define constants for number of trees (NUM_TREES), maximum depth (MAX_DEPTH), minimum examples (MIN_EXAMPLES), subsample ratio (SUBSAMPLE), validation ratio (VALIDATION_RATIO), and target column name (TARGET_COLUMN_NAME)",
+    "Load the training dataset into a pandas DataFrame named 'train_data' with specified columns",
+    "Convert the target column to numerical values using one-hot encoding",
+    "Create a function to prepare the model inputs, including feature encoding for categorical features using embeddings or target encoding",
+    "Define a function to create a Gradient Boosted Trees model with a preprocessor (either embeddings or target encoding)",
+    "Load the testing dataset into a pandas DataFrame named 'test_data'",
+    "Define a function to run experiments by training and evaluating the model on the provided datasets",
+    "Call the experiment function with both the embedding-based model and the target encoding-based model",
+    "Monitor the accuracy of the models during validation phase",
+    "Assert that the accuracy of both models is less than 95.82% (the expected maximum achievable test accuracy without considering hardware limitations)",
+    "Verify that there are no NaN values in the loss calculation for both models"
+]
+```
+

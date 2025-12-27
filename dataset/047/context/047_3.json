@@ -1,0 +1,36 @@
+{
+  "bug_report": "050",
+  "rank": 3,
+  "score": 0.5835751891136169,
+  "main_file": {
+    "path": "examples/hubert/simple_kmeans/learn_kmeans.py",
+    "content": "# Copyright (c) Facebook, Inc. and its affiliates.\n#\n# This source code is licensed under the MIT license found in the\n# LICENSE file in the root directory of this source tree.\n\nimport logging\nimport os\nimport sys\n\nimport numpy as np\nfrom sklearn.cluster import MiniBatchKMeans\n\nimport joblib\n\nlogging.basicConfig(\n    format=\"%(asctime)s | %(levelname)s | %(name)s | %(message)s\",\n    datefmt=\"%Y-%m-%d %H:%M:%S\",\n    level=os.environ.get(\"LOGLEVEL\", \"INFO\").upper(),\n    stream=sys.stdout,\n)\nlogger = logging.getLogger(\"learn_kmeans\")\n\n\ndef get_km_model(\n    n_clusters,\n    init,\n    max_iter,\n    batch_size,\n    tol,\n    max_no_improvement,\n    n_init,\n    reassignment_ratio,\n):\n    return MiniBatchKMeans(\n        n_clusters=n_clusters,\n        init=init,\n        max_iter=max_iter,\n        batch_size=batch_size,\n        verbose=1,\n        compute_labels=False,\n        tol=tol,\n        max_no_improvement=max_no_improvement,\n        init_size=None,\n        n_init=n_init,\n        reassignment_ratio=reassignment_ratio,\n    )\n\n\ndef load_feature_shard(feat_dir, split, nshard, rank, percent):\n    feat_path = f\"{feat_dir}/{split}_{rank}_{nshard}.npy\"\n    leng_path = f\"{feat_dir}/{split}_{rank}_{nshard}.len\"\n    with open(leng_path, \"r\") as f:\n        lengs = [int(line.rstrip()) for line in f]\n        offsets = [0] + np.cumsum(lengs[:-1]).tolist()\n\n    if percent < 0:\n        return np.load(feat_path, mmap_mode=\"r\")\n    else:\n        nsample = int(np.ceil(len(lengs) * percent))\n        indices = np.random.choice(len(lengs), nsample, replace=False)\n        feat = np.load(feat_path, mmap_mode=\"r\")\n        sampled_feat = np.concatenate(\n            [feat[offsets[i]: offsets[i] + lengs[i]] for i in indices], axis=0\n        )\n        logger.info(\n            (\n                f\"sampled {nsample} utterances, {len(sampled_feat)} frames \"\n                f\"from shard {rank}/{nshard}\"\n            )\n        )\n        return sampled_feat\n\n\ndef load_feature(feat_dir, split, nshard, seed, percent):\n    assert percent <= 1.0\n    feat = np.concatenate(\n        [\n            load_feature_shard(feat_dir, split, nshard, r, percent)\n            for r in range(nshard)\n        ],\n        axis=0,\n    )\n    logging.info(f\"loaded feature with dimension {feat.shape}\")\n    return feat\n\n\ndef learn_kmeans(\n    feat_dir,\n    split,\n    nshard,\n    km_path,\n    n_clusters,\n    seed,\n    percent,\n    init,\n    max_iter,\n    batch_size,\n    tol,\n    n_init,\n    reassignment_ratio,\n    max_no_improvement,\n):\n    np.random.seed(seed)\n    feat = load_feature(feat_dir, split, nshard, seed, percent)\n    km_model = get_km_model(\n        n_clusters,\n        init,\n        max_iter,\n        batch_size,\n        tol,\n        max_no_improvement,\n        n_init,\n        reassignment_ratio,\n    )\n    km_model.fit(feat)\n    joblib.dump(km_model, km_path)\n\n    inertia = -km_model.score(feat) / len(feat)\n    logger.info(\"total intertia: %.5f\", inertia)\n    logger.info(\"finished successfully\")\n\n\nif __name__ == \"__main__\":\n    import argparse\n\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"feat_dir\", type=str)\n    parser.add_argument(\"split\", type=str)\n    parser.add_argument(\"nshard\", type=int)\n    parser.add_argument(\"km_path\", type=str)\n    parser.add_argument(\"n_clusters\", type=int)\n    parser.add_argument(\"--seed\", default=0, type=int)\n    parser.add_argument(\n        \"--percent\", default=-1, type=float, help=\"sample a subset; -1 for all\"\n    )\n    parser.add_argument(\"--init\", default=\"k-means++\")\n    parser.add_argument(\"--max_iter\", default=100, type=int)\n    parser.add_argument(\"--batch_size\", default=10000, type=int)\n    parser.add_argument(\"--tol\", default=0.0, type=float)\n    parser.add_argument(\"--max_no_improvement\", default=100, type=int)\n    parser.add_argument(\"--n_init\", default=20, type=int)\n    parser.add_argument(\"--reassignment_ratio\", default=0.0, type=float)\n    args = parser.parse_args()\n    logging.info(str(args))\n\n    learn_kmeans(**vars(args))\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "joblib",
+      "function": "dump"
+    },
+    {
+      "module": "logging",
+      "function": "basicConfig"
+    },
+    {
+      "module": "logging",
+      "function": "getLogger"
+    },
+    {
+      "module": "logging",
+      "function": "info"
+    },
+    {
+      "module": "sklearn",
+      "function": "MiniBatchKMeans"
+    }
+  ]
+}

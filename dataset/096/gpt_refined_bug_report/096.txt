@@ -1,0 +1,16 @@
+SELF CONDITION INFERENCE MODE CAUSES RUNTIME ERROR WITH torch.inference_mode()
+
+SYMPTOMS
+• RuntimeError: Inference tensors cannot be saved for backward.
+• The error occurs when self conditioning is enabled and the code executes a block wrapped with torch.inference_mode().
+• Adding .clone() to tensors does not resolve the issue.
+• Changing torch.inference_mode() to torch.no_grad() avoids the error and allows the code to run.
+
+EXPECTED BEHAVIOR
+When self conditioning is enabled, the code should perform inference without causing runtime errors related to tensor saving for backward passes. Using inference mode or no_grad should correctly disable gradient tracking without interfering with autograd requirements for subsequent operations.
+
+REPRODUCTION STEPS
+1. Enable self conditioning by setting self.self_condition = True.
+2. Run the code path where the condition `if self.self_condition and random() < 0.5:` is true.
+3. Observe the RuntimeError when the block using `with torch.inference_mode():` executes.
+4. Optionally, replace `torch.inference_mode()` with `torch.no_grad()` and confirm the error no longer occurs.

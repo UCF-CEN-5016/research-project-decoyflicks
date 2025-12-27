@@ -1,0 +1,16 @@
+TITLE  
+MAE Code Bug in Position Embedding Calculation  
+
+SYMPTOMS  
+• The code fails to execute correctly when attempting to run the MAE as described in README.md.  
+• SyntaxError: unexpected EOF while parsing (likely due to a missing closing bracket).  
+• The program does not produce the expected output and may raise an error during execution.  
+
+EXPECTED BEHAVIOR  
+The code should correctly compute the position embeddings for the tokens without any syntax errors, allowing the MAE model to run as intended and produce the expected results.  
+
+REPRODUCTION STEPS  
+1. Open the README.md file and locate the section that describes running the MAE.  
+2. Copy the provided code snippet: `tokens = tokens + self.encoder.pos_embedding[:, 1:(num_patches + 1)`  
+3. Attempt to execute the code in the appropriate environment.  
+4. Observe the resulting error message and any unexpected behaviors.

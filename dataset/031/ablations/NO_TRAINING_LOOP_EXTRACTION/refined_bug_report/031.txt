@@ -1,0 +1,34 @@
+TITLE  
+Error in loading state_dict with pretrained weights for ResNet50 model
+
+SYMPTOMS  
+• Missing keys in state_dict:  
+  - "layers.0.0.conv1.weight"  
+  - "layers.0.0.bn1.weight"  
+  - "layers.0.0.bn1.bias"  
+  - "layers.0.0.bn1.running_mean"  
+  - "layers.0.0.bn1.running_var"  
+  - "layers.0.0.conv2.weight"  
+  - ... (additional missing keys)  
+• Unexpected keys in state_dict:  
+  - "layer1.0.conv1.weight"  
+  - "layer1.0.bn1.weight"  
+  - "layer1.0.bn1.bias"  
+  - "layer1.0.bn1.running_mean"  
+  - "layer1.0.bn1.running_var"  
+  - "layer1.0.bn1.num_batches_tracked"  
+  - "layer1.0.conv2.weight"  
+  - "layer1.0.bn2.weight"  
+  - "layer1.0.bn2.bias"  
+  - "layer1.0.bn2.running_mean"  
+  - ... (additional unexpected keys)  
+• RuntimeError encountered during inference.
+
+EXPECTED BEHAVIOR  
+The ResNet50 model should successfully load the pretrained weights without any missing or unexpected keys in the state_dict, allowing for correct inference on the ImageNet dataset.
+
+REPRODUCTION STEPS  
+1. Download pretrained weights from the specified source.  
+2. Run the following command to initiate inference:  
+   `python ./main.py --arch=resnet50 --evaluate --epochs=1 --pretrained-from-file=nvidia_resnet50_200821.pth.tar -b=256 /data/imagenet/`  
+3. Observe the output for any errors related to loading the state_dict.

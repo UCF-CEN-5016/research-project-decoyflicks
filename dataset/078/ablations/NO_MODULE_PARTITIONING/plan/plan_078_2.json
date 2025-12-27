@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and vit_pytorch modules",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 5 and set the input dimensions: height=1024, width=1024, and channels=3",
+    "Create random input data with shape (batch_size, channels, height, width) using torch.randn",
+    "Instantiate the navit_nest_3d model from vit_pytorch with appropriate parameters: dim=768, depth=12, heads=12, mlp_dim=3072",
+    "Set the model to training mode by calling model.train()",
+    "Define a loss function, e.g., nn.CrossEntropyLoss(), and an optimizer, e.g., torch.optim.Adam with learning rate=1e-4",
+    "Create a dummy target tensor with shape (batch_size) containing random class indices for 10 classes using torch.randint",
+    "Perform a forward pass by calling model(input_data) and store the output",
+    "Calculate the loss by calling loss_function(output, target) and store the loss value",
+    "Perform a backward pass by calling loss.backward() to compute gradients",
+    "Capture the output of the backward pass to check for errors",
+    "Assert that the output of the backward pass raises an error related to gradient shape mismatch",
+    "Log the error message to verify it matches the expected error: 'Function UnbindBackwardAutogradNestedTensor0 returned an invalid gradient at index 0 - got 1 1024 but expected shape compatible with [5, j2, 1024]'"
+]
+```

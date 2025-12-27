@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules for instance segmentation from TensorFlow Model Garden",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 8 and image dimensions of 640x640 for input images",
+    "Load the COCO dataset for instance segmentation using tfds.load('coco/2017', split='train')",
+    "Preprocess the dataset to resize images to (640, 640) and normalize pixel values to [0, 1]",
+    "Create a data pipeline using tf.data API to batch and shuffle the dataset with batch size 8",
+    "Define the model configuration parameters such as num_classes=80, learning_rate=0.001, and num_steps=1200",
+    "Initialize the instance segmentation model using tf.keras.Model with the specified parameters",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., SparseCategoricalCrossentropy)",
+    "Train the model for 5 epochs on the training dataset while monitoring validation loss",
+    "During training, periodically log the validation metrics including validation loss",
+    "After training, evaluate the model on the validation dataset and capture the output metrics",
+    "Check the output metrics for validation loss and assert that it equals 0.0",
+    "Print the validation metrics to confirm the presence of validation loss being 0.0",
+    "Run the same steps for the official Semantic Segmentation tutorial to confirm the same behavior"
+]
+```

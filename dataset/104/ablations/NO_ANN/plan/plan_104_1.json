@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torchvision.datasets, torchvision.transforms, torch.utils.data.DataLoader, tqdm.auto.trange, and vector_quantize_pytorch.VectorQuantize",
+    "Set the learning rate to 3e-4, number of training iterations to 1000, number of codes to 256, and seed to 1234",
+    "Determine the device to use: set device to 'cuda' if a GPU is available, otherwise set to 'cpu'",
+    "Define a SimpleVQAutoEncoder class that inherits from nn.Module",
+    "In the __init__ method of SimpleVQAutoEncoder, create a ModuleList containing the following layers: Conv2d with input channels=1, output channels=16, kernel_size=3, stride=1, padding=1; MaxPool2d with kernel_size=2, stride=2; GELU activation; Conv2d with input channels=16, output channels=32, kernel_size=3, stride=1, padding=1; MaxPool2d with kernel_size=2, stride=2; VectorQuantize with dim=32, accept_image_fmap=True, and implicit_neural_codebook=False; Upsample with scale_factor=2 and mode='nearest'; Conv2d with input channels=32, output channels=16, kernel_size=3, stride=1, padding=1; GELU activation; Upsample with scale_factor=2 and mode='nearest'; Conv2d with input channels=16, output channels=1, kernel_size=3, stride=1, padding=1",
+    "Define the forward method of SimpleVQAutoEncoder to pass input through the layers and return the output, indices, and commit loss",
+    "Define a train function that takes model, train_loader, train_iterations, and alpha as parameters",
+    "Inside the train function, define an iterate_dataset function that yields batches of data from the train_loader",
+    "In the train function, loop over the range of train_iterations, zero the optimizer gradients, and get a batch of data from iterate_dataset",
+    "Call the model with the input batch and unpack the output, indices, and commit loss",
+    "Calculate the reconstruction loss as the mean absolute error between the output and input",
+    "Backpropagate the total loss (reconstruction loss + alpha * commit loss) and update the model parameters",
+    "Prepare the FashionMNIST dataset using torchvision.transforms.Compose to normalize the data and convert it to tensor format",
+    "Create a DataLoader for the FashionMNIST dataset with batch_size=256 and shuffle=True",
+    "Set the random seed using torch.random.manual_seed with the value of seed",
+    "Instantiate the SimpleVQAutoEncoder with codebook_size set to num_codes and move it to the specified device",
+    "Create an AdamW optimizer for the model parameters with the specified learning rate",
+    "Run the train function with the model, train_dataset, and train_iterations to start training",
+    "After training, check if the MLPs in ResidualVQ were initialized by inspecting the model parameters",
+    "Assert that the MLPs in ResidualVQ are initialized even when implicit_neural_codebook is set to False"
+]
+```

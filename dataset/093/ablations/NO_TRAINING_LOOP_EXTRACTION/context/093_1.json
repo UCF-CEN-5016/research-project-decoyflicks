@@ -1,0 +1,11 @@
+{
+  "bug_report": "093",
+  "rank": 1,
+  "score": 1.0,
+  "main_file": {
+    "path": "x_transformers/__init__.py",
+    "content": "from x_transformers.x_transformers import (\n    XTransformer,\n    Encoder,\n    Decoder,\n    PrefixDecoder,\n    CrossAttender,\n    Attention,\n    TransformerWrapper,\n    ViTransformerWrapper\n)\n\nfrom x_transformers.autoregressive_wrapper import AutoregressiveWrapper\nfrom x_transformers.nonautoregressive_wrapper import NonAutoregressiveWrapper\n\nfrom x_transformers.continuous import (\n    ContinuousTransformerWrapper,\n    ContinuousAutoregressiveWrapper\n)\n\nfrom x_transformers.xval import (\n    XValTransformerWrapper,\n    XValAutoregressiveWrapper\n)\n\nfrom x_transformers.xl_autoregressive_wrapper import XLAutoregressiveWrapper\n\nfrom x_transformers.dpo import (\n    DPO\n)\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

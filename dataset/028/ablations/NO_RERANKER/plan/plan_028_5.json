@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the vision_transformer repository from GitHub using the command: git clone https://github.com/pytorch/examples.git",
+    "Navigate to the vision_transformer directory using: cd examples/vision_transformer",
+    "Install the required dependencies by running: pip install -r requirements.txt",
+    "Import necessary libraries in a new Python script: import torch, torchvision.transforms as transforms, torchvision.datasets as datasets, torch.utils.data as data",
+    "Set the device to GPU by adding: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define the batch size for the CIFAR10 dataset: batch_size = 64",
+    "Set the number of classes for CIFAR10 dataset: num_classes = 10",
+    "Load the CIFAR10 dataset using: train_dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transforms.ToTensor())",
+    "Create a DataLoader for the training dataset: train_loader = data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)",
+    "Import the Vision Transformer model from the repository: from main import VisionTransformer",
+    "Initialize the Vision Transformer model with num_classes set to 16: model = VisionTransformer(num_classes=16).to(device)",
+    "Run a single forward pass with dummy input data: input_data = torch.rand(batch_size, 3, 32, 32).to(device)",
+    "Get the model output by calling: output = model(input_data)",
+    "Check the shape of the output tensor: assert output.shape[1] == 16, 'Output should have 16 classes instead of 10'",
+    "Print the output shape to verify: print('Output shape:', output.shape)",
+    "Run the script to observe the output shape and confirm the bug occurs"
+]
+```

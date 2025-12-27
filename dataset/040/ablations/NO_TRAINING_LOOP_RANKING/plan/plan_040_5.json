@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and the UNet class from labml_nn.diffusion.ddpm.unet",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 8 and image dimensions of 32x32 for CIFAR-10 dataset",
+    "Create a random input tensor with shape (batch_size, 3, height, width) where height=32 and width=32",
+    "Create a random target tensor with shape (batch_size, num_classes) where num_classes=10 for CIFAR-10",
+    "Instantiate the UNet model from labml_nn.diffusion.ddpm.unet with appropriate parameters",
+    "Pass the input tensor through the UNet model to obtain the output tensor",
+    "Extract the attention weights from the UNet model's forward pass, specifically from the self-attention layer",
+    "Verify the shape of the attention weights tensor to ensure it matches the expected dimensions, which should be (batch_size, num_heads, height * width, height * width)",
+    "Apply softmax operation on the attention weights tensor along the j-axis (dim=2) and store the result in a new tensor",
+    "Assert that the softmax output tensor contains valid probabilities (i.e., all values should be between 0 and 1 and sum to 1 along the j-axis)",
+    "Modify the softmax operation to use dim=1 instead of dim=2 and store the result in another tensor",
+    "Assert that the modified softmax output tensor does not sum to 1 along the j-axis, indicating a potential bug",
+    "Log the attention weights before and after applying the softmax operation to compare the outputs",
+    "Run the model on the CIFAR-10 dataset for a few epochs to observe if the model converges despite the potential bug in the attention mechanism",
+    "Monitor the training loss and accuracy to confirm that the model is still learning despite the suspected bug in the attention mechanism"
+]
+```

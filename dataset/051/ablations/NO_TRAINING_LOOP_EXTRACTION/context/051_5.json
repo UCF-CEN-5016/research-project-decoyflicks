@@ -1,0 +1,198 @@
+{
+  "bug_report": "051",
+  "rank": 5,
+  "score": 0.9599971175193787,
+  "main_file": {
+    "path": "examples/generative/dcgan_overriding_train_step.py",
+    "content": "\"\"\"\nTitle: DCGAN to generate face images\nAuthor: [fchollet](https://twitter.com/fchollet)\nDate created: 2019/04/29\nLast modified: 2023/12/21\nDescription: A simple DCGAN trained using `fit()` by overriding `train_step` on CelebA images.\nAccelerator: GPU\n\"\"\"\n\n\"\"\"\n## Setup\n\"\"\"\n\nimport keras\nimport tensorflow as tf\n\nfrom keras import layers\nfrom keras import ops\nimport matplotlib.pyplot as plt\nimport os\nimport gdown\nfrom zipfile import ZipFile\n\n\n\"\"\"\n## Prepare CelebA data\n\nWe'll use face images from the CelebA dataset, resized to 64x64.\n\"\"\"\n\nos.makedirs(\"celeba_gan\")\n\nurl = \"https://drive.google.com/uc?id=1O7m1010EJjLE5QxLZiM9Fpjs7Oj6e684\"\noutput = \"celeba_gan/data.zip\"\ngdown.download(url, output, quiet=True)\n\nwith ZipFile(\"celeba_gan/data.zip\", \"r\") as zipobj:\n    zipobj.extractall(\"celeba_gan\")\n\n\"\"\"\nCreate a dataset from our folder, and rescale the images to the [0-1] range:\n\"\"\"\n\ndataset = keras.utils.image_dataset_from_directory(\n    \"celeba_gan\", label_mode=None, image_size=(64, 64), batch_size=32\n)\ndataset = dataset.map(lambda x: x / 255.0)\n\n\n\"\"\"\nLet's display a sample image:\n\"\"\"\n\n\nfor x in dataset:\n    plt.axis(\"off\")\n    plt.imshow((x.numpy() * 255).astype(\"int32\")[0])\n    break\n\n\n\"\"\"\n## Create the discriminator\n\nIt maps a 64x64 image to a binary classification score.\n\"\"\"\n\ndiscriminator = keras.Sequential(\n    [\n        keras.Input(shape=(64, 64, 3)),\n        layers.Conv2D(64, kernel_size=4, strides=2, padding=\"same\"),\n        layers.LeakyReLU(negative_slope=0.2),\n        layers.Conv2D(128, kernel_size=4, strides=2, padding=\"same\"),\n        layers.LeakyReLU(negative_slope=0.2),\n        layers.Conv2D(128, kernel_size=4, strides=2, padding=\"same\"),\n        layers.LeakyReLU(negative_slope=0.2),\n        layers.Flatten(),\n        layers.Dropout(0.2),\n        layers.Dense(1, activation=\"sigmoid\"),\n    ],\n    name=\"discriminator\",\n)\ndiscriminator.summary()\n\n\"\"\"\n## Create the generator\n\nIt mirrors the discriminator, replacing `Conv2D` layers with `Conv2DTranspose` layers.\n\"\"\"\n\nlatent_dim = 128\n\ngenerator = keras.Sequential(\n    [\n        keras.Input(shape=(latent_dim,)),\n        layers.Dense(8 * 8 * 128),\n        layers.Reshape((8, 8, 128)),\n        layers.Conv2DTranspose(128, kernel_size=4, strides=2, padding=\"same\"),\n        layers.LeakyReLU(negative_slope=0.2),\n        layers.Conv2DTranspose(256, kernel_size=4, strides=2, padding=\"same\"),\n        layers.LeakyReLU(negative_slope=0.2),\n        layers.Conv2DTranspose(512, kernel_size=4, strides=2, padding=\"same\"),\n        layers.LeakyReLU(negative_slope=0.2),\n        layers.Conv2D(3, kernel_size=5, padding=\"same\", activation=\"sigmoid\"),\n    ],\n    name=\"generator\",\n)\ngenerator.summary()\n\n\"\"\"\n## Override `train_step`\n\"\"\"\n\n\nclass GAN(keras.Model):\n    def __init__(self, discriminator, generator, latent_dim):\n        super().__init__()\n        self.discriminator = discriminator\n        self.generator = generator\n        self.latent_dim = latent_dim\n        self.seed_generator = keras.random.SeedGenerator(1337)\n\n    def compile(self, d_optimizer, g_optimizer, loss_fn):\n        super().compile()\n        self.d_optimizer = d_optimizer\n        self.g_optimizer = g_optimizer\n        self.loss_fn = loss_fn\n        self.d_loss_metric = keras.metrics.Mean(name=\"d_loss\")\n        self.g_loss_metric = keras.metrics.Mean(name=\"g_loss\")\n\n    @property\n    def metrics(self):\n        return [self.d_loss_metric, self.g_loss_metric]\n\n    def train_step(self, real_images):\n        # Sample random points in the latent space\n        batch_size = ops.shape(real_images)[0]\n        random_latent_vectors = keras.random.normal(\n            shape=(batch_size, self.latent_dim), seed=self.seed_generator\n        )\n\n        # Decode them to fake images\n        generated_images = self.generator(random_latent_vectors)\n\n        # Combine them with real images\n        combined_images = ops.concatenate([generated_images, real_images], axis=0)\n\n        # Assemble labels discriminating real from fake images\n        labels = ops.concatenate(\n            [ops.ones((batch_size, 1)), ops.zeros((batch_size, 1))], axis=0\n        )\n        # Add random noise to the labels - important trick!\n        labels += 0.05 * tf.random.uniform(tf.shape(labels))\n\n        # Train the discriminator\n        with tf.GradientTape() as tape:\n            predictions = self.discriminator(combined_images)\n            d_loss = self.loss_fn(labels, predictions)\n        grads = tape.gradient(d_loss, self.discriminator.trainable_weights)\n        self.d_optimizer.apply_gradients(\n            zip(grads, self.discriminator.trainable_weights)\n        )\n\n        # Sample random points in the latent space\n        random_latent_vectors = keras.random.normal(\n            shape=(batch_size, self.latent_dim), seed=self.seed_generator\n        )\n\n        # Assemble labels that say \"all real images\"\n        misleading_labels = ops.zeros((batch_size, 1))\n\n        # Train the generator (note that we should *not* update the weights\n        # of the discriminator)!\n        with tf.GradientTape() as tape:\n            predictions = self.discriminator(self.generator(random_latent_vectors))\n            g_loss = self.loss_fn(misleading_labels, predictions)\n        grads = tape.gradient(g_loss, self.generator.trainable_weights)\n        self.g_optimizer.apply_gradients(zip(grads, self.generator.trainable_weights))\n\n        # Update metrics\n        self.d_loss_metric.update_state(d_loss)\n        self.g_loss_metric.update_state(g_loss)\n        return {\n            \"d_loss\": self.d_loss_metric.result(),\n            \"g_loss\": self.g_loss_metric.result(),\n        }\n\n\n\"\"\"\n## Create a callback that periodically saves generated images\n\"\"\"\n\n\nclass GANMonitor(keras.callbacks.Callback):\n    def __init__(self, num_img=3, latent_dim=128):\n        self.num_img = num_img\n        self.latent_dim = latent_dim\n        self.seed_generator = keras.random.SeedGenerator(42)\n\n    def on_epoch_end(self, epoch, logs=None):\n        random_latent_vectors = keras.random.normal(\n            shape=(self.num_img, self.latent_dim), seed=self.seed_generator\n        )\n        generated_images = self.model.generator(random_latent_vectors)\n        generated_images *= 255\n        generated_images.numpy()\n        for i in range(self.num_img):\n            img = keras.utils.array_to_img(generated_images[i])\n            img.save(\"generated_img_%03d_%d.png\" % (epoch, i))\n\n\n\"\"\"\n## Train the end-to-end model\n\"\"\"\n\nepochs = 1  # In practice, use ~100 epochs\n\ngan = GAN(discriminator=discriminator, generator=generator, latent_dim=latent_dim)\ngan.compile(\n    d_optimizer=keras.optimizers.Adam(learning_rate=0.0001),\n    g_optimizer=keras.optimizers.Adam(learning_rate=0.0001),\n    loss_fn=keras.losses.BinaryCrossentropy(),\n)\n\ngan.fit(\n    dataset, epochs=epochs, callbacks=[GANMonitor(num_img=10, latent_dim=latent_dim)]\n)\n\n\"\"\"\nSome of the last generated images around epoch 30\n(results keep improving after that):\n\n![results](https://i.imgur.com/h5MtQZ7l.png)\n\"\"\"\n"
+  },
+  "module_snippets": [
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    },
+    {
+      "file": "examples/nlp/neural_machine_translation_with_keras_nlp.py",
+      "snippets": [
+        {
+          "lines": "429-433",
+          "code": "def decode_sequences(input_sentences):\n    batch_size = 1\n\n    # Tokenize the encoder input.\n    encoder_input_tokens = ops.convert_to_tensor(eng_tokenizer(input_sentences))\n    if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH:\n        pads = ops.full((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0)\n        encoder_input_tokens = ops.concatenate(\n            [encoder_input_tokens.to_tensor(), pads], 1\n        )\n\n    # Define a function that outputs the next token's probability given the\n    # input sequence.\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache\n\n    # Build a prompt of length 40 with a start token and padding tokens.\n    length = 40\n    start = ops.full((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\"))\n    pad = ops.full((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\"))\n    prompt = ops.concatenate((start, pad), axis=-1)\n\n    generated_tokens = keras_nlp.samplers.GreedySampler()(\n        next,\n        prompt,\n        stop_token_ids=[spa_tokenizer.token_to_id(\"[END]\")],\n        index=1,  # Start sampling after start token.\n    )\n    generated_sentences = spa_tokenizer.detokenize(generated_tokens)\n    return generated_sentences\n\n    def next(prompt, cache, index):\n        logits = transformer([encoder_input_tokens, prompt])[:, index - 1, :]\n        # Ignore hidden states for now; only needed for contrastive search.\n        hidden_states = None\n        return logits, hidden_states, cache"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "gdown",
+      "function": "download"
+    },
+    {
+      "module": "keras",
+      "function": "Conv2D"
+    },
+    {
+      "module": "keras",
+      "function": "Conv2DTranspose"
+    },
+    {
+      "module": "keras",
+      "function": "Dense"
+    },
+    {
+      "module": "keras",
+      "function": "Dropout"
+    },
+    {
+      "module": "keras",
+      "function": "Flatten"
+    },
+    {
+      "module": "keras",
+      "function": "Input"
+    },
+    {
+      "module": "keras",
+      "function": "LeakyReLU"
+    },
+    {
+      "module": "keras",
+      "function": "Reshape"
+    },
+    {
+      "module": "keras",
+      "function": "Sequential"
+    },
+    {
+      "module": "keras",
+      "function": "concatenate"
+    },
+    {
+      "module": "keras",
+      "function": "ones"
+    },
+    {
+      "module": "keras",
+      "function": "shape"
+    },
+    {
+      "module": "keras",
+      "function": "zeros"
+    },
+    {
+      "module": "matplotlib",
+      "function": "axis"
+    },
+    {
+      "module": "matplotlib",
+      "function": "imshow"
+    },
+    {
+      "module": "zipfile",
+      "function": "ZipFile"
+    }
+  ]
+}

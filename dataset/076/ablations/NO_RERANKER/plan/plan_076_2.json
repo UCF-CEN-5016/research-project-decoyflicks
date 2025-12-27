@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import h5py, import numpy as np, from mrcnn import utils, from mrcnn import modellib",
+    "Define constants: set MODEL_DIR to a valid directory path, set COCO_MODEL_PATH to a valid path of pre-trained weights, and set config to an instance of the configuration class.",
+    "Set the mode to 'inference' and create an instance of the MaskRCNN model: model = modellib.MaskRCNN(mode='inference', model_dir=MODEL_DIR, config=config)",
+    "Prepare a dummy input image: create a random image tensor with shape (1, 512, 512, 3) using np.random.rand(1, 512, 512, 3).astype(np.float32)",
+    "Load the model weights: call model.load_weights(COCO_MODEL_PATH, by_name=True) to load the pre-trained weights.",
+    "Ensure the weights file exists at COCO_MODEL_PATH: assert os.path.exists(COCO_MODEL_PATH), 'Weights file not found.'",
+    "Call model.detect([dummy_image]) to run inference on the dummy image.",
+    "Capture the output of the model.detect call and check for exceptions.",
+    "Verify that a NotImplementedError is raised during the execution of model.load_weights, specifically check for the message 'Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead.'",
+    "Log the error message to confirm the occurrence of the bug."
+]
+```

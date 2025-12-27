@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, functional as F from torch, and repeat from einops",
+    "Define a batch size of 2 and image dimensions of 3x224x224 (3 channels, height 224, width 224)",
+    "Create a random input tensor with shape (batch_size, 3, 224, 224) using torch.randn",
+    "Define a dummy encoder class that mimics the expected encoder behavior, including a pos_embedding attribute with shape (1, num_patches, encoder_dim)",
+    "Set num_patches to 16 and encoder_dim to 768 for the dummy encoder, ensuring pos_embedding has shape (1, 17, 768)",
+    "Instantiate the dummy encoder and create an instance of the MAE class with the dummy encoder, decoder_dim set to 768, and masking_ratio set to 0.75",
+    "Call the forward method of the MAE instance with the random input tensor",
+    "Capture the output of the forward method, which should be the reconstruction loss",
+    "Check if the output loss is a valid tensor and not NaN or infinite",
+    "Print the output loss value to verify it is computed correctly",
+    "Assert that the output loss is not equal to zero, indicating that the reconstruction loss is being calculated"
+]
+```

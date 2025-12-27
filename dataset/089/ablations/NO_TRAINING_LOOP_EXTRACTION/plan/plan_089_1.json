@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch and nn from torch",
+    "Define the dimensions for the test: set kv_heads = 4, heads = 8, and dim_head = 64",
+    "Create a class that inherits from nn.Module to simulate the XTransformer class",
+    "In the class constructor, initialize self.qk_norm_k_scale as nn.Parameter(torch.ones(kv_heads, 1, dim_head))",
+    "Define a forward method that takes input tensors with shape (batch_size, seq_length, dim) where batch_size = 2 and seq_length = 10",
+    "Create random input tensors with shape (2, 10, 512) to simulate input data",
+    "Instantiate the class and pass the random input tensors to the forward method",
+    "Capture the output of the forward method",
+    "Check the shape of the output tensor to ensure it matches expected dimensions",
+    "Modify the initialization of self.qk_norm_k_scale to use nn.Parameter(torch.ones(heads, 1, dim_head)) instead",
+    "Re-run the forward method with the same input tensors",
+    "Compare the outputs from both runs to check for discrepancies",
+    "Assert that the outputs from the two runs are not equal, indicating a conflict due to the qk_norm and kv_heads mismatch",
+    "Log the output shapes and values for both runs to verify the conflict"
+]
+```

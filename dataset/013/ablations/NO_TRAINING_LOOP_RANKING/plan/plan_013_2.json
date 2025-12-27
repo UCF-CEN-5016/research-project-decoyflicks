@@ -1,0 +1,22 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'tf_env' with Python 3.10 using the command: conda create -n tf_env python=3.10",
+    "Activate the conda environment using: conda activate tf_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install the TensorFlow Model Garden nightly version using pip with the command: pip install tf-models-nightly",
+    "Install Matplotlib using pip with the command: pip install matplotlib",
+    "Open Visual Studio Code (VSCode) and create a new Python file or Jupyter notebook.",
+    "Import the necessary libraries at the top of the file: import tensorflow as tf, import matplotlib.pyplot as plt, from official import tensorflow_models",
+    "Set the Matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg')",
+    "Run the command: print(tf.__version__) to confirm TensorFlow version is 2.13.10.",
+    "Run the command: print(tf.config.list_physical_devices('GPU')) to confirm GPU is available.",
+    "Create a simple plot using Matplotlib before importing tensorflow_models: plt.plot([1, 2, 3], [1, 4, 9]), plt.show()",
+    "Import the TensorFlow Model Garden with the command: from official import tensorflow_models",
+    "Create another simple plot using Matplotlib after importing tensorflow_models: plt.plot([1, 2, 3], [1, 4, 9]), plt.show()",
+    "Check the current Matplotlib backend after importing tensorflow_models by adding the line: print(plt.get_backend())",
+    "Assert that the backend is 'Agg' after importing tensorflow_models, which indicates it is non-interactive and should not display plots.",
+    "Verify that the first plot displays correctly while the second plot does not display, confirming the bug."
+]
+```

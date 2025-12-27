@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import keras_nlp, import random",
+    "Set the random seed for reproducibility: tf.random.set_seed(42), random.seed(42)",
+    "Define the model parameters: set vocab_size = 10000, embedding_dim = 256, hidden_units = 512, num_layers = 4",
+    "Create a sample English-to-Spanish translation dataset: define test_eng_texts = ['Hello', 'How are you?', 'Goodbye']",
+    "Define a function to create a simple translation model using KerasNLP: def create_translation_model()",
+    "Inside create_translation_model, initialize an Encoder and Decoder from keras_nlp.models",
+    "Compile the model with an optimizer and loss function: model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')",
+    "Train the model on dummy data: model.fit(dummy_input_data, dummy_target_data, epochs=1)",
+    "Define a function decode_sequences(input_sentences) that takes a list of input sentences",
+    "Inside decode_sequences, create a prompt tensor from input sentences: prompt = tf.constant(input_sentences)",
+    "Initialize a GreedySampler from keras_nlp.samplers: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and additional parameters: generated_tokens = sampler(next, prompt, end_token_id=2)",
+    "Run the decode_sequences function with a random input sentence: input_sentence = random.choice(test_eng_texts)",
+    "Assert that a TypeError is raised when calling decode_sequences: assertRaises(TypeError, decode_sequences, [input_sentence])",
+    "Print the error message to confirm the TypeError: print('Caught expected TypeError:', e)"
+]
+```

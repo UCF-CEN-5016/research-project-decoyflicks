@@ -1,0 +1,17 @@
+```json
+[
+    "Install PyTorch version 1.9.0+cu111 using pip with the command: pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html",
+    "Ensure the operating system is Ubuntu 18.04 LTS.",
+    "Create a new Python script named 'test_mps_bug.py'.",
+    "Import the necessary libraries in 'test_mps_bug.py' with the following code: import torch; import torch.nn as nn; import argparse; import os.",
+    "Define a function named 'main' in 'test_mps_bug.py' that will contain the main logic.",
+    "Inside the 'main' function, add the following code to check for MPS availability: if torch.backends.mps.is_available(): print('MPS is available') else: print('MPS is not available')",
+    "Add a command-line argument parser in 'main' to accept a GPU ID with the following code: parser = argparse.ArgumentParser(); parser.add_argument('--gpu', type=int, default=0, help='GPU ID to use'); args = parser.parse_args()",
+    "Set the GPU device using the command: torch.cuda.set_device(args.gpu).",
+    "Add a dummy model definition in 'main' with the following code: model = nn.Linear(10, 5).",
+    "Attempt to call 'torch.backends.mps.is_available()' in 'main' to trigger the bug.",
+    "Run the script using the command: python3 test_mps_bug.py --gpu 0.",
+    "Capture the output of the script to verify the presence of the AttributeError.",
+    "Assert that the output contains the text 'AttributeError: module 'torch.backends' has no attribute 'mps'' to confirm the bug is reproduced."
+]
+```

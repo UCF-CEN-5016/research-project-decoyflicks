@@ -1,0 +1,26 @@
+```json
+[
+    "Import pandas, numpy, and datetime modules",
+    "Define a source path to a CSV file for dataset loading",
+    "Read the dataset from the specified CSV file into a DataFrame",
+    "Parse date columns in the dataset as datetime objects",
+    "Sort the DataFrame by ID features and time feature",
+    "Filter the DataFrame to include only required feature columns",
+    "Replace missing data label with NaN if enabled in configuration",
+    "Drop rows with NaN values in target features if drop_na is True",
+    "Map categorical features to integer labels or one-hot encoding",
+    "Map IDs for timeseries grouping and ID-based scaling",
+    "Split the dataset into training, validation, and test sets based on time feature",
+    "Drop unseen categoricals from the datasets if required by configuration",
+    "Initialize a composite scaler for target and continuous input features",
+    "Fit the scaler to the training data",
+    "Apply the scaler to the training, validation, and test datasets",
+    "Save the processed datasets as CSV files in the specified destination path",
+    "Save the preprocessor state including mappings, scalers, and other metadata",
+    "Load the preprocessor state from a binary file if provided",
+    "Verify that all required keys are present in the preprocessor state",
+    "Preprocess test data using the loaded preprocessor state without dropping unseen categoricals",
+    "Check for NaN values in continuous features of the test dataset"
+]
+```
+

@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: import tensorflow as tf, import numpy as np, import pickle, import os",
+    "Set the random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Define the dataset path: data_root = 'path/to/your/dataset'",
+    "Set the model parameters: name = 'your_dataset_name', mode = 'val', imsize = 512, num_negatives = 5, num_queries = 2000, pool_size = 20000",
+    "Initialize the TuplesDataset class: dataset = TuplesDataset(name, mode, data_root, imsize, num_negatives, num_queries, pool_size)",
+    "Call the create_epoch_tuples method to prepare the dataset: dataset.create_epoch_tuples(net)",
+    "Define a simple model for instance segmentation: net = tf.keras.Sequential([tf.keras.layers.Input(shape=(imsize, imsize, 3)), tf.keras.layers.Conv2D(32, (3, 3), activation='relu'), tf.keras.layers.MaxPooling2D(), tf.keras.layers.Flatten(), tf.keras.layers.Dense(1)])",
+    "Compile the model with a loss function: net.compile(optimizer='adam', loss='binary_crossentropy')",
+    "Train the model on the dataset: history = net.fit(dataset, epochs=10, validation_data=dataset, steps_per_epoch=100, validation_steps=10)",
+    "During training, monitor the validation loss: print(history.history['val_loss'])",
+    "Assert that the validation loss is always zero: assert all(val_loss == 0.0 for val_loss in history.history['val_loss'])",
+    "Check the output of the training process for validation loss: print('Validation loss:', history.history['val_loss'])",
+    "Verify that the validation loss is consistently reported as zero in the output logs"
+]
+```

@@ -1,0 +1,15 @@
+```json
+[
+    "Install TensorFlow 2.11.0 and the necessary GPU drivers (CUDA 11.0, cuDNN)",
+    "Clone the TensorFlow Model Garden repository to /home/cdacapp1/scaling/models-master",
+    "Navigate to the directory /home/cdacapp1/scaling/models-master/official/legacy/image_classification",
+    "Set environment variables: export PYTHONPATH=\"$PYTHONPATH:/home/cdacapp1/scaling/models-master\" and export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records",
+    "Create a Python script to configure the multi-worker mirrored strategy for 2 nodes, each with 2 GPUs, using the provided yaml files gpu.yaml and gpu1.yaml",
+    "Start the first node (gpu1) by running: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml",
+    "Start the second node (gpu2) by running: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml",
+    "Monitor the logs for both nodes to ensure that the training process is distributed across the 2 nodes and each node has access to 2 GPUs",
+    "Assert that the throughput on multiple nodes with the multi-worker mirrored strategy does not increase compared to a single GPU within a single node",
+    "Verify that the performance is consistent across multiple runs by repeating steps 4-7 several times"
+]
+```
+

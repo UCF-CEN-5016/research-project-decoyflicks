@@ -1,0 +1,16 @@
+Bug in implementation of Rotary Positional Embeddings
+
+If you run [this example code,](https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/transformers/rope/__init__.py) there will be a bug.
+Error:
+
+>     x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])
+>               ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> RuntimeError: The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3
+
+It seems the problem is in the incorrect implementation of dividing features for the use of ROPE only into their parts.
+
+The correct code should most likely be something like this:
+
+` x_rope = (x_rope * self.cos_cached[:, :, :, :x_rope.shape[0]]) + (neg_half_x * self.sin_cached[:, :, :, :x_rope.shape[0]])`
+
+

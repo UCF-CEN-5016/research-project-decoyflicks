@@ -1,0 +1,18 @@
+TITLE  
+Neural Machine Translation Example Fails Due to ImportError
+
+SYMPTOMS  
+• The example `neural_machine_translation_with_transformer` does not run successfully on Google Colab.  
+• The following error message is encountered:  
+  ```
+  ImportError: cannot import name 'ops' from 'keras' (/usr/local/lib/python3.10/dist-packages/keras/__init__.py)
+  ```  
+• The program fails to execute after attempting to import `ops` from the Keras library.
+
+EXPECTED BEHAVIOR  
+The example should run without errors, successfully importing all necessary modules and executing the neural machine translation functionality as intended.
+
+REPRODUCTION STEPS  
+1. Open the example notebook [neural_machine_translation_with_transformer](https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/nlp/ipynb/neural_machine_translation_with_transformer.ipynb) on Google Colab.  
+2. Run the code cells sequentially.  
+3. Observe the error that occurs during the import of `ops` from the Keras library.

@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: import os, import tensorflow as tf, import keras, from keras import layers, import keras_nlp",
+    "Set the Keras backend to TensorFlow: os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Set the mixed precision policy to mixed_float16: tf.keras.mixed_precision.set_global_policy('mixed_float16')",
+    "Define a batch size of 32 and input shape for the BERT model: batch_size = 32, input_shape = (None,)",
+    "Instantiate the BERT classifier using keras_nlp: classifier = keras_nlp.models.BertClassifier.from_preset('bert_tiny_en_uncased_sst2')",
+    "Prepare dummy input data for prediction: input_data = ['I love modular workflows in keras-nlp'] * batch_size",
+    "Call the predict method on the classifier with the dummy input data: predictions = classifier.predict(input_data)",
+    "Capture the output and any exceptions raised during the prediction call",
+    "Verify that an AttributeError is raised with the message 'LossScaleOptimizerV3' object has no attribute 'name'",
+    "Log the full traceback of the error to confirm the source of the issue"
+]
+```

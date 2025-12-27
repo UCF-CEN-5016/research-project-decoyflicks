@@ -1,0 +1,21 @@
+```json
+[
+    "Import torch and the ViT and MPP classes from vit_pytorch",
+    "Define image size as 256 and patch size as 32",
+    "Set num_classes to 1000, dim to 1024, depth to 6, heads to 8, mlp_dim to 2048, dropout to 0.1, and emb_dropout to 0.1",
+    "Create a ViT model instance with the defined parameters",
+    "Initialize the MPP trainer with the ViT model, patch_size of 32, dim of 1024, mask_prob of 0.15, random_patch_prob of 0.30, and replace_prob of 0.50",
+    "Define an optimizer using Adam with learning rate set to 3e-4",
+    "Create a function sample_unlabelled_images that returns a tensor of shape (20, 3, 256, 256) filled with random values between 0 and 1",
+    "Run a loop for 100 iterations where in each iteration:",
+    "    Call sample_unlabelled_images to generate a batch of images",
+    "    Pass the images to the mpp_trainer to compute the loss",
+    "    Call opt.zero_grad() to clear previous gradients",
+    "    Call loss.backward() to compute gradients",
+    "    Call opt.step() to update model parameters",
+    "After the loop, save the model state dictionary to './pretrained-net.pt'",
+    "Run the code and observe the output for any RuntimeError related to dimensions",
+    "Check the error message for expected input shape and actual input shape to confirm dimension mismatch",
+    "Validate that the input to the layer norm has shape [20, 64, 3072] instead of the expected shape [*, 1024]"
+]
+```

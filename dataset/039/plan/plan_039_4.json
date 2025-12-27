@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: torch, nn, DataLoader, RandomSampler from torch and labml modules",
+    "Define a batch size of 4",
+    "Set the chunk_len to 16",
+    "Create a TextFileDataset instance for Tiny Shakespeare dataset",
+    "Load the Retro_train_dataset.json file into a Dataset instance using the previously created TextFileDataset",
+    "Initialize a DataLoader with the Dataset, batch_size=4, and RandomSampler",
+    "Define model parameters: d_model=128, d_ff=512, n_heads=16, d_k=16",
+    "Create an NearestNeighborEncoder instance with chunk_len=16, num_chunks={3}, d_model=128, n_heads=16, d_k=16, d_ff=512",
+    "Create a RetroModel instance using the text dataset's number of tokens and previously defined model parameters, including the encoder",
+    "Move the model to a CUDA device (e.g., 'cuda:0')",
+    "Initialize an optimizer using Noam with lr=1.0, d_model=128, warmup=2000",
+    "Create an instance of the Sampler class with the same device, the created RetroModel, and the previously created TextFileDataset",
+    "Set the prompt as 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Call experiment.create() to create a new experiment named 'retro_small'",
+    "Create an instance of the Trainer class with the device, model, dataloader, and optimizer",
+    "Execute the trainer for 1 epoch by iterating through the dataloader",
+    "Assert that the loss calculation in the backward pass results in a RuntimeError with the specified message"
+]
+```
+

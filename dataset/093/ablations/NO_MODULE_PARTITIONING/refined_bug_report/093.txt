@@ -1,0 +1,16 @@
+TITLE  
+Incompatibility between `attn_num_mem_kv` and `attn_one_kv_head` settings
+
+SYMPTOMS  
+• Setting both `attn_num_mem_kv` and `attn_one_kv_head` results in an error.  
+• Exact error message not provided in the report, but the issue occurs during the execution of the model.  
+• The model fails to produce logits as expected when both parameters are set to their specified values.  
+
+EXPECTED BEHAVIOR  
+When configured correctly, the model should initialize without errors and produce output logits based on the input tensor `x`.
+
+REPRODUCTION STEPS  
+1. Initialize a `TransformerWrapper` instance with the specified parameters, including `attn_num_mem_kv = 20` and `attn_one_kv_head = True`.  
+2. Create a random input tensor `x` with shape `(8, 1024)` using `torch.randint`.  
+3. Call the model with the input tensor `x` to generate logits.  
+4. Observe the output shapes and any error messages that occur during execution.

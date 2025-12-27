@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official vision model garden: from official.vision.modeling.layers import detection_generator",
+    "Set TensorFlow logging level to ERROR to reduce output noise: tf.get_logger().setLevel('ERROR')",
+    "Define a batch size of 1 for testing purposes: batch_size = 1",
+    "Create an empty tensor for predicted boxes with shape (batch_size, 0, 4) to simulate zero predicted boxes: predicted_boxes = tf.zeros((batch_size, 0, 4))",
+    "Create a dummy tensor for scores with shape (batch_size, 0) to match the empty predicted boxes: scores = tf.zeros((batch_size, 0))",
+    "Create a dummy tensor for classes with shape (batch_size, 0) to match the empty predicted boxes: classes = tf.zeros((batch_size, 0))",
+    "Define a dummy input feature dictionary with the necessary keys: features = {'predicted_boxes': predicted_boxes, 'scores': scores, 'classes': classes}",
+    "Call the _generate_detections_v2_class_aware function from detection_generator with the empty predicted boxes: detections = detection_generator._generate_detections_v2_class_aware(features)",
+    "Wrap the function call in a try-except block to catch the ValueError: try { detections = detection_generator._generate_detections_v2_class_aware(features) } except ValueError as e: print(e)",
+    "Assert that the caught exception message contains 'List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2' to confirm the bug is reproduced"
+]
+```

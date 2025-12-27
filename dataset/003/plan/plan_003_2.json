@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and Object Detection libraries from their respective modules",
+    "Set up the environment by importing necessary functions such as 'is_tf2' from 'object_detection.utils import tf_version'",
+    "Create a test case class for 'FasterRcnnResnetV1FeatureExtractorTest' that inherits from 'unittest.TestCase'",
+    "Define the method '_build_feature_extractor' within this test case",
+    "Within '_build_feature_extractor', create a feature extractor map dictionary with keys 'resnet_v1_50', 'resnet_v1_101', and 'resnet_v1_152'",
+    "Implement the logic to return the corresponding feature extractor based on the architecture parameter within '_build_feature_extractor'",
+    "Create test methods such as 'test_extract_proposal_features_returns_expected_size' to validate the functionality of extracting proposal features",
+    "Within each test method, create a preprocessed_inputs tensor with shape [4, 224, 224, 3] filled with random uniform values between 0 and 255",
+    "Call the 'extract_proposal_features' method on the feature extractor instance created by '_build_feature_extractor'",
+    "Capture the shape of the output rpn_feature_map tensor to verify its dimensions are as expected",
+    "Assert that the features_shape_out matches [4, 14, 14, 1024] for 'resnet_v1_50', [4, 28, 28, 1024] for 'resnet_v1_101', and [1, 7, 7, 1024] for 'resnet_v1_152'",
+    "Call each test method within the unittest main function to execute the tests"
+]
+```
+

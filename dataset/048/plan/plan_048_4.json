@@ -1,0 +1,15 @@
+[
+    "Import necessary modules and classes from fairseq package",
+    "Define a model configuration with parameters suitable for reproducing the bug",
+    "Create a random input sample with specific dimensions based on the configuration",
+    "Initialize a DistributedFairseqModel instance using the defined configuration and input sample",
+    "Simulate loading a checkpoint to CPU using load_checkpoint_to_cpu function",
+    "Call a forward pass method of the model with the input sample, capturing intermediate outputs",
+    "Introduce intentional error or instability in the computation process (e.g., division by zero)",
+    "Verify that the forward pass results contain NaN values, indicating the bug",
+    "Set up logging to monitor GPU memory usage during execution",
+    "Capture the peak GPU memory usage after running the forward pass",
+    "Assert that the peak GPU memory usage exceeds a predefined threshold, suggesting instability or memory leak",
+    "Report any error messages or exceptions caught during the execution"
+]
+

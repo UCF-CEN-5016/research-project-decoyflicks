@@ -1,0 +1,16 @@
+Self condition inference mode
+
+Hello,
+
+When I enable self conditioning, the code always produce RuntimeError: Inference tensors cannot be saved for backward. To work around you can make a clone to get a normal tensor and use it in autograd. 
+
+I think the problem is at 
+
+        if self.self_condition and random() < 0.5:
+            with torch.inference_mode():
+                x_self_cond = self.model_predictions(x.clone().detach(), t).pred_x_start
+                x_self_cond = x_self_cond.detach_()
+
+I solved this by changing to torch.no_grad, but I am wondering if there is any problem with this? The problem is not solved wherever I added .clone() to unless changing to no_grad
+
+Could you provide any advice? Thanks!

@@ -1,0 +1,22 @@
+[
+    "Import required libraries: torch, TransformerWrapper and Decoder from x_transformers, and traceback",
+    "Define main function reproduce_bug_all_steps() to contain all test cases",
+    "Print step 1 header for testing valid configurations",
+    "Create first test case with only attn_num_mem_kv parameter",
+    "Wrap test case in try-except block to catch and report errors",
+    "Initialize model with valid attn_num_mem_kv=20 and default attn_one_kv_head=False",
+    "Generate test input tensor with random values",
+    "Run forward pass and print success message if it works",
+    "Create second test case with only attn_one_kv_head parameter",
+    "Initialize model with valid attn_one_kv_head=True and default attn_num_mem_kv=0",
+    "Run forward pass and print success message if it works",
+    "Print step 2 header for testing conflicting configuration",
+    "Create third test case with both conflicting parameters",
+    "Initialize model with both attn_num_mem_kv=20 and attn_one_kv_head=True",
+    "Attempt forward pass and expect failure",
+    "Print detailed error information including stack trace if failure occurs",
+    "Print step 3 header for summary",
+    "Print summary of test results showing working and failing cases",
+    "Print conclusion about the parameter conflict bug",
+    "Add if __name__ == '__main__' block to execute the function"
+]

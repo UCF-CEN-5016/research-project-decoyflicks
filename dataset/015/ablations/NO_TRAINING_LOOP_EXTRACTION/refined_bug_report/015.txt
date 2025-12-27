@@ -1,0 +1,16 @@
+TITLE  
+Unused argument in `show_batch` function
+
+SYMPTOMS  
+• The argument `num_of_examples` of the function `show_batch` is never utilized in the code.  
+• No error messages are generated, but the function does not behave as expected when trying to control the number of examples shown.  
+• Users may be confused about the purpose of `num_of_examples` since it has no effect on the output.
+
+EXPECTED BEHAVIOR  
+The `show_batch` function should utilize the `num_of_examples` argument to control the number of examples displayed, ensuring that the output reflects the specified number.
+
+REPRODUCTION STEPS  
+1. Open the notebook located at the provided GitHub link.  
+2. Locate the `show_batch` function definition.  
+3. Observe the function implementation and note that `num_of_examples` is not used in any part of the code.  
+4. Attempt to call `show_batch` with a specific value for `num_of_examples` and verify that the output remains unchanged regardless of the input.

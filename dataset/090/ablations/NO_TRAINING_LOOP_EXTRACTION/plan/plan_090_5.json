@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch, nn, and einops from their respective modules.",
+    "Define a batch size of 4 and sequence length of 16 for input data.",
+    "Create a random tensor for input data with shape (batch_size, sequence_length, input_dim) where input_dim is set to 32.",
+    "Create a random tensor for labels with shape (batch_size, sequence_length - 1) to match the expected output of the model.",
+    "Define a simple neural network model that includes an encoder and a decoder, ensuring that encoder.to_logits.weight is a parameter of the model.",
+    "Instantiate the XLAutoregressiveWrapper with the defined model.",
+    "Set the model to training mode by calling model.train().",
+    "Perform a forward pass by calling the forward method of XLAutoregressiveWrapper with the input tensor and labels.",
+    "Capture the output loss from the forward pass.",
+    "Check the value of encoder.to_logits.weight before the backward pass to ensure it has a valid initial value.",
+    "Call loss.backward() to compute gradients.",
+    "Check the value of encoder.to_logits.weight after the backward pass to verify if it has been updated.",
+    "Assert that the value of encoder.to_logits.weight after the backward pass is equal to its initial value, indicating it did not update.",
+    "Set up Distributed Data Parallel (DDP) by wrapping the model with torch.nn.parallel.DistributedDataParallel.",
+    "Run the forward pass again using DDP and capture the output loss.",
+    "Check the value of encoder.to_logits.weight again after the DDP forward pass to verify it remains unchanged.",
+    "Log the results of the weight checks to confirm the bug is reproducible."
+]
+```

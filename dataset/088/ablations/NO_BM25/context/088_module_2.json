@@ -1,0 +1,36 @@
+{
+  "bug_report": "088",
+  "module": {
+    "module": "tests",
+    "files": [
+      {
+        "path": "tests/test_x_transformers.py",
+        "snippets": [
+          {
+            "lines": "447-448",
+            "code": "            def __init__(self, num_tokens, dim):\n                super().__init__()\n                self.embed_x = nn.Embedding(num_tokens, dim)\n                self.embed_y = nn.Embedding(num_tokens, dim)\n\n            def forward(self, x, y):\n                return self.embed_x(x) + self.embed_y(y)\n\n            def init_(self):\n                pass"
+          },
+          {
+            "lines": "487-490",
+            "code": "            def __init__(self, dim):\n                super().__init__()\n                self.proj_to_pointers = nn.Linear(dim, dim)\n\n            def forward(self, model_embeddings, input_embeddings):\n                pointers = self.proj_to_pointers(model_embeddings)\n                logits = torch.matmul(pointers, input_embeddings.permute(0, 2, 1))\n                return logits"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "tests/test_x_transformers.py",
+      "snippets": [
+        {
+          "lines": "447-448",
+          "code": "            def __init__(self, num_tokens, dim):\n                super().__init__()\n                self.embed_x = nn.Embedding(num_tokens, dim)\n                self.embed_y = nn.Embedding(num_tokens, dim)\n\n            def forward(self, x, y):\n                return self.embed_x(x) + self.embed_y(y)\n\n            def init_(self):\n                pass"
+        },
+        {
+          "lines": "487-490",
+          "code": "            def __init__(self, dim):\n                super().__init__()\n                self.proj_to_pointers = nn.Linear(dim, dim)\n\n            def forward(self, model_embeddings, input_embeddings):\n                pointers = self.proj_to_pointers(model_embeddings)\n                logits = torch.matmul(pointers, input_embeddings.permute(0, 2, 1))\n                return logits"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "bug_report": "032",
+  "rank": 3,
+  "score": 0.7005335092544556,
+  "main_file": {
+    "path": "Tools/DGLPyTorch/SyntheticGraphGeneration/syngen/generator/tabular/gaussian_generator.py",
+    "content": "# Copyright (c) 2023, NVIDIA CORPORATION. All rights reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\nfrom collections import OrderedDict\nfrom functools import partial\nimport pickle\nimport numpy as np\nimport pandas as pd\nimport scipy\nfrom sklearn.preprocessing import OrdinalEncoder\n\nfrom syngen.generator.tabular.base_tabular_generator import BaseTabularGenerator\n\n\nclass GaussianGenerator(BaseTabularGenerator):\n    def __init__(self, **kwargs):\n        super(BaseTabularGenerator).__init__()\n\n    def ordinal_encoder(self, cat_col):\n        encoder = OrdinalEncoder()\n        encoder.fit(cat_col)\n        return encoder\n\n    def fit(self, data, categorical_columns=()):\n        self.column_order = list(data.columns)\n        self.cat_fit = {}\n        self.categorical_columns = set(categorical_columns)\n        self.continuous_columns = set(data.columns) - self.categorical_columns\n        num_samples = len(data)\n\n        # - multinomial distribution\n        for column in self.categorical_columns:\n            enc = self.ordinal_encoder(data[column].values.reshape(-1, 1))\n            pvals = data[column].value_counts() / num_samples\n            pvals = pvals.values\n            self.cat_fit[column] = {\n                \"encoder\": enc,\n                \"pvals\": pvals,\n            }\n\n        self.cont_fit = {}\n        # - gaussian distribution\n        for column in self.continuous_columns:\n            mean, std = data[column].mean(), data[column].std()\n            self.cont_fit[column] = {\n                \"mean\": mean,\n                \"std\": std,\n            }\n        self.fits = {**self.cat_fit, **self.cont_fit}\n\n    def sample(self, n, **kwargs):\n        data_dict = OrderedDict()\n        for column in self.column_order:\n            if column in self.categorical_columns:\n                sampled_data = np.random.multinomial(n,\n                    self.fits[column][\"pvals\"])\n                fsd = []\n                for i, sd in enumerate(sampled_data):\n                    t = [i] * sd\n                    if len(t):\n                        fsd += t\n\n                sampled_data = np.asarray(fsd, dtype=np.int32)\n                np.random.shuffle(sampled_data)\n                sampled_data = sampled_data.reshape(-1, 1)\n                encoder = self.fits[column][\"encoder\"]\n                sampled_data = encoder.inverse_transform(sampled_data)\n            else:\n                sampled_data = np.random.normal(\n                        self.fits[column]['mean'],\n                        self.fits[column]['std'], n)\n\n            data_dict[column] = list(sampled_data.reshape(-1))\n        df = pd.DataFrame.from_dict(data_dict)\n        return df\n\n    def set_device(self, device):\n        ...\n\n    def save(self, path):\n        with open(path, 'wb') as file_handler:\n            pickle.dump(self, file_handler, protocol=pickle.HIGHEST_PROTOCOL)\n\n    @classmethod\n    def load(cls, path):\n        with open(path, 'rb') as file_handler:\n            model = pickle.load(file_handler)\n        return model\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "collections",
+      "function": "OrderedDict"
+    },
+    {
+      "module": "pickle",
+      "function": "dump"
+    },
+    {
+      "module": "pickle",
+      "function": "load"
+    },
+    {
+      "module": "sklearn",
+      "function": "OrdinalEncoder"
+    }
+  ]
+}

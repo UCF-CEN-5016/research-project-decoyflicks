@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and ResidualLFQ from vector_quantize_pytorch.residual_lfq",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define input dimensions: set dim=128, num_quantizers=3, and codebook_size=256",
+    "Create an instance of ResidualLFQ with implicit_neural_codebook=False, passing dim, num_quantizers, and codebook_size as parameters",
+    "Prepare a batch size of 4 and create random input data with shape (batch_size, dim) using torch.randn(4, 128)",
+    "Call the forward method of the ResidualLFQ instance with the random input data",
+    "Check if the MLPs (project_in and project_out) are initialized by asserting that project_in is an instance of nn.Linear",
+    "Assert that project_out is also an instance of nn.Linear",
+    "Print the initialized layers of the ResidualLFQ instance to verify MLPs are created",
+    "Set implicit_neural_codebook=True and repeat the previous steps to ensure MLPs are not initialized",
+    "Compare the outputs of both runs to confirm that MLPs are initialized in the first case and not in the second"
+]
+```

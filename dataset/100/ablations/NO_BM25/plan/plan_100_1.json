@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and rotary_embedding_torch",
+    "Define a batch size of 8 and sequence length of 16",
+    "Create a RotaryEmbedding instance with parameters: dim=32, learned_freq=True, freqs_for='lang'",
+    "Generate random input tensors for queries and keys with shape (batch_size, seq_len, dim)",
+    "Call the rotate_queries_and_keys method on the RotaryEmbedding instance with the generated queries and keys",
+    "Compute a dummy loss by summing the output of rotate_queries_and_keys",
+    "Call loss.backward() to compute gradients for the first time",
+    "Call the rotate_queries_and_keys method again with the same queries and keys to cache frequencies",
+    "Call loss.backward() a second time to trigger the RuntimeError",
+    "Capture the RuntimeError and assert that the message contains 'Trying to backward through the graph a second time'"
+]
+```

@@ -1,0 +1,30 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'tf_env' with Python 3.10 using the command: conda create -n tf_env python=3.10.13",
+    "Activate the new conda environment using: conda activate tf_env",
+    "Install TensorFlow in the environment using pip with the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode).",
+    "Create a new Jupyter Notebook in VSCode.",
+    "In the first cell of the notebook, import the necessary libraries by adding the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official import tf_models",
+    "Run the first cell to ensure the imports are successful.",
+    "Check the current matplotlib backend by adding the following code in a new cell: print(plt.get_backend()) and run it.",
+    "In the next cell, import the TensorFlow Model Garden by adding the following code: from official.vision import image_classification",
+    "Run the cell to import TensorFlow Model Garden.",
+    "Check the matplotlib backend again by adding the following code in a new cell: print(plt.get_backend()) and run it.",
+    "Add a new cell to create a simple plot with the following code: plt.plot([1, 2, 3], [4, 5, 6]) and plt.show()",
+    "Run the cell to attempt to display the plot.",
+    "Observe that the plot does not display after importing TensorFlow Model Garden.",
+    "Add a new cell to change the backend to 'TkAgg' by adding the following code: plt.switch_backend('TkAgg') and run it.",
+    "Add another cell to create a simple plot again with the same code: plt.plot([1, 2, 3], [4, 5, 6]) and plt.show()",
+    "Run the cell to attempt to display the plot again.",
+    "Observe that the plot still does not display after changing the backend post-import.",
+    "Add a new cell to change the backend before importing TensorFlow Model Garden by adding the following code: plt.switch_backend('TkAgg') and then import tensorflow_models.",
+    "Run the cell to import TensorFlow Model Garden after changing the backend.",
+    "Add another cell to create a simple plot again with the same code: plt.plot([1, 2, 3], [4, 5, 6]) and plt.show()",
+    "Run the cell to attempt to display the plot again.",
+    "Observe that the plot displays correctly when the backend is changed before importing TensorFlow Model Garden."
+]
+```

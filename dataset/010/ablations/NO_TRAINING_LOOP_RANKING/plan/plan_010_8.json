@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules for instance segmentation from the TensorFlow Model Garden.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define the dataset path for the instance segmentation dataset, e.g., data_root = '/path/to/your/dataset'.",
+    "Set the model parameters: num_classes = 2, batch_size = 8, image_size = (640, 640).",
+    "Load the instance segmentation model using tf.keras.applications or the specific Model Garden API.",
+    "Initialize the TuplesDataset class with parameters: name='your_dataset_name', mode='val', data_root=data_root, imsize=image_size, num_negatives=5, num_queries=2000, pool_size=20000.",
+    "Call the create_epoch_tuples method on the dataset instance to prepare the validation dataset.",
+    "Define a training loop that includes model compilation with a loss function (e.g., tf.keras.losses.SparseCategoricalCrossentropy()) and optimizer (e.g., tf.keras.optimizers.Adam()).",
+    "Train the model for a few epochs (e.g., 5 epochs) using model.fit() with validation_data set to the validation dataset.",
+    "During training, periodically print the validation loss after each epoch.",
+    "Assert that the validation loss is always equal to 0.0 after each epoch by checking the output of the training loop.",
+    "Log the output of the validation metrics to verify that 'validation_loss' remains 0.0 throughout the training process.",
+    "If using a Jupyter notebook, ensure to run the entire notebook from start to finish to reproduce the bug consistently."
+]
+```

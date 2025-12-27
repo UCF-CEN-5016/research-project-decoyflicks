@@ -1,0 +1,22 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'matplotlib_test' with Python 3.10 using the command: conda create -n matplotlib_test python=3.10",
+    "Activate the newly created conda environment using: conda activate matplotlib_test",
+    "Install TensorFlow version 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install the TensorFlow Model Garden nightly version using pip with the command: pip install tf-models-nightly",
+    "Install Matplotlib using pip with the command: pip install matplotlib",
+    "Open Visual Studio Code (VSCode) and create a new Python file named 'test_plot.py'.",
+    "Import the necessary libraries in 'test_plot.py' with the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official.vision import modeling",
+    "Set the Matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg') before importing tensorflow_models.",
+    "Add a function to create a simple plot in 'test_plot.py': def create_plot(): x = [1, 2, 3]; y = [1, 4, 9]; plt.plot(x, y); plt.show()",
+    "Call the create_plot function in 'test_plot.py' after importing tensorflow_models: create_plot()",
+    "Run the 'test_plot.py' script using the command: python test_plot.py",
+    "Observe that the plot does not display or save any output, indicating that Matplotlib's pyplot is not functioning correctly after importing tensorflow_models.",
+    "Add a line to check the current Matplotlib backend after importing tensorflow_models: print('Current backend:', plt.get_backend())",
+    "Run the script again and verify that the backend is 'Agg', confirming that it is a non-interactive backend.",
+    "Comment out the line that sets the backend to 'Agg' and run the script again to see if the plot displays correctly before importing tensorflow_models.",
+    "Verify that the plot displays correctly when the backend is not set to 'Agg' and tensorflow_models is not imported."
+]
+```

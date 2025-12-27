@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define the dimensions for the model: set dim = 64, heads = 8, kv_heads = 4, and dim_head = 16",
+    "Create a random input tensor with shape (batch_size, seq_length, dim) where batch_size = 2 and seq_length = 10",
+    "Initialize the Attention module with parameters: dim=dim, heads=heads, kv_heads=kv_heads, qk_norm=True",
+    "Create a random context tensor with shape (batch_size, seq_length, dim) to simulate cross-attention",
+    "Call the forward method of the Attention module with the input tensor and context tensor",
+    "Capture the output of the forward method",
+    "Check the shapes of the output tensors to ensure they match expected dimensions",
+    "Assert that the output tensor shape is (batch_size, seq_length, dim) and not (batch_size, seq_length, kv_heads * dim_head)",
+    "Print the output tensor to verify its contents and check for any unexpected values",
+    "Log the parameters used in the Attention module to ensure they are set correctly",
+    "Verify that the qk_norm_k_scale parameter is not being initialized correctly when kv_heads != heads",
+    "Check for any runtime warnings or errors during the execution of the forward method",
+    "Document the observed behavior and any discrepancies in the output compared to expected results"
+]
+```

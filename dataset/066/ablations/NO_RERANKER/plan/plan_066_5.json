@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary modules: keras, layers from keras, and tensorflow_datasets as tfds",
+    "Set the environment variable for KERAS_BACKEND to 'tensorflow'",
+    "Define hyperparameters: set patch_size to 4, image_size to 256, and expansion_factor to 2",
+    "Define a function 'create_mobilevit' that initializes a MobileViT model with num_classes set to 5",
+    "Within 'create_mobilevit', create an input layer with shape (image_size, image_size, 3)",
+    "Add a Rescaling layer to the input to normalize pixel values",
+    "Add a series of convolutional and inverted residual blocks to the model as per the MobileViT architecture",
+    "In the 'mobilevit_block' function, ensure to include the definition of local and global feature extraction",
+    "Define a function 'preprocess_dataset' that resizes images to (image_size, image_size) and applies random cropping and flipping for training data",
+    "Load the 'tf_flowers' dataset using tfds.load with splits for training and validation",
+    "Prepare the training and validation datasets using the 'prepare_dataset' function with a batch size of 64",
+    "Define a learning rate of 0.002 and a label smoothing factor of 0.1",
+    "Compile the MobileViT model with Adam optimizer and CategoricalCrossentropy loss function",
+    "Train the model using the fit method on the training dataset for 30 epochs",
+    "In the model definition, ensure to include a line that uses 'level3_dau_2' instead of 'level2_dau_2' in the selective_kernel_feature_fusion function",
+    "After training, evaluate the model on the validation dataset and capture the output",
+    "Check the model summary to verify the architecture and ensure 'level2_dau_2' is defined but not used",
+    "Assert that the output of the model training does not raise any errors but confirms the unused variable 'level2_dau_2'"
+]
+```

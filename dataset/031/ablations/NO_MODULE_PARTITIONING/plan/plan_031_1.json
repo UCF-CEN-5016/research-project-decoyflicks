@@ -1,0 +1,18 @@
+```json
+[
+    "Clone the NVIDIA DeepLearningExamples repository from GitHub using the command: git clone https://github.com/NVIDIA/DeepLearningExamples.git",
+    "Navigate to the ResNet50 directory using: cd DeepLearningExamples/PyTorch/Classification/ConvNets/resnet50v1.5",
+    "Install required dependencies by running: pip install -r requirements.txt",
+    "Download the pretrained weights file 'nvidia_resnet50_200821.pth.tar' from the specified source and place it in the current directory.",
+    "Prepare the ImageNet dataset by downloading it and placing it in the directory '/data/imagenet/' with the correct structure (subdirectories for each class).",
+    "Set the batch size to 256 and ensure the dataset is large enough to accommodate this batch size.",
+    "Create a Python script named 'main.py' that includes the necessary imports: import torch, import torchvision.models as models, import torchvision.transforms as transforms, import os, import sys.",
+    "Define a function to load the ResNet50 model with pretrained weights using: model = models.resnet50(pretrained=False); model.load_state_dict(torch.load('nvidia_resnet50_200821.pth.tar'))",
+    "Add a command-line argument parser to accept parameters: --arch, --evaluate, --epochs, --pretrained-from-file, and --batch-size.",
+    "Implement the inference logic in 'main.py' to process images from the ImageNet dataset using the ResNet50 model.",
+    "Run the inference command: python ./main.py --arch=resnet50 --evaluate --epochs=1 --pretrained-from-file=nvidia_resnet50_200821.pth.tar -b=256 /data/imagenet/",
+    "Capture the output of the command to check for errors during the loading of the state_dict.",
+    "Verify that the output contains the RuntimeError indicating missing and unexpected keys in the state_dict.",
+    "Log the specific missing keys and unexpected keys from the error message for further analysis."
+]
+```

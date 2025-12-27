@@ -1,0 +1,20 @@
+[
+  "Set up a Colab environment with GPU runtime enabled, preferably a T4 GPU",
+  "Install or upgrade to Keras version 3.2.1 and keras-nlp via the commands: `pip install -q --upgrade keras==3.2.1 keras-nlp`",
+  "Import TensorFlow, keras, keras_nlp, and other necessary modules (`import tensorflow as tf`, `import keras`, `import keras_nlp`, `import random`)",
+  "Define constants: BATCH_SIZE=64, SEQ_LEN=128, VOCAB_SIZE=5000, EMBED_DIM=256, FEED_FORWARD_DIM=128, NUM_HEADS=3, NUM_LAYERS=2, EPOCHS=1 (for quick reproduction)",
+  "Download and prepare a text dataset similar to the KerasNLP English-to-Spanish translation example, or alternatively use dummy text data that exceeds a minimum string length of 512 characters",
+  "Train a WordPieceTokenizer using `keras_nlp.tokenizers.compute_word_piece_vocabulary` on the dataset with reserved tokens: ['[PAD]', '[UNK]', '[BOS]'] and vocabulary size of VOCAB_SIZE",
+  "Initialize the WordPieceTokenizer with the computed vocabulary, sequence_length=SEQ_LEN, lowercase=True",
+  "Create a StartEndPacker layer with sequence_length=SEQ_LEN and start_value set to the tokenizer token ID for '[BOS]'",
+  "Define a preprocess function that tokenizes input sentences using the tokenizer, packs with the StartEndPacker, and returns (features, labels)",
+  "Prepare training and validation datasets using tf.data pipelines that batch and shuffle the data, and map the preprocess function",
+  "Construct a GPT-style model using keras Functional API: input layer with shape (None,), TokenAndPositionEmbedding layer (vocabulary_size=VOCAB_SIZE, sequence_length=SEQ_LEN, embedding_dim=EMBED_DIM), followed by NUM_LAYERS TransformerDecoder layers with num_heads=NUM_HEADS and intermediate_dim=FEED_FORWARD_DIM, then a Dense layer outputting VOCAB_SIZE logits",
+  "Compile the model using SparseCategoricalCrossentropy(from_logits=True) as loss, and keras_nlp.metrics.Perplexity as a metric with from_logits=True and mask_token_id=0",
+  "Train the model on the training dataset for EPOCHS epochs with validation on the validation dataset; verify training completes successfully without errors",
+  "Define a 'next' callback function that takes arguments (prompt, cache, index), calls the model on the prompt, and returns logits for the token at position index-1, along with hidden_states=None and the cache",
+  "Create a prompt sequence by tokenizing an empty string with the tokenizer and packing it with StartEndPacker to get prompt_tokens containing the '[BOS]' token",
+  "Attempt to perform inference by calling `keras_nlp.samplers.GreedySampler()` instance with the signature: sampler(next=next, prompt=prompt_tokens, index=1, end_token_id=some_token_id)` where `end_token_id` is set to the tokenizer token ID for '[PAD]' or '[EOS]' if defined",
+  "Observe the TypeError: `Sampler.__call__() got an unexpected keyword argument 'end_token_id'` thrown at this call",
+  "Assert that the error is reproducible on this minimal example and matches the exact error message and stack trace indicating that the GreedySampler (or more generally Sampler) __call__ method does not accept `end_token_id` as a parameter"
+]

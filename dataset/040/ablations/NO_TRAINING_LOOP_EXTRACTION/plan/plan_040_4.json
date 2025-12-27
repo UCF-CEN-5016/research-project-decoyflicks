@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 8 and input dimensions of (4, 64, 64) for the UNet model",
+    "Create a random tensor input with shape (batch_size, 4, 64, 64) using torch.randn",
+    "Instantiate the UNet model from the provided code in unet.py",
+    "Set the model to evaluation mode using model.eval()",
+    "Pass the random input tensor through the model to obtain the output",
+    "Extract the attention weights from the model's forward pass, specifically from the self-attention layer",
+    "Verify the shape of the attention weights tensor to ensure it matches the expected dimensions (batch_size, num_heads, height, width)",
+    "Apply the softmax operation on the attention weights along the wrong axis (dim=1) to simulate the bug",
+    "Check if the attention weights contain any NaN values after the softmax operation",
+    "Assert that the attention weights do not sum to 1 along the intended axis (dim=2) to confirm the bug",
+    "Log the attention weights before and after the softmax operation for debugging purposes",
+    "Run the model on a sample dataset (e.g., CIFAR-10) to ensure the bug is reproducible during training",
+    "Monitor the training loss and check for any unexpected behavior or divergence in loss values"
+]
+```

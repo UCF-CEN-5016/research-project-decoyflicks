@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, fairseq, and any other required modules.",
+    "Set the DATA_ROOT variable to the path of your dataset, e.g., DATA_ROOT = '/path/to/your/data'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech_to_speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the task.",
+    "Set the following parameters for the fairseq-generate command: target-is-code=True, target-code-size=100, vocoder='code_hifigan', max-tokens=50000, beam=10, max-len-a=1.",
+    "Run the fairseq-generate command with the specified parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Monitor the console output for any error messages related to the key 'input_feat_per_channel'.",
+    "If the error occurs, capture the full stack trace and any relevant output leading up to the error.",
+    "Verify that the SinusoidalPositionalEmbedding class is being used in the model by checking the model's architecture.",
+    "Check the model's state_dict to confirm that 'input_feat_per_channel' is indeed missing.",
+    "Log the dimensions of the input data being passed to the model to ensure they match expected values.",
+    "Assert that the error message contains the exact phrase 'Key 'input_feat_per_channel' is not in struct' to confirm the bug."
+]
+```

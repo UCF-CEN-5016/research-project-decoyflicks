@@ -1,0 +1,25 @@
+TITLE  
+NameError for undefined variable `return_loss` in ResidualSimVQ
+
+SYMPTOMS  
+• The variable `return_loss` is not defined, leading to a NameError during execution.  
+• Error message:  
+  ```
+  NameError: name 'return_loss' is not defined
+  ```  
+• There are shape inconsistencies when using quantizer dropout with `channels_first`, resulting in unexpected tensor dimensions:  
+  ```
+  all_losses:  [torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([]), torch.Size([1]), torch.Size([1]), torch.Size([1])]
+  all_indicies:  [torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 17]), torch.Size([2, 1024, 17]), torch.Size([2, 1024, 17]), torch.Size([2, 1024, 17])]
+  ```
+
+EXPECTED BEHAVIOR  
+The variable `return_loss` should be defined and used correctly within the `forward` method of the ResidualSimVQ class. Additionally, tensor shapes should be consistent when using quantizer dropout with `channels_first`.
+
+REPRODUCTION STEPS  
+1. Clone the repository from GitHub: `git clone https://github.com/lucidrains/vector-quantize-pytorch.git`  
+2. Navigate to the `vector_quantize_pytorch` directory.  
+3. Open the `residual_sim_vq.py` file and locate the `forward` method.  
+4. Attempt to run the code that invokes the `forward` method of the ResidualSimVQ class while ensuring that `self.quantize_dropout` is enabled.  
+5. Observe the output for the NameError related to `return_loss`.  
+6. Test with `channels_first` configuration and check the shapes of `all_losses` and `all_indicies` for inconsistencies.

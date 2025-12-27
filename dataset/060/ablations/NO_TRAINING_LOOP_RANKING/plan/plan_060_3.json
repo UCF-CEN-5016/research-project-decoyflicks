@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, and tensorflow_datasets",
+    "Set the batch size to 32 and image dimensions to 160x160",
+    "Define the AUTOTUNE variable using tf.data.AUTOTUNE",
+    "Load the Oxford Pets dataset using tfds.load('oxford_pet:3.*.*', split=['train[:80%]', 'train[80%:]'], as_supervised=True)",
+    "Assign the training dataset to train_ds and validation dataset to val_ds",
+    "Define the augment_fn function to apply random augmentations to the images and masks",
+    "Define the unpackage_inputs function to separate images and masks from the dataset",
+    "Create the augmented_train_ds dataset by shuffling train_ds with a buffer size of BATCH_SIZE * 2, mapping augment_fn, batching with BATCH_SIZE, mapping unpackage_inputs, and prefetching with buffer_size=tf.data.AUTOTUNE",
+    "Create the resized_val_ds dataset by mapping resize_fn to val_ds, batching with BATCH_SIZE, mapping unpackage_inputs, and prefetching with buffer_size=tf.data.AUTOTUNE",
+    "Run the code cell that creates augmented_train_ds and resized_val_ds",
+    "Capture the output and check for TypeError related to the data types of segmentation masks",
+    "Verify that the error message indicates a mismatch in tensor data types between float32 and int64",
+    "Assert that the error occurs consistently in both local and Colab environments"
+]
+```

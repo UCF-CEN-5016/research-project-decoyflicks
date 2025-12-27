@@ -1,0 +1,14 @@
+```json
+[
+    "Import the torch library using 'import torch'",
+    "Define the dimensions for the bias parameters: set u_dim = 10 and v_dim = 10",
+    "Create an uninitialized tensor for bias terms using 'u_bias = torch.Tensor(u_dim)' and 'v_bias = torch.Tensor(v_dim)'",
+    "Print the values of u_bias and v_bias to observe their initial state",
+    "Define a simple MultiHeadedAttention class that includes the uninitialized bias parameters",
+    "In the MultiHeadedAttention class, implement a forward method that uses the bias parameters in a computation, e.g., 'output = some_function(input) + u_bias + v_bias'",
+    "Create a random input tensor with shape (batch_size=1, seq_length=10, embed_dim=10) using 'input_tensor = torch.rand(1, 10, 10)'",
+    "Instantiate the MultiHeadedAttention class and call the forward method with the input tensor: 'attention_layer = MultiHeadedAttention(); output = attention_layer(input_tensor)'",
+    "Check the output tensor for NaN values using 'assert not torch.isnan(output).any()'",
+    "If the assertion fails, print 'NaN values detected in output' to confirm the bug"
+]
+```

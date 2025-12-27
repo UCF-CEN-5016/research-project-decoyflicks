@@ -1,0 +1,23 @@
+```json
+[
+    "Install the required packages: keras, keras-nlp, tensorflow, and datasets using pip.",
+    "Set up the environment variable for Keras backend to use TensorFlow: os.environ['KERAS_BACKEND'] = 'tensorflow'.",
+    "Import necessary libraries: import os, import keras, import keras_nlp, import tensorflow as tf, from datasets import load_dataset.",
+    "Set the mixed precision policy to mixed_float16: tf.keras.mixed_precision.set_global_policy('mixed_float16').",
+    "Load the CoNLL 2003 dataset using: conll_data = load_dataset('conll2003').",
+    "Define a function to export the dataset to a tab-separated file format.",
+    "Create a directory named 'data' to store the exported dataset files.",
+    "Export the training and validation datasets to 'data/conll_train.txt' and 'data/conll_val.txt' respectively.",
+    "Define a function to map records to training data, ensuring the first element is the number of tokens.",
+    "Create a tf.data.TextLineDataset for both training and validation data using the exported files.",
+    "Define a batch size of 32 for the dataset.",
+    "Map the dataset to convert tokens to IDs using a StringLookup layer.",
+    "Define a custom loss function: CustomNonPaddingTokenLoss that ignores loss from padded tokens.",
+    "Instantiate a Keras model using keras_nlp.models.BertClassifier with the preset 'bert_tiny_en_uncased_sst2'.",
+    "Compile the model with the Adam optimizer and the custom loss function.",
+    "Attempt to fit the model on the training dataset for 1 epoch.",
+    "Capture the output and any exceptions raised during model fitting.",
+    "Verify that the output contains the AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name'.",
+    "Log the complete traceback of the error to confirm the source of the issue."
+]
+```

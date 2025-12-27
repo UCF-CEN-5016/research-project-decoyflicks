@@ -1,0 +1,19 @@
+Validation accuracy higher than training accuracy
+
+Hi, I'm training using the example script on the cats and dogs dataset, and noticed the validation accuracy is consistently higher than training accuracy throughout training. This occurs both with and without dropout and dropout_emb. Is this typical for a ViT? Below is a plot of training and validation accuracy for SmallDatasetVit compared to a CNN for reference.
+
+The model and parameters used are as follows:
+from vit_pytorch.vit_for_small_dataset import ViT
+batch_size = 64
+model = ViT(
+image_size = 224,
+patch_size = 16,
+num_classes = 2,
+dim = 1024,
+depth = 6,
+heads = 16,
+mlp_dim = 2048,
+dropout = 0.1,
+emb_dropout = 0.1)
+
+![smalldataset_vs_cnn](https://github.com/lucidrains/vit-pytorch/assets/157746085/611e6a1a-53c3-4b90-9244-819693a290c2)

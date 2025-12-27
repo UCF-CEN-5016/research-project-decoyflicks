@@ -1,0 +1,20 @@
+```json
+[
+    "Import the necessary libraries: torch, nn, DataLoader, RandomSampler, and other required modules from labml_nn.",
+    "Create a text file dataset with a sample size of 1000 lines for Tiny Shakespeare using TextFileDataset class with url='https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt'.",
+    "Define the training parameters: chunk_len=16, d_model=128, d_ff=512, n_heads=16, d_k=16.",
+    "Create a NearestNeighborEncoder instance with chunk_len=16, k=6, hidden_dims={3}, d_model=128, n_heads=16, d_k=16, and d_ff=512.",
+    "Create the RetroModel instance with input_vocab_size=65 (assuming 65 unique characters), d_model=128, n_layers=6, hidden_dims={3, 5}, chunk_len=16, n_heads=16, d_k=16, and d_ff=512.",
+    "Move the RetroModel to a GPU device if available using torch.device('cuda:0')",
+    "Create an optimizer instance of Noam with model parameters, lr=1., d_model=128, and warmup=2_000.",
+    "Initialize the dataloader with batch size=4, random sampling without replacement.",
+    "Define a training loop that iterates over the dataset for 32 epochs.",
+    "In each epoch, move src, tgt, and neighbors to the GPU device before performing the forward pass.",
+    "Calculate the loss using CrossEntropyLoss function and perform backward propagation.",
+    "Call the optimizer's step method to update model parameters.",
+    "Track training statistics and increment global step counter after each iteration.",
+    "Verify that during the first epoch of the training loop, an exception occurs with a RuntimeError where the size of tensor 'a' (3) must match the size of tensor 'b' (4) at non-singleton dimension 3.",
+    "Monitor GPU memory usage during the execution of the training loop to confirm that it exceeds expected thresholds."
+]
+```
+

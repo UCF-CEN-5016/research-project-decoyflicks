@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: keras, numpy, matplotlib, and tensorflow",
+    "Set the random seed for reproducibility using np.random.seed(42)",
+    "Define image_size as 72 and patch_size as 16",
+    "Load the CIFAR-10 dataset using keras.datasets.cifar10.load_data()",
+    "Extract x_train from the CIFAR-10 dataset and normalize it to the range [0, 1]",
+    "Select a random image from x_train using np.random.choice(range(x_train.shape[0]))",
+    "Display the selected image using plt.imshow() and plt.axis('off')",
+    "Resize the selected image to (image_size, image_size) using ops.image.resize()",
+    "Convert the resized image to a tensor using ops.convert_to_tensor()",
+    "Create an instance of the Patches class with patch_size as an argument",
+    "Call the Patches instance with the resized image tensor and store the result in patches",
+    "Print the image size, patch size, patches per image, and elements per patch",
+    "Calculate the number of patches per image as int(np.sqrt(patches.shape[1]))",
+    "Use a for loop to iterate over the patches and display each patch using plt.imshow()",
+    "Assert that the dtype of the resized_image tensor is int32 before calling Patches",
+    "Run the code cell in Google Colab and observe the InvalidArgumentError",
+    "Capture the full error message and traceback for further analysis"
+]
+```

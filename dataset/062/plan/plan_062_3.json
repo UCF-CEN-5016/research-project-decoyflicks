@@ -1,0 +1,22 @@
+```json
+[
+    "Import pandas as pd and numpy as np from the standard library",
+    "Download the train.csv file from https://raw.githubusercontent.com/IMvision12/Tweets-Classification-NLP/main/train.csv",
+    "Read the downloaded csv file into a pandas DataFrame named df",
+    "Print the first 5 rows of the DataFrame to understand its structure",
+    "Shuffle the DataFrame using df.sample(frac=1, random_state=42) and store it in df_shuffled",
+    "Drop the columns 'id', 'keyword', and 'location' from df_shuffled as they consist of mostly NaN values",
+    "Reset the index of df_shuffled to ensure correct indexing",
+    "Print the first 5 rows of the modified DataFrame to verify column removal",
+    "Split df_shuffled into train_df and test_df using df_shuffled.sample(frac=0.1, random_state=42) for test set and remaining for train set",
+    "Assert that train_df contains 893 samples (7613 * 0.91) and test_df contains 82 samples (7613 * 0.09)",
+    "Create a function create_dataset that takes a DataFrame and returns a tf.data.Dataset object with batch size of 100",
+    "Use the create_dataset function to convert train_df and test_df into train_ds and test_ds respectively",
+    "Assert that train_ds has 8 batches (7613 / 100) and test_ds has 1 batch (82 / 100)",
+    "Print the first element of train_ds and test_ds to inspect their structure",
+    "Define a function plot_curve that takes logs as input and plots accuracy and loss over number of trees",
+    "Call the plot_curve function with logs_1 to visualize training metrics for model_1",
+    "Call the plot_curve function with logs_2 to visualize training metrics for model_2"
+]
+```
+

@@ -1,0 +1,14 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the required packages by running: `!pip install -q -U keras_cv==0.6.0 tensorflow`.",
+    "Import necessary libraries by adding the following code: `import keras_cv; import tensorflow as tf; from keras.utils import data_utils`.",
+    "Attempt to run the following code snippet to trigger the bug: `from keras.utils import data_utils`.",
+    "Observe the error message that appears, specifically looking for `ImportError: cannot import name 'data_utils' from 'keras.utils'`.",
+    "Verify that the installed version of Keras is the latest by running: `!pip show keras` and checking the version number.",
+    "Check the version of TensorFlow installed by running: `!pip show tensorflow`.",
+    "Confirm that the Keras version is incompatible with the example by running: `!pip install keras==2.12.0` to downgrade Keras.",
+    "Re-run the code snippet `from keras.utils import data_utils` after downgrading to Keras 2.12.0 and confirm that it runs without error.",
+    "Document the steps taken and the error encountered for further analysis."
+]
+```

@@ -1,0 +1,7 @@
+when calculating actor loss, why the mask is "action_mask[:, start: ] "
+
+actor_loss = self.actor_loss_fn(actor_log_prob[:, start:],
+                                        log_probs[:, start:], advantages,
+                                        action_mask[:, start:])
+
+In this way, the loss of token "eos" will be filtered out, but "eos" contains the ground reward calculated by Reward Model. I think it should be passed in "mask = action_mask[:, start-1: -1]". Can someone shed some light on this for me?

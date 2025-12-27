@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, numpy, medmnist, imageio, io, and ipywidgets.",
+    "Set a random seed for reproducibility by defining SEED = 42 and setting os.environ['TF_CUDNN_DETERMINISTIC'] = '1'.",
+    "Define hyperparameters: DATASET_NAME = 'organmnist3d', BATCH_SIZE = 32, INPUT_SHAPE = (28, 28, 28, 1), NUM_CLASSES = 11, LEARNING_RATE = 1e-4, EPOCHS = 60, PATCH_SIZE = (8, 8, 8).",
+    "Install the medmnist package using the command: pip install -qq medmnist.",
+    "Define a function download_and_prepare_dataset(data_info) to download the dataset and return train, validation, and test videos and labels.",
+    "Get the metadata of the dataset using info = medmnist.INFO[DATASET_NAME].",
+    "Call download_and_prepare_dataset(info) to prepare the dataset and unpack it into train_videos, train_labels, valid_videos, valid_labels, test_videos, test_labels.",
+    "Define a preprocess function that takes frames and labels, converts frames to float32, and casts labels to float32.",
+    "Define a prepare_dataloader function that takes videos, labels, loader_type, and batch_size, and returns a tf.data.Dataset object.",
+    "Create trainloader, validloader, and testloader by calling prepare_dataloader with respective datasets.",
+    "Define the TubeletEmbedding class with a Conv3D layer and a Reshape layer to process video inputs.",
+    "Define the PositionalEncoder class to add positional information to the encoded video tokens.",
+    "Define the create_vivit_classifier function that constructs the ViViT model using the TubeletEmbedding and PositionalEncoder classes.",
+    "In the run_experiment function, initialize the model by calling create_vivit_classifier with appropriate parameters.",
+    "Compile the model using Adam optimizer, sparse categorical crossentropy loss, and accuracy metrics.",
+    "Call model.fit(trainloader, epochs=EPOCHS, validation_data=validloader) to start training the model.",
+    "Monitor the training process for any errors or exceptions during model fitting.",
+    "Capture the error message when fitting the model to verify the bug occurs.",
+    "Log the output of model.fit to check for any unexpected behavior or exceptions."
+]
+```

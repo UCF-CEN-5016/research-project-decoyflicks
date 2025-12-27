@@ -1,0 +1,26 @@
+```json
+[
+    "Install Python version 3.12.3 if not already installed.",
+    "Create a new virtual environment using 'python -m venv venv'.",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows.",
+    "Install the required libraries from the requirements file using 'pip install -r requirements.txt'.",
+    "Ensure that the 'transformers' library is installed by running 'pip show transformers' and check the version.",
+    "Check if the 'deepspeed' library is installed by running 'pip show deepspeed'.",
+    "Create a new Python script named 'e2e_rlhf.py'.",
+    "In 'e2e_rlhf.py', import the necessary libraries: 'import argparse', 'import deepspeed', 'import torch', 'import torch.nn as nn', 'import torch.nn.functional as F', 'import torchvision', 'import torchvision.transforms as transforms'.",
+    "Define a function 'add_argument()' to parse command line arguments using argparse.",
+    "Add the following arguments in 'add_argument()': '--actor-model', '--reward-model', '--deployment-type', and any other necessary arguments.",
+    "Define a main function 'main(args)' that will contain the core logic of the script.",
+    "In 'main(args)', initialize DeepSpeed by calling 'deepspeed.init_distributed()'.",
+    "Prepare the CIFAR10 dataset by using 'torchvision.datasets.CIFAR10' for both training and testing.",
+    "Define a simple neural network class 'Net' that includes a forward method.",
+    "In 'Net', include a conditional check for using DeepSpeed with a mixture of experts (MoE) by adding a parameter for 'moe'.",
+    "Create a DeepSpeed configuration dictionary in 'get_ds_config(args)' with parameters like 'train_batch_size', 'optimizer', and 'scheduler'.",
+    "Initialize the DeepSpeed engine by calling 'deepspeed.initialize()' with the model and configuration.",
+    "Run the script using the command 'python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu'.",
+    "Capture the output and check for the error message 'ModuleNotFoundError: No module named 'transformers.deepspeed'' in the console.",
+    "Verify that the error occurs consistently by running the script multiple times.",
+    "Log the exact version of the 'transformers' library to confirm compatibility issues.",
+    "Check the installed packages in the virtual environment using 'pip freeze' to ensure all dependencies are correctly installed."
+]
+```

@@ -1,0 +1,17 @@
+[
+  "Import TensorFlow, Keras layers, and necessary modules for building the MIRNet model, including the selective_kernel_feature_fusion function if applicable",
+  "Download or clone the keras-io repository to access the original mirnet.py example file",
+  "Locate and open the mirnet.py file from the path examples/vision/mirnet.py",
+  "Identify the code section around line 347 defining the variable level2_dau_2 and note that it is assigned but never used later",
+  "Locate the code around line 352 where selective_kernel_feature_fusion is called with arguments (level1_dau_2, level3_dau_2, level3_dau_2)",
+  "Copy the original code snippet exactly as is, preserving the call with duplicate level3_dau_2 arguments instead of level2_dau_2 in the second argument",
+  "Set up a minimal test harness that instantiates the MIRNet model from the example, ensuring the relevant function calls and layers are included to reach the faulty selective_kernel_feature_fusion call",
+  "Prepare a synthetic input tensor with a fixed batch size of 1 and image dimensions expected by the MIRNet model (e.g., 256x256 RGB images) to feed forward through the model",
+  "Run a forward pass of the MIRNet model on the synthetic input data, capturing all intermediate outputs, especially the selective_kernel_feature_fusion output where the suspected typo occurs",
+  "Add debugging or logging statements to confirm that the variable level2_dau_2 is created but never passed to selective_kernel_feature_fusion, and that level3_dau_2 is passed twice",
+  "Assert that the output tensor shapes from selective_kernel_feature_fusion match expected dimensions and compare them to the shapes if the second argument was level2_dau_2 instead",
+  "Check for any discrepancies in model output, such as unexpected values, NaNs, or mismatches in feature fusion behavior that may arise from passing level3_dau_2 twice instead of level2_dau_2",
+  "Document the presence of the unused variable level2_dau_2 and the duplicated argument in selective_kernel_feature_fusion call to confirm the bug reproducibility",
+  "Optionally, run unit tests or assertions verifying selective_kernel_feature_fusion was called with (level1_dau_2, level3_dau_2, level3_dau_2) instead of the intended (level1_dau_2, level2_dau_2, level3_dau_2)",
+  "Conclude reproduction by verifying that the bug (unused variable and potential typo) is evident through static code analysis and runtime behavior in the MIRNet example"
+]

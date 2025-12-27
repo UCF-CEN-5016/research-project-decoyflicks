@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules from keras: layers, models, and ops",
+    "Set a random seed for reproducibility using np.random.seed(42)",
+    "Define a batch size of 64 and input image dimensions of 28x28 with 1 channel",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Normalize the training and test data by dividing by 255.0 and reshape to (-1, 28, 28, 1)",
+    "Create a teacher model using keras.Sequential with the following layers: Input layer (28, 28, 1), Conv2D(256, (3, 3), strides=(2, 2), padding='same'), LeakyReLU(negative_slope=0.2), MaxPooling2D(pool_size=(2, 2), strides=(1, 1), padding='same'), Conv2D(512, (3, 3), strides=(2, 2), padding='same'), Flatten(), Dense(10)",
+    "Create a student model using keras.Sequential with the following layers: Input layer (28, 28, 1), Conv2D(16, (3, 3), strides=(2, 2), padding='same'), LeakyReLU(negative_slope=0.2), MaxPooling2D(pool_size=(2, 2), strides=(1, 1), padding='same'), Conv2D(32, (3, 3), strides=(2, 2), padding='same'), Flatten(), Dense(10)",
+    "Compile the teacher model with optimizer keras.optimizers.Adam(), loss keras.losses.SparseCategoricalCrossentropy(from_logits=True), and metrics keras.metrics.SparseCategoricalAccuracy()",
+    "Fit the teacher model on the training data (x_train, y_train) for 5 epochs",
+    "Evaluate the teacher model on the test data (x_test, y_test) to ensure it is trained",
+    "Initialize the Distiller class with the student and teacher models",
+    "Compile the distiller with optimizer keras.optimizers.Adam(), metrics keras.metrics.SparseCategoricalAccuracy(), student_loss_fn keras.losses.SparseCategoricalCrossentropy(from_logits=True), distillation_loss_fn keras.losses.KLDivergence(), alpha=0.1, and temperature=10",
+    "Attempt to fit the distiller on the training data (x_train, y_train) for 3 epochs",
+    "Capture and log any error messages that occur during the fitting process",
+    "Assert that the error message contains specific keywords indicating a fitting issue, such as 'ValueError' or 'InvalidArgumentError'"
+]
+```

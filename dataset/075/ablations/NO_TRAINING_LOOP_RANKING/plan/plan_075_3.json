@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the autotuning directory using 'cd DeepSpeedExamples/training/autotuning/hf/gpt2-xl/'",
+    "Create a new directory for testing using 'mkdir ~/test && cd ~/test'",
+    "Install the Hugging Face Transformers library using 'pip install git+https://github.com/huggingface/transformers.git'",
+    "Install DeepSpeed using 'pip install deepspeed'",
+    "Create a new shell script file named 'test_tune.sh' using 'touch test_tune.sh'",
+    "Make the script executable using 'chmod +x test_tune.sh'",
+    "Copy the contents of the test_tune.sh file from the DeepSpeedExamples repository into the newly created test_tune.sh file",
+    "Modify the script to set 'HF_PATH=../' and 'NGPUS=6' to utilize 6 GPUs",
+    "Run the script with the command './test_tune.sh tune'",
+    "Monitor the output for the error message 'ParquetConfig.__init__() got an unexpected keyword argument 'token' during execution",
+    "Verify that the error occurs after the line '[INFO] [autotuner.py:669:model_info_profile_run] Starting model info profile run.'",
+    "Check the installed versions of DeepSpeed and Transformers using 'pip show deepspeed' and 'pip show transformers' to ensure compatibility issues are not present",
+    "Confirm that the environment has access to 6 NVIDIA 3070 Ti GPUs by running 'nvidia-smi' and checking the GPU utilization during the script execution",
+    "Ensure that the Python version is compatible with the installed libraries by running 'python --version' and checking against the requirements in the Transformers and DeepSpeed documentation"
+]
+```

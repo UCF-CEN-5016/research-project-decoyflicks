@@ -1,0 +1,16 @@
+```json
+[
+    "Import the necessary modules: torch and nn from torch",
+    "Define the parameters for the RelativeMultiHeadAttention class: heads=2, d_model=4, dropout_prob=0.1",
+    "Instantiate the RelativeMultiHeadAttention class with the defined parameters",
+    "Create a random tensor 'x' with shape (4, 2, 4) to simulate a batch of 4 sequences, each with 2 heads and 4 features",
+    "Create a tensor 'cos_cached' with shape (4, 2, 4) filled with random values to simulate cosine positional encodings",
+    "Create a tensor 'sin_cached' with shape (4, 2, 4) filled with random values to simulate sine positional encodings",
+    "Assign 'cos_cached' and 'sin_cached' to the instance of RelativeMultiHeadAttention as self.cos_cached and self.sin_cached respectively",
+    "Create a tensor 'neg_half_x' with shape (4, 2, 4) filled with random values to simulate the negative half of the input tensor",
+    "Create a tensor 'x_rope' with shape (4, 2, 3) to simulate the input tensor with a partial feature set (3 features instead of 4)",
+    "Attempt to execute the line of code: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Capture the RuntimeError that occurs, which states: 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the error message to confirm that the bug has been reproduced"
+]
+```

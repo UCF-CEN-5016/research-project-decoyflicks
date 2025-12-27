@@ -1,0 +1,20 @@
+```json
+[
+    "Import PIL and open for image handling",
+    "Import labml, labml.configs, labml.device_configs, labml.experiment, labml.helpers.hook_model_outputs, labml.helpers.DeviceConfigs, labml.nn.Discriminator, labml.nn.DiscriminatorLoss, labml.nn.Generator, labml.nn.GeneratorLoss, labml.nn.GradientPenalty, labml.nn.MappingNetwork, labml.nn.PathLengthPenalty, labml.utils.misc.monit, pathlib and Path for path handling",
+    "Define a batch size of 64 and image dimensions of 64x64",
+    "Create random normal input data with shape (batch_size, height, width, 3)",
+    "Set device to CUDA device 0 if available",
+    "Initialize configurations object",
+    "Override configurations: set device.cuda_device to 0, image_size to 64, and log_generated_interval to 200",
+    "Call configs.init() to initialize the experiment setup",
+    "Create a generator, discriminator, and mapping network instance from labml.nn.Generator, labml.nn.Discriminator, and labml.nn.MappingNetwork respectively",
+    "Set models for saving and loading using labml.experiment.add_pytorch_models() with mapping_network, generator, and discriminator instances",
+    "Start the experiment using labml.experiment.start() context manager",
+    "Call configs.train() to run the training loop for 1000 iterations",
+    "Verify loss calculation contains NaN values occasionally during training by logging generated images and checking if any of the losses are NaN",
+    "Monitor GPU memory usage during execution by adding a section in configs.step() where labml.utils.misc.monit.record_gpu_memory_usage() is called to record memory usage at each step",
+    "Assert GPU memory exceeds expected threshold after 1000 iterations to verify the bug occurs"
+]
+```
+

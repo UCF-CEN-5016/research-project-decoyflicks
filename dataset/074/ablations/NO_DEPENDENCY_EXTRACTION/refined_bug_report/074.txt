@@ -1,0 +1,17 @@
+TITLE  
+Confusion Regarding Masking in Actor Loss Calculation
+
+SYMPTOMS  
+• The mask used in actor loss calculation is "action_mask[:, start:]", which filters out the "eos" token.  
+• The "eos" token contains the ground reward calculated by the Reward Model, leading to potential loss of important information.  
+• The suggestion to use "mask = action_mask[:, start-1: -1]" is proposed but not implemented.  
+• No error messages are reported, but the behavior of the loss calculation may not align with expectations.
+
+EXPECTED BEHAVIOR  
+The actor loss calculation should correctly include the "eos" token when it contains relevant ground rewards, ensuring that the loss reflects the complete context of the actions taken by the actor.
+
+REPRODUCTION STEPS  
+1. Review the code segment where the actor loss is computed, specifically the line using "action_mask[:, start:]".  
+2. Analyze the role of the "eos" token in the context of the reward model and its expected contribution to the loss.  
+3. Test the impact of changing the mask to "action_mask[:, start-1: -1]" and observe the changes in the calculated actor loss.  
+4. Compare the results with the original implementation to determine if the new masking approach improves the accuracy and relevance of the loss calculation.

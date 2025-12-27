@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the MobileViT implementation (inception_test.py)",
+    "Set batch size to 64 and image dimensions of 280x280",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Load the 'tf_flowers' dataset using TensorFlow Datasets and prepare it according to the preprocessing steps in the implementation",
+    "Call the create_mobilevit function with num_classes=5",
+    "Train the MobileViT model on the prepared training dataset for 1 epoch",
+    "Verify that the validation accuracy does not improve after the first epoch by checking if it remains at 0% or a very low value",
+    "Monitor GPU memory usage during the training process",
+    "Assert that GPU memory usage exceeds an expected threshold to confirm significant computation"
+]
+```
+

@@ -1,0 +1,19 @@
+**TITLE**  
+ModuleNotFoundError when running TensorFlow model training script
+
+**SYMPTOMS**  
+• Encountering a `ModuleNotFoundError` indicating that there is no module named 'tensorflow.conrtib'  
+• The error occurs when attempting to import `graph_matcher` from the `exporter.py` file  
+• The following error message is displayed:  
+  `ModuleNotFoundError: No module named 'tensorflow.conrtib'`  
+• Attempted to resolve the issue by installing and importing `tf_slim` without success  
+
+**EXPECTED BEHAVIOR**  
+The model training script should execute successfully without any import errors, allowing the user to train the model as intended.
+
+**REPRODUCTION STEPS**  
+1. Set up the environment with Debian 12 and Miniforge3.  
+2. Install TensorFlow 2.x.  
+3. Run the following command in the terminal:  
+   `python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config`  
+4. Observe the error message related to the missing module during execution.

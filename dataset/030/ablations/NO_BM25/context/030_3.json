@@ -1,0 +1,62 @@
+{
+  "bug_report": "030",
+  "rank": 3,
+  "score": 0.8461494445800781,
+  "main_file": {
+    "path": "TensorFlow2/Segmentation/MaskRCNN/mrcnn_tf2/runtime/run.py",
+    "content": "import logging\nimport os\n\nimport tensorflow as tf\nimport dllogger\n\nfrom mrcnn_tf2.model.mask_rcnn import MaskRCNN\nfrom mrcnn_tf2.runtime.callbacks import DLLoggerMetricsCallback, DLLoggerPerfCallback, PretrainedWeightsLoadingCallback\nfrom mrcnn_tf2.runtime.evaluation import evaluate\nfrom mrcnn_tf2.runtime.learning_rate import PiecewiseConstantWithWarmupSchedule\nfrom mrcnn_tf2.runtime.weights_mapping import WEIGHTS_MAPPING\n\n\ndef run_training(dataset, params):\n    setup(params)\n\n    strategy = tf.distribute.MirroredStrategy()\n    params.replicas = strategy.num_replicas_in_sync\n    params.global_train_batch_size = params.train_batch_size * params.replicas\n    logging.info(f'Distributed Strategy is activated for {params.replicas} device(s)')\n\n    with strategy.scope():\n\n        learning_rate = PiecewiseConstantWithWarmupSchedule(\n            init_value=params.init_learning_rate,\n            # scale boundaries from epochs to steps\n            boundaries=[\n                int(b * dataset.train_size / params.global_train_batch_size)\n                for b in params.learning_rate_boundaries\n            ],\n            values=params.learning_rate_values,\n            # scale only by local BS as distributed strategy later scales it by number of replicas\n            scale=params.train_batch_size\n        )\n\n        optimizer = tf.keras.optimizers.SGD(\n            learning_rate=learning_rate,\n            momentum=params.momentum\n        )\n\n        mask_rcnn_model = create_model(params)\n\n        mask_rcnn_model.compile(\n            optimizer=optimizer\n        )\n\n    # distributed strategy splits data between instances so we need global BS\n    train_data = dataset.train_fn(batch_size=params.global_train_batch_size)\n\n    if params.eagerly:\n        mask_rcnn_model.run_eagerly = True\n        logging.warning('Model is running in eager mode which might reduce performance')\n\n    mask_rcnn_model.fit(\n        x=train_data,\n        epochs=params.epochs,\n        steps_per_epoch=params.steps_per_epoch or (dataset.train_size // params.global_train_batch_size),\n        callbacks=list(create_callbacks(params)),\n        verbose=0\n    )\n\n\ndef run_evaluation(dataset, params):\n    setup(params)\n\n    mask_rcnn_model = create_model(params)\n\n    if params.eagerly:\n        mask_rcnn_model.run_eagerly = True\n        logging.warning('Model is running in eager mode which might reduce performance')\n\n    predictions = mask_rcnn_model.predict(\n        x=dataset.eval_fn(params.eval_batch_size),\n        callbacks=list(create_callbacks(params))\n    )\n\n    eval_results = evaluate(\n        predictions=predictions,\n        eval_file=params.eval_file,\n        include_mask=params.include_mask\n    )\n\n    dllogger.log(\n        step=tuple(),\n        data={k: float(v) for k, v in eval_results.items()}\n    )\n\n\ndef run_inference(dataset, params):\n    setup(params)\n\n    mask_rcnn_model = create_model(params)\n\n    if params.eagerly:\n        mask_rcnn_model.run_eagerly = True\n        logging.warning('Model is running in eager mode which might reduce performance')\n\n    mask_rcnn_model.predict(\n        x=dataset.eval_fn(params.eval_batch_size),\n        callbacks=list(create_callbacks(params))\n    )\n\n\ndef setup(params):\n\n    # enforces that AMP is enabled using --amp and not env var\n    # mainly for NGC where it is enabled by default\n    os.environ['TF_ENABLE_AUTO_MIXED_PRECISION'] = '0'\n\n    if params.xla:\n        tf.config.optimizer.set_jit(True)\n        logging.info('XLA is activated')\n\n    if params.amp:\n        policy = tf.keras.mixed_precision.experimental.Policy(\"mixed_float16\", loss_scale=\"dynamic\")\n        tf.keras.mixed_precision.experimental.set_policy(policy)\n        logging.info('AMP is activated')\n\n\ndef create_model(params):\n    model = MaskRCNN(\n        params=params,\n        trainable='train' in params.mode\n    )\n\n    checkpoint_path = tf.train.latest_checkpoint(params.model_dir)\n\n    # if there is no checkpoint we are done\n    if checkpoint_path is None:\n        logging.info(f\"No checkpoint was found in: {params.model_dir}\")\n        return model\n\n    model.load_weights(checkpoint_path).expect_partial()\n    logging.info(f\"Loaded weights from checkpoint: {checkpoint_path}\")\n\n    # don't load backbone weights to do not override the checkpoint\n    if params.backbone_checkpoint:\n        params.backbone_checkpoint = None\n        logging.info(\"Pretrained backbone weights will not be loaded\")\n\n    return model\n\n\ndef create_callbacks(params):\n    yield DLLoggerMetricsCallback(\n        dllogger=dllogger,\n        log_every=params.log_every\n    )\n\n    yield DLLoggerPerfCallback(\n        dllogger=dllogger,\n        batch_sizes={\n            'train': params.train_batch_size * getattr(params, 'replicas', 1),\n            'test': params.eval_batch_size * getattr(params, 'replicas', 1),\n            'predict': params.eval_batch_size * getattr(params, 'replicas', 1)\n        },\n        warmup_steps=params.log_warmup_steps,\n        log_every=params.log_every\n    )\n\n    if params.backbone_checkpoint:\n        yield PretrainedWeightsLoadingCallback(\n            checkpoint_path=params.backbone_checkpoint,\n            mapping=lambda name: WEIGHTS_MAPPING.get(name.replace(':0', ''), name)\n        )\n\n    yield tf.keras.callbacks.ModelCheckpoint(\n        filepath=os.path.join(params.model_dir, params.checkpoint_name_format),\n        verbose=1\n    )\n\n    if params.log_tensorboard:\n        yield tf.keras.callbacks.TensorBoard(\n            log_dir=params.log_tensorboard,\n            update_freq='batch'\n        )\n"
+  },
+  "module_snippets": [
+    {
+      "file": "TensorFlow2/Segmentation/MaskRCNN/mrcnn_tf2/runtime/run.py",
+      "snippets": [
+        {
+          "lines": "89-101",
+          "code": "def run_training(dataset, params):\n    setup(params)\n\n    strategy = tf.distribute.MirroredStrategy()\n    params.replicas = strategy.num_replicas_in_sync\n    params.global_train_batch_size = params.train_batch_size * params.replicas\n    logging.info(f'Distributed Strategy is activated for {params.replicas} device(s)')\n\n    with strategy.scope():\n\n        learning_rate = PiecewiseConstantWithWarmupSchedule(\n            init_value=params.init_learning_rate,\n            # scale boundaries from epochs to steps\n            boundaries=[\n                int(b * dataset.train_size / params.global_train_batch_size)\n                for b in params.learning_rate_boundaries\n            ],\n            values=params.learning_rate_values,\n            # scale only by local BS as distributed strategy later scales it by number of replicas\n            scale=params.train_batch_size\n        )\n\n        optimizer = tf.keras.optimizers.SGD(\n            learning_rate=learning_rate,\n            momentum=params.momentum\n        )\n\n        mask_rcnn_model = create_model(params)\n\n        mask_rcnn_model.compile(\n            optimizer=optimizer\n        )\n\n    # distributed strategy splits data between instances so we need global BS\n    train_data = dataset.train_fn(batch_size=params.global_train_batch_size)\n\n    if params.eagerly:\n        mask_rcnn_model.run_eagerly = True\n        logging.warning('Model is running in eager mode which might reduce performance')\n\n    mask_rcnn_model.fit(\n        x=train_data,\n        epochs=params.epochs,\n        steps_per_epoch=params.steps_per_epoch or (dataset.train_size // params.global_train_batch_size),\n        callbacks=list(create_callbacks(params)),\n        verbose=0\n    )\n\ndef run_evaluation(dataset, params):\n    setup(params)\n\n    mask_rcnn_model = create_model(params)\n\n    if params.eagerly:\n        mask_rcnn_model.run_eagerly = True\n        logging.warning('Model is running in eager mode which might reduce performance')\n\n    predictions = mask_rcnn_model.predict(\n        x=dataset.eval_fn(params.eval_batch_size),\n        callbacks=list(create_callbacks(params))\n    )\n\n    eval_results = evaluate(\n        predictions=predictions,\n        eval_file=params.eval_file,\n        include_mask=params.include_mask\n    )\n\n    dllogger.log(\n        step=tuple(),\n        data={k: float(v) for k, v in eval_results.items()}\n    )\n\ndef run_inference(dataset, params):\n    setup(params)\n\n    mask_rcnn_model = create_model(params)\n\n    if params.eagerly:\n        mask_rcnn_model.run_eagerly = True\n        logging.warning('Model is running in eager mode which might reduce performance')\n\n    mask_rcnn_model.predict(\n        x=dataset.eval_fn(params.eval_batch_size),\n        callbacks=list(create_callbacks(params))\n    )"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "dllogger",
+      "function": "log"
+    },
+    {
+      "module": "logging",
+      "function": "info"
+    },
+    {
+      "module": "logging",
+      "function": "warning"
+    },
+    {
+      "module": "mrcnn_tf2",
+      "function": "DLLoggerMetricsCallback"
+    },
+    {
+      "module": "mrcnn_tf2",
+      "function": "DLLoggerPerfCallback"
+    },
+    {
+      "module": "mrcnn_tf2",
+      "function": "MaskRCNN"
+    },
+    {
+      "module": "mrcnn_tf2",
+      "function": "PiecewiseConstantWithWarmupSchedule"
+    },
+    {
+      "module": "mrcnn_tf2",
+      "function": "PretrainedWeightsLoadingCallback"
+    },
+    {
+      "module": "mrcnn_tf2",
+      "function": "evaluate"
+    },
+    {
+      "module": "mrcnn_tf2",
+      "function": "get"
+    }
+  ]
+}

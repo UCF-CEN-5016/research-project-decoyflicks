@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries for the script including bing_bert_dataset_provider, deepspeed, json, logging, nvidia_bert_dataset_provider, pytorch_pretrained_bert, random, time, torch, tqdm, turing, and utils.",
+    "Load configuration file using the json.load() function to get training parameters and model details.",
+    "Set up logger using the Logger class from the turing module for tracking training progress.",
+    "Initialize a random seed using the random.seed() function with a fixed value for reproducibility.",
+    "Define device type (CPU/GPU) based on availability and whether FP16 is enabled in configuration.",
+    "Create a model instance using BertMultiTask class from the turing module with the loaded configuration.",
+    "Initialize an optimizer using deepspeed.initialize() function with the model, configuration, and logger.",
+    "Load training checkpoint if provided using the load_checkpoint() function and get the global step value.",
+    "Set up data providers based on whether Nvidia or Bing dataset is used.",
+    "Define a number of epochs for training based on the configuration.",
+    "Start training loop from the provided epoch to the total number of epochs.",
+    "In each epoch, prepare data loaders using torch DataLoader with appropriate samplers (RandomSampler or DistributedSampler).",
+    "Train model by calling the train() function with arguments including args, index, model, optimizer, and dataset provider.",
+    "At each step in training, call the report_progress() function from utils module to log loss, accuracy, etc.",
+    "Periodically save checkpoints using the checkpoint_model() function if configured.",
+    "Monitor GPU memory usage during training and validation steps.",
+    "After completing the training loop, measure total elapsed time.",
+    "Assert that NaN values are present in the loss calculation during any of the epochs to reproduce the bug."
+]
+```
+

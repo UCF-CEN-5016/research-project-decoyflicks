@@ -1,0 +1,37 @@
+### TITLE
+AttributeError in Keras Layer Import due to Missing 'experimental' Attribute
+
+### SYMPTOMS
+• Encountered an `AttributeError` when attempting to import `model_builder` from `object_detection.builders`.  
+• The specific error message is:  
+  `AttributeError: module 'keras._tf_keras.keras.layers' has no attribute 'experimental'`  
+• The issue arises after downgrading the protobuf library from version 3.19 to 3.20.  
+• The code fails to run as expected, preventing further execution.
+
+### EXPECTED BEHAVIOR
+The code should execute without errors, allowing successful import of the necessary libraries and enabling the functionality of the TensorFlow model without encountering the `AttributeError`.
+
+### REPRODUCTION STEPS
+1. Downgrade the protobuf library from version 3.19 to 3.20.
+2. Attempt to import the following libraries in your code:  
+   ```python
+   from object_detection.utils import colab_utils  
+   from object_detection.utils import config_util  
+   from object_detection.builders import model_builder  
+   ```
+3. Observe the error message generated during the import process.
+
+### ADDITIONAL CONTEXT
+- The error occurs specifically in the following line of code:  
+  ```python
+  class FreezableSyncBatchNorm(tf.keras.layers.experimental.SyncBatchNormalization):
+  ```
+- System Information:  
+  - TensorFlow version: 2.x (latest release)  
+  - Operating System: Windows using Google Colab  
+  - Python version: 3.10.12  
+  - GPU: T4 GPU on Google Colab  
+- The issue may be related to the compatibility of the TensorFlow version with the downgraded protobuf library.
+
+### FEEDBACK REQUEST
+Please provide feedback on this bug report and any potential solutions or workarounds to resolve the `AttributeError`. Thank you!

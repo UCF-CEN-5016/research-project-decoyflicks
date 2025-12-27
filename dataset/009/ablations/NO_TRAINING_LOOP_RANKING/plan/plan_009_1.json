@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the official TensorFlow Object Detection API, including the DetectionFromImageModule.",
+    "Set the CUDA version to 11.5 and ensure TensorFlow GPU version is 2.4.",
+    "Define the model name as 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'.",
+    "Prepare a sample dataset for testing, ensuring it contains images compatible with the model's input requirements (640x640 pixels).",
+    "Create a configuration file for the model training, specifying the model name, dataset path, and training parameters.",
+    "Run the training script 'model_main_tf2.py' with the configuration file to train the model, ensuring it completes without errors.",
+    "After training, use the 'exporter_main_v2.py' script to export the trained model, specifying the trained checkpoint path and output directory.",
+    "In the export script, ensure to set the input shape to (None, 640, 640, 3) to match the model's expected input dimensions.",
+    "Attempt to access the 'outputs' attribute of the 'DetectionFromImageModule' instance after the export process.",
+    "Capture the output of the export process and check for the 'AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs' error.",
+    "Log the error message and the stack trace to verify the occurrence of the bug.",
+    "Validate that the error occurs consistently by repeating the export process multiple times with the same trained model."
+]
+```

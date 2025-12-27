@@ -1,0 +1,22 @@
+[
+  "Clone the DeepSpeedExamples repository from https://github.com/microsoft/DeepSpeedExamples.git",
+  "Navigate to the directory training/autotuning/hf/gpt2-xl in the cloned repository",
+  "Inspect and copy the full content of the test_tune.sh script located at training/autotuning/hf/gpt2-xl/test_tune.sh",
+  "Create a new directory, e.g., '~/test', outside the transformers and DeepSpeedExamples repositories to isolate the test environment",
+  "Inside '~/test', create a new file named test_tune.sh and paste the copied content of the original test_tune.sh script into it",
+  "Edit the test_tune.sh file to set HF_PATH=../ (assuming transformers repo is cloned at ~/transformers) and set NGPUS=6 to match the available 6 GPUs",
+  "Make the script executable by running chmod +x test_tune.sh",
+  "Clone the transformers repository from https://github.com/huggingface/transformers.git to ~/transformers",
+  "Install transformers by running 'pip install .' inside the ~/transformers directory",
+  "Install DeepSpeed by running 'pip install deepspeed' in the '~/test' directory",
+  "Ensure all other required dependencies for DeepSpeed autotuning and HuggingFace transformers are installed (e.g., pyarrow, pandas, etc.)",
+  "Run the test_tune.sh script with the argument 'tune' by executing './test_tune.sh tune' inside '~/test'",
+  "Observe the script execution logs, looking specifically for the initialization phase of the DeepSpeed autotuner",
+  "Wait until the autotuning process reaches the model profiling step where it attempts to run DeepSpeed with the GPT-2 XL model",
+  "Verify that during execution, the error 'ParquetConfig.__init__() got an unexpected keyword argument 'token'' is raised and logged",
+  "Assert that the error trace references the call stack within the DeepSpeed autotuning or scheduler code indicating a misuse of ParquetConfig initialization parameters",
+  "Confirm that no optimal DeepSpeed configuration is found after the autotuning attempt, as indicated by the log messages",
+  "Check for any permission denied errors related to ssh on localhost as part of the log but confirm the ParquetConfig error happens independently of these",
+  "Optionally, reproduce the bug by running the script multiple times to confirm consistency of the ParquetConfig error",
+  "Document the environment details including DeepSpeed version, transformers version, Python version, CUDA version, and GPU details to contextualize the bug reproduction"
+]

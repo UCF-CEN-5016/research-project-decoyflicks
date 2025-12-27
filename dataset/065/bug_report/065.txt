@@ -1,0 +1,20 @@
+examples: structured_data_classification_with_feature_space.py: from keras.utils import FeatureSpace
+
+https://github.com/keras-team/keras-io/tree/master/examples/structured_data/structured_data_classification_with_feature_space.py
+
+from keras.utils import FeatureSpace
+
+---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+[<ipython-input-86-12b1b039c833>](https://7vgpr4slb3-496ff2e9c6d22116-0-colab.googleusercontent.com/outputframe.html?vrz=colab-20230112-060047-RC00_501486188#) in <module>
+----> 1 from keras.utils import FeatureSpace
+
+ImportError: cannot import name 'FeatureSpace' from 'keras.utils' (/usr/local/lib/python3.8/dist-packages/keras/utils/__init__.py)
+
+---------------------------------------------------------------------------
+NOTE: If your import is failing due to a missing package, you can
+manually install dependencies using either !pip or !apt.
+
+To view examples of installing some common dependencies, click the
+"Open Examples" button below.
+---------------------------------------------------------------------------

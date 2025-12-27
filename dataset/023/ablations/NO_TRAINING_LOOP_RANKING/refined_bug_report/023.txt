@@ -1,0 +1,32 @@
+TITLE
+Notebook Fails to Import Required Libraries in TensorFlow Object Detection
+
+SYMPTOMS
+• The notebook at [object_detection.ipynb](https://github.com/tensorflow/models/blob/master/docs/vision/object_detection.ipynb) fails to execute at the section for importing required libraries.
+• An error occurs during the import process, as shown in the provided screenshot.
+• The notebook does not proceed past the import section, preventing further execution.
+
+EXPECTED BEHAVIOR
+The notebook should successfully import all required libraries without any errors, allowing the user to proceed with executing the subsequent sections.
+
+REPRODUCTION STEPS
+1. Open the notebook at [object_detection.ipynb](https://github.com/tensorflow/models/blob/master/docs/vision/object_detection.ipynb) in Google Colab.
+2. Run all cells sequentially until reaching the section titled "Import required libraries from tensorflow models."
+3. Observe the error that occurs during the import process.
+
+ADDITIONAL CONTEXT
+- Please provide any relevant logs or error messages that appear during the import.
+- Include system information, such as the OS platform, TensorFlow version, and Python version, to assist in diagnosing the issue. 
+
+SYSTEM INFORMATION
+- OS Platform and Distribution:
+- Mobile device name (if applicable):
+- TensorFlow installed from (source or binary):
+- TensorFlow version:
+- Python version:
+- Bazel version (if compiling from source):
+- GCC/Compiler version (if compiling from source):
+- CUDA/cuDNN version:
+- GPU model and memory:
+
+For detailed system information, please use the environment capture script available [here](https://github.com/tensorflow/tensorflow/tree/master/tools/tf_env_collect.sh).

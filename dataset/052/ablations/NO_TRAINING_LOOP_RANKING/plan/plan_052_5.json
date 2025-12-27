@@ -1,0 +1,29 @@
+```json
+[
+    "Import necessary libraries: keras, numpy, pandas, tensorflow, and urllib",
+    "Set the Keras backend to TensorFlow by executing os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Define a sequence length of 4 and a step size of 2 for data preparation",
+    "Download the Movielens dataset using urlretrieve and extract it using ZipFile",
+    "Load the users, ratings, and movies data into pandas DataFrames with appropriate column names",
+    "Process the users DataFrame to format user_id, age_group, and occupation columns",
+    "Process the movies DataFrame to format movie_id column",
+    "Process the ratings DataFrame to format user_id and movie_id columns and convert rating to float",
+    "Split the genres in the movies DataFrame into separate columns for each genre",
+    "Sort the ratings DataFrame by unix_timestamp and group by user_id to create sequences of movie_ids and ratings",
+    "Define a function create_sequences to generate sequences of movie_ids and ratings based on the defined sequence length and step size",
+    "Apply create_sequences function to movie_ids and ratings columns in the ratings DataFrame",
+    "Explode the movie_ids and ratings columns to create separate records for each sequence in the DataFrame",
+    "Join the user features with the ratings data to create a final DataFrame for training",
+    "Split the final DataFrame into training and testing datasets with an 85-15 split",
+    "Save the training and testing datasets to CSV files named 'train_data.csv' and 'test_data.csv'",
+    "Define a function get_dataset_from_csv to create a tf.data.Dataset from the CSV files, ensuring to set batch_size to 128",
+    "Define model inputs using keras.Input for user_id, sequence_movie_ids, target_movie_id, and sequence_ratings",
+    "Define a function encode_input_features to encode the input features using layers.Embedding and concatenate them",
+    "Create a model architecture using keras.Model with MultiHeadAttention and Dense layers",
+    "Compile the model with optimizer='adam', loss='mean_squared_error', and metrics=['mean_absolute_error']",
+    "Load the training dataset using get_dataset_from_csv with shuffle=True and batch_size=265",
+    "Call model.fit on the training dataset for 10 epochs to trigger the bug",
+    "Capture the output during model.fit to verify if the OperatorNotAllowedInGraphError occurs",
+    "Log the error message to confirm the specific error encountered during training"
+]
+```

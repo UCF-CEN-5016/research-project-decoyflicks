@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Ensure that PyTorch and DeepSpeed are installed with the correct versions compatible with your CUDA version",
+    "Create a new Python script named 'test_deepspeed_domino.py'",
+    "Import necessary modules in 'test_deepspeed_domino.py': 'import torch', 'from domino.optimizer.optimizer import MegatronOptimizer', 'from domino.optimizer.clip_grads import clip_grad_norm_fp32'",
+    "Define a batch size of 2 and model dimensions for a 2.7B parameter GPT-3 model",
+    "Create a random tensor to simulate model parameters with shape (2, 3, 1024, 1024) using 'torch.randn((2, 3, 1024, 1024)).cuda()'",
+    "Initialize a dummy optimizer instance with 'optimizer = torch.optim.Adam(params, lr=0.001)'",
+    "Create an instance of MegatronOptimizer with the dummy optimizer and required parameters: 'megatron_optimizer = MegatronOptimizer(optimizer, clip_grad=1.0, log_num_zeros_in_grad=False, params_have_main_grad=True, use_contiguous_buffers_in_local_ddp=False, models=[model])'",
+    "Set the global 'cdb' object to None to simulate the bug: 'global cdb; cdb = None'",
+    "Call the 'allreduce_layernorm_grads' method on the MegatronOptimizer instance with a dummy args object: 'args = type('', (), {})()'; args.sequence_parallel = True; megatron_optimizer.allreduce_layernorm_grads(args)",
+    "Capture the output and any exceptions raised during the execution of the allreduce_layernorm_grads method",
+    "Assert that the output contains an AttributeError indicating 'NoneType' object has no attribute 'all_reduce'",
+    "Log the error message to verify that the bug has been reproduced"
+]
+```

@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official vision library: 'from official.vision.modeling.layers import detection_generator'",
+    "Define a batch size of 1 and set the input dimensions for the predicted boxes to (0, 4) to simulate zero predicted boxes.",
+    "Create an empty tensor for predicted boxes with shape (0, 4) using 'tf.constant([], shape=(0, 4), dtype=tf.float32)'",
+    "Create a dummy input tensor for other required inputs (e.g., image features) with shape (1, 256, 256, 3) using 'tf.random.uniform((1, 256, 256, 3))'",
+    "Call the function '_generate_detections_v2_class_aware' from the detection_generator module with the empty predicted boxes tensor and the dummy input tensor",
+    "Wrap the function call in a try-except block to catch the ValueError",
+    "Assert that the caught exception is a ValueError and contains the message 'List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2'",
+    "Print the error message to confirm the bug is reproduced"
+]
+```

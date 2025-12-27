@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Model Garden module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Ensure TensorFlow version is 2.x by running 'print(tf.version.VERSION)'",
+    "Check that the latest version of TensorFlow Model Garden is installed by running 'pip show tensorflow-models'",
+    "Create a virtual environment to isolate dependencies using 'python -m venv tf_env'",
+    "Activate the virtual environment using 'source tf_env/bin/activate' on Linux or 'tf_env\\Scripts\\activate' on Windows",
+    "Install TensorFlow and TensorFlow Model Garden in the virtual environment using 'pip install tensorflow tensorflow-models'",
+    "Import the necessary modules: 'from absl import logging' and 'import tensorflow_text'",
+    "Define a function to trigger the bug by attempting to import 'tensorflow_models' and catching any ImportError",
+    "Run the function to import 'tensorflow_models' and capture the output",
+    "Verify that the output contains an ImportError related to 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Log the error message to confirm the specific ImportError is raised",
+    "Check the installed version of 'tensorflow_text' using 'pip show tensorflow-text' to ensure it matches the expected version",
+    "Create a simple TensorFlow model to ensure that the environment is set up correctly by defining 'model = tf.keras.Sequential([tf.keras.layers.Dense(10, input_shape=(10,))])'",
+    "Compile the model with an optimizer and loss function using 'model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')'",
+    "Generate dummy input data with shape (32, 10) and labels with shape (32,) for testing the model",
+    "Run a training step with the dummy data to ensure the model can train without errors using 'model.fit(x, y, epochs=1)'",
+    "Assert that the model training does not raise any errors to confirm the environment is functional",
+    "Re-attempt to import 'tensorflow_models' to reproduce the ImportError after confirming the model training works"
+]
+```

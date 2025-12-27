@@ -1,0 +1,16 @@
+TITLE  
+Import error when running object_detection.ipynb notebook from TensorFlow Models repository
+
+SYMPTOMS  
+• Notebook execution breaks at the step "Import required libraries from tensorflow models"  
+• ImportError or ModuleNotFoundError occurs (as shown in provided screenshot)  
+• Unable to proceed beyond the import section due to missing or unresolved modules  
+
+EXPECTED BEHAVIOR  
+The notebook should run the import commands successfully without errors, allowing subsequent cells to execute as intended.
+
+REPRODUCTION STEPS  
+1. Open the notebook at https://github.com/tensorflow/models/blob/master/docs/vision/object_detection.ipynb  
+2. Run the notebook in Google Colab or a compatible environment  
+3. Execute cells sequentially until reaching the section "Import required libraries from tensorflow models"  
+4. Observe that the import step fails with an ImportError or ModuleNotFoundError preventing further execution

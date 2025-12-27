@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and Keras modules: keras, layers, and backend",
+    "Import TensorFlow Datasets (tfds) and disable progress bar using tfds.disable_progress_bar()",
+    "Define a batch size of 32 and image dimensions of 256x256",
+    "Load a custom dataset structured similarly to the demo dataset, ensuring it contains images and corresponding bounding box annotations",
+    "Preprocess the dataset to ensure images are resized to (256, 256) and labels are one-hot encoded",
+    "Create a training dataset and a validation dataset using tf.data API, ensuring both datasets are batched with the defined batch size",
+    "Define a learning rate of 0.001 and a label smoothing factor of 0.1",
+    "Create a RetinaNet model instance using keras_cv.models.object_detection.RetinaNet",
+    "Compile the model with an Adam optimizer and a loss function suitable for object detection",
+    "Call model.fit() with the training dataset and validation dataset, taking 20 samples from each for training and validation",
+    "Set epochs to 1 and include a callback for evaluation metrics",
+    "Run the model.fit() function and monitor for InvalidArgumentError during execution",
+    "Capture the full error traceback to verify the specific error message related to 'GatherV2_1'",
+    "Assert that the error message contains 'indices[3,63949] = 0 is not in [0, 0)' to confirm the bug is reproduced"
+]
+```

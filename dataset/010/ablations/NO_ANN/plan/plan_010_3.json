@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary libraries for instance segmentation from the TensorFlow Model Garden.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define the dataset path for the instance segmentation dataset, e.g., 'path/to/your/dataset'.",
+    "Load the instance segmentation model from TensorFlow Model Garden using tf.keras.applications.",
+    "Set the image size for the model, e.g., image_size = (640, 640).",
+    "Define the batch size for training and validation, e.g., batch_size = 8.",
+    "Create a data generator for training and validation datasets using tf.keras.preprocessing.image_dataset_from_directory with the dataset path, image size, and batch size.",
+    "Compile the model with a loss function suitable for instance segmentation, e.g., model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy']).",
+    "Train the model using model.fit with the training dataset, validation dataset, and specify validation_steps to monitor validation loss.",
+    "During training, periodically print the validation loss after each epoch.",
+    "After training, evaluate the model on the validation dataset using model.evaluate and capture the output.",
+    "Check the output for validation loss; assert that validation_loss equals 0.0.",
+    "If validation_loss is 0.0, log the occurrence and note that this reproduces the bug.",
+    "Run the official tutorial for instance segmentation from TensorFlow Model Garden to confirm the same behavior occurs.",
+    "Compare the validation loss output from the tutorial with the output from the custom training to ensure consistency in the bug."
+]
+```

@@ -1,0 +1,17 @@
+TITLE
+Potential Issue with Self-Attention Implementation in SA for DDPM UNet
+
+SYMPTOMS
+• The bug report suggests that the softmax operation might be incorrectly implemented.
+• The Attention module seems to work on the CIFAR-10 dataset, but there may be an underlying issue.
+
+EXPECTED BEHAVIOR
+The self-attention mechanism should correctly compute attention scores by applying the softmax function along the `j` axis (assuming `j` represents the query or key dimension), ensuring that the output probabilities sum up to 1 for each position.
+
+REPRODUCTION STEPS
+1. Clone the repository: https://github.com/labmlai/annotated_deep_learning_paper_implementations.git
+2. Navigate to the specific file mentioned in the bug report: `labml_nn/diffusion/ddpm/unet.py`
+3. Inspect lines 188-190 for the current implementation of self-attention.
+4. Run experiments using the provided dataset (CIFAR-10) and observe if there are any performance discrepancies or errors.
+
+Note: The issue might not be immediately apparent, as the Attention module currently works on CIFAR-10, but it is recommended to review the implementation carefully to ensure correctness.

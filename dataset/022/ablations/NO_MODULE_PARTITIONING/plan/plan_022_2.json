@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official NLP layers: 'gaussian_process', 'position_embedding', and 'kernel_attention'",
+    "Set a random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 8 and input dimensions of (10, 128) for a sequence length of 10 and feature size of 128",
+    "Create random input data for the Gaussian process layer with shape (batch_size, 10, 128) using tf.random.normal",
+    "Instantiate the RandomFeatureGaussianProcess layer with parameters: units=10, num_inducing=1024, gp_kernel_type='gaussian', gp_kernel_scale=1.0, scale_random_features=True, use_custom_random_features=True",
+    "Build the RandomFeatureGaussianProcess layer by calling the build method with input_shape=(batch_size, 10, 128)",
+    "Call the RandomFeatureGaussianProcess layer with the random input data and set training=True",
+    "Capture the output of the layer, which should include the GP output and GP covariance matrix",
+    "Verify the shape of the GP output is (batch_size, 10) and the shape of the GP covariance matrix is (batch_size, batch_size)",
+    "Check the standard deviation of the GP output using tf.math.reduce_std and assert that it is either 0 or 1",
+    "Log the standard deviation value to confirm it is not varying as expected",
+    "Repeat the above steps with different random seeds to ensure the issue is consistent across runs",
+    "Assert that the standard deviation remains constant (either 0 or 1) across multiple runs, indicating the bug is reproducible"
+]
+```

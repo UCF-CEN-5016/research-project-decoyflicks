@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and the BERT model from transformers.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define a batch size of 12 and input dimensions for BERT (e.g., sequence length of 512).",
+    "Create random input data with shape (batch_size, sequence_length) using torch.randint to simulate input IDs.",
+    "Create random attention masks with shape (batch_size, sequence_length) using torch.randint to simulate attention masks.",
+    "Load the BERT model using the from_pretrained method with the 'bert-large-uncased' model.",
+    "Define a forward pass function that includes a call to the gelu activation function with approximate=True.",
+    "Call the forward pass function with the random input data and attention masks.",
+    "Capture the output of the model to ensure it runs without errors.",
+    "Verify that the gelu function is called with approximate=True in the model's forward pass.",
+    "Assert that a TypeError is raised when the gelu function is called with approximate=True, as it should expect a string instead of a boolean."
+]
+```

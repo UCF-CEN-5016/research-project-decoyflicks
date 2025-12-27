@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary modules from denoising_diffusion_pytorch: GaussianDiffusion, Unet, and Trainer",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 4 and image dimensions of 64x64",
+    "Create a random input tensor 'x' with shape (batch_size, 3, height, width) using torch.rand(batch_size, 3, 64, 64)",
+    "Define a time step 't' as a tensor with shape (batch_size,) using torch.randint(0, 1000, (batch_size,))",
+    "Instantiate the Unet model with appropriate parameters, e.g., model = Unet()",
+    "Instantiate the GaussianDiffusion model with the Unet model, e.g., diffusion_model = GaussianDiffusion(model)",
+    "Set the self_condition attribute of the diffusion_model to True",
+    "Enable self conditioning by setting diffusion_model.self_condition = True",
+    "Call the model_predictions method with the input tensor 'x' and time step 't' to generate predictions",
+    "Wrap the prediction call in a conditional statement: if diffusion_model.self_condition and random() < 0.5:",
+    "Within the conditional, use 'with torch.inference_mode():' to call model_predictions again with x.clone().detach() and t",
+    "Capture the output of model_predictions in a variable 'x_self_cond'",
+    "Attempt to access the pred_x_start attribute of x_self_cond",
+    "Run the code and observe for RuntimeError: Inference tensors cannot be saved for backward",
+    "Log the error message to confirm the occurrence of the bug",
+    "Verify that the error occurs consistently by running the code multiple times"
+]
+```

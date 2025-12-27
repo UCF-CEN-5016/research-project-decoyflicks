@@ -1,0 +1,22 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10.13",
+    "Activate the newly created conda environment using: conda activate test_env",
+    "Install TensorFlow in the conda environment using the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using the command: pip install tf-models-nightly",
+    "Open Visual Studio Code (VSCode) and create a new Jupyter Notebook file.",
+    "In the first cell of the notebook, import the necessary libraries by adding the following code: import matplotlib.pyplot as plt; import tensorflow as tf; from official import tensorflow_models",
+    "Run the first cell to ensure that the libraries are imported without errors.",
+    "Check the current matplotlib backend by adding the following code in a new cell: print(plt.get_backend() ) and run the cell. Note the backend (should be 'module://matplotlib_inline.backend_inline' or similar).",
+    "In a new cell, import the TensorFlow Model Garden by adding the following code: from official import tensorflow_models and run the cell.",
+    "Check the matplotlib backend again by adding the following code in a new cell: print(plt.get_backend()) and run the cell. Note the backend (should now be 'agg').",
+    "Create a simple plot in a new cell by adding the following code: plt.plot([1, 2, 3], [1, 4, 9]) and run the cell. Verify that the plot does not display.",
+    "Add a line to show the plot by adding the following code: plt.show() and run the cell. Verify that the plot still does not display.",
+    "Change the matplotlib backend to 'TkAgg' in a new cell by adding the following code: plt.switch_backend('TkAgg') and run the cell.",
+    "Attempt to create and show a plot again by adding the following code: plt.plot([1, 2, 3], [1, 4, 9]); plt.show() and run the cell. Verify that the plot still does not display.",
+    "Change the matplotlib backend back to 'module://matplotlib_inline.backend_inline' before importing tensorflow_models by adding the following code: plt.switch_backend('module://matplotlib_inline.backend_inline') and run the cell.",
+    "Re-import the TensorFlow Model Garden by adding the following code: from official import tensorflow_models and run the cell.",
+    "Create and show a plot again by adding the following code: plt.plot([1, 2, 3], [1, 4, 9]); plt.show() and run the cell. Verify that the plot now displays correctly."
+]
+```

@@ -1,0 +1,13 @@
+[
+    "Import necessary modules from TensorFlow, NumPy, and other required libraries for reproducing the bug",
+    "Define specific input dimensions and batch size used in the original code (e.g., batch_size=32, height=299, width=299)",
+    "Generate synthetic logits data with a known shape (batch_size * (1 + NUM_EVAL_NEGATIVES), num_classes) containing NaN values in certain positions",
+    "Create a dummy duplicate_mask tensor with the same shape as logits to mimic the behavior of the original code",
+    "Invoke the `compute_top_k_and_ndcg` function with the synthetic logits and duplicate_mask tensors",
+    "Capture the output of the function, specifically extracting the logits_by_user tensor",
+    "Observe if the logits_by_user tensor contains unexpected values or is structured incorrectly",
+    "Log or print the shape and some elements of the logits_by_user tensor to visually inspect it for discrepancies",
+    "Compare the observed structure of logits_by_user with the expected structure from the original code",
+    "Assert that the logits_by_user tensor does not match the expected format, indicating the bug reproduction"
+]
+

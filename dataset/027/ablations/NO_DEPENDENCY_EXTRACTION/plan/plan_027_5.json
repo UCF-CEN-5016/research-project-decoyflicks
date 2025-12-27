@@ -1,0 +1,16 @@
+```json
+[
+    "Clone the PyTorch examples repository from GitHub using 'git clone https://github.com/pytorch/examples.git'",
+    "Navigate to the 'dcgan' directory using 'cd examples/dcgan'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Download the CelebA dataset from the official website or use the provided script in the repository to download it.",
+    "Modify the 'dcgan_faces.py' script to change the image size from 64x64 to 128x128 by updating the 'image_size' variable to 128.",
+    "Update the generator and discriminator architectures in the 'dcgan_faces.py' script to accommodate the new image size by adjusting the input and output dimensions of the layers accordingly.",
+    "Set the batch size to 128 in the training loop by modifying the 'batch_size' variable to 128.",
+    "Run the modified 'dcgan_faces.py' script using the command 'python dcgan_faces.py --image-size 128 --batch-size 128'",
+    "Observe the output and wait for the training loop to start, which should print 'Starting Training Loop...'",
+    "Capture the error message that appears after the training loop starts, specifically looking for the ValueError related to mismatched tensor sizes.",
+    "Verify that the input size is torch.Size([3200]) and the target size is torch.Size([128]) in the error message.",
+    "Document the exact error message and the context in which it occurs for further analysis."
+]
+```

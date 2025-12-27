@@ -1,0 +1,15 @@
+[
+    "Import TensorFlow and the syntaxnet module from graph_builder_test.py",
+    "Define a batch size of 10 for MNIST data",
+    "Load MNIST training data with images of shape (28, 28) and labels one-hot encoded with 10 classes",
+    "Set hyperparameters: embedding_sizes=[8, 8, 8], hidden_layer_sizes=[32, 32], seed=42, gate_gradients=True, use_averaging=True",
+    "Create a TensorFlow session for model training",
+    "Initialize graph and parser using syntaxnet.GreedyParser with the defined hyperparameters",
+    "Add MNIST training data to parser using batch_size=10 and corpus_name='mnist'",
+    "Run one epoch of training by calling train_op in parser.training dictionary",
+    "Retrieve loss from parser.training['cost'] after running training for one epoch",
+    "Assert that the retrieved loss contains NaN values",
+    "Monitor GPU memory usage during model initialization and first training step",
+    "Assert that the GPU memory consumption is greater than 10GB"
+]
+

@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow, Keras, and the necessary modules from transformers and datasets libraries.",
+    "Set the runtime type in Google Colab to GPU and ensure the T4 GPU is selected.",
+    "Install the required libraries by running: pip install git+https://github.com/huggingface/transformers.git and pip install datasets.",
+    "Load the SQUAD dataset using the command: datasets = load_dataset('squad').",
+    "Define a model checkpoint variable with the value 'distilbert-base-cased'.",
+    "Instantiate the tokenizer using: tokenizer = AutoTokenizer.from_pretrained(model_checkpoint).",
+    "Set max_length to 384 and doc_stride to 128 for preprocessing.",
+    "Define the function prepare_train_features to tokenize the dataset, ensuring to include truncation and padding.",
+    "Map the prepare_train_features function to the training dataset using: tokenized_datasets = datasets.map(prepare_train_features, batched=True, remove_columns=datasets['train'].column_names).",
+    "Convert the tokenized datasets to numpy format for training: train_set = tokenized_datasets['train'].with_format('numpy') and validation_set = tokenized_datasets['validation'].with_format('numpy').",
+    "Import TFAutoModelForQuestionAnswering from transformers and instantiate the model using: model = TFAutoModelForQuestionAnswering.from_pretrained(model_checkpoint).",
+    "Create an Adam optimizer with a learning rate of 5e-5: optimizer = keras.optimizers.Adam(learning_rate=5e-5).",
+    "Compile the model using: model.compile(optimizer=optimizer).",
+    "Attempt to fit the model using: model.fit(train_set, validation_data=validation_set, epochs=10).",
+    "Monitor the output for any errors during the model fitting process, specifically looking for OperatorNotAllowedInGraphError.",
+    "Capture the error message and verify that it matches the expected output regarding the Softmax.call() issue."
+]
+```

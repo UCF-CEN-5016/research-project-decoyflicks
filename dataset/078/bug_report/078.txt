@@ -1,0 +1,11 @@
+train navit nest 3d error when backward
+
+Thanks for your awesome work!
+When I try to train navit_nest_3d model, an error occured:
+Function UnbindBackwardAutogradNestedTensor0 returned an invalid gradient at index 0 - got     1  1024
+    1  1024
+    1  1024
+    1  1024
+    1  1024
+[ torch.LongTensor{5,2} ] but expected shape compatible with [5, j2, 1024]
+It seems like an error in backward with https://github.com/lucidrains/vit-pytorch/blob/main/vit_pytorch/na_vit_nested_tensor_3d.py#L327 Do you have any good suggestions, thank you !

@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch and the TransformerWrapper class from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 8 and input dimensions of (8, 1024) for the input tensor",
+    "Create a random input tensor x with shape (8, 1024) using torch.randint(0, 32, (8, 1024))",
+    "Instantiate the TransformerWrapper with the following parameters: num_tokens=32, max_seq_len=0, num_memory_tokens=20",
+    "Define the attention layers as a Decoder with the following parameters: dim=512, depth=4, heads=4, rotary_pos_emb=True, attn_flash=True, attn_onnxable=True, attn_num_mem_kv=20, attn_one_kv_head=True",
+    "Pass the attention layers to the TransformerWrapper instantiation",
+    "Call the forward method of the TransformerWrapper instance with the input tensor x",
+    "Capture the output logits from the forward method",
+    "Print the shape and dtype of the input tensor x to verify it is (8, 1024) and torch.int64",
+    "Print the shape and dtype of the output logits to verify the output is as expected",
+    "Assert that the output logits do not contain NaN values to confirm the model is functioning correctly",
+    "Monitor for any runtime errors during the execution of the forward method to confirm the bug occurs"
+]
+```

@@ -1,0 +1,28 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary modules from keras_nlp and nltk",
+    "Set the Keras version to 2.15 and TensorFlow version to 2.15",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40 and TEST_BATCH_SIZE = 1",
+    "Import the necessary tokenizers: eng_tokenizer and spa_tokenizer from data_preprocessing",
+    "Import test_pairs from data_preprocessing, which contains pairs of English and Spanish sentences",
+    "Import the transformer model from model.py",
+    "Define a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Check if encoder_input_tokens shape exceeds 40 and truncate if necessary",
+    "Define the next_fn function inside decode_sequences to generate logits using the transformer model",
+    "In next_fn, call transformer with encoder_input_tokens and prompt, and extract logits for the current index",
+    "Set hidden_states to None in next_fn and return logits, hidden_states, and cache",
+    "Create a prompt tensor of shape (TEST_BATCH_SIZE, 40) with start token and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Define test_eng_texts and test_spa_texts from test_pairs for evaluation",
+    "Initialize an empty list bleu_score to store BLEU scores",
+    "Loop through each test pair, calling decode_sequences with test_eng_texts[i]",
+    "Convert the output of decode_sequences to a numpy array and decode to UTF-8",
+    "Clean the translated output by removing special tokens and split into words",
+    "Calculate the BLEU score using nltk's modified_precision function with n=4",
+    "Assert that the segmentation fault occurs during the execution of decode_sequences",
+    "Run the script and monitor for segmentation fault in the output logs",
+    "Check the shapes of logits and cache in next_fn to ensure they match expected dimensions",
+    "Log the shapes of encoder_input_tokens, prompt, and logits for debugging purposes"
+]
+```

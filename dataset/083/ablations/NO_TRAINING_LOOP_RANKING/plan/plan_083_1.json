@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and any other required modules from vit_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 8 and image dimensions of 224x224",
+    "Create random input data with shape (batch_size, 3, height, width) using torch.randn(batch_size, 3, 224, 224)",
+    "Instantiate the CrossViT model with parameters: image_size=224, num_classes=10, sm_dim=64, lg_dim=128, sm_patch_size=12, lg_patch_size=16, sm_enc_depth=1, lg_enc_depth=4, cross_attn_depth=2, dropout=0.1, emb_dropout=0.1",
+    "Pass the random input data through the CrossViT model by calling model(input_data)",
+    "Capture the output logits from the model",
+    "Check the shape of the output logits to ensure it matches (batch_size, num_classes)",
+    "Assert that the output logits do not contain NaN values using torch.isnan(output).any()",
+    "Introduce a bug by modifying the forward method of CrossViT to return sm_logits + lg_logits + 1e10 instead of sm_logits + lg_logits",
+    "Re-run the model with the modified forward method and capture the output logits",
+    "Verify that the output logits now contain extremely large values due to the introduced bug",
+    "Assert that the output logits exceed a threshold (e.g., 1e10) using output > 1e10"
+]
+```

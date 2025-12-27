@@ -1,0 +1,30 @@
+```json
+[
+    "Import TensorFlow, Keras NLP, and NLTK libraries: 'import tensorflow as tf', 'import keras_nlp', 'from nltk.translate.bleu_score import modified_precision'",
+    "Import necessary functions from data_preprocessing: 'from data_preprocessing import MAX_SEQUENCE_LENGTH, eng_tokenizer, spa_tokenizer, test_pairs'",
+    "Import the transformer model: 'from model import transformer'",
+    "Set the TEST_BATCH_SIZE to 1: 'TEST_BATCH_SIZE = 1'",
+    "Define the decode_sequences function to handle input sentences and generate translations.",
+    "Inside decode_sequences, create a tensor for encoder input tokens using the English tokenizer: 'encoder_input_tokens = tf.convert_to_tensor(eng_tokenizer(input_sentences).to_tensor())'",
+    "Pad the encoder input tokens to MAX_SEQUENCE_LENGTH if necessary: 'if len(encoder_input_tokens[0]) < MAX_SEQUENCE_LENGTH: pads = tf.fill((1, MAX_SEQUENCE_LENGTH - len(encoder_input_tokens[0])), 0); encoder_input_tokens = tf.concat([encoder_input_tokens, pads], 1)'",
+    "Limit the encoder input tokens to a maximum length of 40: 'if encoder_input_tokens.shape[-1] > 40: encoder_input_tokens = encoder_input_tokens[:,:40]'",
+    "Define the next_fn function to output the next token's probability given the input sequence.",
+    "Inside next_fn, call the transformer model: 'logits = transformer([encoder_input_tokens, prompt])'",
+    "Extract the logits for the current index: 'logits = logits[:, index - 1, :]'",
+    "Return logits, hidden_states as None, and cache from next_fn: 'return logits, hidden_states, cache'",
+    "Build a prompt of length 40 with a start token and padding tokens: 'start = tf.fill((batch_size, 1), spa_tokenizer.token_to_id(\"[START]\")); pad = tf.fill((batch_size, length - 1), spa_tokenizer.token_to_id(\"[PAD]\")); prompt = tf.concat((start, pad), axis=-1)'",
+    "Call the GreedySampler with next_fn, prompt, end_token ID, and index: 'generated_tokens = keras_nlp.samplers.GreedySampler()(next_fn, prompt, end_token_id=spa_tokenizer.token_to_id(\"[END]\"), index=1)'",
+    "Detokenize the generated tokens to get the translated sentences: 'generated_sentences = spa_tokenizer.detokenize(generated_tokens)'",
+    "Prepare test data by extracting English and Spanish texts from test_pairs: 'test_eng_texts = [pair[0] for pair in test_pairs]; test_spa_texts = [pair[1] for pair in test_pairs]'",
+    "Initialize an empty list for BLEU scores: 'bleu_score = []'",
+    "Loop through the test pairs to decode sequences and calculate BLEU scores: 'for i in range(len(test_pairs)):'",
+    "Inside the loop, call decode_sequences with the current English input sentence: 'translated = decode_sequences([input_sentence])'",
+    "Convert the translated output to a string: 'translated = translated.numpy()[0].decode(\"utf-8\")'",
+    "Clean the translated string by removing special tokens: 'translated = translated.replace(\"[PAD]\", \"\").replace(\"[START]\", \"\").replace(\"[END]\", \"\").strip()'",
+    "Split the translated string into words: 'translated = translated.split(' '); bleu = modified_precision([test_spa_texts[i]], translated, n=4)'",
+    "Append the calculated BLEU score to the bleu_score list: 'bleu_score.append(bleu)'",
+    "Print the average BLEU score: 'print(\"4-gram BLEU score: %f\" % (np.array(bleu_score).mean()))'",
+    "Run the script to trigger the segmentation fault during the execution of the GreedySampler.",
+    "Monitor the output logs for segmentation fault messages and errors related to tensor shapes."
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Install the required packages: keras, keras-nlp, tensorflow, and tensorflow-datasets using pip.",
+    "Set up the environment variable for Keras backend to 'tensorflow' by executing 'os.environ[\"KERAS_BACKEND\"] = \"tensorflow\"'.",
+    "Import necessary libraries: import os, import tensorflow as tf, import keras, import keras_nlp, import tensorflow_datasets as tfds.",
+    "Disable the progress bar for TensorFlow Datasets by calling 'tfds.disable_progress_bar()'.",
+    "Load the Oxford Flowers 102 dataset using 'data, dataset_info = tfds.load(\"oxford_flowers102\", with_info=True, as_supervised=True)'.",
+    "Define a batch size of 32 and set 'AUTOTUNE = tf.data.AUTOTUNE'.",
+    "Calculate the number of training and validation steps: 'train_steps_per_epoch = dataset_info.splits[\"train\"].num_examples // BATCH_SIZE' and 'val_steps_per_epoch = dataset_info.splits[\"test\"].num_examples // BATCH_SIZE'.",
+    "Define a function 'to_dict(image, label)' that resizes images to (224, 224) and one-hot encodes the labels.",
+    "Define a function 'prepare_dataset(dataset, split)' that shuffles and batches the dataset for training and testing.",
+    "Load the training dataset by calling 'train_dataset = load_dataset()'.",
+    "Set the mixed precision policy to 'mixed_float16' by executing 'tf.keras.mixed_precision.set_global_policy('mixed_float16')'.",
+    "Instantiate the BERT classifier by executing 'classifier = keras_nlp.models.BertClassifier.from_preset(\"bert_tiny_en_uncased_sst2\")'.",
+    "Run the code to trigger the error and capture the output.",
+    "Verify that the output contains the error message: 'AttributeError: 'LossScaleOptimizerV3' object has no attribute 'name''."
+]
+```

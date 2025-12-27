@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch and torch.nn.functional as F",
+    "Define a batch size of 4 and a sequence length of 10",
+    "Create a random tensor 't' with shape (batch_size, seq_len, 8) using torch.randn",
+    "Create a lens tensor with shape (batch_size,) containing values [10, 8, 6, 4]",
+    "Instantiate the AutoregressiveWrapper class with a dummy net that has a max_seq_len of 10 and a pad_value of 0",
+    "Call the generate method of the AutoregressiveWrapper instance with prompts=t, seq_len=5, and prompt_lens=lens",
+    "Verify that the align_right function is called with the correct pad_id parameter",
+    "Check the output tensor shape after calling align_right to ensure it matches expected dimensions",
+    "Assert that the output tensor contains padding values of 0 where expected",
+    "Modify the call to F.pad in align_right to use pad_id instead of hardcoded value 0",
+    "Re-run the generate method and verify that the output tensor now reflects the correct padding value from pad_id"
+]
+```

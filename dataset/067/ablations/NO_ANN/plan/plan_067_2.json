@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, os, xml.etree.ElementTree, and tqdm",
+    "Set the TensorFlow version to 2.10.0 to match the reported environment",
+    "Define constants: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 5, GLOBAL_CLIPNORM = 10.0",
+    "Create a list of class IDs: class_ids = ['car', 'pedestrian', 'trafficLight', 'biker', 'truck']",
+    "Create a class mapping dictionary: class_mapping = dict(zip(range(len(class_ids)), class_ids))",
+    "Set paths for images and annotations: path_images = '/kaggle/input/dataset/data/images/' and path_annot = '/kaggle/input/dataset/data/annotations/'",
+    "Retrieve all XML file paths in path_annot and sort them into xml_files",
+    "Retrieve all JPEG image file paths in path_images and sort them into jpg_files",
+    "Define a function parse_annotation(xml_file) to extract image paths, bounding boxes, and class IDs from XML files",
+    "Initialize empty lists: image_paths, bbox, and classes",
+    "Iterate over xml_files and call parse_annotation for each file, appending results to image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists into ragged tensors: bbox = tf.ragged.constant(bbox) and classes = tf.ragged.constant(classes)",
+    "Create a tf.data.Dataset from the image_paths, classes, and bbox: data = tf.data.Dataset.from_tensor_slices((image_paths, classes, bbox))",
+    "Split the dataset into training and validation sets using SPLIT_RATIO",
+    "Define a load_dataset function to read images and prepare bounding boxes for training",
+    "Map load_dataset function to train_data to create train_ds",
+    "Map load_dataset function to val_data to create val_ds",
+    "Define a YOLOv8 model using keras_cv.models.YOLOV8Detector with num_classes set to len(class_mapping) and bounding_box_format set to 'xyxy'",
+    "Compile the YOLOv8 model with optimizer set to Adam and classification_loss set to 'binary_crossentropy'",
+    "Train the model using yolo.fit with train_ds and val_ds for 3 epochs",
+    "Verify the model's performance by checking the loss values after training",
+    "Assert that the loss values are not decreasing as expected, indicating a potential issue with the sparse categorical cross-entropy loss application",
+    "Check the shape of the labels passed to the loss function to confirm if the last dimension is incorrectly included"
+]
+```

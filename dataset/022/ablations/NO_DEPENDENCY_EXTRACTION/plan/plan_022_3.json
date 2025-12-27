@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the LAMB optimizer from official.modeling.optimization.lamb",
+    "Define a batch size of 3 and set the variable dimensions to (3,)",
+    "Create initial variable values for var0 and var1 as numpy arrays: var0_np = np.array([1.0, 1.0, 2.0]) and var1_np = np.array([3.0, 3.0, 4.0])",
+    "Create gradient values for var0 and var1 as numpy arrays: grads0_np = np.array([0.1, 0.0, 0.1]) and grads1_np = np.array([0.01, 0.0, 0.01])",
+    "Initialize TensorFlow variables var0 and var1 using var0_np and var1_np",
+    "Create IndexedSlices for grads0 and grads1 using the defined gradient values and indices: grads0 = tf.IndexedSlices(tf.constant(grads0_np), tf.constant([0, 2]), tf.constant([3])) and grads1 = tf.IndexedSlices(tf.constant(grads1_np), tf.constant([0, 2]), tf.constant([3]))",
+    "Instantiate the LAMB optimizer with default parameters: opt = lamb.LAMB()",
+    "Run a loop for 3 iterations (t = 0, 1, 2) to apply gradients using opt.apply_gradients(zip([grads0, grads1], [var0, var1]))",
+    "Inside the loop, call lamb_update_numpy with var0_np, grads0_np, t, and initial m0, v0 values, and store the result back in var0_np",
+    "Inside the loop, call lamb_update_numpy with var1_np, grads1_np, t, and initial m1, v1 values, and store the result back in var1_np",
+    "After each update, assert that the standard deviation of the updates is either 0 or 1 by checking the values of m_t and v_t in lamb_update_numpy",
+    "Verify that the updates to var0 and var1 do not change the expected behavior of the optimizer by checking if the applied standard deviation remains constant",
+    "Log the values of m_t and v_t after each iteration to confirm the standard deviation behavior",
+    "Assert that the final values of var0 and var1 after 3 iterations do not match expected values due to the incorrect standard deviation application"
+]
+```

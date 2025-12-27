@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and Keras libraries using 'import tensorflow as tf' and 'import keras'",
+    "Install KerasCV by running '!pip install git+https://github.com/keras-team/keras-cv -q'",
+    "Define a batch size of 64 and input dimensions of (32,) for the model",
+    "Create random training data 'x' with shape (1000, 32) using 'np.random.random((1000, 32))'",
+    "Create random target data 'y' with shape (1000, 1) using 'np.random.random((1000, 1))'",
+    "Define a custom model class 'CustomModel' that subclasses 'keras.Model'",
+    "Override the 'train_step' method in 'CustomModel' to include a forward pass and loss computation",
+    "In 'train_step', use 'self.compute_loss(y=y, y_pred=y_pred)' to compute the loss",
+    "Compile the model with optimizer 'adam' and loss 'mse' using 'model.compile(optimizer=\"adam\", loss=\"mse\")'",
+    "Fit the model using 'model.fit(x, y, epochs=3)'",
+    "Capture any error messages during the fitting process",
+    "Verify that the error message indicates an issue with fitting the model, as shown in the bug report"
+]
+```

@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, json, os, and any other required modules.",
+    "Set DEVICE to 'cuda' if a GPU is available, otherwise set it to 'cpu'.",
+    "Define SAMPLING_FREQ as 16000 (or the sample rate used in the model).",
+    "Define EMISSION_INTERVAL as 1.0 (or the interval used in the model).",
+    "Download the Japanese TTS model using wget: wget https://dl.fbaipublicfiles.com/mms/tts/jvn.tar.gz.",
+    "Extract the downloaded tar.gz file to access the model files.",
+    "Load the model and dictionary using the load_model_dict() function.",
+    "Prepare a test audio file in the correct format (e.g., .wav or .flac) with a duration of at least 5 seconds.",
+    "Create a text file (e.g., test_transcript.txt) with a single line of text that contains Japanese characters.",
+    "Run the infer.py script with the following command: python infer.py --audio_filepath <path_to_audio_file> --text_filepath <path_to_test_transcript.txt> --outdir <output_directory> --use_star False.",
+    "Add print statements in the get_alignments function to output the value of tokens before filtering OOV (out-of-vocabulary) tokens.",
+    "Add print statements in the get_alignments function to output the value of token_indices after filtering OOV tokens.",
+    "Check the console output for the line 'text after filtering OOV:' and verify that it is followed by an empty output.",
+    "Assert that the token_indices list is empty after filtering, indicating that all tokens were OOV.",
+    "Verify that the model is loaded correctly and that the dictionary contains the expected tokens.",
+    "Ensure that the audio file is correctly loaded and that the waveform is not empty before processing."
+]
+```

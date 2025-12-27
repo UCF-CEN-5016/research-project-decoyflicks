@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: keras_cv, numpy, tensorflow, and matplotlib",
+    "Define a function to plot images using matplotlib with a figure size of (20, 20)",
+    "Create a StableDiffusion instance using keras_cv.models.StableDiffusion()",
+    "Define a function to assemble an image dataset that fetches images from given URLs and resizes them to (512, 512)",
+    "Define a function to assemble a text dataset that encodes prompts using the StableDiffusion tokenizer",
+    "Define a function to zip the image and text datasets together, ensuring the image dataset is repeated to match the length of the text dataset",
+    "Assemble an image dataset using URLs of cat doll images: [\"https://i.imgur.com/VIedH1X.jpg\", \"https://i.imgur.com/eBw13hE.png\", \"https://i.imgur.com/oJ3rSg7.png\", \"https://i.imgur.com/5mCL6Df.jpg\", \"https://i.imgur.com/4Q6WWyI.jpg\"]",
+    "Assemble a text dataset with prompts: [\"a photo of a {}\", \"a rendering of a {}\", \"a cropped photo of the {}\", \"the photo of a {}\", \"a photo of a clean {}\"]",
+    "Zip the image and text datasets together to create a training dataset",
+    "Define a NoiseScheduler instance with beta_start=0.00085, beta_end=0.012, beta_schedule='scaled_linear', and train_timesteps=1000",
+    "Create a StableDiffusionFineTuner instance with the StableDiffusion model and the NoiseScheduler",
+    "Compile the trainer with an Adam optimizer and MeanSquaredError loss function",
+    "Call the fit method on the trainer with the training dataset and set epochs to 50",
+    "During training, monitor the output for any warnings or errors related to unused variables",
+    "Check the code at line 347 for the variable 'level2_dau_2' to confirm it is not used",
+    "Check the code at line 352 to see if 'level3_dau_2' is incorrectly referenced instead of 'level2_dau_2'",
+    "Assert that the output of the training process does not utilize 'level2_dau_2' in any calculations or outputs"
+]
+```

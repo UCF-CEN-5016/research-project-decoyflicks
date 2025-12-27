@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from tensorflow import keras",
+    "Define the path to the saved model: model_path = 'path_to_my_model'",
+    "Load the trained NER model using keras.models.load_model with custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False",
+    "Create a TFLite converter instance: converter = tf.lite.TFLiteConverter.from_saved_model(model_path)",
+    "Convert the model to TFLite format: tflite_model = converter.convert()",
+    "Save the TFLite model to a file: with open('model.tflite', 'wb') as f: f.write(tflite_model)",
+    "Define a sample input string for prediction: sample_input = 'eu rejects german call to boycott british lamb'",
+    "Implement a function to tokenize and convert the input string to IDs: def tokenize_and_convert_to_ids(input_string): return [token_id_1, token_id_2, ..., token_id_n] where token_id_x are integer IDs for each token",
+    "Call the tokenize_and_convert_to_ids function with sample_input: sample_input_ids = tokenize_and_convert_to_ids(sample_input)",
+    "Load the TFLite model interpreter: interpreter = tf.lite.Interpreter(model_path='model.tflite')",
+    "Allocate tensors for the interpreter: interpreter.allocate_tensors()",
+    "Get the input and output tensor indices: input_index = interpreter.get_input_details()[0]['index'] and output_index = interpreter.get_output_details()[0]['index']",
+    "Set the input tensor with the sample input IDs: interpreter.set_tensor(input_index, np.expand_dims(sample_input_ids, axis=0))",
+    "Invoke the interpreter to run the model: interpreter.invoke()",
+    "Attempt to get the output tensor: prediction_mask = interpreter.get_tensor(output_index)",
+    "Validate that a ValueError is raised: assert 'ValueError' in str(e) when setting the tensor with mismatched dimensions"
+]
+```

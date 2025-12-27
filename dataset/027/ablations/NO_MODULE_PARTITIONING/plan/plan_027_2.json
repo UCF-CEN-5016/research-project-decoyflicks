@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision, and torchvision.transforms",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the image size as 128x128 and set the batch size to 64",
+    "Create a transformation pipeline using torchvision.transforms to resize images to 128x128 and normalize them",
+    "Load the CelebA dataset using torchvision.datasets.CelebA with the defined transformation and set download=True",
+    "Create a DataLoader for the CelebA dataset with batch_size=64 and shuffle=True",
+    "Define the generator model with input noise size of 100 and output image size of 128x128",
+    "Define the discriminator model with input image size of 128x128",
+    "Initialize the loss function as torch.nn.BCELoss()",
+    "Initialize the optimizers for both generator and discriminator using torch.optim.Adam with learning rate 0.0002 and beta values (0.5, 0.999)",
+    "Start the training loop for a specified number of epochs (e.g., 5 epochs)",
+    "In each epoch, iterate over the DataLoader to get batches of real images",
+    "Generate random noise with shape (batch_size, 100) for the generator input",
+    "Pass the generated noise through the generator to create fake images with shape (batch_size, 3, 128, 128)",
+    "Pass the real images through the discriminator to get output predictions",
+    "Pass the fake images through the discriminator to get output predictions",
+    "Calculate the discriminator loss using the real and fake predictions with the defined loss function",
+    "Calculate the generator loss using the discriminator's predictions for the fake images",
+    "Perform a backward pass and optimize the discriminator and generator parameters",
+    "Run the training loop and print the loss values for both generator and discriminator",
+    "Monitor the output for ValueError related to mismatched tensor sizes during the loss calculation",
+    "Assert that the error message contains 'Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200])) is deprecated'"
+]
+```

@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, numpy, and collections.Counter",
+    "Set the random seed for reproducibility using numpy and tensorflow",
+    "Load the CoNLL 2003 dataset using datasets.load_dataset('conll2003')",
+    "Export the training and validation data to tab-separated files: './data/conll_train.txt' and './data/conll_val.txt'",
+    "Create a StringLookup layer for token IDs with a vocabulary size of 20000",
+    "Define a batch size of 32 for the training and validation datasets",
+    "Create a tf.data.TextLineDataset for the training data from './data/conll_train.txt'",
+    "Create a tf.data.TextLineDataset for the validation data from './data/conll_val.txt'",
+    "Define a mapping function to convert records to training data, extracting tokens and tags",
+    "Map the training dataset using the defined mapping function and convert tokens to IDs",
+    "Map the validation dataset using the defined mapping function and convert tokens to IDs",
+    "Use padded_batch to create batches for both train_dataset and val_dataset",
+    "Define a custom NER model class inheriting from keras.Model with necessary layers",
+    "Instantiate the NER model with num_tags, vocab_size, and other parameters",
+    "Compile the model using the Adam optimizer and a custom loss function",
+    "Fit the model using model.fit with train_dataset and validation_data set to val_dataset",
+    "Modify the fit call to use test_dataset instead of val_dataset: model.fit(train_dataset, epochs=20, validation_data=test_dataset)",
+    "Run the model training for 20 epochs",
+    "Monitor the training output for validation metrics",
+    "Assert that the validation metrics are overly optimistic compared to expected performance on unseen data",
+    "Log the validation accuracy and loss after training to verify the bug"
+]
+```

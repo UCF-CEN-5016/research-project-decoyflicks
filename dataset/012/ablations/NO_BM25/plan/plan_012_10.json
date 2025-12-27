@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from keras and the official model garden repository",
+    "Set the TensorFlow version to tf-nightly-cpu 2.16.0.dev20231103 and tf-keras 2.16.0",
+    "Define the path to the ImageNet dataset directory as '/dir_to_imagenet_data'",
+    "Create a Python script named 'classifier_trainer.py' and copy the content from the provided GitHub URL",
+    "In 'classifier_trainer.py', ensure the import statement for tf_keras is correct: 'from tensorflow import keras as tf_keras'",
+    "Set the mode to 'train_and_eval' and model_type to 'resnet' in the script's argument parser",
+    "Run the script with the command: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --data_dir=/dir_to_imagenet_data'",
+    "Monitor the console output for any errors during execution",
+    "Verify that the output contains the error message: 'AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'. Did you mean: 'optimizer_v2'?'",
+    "Check the line number in the error message to confirm it corresponds to the line where 'ExponentialMovingAverage' class is defined in 'classifier_trainer.py'",
+    "Ensure that the TensorFlow environment is set up correctly and that no other conflicting versions of TensorFlow or Keras are installed",
+    "Confirm that the Python version is 3.11.6 and that Clang 17 is being used as the compiler"
+]
+```

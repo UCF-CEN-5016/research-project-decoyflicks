@@ -1,0 +1,11 @@
+Failed to run Domino example
+
+Following the guide of DeepSpeed-Domino, I ran into the following issue when `bash pretrain_gpt3_2.7b.sh`
+
+```
+[rank0]:     return cdb.all_reduce(tensor, op, group, async_op)
+[rank0]:            ^^^^^^^^^^^^^^
+[rank0]: AttributeError: 'NoneType' object has no attribute 'all_reduce'
+```
+
+It seems that the global `cdb` object was not correctly initialized.

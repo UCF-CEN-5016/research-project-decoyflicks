@@ -1,0 +1,15 @@
+Here is a detailed step-by-step plan to reproduce the bug:
+
+```json
+[
+    "Import TensorFlow and necessary libraries for object detection",
+    "Download and load pre-trained model from TensorFlow Model Garden",
+    "Load two example images for inference, each with dimensions 600x800 pixels and 3 color channels",
+    "Preprocess the images to match input requirements of the model, including resizing and normalization",
+    "Run inference on the preprocessed images using the loaded model",
+    "Extract detection_classes, detection_scores, detection_boxes, detection_masks, and num_detections from model output",
+    "Call the reframe_box_masks_to_image_masks function with the extracted parameters: detection_masks, detection_boxes, image_np.shape[1], image_np.shape[2]",
+    "Verify that a TypeError is raised with the message 'Got an unexpected keyword argument 'box_ind''"
+]
+```
+

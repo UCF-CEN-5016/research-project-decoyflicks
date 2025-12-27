@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import torch, import fairseq, import os, import glob",
+    "Set the device to CUDA if available: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define the model path: model_path = os.path.join(os.getcwd(), '../fairseq_resource/mms1b_all.pt')",
+    "Set the language for inference: lang = 'eng'",
+    "Prepare a list of audio files: audio_files = glob.glob('/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/*.wav')",
+    "Ensure there are exactly 10 audio files: assert len(audio_files) == 10, 'Expected 10 audio files'",
+    "Run the inference command using subprocess: import subprocess; subprocess.run(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files)",
+    "Capture the output logs from the inference command: output = subprocess.check_output(['python', '-u', 'examples/mms/asr/infer/mms_infer.py', '--model', model_path, '--lang', lang] + audio_files, stderr=subprocess.STDOUT)",
+    "Decode the output logs to a string: output_str = output.decode('utf-8')",
+    "Split the output string into lines: output_lines = output_str.split('\\n')",
+    "Extract the input audio file paths from the output logs: input_lines = [line for line in output_lines if 'Input:' in line]",
+    "Extract the corresponding output text from the output logs: output_text_lines = [line for line in output_lines if 'Output:' in line]",
+    "Create a mapping of audio file paths to their corresponding output text: audio_output_map = {input_lines[i].split(': ')[1]: output_text_lines[i].split(': ')[1] for i in range(len(input_lines))}",
+    "Create a list of expected output text in the correct order: expected_output = ['at most by an alms given to a beggar whose blessing he fled from he might hope wearily to win for himself some measure of actual grace', 'the dull light fell more faintly upon the page whereon another equation began to unfold itself slowly and to spread abroad its widening tail', 'he hoped there would be stew for dinner turnips and carrots and bruised potatoes and fat mutton pieces to be ladled out in thick peppered flour fattened sauce', 'the music came nearer and he recalled the words the words of shelley\'s fragment upon the moon wandering companionless pale for weariness', 'the chaos in which his ardour extinguished itself was a cold indifferent knowledge of himself', 'after early nightfall the yellow lamps would light up here and there the squalid quarter of the brothels', 'number ten fresh nelly is waiting on you good-night husband', 'a cold lucid indifference reigned in his soul', 'stuff it into you his belly counselled him', 'allo berti any good in your mind']",
+    "Verify the order of the output text against the expected output: assert list(audio_output_map.values()) == expected_output, 'Output text order is incorrect'"
+]
+```

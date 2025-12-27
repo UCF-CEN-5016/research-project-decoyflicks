@@ -1,0 +1,35 @@
+TITLE  
+Error encountered when executing DeepSpeed training script for GPT-3 model
+
+SYMPTOMS  
+• Warning messages indicating potential issues with GPU mappings during barrier operations:  
+  ```
+  [rank1]:[W102 23:52:19.675612641 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+  ```
+• Deprecation warnings regarding the use of `nvfuser` in Torch script:  
+  ```
+  [rank0]:[W102 23:52:20.611227027 init.cpp:767] Warning: nvfuser is no longer supported in torch script, use _jit_set_nvfuser_enabled is deprecated and a no-op (function operator())
+  ```
+• User warnings about the use of deprecated tensor constructors in PyTorch:  
+  ```
+  UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended. It's best to use methods such as torch.tensor(data, dtype=*, device='cuda') to create tensors.
+  ```
+• A critical error causing the script to fail with an `AttributeError`:  
+  ```
+  AttributeError: 'NoneType' object has no attribute 'all_reduce'
+  ```
+
+EXPECTED BEHAVIOR  
+The training script should execute without warnings or errors, successfully utilizing the specified GPUs for training the GPT-3 model without encountering issues related to device mapping or deprecated features.
+
+REPRODUCTION STEPS  
+1. Clone the DeepSpeedExamples repository from GitHub:  
+   `git clone https://github.com/microsoft/DeepSpeedExamples.git`
+2. Navigate to the DeepSpeed-Domino training directory:  
+   `cd DeepSpeedExamples/training/DeepSpeed-Domino`
+3. Prepare the necessary datasets and files as specified in the script.
+4. Execute the job script using SLURM with the provided parameters:  
+   ```
+   sbatch your_job_script.sh
+   ```
+5. Monitor the output and error logs for any warnings or errors during execution.

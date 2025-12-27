@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and Keras libraries: import tensorflow as tf and from keras import layers, models",
+    "Define a batch size of 1 and input dimensions for the NER model, e.g., input_shape = (1, 9) for a single sentence with 9 tokens",
+    "Create a sample input for the NER model by defining a function tokenize_and_convert_to_ids that returns a list of integers representing token IDs, e.g., sample_input = [1, 2, 3, 4, 5, 6, 7, 8, 9]",
+    "Load the trained NER model using keras.models.load_model with the path to the saved model and custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False",
+    "Convert the loaded model to TFLite format using tf.lite.TFLiteConverter.from_saved_model and call the convert method",
+    "Save the converted TFLite model to a file named 'model.tflite'",
+    "Initialize the TFLite interpreter using tf.lite.Interpreter with the path to 'model.tflite'",
+    "Allocate tensors for the interpreter using interpreter.allocate_tensors()",
+    "Get the input index from the interpreter using input_index = interpreter.get_input_details()[0]['index']",
+    "Get the output index from the interpreter using output_index = interpreter.get_output_details()[0]['index']",
+    "Set the input tensor for the interpreter using interpreter.set_tensor(input_index, np.expand_dims(sample_input, axis=0))",
+    "Invoke the interpreter using interpreter.invoke()",
+    "Attempt to retrieve the output tensor using prediction_mask = interpreter.get_tensor(output_index)",
+    "Capture the ValueError exception when the dimension mismatch occurs, specifically expecting a shape of (1, 1) but receiving (1, 9)",
+    "Verify that the error message contains 'Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0.'"
+]
+```

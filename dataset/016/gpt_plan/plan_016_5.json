@@ -1,0 +1,23 @@
+[
+  "Ensure a multi-node cluster environment with at least 2 physical nodes, each with 2 GPUs (Tesla V100-SXM2 with 16GB memory), running CentOS 7",
+  "Install TensorFlow GPU version 2.11.0 and CUDA 11.0 compatible drivers on all nodes",
+  "Clone the TensorFlow Model Garden repository from https://github.com/tensorflow/models",
+  "Set up conda environment named 'tf11' with Python 3.9.7 and TensorFlow GPU 2.11.0 activated on both nodes",
+  "Prepare ImageNet TFRecord dataset stored at /scratch/cdacapp1/sowmya/actual_imagenet/tf_records accessible from both nodes",
+  "Create a shared model checkpoint directory at /home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss accessible from both nodes",
+  "On Node 1 (gpu1), allocate resources with 'salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive' and export necessary environment variables: PYTHONPATH, DATA_DIR, MODEL_DIR, activate conda environment 'tf11'",
+  "On Node 1, create gpu.yaml with content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0 (replace ip1 and ip2 with actual IP addresses)",
+  "On Node 2 (gpu2), perform the same resource allocation and environment setup as Node 1",
+  "On Node 2, create gpu1.yaml with identical runtime settings as gpu.yaml but with task_index: 1",
+  "On Node 1, navigate to 'official/legacy/image_classification' directory and run: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml",
+  "On Node 2, run the same command as Node 1 but with --config_file=configs/examples/resnet/imagenet/gpu1.yaml",
+  "Verify that both nodes connect and initialize the MultiWorkerMirroredStrategy with 2 GPUs each (total 4 GPUs across nodes)",
+  "Set batch size in gpu.yaml and gpu1.yaml to 128 per GPU (total effective batch size 512) for throughput measurement",
+  "Monitor training throughput on Node 1 and Node 2 logs, capturing 'examples/sec' metrics during training",
+  "Assert that the aggregate throughput across both nodes does NOT increase beyond single-node multi-GPU throughput (~700 examples/sec), remaining close to single GPU throughput (~270 examples/sec)",
+  "Check logs for TensorFlow distributed strategy initialization messages, confirming worker IPs and task indices are recognized correctly",
+  "Capture GPU utilization metrics on both nodes during multi-node training to verify GPUs are active but throughput is not scaling",
+  "Repeat single-node multi-GPU training on either Node 1 or Node 2 using MirroredStrategy with 2 GPUs and batch size 128 per GPU to confirm expected scaling (~700 examples/sec)",
+  "Compare multi-node multi-GPU vs single-node multi-GPU throughput to validate bug reproduction: no throughput increase in multi-node setup",
+  "Optionally, execute a minimal isolated TensorFlow multi-worker mirrored strategy example with synthetic data and 2 nodes, 2 GPUs each, batch size 128 per GPU, to verify if scaling issue reproduces outside Model Garden code"
+]

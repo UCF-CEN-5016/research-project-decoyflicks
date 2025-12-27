@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and nn from torch",
+    "Define a batch size of 4 and a model dimension (d_model) of 3",
+    "Create a random input tensor 'x' with shape (4, 4, 3) using torch.randn()",
+    "Define a class 'RotaryPositionalEmbedding' that initializes cos_cached and sin_cached tensors with shape (4, 1, 3) using torch.randn()",
+    "In the 'forward' method of 'RotaryPositionalEmbedding', implement the line: x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Create an instance of 'RotaryPositionalEmbedding' with d_model=3 and max_len=4",
+    "Call the 'forward' method of the instance with the input tensor 'x'",
+    "Capture the RuntimeError that occurs during the execution of the forward method",
+    "Verify that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the dimensions of x_rope, self.cos_cached, and self.sin_cached before the error occurs to confirm the mismatch"
+]
+```

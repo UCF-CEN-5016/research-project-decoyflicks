@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow and necessary modules from tf.keras and tf.data",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 8 and image dimensions of 512x512",
+    "Load the COCO dataset for instance segmentation using tf.data API",
+    "Preprocess the dataset by resizing images to (512, 512) and normalizing pixel values to [0, 1]",
+    "Create a training dataset with 1000 images and a validation dataset with 200 images",
+    "Define the model using the provided DELF architecture from research/delf/delf/python/training/model/delf_model.py",
+    "Initialize the model with num_classes set to 80 (for COCO dataset)",
+    "Compile the model with a loss function suitable for instance segmentation, such as tf.keras.losses.CategoricalCrossentropy()",
+    "Set the optimizer to tf.keras.optimizers.Adam() with a learning rate of 0.001",
+    "Train the model for 10 epochs, using the training dataset and validating on the validation dataset",
+    "During training, ensure to log metrics including validation loss at the end of each epoch",
+    "After training, print the validation loss from the logs to verify its value",
+    "Check the output of the 'Train and Evaluate' section for validation loss",
+    "Assert that the validation loss is equal to 0.0 after training",
+    "Repeat the process using the official Semantic Segmentation tutorial to confirm the same behavior",
+    "Log the output of the evaluation metrics to verify that validation loss remains 0.0"
+]
+```

@@ -1,0 +1,23 @@
+```json
+[
+    "Clone the syntaxnet repository from GitHub",
+    "Checkout the commit that includes the cluster_example",
+    "Set up a Python environment with TensorFlow installed",
+    "Navigate to the 'syntaxnet/syntaxnet' directory",
+    "Import necessary modules from TensorFlow and SyntaxNet: tensorflow, test_util, gen_parser_ops, time",
+    "Load MNIST dataset using TensorFlow's input pipelines",
+    "Preprocess the MNIST data to have dimensions (batch_size, 28, 28, 1) with pixel values between 0 and 1",
+    "Define model parameters: max_steps=10, beam_size=2, batch_size=1",
+    "Create an instance of StructuredGraphBuilder with the following parameters:",
+    "num_actions: 10 (for MNIST digits)",
+    "feature_sizes: [28*28], domain_sizes: [10], embedding_dims: [8, 8, 8], hidden_layer_sizes: []",
+    "Learning rate: 0.01, decay_steps: 1000, momentum: 0.9",
+    "Construct the training graph using the MakeGraph method with specified parameters",
+    "Initialize the variables and run the inits operation",
+    "Train the model for 10 epochs, recording costs, gold slots, and alive steps every 5 epochs",
+    "Verify that the loss (cost) contains NaN values after a few epochs of training",
+    "Monitor GPU memory usage during the training process using NVIDIA's nvidia-smi tool",
+    "Assert that GPU memory consumption exceeds 10GB on your K40 GPU"
+]
+```
+

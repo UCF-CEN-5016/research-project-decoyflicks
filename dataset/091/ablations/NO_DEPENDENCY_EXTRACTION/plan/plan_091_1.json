@@ -1,0 +1,18 @@
+```json
+[
+    "Clone the x-transformers repository from GitHub using 'git clone https://github.com/lucidrains/x-transformers.git'",
+    "Navigate to the examples/toy_tasks directory using 'cd x-transformers/examples/toy_tasks'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Import necessary libraries in a new Python script: 'import torch', 'from x_transformers import AutoregressiveWrapper'",
+    "Set the device to CUDA if available: 'device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')'",
+    "Define the source sequence with a length of 258: 'src = torch.randint(0, 100, (1, 258)).to(device)'",
+    "Define the start tokens with a length of 230: 'start_tokens = torch.randint(0, 100, (1, 230)).to(device)'",
+    "Set the encoding sequence length to 258: 'ENC_SEQ_LEN = 258'",
+    "Create a source mask with the same length as the source sequence: 'src_mask = torch.ones((1, 1, 258, 258)).to(device)'",
+    "Instantiate the model using the AutoregressiveWrapper: 'model = AutoregressiveWrapper(net=your_model_here).to(device)'",
+    "Call the model's generate method with the parameters: 'sample = model.generate(src, start_tokens, ENC_SEQ_LEN, mask=src_mask)'",
+    "Wrap the generate call in a try-except block to catch exceptions: 'try: ... except Exception as e: print(e)'",
+    "Run the script and observe the output for the RuntimeError related to tensor size mismatch",
+    "Verify that the error message contains 'The size of tensor a (258) must match the size of tensor b (230) at non-singleton dimension 3'"
+]
+```

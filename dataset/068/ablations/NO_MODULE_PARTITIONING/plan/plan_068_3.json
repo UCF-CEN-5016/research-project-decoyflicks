@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, and tensorflow_datasets",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define hyperparameters: set num_epochs to 3, batch_size to 128, and image_size to 64",
+    "Load the Caltech Birds dataset using tfds.load with split='train' and split='test'",
+    "Define a preprocess_image function to normalize and resize images, ensuring bounding boxes are handled correctly",
+    "Map the preprocess_image function to the training and validation datasets using .map()",
+    "Cache the datasets using .cache() and shuffle them with a buffer size of 10 times the batch size",
+    "Batch the datasets using .batch(batch_size, drop_remainder=True) and prefetch with buffer_size=tf.data.AUTOTUNE",
+    "Create a YOLOv8 model instance using keras_cv.models.YOLOv8()",
+    "Compile the YOLOv8 model with an optimizer (e.g., Adam) and loss function suitable for object detection",
+    "Define a callback for evaluating COCO metrics during training",
+    "Fit the YOLOv8 model on the training dataset with validation_data set to the validation dataset, and epochs set to num_epochs",
+    "During training, monitor the output for the UnknownError related to ConcatV2",
+    "Verify that the error occurs after the first epoch by checking the training logs for the specific error message",
+    "Check the shapes of the tensors involved in the error: assert that the shapes are [4,2,4] and [4,1,4] as indicated in the error message",
+    "Log the shapes of the tensors before the concatenation operation to confirm the mismatch",
+    "Ensure that the training is performed on a GPU in Google Colab Pro to replicate the environment where the bug was reported"
+]
+```

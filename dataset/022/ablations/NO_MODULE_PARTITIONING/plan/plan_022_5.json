@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: import tensorflow as tf and import numpy as np",
+    "Define a batch size of 2 and image dimensions of 256x256",
+    "Set the standard deviation sigma to 0 and create a Parser instance with sigma=0",
+    "Create a dummy input data dictionary with keys 'image', 'groundtruth_panoptic_category_mask', and 'groundtruth_panoptic_instance_mask'",
+    "Generate random image data with shape (batch_size, height, width, 3) using np.random.rand(batch_size, height, width, 3)",
+    "Generate random category mask data with shape (batch_size, height, width, 1) using np.random.randint(0, 2, size=(batch_size, height, width, 1))",
+    "Generate random instance mask data with shape (batch_size, height, width, 1) using np.random.randint(0, 2, size=(batch_size, height, width, 1))",
+    "Update the input data dictionary with the generated image, category mask, and instance mask",
+    "Call the _parse_train_data method of the Parser instance with the input data dictionary",
+    "Capture the output of the _parse_train_data method, which includes the processed image and labels",
+    "Check the shape of the instance_centers_heatmap in the output labels to verify it is not as expected due to sigma=0",
+    "Set sigma to 1 and repeat steps 3 to 11 to verify the output of instance_centers_heatmap is still not as expected",
+    "Assert that the instance_centers_heatmap output is the same for both sigma=0 and sigma=1, indicating the bug",
+    "Log the output of instance_centers_heatmap for both cases to confirm the standard deviation is not applied correctly"
+]
+```

@@ -1,0 +1,44 @@
+running gpt2-xl/test_tune.sh fails - ParquetConfig.__init__() got an unexpected keyword argument 'token'
+
+Hi. As the title says, I get: `ParquetConfig.__init__() got an unexpected keyword argument 'token'` when running the script located at [`autotuning/hf/gpt2-xl/test_tune.sh`](https://github.com/microsoft/DeepSpeedExamples/blob/ff9a0234cf22dd9af03c5c7aa8037fb9143adca6/training/autotuning/hf/gpt2-xl/test_tune.sh)
+
+To duplicate
+```bash
+cd ~/
+git clone https://github.com/huggingface/transformers.git
+cd transformers
+pip install .
+mkdir ../test && cd ../test
+pip install deepspeed # and anything else
+touch test_tune.sh
+chmod +x test_tune.sh
+```
+copied the text of the file referenced earlier to newly created file.
+changed to `HF_PATH=../` and `NGPUS=6` since I have six 3070tis.
+Ran `./test_tune.sh tune`
+I then got:
+```bash
+[2024-01-08 18:35:57,240] [INFO] [real_accelerator.py:174:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-01-08 18:35:59,065] [WARNING] [runner.py:202:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+[2024-01-08 18:35:59,066] [INFO] [autotuner.py:71:__init__] Created autotuning experiments directory: autotuning_exps
+[2024-01-08 18:35:59,066] [INFO] [autotuner.py:84:__init__] Created autotuning results directory: autotuning_exps
+[2024-01-08 18:35:59,066] [INFO] [autotuner.py:200:_get_resource_manager] active_resources = OrderedDict([('localhost', [0, 1, 2, 3, 4, 5])])
+[2024-01-08 18:35:59,066] [INFO] [runner.py:361:run_autotuning] [Start] Running autotuning
+[2024-01-08 18:35:59,066] [INFO] [autotuner.py:413:tune] Fast mode is enabled. Tuning micro batch size only.
+[2024-01-08 18:35:59,066] [INFO] [autotuner.py:669:model_info_profile_run] Starting model info profile run.
+  0%|                                                  | 0/1 [00:00<?, ?it/s]
+[2024-01-08 18:35:59,076] [INFO] [scheduler.py:344:run_experiment] Scheduler wrote ds_config to autotuning_results/profile_model_info/ds_config.json, /home/daimyollc/test/autotuning_results/profile_model_info/ds_config.json
+[2024-01-08 18:35:59,078] [INFO] [scheduler.py:351:run_experiment] Scheduler wrote exp to autotuning_results/profile_model_info/exp.json, /home/daimyollc/test/autotuning_results/profile_model_info/exp.json
+[2024-01-08 18:35:59,081] [INFO] [scheduler.py:378:run_experiment] Launching exp_id = 0, exp_name = profile_model_info, with resource = localhost:0,1,2,3,4,5, and ds_config = /home/daimyollc/test/autotuning_results/profile_model_info/ds_config.json
+localhost: Permission denied, please try again.
+localhost: Permission denied, please try again.
+localhost: daimyollc@localhost: Permission denied (publickey,password).
+pdsh@ncai01: localhost: ssh exited with exit code 255
+[2024-01-08 18:36:15,956] [INFO] [scheduler.py:430:clean_up] Done cleaning up exp_id = 0 on the following workers: localhost
+[2024-01-08 18:36:15,957] [INFO] [scheduler.py:393:run_experiment] Done running exp_id = 0, exp_name = profile_model_info, with resource = localhost:0,1,2,3,4,5
+100%|███████████████████████████████████████████████| 1/1 [00:25<00:00, 25.00s/it]
+[2024-01-08 18:36:24,075] [ERROR] [autotuner.py:699:model_info_profile_run] The model is not runnable with DeepSpeed with error = ParquetConfig.__init__() got an unexpected keyword argument 'token'
+
+[2024-01-08 18:36:24,076] [INFO] [runner.py:366:run_autotuning] [End] Running autotuning
+[2024-01-08 18:36:24,076] [INFO] [autotuner.py:1110:run_after_tuning] No optimal DeepSpeed configuration found by autotuning.
+```

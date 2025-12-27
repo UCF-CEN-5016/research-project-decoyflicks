@@ -1,0 +1,28 @@
+{
+  "bug_report": "010",
+  "module": {
+    "module": "official/projects/yt8m/modeling",
+    "files": [
+      {
+        "path": "official/projects/yt8m/modeling/yt8m_model_utils.py",
+        "snippets": [
+          {
+            "lines": "57-80",
+            "code": "def _large_compatible_negative(tensor_type):\n  \"\"\"Large negative number as Tensor.\n\n  This function is necessary because the standard value for epsilon\n  in this module (-1e9) cannot be represented using `tf.float16`.\n\n  Args:\n    tensor_type: A dtype to determine the type.\n\n  Returns:\n    A large negative number.\n  \"\"\"\n  if tensor_type == tf.float16:\n    return tf.float16.min\n  return -1e9\n\ndef weighted_average_pooling(features, weights, axis):\n  \"\"\"Weighted average pooling.\n\n  Args:\n    features: a tensor of at least rank 1.\n    weights: a weight tensor whose shape is broadcast compatible with features.\n      It doesn't have to be normalized.\n    axis: the dimensions to reduce.\n\n  Returns:\n    The reduced tensor.\n  \"\"\"\n  return tf.math.divide_no_nan(\n      tf.reduce_sum(weights * features, axis),  # numerator.\n      tf.reduce_sum(weights, axis),  # denominator.\n  )\n\ndef frame_swap(\n    frames: tf.Tensor, frame_mask: Optional[tf.Tensor] = None\n) -> tf.Tensor:\n  \"\"\"Self-weighted average pooling over all frames of a video.\n\n  It does the following operation independently for each feature:\n    x_pooled = (sum_i x_i * |x_i|) / (sum_i |x_i|).\n  Basically the weight for the feature in each frame is determined by the\n  magnitude of the feature itself.\n\n  Paper: https://research.google/pubs/pub48351/\n\n  Args:\n    frames: A tensor with shape [batch_size, max_frames, feature_size].\n    frame_mask:  A tensor with shape [batch_size, max_frames, 1].\n\n  Returns:\n    A tensor with shape [batch_size, feature_size].\n  \"\"\"\n  weights = tf.abs(frames)\n  if frame_mask is not None:\n    weights *= tf.cast(frame_mask, weights.dtype)\n  # We set axis to 1 to reduce the dimension corresponding to max_frames.\n  return weighted_average_pooling(frames, weights, axis=1)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/projects/yt8m/modeling/yt8m_model_utils.py",
+      "snippets": [
+        {
+          "lines": "57-80",
+          "code": "def _large_compatible_negative(tensor_type):\n  \"\"\"Large negative number as Tensor.\n\n  This function is necessary because the standard value for epsilon\n  in this module (-1e9) cannot be represented using `tf.float16`.\n\n  Args:\n    tensor_type: A dtype to determine the type.\n\n  Returns:\n    A large negative number.\n  \"\"\"\n  if tensor_type == tf.float16:\n    return tf.float16.min\n  return -1e9\n\ndef weighted_average_pooling(features, weights, axis):\n  \"\"\"Weighted average pooling.\n\n  Args:\n    features: a tensor of at least rank 1.\n    weights: a weight tensor whose shape is broadcast compatible with features.\n      It doesn't have to be normalized.\n    axis: the dimensions to reduce.\n\n  Returns:\n    The reduced tensor.\n  \"\"\"\n  return tf.math.divide_no_nan(\n      tf.reduce_sum(weights * features, axis),  # numerator.\n      tf.reduce_sum(weights, axis),  # denominator.\n  )\n\ndef frame_swap(\n    frames: tf.Tensor, frame_mask: Optional[tf.Tensor] = None\n) -> tf.Tensor:\n  \"\"\"Self-weighted average pooling over all frames of a video.\n\n  It does the following operation independently for each feature:\n    x_pooled = (sum_i x_i * |x_i|) / (sum_i |x_i|).\n  Basically the weight for the feature in each frame is determined by the\n  magnitude of the feature itself.\n\n  Paper: https://research.google/pubs/pub48351/\n\n  Args:\n    frames: A tensor with shape [batch_size, max_frames, feature_size].\n    frame_mask:  A tensor with shape [batch_size, max_frames, 1].\n\n  Returns:\n    A tensor with shape [batch_size, feature_size].\n  \"\"\"\n  weights = tf.abs(frames)\n  if frame_mask is not None:\n    weights *= tf.cast(frame_mask, weights.dtype)\n  # We set axis to 1 to reduce the dimension corresponding to max_frames.\n  return weighted_average_pooling(frames, weights, axis=1)"
+        }
+      ]
+    }
+  ]
+}

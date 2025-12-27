@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries including TensorFlow, NumPy, click, dllogger, and horovod",
+    "Define hyperparameters such as batch size (e.g., 32), global batch size (e.g., 1024), number of GPUs (e.g., 32), learning rate (e.g., 0.001), and other relevant parameters",
+    "Create a synthetic dataset generator that returns batches of data with specified dimensions and types, matching the input expected by the model",
+    "Build a model function (`build_model_and_loss`) that creates a neural network model based on the provided hyperparameters and feature specifications",
+    "Initialize Horovod for distributed training by calling `hvd.init()` and setting environment variables such as `HOROVOD_NUM_RANKS` and `HOROVOD_RANK`",
+    "Set up TensorFlow device configuration to use a single GPU or multiple GPUs, as specified in the hyperparameters",
+    "Create data iterators (`data_iterator_train` and optionally `data_iterator_test`) using the synthetic dataset generator and the model parameters",
+    "Initialize the optimizer based on the specified algorithm (e.g., AdamW, LazyAdam) with appropriate learning rate and weight decay",
+    "Wrap the optimizer in a DistributedOptimizer to enable distributed training across multiple GPUs or machines",
+    "Set up the performance calculator for benchmarking if required by initializing an instance of `PerformanceCalculator` with the appropriate warmup steps and total steps",
+    "Call the training function (`train`) with the model, data iterators, optimizer, batch size, number of epochs, benchmark mode, performance calculator, save checkpoint flag, and checkpoint manager",
+    "Monitor GPU memory usage during training to ensure it matches expected behavior",
+    "Assert that the output contains NaN values in the loss calculation or any other relevant metric to verify the bug occurs",
+    "Log detailed metrics such as loss, accuracy, and GPU memory usage at regular intervals during training for further analysis"
+]
+```
+

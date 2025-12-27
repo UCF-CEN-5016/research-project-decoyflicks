@@ -1,0 +1,16 @@
+```json
+[
+    "Install PyTorch version 1.9.0+cu111 using pip with the command 'pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 --extra-index-url https://download.pytorch.org/whl/cu111'",
+    "Ensure the operating system is Ubuntu 18.04 LTS by checking the OS version with 'lsb_release -a'",
+    "Create a new Python script named 'reproduce_bug.py'",
+    "Import the necessary modules at the top of 'reproduce_bug.py' with the following lines: 'import torch', 'import torch.nn.functional as F', 'from torch.utils.data import Dataset, DataLoader', 'import os'",
+    "Define a custom dataset class 'MyTrainDataset' that inherits from 'Dataset' and implements '__len__' and '__getitem__' methods to return dummy data. Set the length to 100 and return random tensors of shape (20,) for inputs and random integers for targets.",
+    "Define a function 'load_train_objs' that initializes 'MyTrainDataset', a simple model 'torch.nn.Linear(20, 1)', and an optimizer 'torch.optim.SGD(model.parameters(), lr=1e-3)'",
+    "Define a function 'prepare_dataloader' that takes a dataset and batch size, and returns a DataLoader with 'pin_memory=True' and 'shuffle=False'",
+    "Define a 'main' function that initializes the dataset, model, and optimizer by calling 'load_train_objs', prepares the DataLoader with a batch size of 32, and attempts to check if 'torch.backends.mps.is_available()' to trigger the bug.",
+    "Set the batch size to 32 and call 'prepare_dataloader' with the dataset and batch size",
+    "Call the 'main' function in the script with 'if __name__ == \"__main__\": main()'",
+    "Run the script using the command 'python3 reproduce_bug.py'",
+    "Observe the output for the AttributeError: 'module 'torch.backends' has no attribute 'mps'' to confirm the bug is reproduced"
+]
+```

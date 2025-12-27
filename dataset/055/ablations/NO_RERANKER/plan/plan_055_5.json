@@ -1,0 +1,25 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras_nlp, numpy, and nltk.translate.bleu_score",
+    "Set the environment variable for TensorFlow to use GPU: export TF_FORCE_GPU_ALLOW_GROWTH=true",
+    "Define constants: MAX_SEQUENCE_LENGTH = 40, TEST_BATCH_SIZE = 1",
+    "Load the English and Spanish tokenizers: eng_tokenizer and spa_tokenizer from data_preprocessing module",
+    "Load the test pairs from data_preprocessing module: test_pairs",
+    "Define the transformer model by importing it from the model module",
+    "Create a function decode_sequences(input_sentences) to handle the translation process",
+    "Inside decode_sequences, convert input_sentences to tensor using eng_tokenizer and pad to MAX_SEQUENCE_LENGTH",
+    "Check if encoder_input_tokens shape exceeds 40 and truncate if necessary",
+    "Define the next_fn function to generate logits using the transformer model with encoder_input_tokens and prompt",
+    "Inside next_fn, ensure logits are sliced correctly and hidden_states is set to None",
+    "Build a prompt tensor of shape (TEST_BATCH_SIZE, 40) with start and padding tokens",
+    "Call keras_nlp.samplers.GreedySampler() with next_fn, prompt, end_token_id, and index=1",
+    "Create a list of English test sentences from test_pairs",
+    "Iterate over the test sentences and call decode_sequences for each input sentence",
+    "Capture the output of decode_sequences and decode it to a string",
+    "Remove special tokens from the translated string and split into words",
+    "Calculate the BLEU score using modified_precision from nltk for each translated sentence",
+    "Run the script and monitor for segmentation fault during the execution of keras_nlp.samplers.GreedySampler()",
+    "Log the shapes of logits and cache in next_fn to verify dimensions before the segmentation fault occurs",
+    "Assert that a segmentation fault occurs during the execution of the script"
+]
+```

@@ -1,0 +1,65 @@
+TITLE  
+Failed to Convert `hubert.extract_features()` into ONNX
+
+SYMPTOMS  
+• The conversion process fails with an `AttributeError`.  
+• Error message: `AttributeError: 'Tensor' object has no attribute 'is_integer'`.  
+• The ONNX file is not generated as expected.  
+
+EXPECTED BEHAVIOR  
+The software should successfully export the model to an ONNX file without errors, resulting in a valid ONNX file being created.
+
+REPRODUCTION STEPS  
+1. Open a command prompt.  
+2. Install `fairseq` version `0.12.2` using pip.  
+3. Run the following Python code to load the model and attempt the ONNX export:  
+   ```python
+   from fairseq import checkpoint_utils
+   import torch
+
+   hubert, _, _ = checkpoint_utils.load_model_ensemble_and_task(
+       ["./assets/hubert/hubert_base.pt"],
+       suffix="",
+   )
+   hubert_model = hubert[0]
+   hubert_model = hubert_model.half()
+
+   class HuberAdapter(torch.nn.Module):
+       def __init__(self, model):
+           super(HuberAdapter, self).__init__()
+           self.model = model
+       def forward(self, feats, padding_mask):
+           inputs = {
+               "source": feats,
+               "padding_mask": padding_mask,
+               "output_layer": 12
+           }
+           return self.model.extract_features(**inputs)
+
+   feats = torch.load("./feats.pt")
+   padding_mask = torch.load("./padding_mask.pt")
+
+   # Exporting Adapter into ONNX
+   torch.onnx.export(
+       adapter,
+       (feats.cuda(), padding_mask.cuda()),
+       "hubert.onnx",
+       input_names=["feats", "padding_mask"],
+       output_names=["logits", "mask"],
+       dynamic_axes={
+           "feats": {0: "seq"},
+           "padding_mask": {0: "seq"},
+       }
+   )
+   ```  
+4. Observe the error during the ONNX export process.  
+
+### ENVIRONMENT  
+- fairseq Version: 0.12.2  
+- PyTorch Version: 2.1.0  
+- OS: WSL Ubuntu 22.04  
+- Installation Method: pip  
+- Python Version: 3.8  
+- CUDA/cuDNN Version: 11.8  
+- GPU Model: 1x RTX 3090  
+- Additional Information: N/A

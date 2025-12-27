@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official repository: 'official.legacy.image_classification.classifier_trainer' and 'official.legacy.image_classification.dataset_factory'",
+    "Set the TensorFlow logging level to 'ERROR' to suppress non-critical warnings during execution",
+    "Define a batch size of 1 and image dimensions of 224x224 for input data",
+    "Create a custom dataset using tf.data.Dataset that yields images of shape (224, 224, 3) filled with zeros and corresponding labels as zeros",
+    "Define a trivial model using 'get_trivial_model' function with num_classes set to 10",
+    "Compile the model with an SGD optimizer and SparseCategoricalCrossentropy loss function, ensuring 'run_eagerly' is set to True",
+    "Create a TensorFlow dataset object using the custom dataset and set it to repeat indefinitely",
+    "Call the model's fit method with the dataset, specifying epochs=1 and steps_per_epoch=10",
+    "Monitor the console output for the warning message: 'Gradients do not exist for variables...' during the training process",
+    "Assert that the warning message appears in the logs, indicating that gradients are not being computed for the specified variables"
+]
+```

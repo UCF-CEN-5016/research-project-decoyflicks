@@ -1,0 +1,58 @@
+{
+  "bug_report": "002",
+  "rank": 3,
+  "score": 0.0,
+  "main_file": {
+    "path": "research/vid2depth/ops/icp_train_demo.py",
+    "content": "# Copyright 2017 The TensorFlow Authors All Rights Reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n# ==============================================================================\n\n\"\"\"Verify the op's ability to discover a hidden transformation and residual.\"\"\"\n\nfrom __future__ import absolute_import\nfrom __future__ import division\nfrom __future__ import print_function\n\nimport os.path\nimport random\nimport time\nimport google3\nfrom absl import app\nfrom absl import flags\nfrom absl import logging\nimport icp_grad  # pylint: disable=unused-import\nfrom icp_op import icp\nimport icp_util\nimport numpy as np\nimport tensorflow as tf\n\nFLAGS = flags.FLAGS\nflags.DEFINE_integer('batch_size', 4, 'Batch size.')\nflags.DEFINE_float('learning_rate', 0.1, 'Learning rate.')\nflags.DEFINE_integer('max_steps', 2000, 'Number of steps to run trainer.')\nflags.DEFINE_string('train_dir', '/tmp/icp_train_demo',\n                    'Directory to save event files for TensorBoard.')\n\n# Every training step feeds the model two points clouds A, B, such that\n# A = random_transform . sample_cloud\n# B = (SECRET_EGO_MOTION . A) + cone(CENTER, RADIUS, SECRET_RES_HEIGHT).\n# The ICP op gradients should help the program discover the values for\n# SECRET_EGO_MOTION and SECRET_RES_HEIGHT to get the best alignment for A, B.\nSECRET_EGO_MOTION = [0.0, 0.0, 0.1, 0.0, 0.0, 0.0]\nRES_CENTER = [0.103, 1.954, 0]\nRES_RADIUS = 10.0\nSECRET_RES_HEIGHT = 0.1\n\n\nclass DataProducer(object):\n  \"\"\"Generates training data.\"\"\"\n\n  def __init__(self):\n    pass\n\n  @classmethod\n  def setup(cls):\n    \"\"\"Open a KITTI video and read its point clouds.\"\"\"\n    lidar_cloud_path = os.path.join(FLAGS.test_srcdir,\n                                    icp_util.LIDAR_CLOUD_PATH)\n    cls.sample_cloud = np.load(lidar_cloud_path)\n    logging.info('sample_cloud: %s', cls.sample_cloud)\n    x_min = np.min(cls.sample_cloud[:, 0])\n    x_max = np.max(cls.sample_cloud[:, 0])\n    y_min = np.min(cls.sample_cloud[:, 1])\n    y_max = np.max(cls.sample_cloud[:, 1])\n    z_min = np.min(cls.sample_cloud[:, 2])\n    z_max = np.max(cls.sample_cloud[:, 2])\n    logging.info('x: %s - %s', x_min, x_max)\n    logging.info('y: %s - %s', y_min, y_max)\n    logging.info('z: %s - %s', z_min, z_max)\n\n  @classmethod\n  def random_transform(cls):\n    tx = random.uniform(-0.2, 0.2)\n    ty = random.uniform(-0.2, 0.2)\n    tz = random.uniform(-0.9, 0.9)\n    rx = random.uniform(-0.2, 0.2) * np.pi\n    ry = random.uniform(-0.2, 0.2) * np.pi\n    rz = random.uniform(-0.2, 0.2) * np.pi\n    transform = [tx, ty, tz, rx, ry, rz]\n    return transform\n\n  @classmethod\n  def next_batch(cls, batch_size):\n    \"\"\"Returns a training batch.\"\"\"\n    source_items = []\n    target_items = []\n    for _ in range(batch_size):\n      source_cloud = icp_util.np_transform_cloud_xyz(cls.sample_cloud,\n                                                     cls.random_transform())\n      source_items.append(source_cloud)\n      dist_to_center = np.linalg.norm((source_cloud - RES_CENTER)[:, :2],\n                                      axis=1, keepdims=True)\n      res = np.maximum(RES_RADIUS - dist_to_center, 0.0) / RES_RADIUS\n      res *= SECRET_RES_HEIGHT\n      # x = 0, y = 0, z = res.\n      res = np.concatenate((np.zeros_like(res), np.zeros_like(res), res),\n                           axis=1)\n      target_cloud = icp_util.np_transform_cloud_xyz(source_cloud + res,\n                                                     SECRET_EGO_MOTION)\n      target_items.append(target_cloud)\n    return np.stack(source_items), np.stack(target_items)\n\n\ndef placeholder_inputs(batch_size):\n  cloud_shape = (batch_size, DataProducer.sample_cloud.shape[0], 3)\n  source_placeholder = tf.placeholder(tf.float32, shape=cloud_shape)\n  target_placeholder = tf.placeholder(tf.float32, shape=cloud_shape)\n  return source_placeholder, target_placeholder\n\n\ndef fill_feed_dict(source_placeholder, target_placeholder):\n  # Create the feed_dict for the placeholders filled with the next\n  # `batch size` examples.\n  source_feed, target_feed = DataProducer.next_batch(FLAGS.batch_size)\n  feed_dict = {\n      source_placeholder: source_feed,\n      target_placeholder: target_feed,\n  }\n  return feed_dict\n\n\ndef run_training():\n  \"\"\"Train model for a number of steps.\"\"\"\n  # Tell TensorFlow that the model will be built into the default Graph.\n  with tf.Graph().as_default():\n    DataProducer.setup()\n    source_placeholder, target_placeholder = placeholder_inputs(\n        FLAGS.batch_size)\n    transform, residual = inference(source_placeholder, target_placeholder)\n    loss = loss_func(transform, residual)\n    train_op = training(loss, FLAGS.learning_rate)\n    summary_op = tf.summary.merge_all()\n    init = tf.global_variables_initializer()\n\n    with tf.Session() as sess:\n      summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph)\n      sess.run(init)\n      # Start the training loop.\n      for step in range(FLAGS.max_steps):\n        start_time = time.time()\n        feed_dict = fill_feed_dict(source_placeholder, target_placeholder)\n        _, loss_value = sess.run([train_op, loss], feed_dict=feed_dict)\n        duration = time.time() - start_time\n        # Print status to stdout.\n        print('Step %d: loss = %f (%.2f sec)' % (step, loss_value, duration))\n        # Update the events file.\n        summary_str = sess.run(summary_op, feed_dict=feed_dict)\n        summary_writer.add_summary(summary_str, step)\n        summary_writer.flush()\n\n\ndef inference(source, target):\n  \"\"\"Builds model.\"\"\"\n  ego_motion = tf.Variable(tf.zeros([6]), name='ego_motion')\n  res_height = tf.Variable(tf.fill([1], 0.0), name='res_height')\n  tf.summary.scalar('tx', ego_motion[0])\n  tf.summary.scalar('ty', ego_motion[1])\n  tf.summary.scalar('tz', ego_motion[2])\n  tf.summary.scalar('rx', ego_motion[3])\n  tf.summary.scalar('ry', ego_motion[4])\n  tf.summary.scalar('rz', ego_motion[5])\n  tf.summary.scalar('res_height', res_height[0])\n\n  dist_to_center = tf.norm((source - RES_CENTER)[:, :, :2], axis=2,\n                           keep_dims=True)\n  res = tf.maximum(RES_RADIUS - dist_to_center, 0.0) / RES_RADIUS\n  res *= res_height\n  res = tf.concat([tf.zeros_like(res), tf.zeros_like(res), res], axis=2)\n\n  shifted_source = source + res\n  ego_motion = tf.stack([ego_motion] * FLAGS.batch_size)\n  transform, residual = icp(shifted_source, ego_motion, target)\n  return transform, residual\n\n\ndef loss_func(transform, residual):\n  return (tf.reduce_mean(tf.square(transform), name='transform_mean') +\n          tf.reduce_mean(tf.square(residual), name='residual_mean'))\n\n\ndef training(loss, learning_rate):\n  tf.summary.scalar('loss', loss)\n  optimizer = tf.train.GradientDescentOptimizer(learning_rate)\n  # Create a variable to track the global step.\n  global_step = tf.Variable(0, name='global_step', trainable=False)\n  # Use the optimizer to apply the gradients that minimize the loss\n  # (and also increment the global step counter) as a single training step.\n  train_op = optimizer.minimize(loss, global_step=global_step)\n  return train_op\n\n\ndef main(_):\n  run_training()\n\n\nif __name__ == '__main__':\n  app.run(main)\n"
+  },
+  "module_snippets": [
+    {
+      "file": "research/vid2depth/ops/icp_train_demo.py",
+      "snippets": [
+        {
+          "lines": "181-183",
+          "code": "def run_training():\n  \"\"\"Train model for a number of steps.\"\"\"\n  # Tell TensorFlow that the model will be built into the default Graph.\n  with tf.Graph().as_default():\n    DataProducer.setup()\n    source_placeholder, target_placeholder = placeholder_inputs(\n        FLAGS.batch_size)\n    transform, residual = inference(source_placeholder, target_placeholder)\n    loss = loss_func(transform, residual)\n    train_op = training(loss, FLAGS.learning_rate)\n    summary_op = tf.summary.merge_all()\n    init = tf.global_variables_initializer()\n\n    with tf.Session() as sess:\n      summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph)\n      sess.run(init)\n      # Start the training loop.\n      for step in range(FLAGS.max_steps):\n        start_time = time.time()\n        feed_dict = fill_feed_dict(source_placeholder, target_placeholder)\n        _, loss_value = sess.run([train_op, loss], feed_dict=feed_dict)\n        duration = time.time() - start_time\n        # Print status to stdout.\n        print('Step %d: loss = %f (%.2f sec)' % (step, loss_value, duration))\n        # Update the events file.\n        summary_str = sess.run(summary_op, feed_dict=feed_dict)\n        summary_writer.add_summary(summary_str, step)\n        summary_writer.flush()\n\ndef inference(source, target):\n  \"\"\"Builds model.\"\"\"\n  ego_motion = tf.Variable(tf.zeros([6]), name='ego_motion')\n  res_height = tf.Variable(tf.fill([1], 0.0), name='res_height')\n  tf.summary.scalar('tx', ego_motion[0])\n  tf.summary.scalar('ty', ego_motion[1])\n  tf.summary.scalar('tz', ego_motion[2])\n  tf.summary.scalar('rx', ego_motion[3])\n  tf.summary.scalar('ry', ego_motion[4])\n  tf.summary.scalar('rz', ego_motion[5])\n  tf.summary.scalar('res_height', res_height[0])\n\n  dist_to_center = tf.norm((source - RES_CENTER)[:, :, :2], axis=2,\n                           keep_dims=True)\n  res = tf.maximum(RES_RADIUS - dist_to_center, 0.0) / RES_RADIUS\n  res *= res_height\n  res = tf.concat([tf.zeros_like(res), tf.zeros_like(res), res], axis=2)\n\n  shifted_source = source + res\n  ego_motion = tf.stack([ego_motion] * FLAGS.batch_size)\n  transform, residual = icp(shifted_source, ego_motion, target)\n  return transform, residual\n\ndef loss_func(transform, residual):\n  return (tf.reduce_mean(tf.square(transform), name='transform_mean') +\n          tf.reduce_mean(tf.square(residual), name='residual_mean'))"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "absl",
+      "function": "DEFINE_float"
+    },
+    {
+      "module": "absl",
+      "function": "DEFINE_integer"
+    },
+    {
+      "module": "absl",
+      "function": "DEFINE_string"
+    },
+    {
+      "module": "absl",
+      "function": "info"
+    },
+    {
+      "module": "absl",
+      "function": "run"
+    },
+    {
+      "module": "icp_op",
+      "function": "icp"
+    },
+    {
+      "module": "icp_util",
+      "function": "np_transform_cloud_xyz"
+    },
+    {
+      "module": "random",
+      "function": "uniform"
+    },
+    {
+      "module": "time",
+      "function": "time"
+    }
+  ]
+}

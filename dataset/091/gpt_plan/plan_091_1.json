@@ -1,0 +1,20 @@
+[
+    "Import torch and relevant modules from x_transformers including XTransformer and necessary utilities",
+    "Set a fixed random seed for reproducibility using torch.manual_seed(0)",
+    "Define batch size as 1 for simplicity and reproducibility",
+    "Set encoder sequence length (ENC_SEQ_LEN) to 258 tokens",
+    "Set decoder output sequence length (DEC_SEQ_LEN) to a smaller value, e.g., 230 tokens, to reproduce the bug where output length is less than input length",
+    "Define vocabulary size (NUM_TOKENS) as 1000 tokens for token embedding",
+    "Instantiate an XTransformer model with parameters: dim=64, enc_max_seq_len=ENC_SEQ_LEN, dec_max_seq_len=DEC_SEQ_LEN, num_tokens=NUM_TOKENS, with default other parameters",
+    "Create a random integer tensor 'src' of shape (batch_size, ENC_SEQ_LEN) with values in [0, NUM_TOKENS), representing encoder input tokens",
+    "Create a random integer tensor 'start_tokens' of shape (batch_size, 1) with values in [0, NUM_TOKENS), representing initial decoder input tokens",
+    "Create an attention mask 'src_mask' of shape (batch_size, ENC_SEQ_LEN) filled with True (no masking) to pass as mask to the encoder and decoder",
+    "Call model.generate(src, start_tokens, DEC_SEQ_LEN, mask=src_mask) to generate a decoded sequence shorter than the encoder input",
+    "Catch any RuntimeError exceptions during the call, specifically looking for 'The size of tensor a (258) must match the size of tensor b (230) at non-singleton dimension 3' indicating a dimension mismatch in attention masking",
+    "If no exception is raised, verify output tensor shape is (batch_size, DEC_SEQ_LEN) confirming generation length is shorter than input length",
+    "If exception is raised, capture and print the full traceback to verify it matches the reported error",
+    "Assert that the exception occurs given the shorter output sequence length compared to the input sequence length",
+    "Optionally, repeat the test changing DEC_SEQ_LEN to be equal or greater than ENC_SEQ_LEN to verify the bug does not occur in those cases",
+    "Ensure all operations are done on CPU or a CUDA device if available, specifying device during tensor creation",
+    "Use minimal imports and dependencies to isolate the bug in model.generate with cross attention and differing input/output sequence lengths"
+]

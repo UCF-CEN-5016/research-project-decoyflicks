@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: torch and nn from torch",
+    "Define a batch size of 4 and feature dimensions of 4 for the input tensor x",
+    "Create a random input tensor x with shape (4, 3, 2, 4) using torch.randn",
+    "Define the RelativeMultiHeadAttention class with heads=2, d_model=4, and dropout_prob=0.1",
+    "Initialize the key_pos_embeddings, key_pos_bias, and query_pos_bias in the __init__ method of RelativeMultiHeadAttention",
+    "Set key_pos_embeddings to a tensor of shape (2^12 * 2, 2, 4) filled with random values using torch.randn",
+    "Set key_pos_bias to a tensor of shape (2^12 * 2, 2) filled with random values using torch.randn",
+    "Set query_pos_bias to a tensor of shape (2, 4) filled with random values using torch.randn",
+    "Create an instance of the RelativeMultiHeadAttention class",
+    "Call the get_scores method of the RelativeMultiHeadAttention instance with query=x and key=x",
+    "In the get_scores method, extract key_pos_emb using key.shape[0] which is 4, resulting in key_pos_emb shape (2^12 * 2, 2, 4)",
+    "Create cos_cached and sin_cached tensors with shape (4, 2, 2, 4) filled with random values using torch.randn",
+    "Set self.cos_cached and self.sin_cached to the created tensors",
+    "Define neg_half_x as a tensor of shape (4, 3, 2, 4) filled with -0.5 using torch.full",
+    "Attempt to execute the line x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])",
+    "Capture the RuntimeError exception that occurs due to mismatched tensor sizes",
+    "Verify that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'"
+]
+```

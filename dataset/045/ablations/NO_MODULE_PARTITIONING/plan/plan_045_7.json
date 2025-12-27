@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: fairseq, torch, and os",
+    "Set the DATA_ROOT variable to the path of your dataset, e.g., DATA_ROOT = '/root/autodl-tmp/FormattingData'",
+    "Create a config.yaml file in the specified path with the required parameters for the speech_to_speech task",
+    "Ensure the model checkpoint file exists at the specified path: /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt",
+    "Set the following parameters for the fairseq-generate command: target-is-code=True, target-code-size=100, vocoder='code_hifigan', max-tokens=50000, beam=10, max-len-a=1",
+    "Run the fairseq-generate command with the following syntax: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results",
+    "Monitor the console output for the error message related to the missing key 'input_feat_per_channel'",
+    "Check the structure of the model configuration loaded from config.yaml to ensure it includes 'input_feat_per_channel'",
+    "Verify that the model checkpoint at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt is compatible with the configuration specified in config.yaml",
+    "If the error occurs, capture the full stack trace and error message for further analysis"
+]
+```

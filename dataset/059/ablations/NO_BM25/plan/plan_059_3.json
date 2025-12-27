@@ -1,0 +1,29 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, os, and matplotlib",
+    "Set a random seed for reproducibility using np.random.seed(42) and tf.random.set_seed(42)",
+    "Define the base path for data as 'data' and create an empty list called words_list",
+    "Download the IAM_Words.zip dataset using wget and unzip it into the current directory",
+    "Read the contents of 'data/words.txt' and append valid entries (not starting with '#') to words_list",
+    "Shuffle the words_list to randomize the dataset order",
+    "Split words_list into training (90%), validation (5%), and test (5%) samples",
+    "Assert that the total number of samples in words_list equals the sum of train, validation, and test samples",
+    "Define a function get_image_paths_and_labels that constructs image paths from the training samples",
+    "Call get_image_paths_and_labels with train_samples to get train_img_paths and train_labels",
+    "Define a function clean_labels to clean the labels by extracting the last part of each line",
+    "Call clean_labels on validation_labels and test_labels to get validation_labels_cleaned and test_labels_cleaned",
+    "Define image dimensions: image_width = 128 and image_height = 32",
+    "Define a function preprocess_image that reads, decodes, and resizes images while normalizing pixel values",
+    "Define a function vectorize_label that converts labels to integer sequences and pads them to max_len",
+    "Define a function process_images_labels that applies preprocessing to both images and labels",
+    "Define a function prepare_dataset that creates a tf.data.Dataset from image paths and labels",
+    "Prepare train_ds, validation_ds, and test_ds using prepare_dataset with respective image paths and labels",
+    "Define a CTCLayer class that computes the CTC loss during model training",
+    "Define a build_model function that constructs the handwriting recognition model architecture",
+    "Call build_model to create the model and print the model summary",
+    "Set epochs to 10 and compile the model with Adam optimizer",
+    "Train the model using model.fit with train_ds and validation_ds, and monitor edit distances",
+    "During training, expect an error related to fitting the model due to potential issues with input shapes or data",
+    "Capture the error message and assert that it matches the expected error type related to model fitting"
+]
+```

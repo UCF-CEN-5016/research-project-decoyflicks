@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and Keras modules",
+    "Import necessary functions from keras_cv, tqdm, xml modules",
+    "Set batch size to 16",
+    "Load a sample dataset with 32 images of dimensions 640x640 and 3 color channels",
+    "Define class mapping for the object detection task",
+    "Preprocess the dataset by resizing and normalizing the images",
+    "Create an instance of YOLOV8Backbone with the 'yolo_v8_s_backbone_coco' preset",
+    "Initialize a YOLOV8Detector model with num_classes equal to the length of class mapping, bounding_box_format='xyxy', and fpn_depth=1",
+    "Compile the YOLOV8Detector model using Adam optimizer with learning_rate=0.001 and global_clipnorm=0.1, classification_loss='binary_crossentropy', and box_loss='ciou'",
+    "Define an evaluation callback to calculate COCO metrics during training",
+    "Train the YOLOV8Detector model on the dataset for 3 epochs using the defined callbacks",
+    "Visualize predictions made by the trained model on a validation subset of the dataset",
+    "Monitor GPU memory usage during model compilation and training",
+    "Assert that the GPU memory usage exceeds a predefined threshold indicating an out-of-memory error"
+]
+```
+

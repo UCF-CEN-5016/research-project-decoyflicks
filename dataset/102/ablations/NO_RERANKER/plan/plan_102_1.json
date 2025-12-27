@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and ResidualSimVQ from vector_quantize_pytorch",
+    "Define a batch size of 1 and input dimensions of (512, 32, 32) for the ResidualSimVQ model",
+    "Instantiate the ResidualSimVQ model with parameters: dim=512, num_quantizers=4, codebook_size=1024, channel_first=True",
+    "Create random input data with shape (1, 512, 32, 32) using torch.randn",
+    "Set the model to training mode by calling residual_sim_vq.train()",
+    "Call the forward method of the ResidualSimVQ model with the random input data",
+    "Capture the output of the forward method, which should include quantized, indices, and commit_loss",
+    "Verify that the NameError occurs by checking if the output contains the string 'NameError: name 'return_loss' is not defined'",
+    "Log the error message to confirm the bug is reproduced",
+    "Check the shape of the output variables to ensure they match expected dimensions"
+]
+```

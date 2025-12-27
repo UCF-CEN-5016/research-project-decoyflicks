@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import numpy as np and import keras from keras",
+    "Set the random seed for reproducibility: np.random.seed(42)",
+    "Load the CIFAR-100 dataset: (x_train, y_train), (x_test, y_test) = keras.datasets.cifar100.load_data()",
+    "Print the shapes of the training and test datasets: print(f'x_train shape: {x_train.shape} - y_train shape: {y_train.shape}') and print(f'x_test shape: {x_test.shape} - y_test shape: {y_test.shape}')",
+    "Define the input shape for the model: input_shape = (32, 32, 3)",
+    "Set hyperparameters: weight_decay = 0.0001, batch_size = 128, num_epochs = 20, dropout_rate = 0.2",
+    "Create a function to build a simple model: def build_model() with layers.Input(shape=input_shape) and layers.Dense(num_classes)",
+    "Compile the model using Adam optimizer and SparseCategoricalCrossentropy loss",
+    "Fit the model using the training dataset with validation_data set to the test dataset: model.fit(train_dataset, epochs=num_epochs, validation_data=test_dataset)",
+    "Monitor the training process and print the validation accuracy after each epoch",
+    "After training, evaluate the model on the test dataset: model.evaluate(x_test, y_test)",
+    "Assert that the validation accuracy is higher than expected, indicating overfitting due to using the test set as validation",
+    "Log the validation accuracy and test accuracy to compare results"
+]
+```

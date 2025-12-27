@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary modules from Keras: layers, Model, and Sequential",
+    "Import numpy for data manipulation",
+    "Load the CIFAR-100 dataset using keras.datasets.cifar100.load_data()",
+    "Assign the training data to variables x_train and y_train, and the test data to x_test and y_test",
+    "Print the shapes of x_train, y_train, x_test, and y_test to confirm data loading",
+    "Define the input shape as (32, 32, 3) and number of classes as 100",
+    "Set hyperparameters: weight_decay = 0.0001, batch_size = 128, num_epochs = 20, dropout_rate = 0.2",
+    "Create a data augmentation pipeline using keras.Sequential with Normalization, Resizing, RandomFlip, and RandomZoom",
+    "Adapt the data augmentation pipeline to the training data x_train",
+    "Define a function build_classifier that constructs a Keras model with input shape (32, 32, 3) and output shape (num_classes)",
+    "Inside build_classifier, add layers for data augmentation, patch extraction, dense layers, and dropout",
+    "Define a function run_experiment that compiles and trains the model",
+    "In run_experiment, compile the model with AdamW optimizer and SparseCategoricalCrossentropy loss",
+    "Call model.fit with x_train, y_train, batch_size, num_epochs, and validation_data set to x_test, y_test",
+    "Print the training history to observe the training process",
+    "Evaluate the model on the test set using model.evaluate with x_test and y_test",
+    "Print the test accuracy and top 5 accuracy to verify model performance",
+    "Check if the validation data used in model.fit is the same as the test data",
+    "Assert that the validation accuracy is higher than expected due to overfitting on the test set"
+]
+```

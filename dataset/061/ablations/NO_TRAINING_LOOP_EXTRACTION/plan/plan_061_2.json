@@ -1,0 +1,16 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the latest version of keras-cv and keras by running: !pip install -q --upgrade keras-cv keras",
+    "Import the necessary libraries by adding the following code: import keras_cv, keras, matplotlib.pyplot as plt, time",
+    "Define the image dimensions by setting img_width = 512 and img_height = 512.",
+    "Create an instance of the StableDiffusion model by running: model = keras_cv.models.StableDiffusion(img_width=img_width, img_height=img_height, jit_compile=False)",
+    "Define a text prompt for image generation: prompt = 'photograph of an astronaut riding a horse'",
+    "Set the batch size to 3 by defining: batch_size = 3",
+    "Call the text_to_image method with the prompt and batch size: images = model.text_to_image(prompt, batch_size=batch_size)",
+    "Attempt to display the generated images using the plot_images function: plot_images(images)",
+    "Run the notebook cell and observe the output for any ImportError related to keras.utils.data_utils",
+    "If an ImportError occurs, verify the error message matches: 'ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Document the error message and the steps taken to reproduce the issue in the notebook."
+]
+```

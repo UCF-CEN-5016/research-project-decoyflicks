@@ -1,0 +1,23 @@
+TITLE
+Core Issue - Incompatibility Between TensorFlow 2.x and tf.contrib Usage
+
+SYMPTOMS
+• ModuleNotFoundError: No module named 'tensorflow.conrtib'
+• Error occurred when importing graph_matcher from tensorflow.contrib.quantize.python on exporter.py file.
+• The error is encountered during the execution of the command `python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config`.
+
+ERROR MESSAGE
+```
+ModuleNotFoundError: No module named 'tensorflow.conrtib'
+```
+
+EXPECTED BEHAVIOR
+The script should successfully import the required modules and execute without errors, allowing the model to be trained as expected.
+
+REPRODUCTION STEPS
+1. Ensure that you are using TensorFlow 2.x.
+2. Activate your environment (`source activate ML`).
+3. Run the following command: `python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobelnetv2fp/pipeline.config`.
+4. Observe the error message related to 'tensorflow.contrib'.
+
+Note: There is a typo in the pipeline configuration path, which should be `models/centernet_mobilenetv2fp/pipeline.config`.

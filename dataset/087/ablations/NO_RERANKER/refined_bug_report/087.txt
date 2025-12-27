@@ -1,0 +1,16 @@
+TITLE  
+Custom alibi position fails when `attn_flash=True` in flash attention implementation
+
+SYMPTOMS  
+• Custom alibi position results in a failure when the parameter `attn_flash` is set to `True`.  
+• The attention bias is incorrectly handled as it is assumed to be 3D instead of 4D when custom positions are provided.  
+• No specific error messages were reported, but the functionality does not work as expected.
+
+EXPECTED BEHAVIOR  
+When using custom alibi positions with the `attn_flash` parameter set to `True`, the system should correctly compute the attention bias without any failures, accommodating the 4D structure of the attention bias.
+
+REPRODUCTION STEPS  
+1. Set up the environment with the relevant code from the repository: https://github.com/lucidrains/x-transformers.  
+2. Implement custom positions for alibi.  
+3. Call the attention function with `attn_flash=True`.  
+4. Observe the failure in the attention computation.

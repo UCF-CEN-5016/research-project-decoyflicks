@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, NumPy, and Matplotlib",
+    "Set the TensorFlow version to 2.10.0 by running '!pip install tensorflow==2.10.0'",
+    "Import the Object Detection API by running '!pip install tensorflow-object-detection-api==0.1.1'",
+    "Load the TensorFlow Hub model for waste identification using tf.saved_model.load()",
+    "Prepare two sample images for inference, ensuring they are in the correct format (e.g., 640x480 pixels, RGB)",
+    "Define a function to preprocess the images: resize to (640, 640) and normalize pixel values to [0, 1]",
+    "Run inference on the two images using the loaded model and store the results in a variable",
+    "Extract the detection results: 'detection_boxes', 'detection_classes', 'detection_scores', and 'detection_masks' from the model output",
+    "Check the shape of 'detection_masks' to ensure it is compatible with the expected input dimensions",
+    "Call the function 'utils_ops.reframe_box_masks_to_image_masks()' with parameters: detection_masks, detection_boxes, image_np.shape[1], image_np.shape[2]",
+    "Capture the output of the function call and check for any exceptions",
+    "Assert that a TypeError is raised with the message 'Got an unexpected keyword argument 'box_ind''",
+    "Log the keys of the output dictionary to verify the presence of 'detection_masks' and other expected keys",
+    "Display the images and the corresponding detection results to confirm that the visualization step fails"
+]
+```

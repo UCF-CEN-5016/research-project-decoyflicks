@@ -1,0 +1,22 @@
+TITLE  
+ImportError when importing tensorflow_models due to undefined symbol in tensorflow_text
+
+SYMPTOMS  
+• ImportError occurs when attempting to import `tensorflow_models` as `tfm`.  
+• Error message:  
+  ```
+  ImportError: /usr/local/lib/python3.10/dist-packages/tensorflow_text/core/pybinds/tflite_registrar.so: undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E
+  ```  
+• The import fails without any further execution of the code, preventing access to the functionalities provided by `tensorflow_models`.  
+
+EXPECTED BEHAVIOR  
+When the software works correctly, importing `tensorflow_models` should succeed without any errors, allowing access to its functions and classes.
+
+REPRODUCTION STEPS  
+1. Ensure that the latest version of TensorFlow Model Garden and TensorFlow 2 are installed.  
+2. Attempt to import the library using the following command:  
+   ```python
+   import tensorflow_models as tfm  
+   ```  
+3. Observe the ImportError that occurs during the import process.  
+4. Review the error message for details on the undefined symbol.

@@ -1,0 +1,18 @@
+TITLE
+Invalid Choice for `--use-feature` Option in `pip install`
+
+SYMPTOMS
+• Command `python -m pip install --use-feature=2020-resolver .` results in an error message indicating that the option `--use-feature` has an invalid choice (`'2020-resolver'`).
+• The available choices for `--use-feature` are listed as `'fast-deps', 'truststore','no-binary-enable-wheel-cache'`.
+
+EXPECTED BEHAVIOR
+The command `python -m pip install --use-feature=2020-resolver .` should correctly resolve dependencies using the 2020 resolver, allowing the installation of the current directory's package.
+
+REPRODUCTION STEPS
+1. Navigate to the TensorFlow Models repository: `cd /path/to/tensorflow/models/research/object_detection`.
+2. Execute the following command:
+```
+python -m pip install --use-feature=2020-resolver .
+```
+
+Note that this command is intended to be used with a specific version of `pip` or in a particular context where the 2020 resolver is relevant, which might not be applicable or available on the current system.

@@ -1,0 +1,31 @@
+```json
+[
+    "Import necessary libraries including TensorFlow and Keras layers",
+    "Define a batch size of 64 and image dimensions of 28x28x1",
+    "Create random uniform input data with shape (batch_size, height, width, channels)",
+    "Instantiate the discriminator network using the Sequential API",
+    "Add a Conv2D layer with 64 filters, kernel size of (3, 3), strides of (2, 2), and padding 'same'",
+    "Add a LeakyReLU activation layer with alpha = 0.2",
+    "Add another Conv2D layer with 128 filters, kernel size of (3, 3), strides of (2, 2), and padding 'same'",
+    "Add another LeakyReLU activation layer with alpha = 0.2",
+    "Add a GlobalMaxPooling2D layer to flatten the output",
+    "Add a Dense layer with 1 unit for binary classification",
+    "Instantiate the generator network using the Sequential API",
+    "Add an Input layer with shape (latent_dim,)",
+    "Add a Dense layer with units = 7 * 7 * 128",
+    "Add a LeakyReLU activation layer with alpha = 0.2",
+    "Reshape the output to (7, 7, 128)",
+    "Add a Conv2DTranspose layer with 128 filters, kernel size of (4, 4), strides of (2, 2), and padding 'same'",
+    "Add another LeakyReLU activation layer with alpha = 0.2",
+    "Add another Conv2DTranspose layer with 128 filters, kernel size of (4, 4), strides of (2, 2), and padding 'same'",
+    "Add another LeakyReLU activation layer with alpha = 0.2",
+    "Add a Conv2D layer with 1 filter, kernel size of (7, 7), padding 'same', and activation 'sigmoid'",
+    "Create an instance of the GAN class, passing in the discriminator, generator, and latent_dim",
+    "Compile the GAN model using Adam optimizers for both discriminator and generator, and BinaryCrossentropy loss function",
+    "Generate random latent vectors with shape (batch_size, latent_dim)",
+    "Call the train_step method of the GAN instance with generated images",
+    "Monitor output of GAN training step to check if loss values are NaN",
+    "Assert that at least one of the loss values returned from train_step is NaN"
+]
+```
+

@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import keras, keras_nlp, numpy, random, and tensorflow",
+    "Set the random seed for reproducibility: np.random.seed(42) and random.seed(42)",
+    "Define the model parameters: set vocab_size = 10000, max_length = 20, and embedding_dim = 256",
+    "Create a dummy English sentence for testing: input_sentence = 'This is a test sentence.'",
+    "Prepare the input data: create a numpy array with shape (1, max_length) filled with random integers between 0 and vocab_size",
+    "Define the start token and pad token: start_token = np.array([[1]]), pad_token = np.array([[0]])",
+    "Concatenate start and pad tokens: prompt = np.concatenate((start_token, pad_token), axis=-1)",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and next token: generated_tokens = sampler(next, prompt, end_token_id=2)",
+    "Wrap the call in a try-except block to catch TypeError: try { generated_tokens = sampler(next, prompt, end_token_id=2) } except TypeError as e: print(e)",
+    "Run the code in a Google Colab environment with Keras version 3.2.1 and TensorFlow version 2.13",
+    "Verify that the output contains the TypeError message: 'Sampler.__call__() got an unexpected keyword argument 'end_token_id''"
+]
+```

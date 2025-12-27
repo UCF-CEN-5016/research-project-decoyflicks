@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: keras, numpy, and matplotlib",
+    "Set the Keras backend to 'jax' by setting os.environ['KERAS_BACKEND'] = 'jax'",
+    "Load the CIFAR-100 dataset using keras.datasets.cifar100.load_data()",
+    "Define the input shape as (32, 32, 3) and set num_classes to 100",
+    "Set hyperparameters: learning_rate = 0.001, weight_decay = 0.0001, batch_size = 256, num_epochs = 10, image_size = 72, patch_size = 6",
+    "Create a data augmentation pipeline using keras.Sequential with layers.Normalization(), layers.Resizing(image_size, image_size), layers.RandomFlip('horizontal'), layers.RandomRotation(factor=0.02), layers.RandomZoom(height_factor=0.2, width_factor=0.2)",
+    "Adapt the normalization layer to the training data using data_augmentation.layers[0].adapt(x_train)",
+    "Define a custom layer class Patches that takes patch_size as an argument and implements the call method to extract patches from images",
+    "In the call method of Patches, use keras.ops.image.extract_patches(images, size=self.patch_size) to extract patches",
+    "Create a function to visualize patches: define a function that takes an image, resizes it, and extracts patches using the Patches class",
+    "Select a random image from x_train using np.random.choice(range(x_train.shape[0]))",
+    "Resize the selected image to (image_size, image_size) using ops.image.resize",
+    "Convert the resized image to a tensor using ops.convert_to_tensor",
+    "Call the Patches class with the resized image tensor to extract patches",
+    "Print the shape of the patches to verify the number of patches and elements per patch",
+    "Attempt to visualize the patches using matplotlib by iterating over the patches and displaying them",
+    "Run the code cell in Google Colab to reproduce the error",
+    "Verify that the output contains the InvalidArgumentError related to Conv2D and tensor data types"
+]
+```

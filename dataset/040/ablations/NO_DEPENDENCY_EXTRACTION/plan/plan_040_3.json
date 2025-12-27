@@ -1,0 +1,22 @@
+```json
+[
+    "Clone the repository from https://github.com/labmlai/annotated_deep_learning_paper_implementations",
+    "Navigate to the directory containing the DDPM UNet implementation: labml_nn/diffusion/ddpm/",
+    "Install required dependencies using pip: pip install -r requirements.txt",
+    "Import necessary libraries: import torch, import torch.nn as nn, import torch.optim as optim",
+    "Define a batch size of 32 and image dimensions of 32x32 for CIFAR-10 dataset",
+    "Load the CIFAR-10 dataset using torchvision.datasets.CIFAR10 with train=True and transform=None",
+    "Create a DataLoader for the CIFAR-10 training set with batch_size=32 and shuffle=True",
+    "Define a simple UNet model class that includes the self-attention mechanism as described in labml_nn/diffusion/ddpm/unet.py",
+    "In the UNet class, implement the attention mechanism using torch.einsum with the current implementation: attn = attn.softmax(dim=1)",
+    "Initialize the model, loss function (e.g., nn.CrossEntropyLoss), and optimizer (e.g., optim.Adam) with learning rate 1e-3",
+    "Run a training loop for 10 epochs, iterating over the DataLoader",
+    "In each iteration, perform the following: get a batch of images and labels, zero the gradients, compute model outputs, calculate loss, and backpropagate",
+    "Log the loss value after each epoch to monitor training progress",
+    "After training, evaluate the model on the CIFAR-10 test set to obtain accuracy",
+    "Assert that the accuracy is below a certain threshold (e.g., 50%) to indicate potential issues with the attention mechanism",
+    "Modify the attention mechanism to use the proposed fix: attn = attn.softmax(dim=2)",
+    "Re-run the training loop with the modified attention mechanism for 10 epochs",
+    "Compare the accuracy of the model with the original and modified attention mechanisms to validate the bug"
+]
+```

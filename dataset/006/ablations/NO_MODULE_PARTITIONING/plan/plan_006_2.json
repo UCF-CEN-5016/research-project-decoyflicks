@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the Orbit library",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 32 and image dimensions of 512x512 for the custom dataset",
+    "Create a synthetic dataset using tf.data.Dataset.from_tensor_slices with random images and labels, ensuring the dataset has at least 100 samples",
+    "Define the model using the EfficientDet architecture with the specific configuration 'efficientdet_d1_coco17_tpu-32'",
+    "Compile the model using model.compile() with an optimizer (e.g., tf.keras.optimizers.Adam) and a loss function (e.g., tf.keras.losses.SparseCategoricalCrossentropy)",
+    "Create a SingleTaskTrainer instance with the synthetic dataset, specifying the label key, model, loss function, optimizer, and metrics",
+    "Call the train method of the SingleTaskTrainer instance to start training the model",
+    "Monitor the console output for any warnings during training, specifically looking for 'Gradients do not exist for variables' messages",
+    "Assert that the warning message appears in the console output during the training process",
+    "Check the list of trainable variables in the model to confirm that the specified variables are included in the warning message"
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras_nlp, import random, import numpy as np",
+    "Set the random seed for reproducibility: np.random.seed(42), random.seed(42)",
+    "Define the model parameters: set vocab_size = 10000, max_length = 20, embedding_dim = 256",
+    "Load the English-to-Spanish translation model from KerasNLP: model = keras_nlp.models.TranslationModel(vocab_size=vocab_size, max_length=max_length, embedding_dim=embedding_dim)",
+    "Prepare a test dataset: create a list of English sentences: test_eng_texts = ['Hello', 'How are you?', 'What is your name?', 'I love programming.', 'This is a test.']",
+    "Define a function decode_sequences(input_sentences) that takes a list of input sentences and returns translated sequences",
+    "Inside decode_sequences, create a prompt tensor: start = tf.constant([[1]]) (assuming 1 is the start token ID), pad = tf.constant([[0]]) (assuming 0 is the padding token ID)",
+    "Concatenate start and pad tensors: prompt = tf.concat([start, pad], axis=-1)",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt: generated_tokens = sampler(next, prompt, end_token_id=2) (assuming 2 is the end token ID)",
+    "Run a loop to test the translation: for i in range(2): input_sentence = random.choice(test_eng_texts), translated = decode_sequences([input_sentence])",
+    "Capture the output of decode_sequences and print it to verify the translation",
+    "Run the code in a Google Colab environment with Keras version 3.2.1 and TensorFlow version compatible with KerasNLP",
+    "Verify that the TypeError occurs: assert that the output contains 'TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id''"
+]
+```

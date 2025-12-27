@@ -1,0 +1,18 @@
+```json
+[
+    "Install TensorFlow 2.8.0 using pip if not already installed: !pip install tensorflow==2.8.0",
+    "Install the latest version of TensorFlow Model Garden from GitHub using git clone: git clone https://github.com/tensorflow/models.git",
+    "Navigate to the official directory containing the SingleTaskTrainer.py file: cd models/official/research/orbit/examples/single_task/",
+    "Ensure all required dependencies are installed for the project. You can use a requirements.txt if available or install manually.",
+    "Import TensorFlow, TensorFlow Models (tfm), and any other necessary libraries",
+    "Create a mock `train_dataset` using `tf.data.Dataset.from_tensor_slices` with at least one example element",
+    "Define a mock model that takes an input dictionary and returns an output tensor",
+    "Set up a mock loss function that calculates the loss between target and predicted values",
+    "Initialize an instance of `SingleTaskTrainer` with the created dataset, label key, model, loss function, optimizer, and metrics (if any)",
+    "Call the `train_loop_begin` method on the trainer instance to reset states",
+    "Call the `train_step` method once on the trainer instance using a mock iterator that yields a batch of data from the mock dataset",
+    "Verify that an ImportError occurs with the message `/usr/local/lib/python3.10/dist-packages/tensorflow_text/core/pybinds/tflite_registrar.so: undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E`",
+    "Capture the error message and assert it matches the expected error string"
+]
+```
+

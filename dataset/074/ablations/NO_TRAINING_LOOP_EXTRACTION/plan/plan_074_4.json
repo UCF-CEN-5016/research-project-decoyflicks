@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, numpy, and the actor loss function from the relevant module.",
+    "Define a batch size of 4 and sequence length of 10 for the input data.",
+    "Create random tensor data for actor_log_prob with shape (batch_size, sequence_length) filled with values from a normal distribution.",
+    "Create random tensor data for log_probs with shape (batch_size, sequence_length) filled with values from a normal distribution.",
+    "Create random tensor data for advantages with shape (batch_size) filled with values from a normal distribution.",
+    "Create a tensor for action_mask with shape (batch_size, sequence_length) where the first 9 elements are 1s and the last element is 0 (to simulate the 'eos' token).",
+    "Set the start variable to 1 to simulate the starting index for the loss calculation.",
+    "Calculate actor_loss using the actor_loss_fn with the created tensors: actor_loss = actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:]).",
+    "Print the calculated actor_loss to observe the output.",
+    "Modify the action_mask to use the proposed mask: action_mask_modified = action_mask[:, start-1:-1].",
+    "Recalculate actor_loss using the modified action_mask: actor_loss_modified = actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask_modified).",
+    "Print the modified actor_loss to observe the output.",
+    "Compare the original actor_loss and modified actor_loss to check if they differ, indicating the bug.",
+    "Assert that the original actor_loss is not equal to the modified actor_loss to confirm the bug exists."
+]
+```

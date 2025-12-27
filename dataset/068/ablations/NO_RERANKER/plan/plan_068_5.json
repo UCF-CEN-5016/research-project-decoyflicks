@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: keras, keras_cv, numpy, matplotlib, and cv2",
+    "Set up the environment to use a GPU in Google Colab Pro by ensuring runtime type is set to GPU",
+    "Define image size as 224 and patch size as 32",
+    "Download and extract the Caltech 101 dataset using keras.utils.get_file and shutil.unpack_archive",
+    "Prepare the dataset by loading images and annotations, ensuring images are resized to (224, 224) and bounding boxes are normalized",
+    "Split the dataset into training (80%) and testing (20%) sets, ensuring x_train and y_train are numpy arrays with shapes (num_samples, 224, 224, 3) and (num_samples, 4) respectively",
+    "Define the model architecture using create_vit_object_detector with input_shape=(224, 224, 3), patch_size=32, num_patches=64, projection_dim=64, num_heads=4, transformer_units=[128, 64], transformer_layers=4, mlp_head_units=[2048, 1024]",
+    "Compile the model using AdamW optimizer with learning_rate=0.001 and weight_decay=0.0001, and MeanSquaredError loss function",
+    "Set batch_size to 32 and num_epochs to 3 for training",
+    "Train the model using model.fit with x_train, y_train, batch_size=32, epochs=3, and validation_split=0.1",
+    "Monitor the training process to capture the output of the first epoch, specifically looking for loss values",
+    "Assert that the training process raises an UnknownError during the first epoch, specifically checking for the InvalidArgumentError related to ConcatOp",
+    "Log the error message to verify it matches the expected output: 'Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]'"
+]
+```

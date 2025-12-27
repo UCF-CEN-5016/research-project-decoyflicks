@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from object_detection.utils and object_detection.protos",
+    "Set the TensorFlow version to 2.12 and ensure compatibility with CUDA 8.6",
+    "Define the path to the pipeline.config file as 'path/to/pipeline.config'",
+    "Load the pipeline configuration using config_util.get_configs_from_pipeline_file(configpath)",
+    "Create an instance of pipeline_pb2.TrainEvalPipelineConfig()",
+    "Read the contents of the pipeline.config file using tf.io.gfile.GFile(configpath, 'r')",
+    "Merge the contents of the pipeline.config file into the pipeline_config using text_format.Merge(proto_str, pipeline_config)",
+    "Attempt to set pipeline_config.eval_input_reader.max_number_of_boxes to 500",
+    "Catch the AttributeError exception when setting max_number_of_boxes and print the error message",
+    "Verify that the error message contains 'AttributeError: 'google.protobuf.pyext._message.RepeatedCompositeContainer' object has no attribute 'max_number_of_boxes'",
+    "Check the current value of pipeline_config.eval_input_reader.max_number_of_boxes to confirm it defaults to 100",
+    "Add the following lines to the pipeline_config to ensure all necessary configurations are included: pipeline_config.train_config.max_number_of_boxes = 500, pipeline_config.eval_config.max_num_boxes_to_visualize = 500, pipeline_config.eval_config.num_visualizations = 500, pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_detections_per_class = 500, pipeline_config.model.faster_rcnn.second_stage_post_processing.batch_non_max_suppression.max_total_detections = 500, pipeline_config.model.faster_rcnn.first_stage_max_proposals = 500",
+    "Train the model using a dataset containing images with over 100 objects per image for 270K steps",
+    "Monitor the training accuracy and confirm it does not exceed 0.04",
+    "Log the training steps and confirm that the model does not converge with the default max_number_of_boxes setting",
+    "Validate that the model's performance improves when the max_number_of_boxes is set directly in the pipeline.config file instead of through the protobuf object"
+]
+```

@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Ensure that PyTorch and DeepSpeed are installed with the correct versions compatible with your CUDA version",
+    "Create a new Python script named 'test_deepspeed_domino.py'",
+    "Import necessary libraries in 'test_deepspeed_domino.py': 'import torch', 'import deepspeed', 'from domino.optimizer.optimizer import MixedPrecisionOptimizer'",
+    "Define a batch size of 8 and model dimensions for GPT-3 (2.7B parameters) in 'test_deepspeed_domino.py': 'batch_size = 8', 'model_dim = 256'",
+    "Initialize a dummy model with 2.7B parameters using 'model = torch.nn.Transformer(d_model=model_dim, nhead=8, num_encoder_layers=12, num_decoder_layers=12)'",
+    "Create random input data with shape (batch_size, sequence_length, model_dim) using 'input_data = torch.randn(batch_size, 512, model_dim)'",
+    "Define a dummy optimizer using 'optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)'",
+    "Initialize the MixedPrecisionOptimizer with the dummy optimizer and model: 'mixed_precision_optimizer = MixedPrecisionOptimizer(optimizer, clip_grad=0.0, log_num_zeros_in_grad=False, params_have_main_grad=True, use_contiguous_buffers_in_local_ddp=False, fp16=False, bf16=False, params_dtype=torch.float32, grad_scaler=None, models=[model])'",
+    "Run the training loop for one iteration: 'for epoch in range(1):', 'optimizer.zero_grad()', 'output = model(input_data)', 'loss = output.mean()', 'loss.backward()', 'mixed_precision_optimizer.step()'",
+    "Add a try-except block around the training loop to catch exceptions: 'try: ... except AttributeError as e: print(e)'",
+    "Run the script using 'python test_deepspeed_domino.py'",
+    "Verify that the output contains the error message: 'AttributeError: 'NoneType' object has no attribute 'all_reduce''",
+    "Check the initialization of the 'cdb' object in the MixedPrecisionOptimizer to confirm it is not set correctly"
+]
+```

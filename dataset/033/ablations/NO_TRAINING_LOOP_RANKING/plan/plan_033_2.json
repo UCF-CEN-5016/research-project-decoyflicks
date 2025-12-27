@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torch.optim, and the SE3TransformerPooled class from the SE3-Transformer package.",
+    "Set the random seed for reproducibility using torch.manual_seed(42).",
+    "Define a batch size of 32 and set NODE_FEATURE_DIM to 6.",
+    "Create a synthetic dataset for the QM9 dataset with 8910 samples, where each sample has 6 node features (shape: (8910, 6)).",
+    "Modify the node features extraction in data_loading/qm9.py to split the features into two types: node_feats = {'0': synthetic_data[:, :5, None], '1': synthetic_data[:, 5:6, None]}.",
+    "Define the model parameters: num_degrees = 3, num_channels = 64, and set args.amp to False.",
+    "Instantiate the SE3TransformerPooled model with fiber_in=Fiber({0: 5, 1: 1}), fiber_out=Fiber({0: num_degrees * num_channels}), fiber_edge=Fiber({0: 6}), output_dim=1.",
+    "Create a DataLoader for the synthetic dataset with batch size 32.",
+    "Run a training loop for one epoch, iterating over the DataLoader.",
+    "In each iteration, pass the batch of node features to the model and capture the output.",
+    "Verify that the output tensor shape matches the expected shape of [batch_size, output_dim] which should be [32, 192] (since num_degrees * num_channels = 3 * 64).",
+    "Assert that the model raises a RuntimeError when the output tensor shape does not match the expected shape, specifically checking for the error message: 'Expected size for first two dimensions of batch2 tensor to be: [8910, 1] but got: [8910, 3]'.",
+    "Log the error message to confirm that the bug is reproduced."
+]
+```

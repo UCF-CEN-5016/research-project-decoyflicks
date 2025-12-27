@@ -1,0 +1,23 @@
+TITLE  
+Conflict between `qk_norm` and `kv_heads` in x-transformers
+
+SYMPTOMS  
+• When using `qk_norm` in conjunction with `kv_heads` not equal to `heads`, unexpected behavior occurs.  
+• The model fails to train properly, leading to incorrect outputs.  
+• There is a potential dimension mismatch error when initializing parameters.  
+
+EXPECTED BEHAVIOR  
+The software should correctly handle the configuration of `qk_norm` and `kv_heads`, allowing for `kv_heads` to differ from `heads` without causing conflicts or errors in parameter initialization.
+
+REPRODUCTION STEPS  
+1. Set `kv_heads` to a value different from `heads` in your model configuration.  
+2. Enable `qk_norm` in the model settings.  
+3. Attempt to train the model and observe the behavior or error messages.  
+4. Review the initialization of parameters in the specified line of the code.  
+
+Proposed Code Change:  
+Change the initialization line in `x_transformers.py` from:  
+`self.qk_norm_k_scale = nn.Parameter(torch.ones(1, 1, dim_head))`  
+to:  
+`self.qk_norm_k_scale = nn.Parameter(torch.ones(kv_heads, 1, dim_head))`  
+This adjustment should resolve the conflict and ensure proper functioning when using both features together.

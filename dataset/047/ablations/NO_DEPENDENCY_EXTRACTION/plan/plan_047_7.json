@@ -1,0 +1,18 @@
+```json
+[
+    "Ensure Python 3.7 or higher is installed on your system.",
+    "Install the required dependencies by running 'pip install fairseq torch soundfile'.",
+    "Download the MMS ASR model file 'mms1b_all.pt' and place it in the directory '../fairseq_resource/'.",
+    "Prepare a directory '/Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/' and place 10 audio files named '1089-134686-0000.wav' to '1089-134686-0009.wav' in it.",
+    "Ensure the audio files are in a compatible format (e.g., WAV) and have valid audio data.",
+    "Create a Python script named 'reproduce_bug.py'.",
+    "In 'reproduce_bug.py', import the necessary libraries: 'import subprocess', 'import os', 'import re', 'import tempfile', 'from pathlib import Path'.",
+    "Define a function 'run_inference()' that will execute the inference command.",
+    "Inside 'run_inference()', set the command string to: 'python -u examples/mms/asr/infer/mms_infer.py --model ../fairseq_resource/mms1b_all.pt --lang eng --audio /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0000.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0001.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0002.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0003.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0004.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0005.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0006.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0007.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0008.wav /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0009.wav'.",
+    "Use 'subprocess.run()' to execute the command and capture the output.",
+    "Print the output to the console to verify the inference results.",
+    "Run the script by executing 'python reproduce_bug.py' in the terminal.",
+    "Check the output logs for the order of the inference results and compare them with the expected order based on the input audio files.",
+    "Assert that the order of the output logs does not match the order of the input audio files, indicating the bug is present."
+]
+```

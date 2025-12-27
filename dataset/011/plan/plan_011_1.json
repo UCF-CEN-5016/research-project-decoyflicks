@@ -1,0 +1,19 @@
+```json
+[
+    "Install TensorFlow 2.6.3 and Python 3.8 on a local machine with CUDA 11.8 and cuDNN 8.5 installed",
+    "Clone the TensorFlow repository from GitHub and checkout the branch containing version 2.6.3",
+    "Navigate to the directory 'orbit/examples/single_task'",
+    "Create a new Python file named `bug_reproducer.py` in this directory",
+    "Import the required modules: `import tensorflow as tf`, `import orbit`, `from orbit.examples.single_task import SingleTaskTrainer`",
+    "Define constants for batch size (640583), learning rate (0.01), and number of classes (e.g., 1000)",
+    "Create a synthetic dataset function that generates random input data with dimensions `(batch_size, height, width, 3)` where `height` and `width` are appropriate for the model",
+    "Define a simple model using Keras such as a Sequential model with several layers (e.g., Conv2D, Dense) suitable for image classification",
+    "Create an instance of `SingleTaskTrainer`, passing the synthetic dataset, label key, model, loss function (`tf.keras.losses.SparseCategoricalCrossentropy`), optimizer (`tf.keras.optimizers.SGD`), and metrics (`tf.keras.metrics.SparseCategoricalAccuracy`)",
+    "In a loop that runs 100 times (to match `trainer_options.train_steps`), call the `train_step` method of the trainer instance",
+    "Monitor the training process to verify if there are any NaN values in the loss calculation or gradients during any iteration",
+    "Add code to capture GPU memory usage at the start and end of the training loop",
+    "Assert that the peak GPU memory usage exceeds a certain threshold (e.g., 10GB) to indicate a potential memory overflow issue",
+    "Run the `bug_reproducer.py` script on a machine with a compatible GPU"
+]
+```
+

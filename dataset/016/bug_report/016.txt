@@ -1,0 +1,57 @@
+Tensorflow2 Multi worker mirrored strategy is not scaling for GPUS 
+
+Hello all,
+ I am using the  TensorFlow Model Garden release and TensorFlow 2.11 gpu
+While executing Resnet50 code https://github.com/tensorflow/models/blob/master/official/legacy/image_classification/classifier_trainer.py , it was noticed that throughput doesn't increase even after running it on multinode multigpu in our cluster.
+
+Steps followed
+
+1)salloc --nodes=2  --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive 
+
+ In gpu1
+
+cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+source /home/apps/anaconda3/bin/activate && \
+conda activate tf11
+
+python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR  --config_file=configs/examples/resnet/imagenet/gpu.yaml
+
+gpu.yaml consists of
+
+
+runtime:
+  distribution_strategy: 'multi_worker_mirrored'
+  worker_hosts: 'ip1:6655,ip2:6655'
+  num_gpus: 2
+  task_index: 0
+
+In gpu2
+
+cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+source /home/apps/anaconda3/bin/activate && \
+conda activate tf11
+
+python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR  --config_file=configs/examples/resnet/imagenet/gpu1.yaml
+
+gpu1.yaml consists of
+
+runtime:
+  distribution_strategy: 'multi_worker_mirrored'
+  worker_hosts: 'ip1:6655,ip2:6655'
+  num_gpus: 2
+  task_index: 1
+
+ System information
+- OS Platform  centos 7):
+- tensorflow-gpu 2.11.0
+- Python version: 3.9.7
+- CUDA/cuDNN version:
+- GPU model and memory:Tesla V100-SXM2 with 16 GB memory with Driver Version: 450.51.05    CUDA Version: 11.0  
+
+execution on single gpu is giving approx. 270 examples/sec and is scaling well on the gpus within the node giving approximately 700 samples/sec with 2 gpus in single node with mirrored strategy , However it is not scaling on different nodes ,the throughput is same as that of a single gpu , am i reading the logs wrong can you please guide me on this if I'm doing anything wrong .

@@ -1,0 +1,21 @@
+```json
+[
+    "Import TensorFlow version 2.13.0 and Keras layers from tensorflow.keras",
+    "Import the Faster R-CNN model definition from delf.python.training.model.delf_model",
+    "Import tf.test.TestCase and parameterized from absl.testing.parameterized",
+    "Set the seed for random number generation to 0 for reproducibility",
+    "Define a batch size of 2 and image dimensions of 321x321",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Initialize the Faster R-CNN model with block3_strides set to False and num_classes set to 1000",
+    "Define labels for training as random integers between 0 and num_classes - 1",
+    "Set up a learning rate of 0.001 and momentum of 0.9 for the SGD optimizer",
+    "Call the global_and_local_forward_pass method with the input images to generate predictions",
+    "Compute the loss using SparseCategoricalCrossentropy on descriptor logits and attention logits",
+    "Verify that desc_loss is a floating-point tensor without NaN values",
+    "Compute gradients of total_loss with respect to model trainable weights",
+    "Clip gradients using tf.clip_by_global_norm with clip_norm set to 10.0",
+    "Apply the clipped gradients to the model's trainable weights using the optimizer",
+    "Assert that desc_prelogits and attn_prelogits have shapes (batch_size, 2048) and (batch_size, 1024) respectively"
+]
+```
+

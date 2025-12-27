@@ -1,0 +1,91 @@
+Error occurred in the Named Entity Recognition using Transformers example
+
+### Issue Type
+
+Bug
+
+### Source
+
+source
+
+### Keras Version
+
+Keras 3.1.0.dev2024031303
+
+### Custom Code
+
+No
+
+### OS Platform and Distribution
+
+_No response_
+
+### Python version
+
+_No response_
+
+### GPU model and memory
+
+Colab T4
+
+### Current Behavior?
+
+A bug happened in the ner_model.fit part!
+
+```
+ner_model.compile(optimizer="adam", loss=loss)
+ner_model.fit(train_dataset, epochs=10)
+
+
+def tokenize_and_convert_to_ids(text):
+    tokens = text.split()
+    return lowercase_and_convert_to_ids(tokens)
+
+
+# Sample inference using the trained model
+sample_input = tokenize_and_convert_to_ids(
+    "eu rejects german call to boycott british lamb"
+)
+sample_input = tf.reshape(sample_input, shape=[1, -1])
+print(sample_input)
+
+output = ner_model.predict(sample_input)
+prediction = np.argmax(output, axis=-1)[0]
+prediction = [mapping[i] for i in prediction]
+
+# eu -> B-ORG, german -> B-MISC, british -> B-MISC
+print(prediction)
+```
+
+Output showing like this 
+
+```
+OperatorNotAllowedInGraphError: Exception encountered when calling Softmax.call().
+
+Using a symbolic `tf.Tensor` as a Python `bool` is not allowed. You can attempt the following resolutions to the problem: If you are running in Graph mode, use Eager execution mode or decorate this function with @tf.function. If you are using AutoGraph, you can try decorating this function with @tf.function. If that does not work, then you may be using an unsupported feature or your source code may not be visible to AutoGraph. See https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/autograph/g3doc/reference/limitations.md#access-to-source-code for more information.
+
+Arguments received by Softmax.call():
+  • inputs=tf.Tensor(shape=(None, 4, None, None), dtype=float32)
+  • mask=None
+```
+
+For model training, I anticipate that ```model.fit``` will function properly and error-free. But the error happened.
+
+### Standalone code to reproduce the issue or tutorial link
+
+```shell
+Here is an executable Colab link to reproduce the error: https://colab.research.google.com/drive/1WtG-3b78mJHppCptt_GwNKR97KiR_FwU?usp=sharing
+```
+
+
+### Relevant log output
+
+```shell
+OperatorNotAllowedInGraphError: Exception encountered when calling Softmax.call().
+
+Using a symbolic `tf.Tensor` as a Python `bool` is not allowed. You can attempt the following resolutions to the problem: If you are running in Graph mode, use Eager execution mode or decorate this function with @tf.function. If you are using AutoGraph, you can try decorating this function with @tf.function. If that does not work, then you may be using an unsupported feature or your source code may not be visible to AutoGraph. See https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/autograph/g3doc/reference/limitations.md#access-to-source-code for more information.
+
+Arguments received by Softmax.call():
+  • inputs=tf.Tensor(shape=(None, 4, None, None), dtype=float32)
+  • mask=None
+```

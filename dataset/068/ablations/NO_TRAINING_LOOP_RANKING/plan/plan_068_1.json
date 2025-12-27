@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, gdown, matplotlib, and functools",
+    "Set the random seed for reproducibility using tf.random.set_seed(42)",
+    "Define a batch size of 16 and image dimensions of 640x640 for the YOLOv8 model",
+    "Download the COCO dataset using gdown and extract it to a specified directory",
+    "Create a training dataset using keras.utils.image_dataset_from_directory with the extracted COCO dataset, setting label_mode='int', image_size=(640, 640), and batch_size=16",
+    "Create a validation dataset using keras.utils.image_dataset_from_directory with the same parameters as the training dataset but pointing to a validation subset",
+    "Initialize the YOLOv8 model using keras_cv.models.YOLOv8 with appropriate parameters for the COCO dataset",
+    "Compile the YOLOv8 model with an optimizer (e.g., Adam) and a loss function suitable for object detection",
+    "Define a custom callback EvaluateCOCOMetricsCallback to evaluate COCO metrics at the end of each epoch",
+    "Call the fit method on the YOLOv8 model with the training dataset, validation dataset, epochs=3, and the custom callback",
+    "Monitor the training process and wait for the first epoch to complete",
+    "Capture the output logs during training to check for any errors",
+    "Verify that the UnknownError occurs after the first epoch, specifically looking for the InvalidArgumentError related to ConcatOp",
+    "Check the shapes of the tensors involved in the error message: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]",
+    "Assert that the error message contains 'UnknownError' and 'InvalidArgumentError' to confirm the bug is reproduced"
+]
+```

@@ -1,0 +1,30 @@
+```json
+[
+    "Clone the DeepSpeedExamples repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeedExamples.git'",
+    "Navigate to the training directory using 'cd DeepSpeedExamples/training/DeepSpeed-Domino'",
+    "Create a conda environment named 'deepspeed_env' using 'conda create -n deepspeed_env python=3.12'",
+    "Activate the conda environment using 'conda activate deepspeed_env'",
+    "Install required packages including DeepSpeed and PyTorch using 'pip install deepspeed torch torchvision'",
+    "Load necessary modules for the SLURM job using 'module load openmpi/4.1.1', 'module load cuda/11.8.0', and 'module load gcc/10.2.0'",
+    "Create a dataset directory at 'dataset/' and place a text document named 'my-gpt2_text_document' inside it",
+    "Create a vocabulary file 'gpt2-vocab.json' and a merges file 'gpt2-merges.txt' in the 'dataset/' directory",
+    "Create a job script named 'deepspeed_example.sh' with the provided SLURM configuration",
+    "Set the environment variable 'CUDA_DEVICE_MAX_CONNECTIONS' to 1 in the job script",
+    "Set 'GPUS_PER_NODE' to 1 in the job script to limit the number of GPUs used",
+    "Set 'MASTER_ADDR' to the first hostname from the SLURM job node list using 'MASTER_ADDR=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)'",
+    "Set 'MASTER_PORT' to 29500 in the job script",
+    "Set 'NNODES' to the number of nodes in the SLURM job using 'NNODES=$SLURM_NNODES'",
+    "Set 'NODE_RANK' to the process ID in the SLURM job using 'NODE_RANK=$SLURM_PROCID'",
+    "Calculate 'WORLD_SIZE' as the product of 'GPUS_PER_NODE' and 'NNODES'",
+    "Create a checkpoint path variable 'CHECKPOINT_PATH=checkpoint' and remove any existing files in that directory using 'rm -rf $CHECKPOINT_PATH/*'",
+    "Define the GPT arguments with specific hyperparameters including '--num-layers 12', '--hidden-size 2560', '--num-attention-heads 32', '--seq-length 512', '--max-position-embeddings 512', '--micro-batch-size 32', '--global-batch-size 64', '--lr 0.00015', '--train-iters 10', '--lr-decay-iters 320000', '--lr-decay-style cosine', '--min-lr 1.0e-5', '--weight-decay 1e-2', '--lr-warmup-fraction .01', '--clip-grad 1.0', '--fp16', '--tensor-model-parallel-size $GPUS_PER_NODE', '--distributed-backend nccl', '--seed 3407'",
+    "Define the data arguments with paths to the dataset files using '--data-path $DATA_PATH', '--vocab-file $VOCAB_FILE', '--merge-file $MERGE_FILE', '--split 949,50,1'",
+    "Define output arguments with '--log-interval 1'",
+    "Construct the command to run the training script using 'cmd=\"deepspeed --num_gpus $GPUS_PER_NODE --num_nodes $NNODES --hostfile='/users/zhu/DistributedSysLab_FS24/deepspeed_example/myhostfile' --no_ssh --node_rank=$NODE_RANK --master_addr=$MASTER_ADDR --master_port=$MASTER_PORT pretrain_gpt.py $GPT_ARGS $DATA_ARGS $OUTPUT_ARGS\"'",
+    "Echo the command to verify it is constructed correctly using 'echo $cmd'",
+    "Execute the command using 'eval $cmd'",
+    "Monitor the output for warnings related to 'using GPU 0 to perform barrier as devices used by this process are currently unknown'",
+    "Check for the specific error message 'AttributeError: 'NoneType' object has no attribute 'all_reduce'' in the output",
+    "Validate that the script fails with the expected error message indicating a problem with the GPU mapping and DeepSpeed initialization"
+]
+```

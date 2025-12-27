@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the inception module from inception_train.py",
+    "Set the batch size to 32 and image dimensions to 299x299",
+    "Define the number of epochs to 100 and the learning rate to 0.1",
+    "Create a random uniform input dataset with shape (batch_size, height, width, 3) where height and width are 299",
+    "Create a random label array with shape (batch_size,) containing integer values from 0 to 9 (for MNIST classes)",
+    "Set the number of GPUs to 1 by defining FLAGS.num_gpus = 1",
+    "Set the training directory to a temporary path by defining FLAGS.train_dir = '/tmp/mnist_train'",
+    "Set the maximum steps to 1000 by defining FLAGS.max_steps = 1000",
+    "Define the learning rate decay parameters: FLAGS.num_epochs_per_decay = 30.0 and FLAGS.learning_rate_decay_factor = 0.16",
+    "Call the train function with the dataset created above",
+    "During training, monitor the loss value after each step",
+    "Assert that the loss value becomes NaN after a certain number of epochs (e.g., after 10 epochs)",
+    "Log GPU memory usage before and during training to verify it exceeds 10G",
+    "Assert that the GPU memory usage is greater than 10G during the training process"
+]
+```

@@ -1,0 +1,15 @@
+```json
+[
+    "Import torch and the espnet_multihead_attention module from fairseq",
+    "Define a batch size of 2 and input dimensions of 10 for the multi-headed attention layer",
+    "Create a random tensor for input with shape (batch_size, seq_length, embed_dim) where seq_length=10 and embed_dim=10",
+    "Create a random tensor for the key with shape (batch_size, seq_length, embed_dim)",
+    "Create a random tensor for the value with shape (batch_size, seq_length, embed_dim)",
+    "Instantiate the RelPositionMultiHeadedAttention class from espnet_multihead_attention.py with num_heads=2 and embed_dim=10",
+    "Call the forward method of the instantiated attention layer with the input, key, and value tensors",
+    "Capture the output of the forward method",
+    "Check the bias parameters (u, v) of the attention layer by accessing the attributes directly after the forward call",
+    "Verify that the bias parameters (u, v) contain uninitialized values by checking if any of the values are NaN or extremely small",
+    "Assert that the output of the forward method does not produce valid attention scores due to the uninitialized bias parameters"
+]
+```

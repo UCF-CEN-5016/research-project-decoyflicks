@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, json, os, and any other required modules.",
+    "Set the DEVICE variable to 'cuda' if a GPU is available, otherwise set it to 'cpu'.",
+    "Define the SAMPLING_FREQ variable to match the sample rate of the audio file, e.g., 16000.",
+    "Define the EMISSION_INTERVAL variable to specify the duration of each audio segment processed, e.g., 1.0 seconds.",
+    "Create a dummy audio file named 'audio.wav' with a sample rate of 16000 Hz and a duration of at least 5 seconds.",
+    "Create a text file named 'text.txt' containing a single line of text that corresponds to the audio, e.g., 'This is a test transcription'.",
+    "Clone the repository from the provided commit link to ensure the code matches the state when the bug was reported.",
+    "Navigate to the directory containing 'align_and_segment.py'.",
+    "Run the command: python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang udm --outdir output --uroman uroman/bin.",
+    "Capture the output of the command to check for errors.",
+    "Verify that the output contains the error message: 'RuntimeError: log_probs must be 3-D (batch_size, input length, num classes)'.",
+    "Check the shape of the emissions tensor before the forced alignment step by adding a print statement in the generate_emissions function.",
+    "Assert that the shape of the emissions tensor is not 3-D before the forced alignment call, which should trigger the bug."
+]
+```

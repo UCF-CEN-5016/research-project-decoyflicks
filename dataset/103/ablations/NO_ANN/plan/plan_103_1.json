@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and vector_quantize_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 2 and input dimensions of (3700, 14)",
+    "Create random input data with shape (batch_size, 3700, 14) using torch.randn",
+    "Define a mask tensor with shape (2, 1851, 1, 14) filled with boolean values (True/False) to simulate masking",
+    "Instantiate the ResidualLFQ model from vector_quantize_pytorch with parameters: dim=14, codebook_size=256, commitment_loss_weight=1.0",
+    "Call the forward method of the ResidualLFQ model with the input data and the mask tensor",
+    "Capture the output of the forward method, which should include the quantized output and auxiliary loss",
+    "Check for the UserWarning in the output indicating a shape mismatch: 'Using a target size (torch.Size([2, 1851, 1, 14])) that is different to the input size (torch.Size([3700, 14]))'",
+    "Assert that the captured output contains the UserWarning to confirm the bug is reproduced",
+    "Print the shapes of the original input and quantized output to verify the mismatch: original_input.shape and quantized.shape"
+]
+```

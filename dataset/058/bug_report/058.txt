@@ -1,0 +1,126 @@
+Retina Net model Fit error
+
+Trying to do the same thing, but with my own dataset (data was structured as noted in the demo) as in https://keras.io/guides/keras_cv/object_detection_keras_cv/, I get the following error: 
+
+
+```python
+---------------------------------------------------------------------------
+InvalidArgumentError                      Traceback (most recent call last)
+Cell In[306], line 1
+----> 1 model.fit(
+      2     train_ds.take(20),
+      3     validation_data=eval_ds.take(20),
+      4     # Run for 10-35~ epochs to achieve good scores.
+      5     epochs=1,
+      6     callbacks=[EvaluateCOCOMetricsCallback(eval_ds.take(20))],
+      7 )
+
+File ~\anaconda3\Lib\site-packages\keras\src\utils\traceback_utils.py:70, in filter_traceback.<locals>.error_handler(*args, **kwargs)
+     67     filtered_tb = _process_traceback_frames(e.__traceback__)
+     68     # To get the full stack trace, call:
+     69     # `tf.debugging.disable_traceback_filtering()`
+---> 70     raise e.with_traceback(filtered_tb) from None
+     71 finally:
+     72     del filtered_tb
+
+File ~\anaconda3\Lib\site-packages\tensorflow\python\eager\execute.py:60, in quick_execute(op_name, num_outputs, inputs, attrs, ctx, name)
+     53   # Convert any objects of type core_types.Tensor to Tensor.
+     54   inputs = [
+     55       tensor_conversion_registry.convert(t)
+     56       if isinstance(t, core_types.Tensor)
+     57       else t
+     58       for t in inputs
+     59   ]
+---> 60   tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,
+     61                                       inputs, attrs, num_outputs)
+     62 except core._NotOkStatusException as e:
+     63   if name is not None:
+
+InvalidArgumentError: Graph execution error:
+
+Detected at node retina_net_label_encoder_18/GatherV2_1 defined at (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\ipykernel_launcher.py", line 17, in <module>
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\traitlets\config\application.py", line 992, in launch_instance
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\ipykernel\kernelapp.py", line 736, in start
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\tornado\platform\asyncio.py", line 195, in start
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\asyncio\base_events.py", line 607, in run_forever
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\asyncio\base_events.py", line 1922, in _run_once
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\asyncio\events.py", line 80, in _run
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\ipykernel\kernelbase.py", line 516, in dispatch_queue
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\ipykernel\kernelbase.py", line 505, in process_one
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\ipykernel\kernelbase.py", line 412, in dispatch_shell
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\ipykernel\kernelbase.py", line 740, in execute_request
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\ipykernel\ipkernel.py", line 422, in do_execute
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\ipykernel\zmqshell.py", line 546, in run_cell
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\IPython\core\interactiveshell.py", line 3024, in run_cell
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\IPython\core\interactiveshell.py", line 3079, in _run_cell
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\IPython\core\async_helpers.py", line 129, in _pseudo_sync_runner
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\IPython\core\interactiveshell.py", line 3284, in run_cell_async
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\IPython\core\interactiveshell.py", line 3466, in run_ast_nodes
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\IPython\core\interactiveshell.py", line 3526, in run_code
+
+  File "C:\Users\ors-intern-5\AppData\Local\Temp\ipykernel_8296\3445135969.py", line 1, in <module>
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\utils\traceback_utils.py", line 65, in error_handler
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\engine\training.py", line 1783, in fit
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\engine\training.py", line 1377, in train_function
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\engine\training.py", line 1360, in step_function
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\engine\training.py", line 1349, in run_step
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\models\object_detection\retinanet\retinanet.py", line 468, in train_step
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\engine\training.py", line 1127, in train_step
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\models\object_detection\retinanet\retinanet.py", line 408, in compute_loss
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\utils\traceback_utils.py", line 65, in error_handler
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\engine\base_layer.py", line 1149, in __call__
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras\src\utils\traceback_utils.py", line 96, in error_handler
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\models\object_detection\retinanet\retinanet_label_encoder.py", line 216, in call
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\models\object_detection\retinanet\retinanet_label_encoder.py", line 138, in _encode_sample
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\utils\target_gather.py", line 116, in _target_gather
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\utils\target_gather.py", line 118, in _target_gather
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\utils\target_gather.py", line 119, in _target_gather
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\utils\target_gather.py", line 87, in _gather_batched
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_cv\utils\target_gather.py", line 104, in _gather_batched
+
+  File "C:\Users\ors-intern-5\anaconda3\Lib\site-packages\keras_core\src\backend\tensorflow\numpy.py", line 673, in take_along_axis
+
+indices[3,63949] = 0 is not in [0, 0)
+	 [[{{node retina_net_label_encoder_18/GatherV2_1}}]] [Op:__inference_train_function_411270]
+```

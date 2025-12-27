@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: tensorflow as tf, numpy as np, and keras",
+    "Define a batch size of 1 and set the input shape for the NER model to (1, 9) where 9 is the number of tokens in the input sentence",
+    "Create a function 'tokenize_and_convert_to_ids' that takes a string input and returns a list of integers representing token IDs, ensuring the output length is 9 for the input 'eu rejects german call to boycott british lamb'",
+    "Load the trained NER model using keras.models.load_model with the path 'path_to_my_model' and custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()}, compile=False",
+    "Convert the loaded model to TFLite format using tf.lite.TFLiteConverter.from_saved_model and save it to 'model.tflite'",
+    "Initialize a TFLite interpreter with the converted model using tf.lite.Interpreter(model_path='model.tflite')",
+    "Allocate tensors for the interpreter using interpreter.allocate_tensors()",
+    "Get the input and output tensor indices using interpreter.get_input_details() and interpreter.get_output_details()",
+    "Prepare the sample input by calling 'tokenize_and_convert_to_ids' with the string 'eu rejects german call to boycott british lamb' and ensure the output is a list of length 9",
+    "Set the input tensor using interpreter.set_tensor with the input index and np.expand_dims(sample_input, axis=0) to add a batch dimension",
+    "Invoke the interpreter using interpreter.invoke() to run the model",
+    "Attempt to retrieve the output tensor using interpreter.get_tensor with the output index",
+    "Capture the ValueError exception that occurs during the invocation, specifically looking for the message 'Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0'"
+]
+```

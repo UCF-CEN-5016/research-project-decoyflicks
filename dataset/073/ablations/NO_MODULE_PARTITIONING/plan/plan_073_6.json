@@ -1,0 +1,18 @@
+```json
+[
+    "Clone the DeepSpeed-Domino repository from GitHub using 'git clone https://github.com/microsoft/DeepSpeed-Domino.git'",
+    "Navigate to the cloned repository directory using 'cd DeepSpeed-Domino'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Ensure that DeepSpeed is installed by running 'pip install deepspeed'",
+    "Create a configuration file for DeepSpeed with the necessary parameters, e.g., 'ds_config.json' with the following content: {\"train_batch_size\": 8, \"gradient_accumulation_steps\": 1, \"fp16\": {\"enabled\": true}}",
+    "Prepare a dataset for training by creating a directory 'data' and placing sample text files in it, ensuring the files are formatted correctly for the model",
+    "Create a shell script 'pretrain_gpt3_2.7b.sh' with the following content: '#!/bin/bash\n deepspeed --num_gpus=1 pretrain_gpt3.py --data_path=data --model_name_or_path=gpt3-2.7b --deepspeed ds_config.json'",
+    "Make the shell script executable by running 'chmod +x pretrain_gpt3_2.7b.sh'",
+    "Run the shell script using 'bash pretrain_gpt3_2.7b.sh'",
+    "Monitor the output for the error message related to 'AttributeError: 'NoneType' object has no attribute 'all_reduce' during execution'",
+    "Check the initialization of the 'cdb' object in the code to confirm it is not being set before the all_reduce call",
+    "Verify that the environment variables and configurations are correctly set up to ensure 'cdb' should be initialized",
+    "Log the output of the script to a file for further analysis by appending ' > output.log 2>&1' to the bash command",
+    "Review the 'output.log' file for the complete stack trace of the error to confirm the source of the bug"
+]
+```

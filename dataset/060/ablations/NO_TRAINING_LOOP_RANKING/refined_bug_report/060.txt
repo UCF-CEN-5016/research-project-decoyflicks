@@ -1,0 +1,39 @@
+TITLE  
+Image segmentation with U-Net-like architecture fails due to type mismatch in data augmentation layer.
+
+SYMPTOMS  
+• The code fails during the dataset creation step.  
+• The error encountered is:  
+  ```
+  TypeError: branches[0] and branches[1] arguments to tf.switch_case must have the same number, type, and overall structure of return values.
+  ```  
+• The error details indicate a type mismatch in the outputs of the augmentation process:  
+  ```
+  Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types
+  ```
+• The issue occurs consistently in both Google Colab and local machine environments.
+
+EXPECTED BEHAVIOR  
+The code should successfully create augmented training and validation datasets without errors, allowing for the image segmentation model to be trained without encountering type mismatches in the data processing pipeline.
+
+REPRODUCTION STEPS  
+1. Run the code from the article [this article](https://keras.io/examples/vision/oxford_pets_image_segmentation/).  
+2. Ensure the necessary libraries (KerasCV, TensorFlow, etc.) are installed and imported.  
+3. Execute the dataset creation code cell as provided:  
+   ```python
+   augmented_train_ds = (
+       train_ds.shuffle(BATCH_SIZE * 2)
+       .map(augment_fn, num_parallel_calls=AUTOTUNE)
+       .batch(BATCH_SIZE)
+       .map(unpackage_inputs)
+       .prefetch(buffer_size=tf.data.AUTOTUNE)
+   )
+   resized_val_ds = (
+       val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE)
+       .batch(BATCH_SIZE)
+       .map(unpackage_inputs)
+       .prefetch(buffer_size=tf.data.AUTOTUNE)
+   )
+   ```  
+4. Observe the error messages generated during execution.  
+5. Confirm that the issue persists in both environments (Colab and local).

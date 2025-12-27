@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official repository: 'official.modeling.optimization.optimizer_factory' and 'official.modeling.optimization.configs.optimization_config'",
+    "Set the TensorFlow logging level to 'ERROR' to suppress non-critical warnings during execution",
+    "Define a batch size of 32 and image dimensions of 512x512 for the custom dataset",
+    "Create a dummy dataset with random uniform input data of shape (batch_size, height, width, 3) and corresponding labels of shape (batch_size, num_classes) where num_classes = 80",
+    "Define a simple model using EfficientDet architecture with the following parameters: model_name='efficientdet_d1_coco17_tpu-32', input_shape=(512, 512, 3), num_classes=80",
+    "Compile the model using an optimizer (e.g., 'adam') and set the loss to 'categorical_crossentropy'",
+    "Train the model on the dummy dataset for 1 epoch with validation split of 0.2",
+    "During training, monitor the console output for any warnings related to gradients not existing for specific variables",
+    "Capture the warning message: 'WARNING:tensorflow:Gradients do not exist for variables ... when minimizing the loss.'",
+    "Assert that the warning message contains the specific variables mentioned in the bug report: ['stack_6/block_1/expand_bn/gamma:0', 'stack_6/block_1/expand_bn/beta:0', 'stack_6/block_1/depthwise_conv2d/depthwise_kernel:0', 'stack_6/block_1/depthwise_bn/gamma:0', 'stack_6/block_1/depthwise_bn/beta:0', 'stack_6/block_1/project_bn/gamma:0', 'stack_6/block_1/project_bn/beta:0', 'top_bn/gamma:0', 'top_bn/beta:0']",
+    "Log the output of the training process to verify the occurrence of the warning and the absence of gradient updates for the specified variables"
+]
+```

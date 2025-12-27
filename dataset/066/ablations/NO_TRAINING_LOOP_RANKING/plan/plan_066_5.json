@@ -1,0 +1,27 @@
+```json
+[
+    "Import keras and necessary layers from keras",
+    "Set the random seed for reproducibility using keras.backend.set_floatx('float32')",
+    "Define a batch size of 64 and image dimensions of 32x32",
+    "Load the CIFAR-100 dataset using keras.datasets.cifar100.load_data()",
+    "Print the shapes of x_train and y_train to verify data loading",
+    "Define the input shape as (32, 32, 3) and number of classes as 100",
+    "Create a data augmentation pipeline using keras.Sequential with Normalization, Resizing, RandomFlip, and RandomZoom",
+    "Adapt the data augmentation pipeline to the training data using data_augmentation.layers[0].adapt(x_train)",
+    "Define hyperparameters: learning_rate = 0.001, weight_decay = 0.0001, num_epochs = 2, dropout_rate = 0.2, image_size = 64, patch_size = 2, latent_dim = 256, projection_dim = 256, num_heads = 8, num_transformer_blocks = 4, num_iterations = 2",
+    "Define the create_ffn function to create a feedforward network with specified hidden units and dropout rate",
+    "Define the Patches class to create patches from input images with the specified patch size",
+    "Define the PatchEncoder class to encode patches into a latent representation",
+    "Define the create_cross_attention_module function to create a cross-attention module with specified parameters",
+    "Define the create_transformer_module function to create a transformer module with specified parameters",
+    "Define the Perceiver class to build the Perceiver model with the specified parameters",
+    "Instantiate the Perceiver model with the defined parameters",
+    "Compile the model using keras.optimizers.Adam and keras.losses.SparseCategoricalCrossentropy",
+    "Fit the model on the training data with validation split of 0.1 and specified callbacks",
+    "Check the model summary to verify the architecture and ensure level2_dau_2 is defined but not used",
+    "Modify line 352 in the code to use level2_dau_2 instead of level3_dau_2",
+    "Run the model training again to observe if the change affects the output",
+    "Assert that the model's output shape is as expected after the training",
+    "Log the training history to verify if any changes in accuracy occur due to the modification"
+]
+```

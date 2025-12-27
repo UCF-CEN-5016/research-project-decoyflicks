@@ -1,0 +1,14 @@
+Bug in rotary positional embedding 
+
+I have copied the original code. But that has an error. The running result shows that there is a tensor operation exception in this statement. 
+```py
+x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])
+```
+and the error information look like this
+`RuntimeError: The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3`
+After debugging, I found that the positional encodings are applied only to a partial set of features(3 in the last dim in this test), but the cos_cached and sin_cached have the same feature dimension as the original x tensor(4 in this test). So there will be error when multiplying by elements. So I think the code should be like this
+```py
+x_rope = ((x_rope * self.cos_cached[:x.shape[0], :, :, :self.d]) +
+          (neg_half_x * self.sin_cached[:x.shape[0], :, :, :self.d]))
+```
+If I have any mistakes, please feel free to tell me.

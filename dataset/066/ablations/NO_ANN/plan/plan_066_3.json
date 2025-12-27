@@ -1,0 +1,31 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, tensorflow, numpy, pandas, and matplotlib",
+    "Define a configuration class CFG with parameters: preset='deberta_v3_extra_small_en', sequence_length=200, seed=42, epochs=5, batch_size=8, augment=True",
+    "Set random seed using keras.utils.set_random_seed(CFG.seed)",
+    "Download the SWAG dataset using wget and unzip it",
+    "Load training data from 'swagaf-master/data/train.csv' into a DataFrame and sample 2% of the data",
+    "Load validation data from 'swagaf-master/data/val.csv' into a DataFrame and sample 2% of the data",
+    "Define a function make_options that creates a new column 'options' in the DataFrame containing formatted strings for each option",
+    "Apply make_options function to both training and validation DataFrames",
+    "Initialize a DebertaV3Preprocessor with preset=CFG.preset and sequence_length=CFG.sequence_length",
+    "Process the first row of training options using the preprocessor and store the output in a variable 'outs'",
+    "Print the shape of each processed output in 'outs' to verify preprocessing",
+    "Define a function preprocess_fn that preprocesses text and returns a tuple of processed text and label",
+    "Define a function option_shuffle that shuffles options and labels with a probability of 0.50",
+    "Define a function augment_fn that applies option_shuffle to the text and label",
+    "Define a function build_dataset that creates a tf.data.Dataset from the provided texts and labels, applying preprocessing and augmentation",
+    "Build training and validation datasets using build_dataset with appropriate parameters",
+    "Define a function get_lr_callback that sets up a learning rate scheduler and plots the learning rate curve",
+    "Define a function get_callbacks that gathers all training callbacks including learning rate scheduler and model checkpoint",
+    "Define a class SelectOption that selects a specific slice from the inputs tensor",
+    "Define a function build_model that constructs the model architecture using keras_nlp.models.DebertaV3Classifier",
+    "Compile the model with optimizer, loss, and metrics",
+    "Print the model summary to verify the model structure",
+    "Train the model using model.fit with training and validation datasets",
+    "Make predictions on the validation dataset using model.predict",
+    "Format predictions and true answers for comparison",
+    "Print a sample of predictions and true answers to verify the output",
+    "Check for the unused variable 'level2_dau_2' in the code and assert that it is not referenced in the model's logic"
+]
+```

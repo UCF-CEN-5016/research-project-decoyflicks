@@ -1,0 +1,16 @@
+[
+    "Import TensorFlow and Keras modules required for the task",
+    "Define necessary hyperparameters such as batch size, learning rate, global clipnorm, number of classes, and FPN depth",
+    "Prepare the training dataset by loading images, resizing them to 640x640 pixels, normalizing pixel values, and converting bounding boxes to 'xyxy' format",
+    "Define a validation dataset following the same preprocessing steps as the training set",
+    "Load the `yolo_v8_s_backbone_coco` model from KerasCV using the `YOLOV8Backbone.from_preset()` function",
+    "Build a YOLOV8 detector using the `YOLOV8Detector` class, passing in the loaded backbone, number of classes, bounding box format, and FPN depth",
+    "Define an Adam optimizer with specified learning rate and global clipnorm",
+    "Compile the model with binary crossentropy loss for classification and CIoU loss for bounding boxes",
+    "Create a custom callback `EvaluateCOCOMetricsCallback` to evaluate the model's performance on the validation dataset, saving the best model based on mAP score",
+    "Train the model using the training dataset and validating it against the validation dataset for 3 epochs with early stopping if mAP does not improve",
+    "Visualize predictions from the trained model on a subset of the validation dataset to ensure correct bounding box outputs",
+    "Verify that the model's output contains valid numerical values (not NaN) in both classification and bounding box predictions during training",
+    "Monitor memory usage during model training to confirm it does not exceed expected levels"
+]
+

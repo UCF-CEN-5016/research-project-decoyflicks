@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and TensorFlow Models (TFM) modules",
+    "Define a batch size of 100 and image dimensions of 256x256",
+    "Create random input data with shape (batch_size, height, width, 3)",
+    "Create labels for the input images with shape (batch_size, 1)",
+    "Call MixupAndCutmix._sample_from_beta function with alpha=0.2 and beta=0.2, and shape=(batch_size, 1)",
+    "Verify that the output of the _sample_from_beta function has values outside the range [0, 1]",
+    "Plot the distribution of the sample_alpha / (sample_alpha + sample_beta) using Seaborn",
+    "Compare this plot with a true beta distribution with alpha=0.2 and beta=0.2 to validate the incorrect implementation",
+    "Assert that the distribution is significantly different from the expected beta distribution"
+]
+```
+

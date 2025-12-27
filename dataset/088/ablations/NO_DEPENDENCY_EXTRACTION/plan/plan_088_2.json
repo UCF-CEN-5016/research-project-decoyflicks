@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch and the TransformerWrapper and Decoder classes from the x_transformers module",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 2 and sequence length of 4 for the input tensor",
+    "Create an input tensor x with shape (batch_size, sequence_length) using torch.randint(0, 20000, (2, 4))",
+    "Create a position tensor pos with shape (batch_size, sequence_length) using torch.tensor([[0, 1, 2, 4], [1, 3, 5, 7]])",
+    "Instantiate the TransformerWrapper model with num_tokens=20000, max_seq_len=1024, and attn_layers as a Decoder with dim=512, depth=2, heads=8, and alibi_pos_bias=True",
+    "Call the model with the input tensor x and position tensor pos, storing the output in logits",
+    "Check the implementation of the align_right function in the x_transformers module to confirm that the pad_id parameter is not being used in the F.pad call",
+    "Create a test case to assert that the output logits do not reflect the expected padding behavior when pad_id is set to a non-zero value",
+    "Define a pad_id variable with a value of 1 and modify the model call to include token_emb_kwargs={'pad_id': pad_id}",
+    "Re-run the model with the modified token_emb_kwargs and capture the output",
+    "Assert that the output logits do not change as expected when pad_id is set, indicating that the pad_id is not being utilized in the align_right function"
+]
+```

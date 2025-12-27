@@ -1,0 +1,19 @@
+```json
+[
+    "Install PyTorch version 1.9.0+cu111 using pip",
+    "Set up a Python virtual environment and activate it",
+    "Clone the pytorch/examples repository from GitHub",
+    "Navigate to the imagenet directory within the cloned repository",
+    "Create a script named `test_mps.py` with the following content:",
+    "```python\nimport os\nimport torch\nfrom torchvision import models\ndef test_mps_is_available():\n    print(torch.backends.mps.is_available())\ntest_mps_is_available()\n```",
+    "Install torchvision version 0.10.0+cu111 using pip to ensure compatibility with PyTorch",
+    "Run the `test_mps.py` script using Python3 and verify that it raises the AttributeError: module 'torch.backends' has no attribute 'mps'",
+    "Check the current PyTorch backend being used by running:",
+    "```python\nprint(torch.__config__.show())\n```",
+    "Ensure that the output does not indicate an MPS (Metal Performance Shaders) backend is available, as this will confirm that the bug is reproducible",
+    "Comment out or remove any lines of code that attempt to utilize MPS in your `test_mps.py` script",
+    "Run the modified `test_mps.py` script again and verify that it no longer raises an AttributeError",
+    "If the script runs successfully without raising errors, the bug has been reproduced"
+]
+```
+

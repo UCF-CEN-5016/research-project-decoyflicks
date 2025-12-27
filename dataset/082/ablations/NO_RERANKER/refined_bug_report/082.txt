@@ -1,0 +1,19 @@
+TITLE  
+Dimension mismatch in Masked Patch Prediction during training
+
+SYMPTOMS  
+• The code runs until it encounters a dimension mismatch error.  
+• Error message: `RuntimeError: Given normalized_shape=[1024], expected input with shape [*, 1024], but got input of size[20, 64, 3072]`  
+
+EXPECTED BEHAVIOR  
+The code should execute without errors, and the model should successfully process the input images and compute the loss for the masked patch prediction task.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries and define the ViT and MPP models as shown in the provided code.  
+2. Define the `sample_unlabelled_images()` function to generate a batch of random images.  
+3. Initialize the optimizer.  
+4. Run a training loop for 100 iterations, where in each iteration:  
+   a. Call `sample_unlabelled_images()` to get a batch of images.  
+   b. Pass the images to the `mpp_trainer` to compute the loss.  
+   c. Perform backpropagation and update the optimizer.  
+5. Observe the error during the forward pass of the model when processing the masked input.

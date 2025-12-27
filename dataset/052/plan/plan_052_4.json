@@ -1,0 +1,20 @@
+```json
+[
+    "Import pandas and numpy for data manipulation and handling",
+    "Load the MovieLens dataset from a CSV file located at 'path/to/movielens.csv'",
+    "Preprocess the dataset by converting user IDs, item IDs, and ratings into integers",
+    "Split the dataset into training, validation, and test sets with 80%, 10%, and 10% distribution respectively",
+    "Define a batch size of 265 for both training and evaluation datasets",
+    "Encode user IDs, item IDs, and ratings into categorical variables using one-hot encoding",
+    "Create the input features by concatenating encoded user IDs, item IDs, and ratings",
+    "Prepare the target variable by selecting the ratings column from the dataset",
+    "Construct the BST model architecture with 256 units in the first hidden layer, 128 units in the second hidden layer, a dropout rate of 0.1, and 3 attention heads",
+    "Compile the model using the Adagrad optimizer with a learning rate of 0.01 and mean squared error as the loss function",
+    "Read the training data from 'train_data.csv' using the get_dataset_from_csv function with shuffling enabled and the specified batch size",
+    "Fit the model to the training data for 5 epochs",
+    "Read the test data from 'test_data.csv' using the get_dataset_from_csv function with the specified batch size without shuffling",
+    "Evaluate the model on the test data and capture the mean absolute error (MAE) in a variable called rmse",
+    "Print the RMSE value to verify if it is at or around 0.7"
+]
+```
+

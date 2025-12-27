@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import keras_nlp, import random, import numpy as np",
+    "Set the random seed for reproducibility: np.random.seed(42)",
+    "Define a list of English sentences for testing: test_eng_texts = ['Hello, how are you?', 'What is your name?', 'I love programming.']",
+    "Define a function decode_sequences that takes input_sentences as an argument",
+    "Inside decode_sequences, create a tensor for the start token: start = np.array([[1]])",
+    "Create a tensor for padding: pad = np.array([[0]])",
+    "Concatenate start and pad tensors: prompt = np.concatenate((start, pad), axis=-1)",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and an unexpected keyword argument 'end_token_id': generated_tokens = sampler(next, prompt, end_token_id=2)",
+    "Run a loop to test the decode_sequences function with random input sentences: for i in range(2): input_sentence = random.choice(test_eng_texts); translated = decode_sequences([input_sentence])",
+    "Capture the output and verify that a TypeError is raised: assert 'TypeError' in str(e) when calling decode_sequences"
+]
+```

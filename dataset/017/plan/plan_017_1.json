@@ -1,0 +1,17 @@
+```json
+[
+    "Import the necessary modules from TensorFlow, Keras, and official models",
+    "Define a batch size of 16 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Set up an instance of the ResNet50 model from the official models library with num_classes=1000",
+    "Label the input data randomly as integers between 0 and 999",
+    "Scale the labels to be one-hot encoded using the function get_classification_decoder",
+    "Compile a simple optimizer (e.g., Adam) and loss function (categorical crossentropy)",
+    "Create a validation step where you pass the batch of inputs through the model for inference",
+    "Calculate the loss on this inference output using the provided build_losses function",
+    "Verify that the calculated loss is not NaN",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory usage does not exceed expected threshold under standard conditions"
+]
+```
+

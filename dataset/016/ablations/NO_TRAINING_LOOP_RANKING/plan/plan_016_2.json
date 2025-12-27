@@ -1,0 +1,26 @@
+```json
+[
+    "Set up a multi-node environment with at least 2 nodes, each with 2 Tesla V100 GPUs.",
+    "Install TensorFlow 2.11.0 with GPU support on both nodes using conda: 'conda install tensorflow-gpu=2.11.0'.",
+    "Ensure CUDA 11.0 and cuDNN compatible with TensorFlow 2.11.0 are installed on both nodes.",
+    "Create a directory for the TensorFlow Model Garden on both nodes: 'mkdir -p /home/cdacapp1/scaling/models-master'.",
+    "Clone the TensorFlow Model Garden repository: 'git clone https://github.com/tensorflow/models.git /home/cdacapp1/scaling/models-master'.",
+    "Prepare the ImageNet dataset in TFRecord format and place it in '/scratch/cdacapp1/sowmya/actual_imagenet/tf_records' on both nodes.",
+    "Create a configuration file 'gpu.yaml' on gpu1 with the following content: 'runtime:\n  distribution_strategy: multi_worker_mirrored\n  worker_hosts: ip1:6655,ip2:6655\n  num_gpus: 2\n  task_index: 0'.",
+    "Create a configuration file 'gpu1.yaml' on gpu2 with the following content: 'runtime:\n  distribution_strategy: multi_worker_mirrored\n  worker_hosts: ip1:6655,ip2:6655\n  num_gpus: 2\n  task_index: 1'.",
+    "On gpu1, run the following command to start the training: 'salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive'.",
+    "On gpu1, navigate to the model directory: 'cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification'.",
+    "Set environment variables on gpu1: 'export PYTHONPATH=\"$PYTHONPATH:/home/cdacapp1/scaling/models-master\" && export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss'.",
+    "Activate the conda environment on gpu1: 'source /home/apps/anaconda3/bin/activate && conda activate tf11'.",
+    "Run the training script on gpu1: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml'.",
+    "On gpu2, repeat the steps to set up the environment and run the training script: 'salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive'.",
+    "On gpu2, navigate to the model directory: 'cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification'.",
+    "Set environment variables on gpu2: 'export PYTHONPATH=\"$PYTHONPATH:/home/cdacapp1/scaling/models-master\" && export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss'.",
+    "Activate the conda environment on gpu2: 'source /home/apps/anaconda3/bin/activate && conda activate tf11'.",
+    "Run the training script on gpu2: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml'.",
+    "Monitor the training throughput on both nodes and log the examples per second during training.",
+    "Verify that the throughput on multi-node setup does not exceed the throughput of a single GPU setup.",
+    "Check the logs for any errors or warnings related to the distribution strategy.",
+    "Assert that the throughput remains constant across both nodes, indicating that scaling is not occurring."
+]
+```

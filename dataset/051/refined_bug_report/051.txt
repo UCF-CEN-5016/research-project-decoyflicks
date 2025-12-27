@@ -1,0 +1,25 @@
+TITLE
+Incorrect Keyword Argument in KerasNLP Sampler Call
+
+SYMPTOMS
+• TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id'
+• The error occurs during the prediction/eval part of running the English-to-Spanish translation example with KerasNLP.
+
+EXPECTED BEHAVIOR
+The `decode_sequences` function should generate translated sentences from input English text without raising a `TypeError`.
+
+REPRODUCTION STEPS
+1. Open [this Colab notebook](https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/nlp/ipynb/neural_machine_translation_with_keras_nlp.ipynb) (Runtime: T4 GPU).
+2. Run the necessary cells to train and compile the model.
+3. Ensure that the `decode_sequences` function is defined as shown in the example.
+4. Execute the cell containing the loop where `decode_sequences` is called with input sentences.
+
+ANALYSIS
+The error suggests that the `GreedySampler` class from KerasNLP does not recognize the `end_token_id` parameter, which indicates a possible issue either with the version of KerasNLP installed or a change in the API. The model trains successfully, but there is an unexpected keyword argument when calling the sampler during prediction.
+
+SUGGESTIONS
+1. Verify that the KerasNLP and TensorFlow versions are compatible.
+2. Check if there have been any recent changes in the `GreedySampler` API documentation or implementation.
+3. Update to the latest version of KerasNLP, as this could be a bug that has been fixed in newer releases.
+
+By following these steps and suggestions, you should be able to identify and resolve the issue.

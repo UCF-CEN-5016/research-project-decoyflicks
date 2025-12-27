@@ -1,0 +1,14 @@
+```json
+[
+    "Import torch and nn from torch library",
+    "Define a batch size of 2 and sequence length of 10",
+    "Create a random input tensor with shape (batch_size, sequence_length, embedding_dim) where embedding_dim is set to 64",
+    "Define a MultiHeadedAttention class that includes uninitialized bias parameters using torch.Tensor",
+    "Instantiate the MultiHeadedAttention class with num_heads=4 and embedding_dim=64",
+    "Call the forward method of the MultiHeadedAttention instance with the input tensor",
+    "Capture the output of the forward method",
+    "Check the output tensor for NaN values using torch.isnan()",
+    "Assert that any NaN values are present in the output tensor",
+    "Print a message indicating the presence of NaN values if the assertion fails"
+]
+```

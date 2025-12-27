@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the relevant modules from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and sequence length of 32",
+    "Create a random input tensor 'x' with shape (batch_size, sequence_length) filled with integers representing token IDs, e.g., torch.randint(0, 1000, (1, 32))",
+    "Create a random tensor 'x_num' with shape (batch_size, sequence_length) filled with numerical values, e.g., torch.randn(1, 32)",
+    "Instantiate the TransformerWrapper with appropriate parameters: num_tokens=1000, max_seq_len=32, and attn_layers set to an instance of AttentionLayers with heads=8 and dim=64",
+    "Set rotary_xpos to True when initializing the TransformerWrapper to enable rotary positional embeddings",
+    "Call the forward method of the TransformerWrapper with the input tensor 'x' and 'x_num', capturing the output and any intermediate values",
+    "Enable rotary_xpos in the attention layers by setting the appropriate flag during initialization",
+    "Capture the output of the forward pass and any intermediate outputs for later validation",
+    "Check the shape of the output tensor to ensure it matches the expected shape, which should be (1, 32, dim) where dim is the embedding dimension",
+    "Assert that the output tensor does not contain NaN values, indicating that the forward pass completed without errors",
+    "Verify that the error message from the bug report is triggered by checking the logs or console output for the specific EinopsError related to tensor dimensions",
+    "Confirm that the error message includes 'Error while processing rearrange-reduction pattern \"n -> n 1\"' and 'Input tensor shape: torch.Size([1, 32])'"
+]
+```

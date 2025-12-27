@@ -1,0 +1,32 @@
+{
+  "bug_report": "093",
+  "rank": 3,
+  "score": 0.8666911721229553,
+  "main_file": {
+    "path": "x_transformers/dpo.py",
+    "content": "from copy import deepcopy\n\nimport torch\nfrom torch.nn import Module\nimport torch.nn.functional as F\nfrom x_transformers.x_transformers import TransformerWrapper\n\nfrom einops import rearrange\n\n# helper functions\n\ndef exists(v):\n    return v is not None\n\ndef freeze_all_layers_(module):\n    for param in module.parameters():\n        param.requires_grad = False\n\ndef log(t, eps = 1e-20):\n    return torch.log(t.clamp(min = eps))\n\ndef log_prob(prob, indices, eps = 1e-20):\n    indices = rearrange(indices, '... -> ... 1')\n    log_probs = log(prob.gather(-1, indices), eps = eps)\n    return rearrange(log_probs, '... 1 -> ...')\n\ndef log_prob_from_model_and_seq(model, seq):\n    logits = model(seq)\n    prob = logits.softmax(dim = -1)\n    return log_prob(prob, seq)\n\n# main class\n\nclass DPO(Module):\n    def __init__(\n        self,\n        model: TransformerWrapper,\n        *,\n        beta = 0.1\n    ):\n        super().__init__()\n        self.policy_model = model\n\n        self.ref_model = deepcopy(model)\n        freeze_all_layers_(self.ref_model)\n\n        self.beta = beta\n\n    def parameters(self):\n        return self.policy_model.parameters()\n\n    def forward(\n        self,\n        preferred_seq,\n        unpreferred_seq,\n        prompt_mask = None\n    ):\n        assert preferred_seq.ndim == 2\n        assert preferred_seq.shape == unpreferred_seq.shape\n\n        \"\"\"\n        Following Appendix B in https://arxiv.org/abs/2305.18290\n        \"\"\"\n\n        with torch.no_grad():\n            self.ref_model.eval()\n            ref_preferred_logprob = log_prob_from_model_and_seq(self.ref_model, preferred_seq)\n            ref_unpreferred_logprob = log_prob_from_model_and_seq(self.ref_model, unpreferred_seq)\n\n        policy_preferred_logprob = log_prob_from_model_and_seq(self.policy_model, preferred_seq)\n        policy_unpreferred_logprob = log_prob_from_model_and_seq(self.policy_model, unpreferred_seq)\n\n        policy_logratios = policy_preferred_logprob - policy_unpreferred_logprob\n        ref_logratios = ref_preferred_logprob - ref_unpreferred_logprob\n\n        losses = -F.logsigmoid(self.beta * (policy_logratios - ref_logratios))\n\n        if exists(prompt_mask):\n            losses = losses[~prompt_mask]\n\n        return losses.mean()\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "copy",
+      "function": "deepcopy"
+    },
+    {
+      "module": "einops",
+      "function": "rearrange"
+    },
+    {
+      "module": "torch",
+      "function": "log"
+    },
+    {
+      "module": "torch",
+      "function": "logsigmoid"
+    },
+    {
+      "module": "torch",
+      "function": "no_grad"
+    }
+  ]
+}

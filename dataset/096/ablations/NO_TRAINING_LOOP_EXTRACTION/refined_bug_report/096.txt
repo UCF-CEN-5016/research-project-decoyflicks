@@ -1,0 +1,23 @@
+TITLE  
+RuntimeError when using self conditioning with inference mode
+
+SYMPTOMS  
+• The code produces a RuntimeError: "Inference tensors cannot be saved for backward."  
+• Using `.clone()` does not resolve the issue unless switching to `torch.no_grad()`.  
+• The problem persists regardless of where `.clone()` is added in the code.  
+
+EXPECTED BEHAVIOR  
+When self conditioning is enabled, the code should run without errors, allowing for inference without encountering the RuntimeError, and the tensors should be handled properly for backward operations if needed.
+
+REPRODUCTION STEPS  
+1. Enable self conditioning in the code.  
+2. Execute the code that includes the following block:  
+   ```python
+   if self.self_condition and random() < 0.5:
+       with torch.inference_mode():
+           x_self_cond = self.model_predictions(x.clone().detach(), t).pred_x_start
+           x_self_cond = x_self_cond.detach_()
+   ```  
+3. Observe the RuntimeError when running the code.  
+4. Attempt to replace `torch.inference_mode()` with `torch.no_grad()` and note the change in behavior.  
+5. Test the placement of `.clone()` in different locations to see if it resolves the issue.

@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: import numpy as np, import tensorflow as tf, from keras import layers, Model, and Sequential",
+    "Set a random seed for reproducibility: SEED = 42; np.random.seed(SEED); tf.random.set_seed(SEED)",
+    "Define hyperparameters: BATCH_SIZE = 32, EPOCHS = 20, INPUT_SHAPE = (28, 28, 28, 1), NUM_CLASSES = 11",
+    "Prepare a synthetic dataset: create random training data with shape (1000, 28, 28, 28, 1) and labels with shape (1000,)",
+    "Create a validation dataset using the same synthetic data: create random validation data with shape (200, 28, 28, 28, 1) and labels with shape (200,)",
+    "Create a test dataset using the same synthetic data: create random test data with shape (200, 28, 28, 28, 1) and labels with shape (200,)",
+    "Define a simple model architecture using Keras: model = Sequential(); add layers: model.add(layers.Input(shape=INPUT_SHAPE)); model.add(layers.Conv3D(32, (3, 3, 3), activation='relu')); model.add(layers.GlobalAvgPool3D()); model.add(layers.Dense(NUM_CLASSES, activation='softmax'))",
+    "Compile the model with optimizer and loss function: model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])",
+    "Fit the model using the training dataset and the test dataset as validation data: model.fit(train_data, train_labels, epochs=EPOCHS, validation_data=(test_data, test_labels))",
+    "Monitor the training process and check for overly optimistic validation accuracy during training",
+    "Assert that the validation accuracy is significantly higher than expected, indicating potential overfitting due to using the test set as validation"
+]
+```

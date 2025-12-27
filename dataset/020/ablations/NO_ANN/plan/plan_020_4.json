@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and the official model garden modules: 'official.core.train_lib' and 'official.vision'",
+    "Set Python version to 3.8 and ensure TensorFlow version is 2.12.0",
+    "Create a Docker container using the image 'tensorflow/tensorflow:2.12.0-gpu-jupyter'",
+    "Install the required package 'tf-models-official==2.12.0' inside the Docker container",
+    "Define a distribution strategy variable, e.g., 'distribution_strategy = tf.distribute.MirroredStrategy()'",
+    "Create a task configuration dictionary with necessary parameters for the object detection model",
+    "Set the model directory path, e.g., 'model_dir = '/tmp/model_dir'",
+    "Prepare an experiment configuration dictionary 'exp_config' with appropriate parameters for training and evaluation",
+    "Call the function 'tfm.core.train_lib.run_experiment' with parameters: distribution_strategy, task, mode='train_and_eval', params=exp_config, model_dir=model_dir, run_post_eval=True",
+    "Capture the output and error logs during the execution of the above function call",
+    "Verify that the output contains the error message 'TypeError: unsupported operand type(s) for |: 'dict' and 'dict''",
+    "Check the line number in the error message to confirm it points to 'official/core/base_trainer.py' at line 442",
+    "Ensure that the error occurs consistently across multiple runs to validate the bug"
+]
+```

@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the official models library as tfm",
+    "Import NumPy and Matplotlib for data visualization",
+    "Define a shape variable as tf.shape(tf.range(1000)) to create a sample size of 1000",
+    "Set alpha and beta parameters for the beta distribution: alpha = 0.2, beta = 0.2",
+    "Call the static method tfm.vision.augment.MixupAndCutmix._sample_from_beta with parameters (alpha, beta, shape)",
+    "Store the output of the _sample_from_beta method in a variable named 'mixup_samples'",
+    "Convert 'mixup_samples' to a NumPy array using .numpy() method",
+    "Generate a reference sample from a standard beta distribution using np.random.beta with parameters (alpha, beta, 100000)",
+    "Create a density plot using sns.kdeplot for 'mixup_samples' with clip set to (0, 1)",
+    "Create a density plot using sns.kdeplot for the reference sample with clip set to (0, 1)",
+    "Display the plots using plt.show() to visualize the differences",
+    "Verify that the density plot of 'mixup_samples' shows significant deviation from the reference sample",
+    "Assert that the mean of 'mixup_samples' is not close to 0.5, indicating incorrect sampling behavior",
+    "Check that the variance of 'mixup_samples' is significantly lower than expected for a beta distribution with alpha = beta = 0.2"
+]
+```

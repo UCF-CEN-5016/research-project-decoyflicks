@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from keras import layers, models, utils, datasets",
+    "Set the random seed for reproducibility: np.random.seed(42)",
+    "Define a batch size of 128 and number of epochs as 20",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data()",
+    "Scale images to the [0, 1] range: x_train = x_train.astype('float32') / 255 and x_test = x_test.astype('float32') / 255",
+    "Ensure images have shape (28, 28, 1) by expanding dimensions: x_train = np.expand_dims(x_train, -1) and x_test = np.expand_dims(x_test, -1)",
+    "Convert class vectors to binary class matrices using keras.utils.to_categorical: y_train = utils.to_categorical(y_train, num_classes=10) and y_test = utils.to_categorical(y_test, num_classes=10)",
+    "Create a Sequential model with layers: Input layer, Conv2D layer, MaxPooling2D layer, Flatten layer, Dropout layer, and Dense layer",
+    "Compile the model with loss='categorical_crossentropy', optimizer='adam', and metrics=['accuracy']",
+    "Fit the model using model.fit with train_dataset as x_train, y_train, epochs=20, and validation_data as x_test, y_test",
+    "Check the model's performance on the validation set by printing the validation accuracy after training",
+    "Assert that the validation accuracy is higher than expected, indicating overfitting due to using the test set as validation set"
+]
+```

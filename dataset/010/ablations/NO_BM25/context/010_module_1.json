@@ -1,0 +1,28 @@
+{
+  "bug_report": "010",
+  "module": {
+    "module": "official/modeling/hyperparams",
+    "files": [
+      {
+        "path": "official/modeling/hyperparams/params_dict_test.py",
+        "snippets": [
+          {
+            "lines": "210-227",
+            "code": "  def test_validate(self):\n    # Raise error due to the unknown parameter.\n    with self.assertRaises(KeyError):\n      params = params_dict.ParamsDict({'a': 1, 'b': {'a': 11}}, ['a == c'])\n      params.validate()\n\n    # OK to check equality of two nested dicts.\n    params = params_dict.ParamsDict({\n        'a': 1,\n        'b': {\n            'a': 10\n        },\n        'c': {\n            'a': 10\n        }\n    }, ['b == c'])\n\n    # Raise error due to inconsistency\n    with self.assertRaises(KeyError):\n      params = params_dict.ParamsDict({'a': 1, 'c': {'a': 10}}, ['a == c.a'])\n      params.validate()\n\n    # Valid rule.\n    params = params_dict.ParamsDict({'a': 1, 'c': {'a': 1}}, ['a == c.a'])\n\n    # Overriding violates the existing rule, raise error upon validate.\n    params.override({'a': 11})\n    with self.assertRaises(KeyError):\n      params.validate()\n\n    # Valid restrictions with constant.\n    params = params_dict.ParamsDict({\n        'a': None,\n        'c': {\n            'a': 1\n        }\n    }, ['a == None', 'c.a == 1'])\n    params.validate()\n    with self.assertRaises(KeyError):\n      params = params_dict.ParamsDict({\n          'a': 4,\n          'c': {\n              'a': 1\n          }\n      }, ['a == None', 'c.a == 1'])\n      params.validate()\n\n  def write_temp_file(self, filename, text):\n    temp_file = os.path.join(self.get_temp_dir(), filename)\n    with tf.io.gfile.GFile(temp_file, 'w') as writer:\n      writer.write(text)\n    return temp_file\n\n  def test_save_params_dict_to_yaml(self):\n    params = params_dict.ParamsDict({\n        'a': 'aa',\n        'b': 2,\n        'c': {\n            'c1': 10,\n            'c2': 20\n        }\n    })\n    output_yaml_file = os.path.join(self.get_temp_dir(), 'params.yaml')\n    params_dict.save_params_dict_to_yaml(params, output_yaml_file)\n\n    with tf.io.gfile.GFile(output_yaml_file, 'r') as f:\n      params_d = yaml.load(f, Loader=yaml.Loader)\n      self.assertEqual(params.a, params_d['a'])\n      self.assertEqual(params.b, params_d['b'])\n      self.assertEqual(params.c.c1, params_d['c']['c1'])\n      self.assertEqual(params.c.c2, params_d['c']['c2'])"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/modeling/hyperparams/params_dict_test.py",
+      "snippets": [
+        {
+          "lines": "210-227",
+          "code": "  def test_validate(self):\n    # Raise error due to the unknown parameter.\n    with self.assertRaises(KeyError):\n      params = params_dict.ParamsDict({'a': 1, 'b': {'a': 11}}, ['a == c'])\n      params.validate()\n\n    # OK to check equality of two nested dicts.\n    params = params_dict.ParamsDict({\n        'a': 1,\n        'b': {\n            'a': 10\n        },\n        'c': {\n            'a': 10\n        }\n    }, ['b == c'])\n\n    # Raise error due to inconsistency\n    with self.assertRaises(KeyError):\n      params = params_dict.ParamsDict({'a': 1, 'c': {'a': 10}}, ['a == c.a'])\n      params.validate()\n\n    # Valid rule.\n    params = params_dict.ParamsDict({'a': 1, 'c': {'a': 1}}, ['a == c.a'])\n\n    # Overriding violates the existing rule, raise error upon validate.\n    params.override({'a': 11})\n    with self.assertRaises(KeyError):\n      params.validate()\n\n    # Valid restrictions with constant.\n    params = params_dict.ParamsDict({\n        'a': None,\n        'c': {\n            'a': 1\n        }\n    }, ['a == None', 'c.a == 1'])\n    params.validate()\n    with self.assertRaises(KeyError):\n      params = params_dict.ParamsDict({\n          'a': 4,\n          'c': {\n              'a': 1\n          }\n      }, ['a == None', 'c.a == 1'])\n      params.validate()\n\n  def write_temp_file(self, filename, text):\n    temp_file = os.path.join(self.get_temp_dir(), filename)\n    with tf.io.gfile.GFile(temp_file, 'w') as writer:\n      writer.write(text)\n    return temp_file\n\n  def test_save_params_dict_to_yaml(self):\n    params = params_dict.ParamsDict({\n        'a': 'aa',\n        'b': 2,\n        'c': {\n            'c1': 10,\n            'c2': 20\n        }\n    })\n    output_yaml_file = os.path.join(self.get_temp_dir(), 'params.yaml')\n    params_dict.save_params_dict_to_yaml(params, output_yaml_file)\n\n    with tf.io.gfile.GFile(output_yaml_file, 'r') as f:\n      params_d = yaml.load(f, Loader=yaml.Loader)\n      self.assertEqual(params.a, params_d['a'])\n      self.assertEqual(params.b, params_d['b'])\n      self.assertEqual(params.c.c1, params_d['c']['c1'])\n      self.assertEqual(params.c.c2, params_d['c']['c2'])"
+        }
+      ]
+    }
+  ]
+}

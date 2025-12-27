@@ -1,0 +1,16 @@
+TITLE  
+Conflict between `attn_num_mem_kv` and `attn_one_kv_head` parameters
+
+SYMPTOMS  
+• An error occurs when both `attn_num_mem_kv` and `attn_one_kv_head` are set to True.  
+• The specific error message is not provided in the original report.  
+• The model fails to execute the forward pass when the conflicting parameters are used.
+
+EXPECTED BEHAVIOR  
+When the model is configured with `attn_num_mem_kv` set to a positive value and `attn_one_kv_head` set to True, it should execute without errors and return the expected logits based on the input tensor.
+
+REPRODUCTION STEPS  
+1. Initialize the `TransformerWrapper` with the specified parameters, including `attn_num_mem_kv = 20` and `attn_one_kv_head = True`.  
+2. Create a random input tensor `x` with shape `(8, 1024)` using `torch.randint`.  
+3. Call the model with the input tensor: `logits = lm(x)`.  
+4. Print the shapes and data types of both the input tensor and the output logits.

@@ -1,0 +1,24 @@
+```json
+[
+    "Ensure Python version is 3.12.3 by running 'python --version'",
+    "Create a new virtual environment using 'python -m venv venv'",
+    "Activate the virtual environment using 'source venv/bin/activate' on Unix or 'venv\\Scripts\\activate' on Windows",
+    "Install the required libraries by running 'pip install torch torchvision deepspeed transformers'",
+    "Verify the installation of the transformers library by running 'pip show transformers'",
+    "Check the installed version of transformers to ensure it supports deepspeed by running 'pip list | grep transformers'",
+    "Create a new Python script named 'e2e_rlhf.py'",
+    "Add the following import statements to 'e2e_rlhf.py': 'import argparse', 'import deepspeed', 'import torch', 'import torchvision'",
+    "Define a function 'add_argument()' to parse command line arguments using argparse",
+    "In 'add_argument()', add the argument '--actor-model' with a default value of 'facebook/opt-1.3b'",
+    "In 'add_argument()', add the argument '--reward-model' with a default value of 'facebook/opt-350m'",
+    "In 'add_argument()', add the argument '--deployment-type' with a default value of 'single_gpu'",
+    "Call 'add_argument()' in the main block of 'e2e_rlhf.py' to retrieve the arguments",
+    "Add a main function 'main(args)' to handle the script execution logic",
+    "In 'main(args)', initialize DeepSpeed by calling 'deepspeed.init_distributed()'",
+    "Add a line to print the arguments received to verify they are parsed correctly",
+    "Attempt to import 'transformers.deepspeed' in 'e2e_rlhf.py' after the argument parsing",
+    "Run the script using the command 'python e2e_rlhf.py --actor-model facebook/opt-1.3b --reward-model facebook/opt-350m --deployment-type single_gpu'",
+    "Capture the output of the script execution to verify the 'ModuleNotFoundError: No module named 'transformers.deepspeed'' is raised",
+    "Log the error message to a file for further analysis if needed"
+]
+```

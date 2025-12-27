@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torch.nn.functional, and deepspeed",
+    "Define a batch size of 16 and set the input dimensions for CIFAR10 images (3 channels, 32x32 pixels)",
+    "Create a random tensor for input data with shape (batch_size, 3, 32, 32)",
+    "Create a random tensor for action_mask with shape (batch_size, sequence_length) where sequence_length is greater than or equal to 10",
+    "Create a random tensor for actor_log_prob with shape (batch_size, sequence_length) filled with values from a normal distribution",
+    "Create a random tensor for log_probs with shape (batch_size, sequence_length) filled with values from a normal distribution",
+    "Create a random tensor for advantages with shape (batch_size, sequence_length) filled with values from a normal distribution",
+    "Set the start index to a value such that start is less than sequence_length (e.g., start = 5)",
+    "Define the actor_loss_fn function that takes actor_log_prob, log_probs, advantages, and action_mask as inputs",
+    "Inside actor_loss_fn, calculate the actor loss using the provided formula: actor_loss = self.actor_loss_fn(actor_log_prob[:, start:], log_probs[:, start:], advantages, action_mask[:, start:])",
+    "Run the forward pass of the model using the random input data and capture the output",
+    "Call the actor_loss_fn with the generated tensors and assert that the output loss is computed without errors",
+    "Modify the action_mask to use the alternative masking: action_mask[:, start-1:-1] and rerun the loss calculation",
+    "Assert that the loss value changes when using the modified mask, indicating that the 'eos' token is being filtered out incorrectly",
+    "Log the loss values for both masking strategies to verify the difference in outputs"
+]
+```

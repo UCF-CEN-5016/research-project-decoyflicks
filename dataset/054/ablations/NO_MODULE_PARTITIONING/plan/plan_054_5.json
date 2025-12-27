@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, from tensorflow import keras, from transformers import TFAutoModelForQuestionAnswering, from datasets import load_dataset",
+    "Set the random seed for reproducibility: tf.random.set_seed(42)",
+    "Load the SQuAD dataset using load_dataset('squad') and assign it to a variable named datasets",
+    "Access the training and validation sets from the datasets variable: train_set = datasets['train'], validation_set = datasets['validation']",
+    "Define a model checkpoint variable: model_checkpoint = 'distilbert-base-cased'",
+    "Instantiate the tokenizer using AutoTokenizer.from_pretrained(model_checkpoint)",
+    "Define a function prepare_train_features that tokenizes the input data with truncation and padding, ensuring to return the necessary features including start and end positions",
+    "Apply the prepare_train_features function to the training and validation datasets using the map method, ensuring to set batched=True and remove_columns to remove original columns",
+    "Convert the tokenized datasets to numpy format: train_set = tokenized_datasets['train'].with_format('numpy'), validation_set = tokenized_datasets['validation'].with_format('numpy')",
+    "Instantiate the model using TFAutoModelForQuestionAnswering.from_pretrained(model_checkpoint)",
+    "Compile the model with an Adam optimizer and a learning rate of 5e-5: optimizer = keras.optimizers.Adam(learning_rate=5e-5), model.compile(optimizer=optimizer)",
+    "Fit the model using model.fit(train_set, validation_data=validation_set, epochs=20) to train on the training set and validate on the validation set",
+    "Monitor the training process and check the validation loss and accuracy after each epoch",
+    "Verify that the validation data is actually the test set by checking the contents of validation_set against the test set from the original dataset",
+    "Assert that the validation accuracy is unrealistically high, indicating that the model is likely overfitting due to using the test set as validation"
+]
+```

@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official.vision.modeling.layers and official.vision.ops",
+    "Define a batch size of 2 and set image dimensions to 640x480",
+    "Create random input data for boxes with shape (batch_size, 100, 10, 4) representing 100 anchors and 10 classes",
+    "Create random input data for scores with shape (batch_size, 100, 10) representing 100 anchors and 10 classes",
+    "Define a dictionary for attributes with random data, shape (batch_size, 100, 10, 5) representing 5 attributes for each class",
+    "Set pre_nms_top_k to 5, pre_nms_score_threshold to 0.5, nms_iou_threshold to 0.5, and max_num_detections to 10",
+    "Call the _generate_detections_v1 function with the created boxes, scores, and attributes, along with the defined parameters",
+    "Capture the output of the _generate_detections_v1 function",
+    "Check the output to ensure it contains nms_boxes, nms_scores, nms_classes, valid_detections, and nms_attributes",
+    "Verify that the num_of_examples argument in the show_batch function is not used in the output or processing",
+    "Assert that the output does not utilize the num_of_examples argument in any way"
+]
+```

@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: argparse, deepspeed, torch, torch.nn, torch.nn.functional, torchvision, and torchvision.transforms",
+    "Define a batch size of 16 for training and set the number of epochs to 30",
+    "Create a CIFAR10 dataset using torchvision.datasets.CIFAR10 with root='./data', train=True, download=True, and apply normalization transforms",
+    "Initialize DeepSpeed distributed backend using deepspeed.init_distributed()",
+    "Define a neural network class Net that includes convolutional layers, pooling layers, and fully connected layers",
+    "In the Net class, implement a forward method that processes input through the layers and returns the output",
+    "Create an instance of the Net class and initialize it with DeepSpeed using deepspeed.initialize with the model and training data",
+    "Define a CrossEntropyLoss criterion for loss calculation",
+    "Create a loop to train the model for the specified number of epochs, iterating over the training data",
+    "Within the training loop, for each batch, get inputs and labels, and move them to the appropriate device",
+    "Pass the inputs through the model to get outputs",
+    "Calculate the loss using the criterion with outputs and labels",
+    "Modify the loss calculation to use action_mask[:, start:] instead of action_mask[:, start-1:-1] to reproduce the bug",
+    "Perform backward propagation on the loss and update the model parameters using model_engine.step()",
+    "Log the loss value after each batch to monitor training progress",
+    "After training, validate the model by testing it on the CIFAR10 test dataset",
+    "Check if the loss calculation during training produces unexpected results, specifically focusing on the handling of the 'eos' token",
+    "Assert that the loss value is not as expected due to the filtering of the 'eos' token in the loss calculation"
+]
+```

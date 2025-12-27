@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and Delf model from delf_model_test.py",
+    "Set the batch size to 2",
+    "Set image size to 321x321",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Initialize Delf model with block3_strides set to True and num_classes set to 1000",
+    "Define a learning rate of 0.001 and momentum of 0.9 for the optimizer",
+    "Generate random uniform labels for the batch with shape (batch_size,)",
+    "Create an instance of SparseCategoricalCrossentropy loss function from tf.keras.losses",
+    "In a GradientTape context, forward pass through the model to get desc_prelogits and attn_prelogits",
+    "Compute descriptor and attention losses using the compute_loss function",
+    "Calculate total loss by summing descriptor and attention losses",
+    "Compute gradients of total loss with respect to trainable weights",
+    "Clip gradients by global norm to a value of 10.0",
+    "Apply gradients to model's trainable weights using optimizer",
+    "Verify that the validation_loss reported in metrics is exactly 0.0"
+]
+```
+

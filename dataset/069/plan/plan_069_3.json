@@ -1,0 +1,22 @@
+```json
+[
+    "Import numpy, pandas, matplotlib.pyplot for data and visualization",
+    "Import tensorflow as tf for the model building and training",
+    "Import keras from tensorflow.keras for model layers and compilation",
+    "Define input_sequence_length = 12 and forecast_horizon = 3",
+    "Define in_feat = 1, out_feat = 10, batch_size = 64, lstm_units = 64",
+    "Create a sample training dataset with shape (batch_size, input_sequence_length, graph.num_nodes, in_feat)",
+    "Create a sample validation dataset with the same shape as the training dataset",
+    "Define the LSTMGC layer with specified parameters: aggregation_type='mean', combination_type='concat'",
+    "Create an input layer of shape (input_sequence_length, graph.num_nodes, in_feat)",
+    "Pass the input layer through the LSTMGC layer to get model outputs",
+    "Construct a keras model using the input and output layers",
+    "Compile the model with optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.0002) and loss='mse'",
+    "Train the model on the training dataset for 20 epochs with early stopping patience of 10",
+    "Create a sample test set with shape (batch_size, input_sequence_length, graph.num_nodes, in_feat)",
+    "Use the trained model to make predictions on the test set",
+    "Plot actual and predicted values for a single node at time step 0 for visualization",
+    "Calculate and print the mean squared error of naive forecasts and model forecasts"
+]
+```
+

@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torch.optim, torchvision.transforms, and torchvision.datasets",
+    "Set the image size to 128x128 by modifying the relevant data transformation parameters",
+    "Define a batch size of 64 for training and 1000 for testing",
+    "Load the CelebA dataset using torchvision.datasets.ImageFolder with the appropriate root directory and transform to resize images to (128, 128)",
+    "Create a DataLoader for the training set with batch size 64 and shuffle set to True",
+    "Create a DataLoader for the testing set with batch size 1000",
+    "Define the DCGAN generator and discriminator models with input dimensions adjusted for 128x128 images",
+    "Initialize the loss function as nn.BCELoss()",
+    "Set the number of training epochs to 5 for quick testing",
+    "Start the training loop, iterating over the training DataLoader",
+    "In each iteration, generate random noise input for the generator with shape (batch_size, 100, 1, 1)",
+    "Pass the noise through the generator to produce fake images of shape (batch_size, 3, 128, 128)",
+    "Obtain real images from the training DataLoader and ensure they have shape (batch_size, 3, 128, 128)",
+    "Create labels for real images as a tensor of ones with shape (batch_size)",
+    "Pass the real images through the discriminator to get output",
+    "Calculate the discriminator loss using the criterion with the output from the discriminator and the real labels",
+    "Print the output shape from the discriminator to verify it is (batch_size, 1) before loss calculation",
+    "Run the training loop for a few epochs and monitor for ValueError during the loss calculation",
+    "Capture the ValueError and print the message to confirm the mismatch in sizes between the target and input during loss calculation",
+    "Assert that the error message contains 'Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200]))'"
+]
+```

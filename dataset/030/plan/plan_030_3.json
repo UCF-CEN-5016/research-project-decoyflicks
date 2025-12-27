@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries from the given code snippet, including paddle and other dependencies.",
+    "Define a model configuration for BertForPretraining with a specific vocab_size and fuse_mha setting as specified in the bert_config.json file used.",
+    "Create a dummy dataset generator that produces batches of data with random values matching the expected input format for BertForPretraining. Ensure the batch size, sequence length, and number of tokens match those required by the model.",
+    "Initialize an instance of BertForPretraining using the defined configuration and load pre-trained weights if available.",
+    "Build a dummy learning rate scheduler that uses CosineAnnealingLR with a max_lr of 0.001 and T_max set to the total number of steps in the dataset for one epoch.",
+    "Define an optimizer (e.g., AdamW) with a specific learning rate, weight decay, and other parameters as specified in the build_optimizer function.",
+    "Create a dummy training loop that iterates through the dataset for a fixed number of epochs or steps. Ensure that the loop calls model.train() before each epoch and model.eval() after each epoch to simulate the train/eval workflow.",
+    "During the training loop, calculate the loss using the criterion (BertPretrainingCriterion) and the predicted scores from the model.",
+    "Verify that during the training loop, a TypeError occurs because the expected input format for lr_scheduler.step() is not met. This might be due to incorrect usage of global_step or gradient_merge_steps within the training loop.",
+    "Monitor the call stack and variables during execution to identify where the type error originates, specifically focusing on how global_step and lr_scheduler.step() are being called within the loop."
+]
+```
+

@@ -1,0 +1,14 @@
+[
+  "Check the installed pip version by running `python -m pip --version` to verify pip version compatibility",
+  "Open a terminal on an Arch Linux system with Python environment ready",
+  "Attempt to run the command `python -m pip install --use-feature=2020-resolver .` in a directory containing a valid Python package (e.g., tensorflow/models/research/object_detection) as per the linked TFOD2 installation instructions",
+  "Capture the full error output from the command, specifically noting the invalid choice error for `--use-feature` option with value `2020-resolver`",
+  "Verify that the error message lists valid choices for `--use-feature` as 'fast-deps', 'truststore', and 'no-binary-enable-wheel-cache', confirming that '2020-resolver' is not recognized",
+  "In a Python script or interactive environment, import the pip module and print `pip._internal.pep425tags.get_supported()` or run `pip debug` to understand pip’s current feature support (optional but useful for environment inspection)",
+  "Assert that the pip version is at least 20.3, as the 2020 resolver feature was introduced in pip 20.3; if the version is older, the bug reproduces as expected",
+  "Document that running `python -m pip install --use-feature=2020-resolver .` on pip versions prior to 20.3 yields the exact error about invalid choice for `--use-feature`",
+  "Reproduce the bug by creating a minimal Python package with a setup.py file in a new directory, then run the command again to confirm consistent failure",
+  "Write a test script that calls `subprocess.run(['python', '-m', 'pip', 'install', '--use-feature=2020-resolver', '.'], capture_output=True, text=True)` and captures stderr to verify the error message programmatically",
+  "Assert in the test script that the stderr output contains the substring `option --use-feature: invalid choice: '2020-resolver'`",
+  "Conclude that the bug is reproducible by using an older pip version that does not support the `2020-resolver` feature flag, causing the installation command to fail with the invalid choice error"
+]

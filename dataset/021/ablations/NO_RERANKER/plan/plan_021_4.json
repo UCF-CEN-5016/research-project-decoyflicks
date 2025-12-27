@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and necessary modules: from official.vision.modeling.layers.detection_generator import _generate_detections_v2_class_aware",
+    "Set the TensorFlow logging level to ERROR to suppress unnecessary logs: tf.get_logger().setLevel('ERROR')",
+    "Define a batch size of 1 for testing purposes.",
+    "Create an empty list to simulate predicted boxes: predicted_boxes = []",
+    "Create a dummy input for the function, such as image_info, with shape (1, 1, 2) to represent one image with height and width: image_info = np.array([[[640, 480]]], dtype=np.float32)",
+    "Call the _generate_detections_v2_class_aware function with the empty predicted boxes: _generate_detections_v2_class_aware(predicted_boxes, image_info)",
+    "Wrap the function call in a try-except block to catch the ValueError: try: _generate_detections_v2_class_aware(predicted_boxes, image_info) except ValueError as e: print(e)",
+    "Assert that the caught exception message contains 'List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2'",
+    "Run the script to verify that the ValueError is raised as expected"
+]
+```

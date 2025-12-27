@@ -1,0 +1,32 @@
+import torch
+from x_transformers import TransformerWrapper, Decoder
+
+# Model setup with flash attention
+model = TransformerWrapper(
+    num_tokens=256,
+    max_seq_len=512,
+    attn_layers=Decoder(
+        dim=512,
+        depth=6,
+        heads=8,
+        attn_flash=True,  # Enable flash attention
+        attn_alibi=True   # Enable alibi position bias
+    )
+).cuda()
+
+# Custom 4D attention bias (batch, heads, seq, seq)
+batch_size = 2
+seq_len = 128
+heads = 8
+custom_alibi = torch.randn(batch_size, heads, seq_len, seq_len).cuda()
+
+# Input data
+x = torch.randint(0, 256, (batch_size, seq_len)).cuda()
+
+# Handling 4D alibi bias in flash attention
+try:
+    out = model(x, attn_bias=custom_alibi)
+    print("Forward pass successful")
+except Exception as e:
+    print(f"Error: {str(e)}")
+    print("Flash attention failed to handle 4D alibi bias")

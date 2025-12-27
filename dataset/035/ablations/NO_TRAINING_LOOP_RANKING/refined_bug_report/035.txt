@@ -1,0 +1,17 @@
+TITLE  
+Incorrect Parameter in RotaryPositionalEmbeddings Initialization  
+
+SYMPTOMS  
+• The code on line 226 of the specified file initializes `RotaryPositionalEmbeddings` with an incorrect parameter value of 3.  
+• An error is raised when executing the code due to the mismatch in expected features.  
+• The example provided in the documentation or code comments indicates that 4 features should be used, leading to confusion.  
+
+EXPECTED BEHAVIOR  
+The code should initialize `RotaryPositionalEmbeddings` with a parameter value of 4, allowing it to function correctly without raising errors when the example is executed.  
+
+REPRODUCTION STEPS  
+1. Clone the repository from the provided GitHub link.  
+2. Navigate to the file located at `labml_nn/transformers/rope/__init__.py`.  
+3. Locate line 226 where `rotary_pe = RotaryPositionalEmbeddings(3)` is defined.  
+4. Run the code to observe the error.  
+5. Modify the line to `rotary_pe = RotaryPositionalEmbeddings(4)` and re-run the code to verify the issue is resolved.

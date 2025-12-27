@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and Keras modules: keras.layers, keras.models, and keras.optimizers",
+    "Set the environment variable for Keras backend to 'tensorflow'",
+    "Define a batch size of 64 and image dimensions of 256x256",
+    "Load the tf_flowers dataset using tfds.load with split=['train[:90%]', 'train[90%:]']",
+    "Define a preprocessing function that resizes images to (280, 280) and crops to (256, 256) for training",
+    "Map the preprocessing function to the training dataset and batch it with the defined batch size",
+    "Define a MobileViT model architecture using create_mobilevit function with num_classes=5",
+    "Compile the model with Adam optimizer and CategoricalCrossentropy loss with label smoothing of 0.1",
+    "Call the model's fit method on the training dataset for 10 epochs",
+    "During training, monitor the output for any errors, specifically looking for OperatorNotAllowedInGraphError",
+    "If the error occurs, capture the stack trace and the shape of the inputs to the Softmax layer",
+    "Verify that the input to the Softmax layer has shape (None, 4, None, None) as indicated in the error message",
+    "Log the error message and the shapes of the tensors involved in the computation",
+    "Assert that the error message contains 'OperatorNotAllowedInGraphError' to confirm the bug"
+]
+```

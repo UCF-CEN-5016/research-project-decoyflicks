@@ -1,0 +1,30 @@
+TITLE
+Inconsistent Data Types in Tensor Operations
+
+SYMPTOMS
+• The error occurs during the data augmentation and preprocessing pipeline.
+• Error message:
+```python
+Tensor("sequential_4/rand_augment_4/cond/random_choice_4/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential_4/rand_augment_4/cond/random_choice_4/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types
+```
+
+EXPECTED BEHAVIOR
+• The `augmented_train_ds` should be correctly batched and preprocessed without any type mismatch errors.
+• The tensors passed through the pipeline should maintain consistent data types.
+
+REPRODUCTION STEPS
+1. Ensure that you are using the file `oxford_pets_image_segmentation.py` from the `examples/vision` directory.
+2. Verify that the environment variables such as `BATCH_SIZE`, `AUTOTUNE`, and any augmentation function `augment_fn` are correctly defined and compatible with the dataset.
+3. Run the training data pipeline code snippet provided in the original bug report:
+```python
+augmented_train_ds = (
+train_ds.shuffle(BATCH_SIZE * 2)
+.map(augment_fn, num_parallel_calls=AUTOTUNE)
+.batch(BATCH_SIZE)
+.map(unpackage_inputs)
+.prefetch(buffer_size=tf.data.AUTOTUNE)
+)
+```
+4. Observe if the error occurs during the execution of this code snippet.
+
+This structured analysis should help in identifying and resolving the underlying issue causing the type mismatch between tensors.

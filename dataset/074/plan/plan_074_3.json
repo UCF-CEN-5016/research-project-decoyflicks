@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary modules: datasets, deepspeed, fire, functools, json, pathlib, pytz, random, torch, transformers, typing",
+    "Define function parameters for train function: mask_prob, random_replace_prob, unmask_replace_prob, tokenizer, max_seq_length, batch_size, num_iterations, checkpoint_every, load_checkpoint_dir, exp_dir",
+    "Load dataset using datasets.load_dataset function with specified parameters",
+    "Create data iterator using create_data_iterator function with provided parameters",
+    "Initialize model using create_model function with specified parameters",
+    "Configure DeepSpeed engine using ds_config dictionary with train_micro_batch_size_per_gpu, optimizer, dtype, and zero_optimization settings",
+    "Load model checkpoint if load_checkpoint_dir is not None",
+    "Start training loop: iterate over data_iterator until step >= num_iterations",
+    "For each batch, move tensors to device",
+    "Perform forward pass to calculate loss",
+    "Perform backward pass and optimizer step",
+    "Log mean loss every log_every steps",
+    "Save model checkpoint every checkpoint_every steps",
+    "After training loop, save last checkpoint if not saved yet",
+    "Return experiment directory exp_dir"
+]
+```
+

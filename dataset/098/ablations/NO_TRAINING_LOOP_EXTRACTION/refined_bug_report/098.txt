@@ -1,0 +1,41 @@
+### TITLE
+NameError due to unassigned member variable in SinusoidalPosEmb class
+
+### SYMPTOMS
+• The `theta` parameter is not assigned as a member variable in the `SinusoidalPosEmb` class.  
+• When executing the `forward` function, a `NameError` is raised:  
+```
+NameError: name 'theta' is not defined
+```
+• The program fails to compute the sinusoidal positional embeddings as expected.
+
+### EXPECTED BEHAVIOR
+The `SinusoidalPosEmb` class should correctly compute and return the sinusoidal positional embeddings without raising errors. The `theta` value should be properly utilized in the `forward` function.
+
+### REPRODUCTION STEPS
+1. Implement the `SinusoidalPosEmb` class as shown in the original bug report.
+2. Create an instance of the class with a specified `dim` value, e.g., `emb = SinusoidalPosEmb(dim=4)`.
+3. Pass a tensor `x` to the instance, e.g., `x = torch.ones((10))`, and call the `emb` instance with `out = emb(x)`.
+4. Observe the raised `NameError` during the execution of the `forward` function. 
+
+### RESOLUTION
+To resolve the issue, assign `theta` as a member variable in the `__init__` method and reference it as `self.theta` in the `forward` method. The corrected code is as follows:
+
+```python
+class SinusoidalPosEmb(nn.Module):
+    def __init__(self, dim, theta=10000):
+        super().__init__()
+        self.dim = dim
+        self.theta = theta
+
+    def forward(self, x):
+        device = x.device
+        half_dim = self.dim // 2
+        emb = math.log(self.theta) / (half_dim - 1)
+        emb = torch.exp(torch.arange(half_dim, device=device) * -emb)
+        emb = x[:, None] * emb[None, :]
+        emb = torch.cat((emb.sin(), emb.cos()), dim=-1)
+        return emb
+```
+
+This adjustment ensures that `theta` is properly recognized within the `forward` method, preventing the `NameError` from occurring.

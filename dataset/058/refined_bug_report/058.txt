@@ -1,0 +1,46 @@
+TITLE
+Retina Net Model Fit Error During Training
+
+SYMPTOMS
+• Graph execution error detected at node `retina_net_label_encoder_18/GatherV2_1`.
+• The error occurs when attempting to fit the RetinaNet model with custom data.
+• Specific error message:
+```
+indices[3,63949] = 0 is not in [0, 0]
+[[node retina_net_label_encoder_18/GatherV2_1]] [Op:__inference_train_function_411270]
+```
+
+EXPECTED BEHAVIOR
+• The model should be able to train on the provided dataset without encountering any errors.
+• Expected output is a trained RetinaNet model that can accurately perform object detection.
+
+REPRODUCTION STEPS
+1. Structure your dataset as per the demo noted in `https://keras.io/guides/keras_cv/object_detection_keras_cv/`.
+2. Import necessary libraries and modules:
+```python
+import tensorflow as tf
+from keras_cv.models.object_detection.retinanet import RetinaNet, RetinaNetBackbone
+```
+3. Initialize the RetinaNet model with appropriate backbone and output stages:
+```python
+model = RetinaNet(
+num_classes=NUM_CLASSES,
+bounding_box_variance=[0.1, 0.1, 0.2, 0.2],
+backbone=RetinaNetBackbone.resnet50_backbone(),
+)
+```
+4. Prepare your training and evaluation datasets `train_ds` and `eval_ds`.
+5. Attempt to fit the model using:
+```python
+model.fit(
+train_ds.take(20),
+validation_data=eval_ds.take(20),
+epochs=1,
+callbacks=[EvaluateCOCOMetricsCallback(eval_ds.take(20))],
+)
+```
+
+NOTES
+- Ensure that your dataset is correctly structured with the expected format.
+- Verify that all indices and labels in your dataset are within valid ranges.
+- Check for any inconsistencies or errors in the way the data is being prepared or fed into the model.

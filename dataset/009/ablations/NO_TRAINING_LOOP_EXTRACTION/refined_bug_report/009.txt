@@ -1,0 +1,21 @@
+TITLE  
+AttributeError when exporting Faster R-CNN model
+
+SYMPTOMS  
+• Attempting to export a trained Faster R-CNN model results in an error.  
+• The following error message is displayed:  
+  `AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs'`  
+• The model fails to export, preventing further use or deployment.  
+
+EXPECTED BEHAVIOR  
+The model should export successfully without any attribute errors, allowing the user to utilize the trained Faster R-CNN model for inference or deployment.
+
+REPRODUCTION STEPS  
+1. Train the model using `model_main_tf2.py` with the configuration `faster_rcnn_resnet50_v1_640x640_coco17_tpu-8`.  
+2. Attempt to export the model using `exporter_main_v2.py`.  
+3. Observe the error message during the export process.  
+
+ENVIRONMENT  
+• CUDA version: 11.5  
+• TensorFlow GPU version: 2.4  
+• Python version: 3.7.16

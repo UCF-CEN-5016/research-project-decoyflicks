@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and pathlib modules",
+    "Set TensorFlow version to 1.x by using 'tf.compat.v1' for compatibility",
+    "Define a function 'load_model' that takes 'model_name' as a parameter",
+    "Set 'base_url' to 'http://download.tensorflow.org/models/research/object_detection/'",
+    "Set 'model_file' to 'model_name + '.tar.gz''",
+    "Use 'tf.keras.utils.get_file' to download the model file, setting 'fname' to 'model_name' and 'origin' to 'base_url + model_file', and 'untar' to True",
+    "Set 'model_dir' to 'pathlib.Path(model_dir)/'saved_model''",
+    "Print 'model_dir' to verify the path",
+    "Attempt to load the model using 'tf.saved_model.load' with 'str(model_dir)'",
+    "Access the model signature with 'model.signatures['serving_default']'",
+    "Return the loaded model from the 'load_model' function",
+    "Define a list 'TEST_IMAGE_PATHS' with at least one image path, e.g., ['path/to/test/image.jpg']",
+    "Call 'load_model' with a valid model name, e.g., 'ssd_mobilenet_v1_coco_2017_11_17'",
+    "Iterate over 'TEST_IMAGE_PATHS' and call 'show_inference(detection_model, image_path)' for each image path",
+    "Capture the output of 'show_inference' and check for empty tensors or '???' in the output",
+    "Assert that the output of 'show_inference' does not contain valid detection results, indicating a failure in model loading or inference"
+]
+```

@@ -1,0 +1,378 @@
+{
+  "bug_report": "059",
+  "rank": 4,
+  "score": 0.9128886461257935,
+  "main_file": {
+    "path": "examples/vision/vivit.py",
+    "content": "\"\"\"\nTitle: Video Vision Transformer\nAuthor: [Aritra Roy Gosthipaty](https://twitter.com/ariG23498), [Ayush Thakur](https://twitter.com/ayushthakur0) (equal contribution)\nDate created: 2022/01/12\nLast modified:  2024/01/15\nDescription: A Transformer-based architecture for video classification.\nAccelerator: GPU\n\"\"\"\n\n\"\"\"\n## Introduction\n\nVideos are sequences of images. Let's assume you have an image\nrepresentation model (CNN, ViT, etc.) and a sequence model\n(RNN, LSTM, etc.) at hand. We ask you to tweak the model for video\nclassification. The simplest approach would be to apply the image\nmodel to individual frames, use the sequence model to learn\nsequences of image features, then apply a classification head on\nthe learned sequence representation.\nThe Keras example\n[Video Classification with a CNN-RNN Architecture](https://keras.io/examples/vision/video_classification/)\nexplains this approach in detail. Alernatively, you can also\nbuild a hybrid Transformer-based model for video classification as shown in the Keras example\n[Video Classification with Transformers](https://keras.io/examples/vision/video_transformers/).\n\nIn this example, we minimally implement\n[ViViT: A Video Vision Transformer](https://arxiv.org/abs/2103.15691)\nby Arnab et al., a **pure Transformer-based** model\nfor video classification. The authors propose a novel embedding scheme\nand a number of Transformer variants to model video clips. We implement\nthe embedding scheme and one of the variants of the Transformer\narchitecture, for simplicity.\n\nThis example requires  `medmnist` package, which can be installed\nby running the code cell below.\n\"\"\"\n\n\"\"\"shell\npip install -qq medmnist\n\"\"\"\n\n\"\"\"\n## Imports\n\"\"\"\n\nimport os\nimport io\nimport imageio\nimport medmnist\nimport ipywidgets\nimport numpy as np\nimport tensorflow as tf  # for data preprocessing only\nimport keras\nfrom keras import layers, ops\n\n# Setting seed for reproducibility\nSEED = 42\nos.environ[\"TF_CUDNN_DETERMINISTIC\"] = \"1\"\nkeras.utils.set_random_seed(SEED)\n\n\"\"\"\n## Hyperparameters\n\nThe hyperparameters are chosen via hyperparameter\nsearch. You can learn more about the process in the \"conclusion\" section.\n\"\"\"\n\n# DATA\nDATASET_NAME = \"organmnist3d\"\nBATCH_SIZE = 32\nAUTO = tf.data.AUTOTUNE\nINPUT_SHAPE = (28, 28, 28, 1)\nNUM_CLASSES = 11\n\n# OPTIMIZER\nLEARNING_RATE = 1e-4\nWEIGHT_DECAY = 1e-5\n\n# TRAINING\nEPOCHS = 60\n\n# TUBELET EMBEDDING\nPATCH_SIZE = (8, 8, 8)\nNUM_PATCHES = (INPUT_SHAPE[0] // PATCH_SIZE[0]) ** 2\n\n# ViViT ARCHITECTURE\nLAYER_NORM_EPS = 1e-6\nPROJECTION_DIM = 128\nNUM_HEADS = 8\nNUM_LAYERS = 8\n\n\"\"\"\n## Dataset\n\nFor our example we use the\n[MedMNIST v2: A Large-Scale Lightweight Benchmark for 2D and 3D Biomedical Image Classification](https://medmnist.com/)\ndataset. The videos are lightweight and easy to train on.\n\"\"\"\n\n\ndef download_and_prepare_dataset(data_info: dict):\n    \"\"\"Utility function to download the dataset.\n\n    Arguments:\n        data_info (dict): Dataset metadata.\n    \"\"\"\n    data_path = keras.utils.get_file(origin=data_info[\"url\"], md5_hash=data_info[\"MD5\"])\n\n    with np.load(data_path) as data:\n        # Get videos\n        train_videos = data[\"train_images\"]\n        valid_videos = data[\"val_images\"]\n        test_videos = data[\"test_images\"]\n\n        # Get labels\n        train_labels = data[\"train_labels\"].flatten()\n        valid_labels = data[\"val_labels\"].flatten()\n        test_labels = data[\"test_labels\"].flatten()\n\n    return (\n        (train_videos, train_labels),\n        (valid_videos, valid_labels),\n        (test_videos, test_labels),\n    )\n\n\n# Get the metadata of the dataset\ninfo = medmnist.INFO[DATASET_NAME]\n\n# Get the dataset\nprepared_dataset = download_and_prepare_dataset(info)\n(train_videos, train_labels) = prepared_dataset[0]\n(valid_videos, valid_labels) = prepared_dataset[1]\n(test_videos, test_labels) = prepared_dataset[2]\n\n\"\"\"\n### `tf.data` pipeline\n\"\"\"\n\n\ndef preprocess(frames: tf.Tensor, label: tf.Tensor):\n    \"\"\"Preprocess the frames tensors and parse the labels.\"\"\"\n    # Preprocess images\n    frames = tf.image.convert_image_dtype(\n        frames[\n            ..., tf.newaxis\n        ],  # The new axis is to help for further processing with Conv3D layers\n        tf.float32,\n    )\n    # Parse label\n    label = tf.cast(label, tf.float32)\n    return frames, label\n\n\ndef prepare_dataloader(\n    videos: np.ndarray,\n    labels: np.ndarray,\n    loader_type: str = \"train\",\n    batch_size: int = BATCH_SIZE,\n):\n    \"\"\"Utility function to prepare the dataloader.\"\"\"\n    dataset = tf.data.Dataset.from_tensor_slices((videos, labels))\n\n    if loader_type == \"train\":\n        dataset = dataset.shuffle(BATCH_SIZE * 2)\n\n    dataloader = (\n        dataset.map(preprocess, num_parallel_calls=tf.data.AUTOTUNE)\n        .batch(batch_size)\n        .prefetch(tf.data.AUTOTUNE)\n    )\n    return dataloader\n\n\ntrainloader = prepare_dataloader(train_videos, train_labels, \"train\")\nvalidloader = prepare_dataloader(valid_videos, valid_labels, \"valid\")\ntestloader = prepare_dataloader(test_videos, test_labels, \"test\")\n\n\"\"\"\n## Tubelet Embedding\n\nIn ViTs, an image is divided into patches, which are then spatially\nflattened, a process known as tokenization. For a video, one can\nrepeat this process for individual frames. **Uniform frame sampling**\nas suggested by the authors is a tokenization scheme in which we\nsample frames from the video clip and perform simple ViT tokenization.\n\n| ![uniform frame sampling](https://i.imgur.com/aaPyLPX.png) |\n| :--: |\n| Uniform Frame Sampling [Source](https://arxiv.org/abs/2103.15691) |\n\n**Tubelet Embedding** is different in terms of capturing temporal\ninformation from the video.\nFirst, we extract volumes from the video -- these volumes contain\npatches of the frame and the temporal information as well. The volumes\nare then flattened to build video tokens.\n\n| ![tubelet embedding](https://i.imgur.com/9G7QTfV.png) |\n| :--: |\n| Tubelet Embedding [Source](https://arxiv.org/abs/2103.15691) |\n\"\"\"\n\n\nclass TubeletEmbedding(layers.Layer):\n    def __init__(self, embed_dim, patch_size, **kwargs):\n        super().__init__(**kwargs)\n        self.projection = layers.Conv3D(\n            filters=embed_dim,\n            kernel_size=patch_size,\n            strides=patch_size,\n            padding=\"VALID\",\n        )\n        self.flatten = layers.Reshape(target_shape=(-1, embed_dim))\n\n    def call(self, videos):\n        projected_patches = self.projection(videos)\n        flattened_patches = self.flatten(projected_patches)\n        return flattened_patches\n\n\n\"\"\"\n## Positional Embedding\n\nThis layer adds positional information to the encoded video tokens.\n\"\"\"\n\n\nclass PositionalEncoder(layers.Layer):\n    def __init__(self, embed_dim, **kwargs):\n        super().__init__(**kwargs)\n        self.embed_dim = embed_dim\n\n    def build(self, input_shape):\n        _, num_tokens, _ = input_shape\n        self.position_embedding = layers.Embedding(\n            input_dim=num_tokens, output_dim=self.embed_dim\n        )\n        self.positions = ops.arange(0, num_tokens, 1)\n\n    def call(self, encoded_tokens):\n        # Encode the positions and add it to the encoded tokens\n        encoded_positions = self.position_embedding(self.positions)\n        encoded_tokens = encoded_tokens + encoded_positions\n        return encoded_tokens\n\n\n\"\"\"\n## Video Vision Transformer\n\nThe authors suggest 4 variants of Vision Transformer:\n\n- Spatio-temporal attention\n- Factorized encoder\n- Factorized self-attention\n- Factorized dot-product attention\n\nIn this example, we will implement the **Spatio-temporal attention**\nmodel for simplicity. The following code snippet is heavily inspired from\n[Image classification with Vision Transformer](https://keras.io/examples/vision/image_classification_with_vision_transformer/).\nOne can also refer to the\n[official repository of ViViT](https://github.com/google-research/scenic/tree/main/scenic/projects/vivit)\nwhich contains all the variants, implemented in JAX.\n\"\"\"\n\n\ndef create_vivit_classifier(\n    tubelet_embedder,\n    positional_encoder,\n    input_shape=INPUT_SHAPE,\n    transformer_layers=NUM_LAYERS,\n    num_heads=NUM_HEADS,\n    embed_dim=PROJECTION_DIM,\n    layer_norm_eps=LAYER_NORM_EPS,\n    num_classes=NUM_CLASSES,\n):\n    # Get the input layer\n    inputs = layers.Input(shape=input_shape)\n    # Create patches.\n    patches = tubelet_embedder(inputs)\n    # Encode patches.\n    encoded_patches = positional_encoder(patches)\n\n    # Create multiple layers of the Transformer block.\n    for _ in range(transformer_layers):\n        # Layer normalization and MHSA\n        x1 = layers.LayerNormalization(epsilon=1e-6)(encoded_patches)\n        attention_output = layers.MultiHeadAttention(\n            num_heads=num_heads, key_dim=embed_dim // num_heads, dropout=0.1\n        )(x1, x1)\n\n        # Skip connection\n        x2 = layers.Add()([attention_output, encoded_patches])\n\n        # Layer Normalization and MLP\n        x3 = layers.LayerNormalization(epsilon=1e-6)(x2)\n        x3 = keras.Sequential(\n            [\n                layers.Dense(units=embed_dim * 4, activation=ops.gelu),\n                layers.Dense(units=embed_dim, activation=ops.gelu),\n            ]\n        )(x3)\n\n        # Skip connection\n        encoded_patches = layers.Add()([x3, x2])\n\n    # Layer normalization and Global average pooling.\n    representation = layers.LayerNormalization(epsilon=layer_norm_eps)(encoded_patches)\n    representation = layers.GlobalAvgPool1D()(representation)\n\n    # Classify outputs.\n    outputs = layers.Dense(units=num_classes, activation=\"softmax\")(representation)\n\n    # Create the Keras model.\n    model = keras.Model(inputs=inputs, outputs=outputs)\n    return model\n\n\n\"\"\"\n## Train\n\"\"\"\n\n\ndef run_experiment():\n    # Initialize model\n    model = create_vivit_classifier(\n        tubelet_embedder=TubeletEmbedding(\n            embed_dim=PROJECTION_DIM, patch_size=PATCH_SIZE\n        ),\n        positional_encoder=PositionalEncoder(embed_dim=PROJECTION_DIM),\n    )\n\n    # Compile the model with the optimizer, loss function\n    # and the metrics.\n    optimizer = keras.optimizers.Adam(learning_rate=LEARNING_RATE)\n    model.compile(\n        optimizer=optimizer,\n        loss=\"sparse_categorical_crossentropy\",\n        metrics=[\n            keras.metrics.SparseCategoricalAccuracy(name=\"accuracy\"),\n            keras.metrics.SparseTopKCategoricalAccuracy(5, name=\"top-5-accuracy\"),\n        ],\n    )\n\n    # Train the model.\n    _ = model.fit(trainloader, epochs=EPOCHS, validation_data=validloader)\n\n    _, accuracy, top_5_accuracy = model.evaluate(testloader)\n    print(f\"Test accuracy: {round(accuracy * 100, 2)}%\")\n    print(f\"Test top 5 accuracy: {round(top_5_accuracy * 100, 2)}%\")\n\n    return model\n\n\nmodel = run_experiment()\n\n\"\"\"\n## Inference\n\"\"\"\n\nNUM_SAMPLES_VIZ = 25\ntestsamples, labels = next(iter(testloader))\ntestsamples, labels = testsamples[:NUM_SAMPLES_VIZ], labels[:NUM_SAMPLES_VIZ]\n\nground_truths = []\npreds = []\nvideos = []\n\nfor i, (testsample, label) in enumerate(zip(testsamples, labels)):\n    # Generate gif\n    testsample = np.reshape(testsample.numpy(), (-1, 28, 28))\n    with io.BytesIO() as gif:\n        imageio.mimsave(gif, (testsample * 255).astype(\"uint8\"), \"GIF\", fps=5)\n        videos.append(gif.getvalue())\n\n    # Get model prediction\n    output = model.predict(ops.expand_dims(testsample, axis=0))[0]\n    pred = np.argmax(output, axis=0)\n\n    ground_truths.append(label.numpy().astype(\"int\"))\n    preds.append(pred)\n\n\ndef make_box_for_grid(image_widget, fit):\n    \"\"\"Make a VBox to hold caption/image for demonstrating option_fit values.\n\n    Source: https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Styling.html\n    \"\"\"\n    # Make the caption\n    if fit is not None:\n        fit_str = \"'{}'\".format(fit)\n    else:\n        fit_str = str(fit)\n\n    h = ipywidgets.HTML(value=\"\" + str(fit_str) + \"\")\n\n    # Make the green box with the image widget inside it\n    boxb = ipywidgets.widgets.Box()\n    boxb.children = [image_widget]\n\n    # Compose into a vertical box\n    vb = ipywidgets.widgets.VBox()\n    vb.layout.align_items = \"center\"\n    vb.children = [h, boxb]\n    return vb\n\n\nboxes = []\nfor i in range(NUM_SAMPLES_VIZ):\n    ib = ipywidgets.widgets.Image(value=videos[i], width=100, height=100)\n    true_class = info[\"label\"][str(ground_truths[i])]\n    pred_class = info[\"label\"][str(preds[i])]\n    caption = f\"T: {true_class} | P: {pred_class}\"\n\n    boxes.append(make_box_for_grid(ib, caption))\n\nipywidgets.widgets.GridBox(\n    boxes, layout=ipywidgets.widgets.Layout(grid_template_columns=\"repeat(5, 200px)\")\n)\n\n\"\"\"\n## Final thoughts\n\nWith a vanilla implementation, we achieve ~79-80% Top-1 accuracy on the\ntest dataset.\n\nThe hyperparameters used in this tutorial were finalized by running a\nhyperparameter search using\n[W&B Sweeps](https://docs.wandb.ai/guides/sweeps).\nYou can find out our sweeps result\n[here](https://wandb.ai/minimal-implementations/vivit/sweeps/66fp0lhz)\nand our quick analysis of the results\n[here](https://wandb.ai/minimal-implementations/vivit/reports/Hyperparameter-Tuning-Analysis--VmlldzoxNDEwNzcx).\n\nFor further improvement, you could look into the following:\n\n- Using data augmentation for videos.\n- Using a better regularization scheme for training.\n- Apply different variants of the transformer model as in the paper.\n\nWe would like to thank [Anurag Arnab](https://anuragarnab.github.io/)\n(first author of ViViT) for helpful discussion. We are grateful to\n[Weights and Biases](https://wandb.ai/site) program for helping with\nGPU credits.\n\nYou can use the trained model hosted on [Hugging Face Hub](https://huggingface.co/keras-io/video-vision-transformer)\nand try the demo on [Hugging Face Spaces](https://huggingface.co/spaces/keras-io/video-vision-transformer-CT).\n\"\"\"\n"
+  },
+  "module_snippets": [
+    {
+      "file": "guides/serialization_and_saving.py",
+      "snippets": [
+        {
+          "lines": "198-199",
+          "code": "def get_model():\n    # Create a simple model.\n    inputs = keras.Input(shape=(32,))\n    outputs = keras.layers.Dense(1)(inputs)\n    model = keras.Model(inputs, outputs)\n    model.compile(optimizer=keras.optimizers.Adam(), loss=\"mean_squared_error\")\n    return model\n\nclass CustomLayer(keras.layers.Layer):\n    def __init__(self, factor):\n        super().__init__()\n        self.factor = factor\n\n    def call(self, x):\n        return x * self.factor\n\n    def get_config(self):\n        return {\"factor\": self.factor}\n\ndef custom_fn(x):\n    return x**2"
+        }
+      ]
+    },
+    {
+      "file": "examples/vision/masked_image_modeling.py",
+      "snippets": [
+        {
+          "lines": "628-636",
+          "code": "    def calculate_loss(self, images, test=False):\n        # Augment the input images.\n        if test:\n            augmented_images = self.test_augmentation_model(images)\n        else:\n            augmented_images = self.train_augmentation_model(images)\n\n        # Patch the augmented images.\n        patches = self.patch_layer(augmented_images)\n\n        # Encode the patches.\n        (\n            unmasked_embeddings,\n            masked_embeddings,\n            unmasked_positions,\n            mask_indices,\n            unmask_indices,\n        ) = self.patch_encoder(patches)\n\n        # Pass the unmaksed patche to the encoder.\n        encoder_outputs = self.encoder(unmasked_embeddings)\n\n        # Create the decoder inputs.\n        encoder_outputs = encoder_outputs + unmasked_positions\n        decoder_inputs = tf.concat([encoder_outputs, masked_embeddings], axis=1)\n\n        # Decode the inputs.\n        decoder_outputs = self.decoder(decoder_inputs)\n        decoder_patches = self.patch_layer(decoder_outputs)\n\n        loss_patch = tf.gather(patches, mask_indices, axis=1, batch_dims=1)\n        loss_output = tf.gather(decoder_patches, mask_indices, axis=1, batch_dims=1)\n\n        # Compute the total loss.\n        total_loss = self.compute_loss(y=loss_patch, y_pred=loss_output)\n\n        return total_loss, loss_patch, loss_output\n\n    def train_step(self, images):\n        with tf.GradientTape() as tape:\n            total_loss, loss_patch, loss_output = self.calculate_loss(images)\n\n        # Apply gradients.\n        train_vars = [\n            self.train_augmentation_model.trainable_variables,\n            self.patch_layer.trainable_variables,\n            self.patch_encoder.trainable_variables,\n            self.encoder.trainable_variables,\n            self.decoder.trainable_variables,\n        ]\n        grads = tape.gradient(total_loss, train_vars)\n        tv_list = []\n        for grad, var in zip(grads, train_vars):\n            for g, v in zip(grad, var):\n                tv_list.append((g, v))\n        self.optimizer.apply_gradients(tv_list)\n\n        # Report progress.\n        results = {}\n        for metric in self.metrics:\n            metric.update_state(loss_patch, loss_output)\n            results[metric.name] = metric.result()\n        return results\n\n    def test_step(self, images):\n        total_loss, loss_patch, loss_output = self.calculate_loss(images, test=True)\n\n        # Update the trackers.\n        results = {}\n        for metric in self.metrics:\n            metric.update_state(loss_patch, loss_output)\n            results[metric.name] = metric.result()\n        return results"
+        }
+      ]
+    },
+    {
+      "file": "examples/vision/patch_convnet.py",
+      "snippets": [
+        {
+          "lines": "455-460",
+          "code": "    def _calculate_loss(self, inputs, test=False):\n        images, labels = inputs\n        # Augment the input images.\n        if test:\n            augmented_images = self.preprocessing_model(images)\n        else:\n            augmented_images = self.train_augmentation_model(images)\n        # Pass through the stem.\n        x = self.stem(augmented_images)\n        # Pass through the trunk.\n        x = self.trunk(x)\n        # Pass through the attention pooling block.\n        logits, _ = self.attention_pooling(x)\n        # Compute the total loss.\n        total_loss = self.compiled_loss(labels, logits)\n        return total_loss, logits\n\n    def train_step(self, inputs):\n        with tf.GradientTape() as tape:\n            total_loss, logits = self._calculate_loss(inputs)\n        # Apply gradients.\n        train_vars = [\n            self.stem.trainable_variables,\n            self.trunk.trainable_variables,\n            self.attention_pooling.trainable_variables,\n        ]\n        grads = tape.gradient(total_loss, train_vars)\n        trainable_variable_list = []\n        for grad, var in zip(grads, train_vars):\n            for g, v in zip(grad, var):\n                trainable_variable_list.append((g, v))\n        self.optimizer.apply_gradients(trainable_variable_list)\n        # Report progress.\n        _, labels = inputs\n        self.compiled_metrics.update_state(labels, logits)\n        return {m.name: m.result() for m in self.metrics}\n\n    def test_step(self, inputs):\n        total_loss, logits = self._calculate_loss(inputs, test=True)\n        # Report progress.\n        _, labels = inputs\n        self.compiled_metrics.update_state(labels, logits)\n        return {m.name: m.result() for m in self.metrics}"
+        }
+      ]
+    },
+    {
+      "file": "examples/vision/super_resolution_sub_pixel.py",
+      "snippets": [
+        {
+          "lines": "314-330",
+          "code": "def get_lowres_image(img, upscale_factor):\n    \"\"\"Return low-resolution image to use as model input.\"\"\"\n    return img.resize(\n        (img.size[0] // upscale_factor, img.size[1] // upscale_factor),\n        PIL.Image.BICUBIC,\n    )\n\ndef upscale_image(model, img):\n    \"\"\"Predict the result based on input image and restore the image as RGB.\"\"\"\n    ycbcr = img.convert(\"YCbCr\")\n    y, cb, cr = ycbcr.split()\n    y = img_to_array(y)\n    y = y.astype(\"float32\") / 255.0\n\n    input = np.expand_dims(y, axis=0)\n    out = model.predict(input)\n\n    out_img_y = out[0]\n    out_img_y *= 255.0\n\n    # Restore the image in RGB color space.\n    out_img_y = out_img_y.clip(0, 255)\n    out_img_y = out_img_y.reshape((np.shape(out_img_y)[0], np.shape(out_img_y)[1]))\n    out_img_y = PIL.Image.fromarray(np.uint8(out_img_y), mode=\"L\")\n    out_img_cb = cb.resize(out_img_y.size, PIL.Image.BICUBIC)\n    out_img_cr = cr.resize(out_img_y.size, PIL.Image.BICUBIC)\n    out_img = PIL.Image.merge(\"YCbCr\", (out_img_y, out_img_cb, out_img_cr)).convert(\n        \"RGB\"\n    )\n    return out_img\n\nclass ESPCNCallback(keras.callbacks.Callback):\n    def __init__(self):\n        super().__init__()\n        self.test_img = get_lowres_image(load_img(test_img_paths[0]), upscale_factor)\n\n    # Store PSNR value in each epoch.\n    def on_epoch_begin(self, epoch, logs=None):\n        self.psnr = []\n\n    def on_epoch_end(self, epoch, logs=None):\n        print(\"Mean PSNR for epoch: %.2f\" % (np.mean(self.psnr)))\n        if epoch % 20 == 0:\n            prediction = upscale_image(self.model, self.test_img)\n            plot_results(prediction, \"epoch-\" + str(epoch), \"prediction\")\n\n    def on_test_batch_end(self, batch, logs=None):\n        self.psnr.append(10 * math.log10(1 / logs[\"loss\"]))"
+        },
+        {
+          "lines": "151-155",
+          "code": "def scaling(input_image):\n    input_image = input_image / 255.0\n    return input_image\n\ndef process_input(input, input_size, upscale_factor):\n    input = tf.image.rgb_to_yuv(input)\n    last_dimension_axis = len(input.shape) - 1\n    y, u, v = tf.split(input, 3, axis=last_dimension_axis)\n    return tf.image.resize(y, [input_size, input_size], method=\"area\")\n\ndef process_target(input):\n    input = tf.image.rgb_to_yuv(input)\n    last_dimension_axis = len(input.shape) - 1\n    y, u, v = tf.split(input, 3, axis=last_dimension_axis)\n    return y"
+        }
+      ]
+    },
+    {
+      "file": "examples/vision/shiftvit.py",
+      "snippets": [
+        {
+          "lines": "977-983",
+          "code": "def process_image(img_path):\n    # read image file from string path\n    img = tf.io.read_file(img_path)\n\n    # decode jpeg to uint8 tensor\n    img = tf.io.decode_jpeg(img, channels=3)\n\n    # resize image to match input size accepted by model\n    # use `method` as `nearest` to preserve dtype of input passed to `resize()`\n    img = tf.image.resize(\n        img, [config.input_shape[0], config.input_shape[1]], method=\"nearest\"\n    )\n    return img\n\ndef create_tf_dataset(image_dir):\n    data_dir = pathlib.Path(image_dir)\n\n    # create tf.data dataset using directory of images\n    predict_ds = tf.data.Dataset.list_files(str(data_dir / \"*.jpg\"), shuffle=False)\n\n    # use map to convert string paths to uint8 image tensors\n    # setting `num_parallel_calls' helps in processing multiple images parallely\n    predict_ds = predict_ds.map(process_image, num_parallel_calls=AUTO)\n\n    # create a Prefetch Dataset for better latency & throughput\n    predict_ds = predict_ds.batch(config.tf_ds_batch_size).prefetch(AUTO)\n    return predict_ds\n\ndef predict(predict_ds):\n    # ShiftViT model returns logits (non-normalized predictions)\n    logits = saved_model.predict(predict_ds)\n\n    # normalize predictions by calling softmax()\n    probabilities = tf.nn.softmax(logits)\n    return probabilities"
+        }
+      ]
+    },
+    {
+      "file": "examples/vision/handwriting_recognition.py",
+      "snippets": [
+        {
+          "lines": "282-285",
+          "code": "def preprocess_image(image_path, img_size=(image_width, image_height)):\n    image = tf.io.read_file(image_path)\n    image = tf.image.decode_png(image, 1)\n    image = distortion_free_resize(image, img_size)\n    image = tf.cast(image, tf.float32) / 255.0\n    return image\n\ndef vectorize_label(label):\n    label = char_to_num(tf.strings.unicode_split(label, input_encoding=\"UTF-8\"))\n    length = tf.shape(label)[0]\n    pad_amount = max_len - length\n    label = tf.pad(label, paddings=[[0, pad_amount]], constant_values=padding_token)\n    return label\n\ndef process_images_labels(image_path, label):\n    image = preprocess_image(image_path)\n    label = vectorize_label(label)\n    return {\"image\": image, \"label\": label}"
+        }
+      ]
+    },
+    {
+      "file": "examples/vision/image_captioning.py",
+      "snippets": [
+        {
+          "lines": "229-235",
+          "code": "def decode_and_resize(img_path):\n    img = tf.io.read_file(img_path)\n    img = tf.image.decode_jpeg(img, channels=3)\n    img = tf.image.resize(img, IMAGE_SIZE)\n    img = tf.image.convert_image_dtype(img, tf.float32)\n    return img\n\ndef process_input(img_path, captions):\n    return decode_and_resize(img_path), vectorization(captions)\n\ndef make_dataset(images, captions):\n    dataset = tf.data.Dataset.from_tensor_slices((images, captions))\n    dataset = dataset.shuffle(BATCH_SIZE * 8)\n    dataset = dataset.map(process_input, num_parallel_calls=AUTOTUNE)\n    dataset = dataset.batch(BATCH_SIZE).prefetch(AUTOTUNE)\n\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "guides/keras_tuner/getting_started.py",
+      "snippets": [
+        {
+          "lines": "597-605",
+          "code": "    def fit(self, hp, model, x, y, validation_data=None, **kwargs):\n        if hp.Boolean(\"normalize\"):\n            x = layers.Normalization()(x)\n        image_size = hp.get(\"image_size\")\n        cropped_x = x[:, :image_size, :image_size, :]\n        if validation_data:\n            x_val, y_val = validation_data\n            cropped_x_val = x_val[:, :image_size, :image_size, :]\n            validation_data = (cropped_x_val, y_val)\n        return model.fit(\n            cropped_x,\n            y,\n            # Tune whether to shuffle the data in each epoch.\n            shuffle=hp.Boolean(\"shuffle\"),\n            validation_data=validation_data,\n            **kwargs,\n        )\n\n    def __init__(self, **kwargs):\n        # Specify the name of the metric as \"custom_metric\".\n        super().__init__(name=\"custom_metric\", **kwargs)\n        self.sum = self.add_weight(name=\"sum\", initializer=\"zeros\")\n        self.count = self.add_weight(name=\"count\", dtype=\"int32\", initializer=\"zeros\")\n\n    def update_state(self, y_true, y_pred, sample_weight=None):\n        values = ops.square(y_true - y_pred)\n        count = ops.shape(y_true)[0]\n        if sample_weight is not None:\n            sample_weight = ops.cast(sample_weight, self.dtype)\n            values *= sample_weight\n            count *= sample_weight\n        self.sum.assign_add(ops.sum(values))\n        self.count.assign_add(count)"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    },
+    {
+      "file": "examples/keras_recipes/tfrecord.py",
+      "snippets": [
+        {
+          "lines": "108-121",
+          "code": "def decode_image(image):\n    image = tf.image.decode_jpeg(image, channels=3)\n    image = tf.cast(image, tf.float32)\n    image = tf.reshape(image, [*IMAGE_SIZE, 3])\n    return image\n\ndef read_tfrecord(example, labeled):\n    tfrecord_format = (\n        {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n            \"target\": tf.io.FixedLenFeature([], tf.int64),\n        }\n        if labeled\n        else {\n            \"image\": tf.io.FixedLenFeature([], tf.string),\n        }\n    )\n    example = tf.io.parse_single_example(example, tfrecord_format)\n    image = decode_image(example[\"image\"])\n    if labeled:\n        label = tf.cast(example[\"target\"], tf.int32)\n        return image, label\n    return image\n\ndef load_dataset(filenames, labeled=True):\n    ignore_order = tf.data.Options()\n    ignore_order.experimental_deterministic = False  # disable order, increase speed\n    dataset = tf.data.TFRecordDataset(\n        filenames\n    )  # automatically interleaves reads from multiple files\n    dataset = dataset.with_options(\n        ignore_order\n    )  # uses data as soon as it streams in, rather than in its original order\n    dataset = dataset.map(\n        partial(read_tfrecord, labeled=labeled), num_parallel_calls=AUTOTUNE\n    )\n    # returns a dataset of (image, label) pairs if labeled=True or just images if labeled=False\n    return dataset"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "imageio",
+      "function": "mimsave"
+    },
+    {
+      "module": "io",
+      "function": "BytesIO"
+    },
+    {
+      "module": "ipywidgets",
+      "function": "HTML"
+    },
+    {
+      "module": "keras",
+      "function": "Add"
+    },
+    {
+      "module": "keras",
+      "function": "Conv3D"
+    },
+    {
+      "module": "keras",
+      "function": "Dense"
+    },
+    {
+      "module": "keras",
+      "function": "Embedding"
+    },
+    {
+      "module": "keras",
+      "function": "GlobalAvgPool1D"
+    },
+    {
+      "module": "keras",
+      "function": "Input"
+    },
+    {
+      "module": "keras",
+      "function": "LayerNormalization"
+    },
+    {
+      "module": "keras",
+      "function": "Model"
+    },
+    {
+      "module": "keras",
+      "function": "MultiHeadAttention"
+    },
+    {
+      "module": "keras",
+      "function": "Reshape"
+    },
+    {
+      "module": "keras",
+      "function": "Sequential"
+    },
+    {
+      "module": "keras",
+      "function": "arange"
+    },
+    {
+      "module": "keras",
+      "function": "expand_dims"
+    }
+  ]
+}

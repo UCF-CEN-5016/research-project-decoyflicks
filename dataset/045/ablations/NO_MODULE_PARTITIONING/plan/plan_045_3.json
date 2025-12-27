@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, os, json, and any other required modules.",
+    "Define constants: set DEVICE to 'cuda' if available, otherwise 'cpu'. Set SAMPLING_FREQ to the sample rate of the audio files (e.g., 16000). Set EMISSION_INTERVAL to a specific value (e.g., 1.0 seconds).",
+    "Prepare a test audio file: Ensure you have a valid audio file in the expected format (e.g., .wav or .flac) located at a specific path (e.g., '/root/autodl-tmp/test_audio.flac').",
+    "Create a configuration YAML file at '/root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml' with the necessary parameters for the fairseq-generate command.",
+    "Load the model: Implement a function load_model_dict() that loads the model from '/root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt' and returns the model and its dictionary.",
+    "Define a function generate_emissions(model, audio_file) that processes the audio file and generates emissions using the model. Ensure it handles the waveform correctly and returns emissions and stride.",
+    "Define a function get_alignments(audio_file, tokens, model, dictionary, use_star) that calls generate_emissions and performs forced alignment using the emissions and token indices.",
+    "Create a main function that sets up the environment: assert the output directory does not exist, read transcripts from a text file (e.g., '/root/autodl-tmp/transcripts.txt'), and normalize the transcripts.",
+    "Call the get_alignments function with the test audio file, tokens, model, dictionary, and use_star set to False.",
+    "Run the fairseq-generate command with the specified parameters: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Validate the output: Check the results in '/root/autodl-tmp/results' for the presence of the error message 'Key 'input_feat_per_channel' is not in struct'.",
+    "Assert that the error message is present in the output to confirm the bug has been reproduced."
+]
+```

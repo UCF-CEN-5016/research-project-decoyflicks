@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import numpy as np, from tensorflow import data as tf_data, from tensorflow import image as tf_image, from tensorflow import io as tf_io",
+    "Set the batch size: BATCH_SIZE = 32",
+    "Set the image size: img_size = (160, 160)",
+    "Prepare paths for input images and target segmentation masks: input_dir = 'images/', target_dir = 'annotations/trimaps/'",
+    "Create a list of input image paths: input_img_paths = sorted([os.path.join(input_dir, fname) for fname in os.listdir(input_dir) if fname.endswith('.jpg')])",
+    "Create a list of target image paths: target_img_paths = sorted([os.path.join(target_dir, fname) for fname in os.listdir(target_dir) if fname.endswith('.png') and not fname.startswith('.')])",
+    "Define a function to load images and masks: def load_img_masks(input_img_path, target_img_path):",
+    "Inside load_img_masks, read and decode the input image: input_img = tf_io.read_file(input_img_path), input_img = tf_io.decode_png(input_img, channels=3), input_img = tf_image.resize(input_img, img_size), input_img = tf_image.convert_image_dtype(input_img, 'float32')",
+    "Inside load_img_masks, read and decode the target image: target_img = tf_io.read_file(target_img_path), target_img = tf_io.decode_png(target_img, channels=1), target_img = tf_image.resize(target_img, img_size, method='nearest'), target_img = tf_image.convert_image_dtype(target_img, 'uint8')",
+    "Inside load_img_masks, adjust target image values: target_img -= 1, return input_img, target_img",
+    "Create a TensorFlow dataset from the input and target image paths: dataset = tf_data.Dataset.from_tensor_slices((input_img_paths, target_img_paths))",
+    "Map the load_img_masks function to the dataset: dataset = dataset.map(load_img_masks, num_parallel_calls=tf_data.AUTOTUNE)",
+    "Batch the dataset: dataset = dataset.batch(BATCH_SIZE)",
+    "Define the augment_fn function to apply augmentations: def augment_fn(inputs): return inputs",
+    "Define the unpackage_inputs function to unpack the dataset: def unpackage_inputs(inputs): return inputs",
+    "Create the augmented training dataset: augmented_train_ds = train_ds.shuffle(BATCH_SIZE * 2).map(augment_fn, num_parallel_calls=tf_data.AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Create the validation dataset: resized_val_ds = val_ds.map(resize_fn, num_parallel_calls=tf_data.AUTOTUNE).batch(BATCH_SIZE).map(unpackage_inputs).prefetch(buffer_size=tf.data.AUTOTUNE)",
+    "Run the code to create the augmented training dataset and validation dataset",
+    "Observe the error message generated during the execution of augmented_train_ds creation",
+    "Verify that the error message indicates a TypeError related to the output types of the branches in the tf.switch_case function"
+]
+```

@@ -1,0 +1,33 @@
+```json
+[
+    "Import necessary libraries: keras, keras_tuner, tensorflow, and numpy",
+    "Set a random seed for reproducibility using numpy and tensorflow",
+    "Define the input shape for the model as (28, 28, 1)",
+    "Create training data: Generate random input data x_train with shape (1000, 28, 28, 1) using np.random.rand",
+    "Create training labels: Generate random integer labels y_train with shape (1000, 1) using np.random.randint with values between 0 and 10",
+    "Create validation data: Generate random input data x_val with shape (1000, 28, 28, 1) using np.random.rand",
+    "Create validation labels: Generate random integer labels y_val with shape (1000, 1) using np.random.randint with values between 0 and 10",
+    "Define a custom HyperModel class MyHyperModel that subclasses keras_tuner.HyperModel",
+    "Implement the build method in MyHyperModel to create a Keras model with an input layer of shape (28, 28, 1), a Flatten layer, a Dense layer with units chosen from [32, 64, 128], and an output Dense layer with 10 units",
+    "Implement the fit method in MyHyperModel to accept parameters hp, model, x, y, validation_data, callbacks, and kwargs",
+    "Inside the fit method, define a batch size using hp.Int with a range of 32 to 128 and a step of 32, setting the default to 64",
+    "Convert x_train and y_train into a tf.data.Dataset object named train_ds, batching it with the defined batch size",
+    "Convert validation_data into a tf.data.Dataset object named validation_data, batching it with the defined batch size",
+    "Define an optimizer using keras.optimizers.Adam with a learning rate defined by hp.Float ranging from 1e-4 to 1e-2, using log sampling and a default of 1e-3",
+    "Define a loss function using keras.losses.SparseCategoricalCrossentropy with from_logits set to True",
+    "Initialize a keras.metrics.Mean object named epoch_loss_metric to track validation loss",
+    "Define a function run_train_step that takes images and labels, computes the loss, and applies gradients using the optimizer",
+    "Define a function run_val_step that takes images and labels, computes the loss, and updates epoch_loss_metric",
+    "Assign the model to each callback in the callbacks list using callback.set_model(model)",
+    "Initialize a variable best_epoch_loss to float('inf') to track the best validation loss",
+    "Create a loop for 2 epochs to simulate training",
+    "Inside the epoch loop, iterate over train_ds to call run_train_step for each batch of images and labels",
+    "Inside the epoch loop, iterate over validation_data to call run_val_step for each batch of images and labels",
+    "After each epoch, compute the epoch loss and call on_epoch_end for each callback with logs containing the epoch loss",
+    "Return the best_epoch_loss at the end of the fit method",
+    "Initialize a RandomSearch tuner from keras_tuner with objective set to keras_tuner.Objective('my_metric', 'min'), max_trials set to 2, and the hypermodel set to MyHyperModel",
+    "Call tuner.search with x set to x_train, y set to y_train, and validation_data set to (x_val, y_val)",
+    "Run the code to fit the model and observe the error message during the fitting process",
+    "Capture the error message and verify it matches the expected error shown in the bug report"
+]
+```

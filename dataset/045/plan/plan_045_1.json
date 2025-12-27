@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules from the fairseq library including EnsembleModel, F (for PyTorch functions), and torch for tensor operations.",
+    "Define a batch size of 16 and input token length of 50.",
+    "Create random uniform input tokens with shape (batch_size, input_token_length) and an additional dimension representing the vocab size of 10000.",
+    "Initialize a dummy input_lengths tensor of shape (batch_size,) filled with ones to represent the lengths of the input sequences.",
+    "Create dummy incremental states with shape (batch_size, beam_size, 2*input_token_length-1) and an additional dimension representing the hidden state size of 512.",
+    "Create dummy target_ids tensor with shape (batch_size, input_token_length+1) filled with values from 0 to 9999.",
+    "Call get_lm_scores function with the model, input_tokens, incremental_states, cand_tokens, input_len, and k.",
+    "Verify that the output probs_next_wrd contains NaN values by checking if any value is equal to float('nan').",
+    "Monitor GPU memory usage during execution using a profiling tool like PyTorch Profiler or Nsight Systems.",
+    "Assert that GPU memory exceeds an expected threshold indicating potential issues with memory management or computation."
+]
+```
+

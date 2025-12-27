@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 8 and input dimensions of (3, 32, 32) for CIFAR-10 images",
+    "Create a random tensor with shape (batch_size, 3, 32, 32) to simulate input images",
+    "Define a simple UNet model class that includes a self-attention mechanism similar to the one in the provided bug report",
+    "In the self-attention mechanism, use einsum to compute attention scores with the shape (batch_size, num_heads, seq_length, seq_length)",
+    "Set the seq_length to 32 (for 32x32 images flattened) and num_heads to 4",
+    "Compute attention scores using einsum with the input tensor and ensure the output shape is (batch_size, num_heads, seq_length, seq_length)",
+    "Apply softmax on the attention scores along the wrong axis (dim=1) instead of the correct axis (dim=2)",
+    "Run a forward pass through the model with the random input tensor",
+    "Capture the output of the attention layer before applying softmax",
+    "Print the output of the attention layer to verify the values are not normalized correctly",
+    "Check for any NaN or unexpected values in the attention output after applying softmax",
+    "Assert that the output of the attention layer contains values that do not sum to 1 along the intended axis",
+    "Log the output values to confirm the presence of the bug in the attention mechanism"
+]
+```

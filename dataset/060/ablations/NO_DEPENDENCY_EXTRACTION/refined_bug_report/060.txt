@@ -1,0 +1,23 @@
+TITLE  
+KerasCV Image Segmentation Fails Due to Type Mismatch in Data Augmentation
+
+SYMPTOMS  
+• The code fails to create datasets for image segmentation using a U-Net-like architecture.  
+• The error occurs both in Google Colab and on a local machine.  
+• The following error message is encountered:  
+  ```
+  TypeError: branches[0] and branches[1] arguments to tf.switch_case must have the same number, type, and overall structure of return values.
+  ```
+• The specific details of the error indicate a type mismatch between tensors:  
+  ```
+  Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types
+  ```
+
+EXPECTED BEHAVIOR  
+The image segmentation training process should execute successfully, creating datasets without any errors. The data augmentation function should apply transformations to the input images and segmentation masks consistently, maintaining the same tensor data types throughout.
+
+REPRODUCTION STEPS  
+1. Run the code provided in the article on either Google Colab or a local machine.  
+2. Ensure that the `train_ds` and `val_ds` datasets are properly initialized.  
+3. Execute the code cell that creates the `augmented_train_ds` and `resized_val_ds` datasets.  
+4. Observe the error message related to the type mismatch during the data augmentation process.

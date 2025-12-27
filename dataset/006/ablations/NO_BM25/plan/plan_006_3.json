@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official DETR project: 'from official.projects.detr.modeling import detr', 'from official.projects.detr.dataloaders import coco', 'from official.projects.detr.configs import detr as detr_cfg'",
+    "Set up a custom dataset for training by creating a COCO format dataset with at least 100 images and corresponding annotations.",
+    "Define a batch size of 8 and image dimensions of 512x512 for the input data.",
+    "Create a configuration object for the DETR model using detr_cfg with the following parameters: input_size=[512, 512, 3], num_classes=80, num_queries=100, hidden_size=256, num_encoder_layers=6, num_decoder_layers=6.",
+    "Instantiate the model using the configuration: model = detr.DETR(backbone, backbone_endpoint_name='backbone', num_queries=100, hidden_size=256, num_classes=80, num_encoder_layers=6, num_decoder_layers=6)",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., SparseCategoricalCrossentropy) using model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')",
+    "Load the custom dataset into a TensorFlow Dataset object with tf.data.Dataset.from_tensor_slices() and apply necessary preprocessing (e.g., resizing, normalization).",
+    "Train the model using model.fit() with the dataset, specifying epochs=10 and steps_per_epoch=10.",
+    "During training, monitor the console output for the warning: 'WARNING:tensorflow:Gradients do not exist for variables ... when minimizing the loss.'",
+    "Verify that the warning appears in the logs, indicating that gradients are not being computed for the specified variables.",
+    "Check the model's trainable variables using model.trainable_variables and assert that the variables listed in the warning are included.",
+    "Ensure that the loss function is correctly defined and that the model is not inadvertently set to a state where it cannot compute gradients (e.g., by checking if the model is in training mode)."
+]
+```

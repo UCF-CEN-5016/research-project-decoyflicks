@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: keras, torch, numpy",
+    "Set the KERAS_BACKEND environment variable to 'torch' using os.environ",
+    "Define a batch size of 64 and input shape of (32,) for the model",
+    "Create random training data with shape (1000, 32) for x and (1000, 1) for y using numpy",
+    "Define a CustomModel class that subclasses keras.Model and overrides the train_step method",
+    "In the train_step method, unpack data into x and y, and call self.zero_grad()",
+    "Compute predictions by calling self(x, training=True) and calculate loss using self.compute_loss(y=y, y_pred=y_pred)",
+    "Call loss.backward() to compute gradients for the weights",
+    "Create a list of trainable weights and their gradients",
+    "Update weights using self.optimizer.apply(gradients, trainable_weights) within a torch.no_grad() context",
+    "Define metrics to track loss and mean absolute error in the CustomModel class",
+    "Compile the CustomModel instance with optimizer='adam', loss='mse', and metrics=['mae']",
+    "Call model.fit(x, y, epochs=3) to start training the model",
+    "Capture any error messages during the model fitting process",
+    "Assert that the error message indicates an issue with fitting the model, as described in the bug report"
+]
+```

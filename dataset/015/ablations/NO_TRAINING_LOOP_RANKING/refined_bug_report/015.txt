@@ -1,0 +1,15 @@
+TITLE  
+Unused Argument in `show_batch` Function  
+
+SYMPTOMS  
+• The argument `num_of_examples` in the `show_batch` function is declared but never utilized within the function's implementation.  
+• No error messages are generated, but the presence of the unused argument may lead to confusion for users reading the code.  
+• The documentation may mislead users into believing that `num_of_examples` affects the function's behavior when it does not.  
+
+EXPECTED BEHAVIOR  
+The `show_batch` function should either utilize the `num_of_examples` argument to control the number of examples displayed or remove the argument if it is unnecessary.  
+
+REPRODUCTION STEPS  
+1. Navigate to the specified line in the provided GitHub link: https://github.com/tensorflow/models/blame/9a2993d140841f37d73cded94c1295da4faab8b5/docs/vision/instance_segmentation.ipynb#L748  
+2. Review the implementation of the `show_batch` function to confirm that `num_of_examples` is not used.  
+3. Check for any related documentation or comments that reference `num_of_examples` and verify their accuracy.

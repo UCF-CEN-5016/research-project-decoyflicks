@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden for instance segmentation.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define a batch size of 8 and image dimensions of 640x640 for the input images.",
+    "Load the COCO dataset or a similar dataset for instance segmentation, ensuring it is in the correct format (TFRecord).",
+    "Create a data pipeline using tf.data API to load the dataset with the following parameters: batch_size=8, shuffle=True, prefetch=tf.data.experimental.AUTOTUNE.",
+    "Define the model configuration for instance segmentation, ensuring to use the default parameters provided in the official tutorial.",
+    "Initialize the model using the Model Garden's instance segmentation API with the specified configuration.",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function suitable for instance segmentation (e.g., SparseCategoricalCrossentropy).",
+    "Set up the training loop to include both training and validation steps, ensuring validation data is included in the pipeline.",
+    "Train the model for a minimum of 5 epochs, monitoring the training and validation metrics during the process.",
+    "During training, periodically log the validation loss using a callback function, ensuring it is printed after each evaluation step.",
+    "After training, evaluate the model on the validation dataset and capture the output metrics, specifically looking for 'validation_loss'.",
+    "Assert that the 'validation_loss' value is equal to 0.0 in the output metrics after evaluation.",
+    "Repeat the evaluation step to confirm that 'validation_loss' remains consistently at 0.0 across multiple evaluations."
+]
+```

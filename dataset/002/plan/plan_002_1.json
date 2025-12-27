@@ -1,0 +1,16 @@
+```json
+[
+    "Install TensorFlow version 2.10.0 using pip: 'pip install tensorflow==2.10.0'",
+    "Clone the TensorFlow models repository from GitHub to /home/server/models_repo",
+    "Navigate to the object detection directory: 'cd /home/server/models_repo/research/object_detection'",
+    "Install all dependencies listed in requirements.txt within the research directory",
+    "Set up the environment by running: 'python setup.py build',
+    "Copy the exporter.py file from 'research/object_detection/tpu_exporters/' to '/home/server/miniforge3/envs/ML/lib/python3.9/site-packages/object_detection'",
+    "Create a symbolic link for tf_slim within TensorFlow 2.x using pip: 'pip install tensorflow-slim'",
+    "Navigate to the directory containing the model_main_tf2.py script",
+    "Run the training command: 'python model_main_tf2.py --model_dir=models/centernet_mobilenetv2fp --pipeline_config_path=models/centernet_mobilenetv2fp/pipeline.config'",
+    "Observe the error message output by the script",
+    "Verify that the error is exactly: 'ModuleNotFoundError: No module named \'tensorflow.contrib\'"
+]
+```
+

@@ -1,0 +1,12 @@
+```json
+[
+    "Import the necessary libraries for PyTorch and the RotaryEmbedding class from the rotary_embedding.py module",
+    "Define a batch size of 32 and sequence length of 1024",
+    "Create random uniform input data with shape (batch_size, sequence_length)",
+    "Call the get_scale function with seq_len parameter set to sequence_length",
+    "Verify that the output from get_scale contains NaN values",
+    "Monitor CPU memory usage during execution",
+    "Assert CPU memory exceeds expected threshold"
+]
+```
+

@@ -1,0 +1,34 @@
+TITLE
+DataFrame append method deprecated, causing AttributeError
+
+SYMPTOMS
+• The code in masked_language_modeling.ipynb raises an `AttributeError` stating that the 'DataFrame' object has no attribute 'append'.
+• A FutureWarning is issued before the error occurs, indicating that the `.append()` method is deprecated and will be removed from pandas in a future version. Users are advised to use `pandas.concat` instead.
+• The exact error message shown is:
+```
+AttributeError                            Traceback (most recent call last)
+/tmp/ipykernel_97675/3156859266.py in ?()
+27
+28 # FutureWarning: The frame.append method is deprecated and will be removed from pandas
+29 # in a future version. Use pandas.concat instead.
+30 # https://stackoverflow.com/questions/75956209/error-dataframe-object-has-no-attribute-append
+---> 31 all_data = train_df.append(test_df)
+
+~/miniconda3/envs/tf/lib/python3.10/site-packages/pandas/core/generic.py in ?(self, name)
+5985             and name not in self._accessors
+5986             and self._info_axis._can_hold_identifiers_and_holds_name(name)
+5987         ):
+5988             return self[name]
+-> 5989         return object.__getattribute__(self, name)
+
+AttributeError: 'DataFrame' object has no attribute 'append'
+```
+
+EXPECTED BEHAVIOR
+When the software works correctly, it should concatenate `train_df` and `test_df` into a single DataFrame named `all_data` without raising any errors or warnings.
+
+REPRODUCTION STEPS
+1. Ensure your environment is set up with Python 3.10, TensorFlow 2.13, and pandas 2.0.3.
+2. Open the Jupyter notebook file `masked_language_modeling.ipynb`.
+3. Locate the line where `train_df.append(test_df)` is used to concatenate two DataFrames (`train_df` and `test_df`).
+4. Run the cell containing this line of code, which will raise an `AttributeError`.

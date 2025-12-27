@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official vision model garden: 'from official.vision.modeling.layers.detection_generator import _generate_detections_v2_class_aware'",
+    "Set the TensorFlow logging level to 'ERROR' to reduce output noise: 'tf.get_logger().setLevel('ERROR')'",
+    "Define a batch size of 1 for testing purposes: 'batch_size = 1'",
+    "Create an empty tensor for predicted boxes with shape (0, 4) to simulate no detections: 'predicted_boxes = tf.constant([], shape=(0, 4), dtype=tf.float32)'",
+    "Create a dummy tensor for predicted scores with shape (0,) to match the empty predicted boxes: 'predicted_scores = tf.constant([], shape=(0,), dtype=tf.float32)'",
+    "Create a dummy tensor for predicted classes with shape (0,) to match the empty predicted boxes: 'predicted_classes = tf.constant([], shape=(0,), dtype=tf.int32)'",
+    "Prepare a dummy input dictionary to simulate the input features required by the function: 'input_features = {\"predicted_boxes\": predicted_boxes, \"predicted_scores\": predicted_scores, \"predicted_classes\": predicted_classes}'",
+    "Call the function '_generate_detections_v2_class_aware' with the empty input features: 'output = _generate_detections_v2_class_aware(input_features)'",
+    "Wrap the function call in a try-except block to catch the ValueError: 'try: output = _generate_detections_v2_class_aware(input_features) except ValueError as e: print(e)'",
+    "Assert that the caught exception message contains 'List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2' to confirm the bug is reproduced: 'assert 'List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2' in str(e)'"
+]
+```

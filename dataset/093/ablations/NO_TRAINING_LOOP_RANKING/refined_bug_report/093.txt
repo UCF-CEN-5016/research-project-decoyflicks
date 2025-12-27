@@ -1,0 +1,38 @@
+TITLE  
+Error when setting both `attn_num_mem_kv` and `attn_one_kv_head` in TransformerWrapper
+
+SYMPTOMS  
+• An error occurs when both `attn_num_mem_kv` and `attn_one_kv_head` are set to True.  
+• Exact error message: [Please include the exact error message here if available].  
+• The model fails to generate logits, leading to unexpected termination of the process.  
+
+EXPECTED BEHAVIOR  
+When the model is configured with `attn_num_mem_kv` set to a positive value and `attn_one_kv_head` set to True, the model should successfully generate logits without any errors.
+
+REPRODUCTION STEPS  
+1. Initialize a `TransformerWrapper` instance with the following parameters:  
+   - `num_tokens = 32`  
+   - `max_seq_len = 0`  
+   - `num_memory_tokens = 20`  
+   - `attn_layers = Decoder` with the following parameters:  
+     - `dim = 512`  
+     - `depth = 4`  
+     - `heads = 4`  
+     - `rotary_pos_emb = True`  
+     - `attn_flash = True`  
+     - `attn_onnxable = True`  
+     - `attn_num_mem_kv = 20`  
+     - `attn_one_kv_head = True`  
+2. Create a random tensor `x` using:  
+   ```python
+   x = torch.randint(0, 32, (8, 1024))
+   ```  
+3. Pass the tensor `x` through the model to generate logits:  
+   ```python
+   logits = lm(x)
+   ```  
+4. Print the shapes and data types of `x` and `logits` to observe the output.  
+   ```python
+   print(x.shape, x.dtype)  
+   print(logits.shape, logits.dtype)  
+   ```

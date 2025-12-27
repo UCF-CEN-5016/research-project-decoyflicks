@@ -1,0 +1,16 @@
+{
+  "bug_report": "021",
+  "rank": 5,
+  "score": 0.8198223114013672,
+  "main_file": {
+    "path": "official/common/dataset_fn.py",
+    "content": "# Copyright 2022 The TensorFlow Authors. All Rights Reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\n# Copyright 2020 The TensorFlow Authors. All Rights Reserved.\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this file except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n# ==============================================================================\n\"\"\"Utility library for picking an appropriate dataset function.\"\"\"\n\nimport functools\nfrom typing import Any, Callable, Type, Union\n\nimport tensorflow as tf\n\nPossibleDatasetType = Union[Type[tf.data.Dataset], Callable[[tf.Tensor], Any]]\n\n\ndef pick_dataset_fn(file_type: str) -> PossibleDatasetType:\n  if file_type == 'tfrecord':\n    return tf.data.TFRecordDataset\n  if file_type == 'tfrecord_compressed':\n    return functools.partial(tf.data.TFRecordDataset, compression_type='GZIP')\n  raise ValueError('Unrecognized file_type: {}'.format(file_type))\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "functools",
+      "function": "partial"
+    }
+  ]
+}

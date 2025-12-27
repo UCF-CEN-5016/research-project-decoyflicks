@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, Keras, and KerasCV",
+    "Set the environment variable for Keras backend to 'tensorflow'",
+    "Define a batch size of 32 and image dimensions of 224x224",
+    "Load a custom dataset structured similarly to the Oxford Flowers dataset using TensorFlow Datasets (tfds)",
+    "Define a function to preprocess the dataset, ensuring images are resized to (224, 224) and labels are one-hot encoded",
+    "Create a training dataset by shuffling, mapping the preprocessing function, and batching the dataset",
+    "Create a validation dataset by mapping the preprocessing function and batching the dataset",
+    "Define a function to apply RandAugment with parameters: value_range=(0, 255), augmentations_per_image=3, magnitude=0.3",
+    "Map the RandAugment function to the training dataset",
+    "Define a function to apply CutMix and MixUp augmentations to the training dataset",
+    "Map the CutMix and MixUp function to the training dataset",
+    "Define a function to preprocess inputs for the model, ensuring images are cast to float32",
+    "Map the preprocessing function to both training and validation datasets",
+    "Create a RetinaNet model using KerasCV with a specified number of classes based on the dataset",
+    "Compile the model with a loss function of CategoricalCrossentropy and an optimizer of SGD",
+    "Attempt to fit the model using the training dataset with parameters: epochs=1, validation_data=validation dataset",
+    "Capture and log any errors that occur during model fitting, specifically looking for InvalidArgumentError",
+    "Verify that the error message contains 'indices[3,63949] = 0 is not in [0, 0)' to confirm the bug is reproduced"
+]
+```

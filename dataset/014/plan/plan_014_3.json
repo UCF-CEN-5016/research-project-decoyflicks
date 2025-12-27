@@ -1,0 +1,15 @@
+[
+    "Import TensorFlow, tf_slim, and necessary functions from object_detection module",
+    "Set up the path to the pipeline.config file",
+    "Load the pipeline configuration using config_util.get_configs_from_pipeline_file() method",
+    "Create an instance of pipeline_pb2.TrainEvalPipelineConfig() and read the content of the pipeline.config file into it using text_format.Merge()",
+    "Add the line 'pipeline_config.eval_input_reader.max_number_of_boxes = 500' directly to the pipeline_config object",
+    "Verify that adding the line directly to the pipeline.config file does not cause any errors during model training",
+    "Create a dummy input tensor for images with dimensions (1, image_size, image_size, 3) and labels with dimensions (1, num_classes)",
+    "Define the number of classes as 1000",
+    "Call the object detection model function with the input tensors and the updated pipeline_config",
+    "Observe if the model trains successfully or throws an error related to max_number_of_boxes not being set correctly",
+    "Monitor the output during training and verify if the model is able to detect more than 100 objects per image",
+    "Assert that without setting the correct values in pipeline.config, the model's performance does not improve as expected"
+]
+

@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the PyTorch examples repository from GitHub using 'git clone https://github.com/pytorch/examples.git'",
+    "Navigate to the 'dcgan' directory using 'cd examples/dcgan'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Download the CelebA dataset from the official website or use a pre-downloaded version, ensuring images are in the correct format and located in a directory named 'celeba'",
+    "Open the 'main.py' file in a text editor",
+    "Locate the section of the code where the image size is defined, typically around line 188, and change the image size from 64 to 128 by modifying the relevant parameters",
+    "Change the batch size to 64 by modifying the 'batch_size' parameter in the data loading section",
+    "Ensure the generator and discriminator architectures are updated to handle 128x128 images by modifying the input and output dimensions in the respective model classes",
+    "Run the modified DCGAN code using the command 'python main.py --batch_size 64'",
+    "Observe the output and wait for the training loop to start",
+    "When the error occurs, note the traceback message, specifically the line indicating 'ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200])) is deprecated'",
+    "Verify that the input size of 3200 is indeed being produced by the model by adding print statements before the line that raises the error to output the shape of the 'output' tensor",
+    "Check the shape of the 'label' tensor to confirm it is of size 128, which is expected",
+    "Document the exact output of the shapes of 'output' and 'label' tensors to confirm the mismatch",
+    "Confirm that the bug is reproducible by running the code multiple times and observing the same error message each time"
+]
+```

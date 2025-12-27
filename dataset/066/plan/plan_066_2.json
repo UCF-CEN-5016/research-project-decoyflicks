@@ -1,0 +1,29 @@
+```json
+[
+    "Import necessary libraries including keras_cv, matplotlib.pyplot, tensorflow, and tensorflow_datasets.",
+    "Define constants for BATCH_SIZE (32) and AUTOTUNE (tf.data.AUTOTUNE).",
+    "Disable progress bars in TensorFlow Datasets with tfds.disable_progress_bar() to ensure logs are clean.",
+    "Load the Oxford Flowers102 dataset using tfds.load(\"oxford_flowers102\", with_info=True, as_supervised=True) and split it into train and test datasets.",
+    "Define a function `to_dict` that resizes images to (299, 299), scales pixel values between [0, 1], and converts labels to one-hot encoding.",
+    "Apply the `to_dict` function to both train and test datasets using the `.map()` method with `num_parallel_calls=AUTOTUNE` for efficient data processing.",
+    "Verify that the dataset has been correctly transformed by checking a few samples (e.g., print a few images and their corresponding labels).",
+    "Define constants for IMAGE_SIZE as (299, 299) and num_classes as 1000.",
+    "Import `CutMix`, `MixUp`, and other augmentation layers from keras_cv.layers.",
+    "Create an instance of CutMix, MixUp, and GridMask with default parameters.",
+    "Define a function `cut_mix_and_mix_up` that applies both CutMix and MixUp to the input samples during training (use `training=True`).",
+    "Apply the `cut_mix_and_mix_up` function to the train dataset using `.map()` with `num_parallel_calls=AUTOTUNE`.",
+    "Verify that the augmented images and labels have been correctly modified by printing a few examples.",
+    "Define a custom pipeline using `RandomAugmentationPipeline` that excludes `RandomRotation` layers and includes `GridMask` instead.",
+    "Apply this custom pipeline to the train dataset using `.map()` with `num_parallel_calls=AUTOTUNE`.",
+    "Verify that the custom pipeline has been correctly applied by printing a few examples of augmented images.",
+    "Define a function `preprocess_for_model` to preprocess inputs for training (cast to float32).",
+    "Apply this preprocessing function to both train and test datasets using `.map()` with `num_parallel_calls=AUTOTUNE`.",
+    "Verify that the input data has been correctly preprocessed by printing a few examples of images and labels.",
+    "Create a MirroredStrategy for distributed training.",
+    "Within the strategy scope, define a model function `get_model` that initializes a DenseNet121 with Rescaling layer and compiles it using CategoricalCrossentropy loss, SGD optimizer, and accuracy metric.",
+    "Verify that the model has been correctly defined by printing its summary (model.summary()).",
+    "Train the model on the train dataset for 1 epoch with validation_data set to test_dataset. Use `.fit()` method with appropriate parameters like epochs=1, validation_data=test_dataset.",
+    "After training, verify the bug occurs by checking if there is any NaN value in the loss during training (e.g., print model.history.history['loss'] and model.history.history['val_loss'])."
+]
+```
+

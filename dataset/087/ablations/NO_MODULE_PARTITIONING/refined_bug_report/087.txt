@@ -1,0 +1,16 @@
+TITLE  
+Custom alibi position fails with flash attention enabled
+
+SYMPTOMS  
+• Setting `attn_flash=True` causes the custom position alibi to malfunction.  
+• The attention bias is not correctly handled as a 4D tensor when custom positions are used.  
+• No specific error messages are provided, but the behavior indicates a failure in processing the attention bias correctly.  
+
+EXPECTED BEHAVIOR  
+When `attn_flash=True`, the software should correctly process custom position alibi inputs without errors, handling the attention bias as a 4D tensor.
+
+REPRODUCTION STEPS  
+1. Set the `attn_flash` parameter to `True`.  
+2. Pass custom positions to the attention mechanism.  
+3. Observe the behavior of the system to confirm the failure in processing the attention bias correctly.  
+4. Check the relevant line of code for handling the attention bias (refer to the provided GitHub link).

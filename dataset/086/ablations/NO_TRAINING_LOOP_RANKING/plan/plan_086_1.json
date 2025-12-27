@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the Encoder class from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1, input sequence length of 64, and context sequence length of 128",
+    "Create input tensor x with shape (1, 64, 256) using torch.randn",
+    "Create mask tensor with shape (1, 64) filled with ones using torch.ones and convert to boolean",
+    "Create context tensor with shape (1, 128, 512) using torch.randn",
+    "Create context mask tensor with shape (1, 128) filled with ones using torch.ones and convert to boolean",
+    "Instantiate the Encoder model with parameters: dim=256, depth=4, heads=4, rotary_pos_emb=True, cross_attend=True, cross_attn_dim_context=512",
+    "Set pos to torch.arange(64) to enable custom positional encoding for self-attention",
+    "Set context_pos to torch.arange(128) to enable rotary positional encoding for cross-attention",
+    "Call the model's forward method with parameters: x, mask, context, pos, context_pos, context_mask",
+    "Capture the output and any exceptions raised during the model's forward pass",
+    "Check if the raised exception is an instance of einops.EinopsError",
+    "Verify that the exception message contains 'Error while processing rearrange-reduction pattern \"n -> n 1\"'",
+    "Assert that the input tensor shape in the exception message is torch.Size([1, 32])"
+]
+```

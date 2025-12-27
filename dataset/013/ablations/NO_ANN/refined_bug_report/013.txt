@@ -1,0 +1,33 @@
+TITLE  
+Matplotlib Pyplot Fails to Display Plots After Importing TensorFlow Models in Conda Environment
+
+SYMPTOMS  
+• Matplotlib's pyplot does not display plots after importing `tensorflow_models`.  
+• The backend for Matplotlib changes to 'agg', a non-interactive backend, after importing `tensorflow_models`.  
+• Plots only display correctly if the backend is set to an interactive mode (e.g., 'TkAgg') before importing `tensorflow_models`.  
+• The following error message is observed: "No display found. Using non-interactive backend 'agg'."  
+
+EXPECTED BEHAVIOR  
+When using Matplotlib's pyplot, plots should display correctly regardless of whether `tensorflow_models` is imported, provided that the appropriate interactive backend is set prior to the import.
+
+REPRODUCTION STEPS  
+1. Download and install VSCode.  
+2. Create a new conda environment with Python 3.10 (e.g., 3.10.13).  
+3. Install TensorFlow using the official installation guide [here](https://www.tensorflow.org/install/pip).  
+4. Install TensorFlow Model Garden using pip: `pip install tf-models-nightly`.  
+5. Download the notebook from [this link](https://www.tensorflow.org/tfmodels/vision/image_classification) by clicking the "Download notebook" icon.  
+6. Add code lines that start with "plt" to create plots.  
+7. Execute the notebook cells containing the plotting code.  
+
+ADDITIONAL CONTEXT  
+• The backend for Matplotlib is 'agg' after importing `tensorflow_models`, preventing plots from being displayed.  
+• Before importing `tensorflow_models`, the backend is set to an interactive mode (e.g., 'Qt5Agg' or 'TkAgg').  
+• Changing the backend to 'TkAgg' after importing `tensorflow_models` does not resolve the issue; however, changing the backend before the import does allow plots to display correctly.  
+
+SYSTEM INFORMATION  
+- OS Platform and Distribution: 2.13.0  
+- TensorFlow installed from: [this link](https://www.tensorflow.org/install/pip)  
+- TensorFlow version: 2.13.10  
+- Python version: 3.10.13  
+- CUDA/cuDNN version: cuDNN version 8.6.0.163 (CUDA 12.0)  
+- GPU model and memory: NVIDIA GeForce RTX 3090, 24576 MiB

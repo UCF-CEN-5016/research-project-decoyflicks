@@ -1,0 +1,28 @@
+{
+  "bug_report": "039",
+  "module": {
+    "module": "labml_nn/transformers/primer_ez",
+    "files": [
+      {
+        "path": "labml_nn/transformers/primer_ez/__init__.py",
+        "snippets": [
+          {
+            "lines": "71-82",
+            "code": "    def __init__(self):\n        super().__init__()\n        self.relu = nn.ReLU()\n\n    def forward(self, x: torch.Tensor):\n        # Apply ReLU\n        x = self.relu(x)\n        # Square it\n        return x * x\n\n    def __init__(self, d_k: int, kernel_size: int = 3):\n        \"\"\"\n        * `d_k` is the number of channels in each head\n        \"\"\"\n        super().__init__()\n        self.kernel_size = kernel_size\n        # We use PyTorch's `Conv1d` module.\n        # We set the number of groups to be equal to the number of channels so that it does a separate convolution\n        # (with different kernels) for each channel.\n        # We add padding to both sides and later crop the right most `kernel_size - 1` results\n        self.conv = nn.Conv1d(in_channels=d_k, out_channels=d_k,\n                              kernel_size=(kernel_size,), padding=(kernel_size - 1,), groups=d_k)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "labml_nn/transformers/primer_ez/__init__.py",
+      "snippets": [
+        {
+          "lines": "71-82",
+          "code": "    def __init__(self):\n        super().__init__()\n        self.relu = nn.ReLU()\n\n    def forward(self, x: torch.Tensor):\n        # Apply ReLU\n        x = self.relu(x)\n        # Square it\n        return x * x\n\n    def __init__(self, d_k: int, kernel_size: int = 3):\n        \"\"\"\n        * `d_k` is the number of channels in each head\n        \"\"\"\n        super().__init__()\n        self.kernel_size = kernel_size\n        # We use PyTorch's `Conv1d` module.\n        # We set the number of groups to be equal to the number of channels so that it does a separate convolution\n        # (with different kernels) for each channel.\n        # We add padding to both sides and later crop the right most `kernel_size - 1` results\n        self.conv = nn.Conv1d(in_channels=d_k, out_channels=d_k,\n                              kernel_size=(kernel_size,), padding=(kernel_size - 1,), groups=d_k)"
+        }
+      ]
+    }
+  ]
+}

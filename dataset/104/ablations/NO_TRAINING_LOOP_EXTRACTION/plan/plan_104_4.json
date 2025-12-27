@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: torch, nn, random, and ResidualFSQ from vector_quantize_pytorch.residual_fsq",
+    "Set the random seed for reproducibility using random.seed(42)",
+    "Define a batch size of 4 and input dimension of 16",
+    "Create a random input tensor with shape (batch_size, input_dim) using torch.randn(batch_size, input_dim)",
+    "Instantiate the ResidualFSQ class with parameters: dim=16, levels=[256], num_quantizers=2, and implicit_neural_codebook=False",
+    "Call the forward method of the ResidualFSQ instance with the input tensor and return_all_codes set to False",
+    "Check if the layers in ResidualFSQ are initialized by asserting that len(residual_fsq.layers) == 2",
+    "Verify that the MLPs are initialized by checking if isinstance(residual_fsq.layers[0], nn.Linear) is True",
+    "Call the forward method again with the same input tensor and assert that the output shape is (batch_size, input_dim)",
+    "Check if the MLPs are still initialized by asserting that isinstance(residual_fsq.layers[0], nn.Linear) is True",
+    "Print a message indicating that the MLPs were initialized despite implicit_neural_codebook being False"
+]
+```

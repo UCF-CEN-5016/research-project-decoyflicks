@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow, slim, and necessary functions from the provided dependencies.",
+    "Set batch size to 2 and image dimensions to 32x32.",
+    "Create random uniform input data with shape (batch_size, height, width, 3).",
+    "Define a model using xception_65 function with num_classes=10 and output_stride=None.",
+    "Train the model for 1 epoch using synthetic labels.",
+    "Verify that logits contain NaN values after training.",
+    "Monitor the GPU memory usage during training.",
+    "Assert that the GPU memory usage exceeds the expected threshold for a fully convolutional network."
+]
+```
+

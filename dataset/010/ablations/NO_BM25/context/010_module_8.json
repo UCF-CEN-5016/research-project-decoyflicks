@@ -1,0 +1,28 @@
+{
+  "bug_report": "010",
+  "module": {
+    "module": "research/delf/delf/python/datasets/sfm120k",
+    "files": [
+      {
+        "path": "research/delf/delf/python/datasets/sfm120k/sfm120k.py",
+        "snippets": [
+          {
+            "lines": "106-119",
+            "code": "  def __init__(self, mode, data_root, imsize=None, num_negatives=5,\n               num_queries=2000, pool_size=20000, loader=utils.default_loader,\n               eccv2020=False):\n    \"\"\"Structure-from-Motion (Sfm120k) dataset initialization.\n\n    Args:\n      mode: Either 'train' or 'val'.\n      data_root: Path to the root directory of the dataset.\n      imsize: Integer, defines the maximum size of longer image side.\n      num_negatives: Integer, number of negative images per one query.\n      num_queries: Integer, number of query images.\n      pool_size: Integer, size of the negative image pool, from where the\n        hard-negative images are chosen.\n      loader: Callable, a function to load an image given its path.\n      eccv2020: Bool, whether to use a new validation dataset used with ECCV\n        2020 paper (https://arxiv.org/abs/2007.13172).\n\n    Raises:\n      ValueError: Raised if `mode` is not one of 'train' or 'val'.\n    \"\"\"\n    if mode not in ['train', 'val']:\n      raise ValueError(\n              \"`mode` argument should be either 'train' or 'val', passed as a \"\n              \"String.\")\n\n    # Setting up the paths for the dataset.\n    if eccv2020:\n      name = \"retrieval-SfM-120k-val-eccv2020\"\n    else:\n      name = \"retrieval-SfM-120k\"\n    db_root = os.path.join(data_root, 'train/retrieval-SfM-120k')\n    ims_root = os.path.join(db_root, 'ims/')\n\n    # Loading the dataset db file.\n    db_filename = os.path.join(db_root, '{}.pkl'.format(name))\n\n    with tf.io.gfile.GFile(db_filename, 'rb') as f:\n      db = pickle.load(f)[mode]\n\n    # Setting full paths for the dataset images.\n    self.images = [id2filename(img_name, None) for\n                   img_name in db['cids']]\n\n    # Initializing tuples dataset.\n    super().__init__(name, mode, db_root, imsize, num_negatives, num_queries,\n                     pool_size, loader, ims_root)\n\n  def Sfm120kInfo(self):\n    \"\"\"Metadata for the Sfm120k dataset.\n\n    The dataset contains the image names lists for training and\n    validation, the cluster ID (3D model ID) for each image and indices\n    forming query-positive pairs of images. The images are loaded per epoch\n    and resized on the fly to the desired dimensionality.\n\n    Returns:\n      info: dictionary with the dataset parameters.\n    \"\"\"\n    info = {'train': {'clusters': 91642, 'pidxs': 181697, 'qidxs': 181697},\n            'val': {'clusters': 6403, 'pidxs': 1691, 'qidxs': 1691}}\n    return info"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "research/delf/delf/python/datasets/sfm120k/sfm120k.py",
+      "snippets": [
+        {
+          "lines": "106-119",
+          "code": "  def __init__(self, mode, data_root, imsize=None, num_negatives=5,\n               num_queries=2000, pool_size=20000, loader=utils.default_loader,\n               eccv2020=False):\n    \"\"\"Structure-from-Motion (Sfm120k) dataset initialization.\n\n    Args:\n      mode: Either 'train' or 'val'.\n      data_root: Path to the root directory of the dataset.\n      imsize: Integer, defines the maximum size of longer image side.\n      num_negatives: Integer, number of negative images per one query.\n      num_queries: Integer, number of query images.\n      pool_size: Integer, size of the negative image pool, from where the\n        hard-negative images are chosen.\n      loader: Callable, a function to load an image given its path.\n      eccv2020: Bool, whether to use a new validation dataset used with ECCV\n        2020 paper (https://arxiv.org/abs/2007.13172).\n\n    Raises:\n      ValueError: Raised if `mode` is not one of 'train' or 'val'.\n    \"\"\"\n    if mode not in ['train', 'val']:\n      raise ValueError(\n              \"`mode` argument should be either 'train' or 'val', passed as a \"\n              \"String.\")\n\n    # Setting up the paths for the dataset.\n    if eccv2020:\n      name = \"retrieval-SfM-120k-val-eccv2020\"\n    else:\n      name = \"retrieval-SfM-120k\"\n    db_root = os.path.join(data_root, 'train/retrieval-SfM-120k')\n    ims_root = os.path.join(db_root, 'ims/')\n\n    # Loading the dataset db file.\n    db_filename = os.path.join(db_root, '{}.pkl'.format(name))\n\n    with tf.io.gfile.GFile(db_filename, 'rb') as f:\n      db = pickle.load(f)[mode]\n\n    # Setting full paths for the dataset images.\n    self.images = [id2filename(img_name, None) for\n                   img_name in db['cids']]\n\n    # Initializing tuples dataset.\n    super().__init__(name, mode, db_root, imsize, num_negatives, num_queries,\n                     pool_size, loader, ims_root)\n\n  def Sfm120kInfo(self):\n    \"\"\"Metadata for the Sfm120k dataset.\n\n    The dataset contains the image names lists for training and\n    validation, the cluster ID (3D model ID) for each image and indices\n    forming query-positive pairs of images. The images are loaded per epoch\n    and resized on the fly to the desired dimensionality.\n\n    Returns:\n      info: dictionary with the dataset parameters.\n    \"\"\"\n    info = {'train': {'clusters': 91642, 'pidxs': 181697, 'qidxs': 181697},\n            'val': {'clusters': 6403, 'pidxs': 1691, 'qidxs': 1691}}\n    return info"
+        }
+      ]
+    }
+  ]
+}

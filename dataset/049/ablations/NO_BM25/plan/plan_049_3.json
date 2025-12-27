@@ -1,0 +1,17 @@
+```json
+[
+    "Import torch and torch.nn modules",
+    "Define a batch size of 10 and number of features as 5",
+    "Create a class ChannelNorm that inherits from nn.Module",
+    "In the __init__ method of ChannelNorm, set affine=True and initialize weight and bias as nn.Parameter(torch.Tensor(1, num_features, 1))",
+    "Define a reset_parameters method in ChannelNorm that initializes weight with ones and bias with uninitialized tensor using torch.Tensor",
+    "Define a forward method in ChannelNorm that computes the normalized output using the input tensor x",
+    "Create an instance of ChannelNorm with num_features=5",
+    "Generate random input data with shape (batch_size, num_features, 10) using torch.randn",
+    "Call the forward method of the ChannelNorm instance with the generated input data",
+    "Capture the output of the forward method",
+    "Check the output for NaN values using torch.isnan(output).any()",
+    "Print the output tensor to observe any uninitialized values or NaNs",
+    "Assert that the output contains NaN values using assert torch.isnan(output).any() == True"
+]
+```

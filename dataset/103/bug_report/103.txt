@@ -1,0 +1,10 @@
+Incorrect commit-loss when using `mask` in LFQ forward pass
+
+## Description
+
+Using `ResidualLFQ` from `vector-quantize-pytorch` version 1.21.2, when using a `mask` and a `commitment_loss_weight = 1.0` (or anything >0) the `original_input` in `LFQ.forward` is reshaped ([here](https://github.com/lucidrains/vector-quantize-pytorch/blob/59a30b68a83be710638184764c025b54693c82cc/vector_quantize_pytorch/lookup_free_quantization.py#L360) and [here](https://github.com/lucidrains/vector-quantize-pytorch/blob/59a30b68a83be710638184764c025b54693c82cc/vector_quantize_pytorch/lookup_free_quantization.py#L344)) which causes a shape mismatch with the `quantized` tensor when computing the `commit_loss`.
+
+This breaks the commit loss and results in the following user warning:
+```
+.../python3.12/site-packages/vector_quantize_pytorch/lookup_free_quantization.py:401: UserWarning: Using a target size (torch.Size([2, 1851, 1, 14])) that is different to the input size (torch.Size([3700, 14])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+```

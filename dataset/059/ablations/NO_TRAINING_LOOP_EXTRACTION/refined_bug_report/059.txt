@@ -1,0 +1,15 @@
+TITLE  
+Error encountered during model fitting in KerasCV
+
+SYMPTOMS  
+• The user encounters an error when attempting to fit a model using KerasCV.  
+• The error message displayed is not provided in text form but is visible in the attached image.  
+• The user has not specified any unexpected behaviors aside from the fitting error.
+
+EXPECTED BEHAVIOR  
+The model should fit without errors, allowing the user to train the model successfully and obtain the expected output.
+
+REPRODUCTION STEPS  
+1. Install KerasCV by running the command `!pip install git+https://github.com/keras-team/keras-cv -q`.  
+2. Attempt to fit the model using the KerasCV library.  
+3. Observe the error that occurs during the fitting process as shown in the attached image.

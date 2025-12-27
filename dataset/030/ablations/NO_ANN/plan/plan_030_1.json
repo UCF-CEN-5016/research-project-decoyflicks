@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import torch, import os, import sys",
+    "Set the environment variable for CUDA: os.environ['CUDA_VISIBLE_DEVICES'] = '0'",
+    "Define the model parameters: set learning_rate = 0.0003, epochs = 10, fold = 0, gpus = 1, task = 11, nfolds = 10",
+    "Prepare the command to run the training script: command = '!python ../main.py --brats --brats22_model --scheduler --learning_rate {learning_rate} --epochs {epochs} --fold {fold} --gpus {gpus} --task {task} --nfolds {nfolds} --save_ckpt'",
+    "Execute the command to start training: os.system(command)",
+    "Ensure that the requirements.txt is installed with the correct versions: run 'pip install -r requirements.txt'",
+    "Check the installed version of PyTorch: assert torch.__version__ == '2.2.0+cu121'",
+    "Verify that the GPU is available: assert torch.cuda.is_available() is True",
+    "Set the batch size for training: set batch_size = 32",
+    "Create a dummy dataset with 1125 training examples, 126 validation examples, and 1251 test examples using random tensors: train_data = torch.randn(1125, 3, 128, 128), val_data = torch.randn(126, 3, 128, 128), test_data = torch.randn(1251, 3, 128, 128)",
+    "Define a DataLoader for the training data: train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)",
+    "Define a DataLoader for the validation data: val_loader = DataLoader(val_data, batch_size=batch_size, shuffle=False)",
+    "Define a DataLoader for the test data: test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False)",
+    "Initialize the nnUNet model: model = nnunet.NNUNet()",
+    "Set up the PyTorch Lightning Trainer: trainer = pl.Trainer(max_epochs=epochs, gpus=gpus)",
+    "Attempt to fit the model using the trainer: trainer.fit(model, train_loader, val_loader)",
+    "Capture the output and error messages during training: use try-except block to catch exceptions",
+    "Check if the output contains 'MisconfigurationException' in the error message: assert 'MisconfigurationException' in str(e)",
+    "Log the error message to verify the specific issue with the lr scheduler: print(str(e))"
+]
+```

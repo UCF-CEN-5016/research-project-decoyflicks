@@ -1,0 +1,28 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torch.nn.functional, torchvision.datasets, torchvision.transforms, torch.utils.data, tqdm.auto, and vector_quantize_pytorch.LFQ",
+    "Set the random seed to 1234 using torch.random.manual_seed(1234)",
+    "Define a variable codebook_size with a value of 256 (2 ** 8)",
+    "Define a variable entropy_loss_weight with a value of 0.02",
+    "Define a variable diversity_gamma with a value of 1.0",
+    "Define a variable spherical with a value of True",
+    "Set the device to 'cuda' if a GPU is available, otherwise set it to 'cpu'",
+    "Create a transform pipeline using torchvision.transforms.Compose to normalize the FashionMNIST dataset with mean 0.5 and std 0.5",
+    "Load the FashionMNIST dataset using torch.utils.data.DataLoader with batch_size of 256 and shuffle set to True",
+    "Define a class LFQAutoEncoder that inherits from nn.Module",
+    "In the __init__ method of LFQAutoEncoder, initialize the encoder with a sequence of Conv2d, MaxPool2d, GELU, GroupNorm, and another Conv2d layer, ensuring the output dimension matches log2(codebook_size)",
+    "Initialize the quantization layer using LFQ with parameters dim set to quantize_dim and implicit_neural_codebook set to False",
+    "Initialize the decoder with a sequence of Conv2d, Upsample, GELU, and another Conv2d layer to reconstruct the input",
+    "Define a forward method that takes input x, passes it through the encoder, quantizes it, and then decodes it back to the original shape",
+    "Create a train function that takes the model, train_loader, and number of iterations as parameters",
+    "In the train function, create an infinite data iterator from the train_loader",
+    "For each iteration, zero the optimizer gradients, get a batch of data from the iterator, and pass it through the model",
+    "Calculate the reconstruction loss using F.l1_loss and add the entropy auxiliary loss",
+    "Perform backpropagation and update the model parameters using the optimizer",
+    "Create an instance of LFQAutoEncoder with codebook_size, entropy_loss_weight, diversity_gamma, and spherical as parameters",
+    "Initialize the optimizer using torch.optim.AdamW with model parameters and a learning rate of 3e-4",
+    "Run the training function for 1000 iterations",
+    "After training, check if the MLPs in ResidualVQ were initialized by inspecting the model parameters",
+    "Assert that the MLPs in ResidualVQ are initialized even when implicit_neural_codebook is set to False"
+]
+```

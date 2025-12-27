@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries for PyTorch, NumPy and DataLoader from the provided code snippet",
+    "Define a batch size of 4 and image dimensions of 128x128",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using randn_like function",
+    "Initialize Unet model with dim=64 and dim_mults=(1, 2, 4, 8)",
+    "Create GaussianDiffusion instance with the initialized Unet model, image_size=128, and timesteps=1000",
+    "Define a Classifier model for classification tasks with num_classes=1000",
+    "Call diffusion.sample function with batch_size=4, cond_fn set to classifier_cond_fn, guidance_kwargs containing classifier instance, y filled with 1s of shape (batch_size,), and classifier_scale=1",
+    "Verify the sampled_images tensor contains NaN values in its elements",
+    "Monitor GPU memory usage during execution of the diffusion.sample call",
+    "Assert that the peak GPU memory usage exceeds a certain threshold indicating potential overflow or underflow issues"
+]
+```
+

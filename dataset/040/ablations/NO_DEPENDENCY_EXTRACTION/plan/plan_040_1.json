@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the repository from https://github.com/labmlai/annotated_deep_learning_paper_implementations",
+    "Navigate to the directory containing the DDPM UNet implementation: labml_nn/diffusion/ddpm/",
+    "Open the unet.py file and locate the attention calculation code at line 188",
+    "Import necessary libraries: numpy, torch, and nn from torch",
+    "Define a batch size of 32 and input dimensions of (3, 32, 32) for CIFAR-10 images",
+    "Create a random tensor for input data with shape (batch_size, 3, 32, 32)",
+    "Create a random tensor for attention weights with shape (batch_size, num_heads, height, width) where num_heads = 8, height = 32, width = 32",
+    "Define a function to simulate the attention mechanism using einsum with the current implementation: attn = torch.einsum('bihw,bjhw->bijh', input_tensor, attn_weights)",
+    "Call the attention function with the input tensor and attention weights",
+    "Verify the shape of the output tensor from the attention function is (batch_size, num_heads, height, width)",
+    "Perform a softmax operation on the attention weights along the j axis: attn = attn.softmax(dim=1)",
+    "Assert that the sum of the softmax output along the j axis equals 1 for each head: assert torch.allclose(attn.sum(dim=1), torch.ones(batch_size, height, width))",
+    "Run the model on the CIFAR-10 dataset using the current attention implementation",
+    "Log the output of the model to check for any unexpected behavior or values",
+    "Compare the output of the model with the modified attention implementation (using attn.softmax(dim=2))",
+    "Assert that the outputs from both implementations are not equal to verify the bug exists"
+]
+```

@@ -1,0 +1,16 @@
+```json
+[
+    "Set environment variables to ensure consistent behavior across different machines",
+    "Install all required packages from requirements.txt, including PyTorch 2.2.0+cu121 and other dependencies",
+    "Clone the nnUNet repository from GitHub or download it manually",
+    "Navigate to the directory containing the BraTS21.ipynb or BraTS22.ipynb notebook",
+    "Create a Python script `main.py` with the provided code context",
+    "Modify the `main.py` script to include the necessary imports for `fused_lamb`, `sklearn.preprocessing.StandardScaler`, and `sklearn.datasets.make_classification`",
+    "Ensure that the script is set up to run on a single GPU (RTX 3060, 12GB) with CUDA 12.1",
+    "Run the script using the following command: !python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0 --gpus 1 --task 11 --nfolds 10 --save_ckpt",
+    "Observe the output and verify that it raises a `pytorch_lightning.utilities.exceptions.MisconfigurationException` related to the `CosineAnnealingWarmRestarts` lr scheduler not following PyTorch's LRScheduler API",
+    "Ensure that the error message contains the specific details about the issue, such as the lr scheduler not having a `step` method",
+    "If the bug does not occur immediately, increase the number of epochs or adjust other parameters to increase the likelihood of reproducing the issue"
+]
+```
+

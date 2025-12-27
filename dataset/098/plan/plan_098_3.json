@@ -1,0 +1,14 @@
+[
+    "Import the required libraries from the provided dependencies list, including Accelerate, collections, einops, ema_pytorch, functools, multiprocessing, pathlib, random, torch, and tqdm.",
+    "Define a custom dataset class that inherits from `torch.utils.data.Dataset` to simulate a real-world dataset. This class should override methods like `__len__` and `__getitem__`, returning synthetic data with appropriate shapes.",
+    "Create an instance of the custom dataset class with a predefined length and batch size, ensuring that the data has realistic characteristics for your use case (e.g., sequences of length 128 with 64 features).",
+    "Define a model architecture similar to the one described in the provided code snippet. This should include Conv1d layers, GELU activation functions, GroupNorm layers, and other components as specified.",
+    "Instantiate an instance of the model class and move it to the appropriate device (e.g., GPU) using `accelerator.device` from the Accelerate library.",
+    "Create a DataLoader object with the custom dataset instance, specifying the batch size and ensuring shuffling is enabled for training.",
+    "Define an optimizer instance using Adam with a learning rate of 0.001 and appropriate parameters.",
+    "Implement a training loop that iterates over the DataLoader, computes losses using the model, performs backward propagation, updates the optimizer, and accumulates gradients as specified in the original code snippet.",
+    "During each epoch, monitor the loss values to ensure they are finite (i.e., not NaN or infinite). If any NaN values are detected, raise an exception to indicate that the bug has occurred.",
+    "After completing a few epochs of training, verify the behavior of the model and optimizer by checking their states (e.g., parameters and gradients) after the last iteration. Ensure that these states have realistic values without being NaN or infinite.",
+    "If no exceptions are raised during the training loop, proceed to save the trained model and optimizer state using the provided code snippet for saving models."
+]
+

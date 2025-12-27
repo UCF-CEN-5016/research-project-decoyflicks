@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, NumPy, and Matplotlib",
+    "Set the TensorFlow version to 2.10.0 by running '!pip install tensorflow==2.10.0'",
+    "Import the object detection utilities from the TensorFlow Object Detection API",
+    "Load the pre-trained model from TensorFlow Hub using tf.saved_model.load()",
+    "Prepare two sample images for inference, ensuring they are in the correct format (e.g., 640x480 pixels, RGB)",
+    "Preprocess the images by resizing them to the model's expected input size (e.g., 640x640 pixels) and normalizing pixel values",
+    "Run inference on the images using the loaded model and store the output in a variable",
+    "Extract the detection results from the model output, including 'detection_boxes', 'detection_classes', 'detection_scores', and 'detection_masks'",
+    "Attempt to visualize the results by calling the function that uses 'reframe_box_masks_to_image_masks' with the extracted masks and boxes",
+    "Pass the following parameters to the visualization function: detection_masks, detection_boxes, image_np.shape[1], image_np.shape[2]",
+    "Ensure that the function call includes the 'box_ind' parameter, which is expected to cause the TypeError",
+    "Run the notebook cell that contains the visualization code",
+    "Observe the output for the TypeError: 'Got an unexpected keyword argument 'box_ind''",
+    "Log the error message to confirm the bug has been reproduced"
+]
+```

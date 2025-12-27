@@ -1,0 +1,16 @@
+```json
+[
+    "Import torch and nn modules from PyTorch",
+    "Define a batch size of 2 and input dimensions of (10, 64) for the input tensor",
+    "Create a random input tensor with shape (batch_size, 10, 64) using torch.randn",
+    "Define a MultiHeadedAttention class that includes uninitialized bias parameters using torch.Tensor",
+    "In the MultiHeadedAttention class, initialize the bias parameters as follows: self.u_bias = torch.Tensor(64) and self.v_bias = torch.Tensor(64)",
+    "Create an instance of the MultiHeadedAttention class with 8 heads and input dimension of 64",
+    "Call the forward method of the MultiHeadedAttention instance with the input tensor",
+    "Capture the output of the forward method",
+    "Verify the output tensor does not contain NaN values by asserting torch.isnan(output).any() is True",
+    "Print the output tensor to observe its values and confirm the presence of NaNs",
+    "Repeat the forward call multiple times to observe non-deterministic behavior in the output",
+    "Log the output values to a file for further analysis of the non-deterministic behavior"
+]
+```

@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and GaussianDiffusion from denoising_diffusion_pytorch.guided_diffusion",
+    "Define a batch size of 4 and image dimensions of 128x128",
+    "Create a random tensor for model input with shape (batch_size, 3, 128, 128) using torch.randn",
+    "Create a random tensor for time steps with shape (batch_size,) using torch.randint(0, 1000, (batch_size,))",
+    "Instantiate the Unet model with dim=64 and dim_mults=(1, 2, 4, 8)",
+    "Instantiate the GaussianDiffusion model with the Unet model, image_size=128, and timesteps=1000",
+    "Define a Classifier class that inherits from nn.Module with a linear layer for time and image input",
+    "Instantiate the Classifier with image_size=128, num_classes=1000, and t_dim=1",
+    "Define a classifier_cond_fn function that computes the gradient of the classifier output with respect to input x",
+    "Prepare guidance_kwargs dictionary with keys 'classifier', 'y', and 'classifier_scale', where 'y' is a tensor of shape (batch_size,) filled with 1s",
+    "Call the sample method of the GaussianDiffusion instance with batch_size=4, cond_fn set to classifier_cond_fn, and guidance_kwargs as defined",
+    "Capture the output of the sample method in a variable called sampled_images",
+    "Check the shape of sampled_images to ensure it is (4, 3, 128, 128)",
+    "Attempt to access the device attribute of self.betas in the GaussianDiffusion class to trigger the bug",
+    "Assert that an AttributeError is raised indicating that 'GaussianDiffusion' object has no attribute 'betas'"
+]
+```

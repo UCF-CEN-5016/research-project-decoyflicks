@@ -1,0 +1,16 @@
+```json
+[
+    "Install TensorFlow version 2.9.2 using pip",
+    "Clone the TensorFlow Model Garden repository from GitHub at commit r2.9.0",
+    "Navigate to the directory containing augment.py (official/vision/ops/augment.py)",
+    "Create a Python script named test_augment.py in the same directory",
+    "Import tensorflow_models as tfm in test_augment.py",
+    "Add an import statement for numpy as np in test_augment.py",
+    "Define a function called test_rand_augment() in test_augment.py",
+    "Inside the test_rand_augment() function, import RandAugment from tfm.vision.augment",
+    "Call RandAugment() and assign it to a variable named augment_instance in the test_rand_augment() function",
+    "Add an assertion within the test_rand_augment() function to check if augment_instance is not None",
+    "Run the test_augment.py script using Python"
+]
+```
+

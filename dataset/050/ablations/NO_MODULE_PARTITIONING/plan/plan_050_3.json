@@ -1,0 +1,17 @@
+```json
+[
+    "Install Keras version 3.4.1 using pip: pip install keras==3.4.1",
+    "Install TensorFlow version 2.11.0 using pip: pip install tensorflow==2.11.0",
+    "Import necessary libraries: import keras; import keras_cv; import numpy as np; import tensorflow as tf; from keras_cv import layers as cv_layers; from keras_cv.models.stable_diffusion import NoiseScheduler; import matplotlib.pyplot as plt",
+    "Define a latent dimension variable: latent_dim = 100",
+    "Create a GAN class with a discriminator and generator, ensuring the generator outputs a shape of (None, 28, 28, 1) for compatibility with the training data",
+    "Instantiate the GAN class: gan = GAN(discriminator=discriminator, generator=generator, latent_dim=latent_dim)",
+    "Compile the GAN model with Adam optimizers and BinaryCrossentropy loss function: gan.compile(d_optimizer=keras.optimizers.Adam(learning_rate=0.0003), g_optimizer=keras.optimizers.Adam(learning_rate=0.0003), loss_fn=keras.losses.BinaryCrossentropy(from_logits=True))",
+    "Create a dataloader that yields batches of real images, ensuring each batch is a list of images with shape (batch_size, height, width, channels)",
+    "Set the batch size to 32: batch_size = 32",
+    "Call the fit method on the GAN instance with the dataloader and epochs set to 1: gan.fit(dataloader, epochs=1)",
+    "Monitor the output for an AttributeError indicating that a 'list' object has no attribute 'shape'",
+    "Verify that the error occurs specifically at the line where batch_size is assigned: batch_size = real_images.shape[0]",
+    "Check that real_images is indeed a list and not a numpy array or tensor at the time of the error"
+]
+```

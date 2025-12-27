@@ -1,0 +1,45 @@
+### TITLE
+MMS ASR Inference Output Log Order is Incorrect
+
+### SYMPTOMS
+• The output log generated during the inference of multiple audio files does not match the order of the input audio files.  
+• The expected order of text outputs does not align with the order of the corresponding audio files in the log.  
+• Example of expected text output order:
+```
+1089-134686-0000 HE HOPED THERE WOULD BE STEW FOR DINNER TURNIPS AND CARROTS AND BRUISED POTATOES AND FAT MUTTON PIECES TO BE LADLED OUT IN THICK PEPPERED FLOUR FATTENED SAUCE
+...
+```
+• Example of actual output log order:
+```
+Input: /Dataset/speech/english/test/libri_test_other/wav/wav/1/wav/1/1089-134686-0000.wav
+Output: at most by an alms given to a beggar whose blessing he fled from he might hope wearily to win for himself some measure of actual grace
+...
+```
+
+### EXPECTED BEHAVIOR
+The output logs should reflect the same order as the input audio files, ensuring that the output for each audio file corresponds correctly to its respective input.
+
+### REPRODUCTION STEPS
+1. Run the following command in the terminal:
+   ```bash
+   python -u examples/mms/asr/infer/mms_infer.py \
+       --model `pwd`/../fairseq_resource/mms1b_all.pt \
+       --lang "eng" \
+       --audio audio1.wav audio2.wav audio3.wav ... audio10.wav
+   ```
+2. Observe the output in the generated text file.
+3. Compare the order of the output text with the order of the input audio files.
+
+### ENVIRONMENT
+- Fairseq Version: [Specify version, e.g., 1.0 or main]
+- PyTorch Version: [Specify version, e.g., 1.0]
+- OS: [Specify OS, e.g., Linux]
+- How you installed Fairseq: [Specify method, e.g., pip, source]
+- Build command used (if compiling from source): [Specify command]
+- Python version: [Specify version]
+- CUDA/cuDNN version: [Specify versions]
+- GPU models and configuration: [Specify details]
+- Any other relevant information: [Add any additional context] 
+
+### ADDITIONAL CONTEXT
+[Include any other relevant information about the problem here.]

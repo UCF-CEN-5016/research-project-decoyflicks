@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary libraries: import tensorflow as tf, import numpy as np, from object_detection.utils import ops as utils_ops, from object_detection.utils import label_map_util, from object_detection.utils import visualization_utils as vis_util",
+    "Set the TensorFlow version to 2.10.0 by running: tf.__version__",
+    "Define the image dimensions: set image_height = 640 and image_width = 480",
+    "Load a sample image into a NumPy array with shape (image_height, image_width, 3) using: image_np = np.random.rand(image_height, image_width, 3).astype(np.float32)",
+    "Create a mock detection output dictionary with keys: 'detection_boxes', 'detection_classes', 'detection_scores', 'detection_masks', 'num_detections'",
+    "Set 'detection_boxes' to a random array of shape (1, 4) with values between 0 and 1: detection_boxes = np.random.rand(1, 4)",
+    "Set 'detection_classes' to a random integer array of shape (1,) with values between 1 and 90: detection_classes = np.random.randint(1, 90, size=(1,))",
+    "Set 'detection_scores' to a random float array of shape (1,) with values between 0 and 1: detection_scores = np.random.rand(1)",
+    "Set 'detection_masks' to a random boolean array of shape (1, image_height, image_width): detection_masks = np.random.rand(1, image_height, image_width) > 0.5",
+    "Set 'num_detections' to 1: num_detections = 1",
+    "Create the detection output dictionary: detection_output = {'detection_boxes': detection_boxes, 'detection_classes': detection_classes, 'detection_scores': detection_scores, 'detection_masks': detection_masks, 'num_detections': num_detections}",
+    "Call the function utils_ops.reframe_box_masks_to_image_masks with parameters: detection_masks, detection_boxes, image_height, image_width",
+    "Capture the output of the function call and store it in a variable: detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(detection_masks, detection_boxes, image_height, image_width)",
+    "Assert that the output raises a TypeError by wrapping the function call in a try-except block and checking for TypeError",
+    "Print the error message to confirm the TypeError: 'Got an unexpected keyword argument 'box_ind''"
+]
+```

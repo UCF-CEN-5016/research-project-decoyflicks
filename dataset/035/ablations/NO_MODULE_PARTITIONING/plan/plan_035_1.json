@@ -1,0 +1,20 @@
+```json
+[
+    "Clone the repository from GitHub using the command: git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git",
+    "Navigate to the directory containing the RoPE file: cd annotated_deep_learning_paper_implementations/labml_nn/transformers/rope",
+    "Open the __init__.py file in a code editor and locate line 226, which currently reads: rotary_pe = RotaryPositionalEmbeddings(3)",
+    "Change the line to read: rotary_pe = RotaryPositionalEmbeddings(4) to simulate the intended fix.",
+    "Navigate to the directory containing the simple.py file: cd ../glu_variants",
+    "Open the simple.py file in a code editor.",
+    "Import necessary libraries at the top of the simple.py file: import torch, from labml_nn.transformers.rope import RotaryPositionalEmbeddings",
+    "Define a configuration class Configs with parameters: d_model=512, seq_len=128, batch_size=32, n_layers=6, n_heads=8, dropout=0.1, d_ff=2048, glu_variant='GLU', epochs=5, grad_norm_clip=0.5",
+    "Create a dataset class TinyShakespeareDataset that reads from a text file and converts characters to tensor IDs.",
+    "Instantiate the dataset with seq_len=128 and create a DataLoader with batch_size=32.",
+    "Initialize the Trainer class with the Configs instance and ensure it includes the modified RotaryPositionalEmbeddings.",
+    "In the Trainer class, during model initialization, ensure the rotary_pe is set to RotaryPositionalEmbeddings(4).",
+    "Run the training process by calling the train method of the Trainer instance.",
+    "Monitor the output for any errors related to the dimensions of the input tensors, specifically looking for errors indicating a mismatch due to the rotary_pe initialization.",
+    "Assert that an error is raised during the forward pass of the model indicating an issue with the input dimensions, such as 'expected input size of 4 but got 3'.",
+    "Log the error message to confirm that the bug has been reproduced."
+]
+```

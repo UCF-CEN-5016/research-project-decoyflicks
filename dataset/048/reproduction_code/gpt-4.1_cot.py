@@ -1,0 +1,1 @@
+emissions = torch.cat(emissions_arr, dim=1).squeeze()

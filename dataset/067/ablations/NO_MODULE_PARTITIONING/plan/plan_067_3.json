@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, matplotlib, and tensorflow_datasets",
+    "Set the TensorFlow version to 2.10.0 to match the reported environment",
+    "Define a batch size of 2 and image dimensions of 800x800",
+    "Download the COCO2017 dataset using tensorflow_datasets with the following command: (train_dataset, val_dataset), dataset_info = tfds.load('coco/2017', split=['train', 'validation'], with_info=True)",
+    "Define a preprocessing function that resizes images to 800x800 and normalizes pixel values using tf.keras.applications.resnet.preprocess_input",
+    "Map the preprocessing function to the train_dataset and val_dataset using the tf.data API",
+    "Create a LabelEncoder class that encodes the labels for the dataset, ensuring the class IDs are in the correct format",
+    "Define a model architecture using the RetinaNet class, ensuring it includes a ResNet50 backbone and the necessary classification and box regression heads",
+    "Compile the model with a custom loss function that includes both classification and box regression losses",
+    "Train the model for 1 epoch using model.fit on the train_dataset and validate on the val_dataset, taking only 100 training steps and 50 validation steps",
+    "During training, monitor the loss values and ensure they are not converging as expected, indicating a potential issue with the label format",
+    "Verify the shape of the labels being passed to the loss function, ensuring they have an extra dimension that should be removed",
+    "Assert that the loss values are significantly higher than expected, indicating that the model is not learning properly due to the incorrect label format",
+    "Log the shapes of the model outputs and the labels to confirm the mismatch in dimensions",
+    "Check the output of the loss function to see if it produces NaN values or extremely high values, indicating a problem with the label format"
+]
+```

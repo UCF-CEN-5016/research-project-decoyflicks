@@ -1,0 +1,25 @@
+### TITLE
+NotImplementedError when loading weights in MaskRCNN model
+
+### SYMPTOMS
+• Encountering a `NotImplementedError` during the execution of the inference code in `demo.ipynb`.
+• The error message is:  
+  ```
+  NotImplementedError: Save or restore weights that is not an instance of `tf.Variable` is not supported in h5, use `save_format='tf'` instead. Got a model or layer Conv2D with weights [<KerasVariable shape=(7, 7, 3, 64), dtype=float32, path=conv1/kernel>, <KerasVariable shape=(64,), dtype=float32, path=conv1/bias>]
+  ```
+• The issue occurs when attempting to load weights using the `load_weights` method of the `MaskRCNN` model.
+
+### EXPECTED BEHAVIOR
+The model should successfully load the weights from the specified path (`COCO_MODEL_PATH`) and proceed with inference without raising any errors.
+
+### REPRODUCTION STEPS
+1. Open the `demo.ipynb` notebook.
+2. Initialize the `MaskRCNN` model with the following code:  
+   ```python
+   model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
+   ```
+3. Attempt to load the weights using the following code:  
+   ```python
+   model.load_weights(COCO_MODEL_PATH, by_name=True)
+   ```
+4. Observe the raised `NotImplementedError` during the execution of the weight loading step.

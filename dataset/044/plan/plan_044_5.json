@@ -1,0 +1,18 @@
+```json
+[
+    "Download the Japanese TTS model using wget command: `wget https://dl.fbaipublicfiles.com/mms/tts/jvn.tar.gz`",
+    "Extract the downloaded model tar file using tar command: `tar -xvzf jvn.tar.gz`",
+    "Navigate to the directory containing the extracted model files",
+    "Import necessary Python libraries including PyTorch and any other required dependencies for Japanese TTS processing",
+    "Prepare a sample text input for TTS synthesis, e.g., 'こんにちは世界' (Hello World in Japanese)",
+    "Initialize parameters for the PQ quantization process: block_size=32, n_centroids=256, n_iter=20, eps=1e-6, max_tentatives=30",
+    "Create a dummy weight matrix W of shape (in_features x out_features) for testing purposes. For example, `W = torch.randn(128, 64)`",
+    "Reshape the dummy weight matrix W using the _reshape method from the PQ class to match the expected input format for quantization",
+    "Initialize an instance of the PQ class with the reshaped weight matrix and the specified parameters: `pq_quantizer = PQ(W, block_size=32, n_centroids=256, n_iter=20, eps=1e-6, max_tentatives=30)`",
+    "Call the encode method on the PQ instance to perform the quantization process: `pq_quantizer.encode()`",
+    "Retrieve and print the quantized weight matrix after encoding: `quantized_weights = pq_quantizer.decode(); print(quantized_weights)`",
+    "Verify that there is no text output after the line 'text after filtering OOV' during the TTS synthesis process",
+    "Inspect the intermediate steps of the quantization process to ensure that all inputs and outputs are as expected"
+]
+```
+

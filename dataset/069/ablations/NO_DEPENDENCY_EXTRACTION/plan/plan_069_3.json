@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: pandas, numpy, matplotlib, and tensorflow",
+    "Set the random seed for reproducibility using numpy.random.seed(42)",
+    "Define a function 'show_heatmap' that takes a DataFrame as input and attempts to plot a heatmap of the correlation matrix using plt.matshow(data.corr())",
+    "Create a sample DataFrame 'df' with a date column containing string dates in the format 'dd.mm.yyyy HH:MM:SS' and a numeric column with random float values",
+    "Populate the DataFrame 'df' with 10 rows, ensuring the date column has values like '01.01.2009 00:10:00', '02.01.2009 00:10:00', etc.",
+    "Call the 'show_heatmap' function with the DataFrame 'df' as the argument",
+    "Run the script using the command 'python3 timeseries_weather_forecasting.py'",
+    "Observe the output for the ValueError: 'could not convert string to float: '01.01.2009 00:10:00''",
+    "Verify that the DataFrame 'df' contains a column with string dates and a numeric column",
+    "Check the shape of the DataFrame 'df' to ensure it has the expected dimensions (10, 2)",
+    "Assert that the DataFrame 'df' contains non-numeric values in the date column before calling the correlation function"
+]
+```

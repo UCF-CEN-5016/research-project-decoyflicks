@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the official TensorFlow Model Garden repository.",
+    "Set the TensorFlow version to tf-nightly-cpu 2.16.0.dev20231103 and tf-keras 2.16.0.",
+    "Import the classifier_trainer.py script from the official TensorFlow Model Garden repository.",
+    "Define a variable for the dataset directory, e.g., data_dir = '/path/to/imagenet_data'.",
+    "Set the model type to 'resnet' and the mode to 'train_and_eval'.",
+    "Prepare the command to run the script: 'python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --data_dir=/path/to/imagenet_data'.",
+    "Run the command in a terminal or command prompt to execute the script.",
+    "Monitor the output for any errors during execution.",
+    "Verify that the output contains the specific error message: 'AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'. Did you mean: 'optimizer_v2'?'.",
+    "Check the version of TensorFlow and tf-keras being used to ensure they match the specified versions.",
+    "Confirm that the directory '/path/to/imagenet_data' contains the required ImageNet dataset files.",
+    "Ensure that the Python version is set to 3.11.6 and that the environment is correctly configured with the necessary dependencies."
+]
+```

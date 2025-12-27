@@ -1,0 +1,18 @@
+```json
+[
+    "Clone the fairseq repository from https://github.com/facebookresearch/fairseq.git to /content/fairseq",
+    "Navigate to the directory /content/fairseq/examples/mms/data_prep/",
+    "Create a symbolic link from /path/to/audio.wav to audio.wav in the current working directory",
+    "Create a symbolic link from /path/to/text.txt to text.txt in the current working directory",
+    "Set the environment variable LANG to 'ful'",
+    "Set the environment variable OUTDIR to '/content/output'",
+    "Install the required dependencies by running pip install torch torchaudio uroman",
+    "Ensure that CUDA is available and the correct version of PyTorch with CUDA support is installed",
+    "Run the command python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin",
+    "Capture the standard error output to a file named 'error_output.log'",
+    "Verify that the RuntimeError occurs in the log with the message: Sizes of tensors must match except in dimension 1. Expected size 1649 but got size 1799 for tensor number 1 in the list.",
+    "Check the dimensions and shapes of the tensors involved in the operation to identify the mismatch",
+    "Assert that the error occurs exactly when trying to concatenate two tensors with different sizes along dimension 1"
+]
+```
+

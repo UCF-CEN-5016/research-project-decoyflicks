@@ -1,0 +1,11 @@
+gae formula bug
+
+https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/999f2036a5a7c54403352211b5d1cc0df42b83f6/labml_nn/rl/ppo/gae.py#L36
+
+this should be gamma^2 r_{t+2} instead of gamma^2 r_{t+1}
+
+https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/999f2036a5a7c54403352211b5d1cc0df42b83f6/labml_nn/rl/ppo/gae.py#L45
+
+this should be wk = (1-lambda) * lambda ^ (k-1) 
+
+thanks for everything! this tutorial is gold!!!

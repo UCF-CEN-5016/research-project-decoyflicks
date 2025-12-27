@@ -1,0 +1,16 @@
+```json
+[
+    "Import labml library for dynamic hyperparameters and experiment tracking",
+    "Import necessary modules from torch for neural network components and operations",
+    "Define a batch size of 32",
+    "Set the number of workers to 8",
+    "Set the number of steps per update to 128",
+    "Set the number of mini batches to 4",
+    "Initialize an experiment with the name 'ppo'",
+    "Configure dynamic hyperparameters for epochs, value loss coefficient, entropy bonus coefficient, clip range, and learning rate",
+    "Create a Trainer object with the configured parameters",
+    "Start the experiment and run the training loop",
+    "Assert that the policy reward in the tracker is less than 0 after one update to validate bug occurrence"
+]
+```
+

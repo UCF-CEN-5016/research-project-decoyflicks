@@ -1,0 +1,17 @@
+TITLE  
+AttributeError in Keras ResNet50 Eager Graph Execution
+
+SYMPTOMS  
+• An `AttributeError` is raised when trying to access the `Optimizer` class from the `tf_keras.optimizers.legacy` module.  
+• Error message: `AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'. Did you mean: 'optimizer_v2'?`  
+• The script fails to run due to the missing attribute, which indicates that the expected class is not available in the specified module.
+
+EXPECTED BEHAVIOR  
+When the software operates correctly, the script should run without raising an `AttributeError`, allowing the model training and evaluation process to complete successfully.
+
+REPRODUCTION STEPS  
+1. Clone the TensorFlow Model Garden repository.  
+2. Navigate to the directory containing `classifier_trainer.py`.  
+3. Execute the following command:  
+   `python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --data_dir=/dir_to_imagenet_data`  
+4. Observe the output for the `AttributeError` mentioned above.

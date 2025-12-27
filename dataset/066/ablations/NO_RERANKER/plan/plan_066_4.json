@@ -1,0 +1,29 @@
+```json
+[
+    "Import necessary libraries: keras, tensorflow, numpy, collections.Counter, and conlleval.evaluate",
+    "Define a batch size of 32 for training the NER model",
+    "Set the vocabulary size to 20000 and the number of tags to 10 (9 NER tags + 1 for padding)",
+    "Create a custom loss function class CustomNonPaddingTokenLoss that ignores padded tokens",
+    "Define the NERModel class with the following parameters: num_tags, vocab_size, maxlen=128, embed_dim=32, num_heads=2, ff_dim=32",
+    "Implement the call method in NERModel to process inputs through embedding, transformer block, and dense layers",
+    "Load the CoNLL 2003 dataset using load_dataset from datasets library",
+    "Export the training and validation data to tab-separated files: './data/conll_train.txt' and './data/conll_val.txt'",
+    "Create a function map_record_to_training_data to transform dataset records into tokens and tags",
+    "Create a function lowercase_and_convert_to_ids to convert tokens to token IDs using StringLookup",
+    "Create TensorFlow Dataset objects for training and validation data using tf.data.TextLineDataset",
+    "Map the training dataset using map_record_to_training_data and lowercase_and_convert_to_ids",
+    "Use padded_batch to handle variable-length sequences in the training dataset",
+    "Instantiate the NERModel with parameters: num_tags, vocab_size, embed_dim=32, num_heads=4, ff_dim=64",
+    "Compile the NER model with optimizer='adam' and the custom loss function",
+    "Fit the model on the training dataset for 10 epochs",
+    "Prepare a sample input for inference: 'eu rejects german call to boycott british lamb'",
+    "Tokenize and convert the sample input to IDs using the lowercase_and_convert_to_ids function",
+    "Reshape the sample input to have shape (1, -1) for prediction",
+    "Call the predict method on the NER model with the sample input",
+    "Capture the output and use np.argmax to get the predicted tag IDs",
+    "Map the predicted tag IDs back to their corresponding labels using the mapping dictionary",
+    "Print the predictions to verify the output",
+    "Check if the variable level2_dau_2 is unused in the code and if the function call in line 352 uses level3_dau_2 instead of level2_dau_2",
+    "Assert that the output does not match expected predictions if level2_dau_2 is indeed the intended variable"
+]
+```

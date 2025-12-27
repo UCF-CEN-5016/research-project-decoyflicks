@@ -1,0 +1,14 @@
+```json
+[
+    "Import the necessary libraries: torch, json, and any other dependencies required for the BERT model.",
+    "Set the PyTorch version to 1.12 or higher to ensure compatibility with the bug: torch.__version__ = '1.12.0'.",
+    "Define the model configuration by loading the BERT large configuration from 'bert_configs/large.json'.",
+    "Create a dummy input tensor with shape (12, 768) to simulate a batch size of 12 and hidden size of 768.",
+    "Instantiate the BERT model using the loaded configuration: model = BertModel.from_pretrained('bert-large-uncased').",
+    "Modify the gelu function in the model's source code to use approximate=True, which is expected to trigger the bug.",
+    "Call the gelu function directly with the dummy input tensor: output = model.gelu(dummy_input).",
+    "Run the script using the command: bash scripts/run_squad.sh /home/bert_large/bert_large_qa.pt 0.2 12 3e-5 0.1 tf32 1 42 /home/bert_large/squad/v1.1 vocab/vocab results/SQuAD train bert_configs/large.json.",
+    "Capture the output and check for the TypeError: gelu(): argument 'approximate' must be str, not bool.",
+    "Log the error message to verify that the bug has been reproduced successfully."
+]
+```

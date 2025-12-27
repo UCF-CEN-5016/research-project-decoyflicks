@@ -1,0 +1,23 @@
+```json
+[
+    "Import pandas and numpy libraries for data manipulation and numerical operations",
+    "Import matplotlib library for visualization purposes",
+    "Read the TSV data from 'FordA_TRAIN.tsv' and 'FordA_TEST.tsv' using the readucr function",
+    "Verify that the x_train and y_train variables have shapes (3601, 500) and (3601,) respectively",
+    "Verify that the x_test and y_test variables have shapes (1320, 500) and (1320,) respectively",
+    "Visualize one timeseries example for each class in the dataset using matplotlib's plot function",
+    "Standardize the data by reshaping x_train and x_test to add a channel dimension, resulting in shapes (3601, 500, 1) and (1320, 500, 1)",
+    "Define num_classes as the number of unique classes found in y_train",
+    "Shuffle the training set using numpy's random.permutation function",
+    "Standardize the labels to positive integers by replacing -1 with 0",
+    "Build a Fully Convolutional Neural Network model with input shape (500, 1)",
+    "Define a make_model function that constructs the CNN architecture as described in the example code",
+    "Compile the model using 'adam' optimizer and 'sparse_categorical_crossentropy' loss function",
+    "Train the model on x_train and y_train for 200 epochs with batch size of 32, validation split of 0.2, and appropriate callbacks",
+    "Evaluate the trained model on x_test and y_test to obtain test_loss and test_acc",
+    "Plot the model's training and validation accuracy using matplotlib's plot function",
+    "Call the show_heatmap function from timeseries_weather_forecasting.py with the dataframe df containing the correlation matrix of data.corr()",
+    "Verify that the show_heatmap function raises a ValueError due to the presence of string values ('01.01.2009 00:10:00') in the dataframe columns or index"
+]
+```
+

@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and rotary_embedding_torch",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 8 and sequence length of 16",
+    "Create a random input tensor 'q' with shape (batch_size, seq_len, embedding_dim) where embedding_dim is 64",
+    "Create a random input tensor 'k' with shape (batch_size, seq_len, embedding_dim) where embedding_dim is 64",
+    "Instantiate the RotaryEmbedding class with parameters: dim=64, learned_freq=True, freqs_for='lang'",
+    "Define a loss function, e.g., nn.MSELoss()",
+    "Perform a forward pass by calling rotate_queries_and_keys with inputs 'q' and 'k'",
+    "Calculate a dummy loss by taking the mean of the output from the forward pass",
+    "Call loss.backward() to compute gradients for the first time",
+    "Perform an optimizer step (e.g., optimizer.step()) to update model parameters",
+    "Reset gradients by calling optimizer.zero_grad()",
+    "Call loss.backward() again to trigger the RuntimeError",
+    "Capture the RuntimeError and assert that the message contains 'Trying to backward through the graph a second time'"
+]
+```

@@ -1,0 +1,19 @@
+TITLE  
+Encoder's `to_logits.weight` parameter not updating during training
+
+SYMPTOMS  
+• The parameter `encoder.to_logits.weight` does not update during the forward pass, leading to issues with Distributed Data Parallel (DDP) training.  
+• No specific error messages are reported, but the weights remain unchanged after multiple training iterations.  
+• The model's performance does not improve as expected, indicating that the weights are not being utilized effectively.
+
+EXPECTED BEHAVIOR  
+The `encoder.to_logits.weight` parameter should be part of the forward pass and update accordingly during training, allowing the model to learn effectively and improve performance.
+
+REPRODUCTION STEPS  
+1. Clone the repository containing the bug: `git clone <repository_url>`  
+2. Navigate to the directory: `cd <repository_directory>`  
+3. Run the training script with DDP enabled: `python train.py --ddp`  
+4. Monitor the updates to the `encoder.to_logits.weight` parameter during training.  
+5. Observe that the weights do not change despite the training process.  
+6. Review the forward pass implementation to confirm that `encoder.to_logits.weight` is not included.  
+7. Analyze the output logs for any indications of weight updates.

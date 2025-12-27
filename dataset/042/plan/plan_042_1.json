@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries from fairseq and torch",
+    "Define the path to the dataset files (src, tgt)",
+    "Load the datasets using load_langpair_dataset function",
+    "Prepend language tokens to the datasets using PrependTokenDataset",
+    "Combine the datasets using RoundRobinZipDatasets",
+    "Noisify the dataset using NoisingDataset",
+    "Transform end-of-sequence tokens using TransformEosLangPairDataset",
+    "Split the dataset into train, valid, and test sets",
+    "Define a batch size of 32",
+    "Create dataloader for the training set with specified batch size",
+    "Initialize the language model and add special tokens to dictionary and model using add_secial_tokens_to_dict_and_model function",
+    "Extend embeddings in the model using extend_embedding function",
+    "Set up optimizer and learning rate scheduler",
+    "Define a function to calculate loss during training",
+    "Train the model for 1 epoch",
+    "Verify that the model parameters have changed after training",
+    "Monitor GPU memory usage during training",
+    "Assert GPU memory exceeds expected threshold during training"
+]
+```
+

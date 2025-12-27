@@ -1,0 +1,22 @@
+TITLE  
+Segmentation Fault in Neural Machine Translation Example with Keras NLP
+
+SYMPTOMS  
+• The test script for neural machine translation results in a segmentation fault.  
+• The segmentation fault occurs after the `next_fn` returns one tensor, an empty tuple, and `None` for `hidden_states` inside the `GreedySampler()`.  
+• The following error message is reported:  
+  ```shell
+  tensorflow.python.framework.errors_impl.InvalidArgumentError: Exception encountered when calling layer 'cross_attention' (type CachedMultiHeadAttention).  
+  {{function_node __wrapped__Einsum_N_2_device_/job:localhost/replica:0/task:0/device:GPU:0}} Expected dimension 1 at axis 0 of the input shaped [64,40,8,32] but got dimension 64 [Op:Einsum] name:  
+  ```  
+• The segmentation fault occurs inconsistently; the script worked once before failing.  
+
+EXPECTED BEHAVIOR  
+The test script should execute without errors, producing translated sentences and calculating the BLEU score without encountering a segmentation fault.
+
+REPRODUCTION STEPS  
+1. Set up the environment with Keras version 2.15 and TensorFlow compatible with the GeForce RTX 3070 Mobile GPU.  
+2. Execute the provided test script for neural machine translation.  
+3. Ensure that the BLEU score evaluation from NLTK is included after tensors are passed to the CPU.  
+4. Observe the behavior of the script, particularly the execution of the `GreedySampler()` function.  
+5. Note the occurrence of the segmentation fault and any accompanying error messages in the log output.

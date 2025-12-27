@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, einsum from torch, rearrange and repeat from einops",
+    "Define a batch size of 2 and an embedding dimension of 64",
+    "Create random input tensors for queries (Q) and keys (K) with shape (batch_size, seq_len, embedding_dim) where seq_len = 10",
+    "Set seq_len to 10 and create Q and K as follows: Q = torch.randn(batch_size, seq_len, embedding_dim) and K = torch.randn(batch_size, seq_len, embedding_dim)",
+    "Instantiate the RotaryEmbedding class with parameters: dim=64, use_xpos=True",
+    "Call the rotate_queries_and_keys method with Q and K as inputs: rotated_Q, rotated_K = rotary_embedding.rotate_queries_and_keys(Q, K)",
+    "Check the contents of rotated_K for NaN values using: assert not torch.isnan(rotated_K).any(), 'rotated_K contains NaN values'",
+    "If the assertion fails, print the NaN values in rotated_K for debugging: print(rotated_K[torch.isnan(rotated_K)])",
+    "Perform a forward pass through a simple transformer model using rotated_Q and rotated_K to compute loss",
+    "Check the computed loss for NaN values using: assert not torch.isnan(loss).any(), 'Loss contains NaN values'",
+    "Log the output of the loss calculation to verify if it contains NaN values"
+]
+```

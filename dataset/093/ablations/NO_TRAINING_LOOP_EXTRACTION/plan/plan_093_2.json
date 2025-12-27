@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch and the TransformerWrapper class from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 8 and input sequence length of 1024",
+    "Create a tensor x with random integers in the range [0, 32) and shape (8, 1024) using torch.randint",
+    "Instantiate the TransformerWrapper with the following parameters: num_tokens=32, max_seq_len=0, num_memory_tokens=20, and attn_layers as a Decoder with dim=512, depth=4, heads=4, rotary_pos_emb=True, attn_flash=True, attn_onnxable=True, attn_num_mem_kv=20, attn_one_kv_head=True",
+    "Call the forward method of the TransformerWrapper instance with the input tensor x",
+    "Capture the output logits from the forward method",
+    "Print the shape and data type of the input tensor x to verify it is (8, 1024) and torch.int64",
+    "Print the shape and data type of the output logits to verify the output is generated",
+    "Assert that an error is raised during the forward method call due to the conflicting parameters attn_num_mem_kv > 0 and attn_one_kv_head=True"
+]
+```

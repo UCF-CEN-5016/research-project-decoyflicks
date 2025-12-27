@@ -1,0 +1,16 @@
+```json
+[
+    "Clone the TensorFlow models repository from GitHub using the following command: 'git clone https://github.com/tensorflow/models.git'",
+    "Navigate to the object_detection directory by running 'cd models/research/object_detection'",
+    "Set up a virtual environment for Python if not already done, using the command: 'python -m venv tfod2_env'",
+    "Activate the virtual environment by running: 'source tfod2_env/bin/activate' on Arch Linux",
+    "Install the required dependencies for TensorFlow Object Detection API (TFOD2) from PyPI using pip. Run the following command: 'pip install tensorflow-object-detection-api'",
+    "Build the Protobuf files by running: 'protoc object_detection/protos/*.proto --python_out=. --pyi_out=.'",
+    "Set up the environment for TFOD2 installation by downloading pre-trained models from TensorFlow Model Zoo and placing them in a directory named 'pretrained-models'",
+    "Navigate to the research/object_detection/models directory where the feature_extractor_test.py script is located",
+    "Ensure that the Python version being used is compatible with TensorFlow 1.x as the test is designed for TF1.X only. Use 'python -m pip install tensorflow==1.15'",
+    "Run the Python module to install the package using the command: 'python -m pip install --use-feature=2020-resolver .'",
+    "Observe the error message indicating that the option '--use-feature' is invalid with the value '2020-resolver'"
+]
+```
+

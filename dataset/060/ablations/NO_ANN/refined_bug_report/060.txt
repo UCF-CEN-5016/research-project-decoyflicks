@@ -1,0 +1,38 @@
+TITLE  
+Image segmentation with U-Net-like architecture fails during dataset creation
+
+SYMPTOMS  
+• The code encounters an error when creating the datasets.  
+• The same issue occurs in both Google Colab and a local machine.  
+• Error message:  
+  ```
+  TypeError: branches[0] and branches[1] arguments to tf.switch_case must have the same number, type, and overall structure of return values.
+  ```
+• Additional details from the error trace indicate that the tensor types for `segmentation_masks` differ:  
+  ```
+  Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=float32) and Tensor("sequential/rand_augment/cond/random_choice/switch_case/indexed_case/Identity_1:0", shape=(160, 160, 1), dtype=int64) have different types
+  ```
+
+EXPECTED BEHAVIOR  
+The code should successfully create the training and validation datasets for image segmentation without any errors, allowing for the training of a U-Net-like model.
+
+REPRODUCTION STEPS  
+1. Execute the code cell provided in the original bug report, specifically the dataset creation section:  
+   ```python
+   augmented_train_ds = (
+       train_ds.shuffle(BATCH_SIZE * 2)
+       .map(augment_fn, num_parallel_calls=AUTOTUNE)
+       .batch(BATCH_SIZE)
+       .map(unpackage_inputs)
+       .prefetch(buffer_size=tf.data.AUTOTUNE)
+   )
+   resized_val_ds = (
+       val_ds.map(resize_fn, num_parallel_calls=AUTOTUNE)
+       .batch(BATCH_SIZE)
+       .map(unpackage_inputs)
+       .prefetch(buffer_size=tf.data.AUTOTUNE)
+   )
+   ```
+2. Ensure that `train_ds` and `val_ds` are properly initialized with the correct dataset.  
+3. Run the code in both Google Colab and a local environment to confirm the error occurs in both settings.  
+4. Observe the error messages and behaviors described above.

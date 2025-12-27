@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository.",
+    "Set the environment variables for DATA_DIR and MODEL_DIR to point to the appropriate directories containing the ImageNet dataset and model checkpoints.",
+    "Activate the conda environment with TensorFlow 2.11.0 installed.",
+    "Define the number of nodes and GPUs: 2 nodes, 2 GPUs per node.",
+    "On the first GPU node (gpu1), run the command to start the training process with the following parameters: --mode=train_and_eval, --model_type=resnet, --dataset=imagenet, --model_dir=$MODEL_DIR, --data_dir=$DATA_DIR, --config_file=configs/examples/resnet/imagenet/gpu.yaml.",
+    "Create gpu.yaml configuration file with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0.",
+    "On the second GPU node (gpu2), run the command to start the training process with the same parameters as gpu1, but use the config file gpu1.yaml.",
+    "Create gpu1.yaml configuration file with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1.",
+    "Ensure that both nodes can communicate with each other over the specified ports (6655) and that the necessary firewall rules are set to allow this communication.",
+    "Monitor the training logs on both nodes to check the throughput of examples processed per second.",
+    "Record the throughput on a single GPU and on two GPUs within a single node to establish a baseline for comparison.",
+    "Verify that the throughput on the multi-node setup does not exceed the throughput of a single GPU, indicating that scaling is not occurring.",
+    "Check for any error messages or warnings in the logs that may indicate issues with the multi-worker setup.",
+    "Validate that the TensorFlow version is indeed 2.11.0 and that the CUDA version is compatible (11.0) with the installed TensorFlow version.",
+    "Confirm that the GPU model (Tesla V100-SXM2) is correctly recognized by TensorFlow on both nodes.",
+    "Assert that the throughput on the multi-node setup remains constant and does not increase beyond the single GPU throughput."
+]
+```

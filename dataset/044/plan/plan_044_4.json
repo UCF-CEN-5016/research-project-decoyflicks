@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules from fairseq, torch, and other required libraries.",
+    "Define a batch size of 32 and prepare sample data including source tokens, lengths, target tokens, and previous output tokens.",
+    "Create an instance of EnsembleModelWithAlignment with multiple models (e.g., three models for simplicity).",
+    "Generate alignments using the SequenceGeneratorWithAlignment class by calling the generate method with the defined sample data.",
+    "Collect attention matrices from the generated hypothesis to prepare for further processing.",
+    "Convert source and target tokens to CPU if they are not already there to match the device of the attention matrices.",
+    "Process the attention matrices to extract hard alignments by calling the extract_alignment function.",
+    "Assert that one or more extracted alignments contain incorrect values (e.g., NaN, Inf) to reproduce the bug.",
+    "Monitor memory usage during the alignment extraction process to ensure it matches expected behavior.",
+    "Compare memory usage against a predefined threshold to validate the bug condition."
+]
+```
+

@@ -1,0 +1,24 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from tensorflow import keras and import tensorflow as tf",
+    "Import RDKit modules: from rdkit import Chem, RDLogger and from rdkit.Chem.Draw import MolsToGridImage",
+    "Disable RDKit logging: RDLogger.DisableLog('rdApp.*')",
+    "Define constants for the model: Set NUM_ATOMS to 9, ATOM_DIM to 5, BOND_DIM to 5, and LATENT_DIM to 64",
+    "Define a function smiles_to_graph that converts SMILES strings to adjacency and feature tensors",
+    "In smiles_to_graph, initialize adjacency tensor with shape (BOND_DIM, NUM_ATOMS, NUM_ATOMS) and feature tensor with shape (NUM_ATOMS, ATOM_DIM)",
+    "Create a list of SMILES strings from the QM9 dataset: Load data from 'https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/qm9.csv' and extract the second column",
+    "Select a subset of the dataset: Use every 10th SMILES string from the data list to create a training set",
+    "Convert the selected SMILES strings to adjacency and feature tensors using smiles_to_graph function",
+    "Stack the adjacency and feature tensors into numpy arrays: adjacency_tensor and feature_tensor",
+    "Define a GraphGenerator model with appropriate input shapes and layers, ensuring the output shapes are (BOND_DIM, NUM_ATOMS, NUM_ATOMS) for adjacency and (NUM_ATOMS, ATOM_DIM) for features",
+    "Define a GraphDiscriminator model with appropriate input shapes and layers",
+    "Create a GraphWGAN model that combines the generator and discriminator",
+    "Compile the GraphWGAN model with Adam optimizers for both generator and discriminator",
+    "Fit the GraphWGAN model on the adjacency_tensor and feature_tensor with epochs set to 10 and batch_size set to 16",
+    "During training, monitor the loss values and check if they are consistently high or NaN",
+    "Verify the output shapes of the generator: Call the generator with a random latent vector of shape (batch_size, LATENT_DIM) and assert the output shapes are incorrect",
+    "Check the shape of the feature tensor after the generator call: Assert that the last dimension of the feature tensor is not equal to ATOM_DIM",
+    "Log the output of the generator to confirm the presence of an additional dimension in the feature tensor",
+    "Assert that the model fails to train effectively by checking if the loss does not decrease over epochs"
+]
+```

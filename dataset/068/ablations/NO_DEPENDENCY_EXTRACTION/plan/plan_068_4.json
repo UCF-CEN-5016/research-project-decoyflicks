@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, Keras, and KerasCV",
+    "Set up Google Colab environment with GPU runtime",
+    "Define a batch size of 2 and image dimensions of 800x800",
+    "Load the COCO 2017 dataset using TensorFlow Datasets with split for training and validation",
+    "Define a preprocessing function that resizes images to 800x800 and normalizes bounding boxes",
+    "Map the preprocessing function to the training dataset and validation dataset",
+    "Use padded_batch to create batches with fixed batch size for both training and validation datasets",
+    "Define a LabelEncoder class to encode bounding boxes and class IDs for training",
+    "Initialize the RetinaNet model with a ResNet50 backbone and compile it with a custom loss function",
+    "Set up callbacks for model checkpointing during training",
+    "Train the model for 1 epoch using model.fit with 100 steps for training and 50 steps for validation",
+    "Monitor the training process for loss values and ensure it runs for 1 epoch",
+    "Capture the output of the training process to check for any errors",
+    "Verify that the UnknownError occurs after the first epoch during the training process",
+    "Check the error message for InvalidArgumentError related to ConcatOp dimensions",
+    "Assert that the shapes of the tensors involved in the error are [4,2,4] and [4,1,4]"
+]
+```

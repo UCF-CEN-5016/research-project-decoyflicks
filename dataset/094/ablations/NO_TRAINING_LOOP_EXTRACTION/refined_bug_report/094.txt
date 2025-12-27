@@ -1,0 +1,19 @@
+TITLE  
+Issue with `return_mems` functionality in `ContinuousTransformerWrapper`
+
+SYMPTOMS  
+• The `return_mems` parameter does not function as expected when a list of memory tensors is provided.  
+• The model fails to return the correct memory states when `mems` is supplied, leading to unexpected behavior.  
+• No specific error messages are generated; however, the output shapes of `logits` and `mems` are not as anticipated.  
+• When `mems=None` is passed, the model operates correctly and returns valid outputs.
+
+EXPECTED BEHAVIOR  
+When the `return_mems` parameter is set to `True` and a valid list of memory tensors is provided, the model should return both the `logits` and the updated memory states in the `mems` list. The shapes of the output tensors should be consistent with the expected dimensions based on the model architecture.
+
+REPRODUCTION STEPS  
+1. Initialize the `ContinuousTransformerWrapper` with the specified parameters, including `num_memory_tokens` and `max_mem_len`.  
+2. Create a random input tensor `x` of shape `(1, 1024, 512)` and a mask tensor `m` of shape `(1, 1024)` with boolean values.  
+3. Create a list of memory tensors `mems` with six tensors of shape `(1, 100, 512)`.  
+4. Call the model with `return_mems=True`, passing `x`, `mask=m`, and `mems=mems`.  
+5. Print the shape of `logits` and the shapes of the tensors in `mems`.  
+6. Repeat the above steps but set `mems=None` instead and observe the difference in behavior.

@@ -1,0 +1,21 @@
+TITLE  
+NameError due to unassigned member variable in SinusoidalPosEmb class
+
+SYMPTOMS  
+• The `theta` parameter is passed to the `__init__` function but is not assigned as a member variable.  
+• The `forward` function attempts to use `theta`, resulting in a `NameError`.  
+• The following error message is raised:  
+  ```
+  NameError: name 'theta' is not defined
+  ```
+
+EXPECTED BEHAVIOR  
+When the software works correctly, the `SinusoidalPosEmb` class should properly utilize the `theta` parameter within the `forward` function without raising any errors. The output should be a tensor representing the sinusoidal positional embeddings of the input tensor `x`.
+
+REPRODUCTION STEPS  
+1. Instantiate the `SinusoidalPosEmb` class with a specified dimension (e.g., `dim = 4`).  
+2. Create a tensor `x` with the shape `(10,)` filled with ones.  
+3. Call the `emb` object with the tensor `x` to execute the `forward` function.  
+4. Observe the error message generated during the execution.  
+
+By following these steps, the issue can be reproduced and confirmed.

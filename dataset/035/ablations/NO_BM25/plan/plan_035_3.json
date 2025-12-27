@@ -1,0 +1,27 @@
+```json
+[
+    "Clone the repository from GitHub using the command: git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git",
+    "Navigate to the directory containing the code: cd annotated_deep_learning_paper_implementations/labml_nn/transformers/rope",
+    "Open the __init__.py file in a text editor and locate line 226, which currently reads: rotary_pe = RotaryPositionalEmbeddings(3)",
+    "Change the line to read: rotary_pe = RotaryPositionalEmbeddings(4) to simulate the bug fix scenario.",
+    "Navigate to the directory containing the training code: cd ../retro",
+    "Open the train.py file in a text editor.",
+    "Import necessary libraries at the top of train.py: import torch, from torch import nn, from torch.utils.data import DataLoader, RandomSampler, from labml import monit, lab, tracker, experiment, logger, from labml_helpers.datasets.text import TextFileDataset, from labml_nn.optimizers.noam import Noam, from labml_nn.transformers.retro import model as retro, from labml_nn.transformers.retro.dataset import Dataset, RetroIndex, from labml_nn.transformers.retro.model import RetroModel, NearestNeighborEncoder",
+    "Set the device to GPU by adding: device = torch.device('cuda:0')",
+    "Load the Tiny Shakespeare dataset by creating a TextFileDataset instance: tds = TextFileDataset(lab.get_data_path() / 'tiny_shakespeare.txt', list, url='https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt')",
+    "Create a Retro dataset instance: train_dataset = Dataset(lab.get_data_path() / 'retro_train_dataset.json', tds)",
+    "Create a DataLoader instance with a batch size of 4: train_dl = DataLoader(train_dataset, batch_size=4, sampler=RandomSampler(train_dataset, replacement=True))",
+    "Define hyper-parameters: chunk_len = 16, d_model = 128, d_ff = 512, n_heads = 16, d_k = 16",
+    "Create the nearest neighbor encoder: nearest_neighbor_encoder = NearestNeighborEncoder(chunk_len, 6, {3}, d_model, n_heads, d_k, d_ff)",
+    "Create the Retro model: model = RetroModel(tds.n_tokens, d_model, 6, {3, 5}, chunk_len, n_heads, d_k, d_ff, encoder=nearest_neighbor_encoder)",
+    "Move the model to the device: model = model.to(device)",
+    "Create the optimizer: optimizer = Noam(model.parameters(), lr=1., d_model=d_model, warmup=2000)",
+    "Create an instance of the Trainer class: trainer = Trainer(device, model, train_dl, optimizer)",
+    "Create an instance of the Sampler class: sampler = Sampler(device, model, tds, chunk_len)",
+    "Define a prompt string: prompt = '''Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'''",
+    "Start the experiment by calling experiment.create(name='retro_small')",
+    "Run the training loop for 1 epoch: for epoch in range(1): trainer()",
+    "Capture the output of the model during training and check for errors related to the RotaryPositionalEmbeddings dimensions.",
+    "Assert that an error is raised during the training process indicating a mismatch in expected dimensions due to the incorrect number of features in RotaryPositionalEmbeddings."
+]
+```

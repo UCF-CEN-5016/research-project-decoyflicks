@@ -1,0 +1,58 @@
+### TITLE
+Keras Optimizer Module Incompatibility with TensorFlow Eager Execution
+
+### SYMPTOMS
+• `AttributeError` occurs when trying to use the `Optimizer` class from `tf_keras.optimizers.legacy`.
+• Error message: `AttributeError: module 'tf_keras.optimizers.legacy' has no attribute 'Optimizer'. Did you mean: 'optimizer_v2'?`
+• The issue arises in the `ExponentialMovingAverage` class definition within `ema_optimizer.py`.
+
+### EXPECTED BEHAVIOR
+The script should successfully instantiate and use the `ExponentialMovingAverage` optimizer without raising an AttributeError.
+
+### REPRODUCTION STEPS
+1. Ensure that you are using TensorFlow 2.x and Keras 2.x.
+2. Run the following command:
+```sh
+python3 classifier_trainer.py --mode=train_and_eval  --model_type=resnet  --dataset=imagenet --data_dir=/dir_to_imagnet_data
+```
+3. The script should attempt to use `ExponentialMovingAverage` as an optimizer, which will result in the described AttributeError.
+
+### ANALYSIS AND RESTRUCTURED BUG REPORT
+
+#### Bug Report Analysis
+
+The reported issue stems from a mismatch between the TensorFlow version and the Keras module being used. Specifically, the `tf_keras.optimizers.legacy.Optimizer` class is not available or does not have the expected structure in the current environment setup.
+
+#### Recommendations for Resolution
+
+1. **Check Keras Version Compatibility**:
+Ensure that the version of `tf-keras` you are using is compatible with your TensorFlow version. The `Optimizer` attribute might be moved to a different module or renamed, which could cause this error.
+
+2. **Update Dependencies**:
+Update both `TensorFlow` and `tf-keras` to their latest versions that support each other properly. You can use pip or conda to update these dependencies.
+
+3. **Review Code for Compatibility**:
+If the issue persists, review the code in `ema_optimizer.py` where the `ExponentialMovingAverage` class is defined. Ensure it correctly imports and uses the optimizer from the appropriate module.
+
+4. **Fallback Plan**:
+As a temporary workaround, consider using a different optimizer that is available in both TensorFlow and Keras, or seek alternative implementations of exponential moving average optimization if necessary.
+
+#### Modified Code Example
+
+Here's an example of how to modify the `ExponentialMovingAverage` class definition:
+
+```python
+from tensorflow.python.keras.optimizer_v2 import optimizer_v2 as tf_keras_optimizer
+
+class ExponentialMovingAverage(tf_keras_optimizer.Optimizer):
+# Class implementation here...
+```
+
+By making these adjustments, you should be able to resolve the issue and ensure that your script runs correctly.
+
+### Summary of Actions
+
+1. Verify compatibility between TensorFlow 2.x and `tf-keras` versions.
+2. Update dependencies if necessary.
+3. Review and modify code as needed for compatibility.
+4. Test the modified code to confirm the issue is resolved.

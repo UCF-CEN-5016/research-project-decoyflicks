@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and Keras modules: from keras import Input, Model, layers, optimizers, losses, metrics",
+    "Set the random seed for reproducibility: import numpy as np; np.random.seed(42); import tensorflow as tf; tf.random.set_seed(42)",
+    "Define a batch size of 32 and input shape of (784,) for a simple dense neural network",
+    "Load the MNIST dataset using keras.datasets.mnist.load_data() and split it into training, validation, and test sets",
+    "Preprocess the data: reshape x_train and x_test to (-1, 784) and normalize by dividing by 255.0",
+    "Reserve 10,000 samples from x_train and y_train for validation: x_val = x_train[-10000:], y_val = y_train[-10000:]; x_train = x_train[:-10000], y_train = y_train[:-10000]",
+    "Create tf.data.Dataset objects for train, validation, and test datasets with batch size of 32",
+    "Define a simple model architecture using Keras: model = Model(inputs=Input(shape=(784,)), outputs=layers.Dense(10, activation='softmax')(layers.Dense(256, activation='relu')(Input(shape=(784,)))))",
+    "Compile the model with Adam optimizer, SparseCategoricalCrossentropy loss, and SparseCategoricalAccuracy metric",
+    "Fit the model using model.fit(train_dataset, epochs=20, validation_data=test_dataset) to intentionally use the test set as validation set",
+    "Monitor the training process and observe the validation accuracy and loss metrics",
+    "Assert that the validation accuracy is unusually high compared to the training accuracy, indicating overfitting due to using the test set as validation",
+    "Log the validation loss and accuracy after training to confirm the bug's presence"
+]
+```

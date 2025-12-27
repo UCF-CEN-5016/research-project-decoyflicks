@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules from diffusers, accelerate, torch, and other required libraries.",
+    "Define a batch size of 16 and image dimensions of 512x512.",
+    "Create random input data with shape (batch_size, height, width, 3) using randn_tensor function.",
+    "Encode the input prompt to obtain prompt_embeds using _encode_prompt method.",
+    "Set up timesteps for the scheduler using scheduler.set_timesteps method.",
+    "Prepare latent variables by calling prepare_latents method with appropriate parameters.",
+    "Prepare extra step kwargs by calling prepare_extra_step_kwargs method.",
+    "Perform denoising loop as specified in the pipeline, iterating through timesteps and computing latents updates.",
+    "Monitor the latents values after each iteration to detect NaN or inf values.",
+    "Assert that NaN or inf values are detected during the denoising loop."
+]
+```
+

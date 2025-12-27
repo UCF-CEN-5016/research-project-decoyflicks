@@ -1,0 +1,29 @@
+TITLE  
+Rotary xpos shape breaking due to custom rotary embedding hack
+
+SYMPTOMS  
+• The implementation of a custom rotary embedding hack has caused the rotary xpos functionality to break.  
+• The following error message is encountered when rotary_xpos is turned on:  
+```
+  File "/opt/anaconda3/envs/neuro/lib/python3.12/site-packages/x_transformers/x_transformers.py", line 669, in forward
+    scale = self.scale ** rearrange(power, 'n -> n 1')
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/neuro/lib/python3.12/site-packages/einops/einops.py", line 591, in rearrange
+    return reduce(tensor, pattern, reduction="rearrange", **axes_lengths)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/neuro/lib/python3.12/site-packages/einops/einops.py", line 533, in reduce
+    raise EinopsError(message + "\n {}".format(e))
+einops.EinopsError:  Error while processing rearrange-reduction pattern "n -> n 1".  
+ Input tensor shape: torch.Size([1, 32]). Additional info: {}.  
+ Wrong shape: expected 1 dims. Received 2-dim tensor.
+```  
+• The application fails to execute the intended functionality of rotary xpos when the custom hack is applied.
+
+EXPECTED BEHAVIOR  
+When the software operates correctly, enabling rotary xpos should function without errors, processing the input tensor and producing the expected output without any shape-related issues.
+
+REPRODUCTION STEPS  
+1. Implement the custom rotary embedding hack in the codebase.  
+2. Enable the rotary_xpos feature.  
+3. Execute the relevant function or module that utilizes rotary xpos.  
+4. Observe the error message generated during execution.

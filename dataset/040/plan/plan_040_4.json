@@ -1,0 +1,19 @@
+```json
+[
+    "Import the necessary modules from labml and torch",
+    "Define a batch size of 4 for the DataLoader",
+    "Set the chunk length to 16 as per the configuration in train.py",
+    "Load the Tiny Shakespeare dataset using TextFileDataset with a batch size of 4",
+    "Initialize the RetroModel with d_model=128, d_ff=512, n_heads=16, and chunk_len=16",
+    "Create an instance of NearestNeighborEncoder for encoding nearest neighbors",
+    "Load the Retro dataset using Dataset with the specified parameters",
+    "Create a DataLoader with the Retro dataset and batch size 4, using RandomSampler",
+    "Initialize the Noam optimizer with model parameters, lr=1., d_model=128, and warmup=2000",
+    "Define a prompt for sampling as 'Second Citizen:\\nOne word, good citizens.\\n\\nFirst Citizen:'",
+    "Call the train function in an environment where labml experiment tracking is initialized",
+    "Monitor the output of each epoch to ensure no NaN values appear in loss calculations",
+    "Assert that the model trains without any runtime errors or unexpected behavior",
+    "Check if the generated samples are coherent and meaningful based on the prompt"
+]
+```
+

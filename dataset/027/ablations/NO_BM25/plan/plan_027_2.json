@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision.transforms, torchvision.datasets, torch.nn, torch.optim, and torch.utils.data",
+    "Set the image size to 128x128 by defining a variable image_size = 128",
+    "Define a batch size of 64 by setting batch_size = 64",
+    "Create a transformation pipeline for the CelebA dataset that includes resizing images to (128, 128) and normalizing them",
+    "Load the CelebA dataset using torchvision.datasets.CelebA with the defined transformation and set download=True",
+    "Create a DataLoader for the CelebA dataset with the defined batch size and shuffle=True",
+    "Define the Generator and Discriminator classes for the DCGAN, ensuring that the input dimensions are adjusted for 128x128 images",
+    "In the Generator class, modify the output layer to produce images of shape (batch_size, 3, 128, 128)",
+    "In the Discriminator class, modify the input layer to accept images of shape (batch_size, 3, 128, 128)",
+    "Initialize the criterion as torch.nn.BCELoss() for binary cross-entropy loss",
+    "Set up the training loop with a specified number of epochs, e.g., num_epochs = 5",
+    "Within the training loop, iterate over the DataLoader to get real images and labels",
+    "Generate random noise as input for the Generator with shape (batch_size, 100)",
+    "Pass the random noise through the Generator to create fake images",
+    "Pass the real images through the Discriminator to get output and calculate errD_real using criterion",
+    "Pass the fake images through the Discriminator to get output and calculate errD_fake using criterion",
+    "Combine the real and fake outputs to calculate the total loss for the Discriminator",
+    "Perform backpropagation and optimization steps for the Discriminator",
+    "Generate new random noise and pass it through the Generator to create fake images for the Generator's training step",
+    "Pass the fake images through the Discriminator to get output and calculate errG using criterion",
+    "Perform backpropagation and optimization steps for the Generator",
+    "Run the training loop and monitor for the ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200]))",
+    "Log the shapes of the outputs and labels before the criterion call to verify the mismatch in sizes"
+]
+```

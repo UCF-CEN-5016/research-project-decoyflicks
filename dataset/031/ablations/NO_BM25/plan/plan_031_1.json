@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: torch, torchvision, and os",
+    "Set the device to 'cuda' if available, otherwise 'cpu'",
+    "Define the model architecture as ResNet50 using torchvision.models.resnet50()",
+    "Set the model to evaluation mode by calling model.eval()",
+    "Download the pretrained weights file 'nvidia_resnet50_200821.pth.tar' from the specified URL",
+    "Load the pretrained weights using torch.load() with the map_location set to the device",
+    "Define a dummy input tensor with shape (256, 3, 224, 224) to simulate a batch of 256 images",
+    "Create a function to load the state_dict into the model using model.load_state_dict()",
+    "Call the function to load the state_dict with strict=True to enforce key matching",
+    "Capture any RuntimeError that occurs during the loading of the state_dict",
+    "Print the error message to verify the presence of missing and unexpected keys",
+    "Assert that the error message contains 'Missing key(s) in state_dict' and 'Unexpected key(s) in state_dict'",
+    "Run the inference command: 'python ./main.py --arch=resnet50 --evaluate --epochs=1 --pretrained-from-file=nvidia_resnet50_200821.pth.tar -b=256 /data/imagenet/'",
+    "Verify that the command outputs the same RuntimeError regarding state_dict loading"
+]
+```

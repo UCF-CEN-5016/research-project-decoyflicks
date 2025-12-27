@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, numpy, glob, matplotlib",
+    "Set the image size to 640 and batch size to 16 for YOLOv8 training",
+    "Download the COCO dataset or use a custom dataset with annotations in COCO format",
+    "Prepare the training dataset by loading images and annotations using tf.data.Dataset",
+    "Define the training dataset with a shape of (None, 640, 640, 3) and validation dataset with the same shape",
+    "Create a YOLOv8 model instance using keras_cv.models.YOLOv8 with appropriate parameters",
+    "Compile the YOLOv8 model with a learning rate of 0.001 and loss function set to 'yolo_loss'",
+    "Set up a callback for evaluation metrics using EvaluateCOCOMetricsCallback with validation dataset",
+    "Start training the model using model.fit with train dataset, validation dataset, epochs set to 3, and callbacks",
+    "Monitor the training process and wait for the first epoch to complete",
+    "Capture the output logs during training to check for loss values and any errors",
+    "Verify that the training completes for the first epoch without interruption",
+    "Check the output logs for the UnknownError related to ConcatV2 operation",
+    "Assert that the error message contains 'Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]'",
+    "Confirm that the error occurs specifically during the evaluation phase at the end of the first epoch"
+]
+```

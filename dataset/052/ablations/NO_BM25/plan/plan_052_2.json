@@ -1,0 +1,25 @@
+```json
+[
+    "Import TensorFlow, Keras, and the necessary modules from transformers and datasets libraries",
+    "Set the TensorFlow logging level to 'ERROR' to suppress warnings",
+    "Define the model checkpoint as 'distilbert-base-cased'",
+    "Load the tokenizer using AutoTokenizer.from_pretrained with the defined model checkpoint",
+    "Load the SQUAD dataset using load_dataset from the datasets library",
+    "Define a maximum length of 384 and a doc_stride of 128 for tokenization",
+    "Create a function prepare_train_features that tokenizes the input examples with truncation and padding",
+    "Use the map method on the loaded dataset to apply the prepare_train_features function, setting batched=True",
+    "Convert the tokenized dataset to a numpy format for training",
+    "Initialize the model using TFAutoModelForQuestionAnswering.from_pretrained with the defined model checkpoint",
+    "Compile the model with the Adam optimizer and a learning rate of 5e-5",
+    "Create a training dataset with a batch size of 8 and a validation dataset from the tokenized dataset",
+    "Call model.fit on the training dataset for 10 epochs, passing the validation dataset",
+    "Define a function tokenize_and_convert_to_ids that splits input text into tokens and converts them to IDs using the tokenizer",
+    "Prepare a sample input text 'eu rejects german call to boycott british lamb'",
+    "Tokenize the sample input and reshape it to have a shape of [1, -1]",
+    "Call ner_model.predict on the reshaped sample input",
+    "Capture the output of the prediction and apply np.argmax to get the predicted indices",
+    "Map the predicted indices to their corresponding labels using a predefined mapping dictionary",
+    "Print the prediction results to verify the output",
+    "Assert that the output contains an OperatorNotAllowedInGraphError during the model.fit call"
+]
+```

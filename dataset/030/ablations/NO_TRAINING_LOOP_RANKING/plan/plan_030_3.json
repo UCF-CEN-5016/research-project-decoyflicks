@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import os, import argparse, import torch, import numpy as np",
+    "Set the random seed for reproducibility: torch.manual_seed(42)",
+    "Define the command line arguments for the training script: use argparse to define --brats, --brats22_model, --scheduler, --learning_rate 0.0003, --epochs 10, --fold 0, --gpus 1, --task 11, --nfolds 10, --save_ckpt",
+    "Create a mock dataset for BraTS21 and BraTS22 with 1125 training examples, 126 validation examples, and 1251 test examples using numpy arrays",
+    "Define a simple nnUNet model architecture compatible with nnUNet and PyTorch Lightning",
+    "Initialize the PyTorch Lightning Trainer with the following parameters: gpus=1, max_epochs=10, callbacks=[pl.callbacks.ModelSummary()]",
+    "Set the learning rate scheduler to CosineAnnealingWarmRestarts and ensure it is not compatible with the PyTorch Lightning API",
+    "Run the training script using the command: !python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0 --gpus 1 --task 11 --nfolds 10 --save_ckpt",
+    "Capture the output and error messages during the execution of the training script",
+    "Verify that the output contains the MisconfigurationException error message related to the lr_scheduler",
+    "Check that the error message specifically states: 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API.'",
+    "Assert that the training process does not complete successfully and raises the expected exception"
+]
+```

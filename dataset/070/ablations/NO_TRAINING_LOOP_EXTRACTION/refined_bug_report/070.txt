@@ -1,0 +1,38 @@
+TITLE  
+Error encountered while running DeepSpeed training script for GPT-3 model
+
+SYMPTOMS  
+• Warning messages indicating potential GPU mapping issues:  
+  ```
+  [rank1]:[W102 23:52:19.675612641 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+  [rank0]:[W102 23:52:20.270275234 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+  ```
+• Deprecation warnings regarding the use of `nvfuser` in Torch script:  
+  ```
+  [rank0]:[W102 23:52:20.611227027 init.cpp:767] Warning: nvfuser is no longer supported in torch script, use _jit_set_nvfuser_enabled is deprecated and a no-op (function operator())
+  ```
+• User warnings about the use of deprecated tensor constructors:  
+  ```
+  UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended. It's best to use methods such as torch.tensor(data, dtype=*, device='cuda') to create tensors.
+  ```
+• Final error message indicating an `AttributeError`:  
+  ```
+  AttributeError: 'NoneType' object has no attribute 'all_reduce'
+  ```
+
+EXPECTED BEHAVIOR  
+The training script should execute successfully without warnings or errors, utilizing the specified GPU resources effectively and performing the training of the GPT-3 model as intended.
+
+REPRODUCTION STEPS  
+1. Activate the conda environment with `conda activate deepspeed_env`.
+2. Load the necessary modules:  
+   ```
+   module load openmpi/4.1.1  
+   module load cuda/11.8.0  
+   module load gcc/10.2.0
+   ```
+3. Submit the job script using SLURM with the command:  
+   ```
+   srun bash pretrain_gpt3_2.7b.sh
+   ```
+4. Observe the output and error logs for warnings and errors as described.

@@ -1,0 +1,33 @@
+TITLE  
+Error when running training example for DeepSpeed-Domino/pretrain_gpt3_2.7b.sh
+
+SYMPTOMS  
+• Warning messages indicating potential issues with GPU mapping:  
+  `[W102 23:52:19.675612641 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1] using GPU 0 to perform barrier as devices used by this process are currently unknown...`  
+• Deprecation warnings related to nvfuser:  
+  `[W102 23:52:20.611227027 init.cpp:767] Warning: nvfuser is no longer supported in torch script...`  
+• UserWarnings regarding the use of deprecated tensor constructors:  
+  `/users/zhu/DeepSpeedExamples/training/DeepSpeed-Domino/pretrain_gpt.py:88: UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended...`  
+• Fatal error messages indicating an `AttributeError`:  
+  `AttributeError: 'NoneType' object has no attribute 'all_reduce'`
+
+EXPECTED BEHAVIOR  
+The script should execute successfully without warnings or errors, properly utilizing the specified GPUs for training without encountering issues related to GPU mapping or deprecated functions.
+
+REPRODUCTION STEPS  
+1. Clone the DeepSpeedExamples repository from GitHub:  
+   `git clone https://github.com/microsoft/DeepSpeedExamples.git`  
+2. Navigate to the training directory:  
+   `cd DeepSpeedExamples/training/DeepSpeed-Domino`  
+3. Create and activate the conda environment:  
+   `conda create -n deepspeed_env python=3.12`  
+   `conda activate deepspeed_env`  
+4. Load necessary modules:  
+   `module load openmpi/4.1.1`  
+   `module load cuda/11.8.0`  
+   `module load gcc/10.2.0`  
+5. Submit the job using the provided job script:  
+   `sbatch <job_script_name.sh>`  
+6. Monitor the output and error logs for warnings and errors.  
+
+By following these steps, the user should be able to reproduce the reported issues.

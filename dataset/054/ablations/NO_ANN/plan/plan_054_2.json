@@ -1,0 +1,21 @@
+```json
+[
+    "Import necessary libraries: import pandas as pd, import numpy as np, import tensorflow as tf, from tensorflow import keras, import tensorflow_hub as hub, import tensorflow_decision_forests as tfdf, import matplotlib.pyplot as plt",
+    "Set random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Load the dataset from the provided URL: df = pd.read_csv('https://raw.githubusercontent.com/IMvision12/Tweets-Classification-NLP/main/train.csv')",
+    "Shuffle the dataset: df_shuffled = df.sample(frac=1, random_state=42)",
+    "Drop unnecessary columns: df_shuffled.drop(['id', 'keyword', 'location'], axis=1, inplace=True)",
+    "Reset the index of the shuffled dataframe: df_shuffled.reset_index(inplace=True, drop=True)",
+    "Split the dataset into training and test sets: test_df = df_shuffled.sample(frac=0.1, random_state=42), train_df = df_shuffled.drop(test_df.index)",
+    "Print the number of samples in training and test sets: print(f'Using {len(train_df)} samples for training and {len(test_df)} for validation')",
+    "Define a function to create a tf.data.Dataset: def create_dataset(dataframe): return tf.data.Dataset.from_tensor_slices((dataframe['text'].to_numpy(), dataframe['target'].to_numpy())).batch(100).prefetch(tf.data.AUTOTUNE)",
+    "Create training and test datasets: train_ds = create_dataset(train_df), test_ds = create_dataset(test_df)",
+    "Download the Universal Sentence Encoder embeddings: sentence_encoder_layer = hub.KerasLayer('https://tfhub.dev/google/universal-sentence-encoder/4')",
+    "Build the model: inputs = layers.Input(shape=(), dtype=tf.string), outputs = sentence_encoder_layer(inputs), preprocessor = keras.Model(inputs=inputs, outputs=outputs), model = tfdf.keras.GradientBoostedTreesModel(preprocessing=preprocessor)",
+    "Compile the model with metrics: model.compile(metrics=['Accuracy', 'Recall', 'Precision', 'AUC'])",
+    "Fit the model using the training dataset and the test dataset as validation data: model.fit(train_ds, epochs=20, validation_data=test_ds)",
+    "Evaluate the model on the test dataset: results = model.evaluate(test_ds, return_dict=True, verbose=0)",
+    "Print evaluation results: for name, value in results.items(): print(f'{name}: {value:.4f}')",
+    "Assert that the model's evaluation metrics are overly optimistic due to using the test set as validation set"
+]
+```

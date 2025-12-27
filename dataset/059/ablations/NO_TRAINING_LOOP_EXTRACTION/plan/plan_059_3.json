@@ -1,0 +1,29 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, matplotlib, os",
+    "Set a random seed for reproducibility using np.random.seed(42) and tf.random.set_seed(42)",
+    "Define the base path for data as 'data'",
+    "Download the IAM dataset using wget and unzip it into the appropriate directory structure",
+    "Open the 'data/words.txt' file and read lines into a list, filtering out lines that start with '#' or contain 'err'",
+    "Shuffle the words_list to randomize the dataset",
+    "Split the dataset into training (90%), validation (5%), and test (5%) sets",
+    "Assert that the total number of samples equals the sum of training, validation, and test samples",
+    "Define a function get_image_paths_and_labels that constructs image paths from the training samples",
+    "Call get_image_paths_and_labels with training samples to get train_img_paths and train_labels",
+    "Define a function clean_labels to clean the validation and test labels",
+    "Call clean_labels with validation and test labels to get validation_labels_cleaned and test_labels_cleaned",
+    "Define image dimensions: image_width = 128, image_height = 32",
+    "Define a function preprocess_image that reads, decodes, and resizes images while normalizing pixel values",
+    "Define a function vectorize_label that converts labels to integer sequences and pads them to max_len",
+    "Define a function process_images_labels that combines image preprocessing and label vectorization",
+    "Define a function prepare_dataset that creates a tf.data.Dataset from image paths and labels",
+    "Prepare train_ds, validation_ds, and test_ds using prepare_dataset with the respective image paths and labels",
+    "Define a CTCLayer class that computes the CTC loss during model training",
+    "Define a build_model function that constructs the handwriting recognition model architecture",
+    "Call build_model to create the model and print the model summary",
+    "Set epochs to 10 for training",
+    "Train the model using model.fit with train_ds and validation_ds, and monitor edit distances with a callback",
+    "During training, monitor for any errors or exceptions that occur when fitting the model",
+    "Capture and log the error message that occurs during model fitting to reproduce the bug"
+]
+```

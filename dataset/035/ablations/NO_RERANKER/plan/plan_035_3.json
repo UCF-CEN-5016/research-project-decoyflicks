@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: torch, nn, DataLoader, RandomSampler from torch.utils.data, and the RotaryPositionalEmbeddings class from labml_nn.transformers.rope",
+    "Set the device to GPU by defining device = torch.device('cuda:0')",
+    "Define a batch size of 4 and a chunk length of 16",
+    "Create a mock dataset using TextFileDataset with a dummy text file path and a list as the data type",
+    "Create a DataLoader instance with the mock dataset, using batch_size=4 and RandomSampler",
+    "Define the number of features as 3 for the initial test case: features = 3",
+    "Instantiate the RotaryPositionalEmbeddings with the incorrect number of features: rotary_pe = RotaryPositionalEmbeddings(features)",
+    "Create a mock RetroModel instance with the following parameters: n_tokens=100, d_model=128, num_layers=6, features={3, 5}, chunk_len=16, n_heads=16, d_k=16, d_ff=512",
+    "Move the model to the device using model.to(device)",
+    "Create a mock input tensor with shape (batch_size, chunk_len) filled with random integers representing token indices",
+    "Create a mock neighbors tensor with shape (batch_size, 2, chunk_len) filled with random integers representing token indices",
+    "Call the model with the mock input and neighbors: output = model(mock_input.to(device), mock_neighbors.to(device))",
+    "Capture the output and check for any runtime errors or exceptions",
+    "Assert that an error occurs due to the mismatch in expected features, specifically looking for an error related to tensor dimensions or shape mismatch",
+    "Log the error message to verify that it corresponds to the issue caused by using 3 features instead of the required 4"
+]
+```

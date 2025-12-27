@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, from keras_cv import YOLOv8, from keras_cv.metrics import EvaluateCOCOMetricsCallback, import numpy as np, import matplotlib.pyplot as plt",
+    "Set the random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42",
+    "Define the batch size as 16 and image dimensions as 640x640",
+    "Load the COCO dataset using tf.data API with a batch size of 16 and image size of (640, 640)",
+    "Create a training dataset train_ds and a validation dataset val_ds from the COCO dataset",
+    "Initialize the YOLOv8 model with default parameters: yolo = YOLOv8()",
+    "Compile the YOLOv8 model with an optimizer: yolo.compile(optimizer='adam')",
+    "Fit the model on the training dataset for 1 epoch: yolo.fit(train_ds, validation_data=val_ds, epochs=1, callbacks=[EvaluateCOCOMetricsCallback(val_ds, 'model.h5')])",
+    "During training, monitor the output for loss values and ensure it reaches Epoch 1/3",
+    "Capture the output logs and look for the UnknownError message during the training process",
+    "Verify the error message contains 'InvalidArgumentError' and 'ConcatOp : Dimension 1 in both shapes must be equal: shape[0] = [4,2,4] vs. shape[1] = [4,1,4]'",
+    "Check the shapes of the ground truths and predictions in the EvaluateCOCOMetricsCallback to confirm the mismatch in dimensions",
+    "Assert that the training process fails with the UnknownError after the first epoch"
+]
+```

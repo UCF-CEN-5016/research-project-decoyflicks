@@ -1,0 +1,30 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, and datasets",
+    "Define a batch size of 32 and set maxlen to 128 for input sequences",
+    "Load the CoNLL 2003 dataset using datasets.load_dataset('conll2003')",
+    "Create a function to export the dataset to a tab-separated file format",
+    "Export the training and validation datasets to './data/conll_train.txt' and './data/conll_val.txt'",
+    "Define a function to map records to training data, ensuring the first element is the number of tokens",
+    "Define a function to lowercase and convert tokens to IDs using keras.layers.StringLookup",
+    "Create a tf.data.TextLineDataset for both training and validation datasets",
+    "Map the training dataset using the defined mapping functions and apply padded_batch with batch_size",
+    "Define the NERModel class with appropriate layers including TokenAndPositionEmbedding and TransformerBlock",
+    "Instantiate the NERModel with num_tags, vocab_size, embed_dim=32, num_heads=4, and ff_dim=64",
+    "Compile the model using Adam optimizer and a custom loss function CustomNonPaddingTokenLoss",
+    "Fit the model on the training dataset for 10 epochs",
+    "Define a function tokenize_and_convert_to_ids that tokenizes input text and converts it to IDs",
+    "Prepare a sample input string: 'eu rejects german call to boycott british lamb'",
+    "Tokenize and convert the sample input to IDs using the tokenize_and_convert_to_ids function",
+    "Reshape the sample input to have shape [1, -1] to match the expected input shape for the model",
+    "Load the saved model using keras.models.load_model with custom_objects for the loss function",
+    "Convert the model to TFLite format using tf.lite.TFLiteConverter.from_saved_model",
+    "Save the converted TFLite model to 'model.tflite'",
+    "Load the TFLite model using tf.lite.Interpreter",
+    "Get input and output details from the interpreter",
+    "Set the input tensor with the sample input using interpreter.set_tensor, expanding dimensions as needed",
+    "Invoke the interpreter with interpreter.invoke()",
+    "Attempt to get the output tensor using interpreter.get_tensor and capture any exceptions",
+    "Assert that a ValueError is raised with the message 'Dimension mismatch. Got 9 but expected 1 for dimension 1 of input 0.'"
+]
+```

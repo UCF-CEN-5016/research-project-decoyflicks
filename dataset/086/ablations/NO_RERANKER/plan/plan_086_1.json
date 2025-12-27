@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the relevant modules from x_transformers",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and sequence length of 32",
+    "Create a tensor 'x' with shape (batch_size, sequence_length, embedding_dim) initialized with random values, where embedding_dim is set to 64",
+    "Create a tensor 'freqs' with shape (batch_size, sequence_length, embedding_dim // 2) initialized with random values",
+    "Instantiate the RotaryEmbedding class with parameters: dim=64, use_xpos=True, scale_base=512, interpolation_factor=1.0",
+    "Call the forward method of the RotaryEmbedding instance with the tensor 'x' to generate rotary positional embeddings",
+    "Create a tensor 'scale' with shape (batch_size, sequence_length, 1) initialized with random values",
+    "Define a function 'apply_rotary_pos_emb' that takes inputs 't', 'freqs', and 'scale' and applies the rotary positional embedding logic",
+    "Call the 'apply_rotary_pos_emb' function with 'x', 'freqs', and 'scale' as arguments",
+    "Assert that the output of 'apply_rotary_pos_emb' has the expected shape of (batch_size, sequence_length, embedding_dim)",
+    "Set 'rotary_xpos' to True in the model configuration to enable rotary xpos",
+    "Run the model's forward pass with the input tensor 'x' and capture any exceptions",
+    "Check if the exception raised is of type 'einops.EinopsError'",
+    "Verify that the error message contains the expected text: 'Error while processing rearrange-reduction pattern \"n -> n 1\"'",
+    "Log the error message to confirm the bug has been reproduced"
+]
+```

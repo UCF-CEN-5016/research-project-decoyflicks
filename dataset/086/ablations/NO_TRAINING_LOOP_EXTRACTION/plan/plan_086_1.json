@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, einops, and the x_transformers module",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define a batch size of 1 and sequence length of 32",
+    "Create a random input tensor with shape (batch_size, sequence_length) using torch.rand",
+    "Set rotary_xpos to True in the configuration for the XTransformer model",
+    "Instantiate the XTransformer model with appropriate parameters, ensuring rotary_xpos is enabled",
+    "Call the forward method of the XTransformer model with the input tensor",
+    "Capture the output and any exceptions raised during the forward pass",
+    "Verify that the exception raised is an EinopsError",
+    "Check the error message to confirm it matches the expected error regarding tensor shape",
+    "Assert that the input tensor shape is torch.Size([1, 32]) before the error occurs",
+    "Log the stack trace to ensure it includes the lines from x_transformers.py and einops.py as shown in the bug report"
+]
+```

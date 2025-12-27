@@ -1,0 +1,28 @@
+{
+  "bug_report": "039",
+  "module": {
+    "module": "labml_nn/neox",
+    "files": [
+      {
+        "path": "labml_nn/neox/model.py",
+        "snippets": [
+          {
+            "lines": "383-402",
+            "code": "    def __init__(self, n_hidden: int = 6_144, d_ff: int = 0):\n        \"\"\"\n        :param n_hidden: is the embedding size\n        \"\"\"\n        super().__init__()\n\n        if not d_ff:\n            d_ff = n_hidden * 4\n\n        # Expansion linear layer\n        self.dense_h_h4 = nn.Linear(n_hidden, d_ff)\n        # GELU activation\n        self.activation = nn.GELU()\n        # Contraction linear layer\n        self.dense_h4_h = nn.Linear(d_ff, n_hidden)\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        :param x: has shape `[batch_size, seq_len, n_hidden]`\n        \"\"\"\n        x = self.dense_h_h4(x)\n        x = self.activation(x)\n        x = self.dense_h4_h(x)\n\n        return x\n\n    def __init__(self, n_hidden: int = 6_144, n_heads: int = 64, *, is_flash_attention: bool = False):\n        \"\"\"\n        :param n_hidden: is the embedding size\n        :param n_heads: is the number of heads\n        :param is_flash_attention: specifies whether to use\n            [FlashAttention](https://github.com/HazyResearch/flash-attention)\n\n        *Out implementation doesn't include dropout*.\n        \"\"\"\n        super().__init__()\n\n        # Layer normalization before attention\n        self.pre_ln_attn = nn.LayerNorm(n_hidden)\n        # Layer normalization before FFN\n        self.pre_ln_ffn = nn.LayerNorm(n_hidden)\n\n        # Attention layer\n        self.attention = AttentionLayer(n_hidden, n_heads, is_flash_attention=is_flash_attention)\n        # FFN layer\n        self.ffn = FFNLayer(n_hidden)"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "labml_nn/neox/model.py",
+      "snippets": [
+        {
+          "lines": "383-402",
+          "code": "    def __init__(self, n_hidden: int = 6_144, d_ff: int = 0):\n        \"\"\"\n        :param n_hidden: is the embedding size\n        \"\"\"\n        super().__init__()\n\n        if not d_ff:\n            d_ff = n_hidden * 4\n\n        # Expansion linear layer\n        self.dense_h_h4 = nn.Linear(n_hidden, d_ff)\n        # GELU activation\n        self.activation = nn.GELU()\n        # Contraction linear layer\n        self.dense_h4_h = nn.Linear(d_ff, n_hidden)\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        :param x: has shape `[batch_size, seq_len, n_hidden]`\n        \"\"\"\n        x = self.dense_h_h4(x)\n        x = self.activation(x)\n        x = self.dense_h4_h(x)\n\n        return x\n\n    def __init__(self, n_hidden: int = 6_144, n_heads: int = 64, *, is_flash_attention: bool = False):\n        \"\"\"\n        :param n_hidden: is the embedding size\n        :param n_heads: is the number of heads\n        :param is_flash_attention: specifies whether to use\n            [FlashAttention](https://github.com/HazyResearch/flash-attention)\n\n        *Out implementation doesn't include dropout*.\n        \"\"\"\n        super().__init__()\n\n        # Layer normalization before attention\n        self.pre_ln_attn = nn.LayerNorm(n_hidden)\n        # Layer normalization before FFN\n        self.pre_ln_ffn = nn.LayerNorm(n_hidden)\n\n        # Attention layer\n        self.attention = AttentionLayer(n_hidden, n_heads, is_flash_attention=is_flash_attention)\n        # FFN layer\n        self.ffn = FFNLayer(n_hidden)"
+        }
+      ]
+    }
+  ]
+}

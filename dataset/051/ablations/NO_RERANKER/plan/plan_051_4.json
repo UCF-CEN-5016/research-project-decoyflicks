@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras, import keras_nlp, import random, import numpy as np",
+    "Set the random seed for reproducibility: np.random.seed(42)",
+    "Define a sample English sentence for translation: input_sentence = 'Hello, how are you?'",
+    "Create a mock test_eng_texts list containing multiple English sentences: test_eng_texts = ['Hello, how are you?', 'What is your name?', 'Where are you from?']",
+    "Define a function decode_sequences that takes a list of input sentences as an argument",
+    "Inside decode_sequences, create a prompt tensor by concatenating a start token and padding: prompt = tf.constant([[1, 2, 3]])",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and an unexpected keyword argument 'end_token_id': generated_tokens = sampler(next, prompt, end_token_id=4)",
+    "Run the decode_sequences function with the test_eng_texts: translated = decode_sequences([input_sentence])",
+    "Wrap the call to decode_sequences in a try-except block to catch the TypeError",
+    "Print the error message when the TypeError is caught to confirm the bug: print('Caught an error:', str(e))",
+    "Verify that the caught error message matches the expected TypeError message: assert 'unexpected keyword argument' in str(e)"
+]
+```

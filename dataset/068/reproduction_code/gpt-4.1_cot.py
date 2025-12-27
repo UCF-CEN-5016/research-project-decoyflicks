@@ -1,0 +1,1 @@
+result[key] = tf.concat([b[key] for b in boxes], axis=0)

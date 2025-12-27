@@ -1,0 +1,28 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, numpy, pandas, and matplotlib",
+    "Define a configuration class CFG with parameters: preset='deberta_v3_extra_small_en', sequence_length=200, seed=42, epochs=5, batch_size=8, augment=True",
+    "Set random seed using keras.utils.set_random_seed(CFG.seed)",
+    "Download the SWAG dataset using wget and unzip it",
+    "Load training data from 'swagaf-master/data/train.csv' into a DataFrame and sample 2% of the data",
+    "Load validation data from 'swagaf-master/data/val.csv' into a DataFrame and sample 2% of the data",
+    "Define a function make_options that creates a new column 'options' in the DataFrame containing formatted strings for each option",
+    "Apply make_options function to both train_df and valid_df DataFrames",
+    "Initialize a DebertaV3Preprocessor from keras_nlp.models with preset=CFG.preset and sequence_length=CFG.sequence_length",
+    "Process the first row of train_df options using the preprocessor and store the output in a variable 'outs'",
+    "Print the shape of each processed output in 'outs' to verify preprocessing",
+    "Define a function build_dataset that creates a tf.data.Dataset from the input texts and labels, applying preprocessing and augmentation as specified",
+    "Build training and validation datasets using build_dataset with appropriate parameters",
+    "Define a function get_lr_callback to create a learning rate scheduler and plot the learning rate curve",
+    "Define a function get_callbacks to gather training callbacks including the learning rate scheduler and model checkpoint",
+    "Define a function build_model to create a Keras model using DebertaV3Classifier and SelectOption layers",
+    "Build the model by calling build_model and store it in a variable 'model'",
+    "Print the model summary to verify the model structure",
+    "Train the model using model.fit with train_ds and valid_ds, specifying epochs and callbacks",
+    "Make predictions on the validation dataset using model.predict and store the results in 'predictions'",
+    "Format predictions and true answers for comparison",
+    "Print the first 50 predictions to verify the output structure and correctness",
+    "Check for the presence of the variable 'level2_dau_2' in the code and assert that it is not used in the model definition or training process",
+    "Verify that the variable 'level3_dau_2' is used in the selective_kernel_feature_fusion function call instead of 'level2_dau_2'"
+]
+```

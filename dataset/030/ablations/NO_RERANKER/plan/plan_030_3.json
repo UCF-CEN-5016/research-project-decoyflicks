@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import pytorch_lightning as pl, import nnunet, import torch, import os, import sys, import argparse",
+    "Set up the command-line argument parser with the following parameters: --brats, --brats22_model, --scheduler, --learning_rate 0.0003, --epochs 10, --fold 0, --gpus 1, --task 11, --nfolds 10, --save_ckpt",
+    "Define a function to prepare the dataset for BraTS21 and BraTS22, ensuring it has 1125 training, 126 validation, and 1251 test examples",
+    "Create a DataLoader for the training dataset with a batch size of 2 and shuffle set to True",
+    "Create a DataLoader for the validation dataset with a batch size of 2 and shuffle set to False",
+    "Create a DataLoader for the test dataset with a batch size of 2 and shuffle set to False",
+    "Initialize the nnUNet model with the specified parameters: filters=[64, 128, 256, 512, 768, 1024], kernels=[[3, 3, 3], [3, 3, 3], [3, 3, 3], [3, 3, 3], [3, 3, 3], [3, 3, 3]], strides=[[1, 1, 1], [2, 2, 2], [2, 2, 2], [2, 2, 2], [2, 2, 2], [2, 2, 2]]",
+    "Set the device to GPU by checking if torch.cuda.is_available() and setting the device accordingly",
+    "Create a PyTorch Lightning Trainer instance with gpus=1 and max_epochs=10",
+    "Call the trainer's fit method with the model and the DataLoader for training",
+    "Capture the output and error messages during the training process",
+    "Verify that the output contains the MisconfigurationException error related to the lr_scheduler",
+    "Check the specific error message to confirm it states: 'The provided lr scheduler `CosineAnnealingWarmRestarts` doesn't follow PyTorch's LRScheduler API.'",
+    "Log the error message to a file for further analysis if needed"
+]
+```

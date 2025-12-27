@@ -1,0 +1,11 @@
+{
+  "bug_report": "030",
+  "rank": 4,
+  "score": 0.910507082939148,
+  "main_file": {
+    "path": "Tools/PyTorch/TimeSeriesPredictionPlatform/hydra_plugins/hydra_optuna_sweeper/hydra_plugins/hydra_optuna_sweeper/optuna_sweeper.py",
+    "content": "# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved\nfrom typing import Any, List, Optional\n\nfrom hydra.plugins.sweeper import Sweeper\nfrom hydra.types import HydraContext, TaskFunction\nfrom omegaconf import DictConfig\n\nfrom .config import SamplerConfig\n\n\nclass OptunaSweeper(Sweeper):\n    \"\"\"Class to interface with Optuna\"\"\"\n\n    def __init__(\n        self,\n        sampler: SamplerConfig,\n        direction: Any,\n        storage: Optional[Any],\n        study_name: Optional[str],\n        n_trials: int,\n        max_failure_rate: float,\n        search_space: Optional[DictConfig],\n        custom_search_space: Optional[str],\n        params: Optional[DictConfig],\n        experiment_sequence: str\n    ) -> None:\n        from ._impl import OptunaSweeperImpl\n\n        self.sweeper = OptunaSweeperImpl(\n            sampler,\n            direction,\n            storage,\n            study_name,\n            n_trials,\n            max_failure_rate,\n            search_space,\n            custom_search_space,\n            params,\n            experiment_sequence,\n        )\n\n    def setup(\n        self,\n        *,\n        hydra_context: HydraContext,\n        task_function: TaskFunction,\n        config: DictConfig,\n    ) -> None:\n        self.sweeper.setup(\n            hydra_context=hydra_context, task_function=task_function, config=config\n        )\n\n    def sweep(self, arguments: List[str]) -> None:\n        return self.sweeper.sweep(arguments)\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

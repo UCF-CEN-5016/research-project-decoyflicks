@@ -1,0 +1,16 @@
+```json
+[
+    "Import PyTorch and necessary libraries for image processing from torchvision, torch.nn and torch.optim",
+    "Define a batch size of 64 and image dimensions of 224x224",
+    "Create random normal input data with shape (batch_size, height, width, 3)",
+    "Load the cats and dogs dataset and split it into training and validation sets with a ratio of 80:20",
+    "Define a ViT model instance using the function from 'vit_pytorch.vit_for_small_dataset' with the following parameters: image_size = 224, patch_size = 16, num_classes = 2, dim = 1024, depth = 6, heads = 16, mlp_dim = 2048, dropout = 0.1, emb_dropout = 0.1",
+    "Initialize an optimizer using torch.optim.Adam with a learning rate of 0.003 and the ViT model parameters",
+    "Define loss function as torch.nn.CrossEntropyLoss",
+    "Train the model for 20 epochs, iterating over the training dataset in batches, performing forward pass, calculating loss, backward pass, and optimization step",
+    "At the end of each epoch, evaluate the model on the validation dataset, computing validation accuracy",
+    "Assert that at least one epoch's validation accuracy is higher than the corresponding epoch's training accuracy to reproduce the bug",
+    "Plot training and validation accuracy over epochs for verification"
+]
+```
+

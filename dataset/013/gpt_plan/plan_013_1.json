@@ -1,0 +1,21 @@
+[
+  "Create a new conda environment with Python 3.10.13: `conda create -n tf_test python=3.10.13`",
+  "Activate the environment: `conda activate tf_test`",
+  "Install TensorFlow 2.13.0 using pip: `pip install tensorflow==2.13.0`",
+  "Install TensorFlow Model Garden nightly build: `pip install tf-models-nightly`",
+  "Install matplotlib: `pip install matplotlib`",
+  "Open VSCode and create a new Python script or Jupyter notebook",
+  "Import matplotlib.pyplot as plt and check the default backend using `matplotlib.get_backend()`",
+  "Run a simple plotting test before importing tensorflow_models: create a plot using `plt.plot([1,2,3],[4,5,6])` and call `plt.show()` to verify it displays",
+  "Import tensorflow_models (e.g., `import tensorflow_models` or the specific submodule used in the notebook)",
+  "Check matplotlib backend again after importing tensorflow_models using `matplotlib.get_backend()` and assert it has changed to 'agg'",
+  "Repeat the plotting test: create the same plot `plt.plot([1,2,3],[4,5,6])` and call `plt.show()`",
+  "Observe that the plot does NOT display, confirming the bug that pyplot does not work after importing tensorflow_models",
+  "Attempt to change matplotlib backend to 'TkAgg' after importing tensorflow_models using `matplotlib.use('TkAgg')`",
+  "Re-run the plotting test (`plt.plot` + `plt.show()`) and assert that the plot still does NOT display",
+  "Restart the Python environment, and this time, set the matplotlib backend to 'TkAgg' BEFORE importing tensorflow_models (`import matplotlib; matplotlib.use('TkAgg')`)",
+  "Then import tensorflow_models and repeat the plotting test (`plt.plot` + `plt.show()`) and verify that the plot correctly displays",
+  "Log or print the matplotlib backend before and after importing tensorflow_models in each case to confirm the backend change behavior",
+  "Assert that when backend is set after import, backend remains 'agg' and plots do not display",
+  "Assert that when backend is set before import, backend remains 'TkAgg' and plots display correctly"
+]

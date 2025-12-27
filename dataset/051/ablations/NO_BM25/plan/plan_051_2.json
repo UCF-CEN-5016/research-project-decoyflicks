@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import tensorflow as tf, import keras_nlp, import random, import numpy as np",
+    "Set the random seed for reproducibility: np.random.seed(42), random.seed(42)",
+    "Define a batch size of 32 and a maximum sequence length of 20 for the translation task",
+    "Load the English-to-Spanish translation model from KerasNLP: model = keras_nlp.models.TranslationModel()",
+    "Prepare a list of test English sentences for translation: test_eng_texts = ['Hello', 'How are you?', 'What is your name?', 'I love programming.', 'This is a test.']",
+    "Define a function decode_sequences(input_sentences) that takes a list of input sentences and returns translated sequences",
+    "Inside decode_sequences, create a prompt tensor by concatenating a start token and padding: prompt = tf.concat([start_token, pad], axis=-1)",
+    "Instantiate the GreedySampler: sampler = keras_nlp.samplers.GreedySampler()",
+    "Call the sampler with the prompt and other necessary parameters, including an end_token_id: generated_tokens = sampler(next, prompt, end_token_id=end_token_id)",
+    "Run a loop to test the translation for 2 random sentences from test_eng_texts: for i in range(2): input_sentence = random.choice(test_eng_texts)",
+    "Inside the loop, call decode_sequences with the randomly selected input_sentence: translated = decode_sequences([input_sentence])",
+    "Capture the output of decode_sequences and attempt to decode the generated tokens: translated = translated.numpy()[0].decode('utf-8')",
+    "Run the code and observe the TypeError: Sampler.__call__() got an unexpected keyword argument 'end_token_id'",
+    "Verify that the error occurs by checking the traceback for the line where the sampler is called"
+]
+```

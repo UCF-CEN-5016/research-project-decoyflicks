@@ -1,0 +1,17 @@
+TITLE  
+Conflict between qk_norm and kv_heads settings in x-transformers
+
+SYMPTOMS  
+• When `qk_norm` is enabled and `kv_heads` is set to a value different from `heads`, a conflict arises.  
+• The model does not function as expected, potentially leading to incorrect computations in the attention mechanism.  
+• No specific error messages are provided, but the output of the model is incorrect or inconsistent with expectations.
+
+EXPECTED BEHAVIOR  
+The model should correctly handle the configuration where `qk_norm` is active and `kv_heads` is set to a value different from `heads`, allowing for proper scaling of the attention weights without conflicts.
+
+REPRODUCTION STEPS  
+1. Set `qk_norm` to `True` in the model configuration.  
+2. Set `kv_heads` to a value different from `heads`.  
+3. Run the model and observe the behavior/output.  
+4. Compare the output against expected results to confirm the conflict.  
+5. Modify the line in `x_transformers.py` as suggested to see if the issue is resolved.

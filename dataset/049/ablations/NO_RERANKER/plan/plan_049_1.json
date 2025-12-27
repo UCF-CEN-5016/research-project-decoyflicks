@@ -1,0 +1,17 @@
+```json
+[
+    "Import necessary libraries: torch and fairseq modules",
+    "Define a model configuration with relative position encodings for the MultiHeadedAttention layer",
+    "Set the dimensions for the model: input_dim=512, num_heads=8, and bias dimensions as (num_heads, 1, input_dim) for (u, v) biases",
+    "Create a model instance using the defined configuration",
+    "Initialize the model without setting the bias parameters explicitly, allowing them to remain uninitialized",
+    "Define a batch size of 32 and sequence length of 10 for input data",
+    "Create random input data with shape (batch_size, sequence_length, input_dim) using torch.randn",
+    "Pass the input data through the model to trigger the forward pass",
+    "Capture the output of the model and check for NaN values in the output tensor",
+    "Assert that the output tensor contains NaN values using torch.isnan(output).any()",
+    "Log the output tensor to verify the presence of NaN values",
+    "Monitor the model's parameters to check the state of the (u, v) bias tensors after the forward pass",
+    "Assert that the (u, v) bias tensors are not initialized (i.e., they contain uninitialized values or NaNs)"
+]
+```

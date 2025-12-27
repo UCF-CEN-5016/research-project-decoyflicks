@@ -1,0 +1,23 @@
+```json
+[
+    "Clone the repository https://github.com/labmlai/annotated_deep_learning_paper_implementations at commit 999f2036a5a7c54403352211b5d1cc0df42b83f6",
+    "Navigate to directory 'labml_nn/rl/ppo/'",
+    "Import the required dependencies: labml, labml_helpers, labml_nn.optimizers.adam, labml_nn.optimizers.mnist_experiment, torch, and torch.nn",
+    "Define a device_info variable using DeviceInfo(use_cuda=True, cuda_device=0)",
+    "Create a random input tensor 'inp' of shape (64, 1, 28, 28) with values from a normal distribution using torch.randn",
+    "Create a target tensor 'target' of shape (64,) with ones and data type torch.long",
+    "Initialize a model instance of Model() and move it to the device specified by device_info.device",
+    "Create an instance of MyAdam optimizer called 'my_adam' for the parameters of the model",
+    "Create an instance of TorchAdam optimizer called 'torch_adam' for the parameters of the model",
+    "Define a loss function 'loss_func' as CrossEntropyLoss",
+    "Compute the loss by calling 'loss_func(model(inp), target)' and store it in a variable 'loss'",
+    "Call the backward() method on the 'loss' tensor to compute gradients",
+    "With monit.section('MyAdam warmup'), perform 100 iterations of my_adam.step() to warm up the optimizer",
+    "With monit.section('MyAdam'), perform 1000 iterations of my_adam.step() to train the model with MyAdam optimizer",
+    "With monit.section('TorchAdam warmup'), perform 100 iterations of torch_adam.step() to warm up the optimizer",
+    "With monit.section('TorchAdam'), perform 1000 iterations of torch_adam.step() to train the model with TorchAdam optimizer",
+    "Add a validation step after training loops: Compute the loss again by calling 'loss_func(model(inp), target)' and store it in another variable 'new_loss'",
+    "Assert that 'new_loss' is equal to 'loss' using assert new_loss == loss, 'The loss values should be the same'"
+]
+```
+

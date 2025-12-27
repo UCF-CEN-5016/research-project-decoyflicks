@@ -1,0 +1,20 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Import necessary libraries: import numpy as np, import matplotlib.pyplot as plt, import tensorflow as tf, from keras import layers, from keras import ops.",
+    "Set the random seed for reproducibility: np.random.seed(42).",
+    "Define image size and patch size: set image_size = 72 and patch_size = 16.",
+    "Load the CIFAR-10 dataset using tf.keras.datasets.cifar10.load_data() and split it into training and testing sets.",
+    "Preprocess the training images: normalize the pixel values to the range [0, 1] by dividing by 255.",
+    "Select a random image from the training set: image = x_train[np.random.choice(range(x_train.shape[0]))].",
+    "Display the selected image using plt.imshow(image.astype('uint8')) and plt.axis('off').",
+    "Resize the selected image to (image_size, image_size) using ops.image.resize(ops.convert_to_tensor([image]), size=(image_size, image_size)).",
+    "Extract patches from the resized image using patches = Patches(patch_size)(resized_image).",
+    "Print the image size, patch size, patches per image, and elements per patch using print statements.",
+    "Create a figure to visualize the patches: plt.figure(figsize=(4, 4)).",
+    "Iterate over the patches and display each patch using plt.imshow(ops.convert_to_numpy(patch_img).astype('uint8')).",
+    "Run the cell to execute the code and observe the output.",
+    "Verify that an InvalidArgumentError occurs during the execution of patches = Patches(patch_size)(resized_image).",
+    "Check the error message to confirm it states 'expected to be an int32 tensor but is a float tensor'."
+]
+```

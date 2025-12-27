@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary modules: torch, nn from torch, and the UNet class from labml_nn.diffusion.ddpm.unet",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 8 and image dimensions of 32x32 (CIFAR-10 image size)",
+    "Create random input data with shape (batch_size, 3, height, width) using torch.randn(batch_size, 3, 32, 32)",
+    "Instantiate the UNet model with appropriate parameters, e.g., model = UNet()",
+    "Pass the random input data through the UNet model to obtain the output: output = model(input_data)",
+    "Locate the self-attention implementation in the UNet class, specifically at line 188 in unet.py",
+    "Modify the softmax operation in the self-attention mechanism to use dim=2: attn = attn.softmax(dim=2)",
+    "Run the model with the modified self-attention code and capture the output",
+    "Check the output shape to ensure it matches the expected dimensions, e.g., assert output.shape == (batch_size, num_classes, height, width)",
+    "Verify that the output does not contain NaN values by asserting that torch.isnan(output).sum() == 0",
+    "Log the output values to monitor for any unexpected behavior or anomalies during execution",
+    "Run the model on the CIFAR-10 dataset to validate that the attention mechanism still functions despite the potential bug",
+    "Assert that the model can still produce a valid loss value during training, e.g., assert loss.item() > 0",
+    "Monitor the training process for any unusual spikes or drops in loss that may indicate the presence of the bug"
+]
+```

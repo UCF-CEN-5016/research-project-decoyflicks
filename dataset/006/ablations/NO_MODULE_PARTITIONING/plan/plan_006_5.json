@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Object Detection API, including model_main_tf2 and EfficientDet.",
+    "Set the TensorFlow logging level to 'ERROR' to suppress non-critical warnings.",
+    "Define a batch size of 8 and image dimensions of 512x512 for the custom dataset.",
+    "Prepare a custom dataset in TFRecord format with at least 100 images and corresponding annotations.",
+    "Create a configuration file for the EfficientDet model, ensuring it points to the custom dataset and specifies the model type as 'efficientdet_d1_coco17_tpu-32'.",
+    "Set the learning rate to 0.001 and specify the optimizer as 'AdamWeightDecay' with a weight decay rate of 0.01.",
+    "Load the EfficientDet model using the model_main_tf2.py script with the custom configuration file.",
+    "Start the training process by calling the 'train' function with the specified parameters.",
+    "Monitor the console output for any warnings related to gradients not existing for specific variables.",
+    "Verify that the warning message includes the variables: ['stack_6/block_1/expand_bn/gamma:0', 'stack_6/block_1/expand_bn/beta:0', 'stack_6/block_1/depthwise_conv2d/depthwise_kernel:0', 'stack_6/block_1/depthwise_bn/gamma:0', 'stack_6/block_1/depthwise_bn/beta:0', 'stack_6/block_1/project_bn/gamma:0', 'stack_6/block_1/project_bn/beta:0', 'top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss.",
+    "Check the loss function in the configuration file to ensure it is correctly specified.",
+    "Assert that the training process does not produce any gradients for the specified variables during the first epoch."
+]
+```

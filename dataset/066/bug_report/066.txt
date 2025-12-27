@@ -1,0 +1,10 @@
+[Examples] Potential typo in MIRNet example
+
+Hello @soumik12345, thank you for the great MIRNet example!
+
+While working on an adaptation of your model I saw that the variable `level2_dau_2` in [line 347](https://github.com/keras-team/keras-io/blob/b56f87af9e968003666e61f88185a93ff0f0eee8/examples/vision/mirnet.py#L347) is never used in the code. Could it be that there's a typo in [line 352](https://github.com/keras-team/keras-io/blob/b56f87af9e968003666e61f88185a93ff0f0eee8/examples/vision/mirnet.py#L352) and that it should be `level2_dau_2` instead of `level3_dau_2`?
+
+```diff
+-      skff_ = selective_kernel_feature_fusion(level1_dau_2, level3_dau_2, level3_dau_2)
++      skff_ = selective_kernel_feature_fusion(level1_dau_2, level2_dau_2, level3_dau_2)
+```

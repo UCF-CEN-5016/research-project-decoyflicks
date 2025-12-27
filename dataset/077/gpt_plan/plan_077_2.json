@@ -1,0 +1,18 @@
+[
+    "Import TensorFlow, Keras, and necessary utilities from the Mask R-CNN mrcnn module and other dependencies such as numpy and os",
+    "Set a fixed batch size of 1 and image input shape compatible with the Mask R-CNN configuration (e.g., 1024x1024 with 3 channels)",
+    "Prepare a minimal Mask R-CNN Config subclass instance with parameters matching the dataset and model requirements (e.g., IMAGE_SHAPE, BATCH_SIZE=1, and other necessary config attributes)",
+    "Create or mock a Dataset instance with image_ids containing at least one image, and define the image_info dict so that the image source points to a directory path containing training images",
+    "In the Dataset.load_image method, simulate or provide image loading that attempts to read from 'drive/MyDrive/Dog Vision/train/17e00d79ad69729522d8705e95939f01.jpg' or a similarly named file that does NOT exist, to reproduce the NotFoundError",
+    "Ensure that train_data and val_data used in model.fit (or the data generator used by Mask R-CNN's train method) yield batches including references to this missing image file path",
+    "Instantiate the MaskRCNN model in 'training' mode with the prepared config and model directory paths",
+    "Configure training parameters: set NUM_EPOCHS to a value like 100, and set callbacks including TensorBoard and early stopping if applicable",
+    "Call the model.train method or the model's fit function (equivalent to model.fit with the data generator that references the missing image)",
+    "Observe the training start, specifically noting the model attempts to build the backbone using the TensorFlow Hub MobileNet V2 feature extractor as indicated by the log message",
+    "During the first epoch, verify that the training process raises a NotFoundError indicating that 'drive/MyDrive/Dog Vision/train/17e00d79ad69729522d8705e95939f01.jpg' cannot be found during the ReadFile operation",
+    "Capture and assert the exact error message includes 'NotFoundError' and references the missing file path",
+    "Confirm that changing the drive directory path in the dataset or data generator does not resolve the issue if the underlying image file remains missing",
+    "Validate that the error occurs before or during the data loading step within the training loop, confirming the file path is accessed incorrectly or the file is missing",
+    "Optionally, enable verbose logging or debugging to trace the exact point of failure in the data loading pipeline",
+    "Do not modify dataset paths or add the missing file, to ensure the bug reproducibility remains consistent"
+]

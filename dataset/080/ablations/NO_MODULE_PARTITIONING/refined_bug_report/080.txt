@@ -1,0 +1,18 @@
+TITLE  
+Validation accuracy exceeds training accuracy during model training  
+
+SYMPTOMS  
+• Validation accuracy is consistently higher than training accuracy throughout the training process.  
+• This behavior is observed with and without dropout and dropout_emb layers.  
+• No error messages are reported; the issue pertains to unexpected accuracy metrics.  
+
+EXPECTED BEHAVIOR  
+The training accuracy should generally be equal to or higher than validation accuracy, as the model is trained on the training dataset.  
+
+REPRODUCTION STEPS  
+1. Use the provided example script to train a model on the cats and dogs dataset.  
+2. Set up the model parameters as specified:  
+   - Import the ViT model from `vit_pytorch.vit_for_small_dataset`.  
+   - Define the model with the specified parameters (image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, dropout, emb_dropout).  
+3. Train the model and monitor both training and validation accuracy throughout the training process.  
+4. Compare the accuracy metrics and plot the results for analysis.

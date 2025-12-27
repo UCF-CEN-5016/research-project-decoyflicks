@@ -1,0 +1,23 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, json, os, and any other required modules.",
+    "Set DEVICE to 'cuda' if a GPU is available, otherwise set it to 'cpu'.",
+    "Define SAMPLING_FREQ as 16000 (or the sample rate used in the model).",
+    "Define EMISSION_INTERVAL as 1.0 (or the interval used in the model).",
+    "Download the Japanese TTS model using wget: wget https://dl.fbaipublicfiles.com/mms/tts/jvn.tar.gz.",
+    "Extract the downloaded tar.gz file to access the model files.",
+    "Load the model and dictionary using the load_model_dict() function.",
+    "Prepare a test audio file (e.g., a .wav or .flac file) that is compatible with the model.",
+    "Create a text file (e.g., test_transcripts.txt) containing a single line of text that includes Out-Of-Vocabulary (OOV) words.",
+    "Set the path to the test audio file and the text file in the script's arguments.",
+    "Call the main function with the appropriate arguments, including the path to the audio file and the text file.",
+    "Inside the main function, read the transcripts from the text file and normalize them using text_normalize().",
+    "Generate tokens from the normalized transcripts using get_uroman_tokens().",
+    "Call the get_alignments() function with the audio file, tokens, model, dictionary, and use_star set to False.",
+    "In the get_alignments() function, check if the tokens list is empty after filtering OOV words.",
+    "Print the tokens list before and after filtering to verify if it is empty.",
+    "Assert that the tokens list is empty, which indicates the bug.",
+    "Log the output of the emissions variable to check if it is being generated correctly.",
+    "Verify that the output after the line 'text after filtering OOV:' is indeed empty."
+]
+```

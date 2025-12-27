@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Define a batch size of 4 and image dimensions of 224x224",
+    "Create a random tensor representing a batch of images with shape (batch_size, 3, height, width) = (4, 3, 224, 224)",
+    "Define a dummy encoder class that mimics the expected encoder structure with a pos_embedding of shape (1, num_patches + 1, dim) where num_patches = (height / patch_size) * (width / patch_size) and dim = 768",
+    "Instantiate the encoder with a patch size of 16, resulting in num_patches = 14 * 14 = 196",
+    "Create an instance of the MAE class with the dummy encoder, decoder_dim=768, masking_ratio=0.75, decoder_depth=1, decoder_heads=8, and decoder_dim_head=64",
+    "Call the forward method of the MAE instance with the random image tensor as input",
+    "Capture the output of the forward method, which should be the reconstruction loss",
+    "Verify that the output is a tensor and check its shape to ensure it is a scalar value",
+    "Assert that the output loss is not NaN or infinite to confirm the bug is present",
+    "Print the output loss value to observe the behavior during execution"
+]
+```

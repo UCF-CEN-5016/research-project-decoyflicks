@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, GaussianDiffusion1D, LearnedGaussianDiffusion, and tqdm",
+    "Define a batch size of 4 and a sequence length of 64 for the input data",
+    "Create a random tensor for input images with shape (batch_size, channels, seq_length) where channels=3, using torch.randn()",
+    "Instantiate a model of type LearnedGaussianDiffusion with appropriate parameters, ensuring it inherits from GaussianDiffusion",
+    "Set the model's self_condition attribute to False to simplify the test case",
+    "Define the number of timesteps for diffusion, e.g., timesteps=1000",
+    "Call the sample method on the model with batch_size=4 to initiate sampling",
+    "Within the sample method, ensure that the ddim_sample method is called, which will trigger the bug",
+    "In the ddim_sample method, prepare the time pairs for sampling by creating a tensor of times using torch.linspace()",
+    "In the for loop of ddim_sample, call model_predictions with the following parameters: img, time_cond, self_cond, clip_x_start=True",
+    "Verify that the TypeError is raised during the execution of model_predictions, specifically check for the message 'model_predictions() got multiple values for argument 'clip_x_start''",
+    "Log the error message to confirm the bug has occurred"
+]
+```

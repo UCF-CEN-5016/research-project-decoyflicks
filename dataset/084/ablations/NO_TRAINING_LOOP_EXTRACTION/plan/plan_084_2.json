@@ -1,0 +1,22 @@
+```json
+[
+    "Import necessary libraries: torch, nn from torch, and einops functions (Rearrange, pack, rearrange, repeat, unpack)",
+    "Set the device to 'cuda' if available, otherwise use 'cpu'",
+    "Define the parameters for the Linformer: dim=128, seq_len=50 (7x7 patches + 1 cls-token), depth=12, heads=8, k=64",
+    "Create an instance of Linformer with the defined parameters",
+    "Define the parameters for the ViT model: dim=128, image_size=224, patch_size=32, num_classes=2, channels=3",
+    "Create an instance of ViT using the defined parameters and the Linformer instance, and move it to the defined device",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Prepare a synthetic dataset with 1000 samples, each with shape (3, 224, 224) for images and corresponding labels (0 or 1) for binary classification",
+    "Create a DataLoader for the synthetic dataset with a batch size of 32",
+    "Define a loss function using nn.CrossEntropyLoss()",
+    "Define an optimizer using torch.optim.Adam with the model parameters and a learning rate of 0.001",
+    "Run a training loop for 5 epochs, iterating over the DataLoader",
+    "In each epoch, for each batch, perform the following steps: pass the input through the model, calculate the loss, perform backpropagation, and update the model parameters",
+    "Print the loss and accuracy after each epoch, ensuring to calculate accuracy as the number of correct predictions divided by the total number of predictions",
+    "Verify that the accuracy after epoch 1 is 100% by asserting that the accuracy variable equals 1.0",
+    "Log the loss and accuracy values for each epoch to observe the trend",
+    "Check the validation loss and accuracy after each epoch to confirm they also reach 100%",
+    "Assert that the validation accuracy variable equals 1.0 after epoch 1"
+]
+```

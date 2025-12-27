@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the augment module from official.vision.ops.augment.py",
+    "Define a batch size of 2 and image dimensions of 224x224",
+    "Create a tensor of zeros with shape (batch_size, height, width, 3) to represent the input image",
+    "Create a tensor of ones with shape (batch_size, 4) to represent bounding boxes",
+    "Instantiate the RandAugment class with magnitude_std set to 0.0 and magnitude set to 10.0",
+    "Call the distort_with_boxes method of the RandAugment instance with the image and bounding boxes as inputs",
+    "Capture the output image and bounding boxes from the distort_with_boxes method",
+    "Verify that the output image shape is (224, 224, 3)",
+    "Verify that the output bounding boxes shape is (2, 4)",
+    "Check the standard deviation of the applied augmentations by asserting that it is equal to 1.0",
+    "Modify the magnitude_std parameter to 1.0 and repeat the distortion process",
+    "Capture the output image and bounding boxes again",
+    "Verify that the output image shape is still (224, 224, 3)",
+    "Verify that the output bounding boxes shape is still (2, 4)",
+    "Check the standard deviation of the applied augmentations by asserting that it is equal to 1.0 again",
+    "Log the results of the standard deviation checks to confirm that it remains constant at 1.0 regardless of the magnitude_std value"
+]
+```

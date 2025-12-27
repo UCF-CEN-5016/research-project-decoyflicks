@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch, torchaudio, sox, json, os, and any other required modules.",
+    "Set DEVICE to 'cuda' if a GPU is available, otherwise set it to 'cpu'.",
+    "Define constants: SAMPLING_FREQ = 16000, EMISSION_INTERVAL = 1.0.",
+    "Download the Japanese TTS model using wget: wget https://dl.fbaipublicfiles.com/mms/tts/jvn.tar.gz.",
+    "Extract the downloaded tar.gz file to access the model files.",
+    "Load the model and dictionary using the load_model_dict() function.",
+    "Prepare a test audio file in the correct format (e.g., .wav or .flac) with a duration of at least 5 seconds.",
+    "Create a text file (e.g., test_transcript.txt) with a single line of text that contains Japanese characters.",
+    "Run the infer.py script with the following command: python infer.py --audio_filepath <path_to_audio_file> --text_filepath <path_to_test_transcript.txt> --outdir <output_directory> --use_star False.",
+    "Add print statements in the get_alignments function to output the value of tokens before filtering OOV (out-of-vocabulary) tokens.",
+    "Check the output of the print statement to verify if tokens are empty or contain only OOV tokens.",
+    "After the line 'text after filtering OOV:', add a print statement to output the filtered tokens.",
+    "Run the script and observe the output after the filtering step to confirm that it is empty.",
+    "Validate that the model is not producing any emissions by checking the emissions tensor shape after calling generate_emissions.",
+    "Assert that the emissions tensor shape is (0, N) where N is the number of classes, indicating no emissions were generated."
+]
+```

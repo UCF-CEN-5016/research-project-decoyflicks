@@ -1,0 +1,17 @@
+[
+  "Import torch, torch.nn, torch.optim, and necessary utility functions such as partial and random from Python standard library",
+  "Set a fixed random seed for reproducibility using torch.manual_seed and random.seed",
+  "Define a minimal dummy model compatible with GaussianDiffusion that includes the 'self_condition' attribute set to True; ensure the model's forward method accepts inputs (x, t, x_self_cond) and returns a tensor of shape (batch_size, channels, height, width)",
+  "Initialize GaussianDiffusion with this dummy model, image_size=32, timesteps=100, objective='pred_noise', beta_schedule='sigmoid', and self_condition enabled (self_condition=True)",
+  "Prepare a synthetic input batch tensor 'img' of shape (batch_size=4, channels=3, height=32, width=32) with random float values between 0 and 1 on CPU or GPU device",
+  "Call diffusion_model.forward(img) to run one forward training step that internally calls p_losses with self_condition enabled",
+  "Observe the execution enters the self-conditioning block where with torch.inference_mode() the model_predictions are computed for self-conditioning",
+  "Verify that a RuntimeError is raised with message containing 'Inference tensors cannot be saved for backward' or similar autograd error related to inference_mode",
+  "Catch and log the exception including stack trace to confirm failure originates from using torch.inference_mode() in self-conditioning during training loss calculation",
+  "Repeat the same forward call but replacing torch.inference_mode() with torch.no_grad() in the self-conditioning code block to confirm no error is raised in this alternate scenario",
+  "Assert that adding .clone() on the inference_mode output tensor does not prevent the RuntimeError from occurring, confirming the clone alone is insufficient",
+  "Confirm that the error consistently occurs when self_condition is enabled and torch.inference_mode() is used during the model_predictions call inside p_losses",
+  "Optionally, run the training loop for a few iterations to confirm reproducibility of the RuntimeError during gradient computation in backward pass",
+  "Validate that the bug does not occur if self_condition is disabled (self_condition=False) or if inference_mode is replaced by no_grad",
+  "Summarize that the reproduction requires: self_condition=True, torch.inference_mode() usage in self-conditioning block, input batch size >= 1, and calling the forward training loss function"
+]

@@ -1,0 +1,32 @@
+**TITLE**  
+Matplotlib Pyplot Fails to Render After Importing TensorFlow Models in Python 3.10 Conda Environment
+
+**SYMPTOMS**  
+• Matplotlib's `pyplot` does not render plots after importing `tensorflow_models`.  
+• The backend changes to 'agg' (a non-interactive backend) after importing `tensorflow_models`, preventing plots from displaying.  
+• Attempting to change the backend to 'TkAgg' after importing `tensorflow_models` does not resolve the issue.  
+• Plots render successfully if the backend is changed to 'TkAgg' before importing `tensorflow_models`.  
+
+**EXPECTED BEHAVIOR**  
+Both cells in the Jupyter notebook should display their respective plots when executed, regardless of the order of imports.
+
+**REPRODUCTION STEPS**  
+1. Download and install VSCode.  
+2. Create a new conda environment with Python 3.10 (3.10.13 recommended) and install TensorFlow using the provided link.  
+3. Install TensorFlow Model Garden using pip: `pip install tf-models-nightly`.  
+4. Download the notebook from this link: [TensorFlow Image Classification Notebook](https://www.tensorflow.org/tfmodels/vision/image_classification).  
+5. Add lines of code starting with `plt` to create plots.  
+6. Execute the cells containing the plotting code.  
+
+**ADDITIONAL CONTEXT**  
+• The backend used by Matplotlib before importing `tensorflow_models` is interactive, allowing plots to be displayed.  
+• After importing `tensorflow_models`, the backend switches to 'agg', which is non-interactive and prevents the display of plots.  
+• Changing the backend after the import does not resolve the issue, while changing it before the import does allow for successful plotting.  
+
+**SYSTEM INFORMATION**  
+- OS Platform and Distribution: 2.13.0  
+- TensorFlow installed from: [TensorFlow Install Guide](https://www.tensorflow.org/install/pip)  
+- TensorFlow version: 2.13.10  
+- Python version: 3.10.13  
+- CUDA/cuDNN version: cuDNN 8.6.0.163 (CUDA 12.0)  
+- GPU model and memory: NVIDIA GeForce RTX 3090, 24576 MiB

@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and the delf module from extract_features.py",
+    "Set up the necessary Python environment with Python 3.8",
+    "Navigate to the /content/models/research/delf/delf/python/examples/ directory using %cd",
+    "Create a list_images.txt file in the current directory with at least one image path",
+    "Create a delf_config_example.pbtxt file in the current directory with valid DELF configuration parameters",
+    "Ensure that the google_landmarks_dataset.py file exists in /content/models/research/delf/delf/python/datasets/",
+    "Run the following Python command to execute extract_features.py script: !python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Verify that an error occurs with the message 'ModuleNotFoundError: No module named 'delf.python.datasets''"
+]
+```
+

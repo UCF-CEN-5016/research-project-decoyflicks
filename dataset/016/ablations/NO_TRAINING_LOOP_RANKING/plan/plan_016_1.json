@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the TensorFlow Model Garden repository",
+    "Set the environment variables for DATA_DIR and MODEL_DIR to point to the appropriate directories containing ImageNet TF records and model checkpoints",
+    "Define the number of nodes and GPUs: 2 nodes, 2 GPUs per node",
+    "Create a configuration file gpu.yaml for the first worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 0",
+    "Create a configuration file gpu1.yaml for the second worker with the following content: runtime: distribution_strategy: 'multi_worker_mirrored', worker_hosts: 'ip1:6655,ip2:6655', num_gpus: 2, task_index: 1",
+    "On the first GPU node (gpu1), run the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml",
+    "On the second GPU node (gpu2), run the command: python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml",
+    "Set the batch size to 64 and ensure the input data shape is compatible with ResNet50 (e.g., (64, 224, 224, 3))",
+    "Monitor the throughput of the training process on both nodes and record the examples per second (e.g., expect around 270 examples/sec on a single GPU and 700 examples/sec on two GPUs in a single node)",
+    "Verify that the throughput on multi-node setup does not exceed the throughput of a single GPU, indicating that scaling is not occurring",
+    "Check the logs for any warnings or errors related to the distribution strategy or GPU utilization",
+    "Assert that the total throughput on multi-node setup is equal to or less than the throughput of a single GPU, confirming the bug"
+]
+```

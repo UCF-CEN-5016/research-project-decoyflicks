@@ -1,0 +1,19 @@
+TITLE  
+Error when using larger image size in DCGAN with Celeba dataset
+
+SYMPTOMS  
+• Attempting to change the image size from 64x64 to 128x128 in the DCGAN code leads to an error during training.  
+• The following error message is displayed:  
+```
+ValueError: Using a target size (torch.Size([128])) that is different to the input size (torch.Size([3200])) is deprecated. Please ensure they have the same size.
+```  
+• The source of the discrepancy between the target size (128) and the input size (3200) is unclear.
+
+EXPECTED BEHAVIOR  
+When the image size is changed to 128x128, the DCGAN should train without errors, with both the input and target sizes being compatible.
+
+REPRODUCTION STEPS  
+1. Clone the DCGAN example repository from the PyTorch tutorials.  
+2. Modify the image size parameter in the code to 128x128.  
+3. Run the training loop.  
+4. Observe the error message related to size mismatch during the training process.

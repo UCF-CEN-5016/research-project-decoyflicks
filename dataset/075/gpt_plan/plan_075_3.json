@@ -1,0 +1,19 @@
+[
+    "Clone the DeepSpeedExamples repository or obtain the script autotuning/hf/gpt2-xl/test_tune.sh from the specified commit ff9a0234cf22dd9af03c7aa8037fb9143adca6",
+    "Ensure you have a machine with at least 6 GPUs (e.g., 6 x NVIDIA 3070 Ti) for testing, or adjust the number of GPUs in the script accordingly",
+    "Set up a Python environment with Python 3.8+ and install required dependencies: pip install torch torchvision deepspeed transformers",
+    "Clone the HuggingFace transformers repository (https://github.com/huggingface/transformers.git) and install it via pip install . inside the cloned directory",
+    "Create a new directory, e.g. ~/test, and copy the contents of autotuning/hf/gpt2-xl/test_tune.sh into a new file named test_tune.sh inside it",
+    "Modify test_tune.sh to set HF_PATH=../ (pointing to the transformers directory) and NGPUS=6 to match your GPU count",
+    "Make test_tune.sh executable by running chmod +x test_tune.sh",
+    "Run ./test_tune.sh tune to start the autotuning process using DeepSpeed and GPT-2 XL model",
+    "Observe the console output logs carefully for initialization messages of DeepSpeed autotuner and resource manager allocating localhost GPUs 0-5",
+    "Wait for the autotuning to start launching the profile_model_info experiment with resource localhost:0,1,2,3,4,5",
+    "Verify that the script attempts to SSH into localhost for distributed resource management, and verify SSH permission issues if any (this is a separate warning, not the main bug)",
+    "Eventually, during the model info profile run, observe the error message: 'ParquetConfig.__init__() got an unexpected keyword argument 'token''",
+    "Confirm the stack trace or error message points to DeepSpeed autotuner internals trying to initialize ParquetConfig with a 'token' argument which it does not accept",
+    "Verify that no optimal DeepSpeed configuration is found and autotuning ends prematurely after this error",
+    "Assert that the error is reproducible by re-running the same sequence with identical environment and parameters",
+    "Optionally, validate the Python environment versions of deepspeed and transformers to confirm ParquetConfig's signature mismatch",
+    "Document that the bug is specifically triggered by running the autotuning script test_tune.sh with the GPT-2 XL model and DeepSpeed autotuner enabled"
+]

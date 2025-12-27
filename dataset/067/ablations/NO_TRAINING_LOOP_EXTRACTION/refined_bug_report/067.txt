@@ -1,0 +1,20 @@
+TITLE  
+Incorrect Application of Sparse Categorical Cross Entropy Loss in Tutorial
+
+SYMPTOMS  
+• The model trained poorly, resulting in subpar performance.  
+• The format of the labels is incorrect, causing training issues.  
+• The last dimension of the labels should be removed to match the expected input format for Sparse Categorical Cross Entropy Loss.  
+• No specific error messages were provided, but the model's output was not as expected.  
+• The additional dimension in the labels is not handled properly by Sparse Categorical Cross Entropy Loss.
+
+EXPECTED BEHAVIOR  
+The model should train correctly with the appropriate label format, leading to improved performance in the segmentation task. Sparse Categorical Cross Entropy Loss should handle the input labels without requiring manual adjustments to their dimensions.
+
+REPRODUCTION STEPS  
+1. Follow the tutorial provided in the [Keras example](https://keras.io/examples/vision/oxford_pets_image_segmentation/).  
+2. Use the label format as specified in the tutorial.  
+3. Observe the model's training performance and results.  
+4. Check the label dimensions in the code at [line 96](https://github.com/keras-team/keras-io/blob/master/examples/vision/oxford_pets_image_segmentation.py#L96) and [line 99](https://github.com/keras-team/keras-io/blob/master/examples/vision/oxford_pets_image_segmentation.py#L99).  
+5. Remove the last dimension of the labels and retrain the model.  
+6. Compare the performance before and after the modification.

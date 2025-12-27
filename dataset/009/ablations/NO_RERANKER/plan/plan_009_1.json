@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official recommendation package",
+    "Set CUDA version to 11.5 and TensorFlow version to 2.4",
+    "Define a batch size of 5 and input dimensions of (640, 640, 3) for the Faster R-CNN model",
+    "Create a random input tensor with shape (batch_size, height, width, channels) using tf.random.uniform with values in range [0, 255]",
+    "Define a dummy treatment indicator tensor with shape (batch_size, 1) using tf.constant with values [[1], [0], [1], [0], [1]]",
+    "Create a dummy dataset using tf.data.Dataset.from_tensor_slices with the input tensor and treatment indicator tensor, batch it with batch_size",
+    "Instantiate the Faster R-CNN model using tf.keras.applications with the specified architecture 'faster_rcnn_resnet50_v1_640x640_coco17_tpu-8'",
+    "Compile the model with an optimizer (e.g., tf.keras.optimizers.SGD) and a loss function (e.g., tf.keras.losses.SparseCategoricalCrossentropy)",
+    "Attempt to export the model using exporter_main_v2.py with the trained model and specify the output directory",
+    "Run the export command and capture the output to check for errors",
+    "Assert that the output contains the error message 'AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs''",
+    "Log the error message to verify that the bug has been reproduced"
+]
+```

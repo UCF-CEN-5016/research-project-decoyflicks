@@ -1,0 +1,41 @@
+TITLE  
+Multi-worker Mirrored Strategy Not Scaling Across Nodes in TensorFlow 2.11
+
+SYMPTOMS  
+• Throughput does not increase when running ResNet50 on multiple nodes with multiple GPUs.  
+• The throughput remains the same as that of a single GPU, approximately 270 examples/sec, even when using two GPUs across two nodes.  
+• Successful scaling is observed within a single node, achieving approximately 700 samples/sec with 2 GPUs using mirrored strategy.  
+• No specific error messages are reported, but the expected performance is not met.
+
+EXPECTED BEHAVIOR  
+When using the multi-worker mirrored strategy across multiple nodes, the throughput should increase proportionally with the number of GPUs utilized, leading to higher overall performance.
+
+REPRODUCTION STEPS  
+1. Allocate resources for two nodes with two GPUs each using the command:  
+   `salloc --nodes=2 --time=20:00:00 --gres=gpu:2 --partition=gpu --exclusive`
+   
+2. On the first GPU node (gpu1), set up the environment and run the classifier trainer with the following commands:  
+   ```bash
+   cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+   export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+   export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+   export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+   source /home/apps/anaconda3/bin/activate && \
+   conda activate tf11
+   
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu.yaml
+   ```
+
+3. On the second GPU node (gpu2), set up the environment and run the classifier trainer with the following commands:  
+   ```bash
+   cd /home/cdacapp1/scaling/models-master/official/legacy/image_classification && \
+   export PYTHONPATH="$PYTHONPATH:/home/cdacapp1/scaling/models-master" && \
+   export DATA_DIR=/scratch/cdacapp1/sowmya/actual_imagenet/tf_records && \
+   export MODEL_DIR=/home/cdacapp1/scaling/models-master/official/legacy/image_classification/checkpointss && \
+   source /home/apps/anaconda3/bin/activate && \
+   conda activate tf11
+   
+   python3 classifier_trainer.py --mode=train_and_eval --model_type=resnet --dataset=imagenet --model_dir=$MODEL_DIR --data_dir=$DATA_DIR --config_file=configs/examples/resnet/imagenet/gpu1.yaml
+   ```
+
+4. Check the throughput performance logs for both nodes to verify if scaling occurs across nodes.

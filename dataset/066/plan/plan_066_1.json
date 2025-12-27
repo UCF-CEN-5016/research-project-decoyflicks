@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and Keras libraries",
+    "Load the MNIST dataset using Keras datasets module",
+    "Preprocess the images by normalizing pixel values to be between 0 and 1",
+    "Define a batch size of 32",
+    "Create random uniform input data with shape (batch_size, 28, 28, 1)",
+    "Reshape the input data to have shape (batch_size, 28*28) since MNIST images are flat",
+    "Define a simple dense neural network model with one hidden layer of 128 units and ReLU activation",
+    "Compile the model using Adam optimizer and binary crossentropy loss function",
+    "Train the model on the preprocessed input data for 5 epochs",
+    "Verify that during training, the loss calculation produces NaN values by checking the loss value after each epoch",
+    "Monitor GPU memory usage during the training process"
+]
+```
+

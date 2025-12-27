@@ -1,0 +1,28 @@
+TITLE
+PyTorch Lightning MisconfigurationException due to Custom Learning Rate Scheduler
+
+SYMPTOMS
+• `MisconfigurationException` from PyTorch Lightning indicating the provided learning rate scheduler `CosineAnnealingWarmRestarts` does not follow the expected PyTorch LRScheduler API.
+• The error specifically states that the custom LR scheduler needs to have its own logic overridden in the `LightningModule.lr_scheduler_step` hook.
+
+EXPECTED BEHAVIOR
+When training an nnUNet model with a custom learning rate scheduler like `CosineAnnealingWarmRestarts`, PyTorch Lightning should configure and apply the scheduler correctly without raising any exceptions related to misconfiguration.
+
+REPRODUCTION STEPS
+1. Ensure all required packages from `requirements.txt` are installed.
+2. Run the following command in your terminal or Jupyter notebook:
+```plaintext
+!python ../main.py --brats --brats22_model --scheduler --learning_rate 0.0003 --epochs 10 --fold 0 --gpus 1 --task 11 --nfolds 10 --save_ckpt
+```
+3. Observe the error message that appears during training, which should indicate a misconfiguration exception due to the custom learning rate scheduler.
+
+Additional Notes:
+- The provided notebook or main script should include logic to handle custom LR schedulers by overriding the `lr_scheduler_step` method in your LightningModule.
+- Ensure that any custom scheduler implementation adheres to PyTorch's LRScheduler API, which typically includes methods like `get_last_lr`, `step`, and `state_dict`.
+
+Suggested Solution:
+1. Override the `lr_scheduler_step` hook in your LightningModule to handle the specific logic required by `CosineAnnealingWarmRestarts`.
+2. Check if there are any PyTorch Lightning examples or best practices for custom LR schedulers that can be referenced.
+3. Validate that all other aspects of the model setup, including optimizers and learning rate scheduler configurations, are correctly specified in the LightningModule.
+
+By addressing these points, you should be able to resolve the misconfiguration exception and successfully train your nnUNet model using a `CosineAnnealingWarmRestarts` scheduler.

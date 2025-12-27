@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary modules: torch and labml.logger.inspect",
+    "Define a batch size of 10 and set sequence length to 4, number of heads to 2, and feature dimension (d_model) to 8",
+    "Create a tensor 'x' with shape (batch_size, seq_len) filled with integers representing token indices, e.g., torch.tensor([[1, 2, 4, 4], [0, 1, 2, 3], [4, 3, 0, 1], [2, 1, 0, 3], [1, 2, 4, 4], [0, 1, 2, 3], [4, 3, 0, 1], [2, 1, 0, 3], [1, 2, 4, 4], [0, 1, 2, 3]])",
+    "Create a tensor 'ret' with shape (batch_size, chunks, neighbors, neighbor_len) filled with random integers, e.g., torch.tensor([[[[0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1]], [[0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1]]], [[[0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1]], [[0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1]]]]])",
+    "Instantiate the RetroModel with parameters: n_vocab=5, d_model=8, n_layers=6, ca_layers={2, 5}, chunk_len=4, n_heads=2, d_k=4, d_ff=32, and encoder=NearestNeighborEncoder(chunk_len=4, n_layers=2, ca_layers={1}, d_model=8, n_heads=2, d_k=4, d_ff=32)",
+    "Move the model to the GPU using model.to(device) where device is set to torch.device('cuda:0')",
+    "Run the model with the input tensors: res = model(torch.tensor([x] * 10).to(device), torch.tensor([ret] * 10).to(device))",
+    "Capture the output and check for RuntimeError during execution",
+    "Verify that the error message contains 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Log the output tensor shape before the error occurs to confirm the dimensions involved in the operation"
+]
+```

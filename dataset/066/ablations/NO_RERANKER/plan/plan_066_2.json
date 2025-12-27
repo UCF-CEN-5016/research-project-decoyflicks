@@ -1,0 +1,30 @@
+```json
+[
+    "Import necessary libraries: keras, keras_nlp, tensorflow, numpy, pandas, and matplotlib",
+    "Define a configuration class CFG with parameters: preset='deberta_v3_extra_small_en', sequence_length=200, seed=42, epochs=5, batch_size=8, augment=True",
+    "Set random seed using keras.utils.set_random_seed(CFG.seed)",
+    "Download the SWAG dataset using wget and unzip it",
+    "Load training data from 'swagaf-master/data/train.csv' into a DataFrame and sample 2% of the data",
+    "Load validation data from 'swagaf-master/data/val.csv' into a DataFrame and sample 2% of the data",
+    "Define a function make_options that creates a new column 'options' in the DataFrame containing formatted strings for each option",
+    "Apply make_options function to both train_df and valid_df DataFrames",
+    "Initialize a DebertaV3Preprocessor with preset=CFG.preset and sequence_length=CFG.sequence_length",
+    "Process the first row of train_df options using the preprocessor and store the output in a variable 'outs'",
+    "Print the shape of each processed output in 'outs' to verify preprocessing",
+    "Define a function build_dataset that creates a tf.data.Dataset from the input texts and labels, applying preprocessing and augmentation as specified",
+    "Build training and validation datasets using build_dataset function with appropriate parameters",
+    "Define a function get_lr_callback to create a learning rate scheduler and plot the learning rate curve",
+    "Define a function get_callbacks to gather all training callbacks including the learning rate scheduler and model checkpoint",
+    "Define a function build_model to create the model architecture using keras_nlp.models.DebertaV3Classifier",
+    "In build_model, create input layers for token_ids and padding_mask with appropriate shapes",
+    "Loop through each option to compute logits using the classifier and concatenate them",
+    "Compile the model with optimizer, loss, and metrics",
+    "Build the model by calling build_model function",
+    "Print the model summary to verify the architecture",
+    "Start training the model using model.fit with train_ds and valid_ds, specifying epochs and callbacks",
+    "After training, make predictions on the validation dataset using model.predict",
+    "Format predictions and true answers for comparison",
+    "Print a sample of predictions alongside true answers to verify the model's output",
+    "Check for the unused variable 'level2_dau_2' in the code and assert that it is not referenced in the model's logic"
+]
+```

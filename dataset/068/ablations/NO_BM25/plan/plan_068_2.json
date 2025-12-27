@@ -1,0 +1,20 @@
+```json
+[
+    "Import necessary libraries: keras_cv, tensorflow, numpy, and tensorflow_datasets",
+    "Set the environment variable for Keras backend to 'jax': os.environ['KERAS_BACKEND'] = 'jax'",
+    "Define a batch size of 4 for training: BATCH_SIZE = 4",
+    "Load the Pascal VOC dataset using tensorflow_datasets with the following parameters: split='train', dataset='voc/2007', bounding_box_format='xywh'",
+    "Map the dataset to unpackage the raw inputs using a function that converts bounding boxes to the required format",
+    "Shuffle the training dataset with a buffer size of BATCH_SIZE * 4",
+    "Create a ragged batch from the training dataset using train_ds.ragged_batch(BATCH_SIZE, drop_remainder=True)",
+    "Define a data augmentation pipeline with RandomFlip and JitteredResize layers, ensuring they are compatible with bounding boxes",
+    "Apply the data augmentation pipeline to the training dataset using train_ds.map(augmenter_fn, num_parallel_calls=tf_data.AUTOTUNE)",
+    "Visualize the augmented dataset to ensure bounding boxes are correctly formatted and visible",
+    "Define a model using keras_cv.models.YOLOV8Detector with preset 'yolo_v8_m_pascalvoc' and bounding_box_format='xywh'",
+    "Compile the model with classification_loss='binary_crossentropy', box_loss='ciou', and a SGD optimizer with learning rate 0.005",
+    "Fit the model on the training dataset using model.fit(train_ds.take(20), epochs=1)",
+    "Monitor the training process for the UnknownError during the first epoch",
+    "Capture the error message and verify it contains 'InvalidArgumentError' related to ConcatOp dimensions",
+    "Check the shapes of the bounding boxes being concatenated to confirm they are mismatched as indicated in the error"
+]
+```

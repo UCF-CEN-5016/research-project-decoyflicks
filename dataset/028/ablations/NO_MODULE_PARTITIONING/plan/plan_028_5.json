@@ -1,0 +1,19 @@
+```json
+[
+    "Clone the vision_transformer repository from GitHub using the command: git clone https://github.com/pytorch/examples.git",
+    "Navigate to the vision_transformer directory using: cd examples/vision_transformer",
+    "Install the required dependencies by running: pip install -r requirements.txt",
+    "Import necessary libraries in a new Python script: import torch, torchvision.transforms as transforms, torchvision.datasets as datasets, torch.utils.data as data",
+    "Set the device to GPU by adding: device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')",
+    "Define the CIFAR10 dataset with the following parameters: dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transforms.ToTensor())",
+    "Create a DataLoader for the CIFAR10 dataset with a batch size of 64: train_loader = data.DataLoader(dataset, batch_size=64, shuffle=True)",
+    "Import the Vision Transformer model from the repository: from main import VisionTransformer",
+    "Instantiate the Vision Transformer model with num_classes set to 16: model = VisionTransformer(num_classes=16).to(device)",
+    "Run a forward pass with a sample batch from the DataLoader: for images, labels in train_loader: images = images.to(device); outputs = model(images); break",
+    "Check the shape of the output tensor: assert outputs.shape[1] == 16, 'Output should have 16 classes instead of 10'",
+    "Print the output shape to verify: print('Output shape:', outputs.shape)",
+    "Verify that the model's num_classes attribute is set to 16: assert model.num_classes == 16, 'num_classes should be 16'",
+    "Log the current behavior by printing the number of classes: print('Current num_classes:', model.num_classes)",
+    "Document the expected behavior by asserting that num_classes should be 10 for CIFAR10: assert model.num_classes == 10, 'Expected num_classes to be 10 for CIFAR10 dataset'"
+]
+```

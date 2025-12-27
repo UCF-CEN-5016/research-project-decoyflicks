@@ -1,0 +1,18 @@
+```json
+[
+    "Import the necessary modules from pytorch_pretrained_bert, apex, and other required libraries",
+    "Set up a logger using basicConfig with level DEBUG to capture logs",
+    "Load the pre-trained BertForQuestionAnswering model using from_pretrained function",
+    "Create a dummy tokenizer for SQuAD data using BasicTokenizer class",
+    "Generate random input data for evaluation: all_input_ids, all_input_mask, all_segment_ids, and all_example_index with appropriate shapes and values",
+    "Create a TensorDataset from the generated input data",
+    "Initialize an SequentialSampler for evaluation",
+    "Create a DataLoader with batch size of 2 and sampler as SequentialSampler",
+    "Set the model to evaluation mode using model.eval()",
+    "Iterate through the DataLoader using tqdm and perform forward pass on each batch without gradient calculation",
+    "Check if there are any NaN values in start_logits or end_logits by printing their mean value",
+    "Monitor GPU memory usage during the evaluation process",
+    "Assert that GPU memory usage exceeds a predefined threshold indicating potential memory overflow"
+]
+```
+

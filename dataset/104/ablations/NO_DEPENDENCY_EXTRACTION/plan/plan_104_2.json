@@ -1,0 +1,24 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torchvision.datasets, torchvision.transforms, and torch.utils.data.DataLoader",
+    "Set the random seed to 1234 using torch.random.manual_seed(1234)",
+    "Define a variable 'device' to use 'cuda' if available, otherwise 'cpu'",
+    "Define a learning rate 'lr' of 3e-4 and 'train_iter' of 1000",
+    "Define 'levels' as [8, 6, 5] to represent the target sizes for the FSQ",
+    "Calculate 'num_codes' as the product of 'levels' using math.prod(levels)",
+    "Create a DataLoader for the FashionMNIST dataset with batch size 256 and normalization transforms",
+    "Define a SimpleFSQAutoEncoder class that inherits from nn.Module",
+    "In the __init__ method of SimpleFSQAutoEncoder, initialize a ModuleList with the following layers: Conv2d(1, 16, kernel_size=3, stride=1, padding=1), MaxPool2d(kernel_size=2, stride=2), GELU(), Conv2d(16, 32, kernel_size=3, stride=1, padding=1), MaxPool2d(kernel_size=2, stride=2), Conv2d(32, len(levels), kernel_size=1), FSQ(levels, implicit_neural_codebook=False), Conv2d(len(levels), 32, kernel_size=3, stride=1, padding=1), Upsample(scale_factor=2, mode='nearest'), Conv2d(32, 16, kernel_size=3, stride=1, padding=1), GELU(), Upsample(scale_factor=2, mode='nearest'), Conv2d(16, 1, kernel_size=3, stride=1, padding=1)",
+    "Define the forward method of SimpleFSQAutoEncoder to pass input through the layers and return the output and indices",
+    "Define a train function that takes model, train_loader, and train_iterations as parameters",
+    "Inside the train function, create an infinite iterator over the train_loader to yield batches of data",
+    "In the training loop, for each iteration, zero the gradients, get a batch of data, and pass it through the model",
+    "Calculate the reconstruction loss as the mean absolute error between the output and input",
+    "Perform backpropagation and update the model parameters using an AdamW optimizer",
+    "Create an instance of SimpleFSQAutoEncoder with levels and move it to the specified device",
+    "Initialize the AdamW optimizer with the model parameters and learning rate",
+    "Run the training function for train_iter iterations",
+    "After training, check if the MLPs in ResidualVQ were initialized by inspecting the model parameters",
+    "Assert that the MLPs in ResidualVQ are initialized even when implicit_neural_codebook is set to False"
+]
+```

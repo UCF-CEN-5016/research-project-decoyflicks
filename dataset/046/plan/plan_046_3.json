@@ -1,0 +1,15 @@
+```json
+[
+    "Import numpy and sklearn libraries",
+    "Import logging, argparse, scipy.special.softmax, sklearn.metrics.pairwise.cosine_similarity, sklearn.preprocessing.StandardScaler, sklearn.decomposition.PCA from their respective modules",
+    "Define a sample argument parser for the script with 'data', 'task', and 'merge' arguments",
+    "Create a mock dataset in the form of a numpy array with shape (10, 5) where each row represents logit values for different classes",
+    "Simulate target labels as an array of integers with shape (10,)",
+    "Initialize a logger to capture logging statements from the script",
+    "Mock the calculate_eer and calculate_minDCF functions to return dummy values without performing actual calculations",
+    "Call the main function logic with mock dataset and arguments that would trigger the error condition based on the provided commit",
+    "Assert that an exception of type RuntimeError is raised with the specific message 'log_probs must be 3-D (batch_size, input length, num classes)'",
+    "Verify that the expected shapes for log_probs are not being met by the mock dataset"
+]
+```
+

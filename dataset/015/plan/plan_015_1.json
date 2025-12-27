@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the provided code context",
+    "Define a batch size of 100 and input shape (10,)",
+    "Create random normal input data with mean=5.0 and std=10.0, shape (1000, 10)",
+    "Call the _train_freezable_batch_norm function twice, first with use_sync_batch_norm=True and then with use_sync_batch_norm=False",
+    "Store the trained weights from both calls",
+    "Reset TensorFlow session or environment to clean state for next test",
+    "Load the batch norm weights back into a new model using the _build_model function with training set to False",
+    "Apply test data (created in step 3) to the loaded model and capture the output",
+    "Verify that the output tensor does not contain any NaN or Inf values",
+    "Monitor the memory usage during execution of steps 5-7",
+    "Assert that the memory usage is higher than expected for a batch normalization operation without training"
+]
+```
+

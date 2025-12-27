@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and the necessary libraries: tensorflow_models as tfm, numpy as np, and matplotlib.pyplot as plt",
+    "Define the parameters for the beta distribution: alpha = 0.2, beta = 0.2",
+    "Set the shape for the sample to be generated: shape = (1000,)",
+    "Call the function tfm.vision.augment.MixupAndCutmix._sample_from_beta with parameters alpha, beta, and shape",
+    "Store the output of the function call in a variable named 'sampled_values'",
+    "Generate a reference sample using numpy's beta function: reference_sample = np.random.beta(alpha, beta, 100000)",
+    "Create a figure for plotting using plt.figure()",
+    "Plot the kernel density estimate of the sampled values using sns.kdeplot(sampled_values, clip=(0, 1))",
+    "Plot the kernel density estimate of the reference sample using sns.kdeplot(reference_sample, clip=(0, 1))",
+    "Add a title to the plot: plt.title('Comparison of MixUp and CutMix Samples')",
+    "Add labels to the x and y axes: plt.xlabel('Sample Value'), plt.ylabel('Density')",
+    "Display the plot using plt.show()",
+    "Verify visually that the distribution of 'sampled_values' is significantly different from 'reference_sample'",
+    "Document the observed differences in the distributions, noting that the sampled values do not follow the expected beta distribution shape"
+]
+```

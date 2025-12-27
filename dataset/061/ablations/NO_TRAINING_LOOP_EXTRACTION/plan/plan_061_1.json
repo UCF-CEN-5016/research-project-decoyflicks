@@ -1,0 +1,19 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the latest version of Keras by running the command: !pip install keras",
+    "Import TensorFlow and Keras by adding the following code: import tensorflow as tf; from keras import layers, models",
+    "Set the random seed for reproducibility by adding: import numpy as np; np.random.seed(42); tf.random.set_seed(42)",
+    "Define a batch size of 8 and image dimensions of 256x256 by adding: batch_size = 8; image_size = (256, 256)",
+    "Create random uniform input data with shape (batch_size, image_size[0], image_size[1], 3) by adding: x_train = np.random.rand(batch_size, image_size[0], image_size[1], 3)",
+    "Create random labels for a classification task with 10 classes by adding: y_train = np.random.randint(0, 10, size=(batch_size,))",
+    "Convert the labels to categorical format by adding: from keras.utils import to_categorical; y_train = to_categorical(y_train, num_classes=10)",
+    "Define a simple model architecture using Keras Sequential API by adding: model = models.Sequential([layers.Input(shape=(image_size[0], image_size[1], 3)), layers.Conv2D(32, (3, 3), activation='relu'), layers.MaxPooling2D(), layers.Flatten(), layers.Dense(10, activation='softmax')])",
+    "Compile the model with categorical crossentropy loss and Adam optimizer by adding: model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])",
+    "Attempt to fit the model on the training data by adding: model.fit(x_train, y_train, batch_size=batch_size, epochs=1)",
+    "Observe the error message: ImportError: cannot import name 'data_utils' from 'keras.utils'",
+    "Take a screenshot of the error message for documentation purposes",
+    "To verify the bug, change the Keras version to 2.12.0 by running: !pip install keras==2.12.0",
+    "Re-run the model fitting code to confirm that the error no longer occurs"
+]
+```

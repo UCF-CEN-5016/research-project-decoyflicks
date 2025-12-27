@@ -1,0 +1,14 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, and torch.nn.functional",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a tensor 'x' with shape (12, 768) filled with random values using torch.randn()",
+    "Call the gelu function from torch.nn.functional with the tensor 'x' and approximate=True",
+    "Capture the output of the gelu function in a variable 'output'",
+    "Verify that the output is a tensor of the same shape as 'x'",
+    "Check if a TypeError is raised during the execution of the gelu function",
+    "If TypeError is raised, assert that the error message contains 'argument 'approximate' must be str, not bool'",
+    "Run the script in an environment with PyTorch version 1.12 or lower to ensure compatibility with the bug",
+    "Log the version of PyTorch being used to confirm it matches the expected version for the bug"
+]
+```

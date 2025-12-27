@@ -1,0 +1,16 @@
+```json
+[
+    "Import torch and the espnet_multihead_attention module from fairseq.modules",
+    "Define the dimensions for the MultiHeadedAttention layer: set num_heads to 8, embed_dim to 64, and num_rel_pos to 10",
+    "Create an instance of the RelPositionMultiHeadedAttention class with the defined parameters",
+    "Initialize the input tensor with shape (batch_size, seq_length, embed_dim) where batch_size is 2 and seq_length is 20",
+    "Call the forward method of the RelPositionMultiHeadedAttention instance with the input tensor",
+    "Capture the output of the forward method",
+    "Check the bias parameters (u, v) of the MultiHeadedAttention layer by accessing the instance attributes",
+    "Print the values of the bias parameters (u, v) to observe their initial state",
+    "Perform a sum operation on the bias parameters (u, v) to check for uninitialized values",
+    "Assert that the sum of the bias parameters (u, v) is not equal to zero or is NaN",
+    "Run the code multiple times to observe non-deterministic behavior in the bias parameters",
+    "Log any occurrences of NaN values in the output or during the sum operation"
+]
+```

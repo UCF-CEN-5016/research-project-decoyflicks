@@ -1,0 +1,23 @@
+```json
+[
+    "Import keras, keras_nlp, matplotlib.pyplot and numpy for required modules",
+    "Define a preset model name 'small_bert' and set epochs to 5 and batch size to 32",
+    "Load the train_df and valid_df datasets using pandas",
+    "Preprocess input data by creating token_ids and padding_mask with shape (batch_size, num_choices, seq_length)",
+    "Build the SelectOption layer with index parameter for each option from 0 to 3",
+    "Define a classifier model using DebertaV3Classifier from keras_nlp.models with preset 'small_bert' and num_classes set to 1",
+    "Initialize an empty list to store logits",
+    "Loop through each option and compute the associated logit by selecting the specific slice of inputs using SelectOption layer",
+    "Concatenate all logits along axis -1",
+    "Apply Softmax activation to combine logits into final outputs with dimension (batch_size, num_classes)",
+    "Define a keras Model with input layers for token_ids and padding_mask and output layer for combined softmax scores",
+    "Compile the model with AdamW optimizer, CategoricalCrossentropy loss, and CategoricalAccuracy metric",
+    "Check model summary to ensure correct architecture is built",
+    "Create a validation data generator using valid_ds dataset",
+    "Train the model on train_ds with specified epochs, validation_data, callbacks, steps_per_epoch, and verbose set accordingly",
+    "Make predictions using the trained model on last validation data batch_size set to 32 and verbose set to 1",
+    "Format predictions and true answers for verification",
+    "Check 5 Predictions by printing question, true answer, predicted answer, and their respective text"
+]
+```
+

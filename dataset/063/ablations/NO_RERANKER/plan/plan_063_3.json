@@ -1,0 +1,17 @@
+```json
+[
+    "Import TensorFlow and necessary Keras modules: layers, backend, and Model from keras",
+    "Import TensorFlow Datasets (tfds) and disable progress bar using tfds.disable_progress_bar()",
+    "Set the following hyperparameters: BATCH_SIZE = 64, image_size = 256, resize_bigger = 280, num_classes = 5",
+    "Define the augment_fn function that applies random augmentations to images, ensuring it returns a tensor of shape (image_size, image_size, 3)",
+    "Define the unpackage_inputs function that takes a tuple of (image, label) and returns them separately",
+    "Load the 'tf_flowers' dataset using tfds.load with split=['train[:90%]', 'train[90%:]'] and as_supervised=True",
+    "Prepare the training dataset by defining a preprocess_dataset function that resizes images to (resize_bigger, resize_bigger) and crops them to (image_size, image_size, 3)",
+    "Shuffle the training dataset with a buffer size of BATCH_SIZE * 10 and map the preprocess_dataset function to it",
+    "Batch the training dataset using .batch(BATCH_SIZE) and apply the unpackage_inputs function",
+    "Create an augmented_train_ds by shuffling the training dataset with a buffer size of BATCH_SIZE * 2, mapping the augment_fn, batching with BATCH_SIZE, mapping unpackage_inputs, and prefetching with buffer_size=tf.data.AUTOTUNE",
+    "Run the code to create augmented_train_ds and capture any errors that occur during execution",
+    "Verify that the error message contains 'different types' and check the shapes of the tensors involved in the error",
+    "Assert that the error message includes Tensor shapes (160, 160, 1) and (160, 160, 1) with different data types (float32 and int64)"
+]
+```

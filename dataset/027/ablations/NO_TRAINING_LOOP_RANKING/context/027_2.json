@@ -1,0 +1,56 @@
+{
+  "bug_report": "027",
+  "rank": 2,
+  "score": 1.0,
+  "main_file": {
+    "path": "distributed/tensor_parallelism/tensor_parallel_example.py",
+    "content": "import os\nimport sys\nimport torch\nimport torch.nn as nn\n\nfrom torch.distributed.tensor.parallel import (\n    parallelize_module,\n    ColwiseParallel,\n    RowwiseParallel,\n)\n\nfrom log_utils import rank_log, get_logger, verify_min_gpu_count\n\n# ---- GPU check ------------\n_min_gpu_count = 2\n\nif not verify_min_gpu_count(min_gpus=_min_gpu_count):\n    print(f\"Unable to locate sufficient {_min_gpu_count} gpus to run this example. Exiting.\")\n    sys.exit()\n# ---------------------------\n\nfrom torch.distributed._tensor.device_mesh import init_device_mesh\n\n\n\n\n\"\"\"\nThis is the script to test Tensor Parallel(TP) on a toy model in a\nMegetron-LM SPMD style. We show an E2E working flow from forward,\nbackward and optimization.\n\nMore context about API designs can be found in the design:\n\nhttps://github.com/pytorch/pytorch/issues/89884.\n\nAnd it is built on top of Distributed Tensor which is proposed in:\n\nhttps://github.com/pytorch/pytorch/issues/88838.\n\nWe use the example of two `nn.Linear` layers with an element-wise `nn.RELU`\nin between to show an example of Megatron-LM, which was proposed in paper:\n\nhttps://arxiv.org/abs/1909.08053.\n\nThe basic idea is that we parallelize the first linear layer by column\nand also parallelize the second linear layer by row so that we only need\none all reduce in the end of the second linear layer.\n\nWe can speed up the model training by avoiding communications between\ntwo layers.\n\nTo parallelize a nn module, we need to specify what parallel style we want\nto use and our `parallelize_module` API will parse and parallelize the modules\nbased on the given `ParallelStyle`. We are using this PyTorch native Tensor\nParallelism APIs in this example to show users how to use them.\n\"\"\"\n\nclass ToyModel(nn.Module):\n    \"\"\"MLP based model\"\"\"\n\n    def __init__(self):\n        super(ToyModel, self).__init__()\n        self.in_proj = nn.Linear(10, 32)\n        self.relu = nn.ReLU()\n        self.out_proj = nn.Linear(32, 5)\n\n    def forward(self, x):\n        return self.out_proj(self.relu(self.in_proj(x)))\n\n\n\"\"\"\nMain body of the demo of a basic version of tensor parallel by using\nPyTorch native APIs.\n\"\"\"\nlogger = get_logger()\n\n# create a device mesh based on the given world_size.\n_world_size = int(os.environ[\"WORLD_SIZE\"])\n\ndevice_mesh = init_device_mesh(device_type=\"cuda\", mesh_shape=(_world_size,))\n_rank = device_mesh.get_rank()\n\n\nprint(f\"Starting PyTorch TP example on rank {_rank}.\")\nassert (\n    _world_size % 2 == 0\n), f\"TP examples require even number of GPUs, but got {_world_size} gpus\"\n\nrank_log(_rank, logger, f\"Device Mesh created: {device_mesh=}\")\n\n# create model and move it to GPU - init\"cuda\"_mesh has already mapped GPU ids.\ntp_model = ToyModel().to(\"cuda\")\n\n# Create an optimizer for the parallelized module.\nlr = 0.25\noptimizer = torch.optim.AdamW(tp_model.parameters(), lr=lr, foreach=True)\n\n# Custom parallelization plan for the model\ntp_model = parallelize_module(\n    module=tp_model,\n    device_mesh=device_mesh,\n    parallelize_plan={\n        \"in_proj\": ColwiseParallel(),\n        \"out_proj\": RowwiseParallel(),\n    },\n)\n# Perform a num of iterations of forward/backward\n# and optimizations for the sharded module.\nnum_iters = 10\nrank_log(_rank, logger, \"Tensor Parallel training starting...\")\n\nfor i in range(num_iters):\n    # For TP, input needs to be same across all TP ranks.\n    # Setting the random seed is to mimic the behavior of dataloader.\n    torch.manual_seed(i)\n    inp = torch.rand(20, 10, device=\"cuda\")\n    output = tp_model(inp)\n    output.sum().backward()\n    optimizer.step()\n    rank_log(_rank, logger, f\"Tensor Parallel iter {i} completed\")\n\nrank_log(_rank, logger, \"Tensor Parallel training completed!\")\n"
+  },
+  "module_snippets": [],
+  "dependencies": [
+    {
+      "module": "log_utils",
+      "function": "get_logger"
+    },
+    {
+      "module": "log_utils",
+      "function": "rank_log"
+    },
+    {
+      "module": "log_utils",
+      "function": "verify_min_gpu_count"
+    },
+    {
+      "module": "torch",
+      "function": "ColwiseParallel"
+    },
+    {
+      "module": "torch",
+      "function": "Linear"
+    },
+    {
+      "module": "torch",
+      "function": "ReLU"
+    },
+    {
+      "module": "torch",
+      "function": "RowwiseParallel"
+    },
+    {
+      "module": "torch",
+      "function": "init_device_mesh"
+    },
+    {
+      "module": "torch",
+      "function": "manual_seed"
+    },
+    {
+      "module": "torch",
+      "function": "parallelize_module"
+    },
+    {
+      "module": "torch",
+      "function": "rand"
+    }
+  ]
+}

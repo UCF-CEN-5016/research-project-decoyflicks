@@ -1,0 +1,14 @@
+```json
+[
+    "Import TensorFlow and required modules from keras_io/examples/vision/mirnet.py",
+    "Define a batch size of 32 and image dimensions of 256x256 for MIRNet input images",
+    "Create synthetic random input data with shape (batch_size, height, width, 3) using numpy",
+    "Load the MIRNet model from keras_io/examples/vision/mirnet.py",
+    "Set up a dummy input pipeline by repeating and shuffling the synthetic input data",
+    "Compile the MIRNet model with SGD optimizer and SparseCategoricalCrossentropy loss function",
+    "Train the MIRNet model on the dummy dataset for 1 epoch to observe if there are any issues during training",
+    "Verify that the variable `level2_dau_2` is never used in the code",
+    "Assert the presence of a typo in line 352 by checking if the function call references `level3_dau_2` instead of `level2_dau_2`"
+]
+```
+

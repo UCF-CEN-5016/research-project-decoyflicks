@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, os, xml.etree.ElementTree, and tqdm",
+    "Define constants: SPLIT_RATIO = 0.2, BATCH_SIZE = 4, LEARNING_RATE = 0.001, EPOCH = 1",
+    "Create a list of class IDs: class_ids = ['car', 'pedestrian', 'trafficLight', 'biker', 'truck']",
+    "Create a class mapping dictionary: class_mapping = dict(zip(range(len(class_ids)), class_ids))",
+    "Set paths for images and annotations: path_images = '/path/to/images/', path_annot = '/path/to/annotations/'",
+    "Collect all XML annotation files from path_annot and sort them into xml_files",
+    "Collect all JPEG image files from path_images and sort them into jpg_files",
+    "Define a function parse_annotation(xml_file) to extract image paths, bounding boxes, and class IDs from XML files",
+    "Iterate over xml_files and call parse_annotation for each file to populate image_paths, bbox, and classes lists",
+    "Convert bbox and classes lists into ragged tensors: bbox = tf.ragged.constant(bbox), classes = tf.ragged.constant(classes), image_paths = tf.ragged.constant(image_paths)",
+    "Create a tf.data.Dataset from the image_paths, classes, and bbox: data = tf.data.Dataset.from_tensor_slices((image_paths, classes, bbox))",
+    "Split the dataset into training and validation sets: num_val = int(len(xml_files) * SPLIT_RATIO), val_data = data.take(num_val), train_data = data.skip(num_val)",
+    "Define a function load_image(image_path) to read and decode images from the file system",
+    "Define a function load_dataset(image_path, classes, bbox) to prepare images and bounding boxes for training",
+    "Map load_dataset function over train_data to create train_ds and val_data for validation",
+    "Apply data augmentation using keras_cv.layers to train_ds with RandomFlip, RandomShear, and JitteredResize",
+    "Batch train_ds using ragged_batch with BATCH_SIZE and drop_remainder=True",
+    "Map the dict_to_tuple function over train_ds to convert the dataset into the required format for the model",
+    "Create a RetinaNet model instance using keras_cv.models.RetinaNet with num_classes set to the length of class_mapping",
+    "Compile the model with an optimizer (Adam) and loss functions (classification_loss='binary_crossentropy', box_loss='ciou')",
+    "Attempt to fit the model using model.fit with train_ds and validation_data set to val_ds, specifying epochs=1",
+    "Capture the InvalidArgumentError during model fitting to verify the bug occurs",
+    "Log the error message to confirm the specific issue with the GatherV2 operation in the model"
+]
+```

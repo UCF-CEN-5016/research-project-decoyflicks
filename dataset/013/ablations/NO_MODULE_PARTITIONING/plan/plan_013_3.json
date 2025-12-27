@@ -1,0 +1,21 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal and create a new conda environment with Python 3.10 using the command: conda create -n test_env python=3.10.13",
+    "Activate the new conda environment using: conda activate test_env",
+    "Install TensorFlow in the conda environment using the command: pip install tensorflow==2.13.10",
+    "Install Matplotlib in the conda environment using the command: pip install matplotlib",
+    "Install TensorFlow Model Garden using the command: pip install tf-models-nightly",
+    "Open a Jupyter Notebook or Python script in the activated conda environment.",
+    "Import the necessary libraries at the top of the notebook/script with the following code: import tensorflow as tf, import matplotlib.pyplot as plt, from official import vision",
+    "Set the Matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg') before importing tensorflow_models.",
+    "Import the TensorFlow Model Garden by adding the line: from official.vision import tensorflow_models",
+    "Create a simple plot using Matplotlib with the following code: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() to display the plot.",
+    "Verify that the plot displays correctly after the above code execution.",
+    "Now, change the backend to 'TkAgg' by adding the line: plt.switch_backend('TkAgg') after importing tensorflow_models.",
+    "Create another simple plot using Matplotlib with the same code: plt.plot([1, 2, 3], [1, 4, 9]) and call plt.show() again.",
+    "Verify that the plot does not display after the second code execution.",
+    "Check the current Matplotlib backend by adding the line: print(plt.get_backend()) after importing tensorflow_models to confirm it is set to 'Agg'.",
+    "Assert that the backend is 'Agg' after importing tensorflow_models, indicating that the interactive plotting is disabled."
+]
+```

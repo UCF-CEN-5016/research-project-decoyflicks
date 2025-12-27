@@ -1,0 +1,19 @@
+```json
+[
+    "Import necessary libraries: torch and ContinuousTransformerWrapper from palm_rlhf_pytorch.attention",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define the output dimension as 259 and the maximum sequence length as 0",
+    "Set the number of memory tokens to 20 and the maximum memory length to 100",
+    "Create an instance of the Decoder class with the following parameters: dim=512, depth=6, heads=4, rotary_pos_emb=True, shift_tokens=1, attn_flash=True, attn_onnxable=True, use_rmsnorm=True, sandwich_norm=True",
+    "Instantiate the ContinuousTransformerWrapper with the defined parameters: dim_out=259, max_seq_len=0, num_memory_tokens=20, max_mem_len=100, attn_layers=Decoder instance",
+    "Create a random input tensor x with shape (1, 1024, 512) using torch.randn",
+    "Create a mask tensor m with shape (1, 1024) where all values are True using torch.randn and comparison",
+    "Initialize a list of memory tensors mems with 6 tensors, each of shape (1, 100, 512) filled with zeros using [torch.zeros(1, 100, 512) for _ in range(6)]",
+    "Call the net instance with parameters: x, mask=m, mems=mems, return_mems=True and store the outputs in logits and mems",
+    "Print the shape of logits to verify the output dimensions",
+    "Print the shapes of each tensor in mems to verify the memory outputs",
+    "Repeat the previous steps but set mems=None instead of the initialized mems list",
+    "Print the shape of logits again to verify the output dimensions when mems is None",
+    "Compare the outputs from both calls to check for discrepancies in logits and mems"
+]
+```

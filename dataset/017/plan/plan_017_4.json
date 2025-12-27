@@ -1,0 +1,15 @@
+```json
+[
+    "Import required modules from official library, absl and numpy for data preparation",
+    "Define a batch size of 32 and image dimensions of 640x480",
+    "Create random uniform input data with shape (batch_size, height, width, 3) using numpy",
+    "Load a Retinanet model by calling the build_retinanet function with num_classes=80",
+    "Prepare dummy labels for training step with same batch size and dimensions",
+    "Run one forward pass through the model with the prepared inputs",
+    "Calculate the loss using the outputs and labels from the forward pass",
+    "Verify if the loss calculation results in NaN values by checking if any value in loss is np.nan",
+    "Monitor GPU memory usage during the execution of the training step",
+    "Assert that the GPU memory usage exceeds a specific threshold indicating potential numerical issues"
+]
+```
+

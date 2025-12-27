@@ -1,0 +1,11 @@
+{
+  "bug_report": "034",
+  "rank": 4,
+  "score": 0.9207215309143066,
+  "main_file": {
+    "path": "PyTorch/SpeechSynthesis/FastPitch/common/text/symbols.py",
+    "content": "\"\"\" from https://github.com/keithito/tacotron \"\"\"\n\n'''\nDefines the set of symbols used in text input to the model.\n\nThe default is a set of ASCII characters that works well for English or text that has been run through Unidecode. For other data, you can modify _characters. See TRAINING_DATA.md for details. '''\nfrom .cmudict import valid_symbols\n\n\n# Prepend \"@\" to ARPAbet symbols to ensure uniqueness (some are the same as uppercase letters):\n_arpabet = ['@' + s for s in valid_symbols]\n\n\ndef get_symbols(symbol_set='english_basic'):\n    if symbol_set == 'english_basic':\n        _pad = '_'\n        _punctuation = '!\\'(),.:;? '\n        _special = '-'\n        _letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'\n        symbols = list(_pad + _special + _punctuation + _letters) + _arpabet\n    elif symbol_set == 'english_basic_lowercase':\n        _pad = '_'\n        _punctuation = '!\\'\"(),.:;? '\n        _special = '-'\n        _letters = 'abcdefghijklmnopqrstuvwxyz'\n        symbols = list(_pad + _special + _punctuation + _letters) + _arpabet\n    elif symbol_set == 'english_expanded':\n        _punctuation = '!\\'\",.:;? '\n        _math = '#%&*+-/[]()'\n        _special = '_@\u00a9\u00b0\u00bd\u2014\u20a9\u20ac$'\n        _accented = '\u00e1\u00e7\u00e9\u00ea\u00eb\u00f1\u00f6\u00f8\u0107\u017e'\n        _letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'\n        symbols = list(_punctuation + _math + _special + _accented + _letters) + _arpabet\n    else:\n        raise Exception(\"{} symbol set does not exist\".format(symbol_set))\n\n    return symbols\n\n\ndef get_pad_idx(symbol_set='english_basic'):\n    if symbol_set in {'english_basic', 'english_basic_lowercase'}:\n        return 0\n    else:\n        raise Exception(\"{} symbol set not used yet\".format(symbol_set))\n"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

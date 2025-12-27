@@ -1,0 +1,14 @@
+```json
+[
+    "Import the necessary modules from PyTorch and the vector_quantize_pytorch library",
+    "Import ResidualSimVQ from vector_quantize_pytorch",
+    "Set the random seed for reproducibility using torch.manual_seed(42)",
+    "Define a batch size of 1 and input dimensions of (512, 32, 32) for the test input tensor",
+    "Create a random input tensor with shape (1, 512, 32, 32) using torch.randn",
+    "Instantiate the ResidualSimVQ class with parameters dim=512, num_quantizers=4, codebook_size=1024, and channel_first=True",
+    "Call the forward method of the ResidualSimVQ instance with the input tensor",
+    "Capture the output of the forward method, which should return quantized, indices, and commit_loss",
+    "Verify that the variable 'return_loss' is not defined in the context of the forward method by checking for a NameError",
+    "Assert that the output of the forward method raises a NameError indicating 'return_loss' is not defined"
+]
+```

@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official EfficientDet repository.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define a batch size of 8 and image dimensions of 512x512.",
+    "Prepare a custom dataset with images and annotations in COCO format, ensuring it has at least 100 images.",
+    "Create a data generator that yields batches of images and corresponding labels with shape (batch_size, height, width, 3) and (batch_size, num_classes).",
+    "Load the 'efficientdet_d1_coco17_tpu-32' model using tf.keras.applications.EfficientDet.",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., tf.keras.losses.CategoricalCrossentropy).",
+    "Train the model using model.fit() with the data generator, specifying steps_per_epoch as the number of batches in the dataset.",
+    "During training, monitor the console output for warnings related to gradients not existing for specific variables.",
+    "Verify that the warning message includes 'Gradients do not exist for variables' followed by the list of variables mentioned in the bug report.",
+    "Check the training logs to confirm that the loss is not decreasing over epochs, indicating a potential issue with gradient computation.",
+    "Assert that the model's trainable variables include the specified variables from the warning message."
+]
+```

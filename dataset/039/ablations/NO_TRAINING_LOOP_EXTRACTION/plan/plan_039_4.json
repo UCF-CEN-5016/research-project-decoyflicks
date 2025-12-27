@@ -1,0 +1,17 @@
+```json
+[
+    "Clone the repository from GitHub using 'git clone https://github.com/labmlai/annotated_deep_learning_paper_implementations.git'",
+    "Navigate to the directory 'annotated_deep_learning_paper_implementations/labml_nn/transformers/rope/'",
+    "Install the required dependencies by running 'pip install -r requirements.txt'",
+    "Import necessary libraries in a new Python script: 'import torch' and 'from labml_nn.transformers.rope import RotaryPositionalEmbedding'",
+    "Set the device to 'cuda' if available: 'device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')'",
+    "Define a batch size of 4 and sequence length of 3: 'batch_size = 4' and 'seq_length = 3'",
+    "Create a random tensor 'x' with shape (batch_size, seq_length, 512) using 'x = torch.randn(batch_size, seq_length, 512).to(device)'",
+    "Instantiate the RotaryPositionalEmbedding class with appropriate parameters: 'rope = RotaryPositionalEmbedding(dim=512)'",
+    "Call the forward method of the RotaryPositionalEmbedding instance with the input tensor: 'x_rope = rope(x)'",
+    "Add a print statement to output the shape of 'x_rope' to verify the dimensions: 'print(x_rope.shape)'",
+    "Run the script to execute the code and observe the output",
+    "Verify that a RuntimeError occurs with the message 'The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 3'",
+    "Confirm that the error is raised specifically at the line 'x_rope = (x_rope * self.cos_cached[:x.shape[0]]) + (neg_half_x * self.sin_cached[:x.shape[0]])'"
+]
+```

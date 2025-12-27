@@ -1,0 +1,28 @@
+{
+  "bug_report": "014",
+  "module": {
+    "module": "official/projects/qat/vision/tasks",
+    "files": [
+      {
+        "path": "official/projects/qat/vision/tasks/image_classification.py",
+        "snippets": [
+          {
+            "lines": "28-49",
+            "code": "class ImageClassificationTask(image_classification.ImageClassificationTask):\n  \"\"\"A task for image classification with QAT.\"\"\"\n\n  def build_model(self) -> tf.keras.Model:\n    \"\"\"Builds classification model with QAT.\"\"\"\n    input_specs = tf.keras.layers.InputSpec(\n        shape=[None] + self.task_config.model.input_size)\n\n    l2_weight_decay = self.task_config.losses.l2_weight_decay\n    # Divide weight decay by 2.0 to match the implementation of tf.nn.l2_loss.\n    # (https://www.tensorflow.org/api_docs/python/tf/keras/regularizers/l2)\n    # (https://www.tensorflow.org/api_docs/python/tf/nn/l2_loss)\n    l2_regularizer = (tf.keras.regularizers.l2(\n        l2_weight_decay / 2.0) if l2_weight_decay else None)\n\n    model = super(ImageClassificationTask, self).build_model()\n    if self.task_config.quantization:\n      model = factory.build_qat_classification_model(\n          model,\n          self.task_config.quantization,\n          input_specs=input_specs,\n          model_config=self.task_config.model,\n          l2_regularizer=l2_regularizer)\n\n    return model\n\n  def build_model(self) -> tf.keras.Model:\n    \"\"\"Builds classification model with QAT.\"\"\"\n    input_specs = tf.keras.layers.InputSpec(\n        shape=[None] + self.task_config.model.input_size)\n\n    l2_weight_decay = self.task_config.losses.l2_weight_decay\n    # Divide weight decay by 2.0 to match the implementation of tf.nn.l2_loss.\n    # (https://www.tensorflow.org/api_docs/python/tf/keras/regularizers/l2)\n    # (https://www.tensorflow.org/api_docs/python/tf/nn/l2_loss)\n    l2_regularizer = (tf.keras.regularizers.l2(\n        l2_weight_decay / 2.0) if l2_weight_decay else None)\n\n    model = super(ImageClassificationTask, self).build_model()\n    if self.task_config.quantization:\n      model = factory.build_qat_classification_model(\n          model,\n          self.task_config.quantization,\n          input_specs=input_specs,\n          model_config=self.task_config.model,\n          l2_regularizer=l2_regularizer)\n\n    return model"
+          }
+        ]
+      }
+    ]
+  },
+  "module_snippets": [
+    {
+      "file": "official/projects/qat/vision/tasks/image_classification.py",
+      "snippets": [
+        {
+          "lines": "28-49",
+          "code": "class ImageClassificationTask(image_classification.ImageClassificationTask):\n  \"\"\"A task for image classification with QAT.\"\"\"\n\n  def build_model(self) -> tf.keras.Model:\n    \"\"\"Builds classification model with QAT.\"\"\"\n    input_specs = tf.keras.layers.InputSpec(\n        shape=[None] + self.task_config.model.input_size)\n\n    l2_weight_decay = self.task_config.losses.l2_weight_decay\n    # Divide weight decay by 2.0 to match the implementation of tf.nn.l2_loss.\n    # (https://www.tensorflow.org/api_docs/python/tf/keras/regularizers/l2)\n    # (https://www.tensorflow.org/api_docs/python/tf/nn/l2_loss)\n    l2_regularizer = (tf.keras.regularizers.l2(\n        l2_weight_decay / 2.0) if l2_weight_decay else None)\n\n    model = super(ImageClassificationTask, self).build_model()\n    if self.task_config.quantization:\n      model = factory.build_qat_classification_model(\n          model,\n          self.task_config.quantization,\n          input_specs=input_specs,\n          model_config=self.task_config.model,\n          l2_regularizer=l2_regularizer)\n\n    return model\n\n  def build_model(self) -> tf.keras.Model:\n    \"\"\"Builds classification model with QAT.\"\"\"\n    input_specs = tf.keras.layers.InputSpec(\n        shape=[None] + self.task_config.model.input_size)\n\n    l2_weight_decay = self.task_config.losses.l2_weight_decay\n    # Divide weight decay by 2.0 to match the implementation of tf.nn.l2_loss.\n    # (https://www.tensorflow.org/api_docs/python/tf/keras/regularizers/l2)\n    # (https://www.tensorflow.org/api_docs/python/tf/nn/l2_loss)\n    l2_regularizer = (tf.keras.regularizers.l2(\n        l2_weight_decay / 2.0) if l2_weight_decay else None)\n\n    model = super(ImageClassificationTask, self).build_model()\n    if self.task_config.quantization:\n      model = factory.build_qat_classification_model(\n          model,\n          self.task_config.quantization,\n          input_specs=input_specs,\n          model_config=self.task_config.model,\n          l2_regularizer=l2_regularizer)\n\n    return model"
+        }
+      ]
+    }
+  ]
+}

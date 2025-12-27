@@ -1,0 +1,28 @@
+MMS - Forced Alignment: Array shapes problem
+
+## 🐛 Bug
+
+I want to forced align an audio file with its text transcription but i encounter this issue when i run this command: `python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang ful --outdir output --uroman uroman/bin`
+
+
+```
+Using torch version: 2.0.1+cu118
+Using torchaudio version: 2.0.2+cu118
+Using device:  cuda
+Read 63 lines from ../../../../B27_20_Apocalypse.txt
+Downloading model and dictionary...
+Model path already exists. Skipping downloading....
+Dictionary path already exists. Skipping downloading....
+Traceback (most recent call last):
+  File "/content/fairseq/examples/mms/data_prep/align_and_segment.py", line 187, in <module>
+    main(args)
+  File "/content/fairseq/examples/mms/data_prep/align_and_segment.py", line 118, in main
+    segments, stride = get_alignments(
+  File "/content/fairseq/examples/mms/data_prep/align_and_segment.py", line 75, in get_alignments
+    emissions, stride = generate_emissions(model, audio_file)
+  File "/content/fairseq/examples/mms/data_prep/align_and_segment.py", line 59, in generate_emissions
+    emissions = torch.cat(emissions_arr, dim=1).squeeze()
+RuntimeError: Sizes of tensors must match except in dimension 1. Expected size 1649 but got size 1799 for tensor number 1 in the list.
+```
+
+thank you for the help.

@@ -1,0 +1,96 @@
+{
+  "bug_report": "075",
+  "rank": 5,
+  "score": 0.8134869337081909,
+  "main_file": {
+    "path": "benchmarks/inference/mii/plot_th_lat.py",
+    "content": "import glob\nimport matplotlib.pyplot as plt\nimport argparse\nfrom pathlib import Path\nimport numpy as np\nimport pdb\nfrom postprocess_results import read_json, get_summary\n\nbs = 768\n    \ntp_sizes_test = {\n    \"7b\": [1]\n}\n\ntp_sizes_all = {\n    \"7b\": [1],\n    \"70b\": [4, 8],\n}\n\nprompt_gen_pairs_test = [\n    (2600, 60)\n]\n\nprompt_gen_pairs_all = [\n    (1200, 60),\n    (1200, 128),\n    (2600, 60),\n    (2600, 128),\n]\n\ndef get_args():\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"--test\", action=\"store_true\")\n    parser.add_argument(\"--no_vllm\", action=\"store_true\")\n    parser.add_argument(\"--log_dir\", type=Path, default=\".\")\n    parser.add_argument(\"--out_dir\", type=Path, default=\"charts/throughput_latency\")\n    args = parser.parse_args()\n    return args\n\n\ndef extract_values(file_pattern):\n    files = glob.glob(file_pattern)\n\n    print(f\"Found {len(files)}\")\n    print('\\n'.join(files))\n\n    clients = []\n    throughputs = []\n    latencies = []\n    for f in files:\n        prof_args, response_details = read_json(f)\n        summary = get_summary(prof_args, response_details)\n        clients.append(prof_args[\"client_num\"])\n        throughputs.append(summary.throughput)\n        latencies.append(summary.latency)\n\n    return clients, throughputs, latencies\n\n\ndef output_charts(model_size, tp, bs, prompt, gen, log_dir, out_dir):\n    if not log_dir.exists():\n        print(f\"Log directory {log_dir} does not exist\")\n        return\n    \n    if not out_dir.exists():\n        out_dir.mkdir(parents=True, exist_ok=True)\n\n    mii_file_pattern = f\"{log_dir}/logs.llama2-{model_size}-tp{tp}-b{bs}/llama2-{model_size}-tp{tp}-b{bs}_c*_p{prompt}_g{gen}.json\"\n    if not args.no_vllm:\n        vllm_file_pattern = f\"{log_dir}/logs.vllm-llama2-{model_size}-tp{tp}/vllm-llama2-{model_size}-tp{tp}_c*_p{prompt}_g{gen}.json\"\n\n    _, mii_throughputs, mii_latencies = extract_values(mii_file_pattern)\n    if not args.no_vllm:\n        _, vllm_throughputs, vllm_latencies = extract_values(vllm_file_pattern)\n\n    # Plotting the scatter plot\n    plt.figure(figsize=(6, 4))\n\n    if not args.no_vllm:\n        plt.scatter(vllm_throughputs, vllm_latencies, label=f\"vLLM\", marker=\"x\", color=\"orange\")\n        fit_vllm_x_list = np.arange(min(vllm_throughputs), max(vllm_throughputs), 0.01)\n        vllm_vllm_model = np.polyfit(vllm_throughputs, vllm_latencies, 3)\n        vllm_model_fn = np.poly1d(vllm_vllm_model)\n        plt.plot(fit_vllm_x_list, vllm_model_fn(fit_vllm_x_list), color=\"orange\", alpha=0.5, linestyle=\"--\")\n\n    plt.scatter(mii_throughputs, mii_latencies, label=f\"DeepSpeed FastGen\", marker=\"o\", color=\"blue\")\n    fit_mii_x_list = np.arange(min(mii_throughputs), max(mii_throughputs), 0.01)\n    mii_fit_model = np.polyfit(mii_throughputs, mii_latencies, 3)\n    mii_model_fn = np.poly1d(mii_fit_model)\n    plt.plot(fit_mii_x_list, mii_model_fn(fit_mii_x_list), color=\"blue\", alpha=0.5, linestyle=\"--\")\n\n    plt.title(f'Model Llama 2 {model_size.upper()}, Prompt: {prompt}, Generation: {gen}, TP: {tp}')\n    plt.xlabel('Throughput (queries/s)', fontsize=14)\n    plt.ylabel('Latency', fontsize=14)\n    plt.legend()\n    plt.grid(True)\n    plt.tight_layout()\n    out_file = out_dir / f\"th_lat_curve_llama{model_size}_tp{tp}_p{prompt}g{gen}.png\"\n    print(f\"Saving {out_file}\")\n    plt.savefig(out_file)\n\n\nif __name__ == \"__main__\":\n    args = get_args()\n    if args.test:\n        tp_sizes = tp_sizes_test\n        prompt_gen_pairs = prompt_gen_pairs_test\n    else:\n        tp_sizes = tp_sizes_all\n        prompt_gen_pairs = prompt_gen_pairs_test_all\n\n    for model_size, tps in tp_sizes.items():\n        for tp in tps:\n            for prompt, gen in prompt_gen_pairs:\n                output_charts(model_size, tp, bs, prompt, gen, args.log_dir, args.out_dir)\n\n"
+  },
+  "module_snippets": [
+    {
+      "file": "benchmarks/inference/mii/plot_th_lat.py",
+      "snippets": [
+        {
+          "lines": "60-100",
+          "code": "def get_args():\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"--test\", action=\"store_true\")\n    parser.add_argument(\"--no_vllm\", action=\"store_true\")\n    parser.add_argument(\"--log_dir\", type=Path, default=\".\")\n    parser.add_argument(\"--out_dir\", type=Path, default=\"charts/throughput_latency\")\n    args = parser.parse_args()\n    return args\n\ndef extract_values(file_pattern):\n    files = glob.glob(file_pattern)\n\n    print(f\"Found {len(files)}\")\n    print('\\n'.join(files))\n\n    clients = []\n    throughputs = []\n    latencies = []\n    for f in files:\n        prof_args, response_details = read_json(f)\n        summary = get_summary(prof_args, response_details)\n        clients.append(prof_args[\"client_num\"])\n        throughputs.append(summary.throughput)\n        latencies.append(summary.latency)\n\n    return clients, throughputs, latencies\n\ndef output_charts(model_size, tp, bs, prompt, gen, log_dir, out_dir):\n    if not log_dir.exists():\n        print(f\"Log directory {log_dir} does not exist\")\n        return\n    \n    if not out_dir.exists():\n        out_dir.mkdir(parents=True, exist_ok=True)\n\n    mii_file_pattern = f\"{log_dir}/logs.llama2-{model_size}-tp{tp}-b{bs}/llama2-{model_size}-tp{tp}-b{bs}_c*_p{prompt}_g{gen}.json\"\n    if not args.no_vllm:\n        vllm_file_pattern = f\"{log_dir}/logs.vllm-llama2-{model_size}-tp{tp}/vllm-llama2-{model_size}-tp{tp}_c*_p{prompt}_g{gen}.json\"\n\n    _, mii_throughputs, mii_latencies = extract_values(mii_file_pattern)\n    if not args.no_vllm:\n        _, vllm_throughputs, vllm_latencies = extract_values(vllm_file_pattern)\n\n    # Plotting the scatter plot\n    plt.figure(figsize=(6, 4))\n\n    if not args.no_vllm:\n        plt.scatter(vllm_throughputs, vllm_latencies, label=f\"vLLM\", marker=\"x\", color=\"orange\")\n        fit_vllm_x_list = np.arange(min(vllm_throughputs), max(vllm_throughputs), 0.01)\n        vllm_vllm_model = np.polyfit(vllm_throughputs, vllm_latencies, 3)\n        vllm_model_fn = np.poly1d(vllm_vllm_model)\n        plt.plot(fit_vllm_x_list, vllm_model_fn(fit_vllm_x_list), color=\"orange\", alpha=0.5, linestyle=\"--\")\n\n    plt.scatter(mii_throughputs, mii_latencies, label=f\"DeepSpeed FastGen\", marker=\"o\", color=\"blue\")\n    fit_mii_x_list = np.arange(min(mii_throughputs), max(mii_throughputs), 0.01)\n    mii_fit_model = np.polyfit(mii_throughputs, mii_latencies, 3)\n    mii_model_fn = np.poly1d(mii_fit_model)\n    plt.plot(fit_mii_x_list, mii_model_fn(fit_mii_x_list), color=\"blue\", alpha=0.5, linestyle=\"--\")\n\n    plt.title(f'Model Llama 2 {model_size.upper()}, Prompt: {prompt}, Generation: {gen}, TP: {tp}')\n    plt.xlabel('Throughput (queries/s)', fontsize=14)\n    plt.ylabel('Latency', fontsize=14)\n    plt.legend()\n    plt.grid(True)\n    plt.tight_layout()\n    out_file = out_dir / f\"th_lat_curve_llama{model_size}_tp{tp}_p{prompt}g{gen}.png\"\n    print(f\"Saving {out_file}\")\n    plt.savefig(out_file)"
+        }
+      ]
+    },
+    {
+      "file": "benchmarks/inference/mii/postprocess_results.py",
+      "snippets": [
+        {
+          "lines": "35-40",
+          "code": "class ResponseDetails:\n    generated_tokens: List[str]\n    prompt: str\n    start_time: float\n    end_time: float\n    model_time: float\n    token_gen_time: List[float]\n\nclass ProfilingSummary:\n    throughput: float\n    latency: float\n    token_gen_latency: float\n    first_token_latency: float\n    tokens_per_sec: float\n\ndef parse_args():\n    parser = argparse.ArgumentParser(description=\"Postprocess results\")\n    parser.add_argument('-i', '--input_path', type=Path, default=\"results.json\")\n\n    args = parser.parse_args()\n    return args"
+        }
+      ]
+    },
+    {
+      "file": "benchmarks/inference/mii/postprocess_results.py",
+      "snippets": [
+        {
+          "lines": "35-40",
+          "code": "class ResponseDetails:\n    generated_tokens: List[str]\n    prompt: str\n    start_time: float\n    end_time: float\n    model_time: float\n    token_gen_time: List[float]\n\nclass ProfilingSummary:\n    throughput: float\n    latency: float\n    token_gen_latency: float\n    first_token_latency: float\n    tokens_per_sec: float\n\ndef parse_args():\n    parser = argparse.ArgumentParser(description=\"Postprocess results\")\n    parser.add_argument('-i', '--input_path', type=Path, default=\"results.json\")\n\n    args = parser.parse_args()\n    return args"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module": "argparse",
+      "function": "ArgumentParser"
+    },
+    {
+      "module": "glob",
+      "function": "glob"
+    },
+    {
+      "module": "matplotlib",
+      "function": "figure"
+    },
+    {
+      "module": "matplotlib",
+      "function": "grid"
+    },
+    {
+      "module": "matplotlib",
+      "function": "legend"
+    },
+    {
+      "module": "matplotlib",
+      "function": "plot"
+    },
+    {
+      "module": "matplotlib",
+      "function": "savefig"
+    },
+    {
+      "module": "matplotlib",
+      "function": "scatter"
+    },
+    {
+      "module": "matplotlib",
+      "function": "tight_layout"
+    },
+    {
+      "module": "matplotlib",
+      "function": "title"
+    },
+    {
+      "module": "matplotlib",
+      "function": "xlabel"
+    },
+    {
+      "module": "matplotlib",
+      "function": "ylabel"
+    },
+    {
+      "module": "postprocess_results",
+      "function": "get_summary"
+    },
+    {
+      "module": "postprocess_results",
+      "function": "read_json"
+    }
+  ]
+}

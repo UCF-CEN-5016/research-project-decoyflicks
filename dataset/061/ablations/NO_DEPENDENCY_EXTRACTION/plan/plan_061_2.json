@@ -1,0 +1,16 @@
+```json
+[
+    "Open Google Colab and create a new notebook.",
+    "Install the latest version of Keras and KerasCV by running: !pip install keras keras-cv.",
+    "Import TensorFlow and KerasCV by adding the following code: import tensorflow as tf; import keras_cv.",
+    "Set the environment variable for Keras backend to TensorFlow by adding: os.environ['KERAS_BACKEND'] = 'tensorflow'.",
+    "Load the Oxford Flowers dataset using TensorFlow Datasets by running: import tensorflow_datasets as tfds; data, dataset_info = tfds.load('oxford_flowers102', with_info=True, as_supervised=True).",
+    "Define a batch size of 32 and set AUTOTUNE for data loading: BATCH_SIZE = 32; AUTOTUNE = tf.data.AUTOTUNE.",
+    "Prepare the dataset by defining a function to resize images and one-hot encode labels: def to_dict(image, label): image = tf.image.resize(image, (224, 224)); label = tf.one_hot(label, dataset_info.features['label'].num_classes); return {'images': image, 'labels': label}.",
+    "Create a function to load the dataset: def load_dataset(split='train'): dataset = data[split]; return dataset.map(to_dict, num_parallel_calls=AUTOTUNE).batch(BATCH_SIZE).",
+    "Load the training dataset by calling: train_dataset = load_dataset().",
+    "Attempt to import keras.utils.data_utils by adding: from keras.utils import data_utils.",
+    "Run the cell to execute the code and observe the ImportError: cannot import name 'data_utils' from 'keras.utils'.",
+    "Verify that the error message appears in the output cell, confirming the bug has been reproduced."
+]
+```

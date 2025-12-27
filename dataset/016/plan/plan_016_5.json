@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and other necessary modules from the provided list of dependencies",
+    "Set up a distributed strategy using TPUStrategy if available, or MirroredStrategy for CPU/GPU environments",
+    "Define a batch size of 16 and image dimensions of 224x224",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Initialize the model by calling build_classification_model with appropriate parameters",
+    "Configure the optimizer using a learning rate of 0.001",
+    "Set up metrics for training and validation as defined in the provided code",
+    "Perform a forward pass through the model during the train_step function with a random label tensor",
+    "Check if the loss calculation results in NaN values by asserting np.isnan(loss).any() is True",
+    "Monitor GPU memory usage during execution using TensorFlow's device lib",
+    "Assert GPU memory exceeds expected threshold, considering the batch size and model complexity"
+]
+```
+

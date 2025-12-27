@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the necessary modules from the official models repository",
+    "Define a batch size of 4 and image dimensions of 512x512",
+    "Create random input data for score_outputs with shape (batch_size, height, width, num_anchors) where num_anchors = 9",
+    "Create random input data for labels with shape (batch_size, height, width, num_anchors) where values are in {0, 1, -1}",
+    "Instantiate the RpnScoreLoss class with rpn_batch_size_per_im set to 4",
+    "Call the RpnScoreLoss instance with score_outputs and labels as arguments",
+    "Capture the output of the RpnScoreLoss call to verify the loss value",
+    "Check if the loss value is finite (not NaN or Inf)",
+    "Create a second set of random input data for box_outputs with shape (batch_size, height, width, num_anchors * 4)",
+    "Create random input data for box_targets with shape (batch_size, height, width, num_anchors * 4)",
+    "Instantiate the RpnBoxLoss class with huber_loss_delta set to 0.1",
+    "Call the RpnBoxLoss instance with box_outputs and box_targets as arguments",
+    "Capture the output of the RpnBoxLoss call to verify the box loss value",
+    "Check if the box loss value is finite (not NaN or Inf)",
+    "Assert that the standard deviation of the RandAugment magnitude is either 0 or 1 by checking the internal state of the augmentation function",
+    "Log the values of the RandAugment magnitude before and after the call to verify the bug occurs"
+]
+```

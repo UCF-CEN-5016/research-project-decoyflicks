@@ -1,0 +1,15 @@
+```json
+[
+    "Import necessary modules: torch, GaussianDiffusion, LearnedGaussianDiffusion, and tqdm",
+    "Define a batch size of 4 and set the device to 'cuda' if available, otherwise 'cpu'",
+    "Create a random tensor 'img' with shape (batch_size, channels, height, width) where channels=3, height=64, width=64",
+    "Instantiate the GaussianDiffusion class and the LearnedGaussianDiffusion class",
+    "Override the model_predictions method in the LearnedGaussianDiffusion class to match the signature: def model_predictions(self, x, t, clip_x_start=False):",
+    "In the GaussianDiffusion class, implement the ddim_sample method that calls model_predictions with clip_x_start=True",
+    "Prepare a time_pairs list containing tuples of time steps, e.g., [(0, 1), (1, 2), (2, 3)]",
+    "Run the ddim_sample method from the GaussianDiffusion class using the created 'img' tensor and the prepared time_pairs",
+    "Capture the output and any exceptions raised during the execution of the ddim_sample method",
+    "Assert that a TypeError is raised with the message 'model_predictions() got multiple values for argument 'clip_x_start''",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

@@ -1,0 +1,14 @@
+[
+    "Import TensorFlow, keras_cv, tqdm, xml and other necessary modules",
+    "Define dataset parameters: batch_size=32, image_width=640, image_height=640",
+    "Create a synthetic dataset with random images of dimensions (batch_size, height, width, 3)",
+    "Label the synthetic dataset with dummy bounding boxes in 'xyxy' format and random class labels",
+    "Initialize the YOLOV8Detector model with num_classes based on the number of unique classes in the dataset, backbone='yolo_v8_s_backbone_coco'",
+    "Compile the model with Adam optimizer and loss functions: classification_loss='binary_crossentropy', box_loss='ciou'",
+    "Create a validation dataset similar to the training dataset for evaluation",
+    "Define EvaluateCOCOMetricsCallback to track mAP scores during training",
+    "Train the model using the fit method on the synthetic training data for 3 epochs, with validation_data set to the validation dataset and callbacks set to EvaluateCOCOMetricsCallback",
+    "Visualize detections on a subset of the validation dataset to ensure that predictions are being made",
+    "Monitor GPU memory usage during training to verify that it exceeds expected thresholds"
+]
+

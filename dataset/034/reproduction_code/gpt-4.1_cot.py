@@ -1,0 +1,1 @@
+return torch.nn.functional.gelu(x, approximate=True)

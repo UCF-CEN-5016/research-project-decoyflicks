@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, numpy, matplotlib, os",
+    "Set random seeds for reproducibility: np.random.seed(42) and tf.random.set_seed(42)",
+    "Define base path for data as 'data'",
+    "Download the IAM dataset using wget command: wget -q https://github.com/sayakpaul/Handwriting-Recognizer-in-Keras/releases/download/v1.0.0/IAM_Words.zip",
+    "Unzip the downloaded dataset: unzip -qq IAM_Words.zip",
+    "Create directories for data organization: mkdir data and mkdir data/words",
+    "Extract words from the dataset: tar -xf IAM_Words/words.tgz -C data/words",
+    "Move the words.txt file to the data directory: mv IAM_Words/words.txt data",
+    "Read the words.txt file and filter out errored entries, storing valid entries in words_list",
+    "Shuffle the words_list to randomize the dataset",
+    "Split the dataset into training (90%), validation (5%), and test (5%) sets",
+    "Assert that the total number of samples equals the sum of training, validation, and test samples",
+    "Define image dimensions: image_width = 128 and image_height = 32",
+    "Define a batch size of 64",
+    "Create a function to get image paths and labels from the training samples",
+    "Implement a function to preprocess images: read, decode, resize, and normalize images",
+    "Create a function to vectorize labels by mapping characters to integers and padding them",
+    "Prepare the training dataset using tf.data.Dataset from the training image paths and labels",
+    "Build the model architecture using Keras functional API with Conv2D, MaxPooling2D, LSTM layers, and a custom CTCLayer",
+    "Compile the model with Adam optimizer",
+    "Attempt to fit the model using model.fit with training dataset and validation dataset for 10 epochs",
+    "Capture and print any errors that occur during model fitting",
+    "Verify that the error message matches the one reported in the bug report"
+]
+```

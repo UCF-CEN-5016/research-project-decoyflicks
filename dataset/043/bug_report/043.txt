@@ -1,0 +1,30 @@
+ModuleNotFoundError: No module named 'commons'
+
+## 🐛 Bug
+
+I receive a ModuleNotFoundError for the module *commons* when calling infer.py for examples/mms/tts
+
+### To Reproduce
+
+- I cloned fairseq
+- did a pip install --editable ./
+- changed the directory to examples/mms/tts/
+- called python infer.py --model-dir model/ --wav test.wav --txt "Heute ist ein schöner Tag."
+- 
+### Expected behavior
+
+I expect the wav to be generated.
+
+### Environment
+
+ - fairseq Version (e.g., 1.0 or main): main
+ - PyTorch Version (e.g., 1.0): 2.0.1
+ - OS (e.g., Linux): Windows 10
+ - How you installed fairseq (`pip`, source): pip from github
+ - Build command you used (if compiling from source):
+ - Python version: 3.10
+ - CUDA/cuDNN version: 11.8
+ - GPU models and configuration:
+ - Any other relevant information:
+
+

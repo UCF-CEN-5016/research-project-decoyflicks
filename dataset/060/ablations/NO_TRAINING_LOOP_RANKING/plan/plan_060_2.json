@@ -1,0 +1,27 @@
+```json
+[
+    "Import necessary libraries: tensorflow, keras, keras_cv, numpy, glob, and matplotlib",
+    "Define constants: IMAGE_SIZE = 160, BATCH_SIZE = 4, OUT_CLASSES = 1, TRAIN_SPLIT_RATIO = 0.90, DATA_DIR = './DUTS-TE/'",
+    "Download the DUTS-TE dataset using wget and unzip it to the DATA_DIR",
+    "Define a function load_paths(path, split_ratio) to load and split image and mask paths into training and validation sets",
+    "In load_paths, use glob to get sorted lists of image and mask paths, limiting to 140 images and masks",
+    "Define a function read_image(path, size, mode) to load and preprocess images, normalizing pixel values to [0, 1]",
+    "Define a function preprocess(x_batch, y_batch, img_size, out_classes) to decode image and mask paths, read images, and set shapes",
+    "Define a function load_dataset(image_paths, mask_paths, img_size, out_classes, batch, shuffle=True) to create a tf.data.Dataset",
+    "In load_dataset, use tf.data.Dataset.from_tensor_slices to create a dataset from image and mask paths",
+    "Shuffle the dataset if shuffle=True, using dataset.cache().shuffle(buffer_size=1000)",
+    "Map the dataset using the preprocess function with num_parallel_calls=tf.data.AUTOTUNE",
+    "Batch the dataset using dataset.batch(BATCH_SIZE)",
+    "Prefetch the dataset using dataset.prefetch(tf.data.AUTOTUNE)",
+    "Call load_paths(DATA_DIR, TRAIN_SPLIT_RATIO) to get train_paths and val_paths",
+    "Call load_dataset with train_paths to create train_dataset",
+    "Call load_dataset with val_paths to create val_dataset",
+    "Define an augment_fn function that applies random augmentations to images and masks",
+    "Define a unpackage_inputs function that separates images and masks from the dataset",
+    "Create augmented_train_ds by shuffling train_ds, mapping augment_fn, batching, mapping unpackage_inputs, and prefetching",
+    "Create resized_val_ds by mapping resize_fn, batching, mapping unpackage_inputs, and prefetching",
+    "Run the code to create augmented_train_ds and resized_val_ds",
+    "Capture the output and check for TypeError related to tf.switch_case in the console",
+    "Verify that the error message indicates a mismatch in tensor types between branches in the random_choice layer"
+]
+```

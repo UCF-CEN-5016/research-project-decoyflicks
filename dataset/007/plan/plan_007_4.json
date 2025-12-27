@@ -1,0 +1,12 @@
+```json
+[
+    "Import TensorFlow, absl.flags, and deep_speech_model from the provided codebase",
+    "Define a batch size of 128 and set sample_rate to 16000 Hz",
+    "Create random uniform input data with shape (batch_size, height, width, 3)",
+    "Call run_deep_speech function with predefined flags",
+    "Verify output contains NaN values in loss calculation",
+    "Monitor GPU memory usage during execution",
+    "Assert GPU memory exceeds expected threshold"
+]
+```
+

@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and the tensorflow_models module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Ensure TensorFlow version is 2.x by running 'print(tf.version.VERSION)'",
+    "Check that the absl module is installed by running 'pip install absl-py'",
+    "Create a mock configuration for the YT8M task by defining a dictionary with necessary parameters such as 'train_data' and 'model'",
+    "Define a batch size of 32 and input shape of [None, 1152] (assuming 1152 is the sum of feature sizes from the configuration)",
+    "Create random input data for video_matrix with shape (batch_size, num_frames, num_features) where num_frames is set to 10 and num_features is 1152",
+    "Create random labels for the input data with shape (batch_size, num_classes) where num_classes is set to 386 (example value)",
+    "Define a mock input context as None for simplicity",
+    "Instantiate the YT8MTask class using the mock configuration",
+    "Call the build_model method of the YT8MTask instance to create the model",
+    "Prepare the input dictionary with keys 'video_matrix', 'num_frames', and 'labels' using the generated random data",
+    "Call the train_step method of the YT8MTask instance with the prepared inputs, model, optimizer (use tf.keras.optimizers.Adam()), and metrics set to None",
+    "Capture the output of the train_step method and check for any exceptions",
+    "Verify that an ImportError occurs with the message indicating 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Log the error message to confirm the bug is reproduced"
+]
+```

@@ -1,0 +1,13 @@
+```json
+[
+    "Import TensorFlow and necessary modules from the official vision library: 'from official.vision.modeling.layers.detection_generator import _generate_detections_v2_class_aware'",
+    "Set up a TensorFlow environment with version 2.11.0 and ensure GPU support is enabled.",
+    "Define a function to create an empty tensor for predicted boxes: 'predicted_boxes = tf.constant([], shape=(0, 4), dtype=tf.float32)'",
+    "Define a function to create an empty tensor for predicted scores: 'predicted_scores = tf.constant([], shape=(0,), dtype=tf.float32)'",
+    "Define a function to create an empty tensor for predicted classes: 'predicted_classes = tf.constant([], shape=(0,), dtype=tf.int32)'",
+    "Call the '_generate_detections_v2_class_aware' function with the empty tensors: '_generate_detections_v2_class_aware(predicted_boxes, predicted_scores, predicted_classes)'",
+    "Wrap the function call in a try-except block to catch the ValueError: 'try: ... except ValueError as e: print(e)'",
+    "Run the script to execute the function call and trigger the bug.",
+    "Verify that the output contains the error message: 'ValueError: List argument 'values' to 'ConcatV2' Op with length 0 shorter than minimum length 2.'"
+]
+```

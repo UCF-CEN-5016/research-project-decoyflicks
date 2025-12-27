@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary modules: torch, random, and the ResidualLFQ class from vector_quantize_pytorch.residual_lfq",
+    "Set the random seed for reproducibility using random.seed(42)",
+    "Define a batch size of 4 and input dimension of 128",
+    "Create random input data with shape (batch_size, input_dim) using torch.randn(batch_size, input_dim)",
+    "Instantiate the ResidualLFQ class with parameters: dim=128, num_quantizers=2, codebook_size=256",
+    "Prepare a mask tensor of shape (batch_size, 1) filled with zeros using torch.zeros(batch_size, 1)",
+    "Call the forward method of the ResidualLFQ instance with the input data and mask",
+    "Capture the output from the forward method, which should return quantized_out, all_indices, and all_losses",
+    "Check the all_losses tensor for NaN values using torch.isnan(all_losses).any()",
+    "Assert that the result of the NaN check is True, indicating that NaN values are present in the losses",
+    "Print the all_losses tensor to observe the values and confirm the presence of NaNs",
+    "Repeat the process with larger input dimensions (e.g., dim=1024) to increase the likelihood of float precision overflow"
+]
+```

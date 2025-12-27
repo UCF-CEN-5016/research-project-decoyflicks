@@ -1,0 +1,11 @@
+{
+  "bug_report": "042",
+  "rank": 2,
+  "score": 0.9657398462295532,
+  "main_file": {
+    "path": "imagen_pytorch/test/__init__.py",
+    "content": "from imagen_pytorch.test import test_trainer"
+  },
+  "module_snippets": [],
+  "dependencies": []
+}

@@ -1,0 +1,16 @@
+```json
+[
+    "Import the necessary libraries: torch and fairseq modules",
+    "Define the dimensions for the MultiHeadedAttention layer: set num_heads to 8, embed_dim to 64, and num_positions to 10",
+    "Create an instance of the RelPositionMultiHeadedAttention class from fairseq with the defined parameters",
+    "Initialize the input tensor with shape (batch_size, num_positions, embed_dim) where batch_size is set to 2 and fill it with random values using torch.randn",
+    "Call the forward method of the RelPositionMultiHeadedAttention instance with the input tensor",
+    "Capture the output of the forward method",
+    "Check the bias parameters (u, v) of the MultiHeadedAttention layer by accessing them directly from the instance",
+    "Calculate the sum of the bias parameters u and v to verify their initialization state",
+    "Assert that the sum of the bias parameters u and v is not equal to zero, indicating uninitialized values",
+    "Run the test multiple times to observe non-deterministic behavior and potential NaN values in the output",
+    "Log the output of the forward method to check for NaN values",
+    "Assert that the output contains NaN values to confirm the bug is reproduced"
+]
+```

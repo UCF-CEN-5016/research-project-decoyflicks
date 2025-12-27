@@ -1,0 +1,18 @@
+```json
+[
+    "Import TensorFlow and KerasCV modules: keras_cv.layers and keras_cv.models",
+    "Set BATCH_SIZE to 32 and AUTOTUNE to tf.data.AUTOTUNE",
+    "Define augment_fn function that applies random augmentations to input images",
+    "Define unpackage_inputs function that unpacks the dataset into images and labels",
+    "Create a synthetic dataset train_ds using tf.data.Dataset.from_tensor_slices with shape (100, 160, 160, 1) filled with random float32 values",
+    "Shuffle train_ds with buffer size of BATCH_SIZE * 2",
+    "Map train_ds using augment_fn with num_parallel_calls set to AUTOTUNE",
+    "Batch train_ds with BATCH_SIZE",
+    "Map train_ds using unpackage_inputs",
+    "Prefetch train_ds with buffer_size set to tf.data.AUTOTUNE",
+    "Run the code block that creates augmented_train_ds",
+    "Capture any errors that occur during the execution of the code block",
+    "Verify that the error message contains 'different types' and references Tensor shapes (160, 160, 1) with dtype float32 and int64",
+    "Log the error details to confirm the bug is reproduced"
+]
+```

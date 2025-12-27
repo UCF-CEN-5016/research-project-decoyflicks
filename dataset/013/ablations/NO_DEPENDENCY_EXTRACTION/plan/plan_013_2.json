@@ -1,0 +1,26 @@
+```json
+[
+    "Install Anaconda or Miniconda if not already installed.",
+    "Open a terminal or Anaconda Prompt.",
+    "Create a new conda environment named 'test_env' with Python 3.10 using the command: conda create -n test_env python=3.10",
+    "Activate the new conda environment using: conda activate test_env",
+    "Install TensorFlow 2.13.10 using pip with the command: pip install tensorflow==2.13.10",
+    "Install TensorFlow Model Garden using pip with the command: pip install tf-models-nightly",
+    "Open a new Python script or Jupyter Notebook in VSCode.",
+    "Import the necessary libraries by adding the following lines at the top of the script: import matplotlib.pyplot as plt, import tensorflow as tf, from official.vision import image_classification",
+    "Set the matplotlib backend to 'Agg' by adding the line: plt.switch_backend('Agg')",
+    "Load a sample dataset for image classification, for example, using: (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()",
+    "Preprocess the dataset by normalizing the pixel values: x_train, x_test = x_train / 255.0, x_test / 255.0",
+    "Define a simple model architecture using: model = tf.keras.models.Sequential([tf.keras.layers.Flatten(input_shape=(32, 32, 3)), tf.keras.layers.Dense(128, activation='relu'), tf.keras.layers.Dense(10)])",
+    "Compile the model with: model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])",
+    "Fit the model on the training data using: model.fit(x_train, y_train, epochs=5, batch_size=32)",
+    "Import the TensorFlow Model Garden by adding the line: from official.vision import image_classification",
+    "After importing TensorFlow Model Garden, check the current matplotlib backend by adding: print('Current backend:', plt.get_backend())",
+    "Create a plot using matplotlib by adding: plt.plot([1, 2, 3], [1, 4, 9])",
+    "Attempt to display the plot using: plt.show()",
+    "Verify that the plot does not display and check the output of the backend to confirm it is 'Agg'.",
+    "Add a line to switch the backend to 'TkAgg' after importing TensorFlow Model Garden: plt.switch_backend('TkAgg')",
+    "Attempt to display the plot again using: plt.show()",
+    "Verify that the plot still does not display, confirming the bug persists after changing the backend."
+]
+```

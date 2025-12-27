@@ -1,0 +1,22 @@
+```json
+[
+    "Clone the fairseq repository from https://github.com/pytorch/fairseq.git",
+    "Navigate to the directory where the model is downloaded",
+    "Extract the contents of the jvn.tar.gz file using tar -xzvf jvn.tar.gz",
+    "Change into the extracted directory",
+    "Install the required dependencies by running pip install -r requirements.txt",
+    "Create a Python script named reproduce_bug.py with the following content:",
+    "Import necessary modules from fairseq, collections, copy, dataclasses, hashlib, json, logging, omegaconf, and torch.optim.",
+    "Define the OptimizerAndSchedulerConfig and CompositeOptimizerConfig data classes as shown in the code snippet provided.",
+    "Register the 'composite' optimizer by calling register_optimizer('composite', dataclass=CompositeOptimizerConfig).",
+    "Create a configuration dictionary for the composite optimizer with multiple parameter groups, ensuring that the dynamic_groups flag is set to False for reproducibility.",
+    "Load the pre-trained model parameters from a suitable file (e.g., 'model.pt') and initialize a list of parameter groups with these parameters, each belonging to a different group.",
+    "Call the FairseqCompositeOptimizer constructor with the configuration dictionary and the list of parameter groups.",
+    "Assert that the length of params is greater than 1 to ensure the composite optimizer works as expected.",
+    "Define a closure function that re-evaluates the model and returns the loss. Ensure this function accesses the correct layers and parameters of the model.",
+    "Call the step() method of the CompositeOptimizer instance, passing in the closure function.",
+    "Verify that after filtering out of vocabulary (OOV) words, there is no text left in the output. This can be done by checking if the length of the output text is zero.",
+    "Assert that the model parameters are being updated as expected during the optimization step."
+]
+```
+

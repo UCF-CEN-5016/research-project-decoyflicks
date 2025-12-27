@@ -1,0 +1,22 @@
+```json
+[
+    "Import TensorFlow and Keras modules: import tensorflow as tf and from keras import layers, models",
+    "Set the Keras backend to TensorFlow by adding os.environ['KERAS_BACKEND'] = 'tensorflow'",
+    "Define the image size as 256 and batch size as 64",
+    "Load the tf_flowers dataset using tfds.load with split=['train[:90%]', 'train[90%:]']",
+    "Define a preprocessing function that resizes images to (280, 280) and crops them to (256, 256) for training",
+    "Map the preprocessing function to the training dataset and batch it with the defined batch size",
+    "Define a MobileViT model creation function with num_classes set to 5",
+    "In the model creation function, define the input shape as (256, 256, 3) and add a Rescaling layer",
+    "Add multiple convolutional and MobileViT blocks to the model as per the architecture description",
+    "Compile the model using Adam optimizer and CategoricalCrossentropy loss with label smoothing of 0.1",
+    "Call model.fit on the training dataset for 10 epochs",
+    "During model training, monitor for any exceptions or errors, specifically looking for OperatorNotAllowedInGraphError",
+    "If the error occurs, capture the stack trace and log the input shapes being passed to the Softmax layer",
+    "After the fit call, prepare a sample input text 'eu rejects german call to boycott british lamb'",
+    "Tokenize the sample input and convert it to IDs using the tokenize_and_convert_to_ids function",
+    "Reshape the sample input to have shape [1, -1] and call model.predict on it",
+    "Verify that the output of model.predict raises the same OperatorNotAllowedInGraphError",
+    "Log the shape of the input tensor passed to the Softmax layer to confirm it matches (None, 4, None, None)"
+]
+```

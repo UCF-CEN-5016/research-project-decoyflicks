@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official.vision.ops.augment",
+    "Define a batch size of 8 and image dimensions of 256x256",
+    "Set the number of classes to 80 and the number of queries to 100",
+    "Create a random input tensor with shape (batch_size, height, width, channels) = (8, 256, 256, 3)",
+    "Create a random tensor for class targets with shape (batch_size, num_queries) = (8, 100)",
+    "Create a random tensor for box targets with shape (batch_size, num_queries, 4) = (8, 100, 4)",
+    "Initialize the model using the DetectionTask class from official.projects.detr.tasks.detection",
+    "Set the task configuration to use a standard deviation of 1 for RandAugment",
+    "Call the build_inputs method of the DetectionTask instance with the random input tensor",
+    "Call the model's forward pass with the input tensor and store the outputs",
+    "Extract cls_outputs and box_outputs from the model outputs",
+    "Call the build_losses method with cls_outputs, box_outputs, class targets, and box targets",
+    "Verify that the computed loss values are not NaN or Inf",
+    "Check the standard deviation of the RandAugment applied to the inputs",
+    "Assert that the standard deviation is either 0 or 1, indicating the bug is present",
+    "Log the output of the loss values and the standard deviation for debugging purposes"
+]
+```

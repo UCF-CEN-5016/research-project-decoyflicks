@@ -1,0 +1,17 @@
+```json
+[
+    "Import torch and the necessary modules from fairseq",
+    "Define a batch size of 2 and sequence length of 10 for input tensors",
+    "Create a random input tensor with shape (batch_size, sequence_length, embedding_dim) using torch.randn",
+    "Define the embedding dimension as 64",
+    "Create a random tensor for previous output tokens with shape (batch_size, sequence_length) using torch.randint",
+    "Create a random tensor for log probabilities with shape (batch_size, beam_size, vocab_size) using torch.randn, where beam_size is 4 and vocab_size is 100",
+    "Initialize the Search class from fairseq with a dummy target dictionary that has pad, unk, and eos methods returning 0, 1, and 2 respectively",
+    "Call the step method of the Search class with step=0, passing in the log probabilities, a None value for scores, and the previous output tokens",
+    "Create a tensor for bias terms using torch.Tensor(2, 2) to simulate uninitialized bias parameters",
+    "Perform a forward pass through the model that uses the uninitialized bias parameters",
+    "Capture the output of the model and check for NaN values using torch.isnan",
+    "Assert that the output contains NaN values, indicating the presence of the bug",
+    "Print the output tensor to verify its contents and confirm the presence of NaN values"
+]
+```

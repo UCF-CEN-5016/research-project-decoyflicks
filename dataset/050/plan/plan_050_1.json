@@ -1,0 +1,18 @@
+[
+    "Import necessary modules: TensorFlow, KerasCV, tqdm, xml",
+    "Define class_mapping with 80 object classes for COCO dataset",
+    "Load and preprocess the training dataset using Roboflow's load function",
+    "Preprocess validation dataset in a similar manner",
+    "Set batch size to 32 and image dimensions to 640x640",
+    "Create a random uniform input dataset with shape (batch_size, height, width, 3) for training",
+    "Create a random uniform input dataset with the same shape for validation",
+    "Initialize YOLOV8Backbone with 'yolo_v8_s_backbone_coco'",
+    "Build YOLOV8Detector model with num_classes=80 and bounding_box_format='xyxy'",
+    "Compile YOLOV8Detector model using Adam optimizer with learning_rate=LEARNING_RATE",
+    "Initialize EvaluateCOCOMetricsCallback for validation data",
+    "Train the YOLOV8Detector model on training dataset for 3 epochs",
+    "Verify that the training process completes without errors",
+    "Visualize predictions using visualize_detections function on validation dataset",
+    "Assert the output contains no NaN values in any loss calculation during training"
+]
+

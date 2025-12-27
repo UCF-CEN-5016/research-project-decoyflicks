@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the necessary modules for Faster R-CNN and model exporting.",
+    "Set the CUDA version to 11.5 and ensure TensorFlow GPU version is 2.4.",
+    "Define the Python version as 3.7.16.",
+    "Load the pre-trained Faster R-CNN model using the model_main_tf2.py script with the following parameters: model_dir='path/to/model_dir', pipeline_config_path='path/to/pipeline.config', num_steps=5000.",
+    "Prepare a sample dataset for inference, ensuring it contains images compatible with the model's input size of 640x640.",
+    "Create a dummy input image with dimensions (640, 640, 3) filled with random pixel values.",
+    "Run the inference on the dummy input image using the trained model to generate detection results, ensuring the output includes 'detection_masks_reframed', 'detection_boxes', 'detection_classes', and 'detection_scores'.",
+    "Export the trained model using the exporter_main_v2.py script with the following parameters: --input_type=image_tensor --pipeline_config_path='path/to/pipeline.config' --trained_checkpoint_dir='path/to/model_dir' --output_directory='path/to/exported_model'.",
+    "During the export process, ensure that the 'DetectionFromImageModule' is being instantiated correctly and that the outputs attribute is being accessed.",
+    "Run the exporter_main_v2.py script and capture the output to verify if the 'AttributeError: 'DetectionFromImageModule' object has no attribute 'outputs'' occurs.",
+    "Log the full stack trace of the error to confirm the source of the issue is related to the 'outputs' attribute in the 'DetectionFromImageModule'.",
+    "Validate that the error message matches the expected output, confirming the bug is reproduced."
+]
+```

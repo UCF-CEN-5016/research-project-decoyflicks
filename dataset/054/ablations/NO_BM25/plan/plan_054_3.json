@@ -1,0 +1,26 @@
+```json
+[
+    "Import necessary modules from Keras: layers, Model, and Sequential",
+    "Import numpy for data manipulation",
+    "Load the CIFAR-100 dataset using keras.datasets.cifar100.load_data()",
+    "Assign the training data to variables x_train and y_train, and the test data to x_test and y_test",
+    "Print the shapes of x_train, y_train, x_test, and y_test to confirm data loading",
+    "Define input_shape as (32, 32, 3) and num_classes as 100",
+    "Set batch_size to 128 and num_epochs to 20",
+    "Create a Sequential model using Keras layers: Input, Dense, Dropout, and GlobalAveragePooling1D",
+    "Define a function build_classifier that takes blocks as input and returns a Keras model",
+    "Inside build_classifier, create an input layer with shape input_shape",
+    "Add a data augmentation layer using layers.Normalization(), layers.Resizing(), layers.RandomFlip(), and layers.RandomZoom()",
+    "Add a Dense layer to encode patches with units equal to embedding_dim (set to 256)",
+    "Add a GlobalAveragePooling1D layer to the model",
+    "Add a Dense layer for output with units equal to num_classes",
+    "Compile the model using Adam optimizer, SparseCategoricalCrossentropy loss, and accuracy metrics",
+    "Define a run_experiment function that fits the model using model.fit() with validation_data set to test_dataset",
+    "Call run_experiment with the model and pass x_train, y_train, batch_size, and epochs",
+    "Set validation_data to x_test, y_test to simulate using the test set as validation set",
+    "Run the model and observe the training process",
+    "Print the training history to check for validation accuracy and loss",
+    "Assert that the validation accuracy is unusually high compared to expected performance on unseen data",
+    "Log the validation accuracy and loss to confirm the model's performance is overly optimistic"
+]
+```

@@ -1,0 +1,39 @@
+TITLE  
+Incorrect Implementation of Beta Sampling in MixUp + Cutmix
+
+SYMPTOMS  
+• The sampling from a beta distribution in `tfm.vision.augment.MixupAndCutmix._sample_from_beta` is incorrect, leading to erroneous mixup samples.  
+• The current implementation produces significantly poor mixup results, as illustrated in the attached image.  
+• The output samples deviate from the expected distribution, affecting the overall performance of the Mixup and Cutmix augmentations.
+
+EXPECTED BEHAVIOR  
+The `_sample_from_beta` function should correctly sample from a beta distribution, producing samples that adhere to the expected distribution characteristics. The correct implementation should yield mixup samples that are visually and statistically valid, closely resembling the behavior of the beta distribution.
+
+REPRODUCTION STEPS  
+1. Import the necessary libraries: `tensorflow_models`, `tensorflow`, `numpy`, and `matplotlib`.  
+2. Run the following code to generate the mixup samples using the faulty `_sample_from_beta` implementation:  
+   ```python
+   import tensorflow_models as tfm
+   import tensorflow as tf
+   import numpy as np
+   import matplotlib.pyplot as plt
+   a = tf.range(1000)
+   x = tfm.vision.augment.MixupAndCutmix._sample_from_beta(0.2, 0.2, tf.shape(tf.range(1000))).numpy()
+   ```
+3. Plot the generated samples against the expected beta distribution using the following code:  
+   ```python
+   import seaborn as sns
+   x = np.random.beta(0.2, 0.2, 100000)
+   sns.kdeplot(x, clip=(0, 1))
+   plt.show()
+   ```  
+4. Observe the discrepancy between the two distributions in the generated plot.  
+5. Compare the results with the corrected implementation provided:  
+   ```python
+   @staticmethod
+   def _sample_from_beta(alpha, beta, shape):
+       sample_alpha = tf.random.gamma(shape, alpha, beta=1.0)  
+       sample_beta = tf.random.gamma(shape, beta, beta=1.0)  
+       return sample_alpha / (sample_alpha + sample_beta)
+   ```  
+6. Validate that the corrected implementation produces the expected results.

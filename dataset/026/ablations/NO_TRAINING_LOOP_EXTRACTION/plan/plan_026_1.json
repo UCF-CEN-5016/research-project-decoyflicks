@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, NumPy, and any required visualization libraries (e.g., Matplotlib).",
+    "Set the TensorFlow version to 2.10.0 by running '!pip install tensorflow==2.10.0' in a Google Colab cell.",
+    "Import the object detection utilities from TensorFlow: 'from object_detection.utils import ops as utils_ops, label_map_util, visualization_utils as vis_util'.",
+    "Load the pre-trained model from TensorFlow Hub using the URL provided in the notebook: 'model = tf.saved_model.load('https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1')'.",
+    "Prepare a sample image for inference by loading it using OpenCV or PIL, resizing it to (640, 640) and normalizing pixel values.",
+    "Create a function to run inference on the model with the prepared image, ensuring to return the output dictionary containing 'detection_boxes', 'detection_classes', 'detection_scores', and 'num_detections'.",
+    "Run the inference function on the sample image and store the output in a variable called 'output_dict'.",
+    "Extract the 'detection_masks' from the 'output_dict' to use in visualization.",
+    "Call the 'reframe_box_masks_to_image_masks' function with parameters: detection_masks, detection_boxes, image_np.shape[1], image_np.shape[2].",
+    "Ensure to pass the 'box_ind' argument to the 'reframe_box_masks_to_image_masks' function, which should trigger the TypeError.",
+    "Run the cell containing the visualization code to display the images with labels, expecting the TypeError to occur.",
+    "Capture the error message and verify that it matches 'TypeError: Got an unexpected keyword argument 'box_ind''."
+]
+```

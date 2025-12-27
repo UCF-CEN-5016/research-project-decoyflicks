@@ -1,0 +1,18 @@
+```json
+[
+    "Clone the DELF repository from GitHub to /content/models/research/delf",
+    "Navigate to the DELF python examples directory with %cd /content/models/research/delf/delf/python/examples/",
+    "Ensure Python 3.8 is installed and set as the default version",
+    "Create a virtual environment for Python dependencies if not already created, activate it",
+    "Install necessary Python packages using pip: tensorflow, numpy, six, urllib3, and protobuf",
+    "Verify TensorFlow is installed correctly by importing tf in a Python shell",
+    "Check that the DELF package is properly installed without any errors",
+    "Create a dummy list_images.txt file with one image path (e.g., '/path/to/image.jpg')",
+    "Set up a temporary directory for storing datasets and output files",
+    "Ensure extract_features.py script exists in /content/models/research/delf/delf/python/examples/",
+    "Run the extract_features.py script with the following command: python3 extract_features.py --config_path delf_config_example.pbtxt --list_images_path list_images.txt --output_dir data/oxford5k_features",
+    "Monitor the output of the script for any errors or exceptions",
+    "Capture the error message if it appears, noting that ModuleNotFoundError: No module named 'delf.python.datasets' should be present"
+]
+```
+

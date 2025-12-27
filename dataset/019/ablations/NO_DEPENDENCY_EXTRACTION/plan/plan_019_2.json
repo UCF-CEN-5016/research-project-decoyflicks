@@ -1,0 +1,20 @@
+```json
+[
+    "Import TensorFlow and the TensorFlow Model Garden modules: tensorflow_models and tensorflow_text",
+    "Set the Python version to 3.10 and ensure TensorFlow version is 2.x",
+    "Install the required packages using pip: !pip install tensorflow tensorflow_models tensorflow_text",
+    "Import the necessary modules: from tensorflow import keras, from tensorflow_models import tfm, from tensorflow_text import core",
+    "Define a batch size of 8 and input dimensions of (256, 256, 3) for image data",
+    "Create a random uniform input dataset with shape (batch_size, height, width, channels) using numpy: np.random.rand(8, 256, 256, 3)",
+    "Create a dummy label dataset with shape (batch_size, num_classes) using numpy: np.random.randint(0, 2, size=(8, 10))",
+    "Define a simple model architecture using tf.keras.Sequential with at least one Conv2D layer and one Dense layer",
+    "Compile the model with an optimizer (e.g., Adam) and a loss function (e.g., CategoricalCrossentropy)",
+    "Attempt to import the tensorflow_models module: import tensorflow_models as tfm",
+    "Run the model's fit method with the input dataset and labels for 1 epoch",
+    "Capture the output logs during the model training to check for ImportError",
+    "Verify that the ImportError occurs with the message: 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Check the installed versions of TensorFlow and TensorFlow Text using: print(tf.version.VERSION) and print(tfm.__version__)",
+    "Ensure that the TensorFlow Text version is compatible with the TensorFlow version being used",
+    "Log the system information including OS, Python version, and installed package versions to help diagnose the issue"
+]
+```

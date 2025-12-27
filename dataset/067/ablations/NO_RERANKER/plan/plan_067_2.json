@@ -1,0 +1,31 @@
+```json
+[
+    "Import TensorFlow and necessary modules: keras, layers, and numpy",
+    "Set the TensorFlow version to 2.10.0 to match the reported bug environment",
+    "Define a batch size of 32 for training and validation datasets",
+    "Download the LJSpeech dataset from 'https://data.keithito.com/data/speech/LJSpeech-1.1.tar.bz2' and extract it",
+    "Read the metadata.csv file from the dataset and parse it to extract 'file_name' and 'normalized_transcription'",
+    "Shuffle the metadata DataFrame and split it into training (90%) and validation (10%) sets",
+    "Define a character set for the transcription: characters = [x for x in 'abcdefghijklmnopqrstuvwxyz'?! ']",
+    "Create a StringLookup layer for mapping characters to integers and vice versa",
+    "Define the function encode_single_sample that processes audio files and labels",
+    "In encode_single_sample, read a wav file and decode it to get the audio tensor",
+    "Squeeze the audio tensor to remove the last dimension, ensuring it has shape (samples,)",
+    "Compute the spectrogram of the audio using tf.signal.stft with frame_length=256, frame_step=160, and fft_length=384",
+    "Normalize the spectrogram by subtracting the mean and dividing by the standard deviation",
+    "Convert the label to lowercase, split it into characters, and map characters to integers using char_to_num",
+    "Return the spectrogram and label from encode_single_sample as a tuple",
+    "Create a tf.data.Dataset object for the training set using the file names and normalized transcriptions",
+    "Map the encode_single_sample function to the training dataset and apply padded_batch with batch_size=32",
+    "Create a tf.data.Dataset object for the validation set in the same way as the training set",
+    "Define the CTCLoss function that computes the CTC loss using keras.backend.ctc_batch_cost",
+    "Define the build_model function to create a model similar to DeepSpeech2 with input shape (None, input_dim) and output shape (None, output_dim + 1)",
+    "Compile the model using the Adam optimizer and the CTCLoss function",
+    "Train the model for 1 epoch using the training dataset and validation dataset",
+    "During training, monitor the loss value and check if it is significantly high or NaN",
+    "Verify that the model's predictions on the validation dataset are poor by checking the Word Error Rate (WER) after training",
+    "Assert that the WER is above a certain threshold (e.g., > 0.5) indicating poor performance",
+    "Check the shape of the labels passed to the model and confirm that they have an extra dimension (e.g., shape (batch_size, max_label_length, 1))",
+    "Log the shapes of the inputs and outputs during training to confirm the mismatch"
+]
+```

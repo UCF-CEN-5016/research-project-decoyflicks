@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: import keras, import numpy as np, import tensorflow as tf",
+    "Set the random seed for reproducibility: np.random.seed(42), tf.random.set_seed(42)",
+    "Load the MNIST dataset: (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()",
+    "Preprocess the data: reshape x_train and x_test to (60000, 784) and (10000, 784) respectively, and normalize by dividing by 255.0",
+    "Convert y_train and y_test to float32: y_train = y_train.astype('float32'), y_test = y_test.astype('float32')",
+    "Split the training data to create a validation set: reserve the last 10000 samples from x_train and y_train for validation",
+    "Define a simple neural network model using Keras Functional API: inputs = keras.Input(shape=(784,)), x = layers.Dense(64, activation='relu')(inputs), outputs = layers.Dense(10, activation='softmax')(x), model = keras.Model(inputs=inputs, outputs=outputs)",
+    "Compile the model with optimizer='adam', loss='sparse_categorical_crossentropy', and metrics=['sparse_categorical_accuracy']",
+    "Create a training dataset using tf.data.Dataset: train_dataset = tf.data.Dataset.from_tensor_slices((x_train[:-10000], y_train[:-10000])).batch(64)",
+    "Create a test dataset using tf.data.Dataset: test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(64)",
+    "Fit the model using the training dataset and the test dataset as validation data: model.fit(train_dataset, epochs=20, validation_data=test_dataset)",
+    "Monitor the training process and check the validation accuracy after each epoch",
+    "Assert that the validation accuracy is unrealistically high compared to expected performance on unseen data",
+    "Log the validation accuracy values to verify the model's performance is overly optimistic due to using the test set as validation"
+]
+```

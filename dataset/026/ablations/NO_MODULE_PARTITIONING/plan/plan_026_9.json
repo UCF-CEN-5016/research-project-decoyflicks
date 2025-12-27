@@ -1,0 +1,18 @@
+```json
+[
+    "Import necessary libraries: TensorFlow, NumPy, and Matplotlib",
+    "Set the TensorFlow version to 2.10.0 by running '!pip install tensorflow==2.10.0'",
+    "Import the object detection utilities from TensorFlow: 'from object_detection.utils import ops as utils_ops'",
+    "Load the pre-trained model from TensorFlow Hub using 'tf.keras.Sequential' and 'hub.KerasLayer'",
+    "Define the input image dimensions as (height, width, channels) = (640, 640, 3)",
+    "Create a batch size of 1 for testing purposes",
+    "Generate a random input image with shape (1, height, width, channels) using 'np.random.rand(1, 640, 640, 3)'",
+    "Run the model on the generated input image to get detection results",
+    "Extract the detection results: 'detection_boxes', 'detection_classes', 'detection_scores', and 'num_detections'",
+    "Check the keys of the detection results dictionary to ensure they include 'detection_masks'",
+    "Prepare to visualize the results by calling 'utils_ops.reframe_box_masks_to_image_masks' with parameters: detection_masks, detection_boxes, image_np.shape[1], image_np.shape[2]",
+    "Run the visualization code that includes 'detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(detection_masks, detection_boxes, image_np.shape[1], image_np.shape[2])'",
+    "Capture the output and check for TypeError: 'Got an unexpected keyword argument 'box_ind''",
+    "Log the error message to confirm the bug has occurred"
+]
+```

@@ -1,0 +1,23 @@
+```json
+[
+    "Import TensorFlow and KerasCV modules: keras_cv.layers and keras_cv.models",
+    "Set the batch size to 32 and define AUTOTUNE as tf.data.AUTOTUNE",
+    "Define a function augment_fn that applies random augmentations to images and segmentation masks",
+    "Define a function unpackage_inputs that unpacks the dataset into images and masks",
+    "Define a function resize_fn that resizes images and masks to (160, 160)",
+    "Create a training dataset train_ds using tf.data.Dataset.from_tensor_slices with dummy image data of shape (100, 160, 160, 3) and segmentation masks of shape (100, 160, 160, 1)",
+    "Create a validation dataset val_ds using tf.data.Dataset.from_tensor_slices with dummy image data of shape (20, 160, 160, 3) and segmentation masks of shape (20, 160, 160, 1)",
+    "Shuffle train_ds with a buffer size of BATCH_SIZE * 2",
+    "Map train_ds using augment_fn with num_parallel_calls set to AUTOTUNE",
+    "Batch train_ds with BATCH_SIZE",
+    "Map train_ds using unpackage_inputs",
+    "Prefetch train_ds with buffer_size set to tf.data.AUTOTUNE",
+    "Map val_ds using resize_fn with num_parallel_calls set to AUTOTUNE",
+    "Batch val_ds with BATCH_SIZE",
+    "Map val_ds using unpackage_inputs",
+    "Prefetch val_ds with buffer_size set to tf.data.AUTOTUNE",
+    "Run the code cell containing the dataset creation steps",
+    "Capture the output and verify that a TypeError is raised during the execution",
+    "Check the error message to confirm it matches the expected TypeError related to tf.switch_case"
+]
+```

@@ -1,0 +1,17 @@
+TITLE  
+Failed to Convert `hubert.extract_features()` into ONNX
+
+SYMPTOMS  
+• AttributeError: 'Tensor' object has no attribute 'is_integer'  
+• The ONNX export process fails without generating the expected ONNX file.  
+• The conversion process does not handle the input tensors correctly, leading to errors during execution.
+
+EXPECTED BEHAVIOR  
+The conversion process should successfully export the `hubert.extract_features()` method into an ONNX file without any errors, resulting in a valid ONNX model file named "hubert.onnx".
+
+REPRODUCTION STEPS  
+1. Install fairseq version `0.12.2` using pip.  
+2. Load the Hubert model using the provided code snippet.  
+3. Prepare the input features and padding mask by loading them from the specified files.  
+4. Attempt to export the model to ONNX format using the `torch.onnx.export()` function with the provided parameters.  
+5. Observe the error message that occurs during the export process.

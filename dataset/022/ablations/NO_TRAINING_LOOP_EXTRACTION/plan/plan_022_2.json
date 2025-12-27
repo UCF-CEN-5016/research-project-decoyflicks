@@ -1,0 +1,15 @@
+```json
+[
+    "Import TensorFlow and necessary modules from official.vision.ops.augment",
+    "Define a variable for the RandAugment level standard deviation, set it to 0 and 1 for testing",
+    "Create a function to apply RandAugment with the defined level standard deviation",
+    "Generate a batch of input images with shape (batch_size, height, width, channels), e.g., (32, 224, 224, 3)",
+    "Apply the RandAugment function to the generated batch of images",
+    "Capture the output of the RandAugment function",
+    "Check the standard deviation of the applied augmentations in the output",
+    "Assert that the standard deviation is always 1 when level_std is not included in the calculation",
+    "Repeat the process with level_std set to a non-zero value to observe the difference",
+    "Log the outputs and standard deviations for both cases to verify the bug",
+    "Ensure that the outputs are consistent with the expected behavior of RandAugment"
+]
+```

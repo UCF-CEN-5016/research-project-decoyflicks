@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, fairseq, and any other required modules.",
+    "Set the DATA_ROOT variable to the path of the dataset, e.g., DATA_ROOT = '/path/to/dataset'.",
+    "Create a configuration YAML file at /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml with the necessary parameters for the speech_to_speech task.",
+    "Ensure the model file exists at /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt and is compatible with the task.",
+    "Define the command to run fairseq-generate with the following parameters: DATA_ROOT, config-yaml, task, target-is-code, target-code-size, vocoder, path, gen-subset, max-tokens, beam, max-len-a, results-path.",
+    "Set the target-code-size to 100 and max-tokens to 50000.",
+    "Run the fairseq-generate command in the terminal: fairseq-generate $DATA_ROOT --config-yaml /root/autodl-tmp/FormattingData/DATA_ROOT/config.yaml --task speech_to_speech --target-is-code --target-code-size 100 --vocoder code_hifigan --path /root/autodl-tmp/xm_transformer_s2ut_en-hk/model.pt --gen-subset test --max-tokens 50000 --beam 10 --max-len-a 1 --results-path /root/autodl-tmp/results.",
+    "Monitor the output for the error message indicating that the key 'input_feat_per_channel' is not in struct.",
+    "Check the logs for any additional error messages or stack traces that may provide context for the bug.",
+    "Validate that the model architecture in Wav2Vec2Config does not include 'input_feat_per_channel' as a defined field.",
+    "Confirm that the model is being loaded correctly and that the configuration is being parsed without errors.",
+    "Assert that the error occurs consistently across multiple runs to confirm it is reproducible."
+]
+```

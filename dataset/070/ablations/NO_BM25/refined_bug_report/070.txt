@@ -1,0 +1,46 @@
+TITLE  
+Error encountered while running DeepSpeed training script
+
+SYMPTOMS  
+• Warning messages indicating potential GPU mapping issues:  
+  ```
+  [rank1]:[W102 ...] using GPU 0 to perform barrier as devices used by this process are currently unknown.
+  [rank0]:[W102 ...] using GPU 0 to perform barrier as devices used by this process are currently unknown.
+  ```
+• Deprecation warnings regarding nvfuser in Torch script:  
+  ```
+  [rank0]:[W102 ...] Warning: nvfuser is no longer supported in torch script, use _jit_set_nvfuser_enabled is deprecated and a no-op (function operator())
+  ```
+• User warnings about the use of deprecated tensor constructors:  
+  ```
+  UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended.
+  ```
+• AttributeError indicating that a NoneType object has no attribute 'all_reduce':  
+  ```
+  AttributeError: 'NoneType' object has no attribute 'all_reduce'
+  ```
+
+EXPECTED BEHAVIOR  
+The training script should execute without warnings or errors, successfully utilizing the specified GPUs for training without encountering any issues related to GPU mapping or deprecated functions.
+
+REPRODUCTION STEPS  
+1. Clone the DeepSpeedExamples repository from GitHub.  
+2. Navigate to the directory containing the training script:  
+   ```
+   cd /users/zhu/DeepSpeedExamples/training/DeepSpeed-Domino
+   ```
+3. Ensure the appropriate environment is activated:  
+   ```
+   conda activate deepspeed_env
+   ```
+4. Load the necessary modules:  
+   ```
+   module load openmpi/4.1.1
+   module load cuda/11.8.0
+   module load gcc/10.2.0
+   ```
+5. Submit the job using the provided SLURM script:  
+   ```
+   sbatch your_slurm_script.sh
+   ```
+6. Monitor the output and error logs for any warnings or errors during execution.

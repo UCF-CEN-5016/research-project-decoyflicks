@@ -1,0 +1,29 @@
+```json
+[
+    "Import TensorFlow, Keras, and necessary layers from keras.models and keras.layers",
+    "Define a batch size of 128 and input shape of (28, 28, 1)",
+    "Create random uniform input data with shape (batch_size, height, width, channels) for MNIST dataset",
+    "Initialize StandardizedConv2DWithOverride layer with kernel size (3, 3), activation 'relu'",
+    "Add a MaxPooling2D layer with pool size (2, 2)",
+    "Add another StandardizedConv2DWithOverride layer with kernel size (3, 3), activation 'relu'",
+    "Add a Flatten layer to flatten the output",
+    "Add a Dropout layer with rate 0.5",
+    "Add a Dense layer for classification with num_classes = 10 and activation 'softmax'",
+    "Compile model with loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy']",
+    "Generate random labels for the input data using keras.utils.to_categorical",
+    "Train the model on the randomly generated input data and labels for 5 epochs",
+    "Load the trained model from disk",
+    "Set up TFLiteConverter to convert the loaded Keras model into TFLite format",
+    "Specify custom_objects={'CustomNonPaddingTokenLoss': CustomNonPaddingTokenLoss()} in the converter",
+    "Convert the Keras model to TFLite format and save it as 'model.tflite'",
+    "Load the TFLite model using the TensorFlow Lite Interpreter API",
+    "Prepare sample input by tokenizing and converting to IDs with the same function used during training",
+    "Expand the dimensions of the sample input tensor to match the expected shape [1, 28, 28, 1]",
+    "Set the prepared sample input tensor as the input to the TFLite interpreter",
+    "Invoke the TFLite interpreter to perform inference",
+    "Retrieve and store the output tensor from the interpreter",
+    "Assert that the dimension of the retrieved output tensor is [1, num_classes] where num_classes = 10",
+    "Verify that attempting to retrieve the output tensor using the wrong input shape (e.g., [1, 9]) results in a ValueError with 'Dimension mismatch' message"
+]
+```
+

@@ -1,0 +1,15 @@
+TITLE  
+MMS - Forced Alignment: log_probs shape mismatch error
+
+SYMPTOMS  
+• Encountered a runtime error when attempting to perform forced alignment on an audio file with its corresponding text transcription.  
+• Error message received: `RuntimeError: log_probs must be 3-D (batch_size, input length, num classes)`.  
+• The issue seems to have arisen following a specific commit in the repository.
+
+EXPECTED BEHAVIOR  
+The software should successfully align the audio file with the provided text transcription without any errors, resulting in a properly formatted output in the specified directory.
+
+REPRODUCTION STEPS  
+1. Run the command: `python align_and_segment.py --audio_filepath audio.wav --text_filepath text.txt --lang udm --outdir output --uroman uroman/bin`.  
+2. Ensure that the audio file (`audio.wav`) and text file (`text.txt`) are correctly formatted and accessible.  
+3. Observe the output for any error messages related to the shape of `log_probs`.

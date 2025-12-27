@@ -1,0 +1,22 @@
+TITLE
+Incorrect Type Passed to Gelu Function in PyTorch
+
+SYMPTOMS
+• `TypeError: gelu(): argument 'approximate' must be str, not bool` is raised during the execution.
+• The error occurs at line 122 of the `modeling.py` file in the BERT large model script.
+
+EXPECTED BEHAVIOR
+• The `gelu` function should accept a boolean value for the `approximate` parameter and return the appropriate output without raising a type error.
+
+REPRODUCTION STEPS
+1. Navigate to the directory containing the BERT_large model and scripts.
+2. Run the command:
+```bash
+bash scripts/run_squad.sh /home/bert_large/bert_large_qa.pt 0.2 12 3e-5 0.1 tf32 1 42 /home/bert_large/squad/v1.1 vocab/vocab results/SQuAD `train` bert_configs/large.json
+```
+3. Observe the error message:
+```python
+File "/workspace/DeepLearningExamples/PyTorch/LanguageModeling/BERT/modeling.py", line 122, in gelu
+return torch.nn.functional.gelu(x, approximate=True)
+TypeError: gelu(): argument 'approximate' must be str, not bool
+```

@@ -1,0 +1,19 @@
+```json
+[
+    "Import TensorFlow and necessary modules for instance segmentation from the Model Garden.",
+    "Set the random seed for reproducibility using tf.random.set_seed(42).",
+    "Define the dataset path for the Sfm120k dataset, e.g., data_root = '/path/to/sfm120k'.",
+    "Create a function to load the dataset using CreateDataset with parameters: mode='val', data_root=data_root, imsize=640, num_negatives=5, num_queries=2000, pool_size=20000.",
+    "Initialize the dataset by calling CreateDataset and assign it to a variable, e.g., dataset = CreateDataset(mode='val', data_root=data_root).",
+    "Set the batch size for validation to 8, e.g., batch_size = 8.",
+    "Create a validation data loader using tf.data.Dataset.from_tensor_slices(dataset.images).batch(batch_size).",
+    "Define a model for instance segmentation using a pre-trained model from Model Garden, e.g., model = tf.keras.applications.MaskRCNN(weights='coco').",
+    "Compile the model with a loss function suitable for instance segmentation, e.g., model.compile(optimizer='adam', loss='categorical_crossentropy').",
+    "Train the model on the training dataset for a few epochs, e.g., model.fit(train_dataset, epochs=5).",
+    "Evaluate the model on the validation dataset using model.evaluate(validation_dataset).",
+    "During evaluation, capture the output metrics including validation loss.",
+    "Log the output metrics to check for validation_loss value, e.g., print('Validation Loss:', metrics['validation_loss']).",
+    "Assert that the validation_loss is equal to 0.0, e.g., assert metrics['validation_loss'] == 0.0, 'Validation loss is not zero.'",
+    "Repeat the evaluation step multiple times to confirm that validation_loss consistently equals 0.0."
+]
+```

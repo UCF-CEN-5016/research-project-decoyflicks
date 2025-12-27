@@ -1,0 +1,16 @@
+```json
+[
+    "Import TensorFlow and the tensorflow_models module using 'import tensorflow as tf' and 'import tensorflow_models as tfm'",
+    "Ensure TensorFlow version is 2.x by running 'print(tf.version.VERSION)'",
+    "Install the tensorflow_text package using 'pip install tensorflow-text'",
+    "Check the installed version of tensorflow_text by running 'import tensorflow_text as tf_text; print(tf_text.__version__)'",
+    "Create a Python script or Jupyter notebook to run the following code",
+    "Define a function to simulate the import error by including the line 'import tensorflow_models as tfm'",
+    "Run the function to trigger the import error and capture the output",
+    "Verify that the output contains the specific ImportError message related to 'undefined symbol: _ZN4absl12lts_2022062320raw_logging_internal21internal_log_functionB5cxx11E'",
+    "Check the system environment by running 'python -c \"import sys; print(sys.version)\"' to confirm Python version is 3.10",
+    "Check the installed packages and their versions using 'pip freeze' to ensure compatibility with TensorFlow and tensorflow_text",
+    "Validate that the error occurs consistently by running the import function multiple times and capturing the output each time",
+    "Document the environment details including OS, TensorFlow version, Python version, and any other relevant system information"
+]
+```

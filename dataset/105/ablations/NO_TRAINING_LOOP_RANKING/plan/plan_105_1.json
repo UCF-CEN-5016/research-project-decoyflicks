@@ -1,0 +1,16 @@
+```json
+[
+    "Import necessary libraries: torch, torch.nn, torch.nn.functional, torchvision.datasets, torchvision.transforms, torch.utils.data.DataLoader, and vector_quantize_pytorch.LFQ",
+    "Set the random seed for reproducibility using torch.random.manual_seed(1234)",
+    "Define constants: Z_CHANNELS = 512, NUM_QUANTIZERS = 2, CODEBOOK_SIZE = 16 * 1024, lr = 3e-4, train_iter = 1000, device = 'cuda' if torch.cuda.is_available() else 'cpu'",
+    "Create a data transformation pipeline using torchvision.transforms.Compose to normalize the FashionMNIST dataset with mean 0.5 and std 0.5",
+    "Load the FashionMNIST dataset using torch.utils.data.DataLoader with batch_size = 256 and shuffle = True",
+    "Define the LFQAutoEncoder class with an encoder, quantizer (using LFQ with specified parameters), and decoder as described in the bug report",
+    "Instantiate the LFQAutoEncoder model with codebook_size = CODEBOOK_SIZE and other parameters: entropy_loss_weight = 0.02, diversity_gamma = 1.0, and move it to the specified device",
+    "Initialize the optimizer using torch.optim.AdamW with model parameters and learning rate lr",
+    "Create a training loop that runs for train_iter iterations, where in each iteration, a batch of data is fetched from the DataLoader, and the model is called with the input data",
+    "In the training loop, compute the reconstruction loss using F.l1_loss and the entropy auxiliary loss, then perform backpropagation and optimizer step",
+    "Run the training loop and monitor for the RuntimeError: shape mismatch during the forward pass of the model, specifically when executing self.embed.data[ind][mask] = sampled",
+    "Validate that the error occurs by checking the output of the training loop for the RuntimeError and logging the shapes of the tensors involved in the operation that causes the error"
+]
+```
