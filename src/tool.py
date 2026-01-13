@@ -1,15 +1,15 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from retrieval import RetrievalPipeline
 import argparse
-from pathlib import Path
 import os
 import subprocess
 import json
 import logging
-from typing import Tuple, Dict, Any
+from typing import Tuple
 import ast
-
-import openai
-from openai import OpenAI, APIError, APIConnectionError, RateLimitError
 
 # Configure logging
 logging.basicConfig(
@@ -44,56 +44,6 @@ GENERATION_ABLATION_MAP = {
     "no_static_analysis": {"no_static_analysis": True},
     "no_runtime_feedback": {"no_runtime_feedback": True},
 }
-
-# --- MODIFIED: Replaced DeepSeek function with OpenAI function ---
-def query_openai_api(prompt: str, model: str = "gpt-4.1", temperature: float = 0.0) -> str:
-    """
-    Sends a prompt to the OpenAI API and returns the text response.
-
-    Args:
-        prompt: The input prompt string.
-        model: The model to use (e.g., "gpt-4.1").
-        temperature: The sampling temperature.
-
-    Returns:
-        The content of the AI's response, or an empty string on failure.
-    """
-    try:
-        client = OpenAI(api_key="<API_KEY>")  # Ensure your API key is set in the environment variable OPENAI_API_KEY
-        
-        response = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "user", "content": prompt}
-            ],
-            temperature=temperature, 
-            max_tokens=4096, # Kept from original DeepSeek function
-        )
-        
-        content = response.choices[0].message.content
-        if content:
-            return content.strip()
-        else:
-            logger.warning(f"API response missing 'content': {response}")
-            return ""
-    
-    except openai.OpenAIError as e:
-        # Handle auth error if key is missing or invalid
-        if "OPENAI_API_KEY" in str(e):
-            logger.error("OPENAI_API_KEY environment variable not set or is invalid.")
-        else:
-            logger.error(f"An OpenAI error occurred: {e}")
-    except APIError as api_err:
-        logger.error(f"OpenAI API error occurred: {api_err}")
-    except APIConnectionError as conn_err:
-        logger.error(f"OpenAI connection error: {conn_err}")
-    except RateLimitError as rate_err:
-        logger.error(f"OpenAI rate limit exceeded: {rate_err}")
-    except Exception as e:
-        logger.error(f"An unexpected error occurred in query_openai_api: {e}")
-        
-    return "" # Return empty string on any failure
-# --- END MODIFICATION ---
 
 def main():
     parser = argparse.ArgumentParser(description="Code generation for bug reproduction")
@@ -159,15 +109,24 @@ def main():
         logger.info("Performing bug report refinement")
         prompt_refinement = create_prompt_refinement(bug_report_content)
         
-        logger.info("Executing OpenAI API for bug report refinement")
-        # --- MODIFIED: Use OpenAI API ---
-        # Use higher temperature for creative refinement task
-        accumulated_output = query_openai_api(prompt_refinement, model="gpt-4.1", temperature=0.5)
+        logger.info("Executing LLM for bug report refinement")
+        cmd = ['ollama', 'run', 'qwen2.5:7b', prompt_refinement]
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1)
+        if process.stderr:
+            for line in process.stderr:
+                logger.error(f"LLM error: {line.strip()}")
+        accumulated_output = []
+        for line in iter(process.stdout.readline, ''):
+            line = line.strip()
+            logger.debug(f"LLM output: {line}")
+            accumulated_output.append(line)
+     
+        process.stdout.close()
+        return_code = process.wait()
         
         logger.info(f"Saving refined bug report to: {refined_report_path}")
         with open(refined_report_path, 'w', encoding='utf-8') as f:
-            f.write(accumulated_output)
-        # --- END MODIFICATION ---
+            f.write('\n'.join(accumulated_output))
     else:
         logger.info("Skipping refinement - copying original bug report")
         with open(refined_report_path, 'w', encoding='utf-8') as f:
@@ -187,13 +146,15 @@ def main():
             context_content = json.loads(f.read())
         
         prompt_plan = create_prompt_plan(bug_report_content, context_content)
+        cmd = ['ollama', 'run', 'qwen2.5-coder:7b', prompt_plan]
         
         if not gen_flags.get("no_plan", False):
-            logger.info("Executing OpenAI API for plan generation")
-            # --- MODIFIED: Use OpenAI API ---
-            # Use 0.0 temperature for deterministic planning
-            output = query_openai_api(prompt_plan, model="gpt-4.1", temperature=0.0)
-            # --- END MODIFICATION ---
+            logger.info("Executing LLM for plan generation")
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if process.stderr:
+                for line in process.stderr:
+                    logger.error(f"LLM error: {line.strip()}")
+            output, _ = process.communicate()
         else:
             # Keep an empty string "No plan" for ablation
             output = "No plan"
@@ -237,11 +198,15 @@ def main():
         for attempt in range(max_attempts):
             logger.info(f"Attempt {attempt + 1} for context {context_num}")
             
-            # --- MODIFIED: Use OpenAI API ---
-            logger.info("Executing OpenAI API for code generation")
-            # Use 0.0 temperature for deterministic code generation
-            stdout = query_openai_api(prompt_code, model="gpt-4.1", temperature=0.0)
-            # --- END MODIFICATION ---
+            cmd = ['ollama', 'run', 'qwen2.5-coder:7b']
+            process = subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            stdout, stderr = process.communicate(input=prompt_code)
             
             output = stdout
             start_marker = "```python"
@@ -374,10 +339,10 @@ def analyze_bug_reproduction(code: str, bug_report: str) -> str:
       [Explanation]
     """
     
-    # --- MODIFIED: Use OpenAI API ---
-    output = query_openai_api(prompt, model="gpt-4.1", temperature=0.0)
+    cmd = ['ollama', 'run', 'qwen2.5-coder:7b', prompt]
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    output, _ = process.communicate()
     return output
-    # --- END MODIFICATION ---
 
 def _build_refactor_prompt(code: str, issues: str, bug_report: str) -> str:
     """Build a prompt for code refactoring based on ` feedback."""
@@ -409,13 +374,26 @@ def _build_refactor_prompt(code: str, issues: str, bug_report: str) -> str:
 
 def _run_llm_refactor(prompt: str) -> str:
     """Execute the LLM to refactor code based on PyLint feedback and bug report.
+    
+    Args:
+        prompt: The complete refactoring prompt with code and issues
+        
+    Returns:
+        The refactored code extracted from LLM's response
     """
     
-    # --- MODIFIED: Use OpenAI API ---
-    logger.info("Executing OpenAI API for refactoring")
-    stdout = query_openai_api(prompt, model="gpt-4.1", temperature=0.0)
+    cmd = ['ollama', 'run', 'qwen2.5-coder:7b']
+    process = subprocess.Popen(
+        cmd,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    
+    # Send the prompt and get response
+    stdout, stderr = process.communicate(input=prompt)
     output = stdout.strip()
-    # --- END MODIFICATION ---
     
     # Extract code block if present
     start_marker = "```python"
@@ -454,39 +432,30 @@ def check_relevance(bug_report: str, code: str) -> bool:
 
             Output only the JSON response with no additional commentary:"""
 
-    # --- MODIFIED: Use OpenAI API ---
-    logger.info("Executing OpenAI API for relevance check")
-    stdout = query_openai_api(prompt, model="gpt-4.1", temperature=0.0)
-    # --- END MODIFICATION ---
-
+    cmd = ['ollama', 'run', 'qwen2.5-coder:7b']
+    process = subprocess.Popen(
+        cmd,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    stdout, stderr = process.communicate(input=prompt)
     try:
-        # Try to find JSON in the response, as models sometimes add extra text
-        json_str = extract_json_content(stdout)
-        if not json_str:
-            # If no ```json block, try to parse the whole string
-            json_str = stdout
-            
-        response = json.loads(json_str)
+        response = json.loads(stdout.strip())
         return response.get('relevance', '').lower() == 'yes'
     except json.JSONDecodeError:
-        logger.warning(f"Failed to parse JSON for relevance check. Response: '{stdout}'")
         # Fallback if JSON parsing fails
         return 'yes' in stdout.lower()
 
 def extract_json_content(text):
     # Find content between ```json and ``` markers
     import re
-    # Be more flexible, allow optional "json" tag
-    pattern = r'```(json)?\s*(.*?)\s*```'
+    pattern = r'```json\s*(.*?)\s*```'
     match = re.search(pattern, text, re.DOTALL)
     
     if match:
-        return match.group(2) # Group 2 has the content
-    
-    # Fallback: if no markers, assume the whole string is a potential JSON object
-    if text.strip().startswith("{") and text.strip().endswith("}"):
-        return text.strip()
-        
+        return match.group(1)
     return None
 
 def calculate_probability_of_reproduction(code: str, bug_report: str) -> Tuple[float, str]:   
@@ -631,13 +600,8 @@ Format your response as JSON with:
     ],
 }}"""
 
-    # --- MODIFIED: Use OpenAI API ---
-    logger.info("Executing OpenAI API for code behavior prediction")
-    analysis_result_raw = query_openai_api(code_analysis_prompt, model="gpt-4.1", temperature=0.0)
-    analysis_result = extract_json_content(analysis_result_raw)
-    if not analysis_result:
-        logger.warning(f"Could not extract JSON from behavior prediction: {analysis_result_raw}")
-        analysis_result = "{{}}" # Empty JSON
+    analysis_result = query_llm(code_analysis_prompt)
+    analysis_result = extract_json_content(analysis_result)
 
     # Stage 2: Symptom Extraction from Bug Report
     symptom_extraction_prompt = f"""Extract technical symptoms from this bug report:
@@ -659,13 +623,8 @@ Format as JSON with:
     "error_manifestations": [str]
 }}"""
 
-    logger.info("Executing OpenAI API for symptom extraction")
-    extraction_result_raw = query_openai_api(symptom_extraction_prompt, model="gpt-4.1", temperature=0.0)
-    extraction_result = extract_json_content(extraction_result_raw)
-    if not extraction_result:
-        logger.warning(f"Could not extract JSON from symptom extraction: {extraction_result_raw}")
-        extraction_result = "{{}}" # Empty JSON
-
+    extraction_result = query_llm(symptom_extraction_prompt)
+    extraction_result = extract_json_content(extraction_result)
 
     COMPARISON_PROMPT = f"""
 Analyze the code, symptoms from the execution analysis, bug report and the actual bug report to determine if the code will reproduce the bug:
@@ -710,32 +669,28 @@ Consider these factors for matching:
 
 Return ONLY valid JSON with NO additional text:
 """
-    logger.info("Executing OpenAI API for final score comparison")
-    comparison_result_raw = query_openai_api(COMPARISON_PROMPT, model="gpt-4.1", temperature=0.0)
-    comparison_result_json = extract_json_content(comparison_result_raw)
-    
-    if not comparison_result_json:
-        logger.error(f"Could not extract JSON from comparison: {comparison_result_raw}")
-        return 0.0, "Failed to parse LLM response for score."
-    # --- END MODIFICATION ---
-
+    comparison_result = query_llm(COMPARISON_PROMPT)
+    comparison_result = extract_json_content(comparison_result)
     try:
-        comparison_result = json.loads(comparison_result_json)
+        comparison_result = json.loads(comparison_result)
         score = comparison_result.get('score', 0.0)
         feedback = comparison_result.get('feedback', "")
         logger.info(f"Reproduction score: {score}, Feedback: {feedback}")
         return float(score), feedback
     except json.JSONDecodeError:
-        logger.error(f"Failed to parse JSON response from LLM: {comparison_result_json}")
-        return 0.0, "Failed to parse JSON response from LLM."
-    except Exception as e:
-        logger.error(f"Error in calculate_probability: {e}")
-        return 0.0, f"Error: {e}"
+        logger.error("Failed to parse JSON response from LLM")
 
-
-# --- MODIFIED: Removed redundant query_llm function ---
-# The query_openai_api function now serves as the single point of contact.
-# --- END MODIFICATION ---
+def query_llm(prompt: str) -> str:
+    """Executes ollama query with deepseek-r1:7b"""
+    process = subprocess.Popen(
+        ['ollama', 'run', 'qwen2.5-coder:7b'],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True
+    )
+    stdout, _ = process.communicate(prompt)
+    return stdout.strip()
 
 def parse_json_response(response: str, default: dict = None) -> dict:
     """Safe JSON parsing with fallback"""
