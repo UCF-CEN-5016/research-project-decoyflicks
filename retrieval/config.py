@@ -7,10 +7,17 @@ class Config:
                  bug_id: str, 
                  ablation_config: Dict[str, Any] = None, 
                  retrieval_ablation_name: str = "full_system", 
-                 generation_ablation_name: str = "all_steps"):
+                 generation_ablation_name: str = "all_steps",
+                 dataset_dir: str = None):
         
         self.BASE_DIR = Path(os.path.dirname(os.path.abspath(__file__))).parent
-        self.DATASET_DIR = self.BASE_DIR / "dataset"
+        
+        # Use custom dataset_dir if provided (for ae_dataset), otherwise use default
+        if dataset_dir:
+            self.DATASET_DIR = Path(dataset_dir)
+        else:
+            self.DATASET_DIR = self.BASE_DIR / "dataset"
+        
         self.PROJECT_DIR = self.DATASET_DIR / bug_id
         
         # --- Base paths for full_system (default) ---

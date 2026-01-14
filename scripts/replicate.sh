@@ -23,7 +23,8 @@
 set -e  # Exit on error
 
 # --- Configuration ---
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PYTHON_VERSION="3.12"
 BUG_START=1
 BUG_END=106
@@ -32,11 +33,19 @@ SKIP_SETUP=false
 OPENAI_API_KEY=""
 
 # --- Color Output ---
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+    RED=''
+    GREEN=''
+    YELLOW=''
+    BLUE=''
+    NC=''
+else
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m'
+fi
 
 # --- Helper Functions ---
 log_info() {
@@ -137,7 +146,21 @@ if [ "$SKIP_SETUP" = false ]; then
     
     # Activate virtual environment
     log_info "Activating virtual environment..."
-    source "$PROJECT_DIR/venv/bin/activate"
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+        # Windows
+        if [ ! -f "$PROJECT_DIR/venv/Scripts/activate" ]; then
+            log_error "Virtual environment activation script not found"
+            exit 1
+        fi
+        source "$PROJECT_DIR/venv/Scripts/activate"
+    else
+        # Unix/Mac
+        if [ ! -f "$PROJECT_DIR/venv/bin/activate" ]; then
+            log_error "Virtual environment activation script not found"
+            exit 1
+        fi
+        source "$PROJECT_DIR/venv/bin/activate"
+    fi
     
     # Upgrade pip
     log_info "Upgrading pip..."
@@ -150,8 +173,16 @@ if [ "$SKIP_SETUP" = false ]; then
     log_success "Python environment setup complete"
 else
     log_warning "Skipping environment setup"
-    if [ -d "$PROJECT_DIR/venv" ]; then
-        source "$PROJECT_DIR/venv/bin/activate"
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+        # Windows
+        if [ -f "$PROJECT_DIR/venv/Scripts/activate" ]; then
+            source "$PROJECT_DIR/venv/Scripts/activate"
+        fi
+    else
+        # Unix/Mac
+        if [ -d "$PROJECT_DIR/venv" ]; then
+            source "$PROJECT_DIR/venv/bin/activate"
+        fi
     fi
 fi
 
@@ -193,8 +224,8 @@ fi
 
 echo ""
 
-# --- Step 3: Verify Dataset Structure ---
-log_info "Step 3/5: Verifying dataset structure..."
+# --- Step 3: Verify Dataset Structure & Setup Code ---
+log_info "Step 3/5: Verifying dataset structure and setting up code..."
 
 DATASET_DIR="$PROJECT_DIR/dataset"
 if [ ! -d "$DATASET_DIR" ]; then
@@ -203,23 +234,36 @@ if [ ! -d "$DATASET_DIR" ]; then
     exit 1
 fi
 
-# Check for required dataset files
+# Check for required dataset files and setup code directories
 MISSING_BUGS=0
+MISSING_CODE=0
 for i in $(seq -f "%03g" "$BUG_START" "$BUG_END"); do
     BUG_DIR="$DATASET_DIR/$i"
+    CODE_DIR="$BUG_DIR/code"
+    
     if [ ! -d "$BUG_DIR" ]; then
         log_warning "Bug directory not found: $BUG_DIR"
         MISSING_BUGS=$((MISSING_BUGS + 1))
-    elif [ ! -f "$BUG_DIR/bug_report/$i.txt" ]; then
-        log_warning "Bug report not found: $BUG_DIR/bug_report/$i.txt"
-    elif [ ! -d "$BUG_DIR/code" ]; then
-        log_warning "Code directory not found: $BUG_DIR/code"
+    else
+        # Ensure code directory exists
+        if [ ! -d "$CODE_DIR" ]; then
+            mkdir -p "$CODE_DIR"
+            MISSING_CODE=$((MISSING_CODE + 1))
+        fi
+        
+        # Check for bug report
+        if [ ! -f "$BUG_DIR/bug_report/$i.txt" ]; then
+            log_warning "Bug report not found: $BUG_DIR/bug_report/$i.txt"
+        fi
     fi
 done
 
 if [ $MISSING_BUGS -gt 0 ]; then
-    log_warning "Found $MISSING_BUGS missing or incomplete bug directories"
-    log_info "Some experiments may fail for these bugs"
+    log_warning "Found $MISSING_BUGS missing bug directories"
+fi
+
+if [ $MISSING_CODE -gt 0 ]; then
+    log_info "Created $MISSING_CODE code directories"
 fi
 
 log_success "Dataset structure verification complete"
@@ -231,7 +275,12 @@ log_info "Step 4/5: Preparing output directories..."
 
 mkdir -p "$PROJECT_DIR/logs"
 mkdir -p "$PROJECT_DIR/results"
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+# Cross-platform timestamp
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+    TIMESTAMP=$(date +"%Y%m%d_%H%M%S" 2>/dev/null || echo "$(date +%s)")
+else
+    TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+fi
 OUTPUT_DIR="$PROJECT_DIR/results/run_$TIMESTAMP"
 mkdir -p "$OUTPUT_DIR"
 

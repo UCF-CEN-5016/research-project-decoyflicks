@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Generate 106 scripts and submit them
+# Works on: macOS, Linux, Windows (Git Bash / WSL)
 for i in $(seq -f "%03g" 1 106)
 do
     filename="run_bug_${i}.sh"
@@ -19,7 +20,12 @@ do
 # Create a virtual environment in SLURM temporary directory
 module load python/3.12
 virtualenv --no-download venv
-source venv/bin/activate
+# Cross-platform venv activation
+if [[ "\$OSTYPE" == "msys" || "\$OSTYPE" == "cygwin" || "\$OSTYPE" == "win32" ]]; then
+    source venv/Scripts/activate
+else
+    source venv/bin/activate
+fi
 pip install annoy numpy pylint rank_bm25 requests scikit_learn sentence_transformers torch transformers pandas openai
 python run_ablations.py --start_bug_id ${i} --end_bug_id ${i} --max-gen-attempts 1 --max-run-attempts 1
 deactivate

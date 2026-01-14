@@ -62,7 +62,7 @@ def query_openai_api(prompt: str, model: str = "gpt-4.1", temperature: float = 0
         The content of the AI's response, or an empty string on failure.
     """
     try:
-        client = OpenAI(api_key="<API_KEY>")  # Ensure your API key is set in the environment variable OPENAI_API_KEY
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         
         response = client.chat.completions.create(
             model=model,
@@ -120,11 +120,17 @@ def main():
 
     parser.add_argument("--max-attempts", type=int, default=5,
                           help="Maximum attempts for code generation")
+    
+    parser.add_argument("--ae_dataset_path", type=str, default=None,
+                          help="Optional path to ae_dataset (uses dataset by default)")
+    
     args = parser.parse_args()
     
     logger.info(f"Processing bug ID: {args.bug_id}")
     logger.info(f"Using Retrieval Ablation: {args.retrieval_ablation}")
     logger.info(f"Using Generation Ablation: {args.generation_ablation}")
+    if args.ae_dataset_path:
+        logger.info(f"Using dataset: {args.ae_dataset_path}")
 
     # --- Setup pipeline and flags ---
     ret_ablation_name = args.retrieval_ablation
@@ -138,7 +144,8 @@ def main():
         bug_id=args.bug_id, 
         ablation_config=ret_ablation_dict, 
         retrieval_ablation_name=ret_ablation_name,
-        generation_ablation_name=gen_ablation_name
+        generation_ablation_name=gen_ablation_name,
+        dataset_dir=args.ae_dataset_path
     )
     
     result = pipeline.run_pipeline(args.bug_id)

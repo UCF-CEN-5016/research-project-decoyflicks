@@ -7,3 +7,5 @@ code
 *attempt*
 *logs*
 *.DS_Store*
+*cache*
+ae_dataset
