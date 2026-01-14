@@ -1,39 +1,38 @@
 # Windows Setup Guide for RepGen
 
-This guide provides step-by-step instructions for running RepGen on Windows.
+This guide provides step-by-step instructions for running RepGen on Windows using Git Bash or WSL 2.
 
-## Prerequisites
+**First time?** Start with [README.md](README.md) for prerequisites overview, then follow the relevant option below.
 
-- Windows 10/11
-- [Git for Windows](https://git-scm.com/download/win) OR [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install)
-- Python 3.12+ (from python.org or Microsoft Store)
-- OpenAI API key
+---
 
 ## Option 1: Git Bash (Recommended for Most Users)
 
-Git Bash is the simplest solution for Windows users. It's included with Git for Windows.
+Git Bash is the simplest solution. It's included with Git for Windows and provides a full bash shell on Windows.
 
 ### Step 1: Install Git for Windows
 
 1. Download [Git for Windows](https://git-scm.com/download/win)
-2. Run the installer and accept all default options
-3. After installation, you'll have Git Bash available
-
-### Step 2: Install Python
-
-1. Download [Python 3.12+](https://www.python.org/downloads/windows/)
-2. **Important:** Check "Add Python to PATH" during installation
-3. Verify installation:
+2. Run the installer with default options
+3. Verify by opening a new terminal and running:
    ```bash
-   # Open Git Bash and run:
+   git --version
+   ```
+
+### Step 2: Verify Python Installation
+
+1. Download [Python 3.12+](https://www.python.org/downloads/windows/) if not already installed
+2. **Important:** During installation, check "Add Python to PATH"
+3. Verify in Git Bash:
+   ```bash
    python --version
    ```
 
 ### Step 3: Set Up the Project
 
-1. **Open Git Bash** (Right-click → "Git Bash Here" or search for "Git Bash" in Start Menu)
+1. **Open Git Bash** (Right-click → "Git Bash Here" or search "Git Bash" in Start Menu)
 
-2. Navigate to the project directory:
+2. Navigate to your project directory:
    ```bash
    cd /c/path/to/ICSE26-RepGen
    ```
@@ -45,7 +44,7 @@ Git Bash is the simplest solution for Windows users. It's included with Git for 
 
 3. Create virtual environment:
    ```bash
-   python3 -m venv venv
+   python -m venv venv
    ```
 
 4. Activate virtual environment:
@@ -75,9 +74,11 @@ Git Bash is the simplest solution for Windows users. It's included with Git for 
    bash scripts/pipeline.sh --bugs 80-82 --dataset ae_dataset --setup --run
    ```
 
+---
+
 ## Option 2: WSL 2 (Windows Subsystem for Linux)
 
-WSL 2 provides a full Linux environment on Windows, which may be more compatible with some tools.
+WSL 2 provides a full Linux environment on Windows for advanced users.
 
 ### Step 1: Install WSL 2
 
@@ -112,6 +113,20 @@ export OPENAI_API_KEY="sk-your-key-here"
 bash scripts/pipeline.sh --bugs 80-82 --dataset ae_dataset --setup --run
 ```
 
+---
+
+## Comparison: Git Bash vs WSL 2
+
+| Aspect | Git Bash | WSL 2 |
+|--------|----------|-------|
+| **Setup** | Easy (1 click) | Moderate (needs restart) |
+| **Speed** | Good | Excellent |
+| **Linux compatibility** | Partial | Full |
+| **File access** | Native | Via `/mnt/` |
+| **For beginners** | ✅ Recommended | Advanced users |
+
+---
+
 ## Common Issues and Solutions
 
 ### Issue: "bash: command not found"
@@ -119,35 +134,164 @@ bash scripts/pipeline.sh --bugs 80-82 --dataset ae_dataset --setup --run
 **Cause:** Git Bash is not installed or not in PATH
 
 **Solution:**
-- Install [Git for Windows](https://git-scm.com/download/win)
-- Make sure to select Git Bash during installation
-- Use Git Bash terminal, not CMD.exe or PowerShell
+1. Install [Git for Windows](https://git-scm.com/download/win)
+2. Make sure to accept Git Bash installation
+3. Use Git Bash terminal, not CMD.exe or PowerShell
 
 ### Issue: "python: command not found"
 
 **Cause:** Python is not in PATH or not installed
 
 **Solution:**
-- Reinstall Python from [python.org](https://www.python.org/downloads/windows/)
-- **Make sure to check "Add Python to PATH"**
-- Restart Git Bash after installation
+1. Download [Python 3.12+](https://www.python.org/downloads/windows/)
+2. **Critically important:** Check "Add Python to PATH" during installation
+3. Restart Git Bash after installation
+4. Verify: `python --version`
+
+### Issue: "python: command not found" in WSL 2
+
+**Solution:**
+```bash
+sudo apt update
+sudo apt install python3.12 python3.12-venv
+```
 
 ### Issue: Virtual environment won't activate
 
-**Solution:** Use the correct activation command for Windows:
+**Solution:** Use the correct activation command for your setup:
 
+**Git Bash on Windows:**
 ```bash
-# Git Bash on Windows
 source venv/Scripts/activate
+```
 
-# NOT source venv/bin/activate (this is for macOS/Linux)
+**WSL 2 or Linux:**
+```bash
+source venv/bin/activate
+```
+
+**Wrong command (don't use on Windows Git Bash):**
+```bash
+source venv/bin/activate  # This won't work on Windows Git Bash
 ```
 
 ### Issue: OPENAI_API_KEY not working
 
-**Solution:** Make sure to set it in the current Git Bash session:
+**Cause:** API key not set in current terminal session
+
+**Solution:** Set it in the current Git Bash/WSL session:
+```bash
+export OPENAI_API_KEY="sk-your-actual-key-here"
+echo $OPENAI_API_KEY  # Verify it's set
+```
+
+To make it persistent across sessions, add to your shell profile:
+- **Git Bash:** `~/.bashrc`
+- **WSL 2:** `~/.bashrc`
+
+Edit with:
+```bash
+nano ~/.bashrc
+# Add: export OPENAI_API_KEY="sk-..."
+# Save: Ctrl+O, Enter, Ctrl+X
+```
+
+### Issue: Git clone failing with SSL errors
+
+**Solution:** Update Git or temporarily disable SSL:
 
 ```bash
+# Try updating Git first
+git --version
+
+# If still failing, try:
+git config --global http.sslVerify false
+```
+
+### Issue: Permission denied on scripts
+
+**Solution:** Make scripts executable:
+
+```bash
+chmod +x scripts/*.sh
+```
+
+---
+
+## File Path Conversion
+
+Windows paths need to be converted for Git Bash (use forward slashes):
+
+| Windows Path | Git Bash Path |
+|--------------|---------------|
+| `C:\Users\...` | `/c/Users/...` |
+| `D:\Projects\...` | `/d/Projects/...` |
+| `E:\...` | `/e/...` |
+
+### Examples
+
+```bash
+# Navigate to typical Windows locations
+cd /c/Users/YourUsername/Downloads/Research/ICSE26-RepGen
+cd /d/Projects/ICSE26-RepGen
+
+# Always use forward slashes in Git Bash
+cd /c/path/to/file  # ✅ Correct
+cd C:\path\to\file  # ❌ Wrong
+```
+
+---
+
+## Terminal Tips
+
+### Always Use Git Bash on Windows
+
+| Terminal | Works? | Recommendation |
+|----------|--------|-----------------|
+| Git Bash | ✅ Yes | **Use this** |
+| CMD.exe | ❌ No | Don't use |
+| PowerShell | ❌ No | Don't use |
+| WSL 2 | ✅ Yes | Use if already set up |
+
+### Opening Git Bash
+
+1. **Method 1:** Right-click in folder → "Git Bash Here"
+2. **Method 2:** Search "Git Bash" in Start Menu
+3. **Method 3:** Open from Program Files
+
+---
+
+## Next Steps
+
+1. Follow either **Option 1 (Git Bash)** or **Option 2 (WSL 2)** above
+2. Once setup is complete, see [README.md](README.md) for quick start
+3. For detailed pipeline usage, see [PIPELINE.md](PIPELINE.md)
+
+---
+
+## Troubleshooting by Error Message
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `bash: command not found` | Git Bash not installed | Install Git for Windows |
+| `python: command not found` | Python not in PATH | Reinstall Python, check "Add to PATH" |
+| `OPENAI_API_KEY not set` | API key not exported | `export OPENAI_API_KEY="sk-..."` |
+| `venv: command not found` | Python venv not available | Use `python -m venv venv` |
+| `Permission denied` | Scripts not executable | `chmod +x scripts/*.sh` |
+| `SSL certificate error` | Git SSL issue | `git config --global http.sslVerify false` |
+
+---
+
+## Additional Resources
+
+- [Git Bash Documentation](https://git-scm.com/docs)
+- [WSL 2 Guide](https://learn.microsoft.com/en-us/windows/wsl/)
+- [Python on Windows](https://docs.python.org/3/using/windows.html)
+- [OpenAI API Keys](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key)
+
+---
+
+**Ready?** Start with either Git Bash or WSL 2 option above!
 export OPENAI_API_KEY="sk-your-actual-key-here"
 echo $OPENAI_API_KEY  # Verify it's set
 ```
