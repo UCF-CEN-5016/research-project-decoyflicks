@@ -150,16 +150,47 @@ We provide scripts to run the tool in different modes. Logs and generated reprod
 To experience the complete RepGen pipeline, run the demo script:
 
 ```bash
-bash scripts/demo.sh
+bash scripts/RepGen.sh
 ```
 
-This interactive demo will:
-1. Set up the environment for the first two bugs
-2. Prompt for your OpenAI API key
-3. Run local inference (Qwen2.5)
-4. Run cloud inference (GPT-4o)
-5. Execute baseline code
-6. Run ablation studies
+This interactive script guides you through the entire RepGen workflow:
+
+1. **Bug Range Selection** - Choose which bugs to process (1-106)
+2. **Environment Setup** - Automatically prepares the environment for selected bugs
+3. **API Configuration** - Optionally configure OpenAI API key for cloud inference
+4. **Local Inference** - Demonstrates bug reproduction using Qwen2.5 (via Ollama)
+5. **Cloud Inference** - Demonstrates bug reproduction using GPT-4o (if API key provided)
+6. **Baseline Experiments** - Runs zero-shot, few-shot, and CoT baselines
+7. **Ablation Studies** - Tests retrieval and generation component variations
+
+**Features:**
+- Interactive prompts with confirmation at each step
+- Skip any step you don't want to run
+- Process single bugs or ranges (e.g., bugs 1-10)
+- Color-coded output for easy tracking
+- Progress indicators for multi-bug processing
+
+**Example Usage:**
+
+For a quick test with a single bug:
+```bash
+# When prompted, enter:
+# START bug ID: 1
+# END bug ID: 1
+```
+
+For comprehensive testing:
+```bash
+# When prompted, enter:
+# START bug ID: 1
+# END bug ID: 106
+```
+
+**Note:** The demo script automatically handles:
+- Virtual environment activation
+- Repository cloning and caching
+- Model availability checks
+- Result organization and logging
 
 **Prerequisites for Demo:**
 - Ollama running locally (`ollama serve` in a separate terminal) for local inference
