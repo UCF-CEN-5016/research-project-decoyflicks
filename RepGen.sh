@@ -54,10 +54,8 @@ fi
 # Activate virtual environment with Windows compatibility
 activate_venv() {
     if [ "$IS_WINDOWS" = true ]; then
-        # Windows: use Scripts/activate.bat
-        if [ -f "venv/Scripts/activate.bat" ]; then
-            cmd /c "venv\\Scripts\\activate.bat"
-        elif [ -f "venv/Scripts/activate" ]; then
+        # Windows: use Scripts/activate
+        if [ -f "venv/Scripts/activate" ]; then
             source venv/Scripts/activate
         fi
     else
