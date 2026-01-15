@@ -6,29 +6,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-
-def setup_logger(name: str = None, log_dir: Path = None) -> logging.Logger:
-    """Configure and return a logger instance."""
-    logger = logging.getLogger(name or __name__)
-    logger.setLevel(logging.INFO)
-    
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    
-    # Console handler
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
-    
-    # File handler if log_dir is provided
-    if log_dir:
-        log_dir.mkdir(parents=True, exist_ok=True)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_file = log_dir / f"{timestamp}.log"
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setFormatter(formatter)
-        logger.addHandler(file_handler)
-    
-    return logger
+import sys
 
 def extract_module_path(file_path: str, dataset_root: str = "dataset/") -> str:
     """Extract full module path relative to dataset root."""

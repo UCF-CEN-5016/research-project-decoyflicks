@@ -6,9 +6,10 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from ..models.hybrid_search import HybridSearchIndex
-from .utils import setup_logger, tokenize, save_json, load_json
+from .utils import tokenize, save_json, load_json
+import logging
 
-logger = setup_logger(__name__)
+logger = logging.getLogger(__name__)
 
 class CodeIndexer:
     def __init__(self, config):

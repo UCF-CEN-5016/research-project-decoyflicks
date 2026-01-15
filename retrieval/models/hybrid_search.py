@@ -9,6 +9,11 @@ from transformers import AutoTokenizer
 import torch
 from sklearn.preprocessing import normalize
 from ..core.utils import tokenize
+import logging
+
+# Suppress logs from transformers and sentence_transformers
+logging.getLogger("transformers").setLevel(logging.ERROR)
+logging.getLogger("sentence_transformers").setLevel(logging.ERROR)
 
 class HybridSearchIndex:
     def __init__(
@@ -35,7 +40,7 @@ class HybridSearchIndex:
         self.bm25 = BM25Okapi(corpus)
         
         texts = [chunk['page_content'] for chunk in code_chunks]
-        self.embeddings = self.encoder.encode(texts, convert_to_tensor=True, show_progress_bar=True)
+        self.embeddings = self.encoder.encode(texts, convert_to_tensor=True, show_progress_bar=False)
         self.embeddings = normalize(self.embeddings.cpu().numpy())
         
         self._build_annoy_index()

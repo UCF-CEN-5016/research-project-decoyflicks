@@ -2,9 +2,9 @@ import ast
 import os
 from pathlib import Path
 from typing import Dict, List, Any, Set, Tuple
-from .utils import setup_logger
+import logging
 
-logger = setup_logger(__name__)
+logger = logging.getLogger(__name__)
 
 class DependencyAnalyzer:
     def __init__(self, config):

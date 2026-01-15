@@ -59,7 +59,7 @@ class ProductionFormatter(logging.Formatter):
         return f"{timestamp} {level_fmt} {record.getMessage()}"
 
 def setup_logging():
-    logger = logging.getLogger("RepGen")
+    logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     
     # Prevent duplicate handlers

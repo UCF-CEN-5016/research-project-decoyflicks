@@ -33,7 +33,7 @@ GENERATION_ABLATIONS = [
 ]
 
 # --- 3. Setup Logging ---
-script_logger = logging.getLogger("AblationRunner")
+script_logger = logging.getLogger()
 script_logger.setLevel(logging.INFO)
 if not script_logger.hasHandlers():
     handler = logging.StreamHandler(sys.stdout)
