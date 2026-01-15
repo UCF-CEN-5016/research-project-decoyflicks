@@ -25,14 +25,59 @@
 
 set -e  # Exit on error
 
-# Color codes for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+# Detect if running on Windows (Git Bash/MSYS)
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+    IS_WINDOWS=true
+else
+    IS_WINDOWS=false
+fi
+
+# Color codes for output (disable on Windows CMD, but enabled on Git Bash/WSL)
+if [ -t 1 ] && [ "$TERM" != "" ]; then
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    MAGENTA='\033[0;35m'
+    CYAN='\033[0;36m'
+    NC='\033[0m' # No Color
+else
+    RED=''
+    GREEN=''
+    YELLOW=''
+    BLUE=''
+    MAGENTA=''
+    CYAN=''
+    NC=''
+fi
+
+# Activate virtual environment with Windows compatibility
+activate_venv() {
+    if [ "$IS_WINDOWS" = true ]; then
+        # Windows: use Scripts/activate.bat
+        if [ -f "venv/Scripts/activate.bat" ]; then
+            cmd /c "venv\\Scripts\\activate.bat"
+        elif [ -f "venv/Scripts/activate" ]; then
+            source venv/Scripts/activate
+        fi
+    else
+        # Unix-like: use bin/activate
+        if [ -f "venv/bin/activate" ]; then
+            source venv/bin/activate
+        fi
+    fi
+}
+
+# Python command detection (handle both python and python3)
+detect_python() {
+    if command -v python3 &> /dev/null; then
+        echo "python3"
+    elif command -v python &> /dev/null; then
+        echo "python"
+    else
+        echo "python3"  # Default fallback
+    fi
+}
 
 # Helper functions
 print_header() {
@@ -160,12 +205,13 @@ print_header "Step 1: Activating Virtual Environment"
 if confirm_execution; then
     if [ -d "venv" ]; then
         print_success "Virtual environment found"
-        source venv/bin/activate
+        activate_venv
         print_success "Virtual environment activated"
     else
         print_warning "Virtual environment not found. Creating new environment..."
-        python3 -m venv venv
-        source venv/bin/activate
+        PYTHON_CMD=$(detect_python)
+        $PYTHON_CMD -m venv venv
+        activate_venv
         print_success "Virtual environment created and activated"
     fi
 else
@@ -279,7 +325,7 @@ for BUG_NUMBER in $(seq $START_BUG $END_BUG); do
     echo ""
     
     if confirm_execution; then
-        if bash scripts/experimental/baselines.sh --bugs "$BUG_NUMBER"; then
+        if bash scripts/experimental/baseline.sh --bugs "$BUG_NUMBER"; then
             print_success "Baseline experiments completed for bug $BUG_NUMBER"
         else
             print_warning "Baseline experiments encountered an issue for bug $BUG_NUMBER"
