@@ -184,12 +184,12 @@ fi
 # ============================================================================
 print_header "Step 6: Running Baseline Experiments"
 
-echo "This will run baseline experiments (Zero-shot, Few-shot, CoT) for bug $BUG_NUMBER."
-echo "This may take some time..."
+echo "This will run baseline experiments (Zero-shot, Few-shot, CoT) using local models such as Qwen2.5, Qwen2.5-Coder (via Ollama) for bug $BUG_NUMBER."
+echo "Execute this setup, if you have Ollama installed, and the Qwen2.5 and Qwen2.5-Coder models available. This may take some time..."
 echo ""
 
 if confirm_execution; then
-    if bash scripts/pipeline/baselines.sh --bugs "$BUG_NUMBER"; then
+    if bash scripts/experimental/baselines.sh --bugs "$BUG_NUMBER"; then
         print_success "Baseline experiments completed"
     else
         print_warning "Baseline experiments encountered an issue"
