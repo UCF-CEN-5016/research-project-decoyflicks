@@ -1,6 +1,9 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from retrieval import RetrievalPipeline
 import argparse
-from pathlib import Path
 import os
 import subprocess
 import json
@@ -11,13 +14,101 @@ import ast
 import openai
 from openai import OpenAI, APIError, APIConnectionError, RateLimitError
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler()]
-)
-logger = logging.getLogger(__name__)
+# ==========================================
+# PRODUCTION LOGGING CONFIGURATION
+# ==========================================
+SUCCESS_LEVEL_NUM = 25
+logging.addLevelName(SUCCESS_LEVEL_NUM, "SUCCESS")
+
+def success(self, message, *args, **kws):
+    if self.isEnabledFor(SUCCESS_LEVEL_NUM):
+        self._log(SUCCESS_LEVEL_NUM, message, args, **kws)
+
+logging.Logger.success = success
+
+class ProductionFormatter(logging.Formatter):
+    """
+    Produces aligned, colored logs similar to Nginx or sophisticated CLI tools.
+    Format: [HH:MM:SS] [LEVEL  ] Message
+    """
+    # ANSI Colors
+    GREY = "\x1b[38;5;240m"
+    BLUE = "\x1b[38;5;39m"
+    GREEN = "\x1b[38;5;82m"
+    YELLOW = "\x1b[38;5;226m"
+    RED = "\x1b[38;5;196m"
+    BOLD_RED = "\x1b[31;1m"
+    MAGENTA = "\x1b[38;5;213m"
+    CYAN = "\x1b[38;5;51m"
+    RESET = "\x1b[0m"
+
+    def format(self, record):
+        # Timestamp in Grey
+        dt = self.formatTime(record, "%H:%M:%S")
+        timestamp = f"{self.GREY}{dt}{self.RESET}"
+
+        # Level with color - removed spaces inside brackets
+        if record.levelno == logging.INFO:
+            level_fmt = f"{self.BLUE}[INFO]{self.RESET}"
+        elif record.levelno == SUCCESS_LEVEL_NUM:
+            level_fmt = f"{self.GREEN}[SUCCESS]{self.RESET}"
+        elif record.levelno == logging.WARNING:
+            level_fmt = f"{self.YELLOW}[WARNING]{self.RESET}"
+        elif record.levelno == logging.ERROR:
+            level_fmt = f"{self.RED}[ERROR]{self.RESET}"
+        elif record.levelno == logging.CRITICAL:
+            level_fmt = f"{self.BOLD_RED}[CRITICAL]{self.RESET}"
+        elif record.levelno == logging.DEBUG:
+            level_fmt = f"{self.GREY}[DEBUG]{self.RESET}"
+        else:
+            level_fmt = f"{self.CYAN}[CUSTOM]{self.RESET}"
+
+        # Add context information if available
+        context = ""
+        if hasattr(record, 'bug_id'):
+            context = f"{self.MAGENTA}[Bug {record.bug_id}]{self.RESET} "
+        if hasattr(record, 'context_num'):
+            context += f"{self.CYAN}[Ctx {record.context_num}]{self.RESET} "
+        if hasattr(record, 'attempt'):
+            context += f"{self.YELLOW}[Att {record.attempt}]{self.RESET} "
+
+        return f"{timestamp} {level_fmt} {context}{record.getMessage()}"
+
+def setup_logging(log_level=logging.INFO, log_file=None):
+    """
+    Set up production-ready logging with optional file output.
+    
+    Args:
+        log_level: Logging level (default: INFO)
+        log_file: Optional file path for log output
+    """
+    logger = logging.getLogger()
+    logger.setLevel(log_level)
+    
+    # Prevent duplicate handlers
+    if logger.hasHandlers():
+        logger.handlers.clear()
+
+    # Console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(ProductionFormatter())
+    logger.addHandler(console_handler)
+    
+    # File handler (optional)
+    if log_file:
+        file_handler = logging.FileHandler(log_file, mode='a', encoding='utf-8')
+        file_formatter = logging.Formatter(
+            '%(asctime)s [%(levelname)-8s] %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
+        file_handler.setFormatter(file_formatter)
+        logger.addHandler(file_handler)
+        logger.info(f"Logging to file: {log_file}")
+    
+    return logger
+
+logger = setup_logging()
+# ==========================================
 
 # Set environment variables at the start
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
@@ -45,55 +136,83 @@ GENERATION_ABLATION_MAP = {
     "no_runtime_feedback": {"no_runtime_feedback": True},
 }
 
-# --- MODIFIED: Replaced DeepSeek function with OpenAI function ---
-def query_openai_api(prompt: str, model: str = "gpt-4.1", temperature: float = 0.0) -> str:
+def query_openai_api(prompt: str, model: str = "gpt-4.1", temperature: float = 0.0, max_retries: int = 3) -> str:
     """
-    Sends a prompt to the OpenAI API and returns the text response.
+    Sends a prompt to the OpenAI API and returns the text response with retry logic.
 
     Args:
         prompt: The input prompt string.
         model: The model to use (e.g., "gpt-4.1").
         temperature: The sampling temperature.
+        max_retries: Maximum number of retry attempts for transient errors.
 
     Returns:
         The content of the AI's response, or an empty string on failure.
     """
-    try:
-        client = OpenAI(api_key="<API_KEY>")  # Ensure your API key is set in the environment variable OPENAI_API_KEY
+    api_key = os.getenv("OPENAI_API_KEY")
+    
+    if not api_key:
+        logger.error("OPENAI_API_KEY environment variable not set")
+        return ""
+    
+    # Sanitize API key for logging (show only last 4 chars)
+    sanitized_key = f"...{api_key[-4:]}" if len(api_key) > 4 else "****"
+    
+    for attempt in range(max_retries):
+        try:
+            if attempt > 0:
+                logger.info(f"Retry attempt {attempt + 1}/{max_retries} for OpenAI API call")
+            
+            client = OpenAI(api_key=api_key)
+            
+            logger.debug(f"Calling OpenAI API: model={model}, temp={temperature}, prompt_len={len(prompt)}")
+            
+            response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=temperature, 
+                max_tokens=4096,
+            )
+            
+            content = response.choices[0].message.content
+            if content:
+                logger.debug(f"Received response: {len(content)} chars")
+                return content.strip()
+            else:
+                logger.warning(f"API response missing 'content' field: {response}")
+                return ""
         
-        response = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "user", "content": prompt}
-            ],
-            temperature=temperature, 
-            max_tokens=4096, # Kept from original DeepSeek function
-        )
+        except openai.AuthenticationError as e:
+            logger.error(f"Authentication failed with API key {sanitized_key}: {e}")
+            return ""  # Don't retry auth errors
         
-        content = response.choices[0].message.content
-        if content:
-            return content.strip()
-        else:
-            logger.warning(f"API response missing 'content': {response}")
+        except RateLimitError as e:
+            wait_time = 2 ** attempt  # Exponential backoff
+            logger.warning(f"Rate limit exceeded. Waiting {wait_time}s before retry...")
+            if attempt < max_retries - 1:
+                import time
+                time.sleep(wait_time)
+            else:
+                logger.error(f"Rate limit exceeded after {max_retries} attempts: {e}")
+                return ""
+        
+        except APIConnectionError as e:
+            logger.warning(f"Connection error (attempt {attempt + 1}/{max_retries}): {e}")
+            if attempt == max_retries - 1:
+                logger.error(f"Failed to connect after {max_retries} attempts")
+                return ""
+        
+        except APIError as e:
+            logger.error(f"OpenAI API error: {e}")
+            return ""  # Don't retry API errors
+        
+        except Exception as e:
+            logger.error(f"Unexpected error in query_openai_api: {type(e).__name__}: {e}", exc_info=True)
             return ""
     
-    except openai.OpenAIError as e:
-        # Handle auth error if key is missing or invalid
-        if "OPENAI_API_KEY" in str(e):
-            logger.error("OPENAI_API_KEY environment variable not set or is invalid.")
-        else:
-            logger.error(f"An OpenAI error occurred: {e}")
-    except APIError as api_err:
-        logger.error(f"OpenAI API error occurred: {api_err}")
-    except APIConnectionError as conn_err:
-        logger.error(f"OpenAI connection error: {conn_err}")
-    except RateLimitError as rate_err:
-        logger.error(f"OpenAI rate limit exceeded: {rate_err}")
-    except Exception as e:
-        logger.error(f"An unexpected error occurred in query_openai_api: {e}")
-        
-    return "" # Return empty string on any failure
-# --- END MODIFICATION ---
+    return ""
 
 def main():
     parser = argparse.ArgumentParser(description="Code generation for bug reproduction")
@@ -117,115 +236,212 @@ def main():
 
     parser.add_argument("--max-attempts", type=int, default=5,
                           help="Maximum attempts for code generation")
+    
+    parser.add_argument("--ae_dataset_path", type=str, default=None,
+                          help="Optional path to ae_dataset (uses dataset by default)")
+    
+    parser.add_argument("--log-level", type=str, default="INFO",
+                          choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+                          help="Logging level")
+    
+    parser.add_argument("--log-file", type=str, default=None,
+                          help="Optional log file path")
+    
     args = parser.parse_args()
     
-    logger.info(f"Processing bug ID: {args.bug_id}")
-    logger.info(f"Using Retrieval Ablation: {args.retrieval_ablation}")
-    logger.info(f"Using Generation Ablation: {args.generation_ablation}")
+    # Re-initialize logger with arguments
+    global logger
+    log_level = getattr(logging, args.log_level.upper())
+    logger = setup_logging(log_level=log_level, log_file=args.log_file)
+    
+    logger.info("=" * 60)
+    logger.info("RepGen Code Generation Pipeline - Starting")
+    logger.info("=" * 60)
+    logger.info(f"Bug ID: {args.bug_id}", extra={'bug_id': args.bug_id})
+    logger.info(f"Retrieval Ablation: {args.retrieval_ablation}")
+    logger.info(f"Generation Ablation: {args.generation_ablation}")
+    logger.info(f"Max Attempts: {args.max_attempts}")
+    if args.ae_dataset_path:
+        logger.info(f"Custom Dataset Path: {args.ae_dataset_path}")
+    logger.info("=" * 60)
 
-    # --- Setup pipeline and flags ---
+    # Setup pipeline and flags
     ret_ablation_name = args.retrieval_ablation
     gen_ablation_name = args.generation_ablation
     
     ret_ablation_dict = RETRIEVAL_ABLATION_CONFIGS.get(ret_ablation_name, {})
     gen_flags = GENERATION_ABLATION_MAP.get(gen_ablation_name, {})
     
-    logger.info("Initializing Retrieval Pipeline")
-    pipeline = RetrievalPipeline(
-        bug_id=args.bug_id, 
-        ablation_config=ret_ablation_dict, 
-        retrieval_ablation_name=ret_ablation_name,
-        generation_ablation_name=gen_ablation_name
-    )
+    logger.info("Initializing retrieval pipeline...", extra={'bug_id': args.bug_id})
+    try:
+        pipeline = RetrievalPipeline(
+            bug_id=args.bug_id, 
+            ablation_config=ret_ablation_dict, 
+            retrieval_ablation_name=ret_ablation_name,
+            generation_ablation_name=gen_ablation_name,
+            dataset_dir=args.ae_dataset_path
+        )
+    except Exception as e:
+        logger.error(f"Failed to initialize pipeline: {e}", exc_info=True, extra={'bug_id': args.bug_id})
+        return
     
-    result = pipeline.run_pipeline(args.bug_id)
-    logger.info(f"Retrieval pipeline completed: {result}")
+    logger.info("Running retrieval pipeline...", extra={'bug_id': args.bug_id})
+    try:
+        result = pipeline.run_pipeline(args.bug_id)
+        logger.success(f"Retrieval pipeline completed: {result['status']}", extra={'bug_id': args.bug_id})
+    except Exception as e:
+        logger.error(f"Retrieval pipeline failed: {e}", exc_info=True, extra={'bug_id': args.bug_id})
+        return
  
-    # --- Get all paths from config ---
+    # Get all paths from config
     config = pipeline.config
-    logger.info(f"Reading context from: {config.CONTEXT_DIR_IN}")
-    logger.info(f"Writing outputs to: {config.REPRODUCTION_DIR_OUT}")
+    logger.debug(f"Context Directory: {config.CONTEXT_DIR_IN}")
+    logger.debug(f"Output Directory: {config.REPRODUCTION_DIR_OUT}")
     
     # Bug report handling
     bug_report_path = config.BUG_REPORTS_DIR / f"{args.bug_id}.txt"
-    logger.info(f"Loading bug report from: {bug_report_path}")
-    with open(bug_report_path, 'r', encoding='utf-8') as f:
-        bug_report_content = f.read()
+    try:
+        with open(bug_report_path, 'r', encoding='utf-8') as f:
+            bug_report_content = f.read()
+        logger.info(f"Loaded bug report: {len(bug_report_content)} chars", extra={'bug_id': args.bug_id})
+    except FileNotFoundError:
+        logger.error(f"Bug report not found: {bug_report_path}", extra={'bug_id': args.bug_id})
+        return
+    except Exception as e:
+        logger.error(f"Failed to read bug report: {e}", exc_info=True, extra={'bug_id': args.bug_id})
+        return
     
     refined_report_dir = config.REFINED_BUG_REPORT_DIR_OUT
     refined_report_path = refined_report_dir / f"{args.bug_id}.txt"
     
+    # STEP 1: Bug Report Refinement
+    logger.info("─" * 60)
+    logger.info("STEP 1/3: Bug Report Refinement", extra={'bug_id': args.bug_id})
+    logger.info("─" * 60)
+    
     if not gen_flags.get("no_refine", False):
-        logger.info("Performing bug report refinement")
+        logger.info("Refining bug report with LLM...", extra={'bug_id': args.bug_id})
         prompt_refinement = create_prompt_refinement(bug_report_content)
         
-        logger.info("Executing OpenAI API for bug report refinement")
-        # --- MODIFIED: Use OpenAI API ---
-        # Use higher temperature for creative refinement task
         accumulated_output = query_openai_api(prompt_refinement, model="gpt-4.1", temperature=0.5)
         
-        logger.info(f"Saving refined bug report to: {refined_report_path}")
-        with open(refined_report_path, 'w', encoding='utf-8') as f:
-            f.write(accumulated_output)
-        # --- END MODIFICATION ---
+        if accumulated_output:
+            try:
+                with open(refined_report_path, 'w', encoding='utf-8') as f:
+                    f.write(accumulated_output)
+                logger.success(f"Refined bug report saved: {refined_report_path.name} ({len(accumulated_output)} chars)", 
+                             extra={'bug_id': args.bug_id})
+            except Exception as e:
+                logger.error(f"Failed to save refined report: {e}", extra={'bug_id': args.bug_id})
+                return
+        else:
+            logger.warning("LLM returned empty response, using original report", extra={'bug_id': args.bug_id})
+            with open(refined_report_path, 'w', encoding='utf-8') as f:
+                f.write(bug_report_content)
     else:
-        logger.info("Skipping refinement - copying original bug report")
+        logger.info("Refinement skipped (ablation active). Using original report.", extra={'bug_id': args.bug_id})
         with open(refined_report_path, 'w', encoding='utf-8') as f:
             f.write(bug_report_content)
-        logger.info(f"Original bug report copied to: {refined_report_path}")
     
-    # Plan generation
+    # STEP 2: Plan Generation
+    logger.info("─" * 60)
+    logger.info("STEP 2/3: Plan Generation", extra={'bug_id': args.bug_id})
+    logger.info("─" * 60)
+    
     context_dir = config.CONTEXT_DIR_IN 
     plan_dir = config.PLANS_DIR_OUT
     
-    logger.info(f"Processing context files from: {context_dir}")
-    for context_file in os.listdir(context_dir):
+    try:
+        context_files_list = os.listdir(context_dir)
+        logger.info(f"Found {len(context_files_list)} context files", extra={'bug_id': args.bug_id})
+    except Exception as e:
+        logger.error(f"Failed to list context files: {e}", extra={'bug_id': args.bug_id})
+        return
+
+    for idx, context_file in enumerate(context_files_list, 1):
         context_path = os.path.join(context_dir, context_file)
-        logger.info(f"Processing context file: {context_file}")
         
-        with open(context_path, 'r', encoding='utf-8') as f:
-            context_content = json.loads(f.read())
+        logger.info(f"Processing context {idx}/{len(context_files_list)}: {context_file}", 
+                   extra={'bug_id': args.bug_id})
+        
+        try:
+            with open(context_path, 'r', encoding='utf-8') as f:
+                context_content = json.loads(f.read())
+            logger.debug(f"Loaded context: {len(str(context_content))} chars")
+        except Exception as e:
+            logger.error(f"Failed to load context file {context_file}: {e}", extra={'bug_id': args.bug_id})
+            continue
         
         prompt_plan = create_prompt_plan(bug_report_content, context_content)
         
         if not gen_flags.get("no_plan", False):
-            logger.info("Executing OpenAI API for plan generation")
-            # --- MODIFIED: Use OpenAI API ---
-            # Use 0.0 temperature for deterministic planning
             output = query_openai_api(prompt_plan, model="gpt-4.1", temperature=0.0)
-            # --- END MODIFICATION ---
+            if not output:
+                logger.warning(f"Empty plan generated for {context_file}", extra={'bug_id': args.bug_id})
+                output = "[]"
         else:
-            # Keep an empty string "No plan" for ablation
-            output = "No plan"
+            logger.debug("Plan generation skipped (ablation active)")
+            output = "[]"
     
         plan_path = plan_dir / f"plan_{context_file.split('.')[0]}.json"
-        # Remove module from the path if it exists
         if 'module' in plan_path.name:
             plan_path = plan_path.with_name(plan_path.name.replace('module_', ''))
-        logger.info(f"Saving plan to: {plan_path}")
-        with open(plan_path, 'w', encoding='utf-8') as f:
-            f.write(output)
+        
+        try:
+            with open(plan_path, 'w', encoding='utf-8') as f:
+                f.write(output)
+            logger.success(f"Plan saved: {plan_path.name}", extra={'bug_id': args.bug_id})
+        except Exception as e:
+            logger.error(f"Failed to save plan: {e}", extra={'bug_id': args.bug_id})
 
-    # Code generation
-    logger.info("Starting code generation phase")
-    refined_report_path = config.REFINED_BUG_REPORT_DIR_IN / f"{args.bug_id}.txt"
-    with open(refined_report_path, 'r', encoding='utf-8') as f:
-        refined_bug_report = f.read()
+    # STEP 3: Code Generation
+    logger.info("─" * 60)
+    logger.info("STEP 3/3: Code Generation & Verification", extra={'bug_id': args.bug_id})
+    logger.info("─" * 60)
     
-    context_files = sorted(config.CONTEXT_DIR_IN.glob("*.json"), key=lambda x: int(x.stem.split('_')[-1]))
+    refined_report_path = config.REFINED_BUG_REPORT_DIR_IN / f"{args.bug_id}.txt"
+    try:
+        with open(refined_report_path, 'r', encoding='utf-8') as f:
+            refined_bug_report = f.read()
+    except Exception as e:
+        logger.error(f"Failed to load refined bug report: {e}", extra={'bug_id': args.bug_id})
+        return
+    
+    try:
+        context_files = sorted(config.CONTEXT_DIR_IN.glob("*.json"), 
+                              key=lambda x: int(x.stem.split('_')[-1]))
+        logger.info(f"Processing {len(context_files)} contexts", extra={'bug_id': args.bug_id})
+    except Exception as e:
+        logger.error(f"Failed to enumerate context files: {e}", extra={'bug_id': args.bug_id})
+        return
+    
     reproduction_dir = config.REPRODUCTION_DIR_OUT
     plan_dir = config.PLANS_DIR_IN 
     
-    for context_file in context_files:
+    for ctx_idx, context_file in enumerate(context_files, 1):
         context_num = context_file.stem.split('_')[-1]
-        logger.info(f"Generating code for context {context_num}")
         
-        with open(context_file, 'r', encoding='utf-8') as f:
-            context_content = json.load(f)
+        logger.info("=" * 60, extra={'bug_id': args.bug_id, 'context_num': context_num})
+        logger.info(f"Processing Context {ctx_idx}/{len(context_files)} (ID: {context_num})", 
+                   extra={'bug_id': args.bug_id, 'context_num': context_num})
+        logger.info("=" * 60, extra={'bug_id': args.bug_id, 'context_num': context_num})
+        
+        try:
+            with open(context_file, 'r', encoding='utf-8') as f:
+                context_content = json.load(f)
+        except Exception as e:
+            logger.error(f"Failed to load context: {e}", 
+                        extra={'bug_id': args.bug_id, 'context_num': context_num})
+            continue
         
         plan_file = plan_dir / f"plan_{args.bug_id}_{context_num}.json"
-        with open(plan_file, 'r', encoding='utf-8') as f:
-            plan_content = f.read()
+        try:
+            with open(plan_file, 'r', encoding='utf-8') as f:
+                plan_content = f.read()
+        except Exception as e:
+            logger.warning(f"Failed to load plan, using empty: {e}", 
+                          extra={'bug_id': args.bug_id, 'context_num': context_num})
+            plan_content = "[]"
         
         prompt_code = _build_prompt(
             refined_bug_report,
@@ -234,14 +450,18 @@ def main():
         )
         
         max_attempts = args.max_attempts
+        success = False
+        
         for attempt in range(max_attempts):
-            logger.info(f"Attempt {attempt + 1} for context {context_num}")
+            logger.info(f"Attempt {attempt + 1}/{max_attempts}", 
+                       extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
-            # --- MODIFIED: Use OpenAI API ---
-            logger.info("Executing OpenAI API for code generation")
-            # Use 0.0 temperature for deterministic code generation
             stdout = query_openai_api(prompt_code, model="gpt-4.1", temperature=0.0)
-            # --- END MODIFICATION ---
+            
+            if not stdout:
+                logger.error("LLM returned empty response", 
+                           extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
+                continue
             
             output = stdout
             start_marker = "```python"
@@ -251,20 +471,29 @@ def main():
 
             if start_idx != -1 and end_idx != -1:
                 extracted_code = output[start_idx + len(start_marker):end_idx].strip()
+                logger.debug("Extracted code from markdown block")
             else:
                 extracted_code = output
-                logger.warning("No code block markers found in LLM output")
+                logger.warning("No markdown code block found, using full output", 
+                             extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
 
             output_file = reproduction_dir / f"reproduce_{args.bug_id}_{context_num}_attempt{attempt + 1}.py"
-            logger.debug(f"Saving attempt code to: {output_file}")
-            with open(output_file, 'w', encoding='utf-8') as f:
-                f.write(extracted_code)
+            try:
+                with open(output_file, 'w', encoding='utf-8') as f:
+                    f.write(extracted_code)
+                logger.debug(f"Saved attempt to: {output_file.name}")
+            except Exception as e:
+                logger.error(f"Failed to save code: {e}", 
+                           extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
+                continue
 
+            # Structural correctness check
             if not gen_flags.get("no_compilation", False):
                 is_correct, feedback = check_structural_correctness(extracted_code)
                 
                 if not is_correct:
-                    logger.warning(f"Structural issues found in attempt {attempt + 1}: {feedback}")
+                    logger.warning(f"Structural check failed: {feedback.splitlines()[0][:80]}...", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
                     prompt_code = _build_prompt(
                         refined_bug_report,
                         context_content,
@@ -272,11 +501,16 @@ def main():
                         feedback=f"Code failed structural check:\n{feedback}\nPlease fix these issues."
                     )
                     continue
+                else:
+                    logger.success("Structural check passed", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
+            # Relevance check
             if not gen_flags.get("no_relevance", False):
                 relevance_check = check_relevance(refined_bug_report, extracted_code)
                 if not relevance_check:
-                    logger.warning("Generated code is not relevant to the bug report")
+                    logger.warning("Relevance check failed", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
                     prompt_code = _build_prompt(
                         refined_bug_report,
                         context_content,
@@ -284,71 +518,117 @@ def main():
                         feedback="Generated code is not relevant to the bug report."
                     )
                     continue
+                else:
+                    logger.success("Relevance check passed", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
+            # Static analysis
             if not gen_flags.get("no_static_analysis", False):
                 pylint_output = analyze_with_pylint(extracted_code, output_file)
                 if pylint_output:
+                    logger.info(f"Static analysis found {len(pylint_output)} critical issues", 
+                              extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
+                    for issue in pylint_output[:3]:  # Show first 3
+                        logger.debug(f"  - {issue}")
+                    
                     refactor_prompt = _build_refactor_prompt(
                         extracted_code,
                         "\n".join(pylint_output),
                         refined_bug_report
                     )
-                    logger.info("Executing LLM for code refactoring and fixing the issues raised by static analysis")
                     refactored_code = _run_llm_refactor(refactor_prompt)
-                    extracted_code = refactored_code
+                    if refactored_code:
+                        extracted_code = refactored_code
+                        logger.success("Code refactored", 
+                                     extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
+                else:
+                    logger.success("Static analysis passed", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
+            # Runtime feedback
             if not gen_flags.get("no_runtime_feedback", False):
                 score, feedback = calculate_probability_of_reproduction(extracted_code, refined_bug_report)
-                logger.info(f"Reproduction score for attempt {attempt + 1}: {score:.2f}")
+                logger.info(f"Confidence score: {score:.2f}", 
+                          extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
                 if score > 0.7:
                     final_output_file = reproduction_dir / f"reproduce_{args.bug_id}.py"
-                    with open(final_output_file, 'w', encoding='utf-8') as f:
-                        f.write(extracted_code)
-                    logger.info(f"Successfully generated reproduction code: {final_output_file}")
-                    analysis = analyze_bug_reproduction(extracted_code, refined_bug_report)
-                    logger.info(f"Bug reproduction analysis:\n{analysis}")
-                    return extracted_code, analysis
+                    try:
+                        with open(final_output_file, 'w', encoding='utf-8') as f:
+                            f.write(extracted_code)
+                        logger.success(f"✓ Valid reproduction found! Saved to: {final_output_file.name}", 
+                                     extra={'bug_id': args.bug_id, 'context_num': context_num})
+                        
+                        analysis = analyze_bug_reproduction(extracted_code, refined_bug_report)
+                        if analysis:
+                            logger.info("Analysis Summary:", extra={'bug_id': args.bug_id})
+                            for line in analysis.split('\n')[:10]:  # First 10 lines
+                                logger.info(f"  {line}")
+                        
+                        success = True
+                        return
+                    except Exception as e:
+                        logger.error(f"Failed to save final code: {e}", 
+                                   extra={'bug_id': args.bug_id, 'context_num': context_num})
                 else:
+                    logger.warning(f"Low confidence ({score:.2f}), retrying...", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
+                    logger.debug(f"Feedback: {feedback[:200]}")
                     prompt_code = _build_prompt(
                         refined_bug_report,
                         context_content,
                         plan_content,
-                        feedback=f"Code failed to reproduce the bug with the confidence score {score:.2f}. Feedback: {feedback}"
+                        feedback=f"Code failed to reproduce the bug with confidence score {score:.2f}. Feedback: {feedback}"
                     )
             else:
                 final_output_file = reproduction_dir / f"reproduce_{args.bug_id}.py"
-                with open(final_output_file, 'w', encoding='utf-8') as f:
-                    f.write(extracted_code)          
-                return extracted_code, "No runtime analysis performed."
-    else:
-        logger.warning(f"Failed to generate valid code for context {context_num} after {max_attempts} attempts")
+                try:
+                    with open(final_output_file, 'w', encoding='utf-8') as f:
+                        f.write(extracted_code)
+                    logger.success(f"Code generated (no feedback mode): {final_output_file.name}", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num})
+                    success = True
+                    break
+                except Exception as e:
+                    logger.error(f"Failed to save code: {e}", 
+                               extra={'bug_id': args.bug_id, 'context_num': context_num})
+        
+        if not success:
+            logger.error(f"Failed to generate valid code after {max_attempts} attempts", 
+                        extra={'bug_id': args.bug_id, 'context_num': context_num})
+    
+    logger.info("=" * 60)
+    logger.info("Pipeline Completed", extra={'bug_id': args.bug_id})
+    logger.info("=" * 60)
 
 def analyze_with_pylint(code: str, file_path: Path):
+    """Run pylint analysis on code and return critical errors."""
     result = []
     try:
         from pylint.lint import Run
         from pylint.reporters.text import TextReporter
         from io import StringIO
         
-        # Write code to temporary file
         file_path.write_text(code, encoding='utf-8')
         
-        # Run pylint analysis
         pylint_output = StringIO()
         reporter = TextReporter(pylint_output)
         Run([str(file_path)], reporter=reporter, exit=False)
         raw_output = pylint_output.getvalue()
-        # Split the raw output into lines
+        
         lines = raw_output.splitlines()
         for line in lines:
             if "e0" in line.lower() and "import-error" not in line.lower():
                 result.append(line.strip())
+        
+        logger.debug(f"Pylint found {len(result)} critical errors")
         return result
+    except ImportError:
+        logger.warning("Pylint not available, skipping static analysis")
+        return []
     except Exception as e:
-        result = []
-    return result
-
+        logger.warning(f"Pylint analysis failed: {e}")
+        return []
 
 def analyze_bug_reproduction(code: str, bug_report: str) -> str:
     """Analyze which parts of the code are most likely to reproduce the bug."""
@@ -374,13 +654,11 @@ def analyze_bug_reproduction(code: str, bug_report: str) -> str:
       [Explanation]
     """
     
-    # --- MODIFIED: Use OpenAI API ---
     output = query_openai_api(prompt, model="gpt-4.1", temperature=0.0)
-    return output
-    # --- END MODIFICATION ---
+    return output if output else "Analysis not available"
 
 def _build_refactor_prompt(code: str, issues: str, bug_report: str) -> str:
-    """Build a prompt for code refactoring based on ` feedback."""
+    """Build a prompt for code refactoring based on feedback."""
     return f"""
     Refactor the following Python code to fix the identified issues while maintaining 
     its ability to reproduce the reported bug. Preserve all functionality related to the bug.
@@ -408,16 +686,16 @@ def _build_refactor_prompt(code: str, issues: str, bug_report: str) -> str:
     """
 
 def _run_llm_refactor(prompt: str) -> str:
-    """Execute the LLM to refactor code based on PyLint feedback and bug report.
-    """
-    
-    # --- MODIFIED: Use OpenAI API ---
-    logger.info("Executing OpenAI API for refactoring")
+    """Execute the LLM to refactor code based on PyLint feedback and bug report."""
+    logger.debug("Requesting code refactoring from LLM")
     stdout = query_openai_api(prompt, model="gpt-4.1", temperature=0.0)
-    output = stdout.strip()
-    # --- END MODIFICATION ---
     
-    # Extract code block if present
+    if not stdout:
+        logger.warning("LLM returned empty refactoring response")
+        return ""
+    
+    output = stdout.strip()
+    
     start_marker = "```python"
     end_marker = "```"
     start_idx = output.find(start_marker)
@@ -426,14 +704,14 @@ def _run_llm_refactor(prompt: str) -> str:
         end_idx = output.find(end_marker, start_idx + len(start_marker))
         if end_idx != -1:
             extracted_code = output[start_idx + len(start_marker):end_idx].strip()
-            logger.debug("Extracted refactored code from code block")
+            logger.debug("Extracted refactored code from markdown block")
             return extracted_code
     
-    # Fallback: return entire output if no markers found
     logger.warning("No code block markers found in refactoring output")
     return output
 
 def check_relevance(bug_report: str, code: str) -> bool:
+    """Check if generated code is relevant to the bug report."""
     prompt = f"""System:
             You are a helpful AI software engineer specializing in identifying
             relevant code segments given a bug report. Analyze the provided bug
@@ -454,42 +732,44 @@ def check_relevance(bug_report: str, code: str) -> bool:
 
             Output only the JSON response with no additional commentary:"""
 
-    # --- MODIFIED: Use OpenAI API ---
-    logger.info("Executing OpenAI API for relevance check")
+    logger.debug("Checking code relevance with LLM")
     stdout = query_openai_api(prompt, model="gpt-4.1", temperature=0.0)
-    # --- END MODIFICATION ---
+
+    if not stdout:
+        logger.warning("Empty response from relevance check, assuming not relevant")
+        return False
 
     try:
-        # Try to find JSON in the response, as models sometimes add extra text
         json_str = extract_json_content(stdout)
         if not json_str:
-            # If no ```json block, try to parse the whole string
             json_str = stdout
             
         response = json.loads(json_str)
-        return response.get('relevance', '').lower() == 'yes'
-    except json.JSONDecodeError:
-        logger.warning(f"Failed to parse JSON for relevance check. Response: '{stdout}'")
-        # Fallback if JSON parsing fails
+        is_relevant = response.get('relevance', '').lower() == 'yes'
+        logger.debug(f"Relevance check result: {is_relevant}")
+        return is_relevant
+    except json.JSONDecodeError as e:
+        logger.warning(f"Failed to parse JSON for relevance check: {e}")
+        logger.debug(f"Raw response: {stdout[:200]}")
         return 'yes' in stdout.lower()
 
 def extract_json_content(text):
-    # Find content between ```json and ``` markers
+    """Extract JSON content from markdown code blocks or raw text."""
     import re
-    # Be more flexible, allow optional "json" tag
-    pattern = r'```(json)?\s*(.*?)\s*```'
+    pattern = r'```(?:json)?\s*(.*?)\s*```'
     match = re.search(pattern, text, re.DOTALL)
     
     if match:
-        return match.group(2) # Group 2 has the content
+        return match.group(1)
     
-    # Fallback: if no markers, assume the whole string is a potential JSON object
     if text.strip().startswith("{") and text.strip().endswith("}"):
         return text.strip()
         
     return None
 
-def calculate_probability_of_reproduction(code: str, bug_report: str) -> Tuple[float, str]:   
+def calculate_probability_of_reproduction(code: str, bug_report: str) -> Tuple[float, str]:
+    """Calculate probability that code will reproduce the bug."""
+    
     # Stage 1: Code Behavior Prediction
     code_analysis_prompt = f"""Analyze this deep learning code systematically:
 
@@ -631,13 +911,12 @@ Format your response as JSON with:
     ],
 }}"""
 
-    # --- MODIFIED: Use OpenAI API ---
-    logger.info("Executing OpenAI API for code behavior prediction")
+    logger.debug("Analyzing code behavior with LLM")
     analysis_result_raw = query_openai_api(code_analysis_prompt, model="gpt-4.1", temperature=0.0)
     analysis_result = extract_json_content(analysis_result_raw)
     if not analysis_result:
-        logger.warning(f"Could not extract JSON from behavior prediction: {analysis_result_raw}")
-        analysis_result = "{{}}" # Empty JSON
+        logger.warning("Could not extract JSON from behavior prediction")
+        analysis_result = "{}"
 
     # Stage 2: Symptom Extraction from Bug Report
     symptom_extraction_prompt = f"""Extract technical symptoms from this bug report:
@@ -659,14 +938,14 @@ Format as JSON with:
     "error_manifestations": [str]
 }}"""
 
-    logger.info("Executing OpenAI API for symptom extraction")
+    logger.debug("Extracting symptoms from bug report")
     extraction_result_raw = query_openai_api(symptom_extraction_prompt, model="gpt-4.1", temperature=0.0)
     extraction_result = extract_json_content(extraction_result_raw)
     if not extraction_result:
-        logger.warning(f"Could not extract JSON from symptom extraction: {extraction_result_raw}")
-        extraction_result = "{{}}" # Empty JSON
+        logger.warning("Could not extract JSON from symptom extraction")
+        extraction_result = "{}"
 
-
+    # Stage 3: Comparison
     COMPARISON_PROMPT = f"""
 Analyze the code, symptoms from the execution analysis, bug report and the actual bug report to determine if the code will reproduce the bug:
 
@@ -710,32 +989,27 @@ Consider these factors for matching:
 
 Return ONLY valid JSON with NO additional text:
 """
-    logger.info("Executing OpenAI API for final score comparison")
+    logger.debug("Calculating final reproduction probability")
     comparison_result_raw = query_openai_api(COMPARISON_PROMPT, model="gpt-4.1", temperature=0.0)
     comparison_result_json = extract_json_content(comparison_result_raw)
     
     if not comparison_result_json:
-        logger.error(f"Could not extract JSON from comparison: {comparison_result_raw}")
+        logger.error("Could not extract JSON from comparison")
         return 0.0, "Failed to parse LLM response for score."
-    # --- END MODIFICATION ---
 
     try:
         comparison_result = json.loads(comparison_result_json)
         score = comparison_result.get('score', 0.0)
         feedback = comparison_result.get('feedback', "")
-        logger.info(f"Reproduction score: {score}, Feedback: {feedback}")
+        logger.debug(f"Calculated score: {score}")
         return float(score), feedback
-    except json.JSONDecodeError:
-        logger.error(f"Failed to parse JSON response from LLM: {comparison_result_json}")
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse JSON response: {e}")
+        logger.debug(f"Raw response: {comparison_result_json[:200]}")
         return 0.0, "Failed to parse JSON response from LLM."
     except Exception as e:
-        logger.error(f"Error in calculate_probability: {e}")
+        logger.error(f"Error in calculate_probability: {e}", exc_info=True)
         return 0.0, f"Error: {e}"
-
-
-# --- MODIFIED: Removed redundant query_llm function ---
-# The query_openai_api function now serves as the single point of contact.
-# --- END MODIFICATION ---
 
 def parse_json_response(response: str, default: dict = None) -> dict:
     """Safe JSON parsing with fallback"""
@@ -751,10 +1025,9 @@ def check_structural_correctness(code: str) -> tuple[bool, str]:
     """
     try:
         ast.parse(code)
-        return True, ""  # Code is structurally correct
+        return True, ""
     except SyntaxError as e:
-        # Capture syntax error details
-        error_msg = f"Syntax Error: {e.msg}\nLine {e.lineno}: {e.text.strip()}"
+        error_msg = f"Syntax Error: {e.msg}\nLine {e.lineno}: {e.text.strip() if e.text else 'N/A'}"
         return False, error_msg
     except Exception as e:
         return False, f"Structural Error: {str(e)}"
@@ -772,7 +1045,6 @@ def _build_prompt(bug_report: str, code_context: str, plan: str, feedback: str =
             Reproduction Plan:
             {plan}"""
 
-    # Add feedback section if provided
     if feedback:
         prompt += f"""
 
@@ -795,18 +1067,17 @@ def _build_prompt(bug_report: str, code_context: str, plan: str, feedback: str =
     return prompt
  
 def create_prompt_plan(bug_report_content, context):
-    # Determine structure type based on keys in context
-    if 'main_file' in context:  # Old structure
+    """Create a prompt for generating a reproduction plan."""
+    if 'main_file' in context:
         file_paths = [context['main_file']['path']]
         file_contents = [context['main_file']['content']]
         dependencies = context.get('dependencies', [])
         dep_string = "\n\nImport Dependencies:\n" + json.dumps(dependencies, indent=2) if dependencies else ""
-    elif 'module' in context:  # New structure
+    elif 'module' in context:
         file_paths = [file['path'] for file in context['module']['files']]
         file_contents = [snippet['code'] for file in context['module']['files'] for snippet in file['snippets']]
         dep_string = ""
 
-    # Format file paths and contents for output
     file_paths_string = "\n\n".join([f"Module Path {i+1}:\n{json.dumps(path, indent=2)}" for i, path in enumerate(file_paths)])
     file_contents_string = "\n\n".join([f"Code Context {i+1}:\n{json.dumps(content, indent=2)}" for i, content in enumerate(file_contents)])
 
@@ -842,6 +1113,7 @@ Output must be a valid JSON array of strings, formatted like this example:
 Generate plan steps:"""
  
 def create_prompt_refinement(bug_report_content):
+    """Create a prompt for refining the bug report."""
     return f"""You are a software development assistant. Analyze and restructure this bug report.
  
 Original bug report:
@@ -868,4 +1140,11 @@ REPRODUCTION STEPS
 Begin your structured analysis:"""
  
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        logger.warning("Pipeline interrupted by user")
+        sys.exit(130)
+    except Exception as e:
+        logger.critical(f"Fatal error: {e}", exc_info=True)
+        sys.exit(1)

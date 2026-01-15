@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import List
 
 # --- 1. Define Retrieval Ablations ---
-# These map to the --retrieval_ablation flag in main.py
+# These map to the --retrieval_ablation flag in the tool script
 RETRIEVAL_ABLATIONS = [
     # "full_system",
     "NO_BM25",
@@ -21,7 +21,7 @@ RETRIEVAL_ABLATIONS = [
 ]
 
 # --- 2. Define Generation Ablations ---
-# These map to the --generation_ablation flag in main.py
+# These map to the --generation_ablation flag in the tool script
 GENERATION_ABLATIONS = [
     "all_steps",
     "no_refine",
@@ -33,7 +33,7 @@ GENERATION_ABLATIONS = [
 ]
 
 # --- 3. Setup Logging ---
-script_logger = logging.getLogger("AblationRunner")
+script_logger = logging.getLogger()
 script_logger.setLevel(logging.INFO)
 if not script_logger.hasHandlers():
     handler = logging.StreamHandler(sys.stdout)
@@ -47,13 +47,14 @@ def run_command_with_retry(cmd: List[str], log_file: Path, max_attempts: int = 3
         script_logger.info(f"Attempt {attempt} of {max_attempts}: {' '.join(cmd)}")
         
         try:
-            with open(log_file, 'w') as f:
+            # Capture both stdout and stderr to the log file
+            with open(log_file, 'w', encoding='utf-8') as f:
                 process = subprocess.run(
                     cmd,
                     check=True, 
                     text=True,
                     stdout=f,
-                    stderr=f
+                    stderr=subprocess.STDOUT
                 )
             script_logger.info(f"Command succeeded. Log saved to: {log_file}")
             return 0 # Success
@@ -61,7 +62,7 @@ def run_command_with_retry(cmd: List[str], log_file: Path, max_attempts: int = 3
             script_logger.warning(f"Command failed with exit code {e.returncode}. Retrying in 2s...")
             time.sleep(2)
         except FileNotFoundError:
-            script_logger.error(f"Error: 'python' command not found. Cannot continue.")
+            script_logger.error(f"Error: 'python' command not found or script missing. Cannot continue.")
             return 127 # Command not found
         except Exception as e:
             script_logger.error(f"An unexpected error occurred: {e}. Retrying in 2s...")
@@ -75,14 +76,26 @@ def main():
     parser = argparse.ArgumentParser(description="Systematic ablation runner for RepGen")
     parser.add_argument("--start_bug_id", required=True, type=int, help="First bug ID to process (e.g., 1)")
     parser.add_argument("--end_bug_id", required=True, type=int, help="Last bug ID to process (e.g., 10)")
+    
+    # New configuration arguments
+    parser.add_argument("--tool_script", type=str, default="tool_openai.py", 
+                        help="The script to run (e.g., tool.py or tool_openai.py)")
     parser.add_argument("--max-gen-attempts", type=int, default=5, 
-                        help="Max attempts for *each* code generation run (passed to main.py)")
+                        help="Max attempts for *each* code generation run (passed to tool)")
     parser.add_argument("--max-run-attempts", type=int, default=3,
                         help="Max retry attempts for *each script execution*")
+    parser.add_argument("--dataset_path", type=str, default=None,
+                        help="Optional custom dataset path to pass to the tool")
+
     args = parser.parse_args()
 
     if args.start_bug_id > args.end_bug_id:
         script_logger.error("Error: Start bug ID must be less than or equal to end bug ID")
+        sys.exit(1)
+
+    # Verify the tool script exists
+    if not os.path.exists(args.tool_script):
+        script_logger.error(f"Error: Tool script '{args.tool_script}' not found.")
         sys.exit(1)
 
     base_dir = Path(__file__).parent
@@ -91,17 +104,15 @@ def main():
     # Loop through bug IDs
     for i in range(args.start_bug_id, args.end_bug_id + 1):
         bug_id = f"{i:03d}" # Format as "001", "002", etc.
-        script_logger.info(f"\n===== Processing bug_id: {bug_id} =====")
+        script_logger.info(f"\n===== Processing bug_id: {bug_id} using {args.tool_script} =====")
         
         logs_dir = logs_base_dir / f"bug_{bug_id}"
         logs_dir.mkdir(parents=True, exist_ok=True)
         
         # --- STUDY 1: Retrieval Ablations (ACTIVE) ---
-        # Runs each retrieval ablation with the FULL generation pipeline.
         script_logger.info("========== RUNNING STUDY 1: RETRIEVAL ABLATIONS ==========")
         
         for ret_ablation in RETRIEVAL_ABLATIONS:
-            
             if ret_ablation == "full_system":
                 log_name = f"bug_{bug_id}_baseline_retrieval.log"
                 script_logger.info("\nRunning baseline retrieval (full_system):")
@@ -111,50 +122,40 @@ def main():
                 
             log_file_path = logs_dir / log_name
 
+            # Construct command dynamically
             cmd = [
-                "python", "tool_openai.py",
+                "python", args.tool_script,
                 f"--bug_id={bug_id}",
                 f"--max-attempts={args.max_gen_attempts}",
                 f"--retrieval_ablation={ret_ablation}",
-                "--generation_ablation=all_steps" # Always use full generation pipeline
+                "--generation_ablation=all_steps" # Always use full generation pipeline for retrieval study
             ]
+            
+            # Pass dataset path if provided (assuming the tool script accepts --ae_dataset_path)
+            if args.dataset_path:
+                cmd.append(f"--ae_dataset_path={args.dataset_path}")
             
             run_command_with_retry(cmd, log_file_path, args.max_run_attempts)
 
-        # --- STUDY 2: Generation Ablations (DISABLED) ---
-        # To run this study, uncomment the lines below.
-        # This will use the "full_system" context and create outputs
-        # in the "ablations/" sub-folder for each generation step.
-        # -------------------------------------------------------------
-        
-        script_logger.info("========== SKIPPING STUDY 2: GENERATION ABLATIONS ==========")
-
-        # script_logger.info("========== RUNNING STUDY 2: GENERATION ABLATIONS ==========")
-        # # We skip the first item ("all_steps") because it was run in Study 1
-        # for gen_ablation in GENERATION_ABLATIONS[1:]:
-        #     script_logger.info(f"\nRunning with {gen_ablation}:")
-        #     log_name = f"bug_{bug_id}_{gen_ablation}.log"
-        #     log_file_path = logs_dir / log_name
+        script_logger.info("========== RUNNING STUDY 2: GENERATION ABLATIONS ==========")
+        # We skip the first item ("all_steps") because it was run in Study 1 (as full_system)
+        for gen_ablation in GENERATION_ABLATIONS[1:]:
+            script_logger.info(f"\nRunning with {gen_ablation}:")
+            log_name = f"bug_{bug_id}_{gen_ablation}.log"
+            log_file_path = logs_dir / log_name
             
-        #     cmd = [
-        #         "python", "main.py",
-        #         f"--bug_id={bug_id}",
-        #         f"--max-attempts={args.max_gen_attempts}",
-        #         "--retrieval_ablation=full_system", # Use full_system context
-        #         f"--generation_ablation={gen_ablation}"
-        #     ]
-        #     run_command_with_retry(cmd, log_file_path, args.max_run_attempts)
+            cmd = [
+                "python", args.tool_script,
+                f"--bug_id={bug_id}",
+                f"--max-attempts={args.max_gen_attempts}",
+                "--retrieval_ablation=full_system", 
+                f"--generation_ablation={gen_ablation}"
+            ]
+            
+            if args.dataset_path:
+                cmd.append(f"--ae_dataset_path={args.dataset_path}")
 
-        # -------------------------------------------------------------
-
-        script_logger.info(f"\nAll logs for bug_id {bug_id} have been saved to: {logs_dir}")
-        try:
-            if sys.platform == "win32":
-                subprocess.run(["cmd", "/c", "dir", str(logs_dir)], check=True)
-            else:
-                subprocess.run(["ls", "-l", str(logs_dir)], check=True)
-        except Exception as e:
-            script_logger.warning(f"Could not list log directory contents: {e}")
+            run_command_with_retry(cmd, log_file_path, args.max_run_attempts)
 
     script_logger.info(f"\n===== Completed processing all bug IDs from {args.start_bug_id} to {args.end_bug_id} =====")
 

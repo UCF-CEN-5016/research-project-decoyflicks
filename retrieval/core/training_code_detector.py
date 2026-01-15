@@ -5,10 +5,10 @@ import numpy as np
 from sentence_transformers import CrossEncoder
 from transformers import AutoTokenizer
 import torch
-from .utils import setup_logger
 import os
+import logging
 
-logger = setup_logger(__name__)
+logger = logging.getLogger(__name__)
 
 import ast
 

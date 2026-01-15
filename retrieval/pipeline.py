@@ -6,14 +6,15 @@ from .core.code_indexer import CodeIndexer
 from .core.module_analyzer import ModuleAnalyzer
 from .core.training_code_detector import TrainingCodeDetector
 from .core.dependency_analyzer import DependencyAnalyzer
-from .core.utils import setup_logger, load_bug_report, save_json
+from .core.utils import load_bug_report, save_json
 import json
+import logging
 
-logger = setup_logger(__name__)
+logger = logging.getLogger(__name__)
 
 class RetrievalPipeline:
-    def __init__(self, bug_id: str = "001", config: Config = None, ablation_config: Dict[str, Any] = None, retrieval_ablation_name: str = "full_system", generation_ablation_name: str = "all_steps"):
-        self.config = config or Config(bug_id=bug_id, ablation_config=ablation_config, retrieval_ablation_name=retrieval_ablation_name, generation_ablation_name=generation_ablation_name)
+    def __init__(self, bug_id: str = "001", config: Config = None, ablation_config: Dict[str, Any] = None, retrieval_ablation_name: str = "full_system", generation_ablation_name: str = "all_steps", dataset_dir: str = None):
+        self.config = config or Config(bug_id=bug_id, ablation_config=ablation_config, retrieval_ablation_name=retrieval_ablation_name, generation_ablation_name=generation_ablation_name, dataset_dir=dataset_dir)
         self.bug_id = bug_id
         self.code_indexer = CodeIndexer(self.config)
         self.module_analyzer = ModuleAnalyzer(self.config)

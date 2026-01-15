@@ -1,250 +1,255 @@
-## Imitation Game: Reproducing Deep Learning Bugs Leveraging Intelligent Agent (ICSE'26)
+# Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent (ICSE '26)
 
-This work has been accepted for publication in the 48th ACM/IEEE International Conference on Software Engineering. The preprint can be found at https://arxiv.org/abs/2512.14990.
+This repository contains the official artifact for the ICSE 2026 paper **"Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent"**.
 
-### Abstract
-Despite their wide adoption in various domains (e.g., healthcare, finance, software engineering), Deep Learning (DL)-based applications suffer from many bugs, failures, and vulnerabilities. Reproducing these bugs is essential for their resolution, but it is extremely challenging due to the inherent nondeterminism of DL models and their tight coupling with hardware and software environments. According to recent studies, only about 3% of DL bugs can be reliably reproduced using manual approaches. To address these challenges, we present RepGen, a novel, automated, and intelligent approach for reproducing deep learning bugs. RepGen constructs a learning-enhanced context from a project, develops a comprehensive plan for bug reproduction, employs an iterative generate-validate-refine mechanism, and thus generates such code using an LLM that reproduces the bug at hand. We evaluate RepGen on 106 real-world deep learning bugs and achieve a reproduction rate of 80.19%, a 19.81% improvement over the state-of-the-art measure. A developer study involving 27 participants shows that RepGen improves the success rate of DL bug reproduction by 23.35%, reduces the time to reproduce by 56.8%, and also lowers the cognitive load of the participants.
+It provides the complete implementation of **RepGen**, a novel automated approach for reproducing Deep Learning (DL) bugs, along with a benchmark dataset of 106 real-world bugs and scripts to replicate the experimental results.
 
-# Folder Structure
-Main Project Files:
--   `tool.py`: RepGen's base implementation (uses local Ollama models)
--   `tool_openai.py`: GPT-based variant of RepGen (uses OpenAI API)
--   `run_ablations.py`: Script for orchestrating ablation studies
--   `script.sh`: SLURM batch script generator for `run_ablations.py`
--   `baseline_script.sh`: Script for running baseline comparisons
--   `dataset_creation.py`: Script for creating the dataset structure
--   `requirements.txt`: Project dependencies
+## Abstract
 
-Dataset Structure (`/dataset/[bug_id]/`):
+Despite their wide adoption in various domains (e.g., healthcare, finance, software engineering), Deep Learning (DL)-based applications suffer from many bugs, failures, and vulnerabilities. Reproducing these bugs is essential for their resolution, but it is extremely challenging due to the inherent nondeterminism of DL models and their tight coupling with hardware and software environments. According to recent studies, only about 3% of DL bugs can be reliably reproduced using manual approaches. To address these challenges, we present RepGen, a novel, automated, and intelligent approach for reproducing deep learning bugs. RepGen constructs a learning-enhanced context from a project, develops a comprehensive plan for bug reproduction, employs an iterative generate-validate-refine mechanism, and thus generates such code using an LLM that reproduces the bug at hand. We evaluate RepGen on 106 real-world deep learning bugs and achieve a reproduction rate of 80.19%, a 19.81% improvement over the state-of-the-art measure. A developer study involving 27 participants shows that RepGen improves the success rate of DL bug reproduction by 23.35%, reduces the time to reproduce by 56.8%, and lowers participants' cognitive load. 
 
--   `bug_report/`: Contains original bug reports
--   `context/`: Stores relevant context information
--   `plan/`: Generated reproduction plans
--   `refined_bug_report/`: Processed bug reports
--   `reproduction_code/`: Generated reproduction code
--   `Dataset.csv`: Main dataset metadata
+## 1. Artifact Overview
 
-Retrieval Module (`/retrieval/`):
--   `core/`: Core functionality
-    -   `code_indexer.py`: Code indexing implementation
-    -   `dependency_analyzer.py`: Dependency analysis
-    -   `module_analyzer.py`: Module analysis
-    -   `training_code_detector.py`: Training code detection
-    -   `utils.py`: Utility functions
--   `models/`: Model implementations
-    -   `hybrid_search.py`: Hybrid search implementation
--   `config.py`: Configuration settings
--   `pipeline.py`: Main retrieval pipeline
+### Directory Structure
 
-Results and Figures:
--   `/figures/`: Visualization and diagrams
-    -   `parameter-tuning/`: Parameter tuning results
-    -   Various result plots and framework diagrams
--   `/results/`: Experimental results
-    -   `Dev Study Results/`: Developer study data
-    -   Statistical significance tests, results for RQ1, RQ2, and RQ3.
+```plaintext
+repgen/
+├── dataset/             # Benchmark: 106 DL bugs (IDs 001-106) with metadata
+├── figures/             # Visualization assets for the paper (RQ1, RQ2)
+├── results/             # Raw experimental data and statistical analysis notebooks
+├── retrieval/           # RAG Module: Context retrieval implementation
+├── scripts/             # Automation & Experimentation Scripts
+│   ├── quick-start/     # Entry points for fast reproduction (Local/Cloud)
+│   ├── pipeline/        # Core pipeline configuration and parameters
+│   └── experimental/    # Baselines (Zero-shot, CoT) and ablation studies
+├── src/                 # Source Code: Main agent logic, generation, and execution
+├── requirements.txt     # Python project dependencies
+└── README.md            # Documentation
 
-# Dependencies
-The dependencies can be installed using,
-```bash
-pip3 install -r requirements.txt
-````
+```
 
-## Running and Analysis
+## 2. Environment Setup
 
-To run these scripts, you need to set up your environment, including installing Python dependencies and configuring API keys if you plan to use external models like OpenAI, Llama, or DeepSeek, or setting up Ollama for local models.
+This artifact is compatible with **Linux** (Ubuntu 20.04+), **macOS** (Apple Silicon recommended), and **Windows** (via WSL2 or Git Bash).
+
+> **Important:** All scripts in this repository are shell scripts (`.sh` files) designed to run in Unix-based terminals. To run these scripts:
+> - **macOS/Linux:** Use the native terminal
+> - **Windows:** Use **Git Bash** (included with [Git for Windows](https://git-scm.com/download/win)) or **WSL2** (Windows Subsystem for Linux)
+> 
+> Git Bash and WSL2 are freely available on all operating systems and provide a Unix-compatible environment for running shell scripts.
 
 ### Prerequisites
 
-  - Python 3.12
-  - Ollama (if using local models like `qwen2.5:7b`, `qwen2.5-coder:7b`, `llama3-8b`, `qwen3-8b`, `deepseek-r1-7b`)
-  - API keys for Llama, DeepSeek, or OpenAI (if using their respective models)
+* **Python:** Version 3.8 or higher.
+* **Git:** Required for version control.
+* **Ollama (Local Inference):** Required only if running without cloud APIs.
+* [Download for macOS/Linux](https://ollama.ai/download)
+* [Download for Windows](https://www.google.com/search?q=https://ollama.ai/download/windows)
 
-### Environment Variables
+### Automated Setup (Recommended)
 
-Set the following environment variables for API access:
+We provide a setup script that automates environment configuration, dependency installation, and dataset preparation:
 
-  - `GROQ_API_KEY` (for Llama models)
-  - `DEEPSEEK_API_KEY` (for DeepSeek models)
-  - `OPENAI_API_KEY` (for OpenAI models like `gpt-4.1`)
-
-### Ollama Setup
-
-If using local models, ensure Ollama is installed and running. Download the required models:
-
+```bash
+bash scripts/setup.sh --bugs 1-10
 ```
+
+**Setup Script Options:**
+
+| Flag | Description | Example |
+| --- | --- | --- |
+| `--bugs` | **Required.** Bug IDs to set up (ranges or lists) | `1-10`, `80-82`, `1,5,10` |
+| `--skip-code` | Skip cloning code repositories (metadata only) | `--skip-code` |
+| `--force-clone` | Re-clone repositories even if they already exist | `--force-clone` |
+| `--quiet` | Suppress informational messages | `--quiet` |
+| `--log-file` | Write detailed logs to a file | `--log-file setup.log` |
+
+**Examples:**
+
+```bash
+# Set up bugs 1-10 (recommended starting point)
+bash scripts/setup.sh --bugs 1-10
+
+# Set up specific bugs (80, 81, 82)
+bash scripts/setup.sh --bugs 80-82
+
+# Set up all bugs with logging
+bash scripts/setup.sh --bugs 1-106 --log-file setup.log
+
+# Set up without cloning code (faster)
+bash scripts/setup.sh --bugs 1-10 --skip-code
+
+# Activate the environment after setup
+source venv/bin/activate
+```
+
+### Installation
+
+**1. Clone the Repository**
+
+```bash
+git clone https://github.com/mehilshah/ICSE26-RepGen
+cd ICSE26-RepGen
+```
+
+**2. Virtual Environment Setup**
+
+We strongly recommend using a virtual environment to manage dependencies.
+
+* **macOS / Linux / Windows (WSL2):**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+* **Windows (Git Bash/PowerShell):**
+```bash
+python -m venv venv
+source venv/Scripts/activate
+pip install -r requirements.txt
+```
+
+**3. Model Configuration**
+
+#### **Mode A: Local Inference (Ollama)**
+
+If using local LLMs, ensure the Ollama service is active and models are pulled:
+
+```bash
+# Start the service (in a separate terminal)
+ollama serve
+
+# Pull required models
 ollama pull qwen2.5:7b
 ollama pull qwen2.5-coder:7b
-ollama pull llama3-8b
-ollama pull qwen3-8b
-ollama pull deepseek-r1-7b
 ```
 
-## Scripts
+#### **Mode B: Cloud Inference (APIs)**
 
-### `dataset_creation.py`
+If using GPT-4, Llama-3, or DeepSeek, export your API keys. You may add these to a `.env` file or export them directly:
 
-This script is used to create a dataset of bug reports by fetching information from GitHub issues and cloning repositories.
-
-**Usage:**
-
-```
-python dataset_creation.py [OPTIONS]
+```bash
+export OPENAI_API_KEY="sk-..."
+export GROQ_API_KEY="gsk-..."
+export DEEPSEEK_API_KEY="sk-..."
 ```
 
-**Arguments:**
+## 3. Usage & Experiments
 
-  - `--start-id`: Starting bug ID
-  - `--start-row`: Starting row in CSV
-  - `--end-row`: Ending row in CSV (default: `None`, process all rows)
-  - `--csv-file`: CSV file with issues data (default: `issues.csv`)
-  - `--dataset-dir`: Base directory for the dataset (default: `dataset`)
+We provide scripts to run the tool in different modes. Logs and generated reproduction scripts will be saved in the `results/` directory.
 
-**Example:**
+> **Reminder:** All commands below should be executed in a Unix-based terminal:
+> - macOS/Linux: Use the native terminal
+> - Windows: Use **Git Bash** or **WSL2** (not PowerShell or Command Prompt)
 
-```
-python dataset_creation.py --csv-file my_issues.csv --start-row 10 --end-row 50
-```
+### Quick Start
 
-### `baselines.py`
+#### Demo Script (Recommended for First-Time Users)
 
-This Python script generates bug reproduction code using various language models and prompting techniques (zero-shot, few-shot, Chain-of-Thought).
+To experience the complete RepGen pipeline, run the demo script:
 
-**Usage:**
-
-```
-python baselines.py --bug_id <BUG_ID> --model <MODEL_NAME> --technique <TECHNIQUE> [OPTIONS]
+```bash
+bash scripts/RepGen.sh
 ```
 
-**Arguments:**
+This interactive script guides you through the entire RepGen workflow:
 
-  - `--bug_id` (required): Bug ID to reproduce (e.g., `001`)
-  - `--model`: Model to use. Options include `llama3-8b`, `qwen3-8b`, `deepseek-r1-7b`, `llama3-70b`, `gpt-4.1`, `qwen2.5-7b`, `deepseek-r1-685b`, `qwen2.5-coder`. Default is `llama3-8b`.
-  - `--technique`: Prompting technique. Options include `zero_shot`, `few_shot`, `cot`. Default is `zero_shot`.
-  - `--examples`: Number of examples for few-shot learning (default: `3`)
+1. **Bug Range Selection** - Choose which bugs to process (1-106)
+2. **Environment Setup** - Automatically prepares the environment for selected bugs
+3. **API Configuration** - Optionally configure OpenAI API key for cloud inference
+4. **Local Inference** - Demonstrates bug reproduction using Qwen2.5 (via Ollama)
+5. **Cloud Inference** - Demonstrates bug reproduction using GPT-4o (if API key provided)
+6. **Baseline Experiments** - Runs zero-shot, few-shot, and CoT baselines
+7. **Ablation Studies** - Tests retrieval and generation component variations
 
-**Supported Models & APIs:**
+**Features:**
+- Interactive prompts with confirmation at each step
+- Skip any step you don't want to run
+- Process single bugs or ranges (e.g., bugs 1-10)
+- Color-coded output for easy tracking
+- Progress indicators for multi-bug processing
 
-  - **Local Ollama Models:** `llama3-8b`, `qwen3-8b`, `deepseek-r1-7b`, `qwen2.5-7b`, `qwen2.5-coder`
-  - **DeepSeek API:** Models starting with `deepseek`
-  - **Llama API:** Models starting with `llama3.3-70b`
-  - **OpenAI API:** Models starting with `gpt-4.1`
+**Example Usage:**
 
-**Example:**
-
-```
-python baselines.py --bug_id 001 --model gpt-4.1 --technique cot
-python baselines.py --bug_id 002 --model qwen2.5-7b --technique few_shot --examples 5
-```
-
-### `baseline_script.sh`
-
-This bash script automates the execution of `baselines.py` over a range of bug IDs, models, and techniques.
-
-**Usage:**
-
-```
-./baseline_script.sh <start_bug_id> <end_bug_id>
+For a quick test with a single bug:
+```bash
+# When prompted, enter:
+# START bug ID: 1
+# END bug ID: 1
 ```
 
-**Arguments:**
-
-  - `start_bug_id`: The starting bug ID (integer)
-  - `end_bug_id`: The ending bug ID (integer)
-
-**Example:**
-
-```
-./baseline_script.sh 1 10
+For comprehensive testing:
+```bash
+# When prompted, enter:
+# START bug ID: 1
+# END bug ID: 106
 ```
 
-### `tool.py`
+**Note:** The demo script automatically handles:
+- Virtual environment activation
+- Repository cloning and caching
+- Model availability checks
+- Result organization and logging
 
-This Python script performs code generation for bug reproduction using RepGen's full pipeline. It utilizes **local Ollama models** (specifically `qwen2.5:7b` and `qwen2.5-coder:7b`) for its operations. It supports ablation studies by allowing you to disable specific pipeline components.
+**Prerequisites for Demo:**
+- Ollama running locally (`ollama serve` in a separate terminal) for local inference
+- OpenAI API key (optional, for cloud-based inference)
 
-**Usage:**
+#### Individual Script Execution
 
-```
-python tool.py --bug_id <BUG_ID> [OPTIONS]
-```
+| Mode | Description | Command |
+| --- | --- | --- |
+| **Local** | Uses Qwen2.5 (requires Ollama) | `bash scripts/quick-start/local.sh [RANGE] [ATTEMPTS]` |
+| **Cloud** | Uses GPT-4o (requires API Key) | `bash scripts/quick-start/cloud.sh [RANGE] [ATTEMPTS]` |
 
-**Arguments:**
+**Example:** Run reproduction for bug IDs 80 through 85 with 1 attempt per context:
 
-  - `--bug_id` (required): Bug ID to analyze (e.g., `001`)
-  - `--retrieval_ablation`: Name of retrieval config.
-      - **Choices:** `full_system`, `NO_BM25`, `NO_ANN`, `NO_RERANKER`, `NO_TRAINING_LOOP_EXTRACTION`, `NO_TRAINING_LOOP_RANKING`, `NO_MODULE_PARTITIONING`, `NO_DEPENDENCY_EXTRACTION`
-  - `--generation_ablation`: Name of generation config.
-      - **Choices:** `all_steps`, `no_refine`, `no_plan`, `no_compilation`, `no_relevance`, `no_static_analysis`, `no_runtime_feedback`
-  - `--max-attempts`: Maximum attempts for code generation (default: `5`)
-
-**Example:**
-
-```
-# Run full pipeline on bug 003
-python tool.py --bug_id 003
-
-# Run on bug 004, disabling the Reranker and the Plan Generation steps
-python tool.py --bug_id 004 --retrieval_ablation NO_RERANKER --generation_ablation no_plan
+```bash
+bash scripts/quick-start/local.sh 80-85 1
 ```
 
-### `tool_openai.py`
+### Replication Packages
 
-This script is similar to `tool.py` but uses **OpenAI's GPT models** (e.g., `gpt-4.1`) for bug report refinement, plan generation, and code generation. It requires an `OPENAI_API_KEY`.
+#### Baseline Experiments
 
-**Usage:**
+Reproduce the comparison baselines (Zero-shot, Few-shot, Chain-of-Thought) cited in the paper.
 
-```
-python tool_openai.py --bug_id <BUG_ID> [OPTIONS]
-```
-
-**Arguments:**
-
-  - `--bug_id` (required): Bug ID to analyze (e.g., `001`)
-  - `--retrieval_ablation`: Name of retrieval config. (See `tool.py` for choices)
-  - `--generation_ablation`: Name of generation config. (See `tool.py` for choices)
-  - `--max-attempts`: Maximum attempts for code generation (default: `5`)
-
-**Example:**
-
-```
-python tool_openai.py --bug_id 005
+```bash
+bash scripts/pipeline/baselines.sh --bugs 1-106
 ```
 
-### `run_ablations.py`
+#### Ablation Studies
 
-This Python script systematically orchestrates ablation studies by repeatedly calling `tool_openai.py` over a range of bug IDs, each time with a different ablation setting.
+Reproduce the component analysis (e.g., RepGen without Retrieval, RepGen without Iterative Refinement).
 
-**Usage:**
-
-```
-python run_ablations.py --start_bug_id <ID> --end_bug_id <ID> [OPTIONS]
+```bash
+bash scripts/pipeline/ablations.sh --bugs 1-106
 ```
 
-**Arguments:**
+> **Note:** For advanced customization, refer to the documentation in `scripts/README.md`.
 
-  - `--start_bug_id` (required): The first bug ID to process (integer)
-  - `--end_bug_id` (required): The last bug ID to process (integer)
-  - `--max-gen-attempts`: Max attempts passed to `tool_openai.py` (default: `5`)
-  - `--max-run-attempts`: Max retry attempts for each script execution (default: `3`)
+## 4. Troubleshooting
 
-**Example:**
+* **Error: "Ollama service is not running"**
+* Ensure you have run `ollama serve` in a dedicated terminal window before executing the scripts.
 
+* **Error: "Dataset not found"**
+* Verify that the `dataset/` directory exists in the root `repgen/` folder and contains subdirectories `001` to `106`.
+
+* **Permission Denied**
+* If scripts fail to execute, grant permissions: `chmod +x scripts/**/*.sh`.
+
+## 5. Citation
+
+If you use RepGen or the dataset in your research, please cite our ICSE 2026 paper:
+
+```bibtex
+@inproceedings{shah2026repgen,
+  author    = {Shah, Mehil B and Rahman, Mohammad Masudur and Khomh, Foutse},
+  title     = {Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent},
+  booktitle = {Proceedings of the 48th International Conference on Software Engineering (ICSE)},
+  year      = {2026},
+  url       = {https://arxiv.org/abs/2512.14990}
+}
 ```
-# Run all retrieval ablations for bugs 1 through 10
-python run_ablations.py --start_bug_id 1 --end_bug_id 10
-```
-
-### `script.sh`
-
-This bash script generates 106 separate SLURM batch scripts (e.g., `run_bug_001.sh`, `run_bug_002.sh`, etc.) and submits them to the SLURM scheduler. Each generated script sets up its own environment and runs `run_ablations.py` for a single, specific bug ID.
-
-**Usage:**
-
-```
-./script.sh
-```
-
-*(Note: This script has no arguments; it is hard-coded to run from bug ID 1 to 106).*
-
-### Disclaimer
-Some code snippets in this replication package contain hard-coded file paths, as the code was generated using the actual bug reports and code snippets. These paths are preserved for authenticity but are not associated with the authors of this study. We have carefully reviewed all code and the artifacts to ensure no identifying information has been included.

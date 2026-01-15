@@ -7,3 +7,7 @@ code
 *attempt*
 *logs*
 *.DS_Store*
+*cache*
+ae_dataset
+dataset_cloud
+dataset_local
