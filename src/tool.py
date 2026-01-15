@@ -494,7 +494,7 @@ def main():
                                 logger.info(f"  {line}")
                         
                         success = True
-                        break
+                        return
                     except Exception as e:
                         logger.error(f"Failed to save final file: {e}", extra={'bug_id': args.bug_id})
                 else:

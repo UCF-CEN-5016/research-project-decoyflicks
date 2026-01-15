@@ -10,7 +10,7 @@
 # - Master log file with detailed experiment tracking
 #
 # Usage:
-#   bash scripts/pipeline/baselines.sh --bugs 1-5 [OPTIONS]
+#   bash baselines.sh --bugs 1-5 [OPTIONS]
 ###############################################################################
 
 set -o pipefail
@@ -399,25 +399,11 @@ echo "========================================"
 echo " Total Experiments: $TOTAL_RUNS"
 echo -e " Successful:        ${GREEN}$SUCCESS_RUNS${NC}"
 echo -e " Failed:            ${RED}$FAILED_RUNS${NC}"
-if [ $TOTAL_RUNS -gt 0 ]; then
-    echo " Success Rate:      $(awk "BEGIN {printf \"%.1f%%\", ($SUCCESS_RUNS/$TOTAL_RUNS)*100}")"
-fi
+
 echo ""
 echo " CSV Report:        $SUMMARY_CSV"
 echo " Master Log:        $MASTER_LOG"
 echo ""
-
-log_to_master ""
-log_to_master "========================================"
-log_to_master "FINAL SUMMARY"
-log_to_master "========================================"
-log_to_master "Total Experiments: $TOTAL_RUNS"
-log_to_master "Successful: $SUCCESS_RUNS"
-log_to_master "Failed: $FAILED_RUNS"
-if [ $TOTAL_RUNS -gt 0 ]; then
-    log_to_master "Success Rate: $(awk "BEGIN {printf \"%.1f%%\", ($SUCCESS_RUNS/$TOTAL_RUNS)*100}")"
-fi
-log_to_master "Completed: $(date '+%Y-%m-%d %H:%M:%S')"
 
 # Remove trap for normal exit
 trap - EXIT

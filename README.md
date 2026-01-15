@@ -32,6 +32,12 @@ repgen/
 
 This artifact is compatible with **Linux** (Ubuntu 20.04+), **macOS** (Apple Silicon recommended), and **Windows** (via WSL2 or Git Bash).
 
+> **Important:** All scripts in this repository are shell scripts (`.sh` files) designed to run in Unix-based terminals. To run these scripts:
+> - **macOS/Linux:** Use the native terminal
+> - **Windows:** Use **Git Bash** (included with [Git for Windows](https://git-scm.com/download/win)) or **WSL2** (Windows Subsystem for Linux)
+> 
+> Git Bash and WSL2 are freely available on all operating systems and provide a Unix-compatible environment for running shell scripts.
+
 ### Prerequisites
 
 * **Python:** Version 3.8 or higher.
@@ -39,6 +45,43 @@ This artifact is compatible with **Linux** (Ubuntu 20.04+), **macOS** (Apple Sil
 * **Ollama (Local Inference):** Required only if running without cloud APIs.
 * [Download for macOS/Linux](https://ollama.ai/download)
 * [Download for Windows](https://www.google.com/search?q=https://ollama.ai/download/windows)
+
+### Automated Setup (Recommended)
+
+We provide a setup script that automates environment configuration, dependency installation, and dataset preparation:
+
+```bash
+bash scripts/setup.sh --bugs 1-10
+```
+
+**Setup Script Options:**
+
+| Flag | Description | Example |
+| --- | --- | --- |
+| `--bugs` | **Required.** Bug IDs to set up (ranges or lists) | `1-10`, `80-82`, `1,5,10` |
+| `--skip-code` | Skip cloning code repositories (metadata only) | `--skip-code` |
+| `--force-clone` | Re-clone repositories even if they already exist | `--force-clone` |
+| `--quiet` | Suppress informational messages | `--quiet` |
+| `--log-file` | Write detailed logs to a file | `--log-file setup.log` |
+
+**Examples:**
+
+```bash
+# Set up bugs 1-10 (recommended starting point)
+bash scripts/setup.sh --bugs 1-10
+
+# Set up specific bugs (80, 81, 82)
+bash scripts/setup.sh --bugs 80-82
+
+# Set up all bugs with logging
+bash scripts/setup.sh --bugs 1-106 --log-file setup.log
+
+# Set up without cloning code (faster)
+bash scripts/setup.sh --bugs 1-10 --skip-code
+
+# Activate the environment after setup
+source venv/bin/activate
+```
 
 ### Installation
 
@@ -96,7 +139,33 @@ export DEEPSEEK_API_KEY="sk-..."
 
 We provide scripts to run the tool in different modes. Logs and generated reproduction scripts will be saved in the `results/` directory.
 
+> **Reminder:** All commands below should be executed in a Unix-based terminal:
+> - macOS/Linux: Use the native terminal
+> - Windows: Use **Git Bash** or **WSL2** (not PowerShell or Command Prompt)
+
 ### Quick Start
+
+#### Demo Script (Recommended for First-Time Users)
+
+To experience the complete RepGen pipeline, run the demo script:
+
+```bash
+bash scripts/demo.sh
+```
+
+This interactive demo will:
+1. Set up the environment for the first two bugs
+2. Prompt for your OpenAI API key
+3. Run local inference (Qwen2.5)
+4. Run cloud inference (GPT-4o)
+5. Execute baseline code
+6. Run ablation studies
+
+**Prerequisites for Demo:**
+- Ollama running locally (`ollama serve` in a separate terminal) for local inference
+- OpenAI API key (optional, for cloud-based inference)
+
+#### Individual Script Execution
 
 | Mode | Description | Command |
 | --- | --- | --- |
@@ -124,7 +193,7 @@ bash scripts/pipeline/baselines.sh --bugs 1-106
 Reproduce the component analysis (e.g., RepGen without Retrieval, RepGen without Iterative Refinement).
 
 ```bash
-bash scripts/pipeline/ablation.sh --bugs 1-106
+bash scripts/pipeline/ablations.sh --bugs 1-106
 ```
 
 > **Note:** For advanced customization, refer to the documentation in `scripts/README.md`.

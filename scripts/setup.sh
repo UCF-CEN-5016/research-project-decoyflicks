@@ -1,30 +1,35 @@
 #!/bin/bash
 
 ###############################################################################
-# RepGen Unified Pipeline - Single configurable entry point (Cloud)
+# RepGen Setup Script - Initialize venv, install dependencies, and datasets
 #
 # Usage:
-#   bash cloud.sh [OPTIONS]
+#   bash setup.sh --bugs <range> [OPTIONS]
+#
+# Examples:
+#   bash setup.sh --bugs 1-10
+#   bash setup.sh --bugs 1,3,5,10-15
+#   bash setup.sh --bugs 80-82 --force-clone --log-file setup.log
+#
+# This script will:
+#   1. Create and activate a Python virtual environment
+#   2. Install all dependencies from requirements.txt
+#   3. Set up dataset_local with the specified bugs
+#   4. Set up dataset_cloud with the specified bugs
 ###############################################################################
 
-# Ensure pipeline fails if any part of a pipe fails (catches Python errors)
+# Ensure pipeline fails if any part of a pipe fails
 set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-DATASET_PATH="$PROJECT_DIR/dataset_cloud"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 CACHE_DIR="$PROJECT_DIR/.code_cache"
 CSV_FILE="$PROJECT_DIR/dataset/Dataset.csv"
 
 # Default parameters
 BUGS=""
-SETUP=false
-RUN=false
 SKIP_CODE=false
 FORCE_CLONE=false
-MAX_ATTEMPTS=1
-RETRIEVAL="full_system"
-GENERATION="all_steps"
 QUIET=false
 LOG_FILE=""
 
@@ -171,7 +176,7 @@ stop_spinner() {
 # Cleanup function for interrupts
 cleanup() {
     stop_spinner
-    log_warning "Pipeline interrupted by user"
+    log_warning "Setup interrupted by user"
     exit 130
 }
 trap cleanup INT TERM
@@ -180,18 +185,12 @@ trap cleanup INT TERM
 while [[ $# -gt 0 ]]; do
     case $1 in
         --bugs) BUGS="$2"; shift 2 ;;
-        --dataset) DATASET_PATH="$2"; shift 2 ;;
-        --setup) SETUP=true; shift ;;
-        --run) RUN=true; shift ;;
         --skip-code) SKIP_CODE=true; shift ;;
         --force-clone) FORCE_CLONE=true; shift ;;
-        --max-attempts) MAX_ATTEMPTS="$2"; shift 2 ;;
-        --retrieval) RETRIEVAL="$2"; shift 2 ;;
-        --generation) GENERATION="$2"; shift 2 ;;
         --quiet) QUIET=true; shift ;;
         --log-file) LOG_FILE="$2"; shift 2 ;;
         --help)
-            grep "^#" "$0" | head -60
+            grep "^#" "$0" | head -20
             exit 0
             ;;
         *)
@@ -216,11 +215,6 @@ if [ -z "$BUGS" ]; then
     exit 1
 fi
 
-if [ "$SETUP" = false ] && [ "$RUN" = false ]; then
-    log_error "Must specify at least --setup or --run"
-    exit 1
-fi
-
 # Parse bug range
 parse_bugs() {
     local range="$1"
@@ -241,16 +235,12 @@ BUG_END="${BUG_IDS[$((TOTAL_BUGS-1))]}"
 # Print banner
 echo ""
 echo "=========================================="
-echo -e "  ${BOLD}RepGen Unified Pipeline${NC}"
+echo -e "  ${BOLD}RepGen Setup Script${NC}"
 echo "=========================================="
 echo ""
-log_info "Dataset: ${BOLD}${DATASET_PATH}${NC}"
 log_info "Bugs: ${BOLD}${BUGS}${NC} (${TOTAL_BUGS} total)"
-log_info "Setup: ${BOLD}${SETUP}${NC} | Run: ${BOLD}${RUN}${NC}"
-if [ "$RUN" = true ]; then
-    log_info "Max attempts: ${BOLD}${MAX_ATTEMPTS}${NC}"
-    log_info "Retrieval: ${BOLD}${RETRIEVAL}${NC} | Generation: ${BOLD}${GENERATION}${NC}"
-fi
+log_info "Skip Code: ${BOLD}${SKIP_CODE}${NC}"
+log_info "Force Clone: ${BOLD}${FORCE_CLONE}${NC}"
 if [ -n "$LOG_FILE" ]; then
     log_info "Log file: ${BOLD}${LOG_FILE}${NC}"
 fi
@@ -282,24 +272,20 @@ get_cache_key() {
     echo "$1" | sed 's|.*github.com/||' | sed 's|/|__|g' | sed 's|\.git||'
 }
 
-# ============================================================================
-# SETUP PHASE
-# ============================================================================
-
-if [ "$SETUP" = true ]; then
+# Setup a single dataset
+setup_dataset() {
+    local dataset_name=$1
+    local dataset_path=$2
+    
     echo "=========================================="
-    echo -e "  ${BOLD}Setup Phase${NC}"
+    echo -e "  ${BOLD}Setting up ${dataset_name}${NC}"
     echo "=========================================="
     echo ""
-    log_info "Starting setup phase"
+    log_info "Dataset path: ${BOLD}${dataset_path}${NC}"
+    echo ""
     
     mkdir -p "$CACHE_DIR"
-    
-    if [ "$DATASET_PATH" != "$PROJECT_DIR/dataset" ]; then
-        log_step "Creating custom dataset structure"
-        mkdir -p "$DATASET_PATH"
-        log_success "Custom dataset directory created"
-    fi
+    mkdir -p "$dataset_path"
     
     SETUP_SUCCESS=0
     SETUP_FAILED=0
@@ -309,7 +295,7 @@ if [ "$SETUP" = true ]; then
         CURRENT_BUG=$((CURRENT_BUG + 1))
         BID=$(printf "%03d" "$bug_id")
         ORIG_BDIR="$PROJECT_DIR/dataset/$BID"
-        AE_BDIR="$DATASET_PATH/$BID"
+        AE_BDIR="$dataset_path/$BID"
         AE_CDIR="$AE_BDIR/code"
         AE_BRDIR="$AE_BDIR/bug_report"
         AE_CTXDIR="$AE_BDIR/context"
@@ -427,168 +413,133 @@ if [ "$SETUP" = true ]; then
         log_warning "Failed: ${BOLD}${SETUP_FAILED}${NC}"
     fi
     echo ""
-fi
+    
+    return $SETUP_FAILED
+}
 
 # ============================================================================
-# RUN PHASE
+# SETUP VENV AND DEPENDENCIES
 # ============================================================================
 
-if [ "$RUN" = true ]; then
+setup_venv() {
     echo "=========================================="
-    echo -e "  ${BOLD}Run Phase${NC}"
+    echo -e "  ${BOLD}Setting up Virtual Environment${NC}"
     echo "=========================================="
     echo ""
-    log_info "Starting run phase"
+    
+    VENV_DIR="$PROJECT_DIR/venv"
+    REQUIREMENTS_FILE="$PROJECT_DIR/requirements.txt"
+    
+    # Check if venv already exists
+    if [ -d "$VENV_DIR" ]; then
+        log_warning "Virtual environment already exists at: $VENV_DIR"
+        log_step "Skipping venv creation"
+    else
+        log_step "Creating virtual environment"
+        start_spinner "Creating venv..."
+        
+        if python3 -m venv "$VENV_DIR" > /tmp/venv_create_$$.log 2>&1; then
+            stop_spinner
+            log_success "Virtual environment created successfully"
+        else
+            stop_spinner
+            log_error "Failed to create virtual environment"
+            [ -n "$LOG_FILE" ] && cat /tmp/venv_create_$$.log >> "$LOG_FILE"
+            return 1
+        fi
+    fi
+    
+    # Determine activation script based on OS
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+        ACTIVATE_SCRIPT="$VENV_DIR/Scripts/activate"
+    else
+        ACTIVATE_SCRIPT="$VENV_DIR/bin/activate"
+    fi
+    
+    if [ ! -f "$ACTIVATE_SCRIPT" ]; then
+        log_error "Activation script not found: $ACTIVATE_SCRIPT"
+        return 1
+    fi
     
     log_step "Activating virtual environment"
-    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-        if [ -f "$PROJECT_DIR/venv/Scripts/activate" ]; then
-            source "$PROJECT_DIR/venv/Scripts/activate" 2>/dev/null || {
-                log_error "Failed to activate virtual environment"
-                exit 1
-            }
-            log_success "  Virtual environment activated (Windows)"
-        else
-            log_error "Virtual environment not found at $PROJECT_DIR/venv/Scripts/activate"
-            exit 1
-        fi
+    source "$ACTIVATE_SCRIPT" || {
+        log_error "Failed to activate virtual environment"
+        return 1
+    }
+    log_success "Virtual environment activated"
+    
+    # Upgrade pip
+    log_step "Upgrading pip"
+    start_spinner "Upgrading pip..."
+    
+    if pip install --quiet --upgrade pip > /tmp/pip_upgrade_$$.log 2>&1; then
+        stop_spinner
+        log_success "pip upgraded successfully"
     else
-        if [ -d "$PROJECT_DIR/venv" ]; then
-            source "$PROJECT_DIR/venv/bin/activate" 2>/dev/null || {
-                log_error "Failed to activate virtual environment"
-                exit 1
-            }
-            log_success "Virtual environment activated (Unix/Mac)"
-        else
-            log_error "Virtual environment not found at $PROJECT_DIR/venv"
-            exit 1
-        fi
+        stop_spinner
+        log_warning "pip upgrade encountered issues"
+        [ -n "$LOG_FILE" ] && cat /tmp/pip_upgrade_$$.log >> "$LOG_FILE"
     fi
     
-    if [ -z "$OPENAI_API_KEY" ]; then
-        log_error "OPENAI_API_KEY environment variable not set"
-        log_info "Please set it with: export OPENAI_API_KEY='your-key-here'"
-        exit 1
+    # Install dependencies
+    if [ ! -f "$REQUIREMENTS_FILE" ]; then
+        log_error "Requirements file not found: $REQUIREMENTS_FILE"
+        return 1
     fi
     
-    # Validate API key format (basic check)
-    if [[ ! "$OPENAI_API_KEY" =~ ^sk- ]]; then
-        log_warning "API key format looks unusual (should start with 'sk-')"
+    log_step "Installing dependencies from requirements.txt"
+    start_spinner "Installing packages..."
+    
+    if pip install --quiet -r "$REQUIREMENTS_FILE" > /tmp/pip_install_$$.log 2>&1; then
+        stop_spinner
+        log_success "All dependencies installed successfully"
+    else
+        stop_spinner
+        log_warning "Some dependencies may have failed to install (see logs)"
+        [ -n "$LOG_FILE" ] && cat /tmp/pip_install_$$.log >> "$LOG_FILE"
     fi
     
-    log_success "Environment configured successfully"
-    log_debug "Python: $(which python)"
-    log_debug "API Key: ...${OPENAI_API_KEY: -4}"
     echo ""
-    
-    RUN_SUCCESS=0
-    RUN_FAILED=0
-    CURRENT_BUG=0
-    
-    for bug_id in "${BUG_IDS[@]}"; do
-        CURRENT_BUG=$((CURRENT_BUG + 1))
-        BID=$(printf "%03d" "$bug_id")
-        BDIR="$DATASET_PATH/$BID"
-        CDIR="$BDIR/code"
-        
-        if [ ! -d "$CDIR" ]; then
-            log_error "Code directory missing for bug $BID: $CDIR"
-            RUN_FAILED=$((RUN_FAILED + 1))
-            continue
-        fi
-        
-        show_progress "$CURRENT_BUG" "$TOTAL_BUGS" "Pipeline Progress"
-        echo ""
-        log_step "Running pipeline for Bug ${BOLD}${BID}${NC} (${CURRENT_BUG}/${TOTAL_BUGS})"
-        log_debug "Bug directory: $BDIR"
-        log_debug "Code directory: $CDIR"
-        echo ""
-        
-        TEMP_OUTPUT="/tmp/repgen_output_$BID.log"
-        START_TIME=$(date +%s)
-        
-        PYTHON_ARGS=(
-            "$PROJECT_DIR/src/tool_openai.py"
-            "--bug_id=$BID"
-            "--max-attempts=$MAX_ATTEMPTS"
-            "--retrieval_ablation=$RETRIEVAL"
-            "--generation_ablation=$GENERATION"
-            "--ae_dataset_path=$DATASET_PATH"
-        )
-        
-        # Add log file if specified
-        if [ -n "$LOG_FILE" ]; then
-            PYTHON_ARGS+=("--log-file=$LOG_FILE")
-        fi
-        
-        if [ "$QUIET" = false ]; then
-            python "${PYTHON_ARGS[@]}" 2>&1 | while IFS= read -r line; do
-                echo "  ${line}"
-            done
-            RESULT=${PIPESTATUS[0]}
-        else
-            python "${PYTHON_ARGS[@]}" > "$TEMP_OUTPUT" 2>&1
-            RESULT=$?
-        fi
-        
-        END_TIME=$(date +%s)
-        DURATION=$((END_TIME - START_TIME))
-        
-        echo ""
-        
-        if [ $RESULT -eq 0 ]; then
-            log_success "Bug $BID completed successfully (${DURATION}s)"
-            RUN_SUCCESS=$((RUN_SUCCESS + 1))
-        else
-            log_error "Bug $BID failed (Exit Code: $RESULT, Duration: ${DURATION}s)"
-            
-            if [ "$QUIET" = true ] && [ -f "$TEMP_OUTPUT" ]; then
-                echo "  ${DIM}Last 15 lines of output:${NC}"
-                tail -15 "$TEMP_OUTPUT" | sed 's/^/    /'
-            fi
-            
-            # Save error log
-            if [ -n "$LOG_FILE" ]; then
-                echo "=== Bug $BID Error Log ===" >> "$LOG_FILE"
-                cat "$TEMP_OUTPUT" >> "$LOG_FILE" 2>/dev/null || true
-                echo "" >> "$LOG_FILE"
-            fi
-            
-            RUN_FAILED=$((RUN_FAILED + 1))
-        fi
-        
-        # Clean up temp file
-        rm -f "$TEMP_OUTPUT"
-        echo ""
-    done
-    
-    show_progress "$TOTAL_BUGS" "$TOTAL_BUGS" "Pipeline Progress"
-    echo ""
-    echo ""
-    echo "=========================================="
-    echo -e "  ${BOLD}Run Summary${NC}"
-    echo "=========================================="
-    echo ""
-    log_success "Successful: ${BOLD}${RUN_SUCCESS}/${TOTAL_BUGS}${NC}"
-    if [ $RUN_FAILED -gt 0 ]; then
-        log_warning "Failed: ${BOLD}${RUN_FAILED}${NC}"
-    fi
-    
-    SUCCESS_RATE=$((RUN_SUCCESS * 100 / TOTAL_BUGS))
-    log_info "Success rate: ${BOLD}${SUCCESS_RATE}%${NC}"
-    
-    if [ -n "$LOG_FILE" ]; then
-        log_info "Full logs saved to: ${BOLD}${LOG_FILE}${NC}"
-    fi
-    echo ""
-fi
+    return 0
+}
 
-log_success "${BOLD}Pipeline complete!${NC}"
+# ============================================================================
+# MAIN SETUP
+# ============================================================================
+
+TOTAL_FAILED=0
+
+# Setup venv and install dependencies
+setup_venv
+VENV_SETUP=$?
+
+# Setup dataset_local
+setup_dataset "dataset_local" "$PROJECT_DIR/dataset_local"
+TOTAL_FAILED=$((TOTAL_FAILED + $?))
+
+# Setup dataset_cloud
+setup_dataset "dataset_cloud" "$PROJECT_DIR/dataset_cloud"
+TOTAL_FAILED=$((TOTAL_FAILED + $?))
+
+# Final summary
+echo "=========================================="
+echo -e "  ${BOLD}Setup Complete${NC}"
+echo "=========================================="
 echo ""
 
-# Exit with error if any runs failed
-if [ "$RUN" = true ] && [ $RUN_FAILED -gt 0 ]; then
+if [ $VENV_SETUP -eq 0 ] && [ $TOTAL_FAILED -eq 0 ]; then
+    log_success "All setup steps completed successfully!"
+    echo ""
+    log_info "To activate the virtual environment, run:"
+    echo "    source $PROJECT_DIR/venv/bin/activate"
+    echo ""
+    exit 0
+elif [ $VENV_SETUP -ne 0 ]; then
+    log_error "Virtual environment setup failed"
+    echo ""
+    exit 1
+else
+    log_error "Setup completed with errors in dataset configuration"
+    echo ""
     exit 1
 fi
-
-exit 0

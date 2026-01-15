@@ -7,9 +7,13 @@
 # - Generates a persistent CSV summary (logs/ablation_.../summary.csv)
 # - Tracks and displays duration for each experiment
 # - Clear visual feedback (Pass/Fail/Retry)
+# - Custom ablation selection via command-line arguments
 #
 # Usage:
-#   bash scripts/pipeline/ablation.sh --bugs 1-5 [OPTIONS]
+#   bash ablations.sh --bugs 1-5 [OPTIONS]
+#   bash ablations.sh --bugs 1-5 \
+#     --retrieval-ablations "NO_TRAINING_LOOP_RANKING" \
+#     --generation-ablations "no_relevance"
 ###############################################################################
 
 set -o pipefail
@@ -31,13 +35,15 @@ LOG_BASE_DIR="$PROJECT_DIR/logs/ablation_study_$(date +%Y%m%d_%H%M%S)"
 SUMMARY_CSV="$LOG_BASE_DIR/summary.csv"
 MASTER_LOG="$LOG_BASE_DIR/master.log"
 QUIET=false
+CUSTOM_RETRIEVAL_ABLATIONS=""
+CUSTOM_GENERATION_ABLATIONS=""
 
 # Global Counters
 TOTAL_RUNS=0
 SUCCESS_RUNS=0
 FAILED_RUNS=0
 
-# --- Define Retrieval Ablations ---
+# --- Define Retrieval Ablations (defaults) ---
 RETRIEVAL_ABLATIONS=(
     "NO_BM25"
     "NO_ANN"
@@ -48,7 +54,7 @@ RETRIEVAL_ABLATIONS=(
     "NO_DEPENDENCY_EXTRACTION"
 )
 
-# --- Define Generation Ablations ---
+# --- Define Generation Ablations (defaults) ---
 GENERATION_ABLATIONS=(
     "no_refine"
     "no_plan"
@@ -277,16 +283,44 @@ while [[ $# -gt 0 ]]; do
         --dataset) DATASET_PATH="$2"; shift 2 ;;
         --max-attempts) MAX_RUN_ATTEMPTS="$2"; shift 2 ;;
         --quiet) QUIET=true; shift ;;
+        --retrieval-ablations) CUSTOM_RETRIEVAL_ABLATIONS="$2"; shift 2 ;;
+        --generation-ablations) CUSTOM_GENERATION_ABLATIONS="$2"; shift 2 ;;
         --help)
             echo "Usage: $0 --bugs 1-5 [OPTIONS]"
             echo ""
             echo "Options:"
-            echo "  --bugs RANGE          Bug IDs to process (e.g., '1-5' or '1,3,5')"
-            echo "  --tool-script PATH    Path to tool script (default: src/tool_openai.py)"
-            echo "  --dataset PATH        Path to dataset (default: ae_dataset)"
-            echo "  --max-attempts NUM    Maximum retry attempts (default: 1)"
-            echo "  --quiet               Suppress spinner output"
-            echo "  --help                Show this help message"
+            echo "  --bugs RANGE                    Bug IDs to process (e.g., '1-5' or '1,3,5')"
+            echo "  --tool-script PATH              Path to tool script (default: src/tool_openai.py)"
+            echo "  --dataset PATH                  Path to dataset (default: dataset_cloud)"
+            echo "  --max-attempts NUM              Maximum retry attempts (default: 1)"
+            echo "  --quiet                         Suppress spinner output"
+            echo "  --retrieval-ablations LIST      Comma-separated retrieval ablations to run"
+            echo "                                  (e.g., 'NO_BM25,NO_RERANKER')"
+            echo "  --generation-ablations LIST     Comma-separated generation ablations to run"
+            echo "                                  (e.g., 'no_refine,no_plan')"
+            echo "  --help                          Show this help message"
+            echo ""
+            echo "Available Retrieval Ablations:"
+            echo "  NO_BM25, NO_ANN, NO_RERANKER, NO_TRAINING_LOOP_EXTRACTION,"
+            echo "  NO_TRAINING_LOOP_RANKING, NO_MODULE_PARTITIONING, NO_DEPENDENCY_EXTRACTION"
+            echo ""
+            echo "Available Generation Ablations:"
+            echo "  no_refine, no_plan, no_compilation, no_relevance,"
+            echo "  no_static_analysis, no_runtime_feedback"
+            echo ""
+            echo "Examples:"
+            echo "  # Run all ablations for bugs 1-5"
+            echo "  $0 --bugs 1-5"
+            echo ""
+            echo "  # Run specific ablations only"
+            echo "  $0 --bugs 1-5 \\"
+            echo "    --retrieval-ablations 'NO_TRAINING_LOOP_RANKING' \\"
+            echo "    --generation-ablations 'no_relevance'"
+            echo ""
+            echo "  # Run multiple custom ablations"
+            echo "  $0 --bugs 1-3 \\"
+            echo "    --retrieval-ablations 'NO_BM25,NO_RERANKER' \\"
+            echo "    --generation-ablations 'no_refine,no_plan,no_relevance'"
             exit 0
             ;;
         *)
@@ -304,7 +338,21 @@ if [ -z "$BUGS" ]; then
 fi
 
 # ==========================================
-# 5. MAIN EXECUTION
+# 5. APPLY CUSTOM ABLATIONS IF PROVIDED
+# ==========================================
+
+if [ -n "$CUSTOM_RETRIEVAL_ABLATIONS" ]; then
+    IFS=',' read -ra RETRIEVAL_ABLATIONS <<< "$CUSTOM_RETRIEVAL_ABLATIONS"
+    log_info "Using custom retrieval ablations: ${RETRIEVAL_ABLATIONS[*]}"
+fi
+
+if [ -n "$CUSTOM_GENERATION_ABLATIONS" ]; then
+    IFS=',' read -ra GENERATION_ABLATIONS <<< "$CUSTOM_GENERATION_ABLATIONS"
+    log_info "Using custom generation ablations: ${GENERATION_ABLATIONS[*]}"
+fi
+
+# ==========================================
+# 6. MAIN EXECUTION
 # ==========================================
 
 # Create log directory and initialize files
@@ -332,10 +380,15 @@ echo " Summary CSV:  $SUMMARY_CSV"
 echo " Master Log:   $MASTER_LOG"
 echo " Max Attempts: $MAX_RUN_ATTEMPTS"
 echo "------------------------------------------------"
+echo " Retrieval Ablations: ${RETRIEVAL_ABLATIONS[*]}"
+echo " Generation Ablations: ${GENERATION_ABLATIONS[*]}"
+echo "------------------------------------------------"
 
 log_to_master "Tool: $TOOL_SCRIPT"
 log_to_master "Dataset: $DATASET_PATH"
 log_to_master "Max Attempts: $MAX_RUN_ATTEMPTS"
+log_to_master "Retrieval Ablations: ${RETRIEVAL_ABLATIONS[*]}"
+log_to_master "Generation Ablations: ${GENERATION_ABLATIONS[*]}"
 
 BUG_IDS=($(parse_bugs "$BUGS"))
 log_to_master "Processing bugs: ${BUG_IDS[*]}"
@@ -348,35 +401,43 @@ for bug_id in "${BUG_IDS[@]}"; do
     log_header "Processing Bug $BID"
 
     # --- 1. RETRIEVAL ABLATIONS ---
-    log_info "Running Retrieval Ablations"
-    for abl in "${RETRIEVAL_ABLATIONS[@]}"; do
-        log_file="$BUG_LOG_DIR/retrieval_${abl}.log"
-        
-        # Args for this run
-        args=("$TOOL_SCRIPT" "--bug_id=$BID" "--max-attempts=$MAX_GEN_ATTEMPTS" "--retrieval_ablation=$abl" "--generation_ablation=all_steps")
-        [ -n "$DATASET_PATH" ] && args+=("--ae_dataset_path=$DATASET_PATH")
+    if [ ${#RETRIEVAL_ABLATIONS[@]} -gt 0 ]; then
+        log_info "Running Retrieval Ablations"
+        for abl in "${RETRIEVAL_ABLATIONS[@]}"; do
+            log_file="$BUG_LOG_DIR/retrieval_${abl}.log"
+            
+            # Args for this run
+            args=("$TOOL_SCRIPT" "--bug_id=$BID" "--max-attempts=$MAX_GEN_ATTEMPTS" "--retrieval_ablation=$abl" "--generation_ablation=all_steps")
+            [ -n "$DATASET_PATH" ] && args+=("--ae_dataset_path=$DATASET_PATH")
 
-        run_experiment "$BID" "Retrieval" "$abl" "$log_file" "${args[@]}"
-    done
+            run_experiment "$BID" "Retrieval" "$abl" "$log_file" "${args[@]}"
+        done
+    else
+        log_info "No retrieval ablations specified, skipping..."
+    fi
 
     # --- 2. GENERATION ABLATIONS ---
-    echo ""
-    log_info "Running Generation Ablations"
-    for abl in "${GENERATION_ABLATIONS[@]}"; do
-        log_file="$BUG_LOG_DIR/generation_${abl}.log"
-        
-        # Args for this run (Retrieval fixed to full_system)
-        args=("$TOOL_SCRIPT" "--bug_id=$BID" "--max-attempts=$MAX_GEN_ATTEMPTS" "--retrieval_ablation=full_system" "--generation_ablation=$abl")
-        [ -n "$DATASET_PATH" ] && args+=("--ae_dataset_path=$DATASET_PATH")
+    if [ ${#GENERATION_ABLATIONS[@]} -gt 0 ]; then
+        echo ""
+        log_info "Running Generation Ablations"
+        for abl in "${GENERATION_ABLATIONS[@]}"; do
+            log_file="$BUG_LOG_DIR/generation_${abl}.log"
+            
+            # Args for this run (Retrieval fixed to full_system)
+            args=("$TOOL_SCRIPT" "--bug_id=$BID" "--max-attempts=$MAX_GEN_ATTEMPTS" "--retrieval_ablation=full_system" "--generation_ablation=$abl")
+            [ -n "$DATASET_PATH" ] && args+=("--ae_dataset_path=$DATASET_PATH")
 
-        run_experiment "$BID" "Generation" "$abl" "$log_file" "${args[@]}"
-    done
+            run_experiment "$BID" "Generation" "$abl" "$log_file" "${args[@]}"
+        done
+    else
+        log_info "No generation ablations specified, skipping..."
+    fi
     
     log_to_master "Completed Bug $BID"
 done
 
 # ==========================================
-# 6. FINAL SUMMARY
+# 7. FINAL SUMMARY
 # ==========================================
 
 echo ""
@@ -386,25 +447,10 @@ echo "========================================"
 echo " Total Experiments: $TOTAL_RUNS"
 echo -e " Successful:        ${GREEN}$SUCCESS_RUNS${NC}"
 echo -e " Failed:            ${RED}$FAILED_RUNS${NC}"
-if [ $TOTAL_RUNS -gt 0 ]; then
-    echo " Success Rate:      $(awk "BEGIN {printf \"%.1f%%\", ($SUCCESS_RUNS/$TOTAL_RUNS)*100}")"
-fi
 echo ""
 echo " CSV Report:        $SUMMARY_CSV"
 echo " Master Log:        $MASTER_LOG"
 echo ""
-
-log_to_master ""
-log_to_master "========================================"
-log_to_master "FINAL SUMMARY"
-log_to_master "========================================"
-log_to_master "Total Experiments: $TOTAL_RUNS"
-log_to_master "Successful: $SUCCESS_RUNS"
-log_to_master "Failed: $FAILED_RUNS"
-if [ $TOTAL_RUNS -gt 0 ]; then
-    log_to_master "Success Rate: $(awk "BEGIN {printf \"%.1f%%\", ($SUCCESS_RUNS/$TOTAL_RUNS)*100}")"
-fi
-log_to_master "Completed: $(date '+%Y-%m-%d %H:%M:%S')"
 
 # Remove trap for normal exit
 trap - EXIT

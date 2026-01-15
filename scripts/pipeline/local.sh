@@ -4,7 +4,7 @@
 # RepGen Unified Pipeline - Local Inference (Ollama)
 #
 # Usage:
-#   bash scripts/pipeline/local.sh [OPTIONS]
+#   bash local.sh [OPTIONS]
 ###############################################################################
 
 # Ensure pipeline fails if any part of a pipe fails
