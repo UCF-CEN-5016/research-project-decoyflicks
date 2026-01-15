@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ###############################################################################
-# RepGen Unified Pipeline - Single configurable entry point
+# RepGen Unified Pipeline - Single configurable entry point (Cloud)
 #
 # Usage:
-#   bash pipeline.sh [OPTIONS]
+#   bash scripts/pipeline/cloud.sh [OPTIONS]
 ###############################################################################
 
 # Ensure pipeline fails if any part of a pipe fails (catches Python errors)
 set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 DATASET_PATH="$PROJECT_DIR/dataset"
 CACHE_DIR="$PROJECT_DIR/.code_cache"
 CSV_FILE="$PROJECT_DIR/dataset/Dataset.csv"

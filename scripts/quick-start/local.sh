@@ -116,12 +116,12 @@ echo -e "${YELLOW}✓ All required models are available${NC}"
 # Navigate to project root
 cd "$PROJECT_ROOT"
 
-# Run pipeline with ollama_pipeline.sh
+# Run pipeline with local pipeline script
 echo ""
 echo -e "${BLUE}Running pipeline...${NC}"
 echo ""
 
-bash "$SCRIPT_DIR/ollama_pipeline.sh" \
+bash "$SCRIPT_DIR/../pipeline/local.sh" \
     --bugs "$BUGS" \
     --dataset dataset \
     --setup \

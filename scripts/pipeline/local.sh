@@ -19,20 +19,20 @@
 #  - Highly configurable via command-line parameters
 #
 # Usage:
-#   bash ollama_pipeline.sh [OPTIONS]
+#   bash scripts/pipeline/local.sh [OPTIONS]
 #
 # Examples:
 #   # Setup and run on original dataset, bugs 1-3
-#   bash ollama_pipeline.sh --bugs 1-3 --setup --run
+#   bash scripts/pipeline/local.sh --bugs 1-3 --setup --run
 #
 #   # Setup ae_dataset only, bugs 80-82
-#   bash ollama_pipeline.sh --bugs 80-82 --dataset ae_dataset --setup
+#   bash scripts/pipeline/local.sh --bugs 80-82 --dataset ae_dataset --setup
 #
 #   # Run pipeline only on existing ae_dataset, bugs 80-82
-#   bash ollama_pipeline.sh --bugs 80-82 --dataset ae_dataset --run --skip-code
+#   bash scripts/pipeline/local.sh --bugs 80-82 --dataset ae_dataset --run --skip-code
 #
 #   # Setup and run with custom config
-#   bash ollama_pipeline.sh --bugs 80-82 --dataset ae_dataset --setup --run \
+#   bash scripts/pipeline/local.sh --bugs 80-82 --dataset ae_dataset --setup --run \
 #                          --max-attempts 3 --retrieval full_system --generation all_steps
 #
 ###############################################################################
@@ -56,7 +56,7 @@ fi
 
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 # Default values
 BUGS=""
@@ -163,7 +163,7 @@ done
 # Validate required arguments
 if [ -z "$BUGS" ]; then
     echo -e "${RED}Error: --bugs is required${NC}"
-    echo "Usage: bash ollama_pipeline.sh --bugs 1-10 --setup --run"
+    echo "Usage: bash scripts/pipeline/local.sh --bugs 1-10 --setup --run"
     exit 1
 fi
 

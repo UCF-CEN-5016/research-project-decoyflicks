@@ -27,7 +27,7 @@ MAX_ATTEMPTS="${2:-5}"
 shift 2 2>/dev/null || shift $# 2>/dev/null  # Remove first two args if they exist
 
 # Run pipeline with dynamic logging (pass through any extra args like --quiet)
-bash "$SCRIPT_DIR/pipeline.sh" \
+bash "$SCRIPT_DIR/../pipeline/cloud.sh" \
     --bugs "$BUGS" \
     --dataset ae_dataset \
     --setup \
