@@ -160,6 +160,18 @@ cleanup() {
 }
 trap cleanup INT TERM EXIT
 
+# Detect Python executable (handle both python and python3)
+detect_python() {
+    if command -v python3 &>/dev/null; then
+        echo "python3"
+    elif command -v python &>/dev/null; then
+        echo "python"
+    else
+        echo "python3"  # Default fallback
+    fi
+}
+PYTHON_CMD=$(detect_python)
+
 # ==========================================
 # 3. HELPER FUNCTIONS
 # ==========================================
@@ -210,7 +222,7 @@ run_baseline() {
     
     # Log experiment start
     log_to_master "Starting baseline: Bug=$bug_id, Model=$model, Backend=$backend, Technique=$technique"
-    log_to_master "Command: python $TOOL_SCRIPT --bug_id=$bug_id --backend=$backend --model=$model --technique=$technique --examples=$EXAMPLES --dataset_path=$DATASET_PATH"
+    log_to_master "Command: $PYTHON_CMD $TOOL_SCRIPT --bug_id=$bug_id --backend=$backend --model=$model --technique=$technique --examples=$EXAMPLES --dataset_path=$DATASET_PATH"
     log_to_master "Log file: $log_file"
     
     # Retry Loop
@@ -234,10 +246,10 @@ run_baseline() {
             echo "Technique: $technique"
             echo "Examples: $EXAMPLES"
             echo "Attempt: $attempt/$MAX_RUN_ATTEMPTS"
-            echo "Command: python $TOOL_SCRIPT --bug_id=$bug_id --backend=$backend --model=$model --technique=$technique --examples=$EXAMPLES --dataset_path=$DATASET_PATH"
+            echo "Command: $PYTHON_CMD $TOOL_SCRIPT --bug_id=$bug_id --backend=$backend --model=$model --technique=$technique --examples=$EXAMPLES --dataset_path=$DATASET_PATH"
             echo "========================================" 
             echo ""
-            python "$TOOL_SCRIPT" \
+            $PYTHON_CMD "$TOOL_SCRIPT" \
                 --bug_id "$bug_id" \
                 --backend "$backend" \
                 --model "$model" \

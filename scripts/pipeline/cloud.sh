@@ -261,8 +261,14 @@ get_repo_info() {
     local bug_id=$1
     local csv_line=$((bug_id + 1))
     
+    # Determine Python executable
+    local python_cmd="python3"
+    if ! command -v python3 &>/dev/null && command -v python &>/dev/null; then
+        python_cmd="python"
+    fi
+    
     if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-        local line=$(python -c "
+        local line=$($python_cmd -c "
 with open('$CSV_FILE', 'r') as f:
     for i, l in enumerate(f):
         if i == $csv_line:
@@ -477,7 +483,7 @@ if [ "$RUN" = true ]; then
     fi
     
     log_success "Environment configured successfully"
-    log_debug "Python: $(which python)"
+    log_debug "Python: $(command -v python3 || command -v python)"
     log_debug "API Key: ...${OPENAI_API_KEY: -4}"
     echo ""
     
@@ -522,12 +528,12 @@ if [ "$RUN" = true ]; then
         fi
         
         if [ "$QUIET" = false ]; then
-            python "${PYTHON_ARGS[@]}" 2>&1 | while IFS= read -r line; do
+            python3 "${PYTHON_ARGS[@]}" 2>&1 | while IFS= read -r line; do
                 echo "  ${line}"
             done
             RESULT=${PIPESTATUS[0]}
         else
-            python "${PYTHON_ARGS[@]}" > "$TEMP_OUTPUT" 2>&1
+            python3 "${PYTHON_ARGS[@]}" > "$TEMP_OUTPUT" 2>&1
             RESULT=$?
         fi
         

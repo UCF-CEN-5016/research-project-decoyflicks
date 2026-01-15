@@ -64,6 +64,18 @@ GENERATION_ABLATIONS=(
     "no_runtime_feedback"
 )
 
+# Detect Python executable (handle both python and python3)
+detect_python() {
+    if command -v python3 &>/dev/null; then
+        echo "python3"
+    elif command -v python &>/dev/null; then
+        echo "python"
+    else
+        echo "python3"  # Default fallback
+    fi
+}
+PYTHON_CMD=$(detect_python)
+
 # ==========================================
 # 2. UI & LOGGING HELPERS
 # ==========================================
@@ -190,7 +202,7 @@ run_experiment() {
     
     # Log experiment start
     log_to_master "Starting experiment: Bug=$bug_id, Type=$type, Ablation=$ablation"
-    log_to_master "Command: python ${cmd_args[*]}"
+    log_to_master "Command: $PYTHON_CMD ${cmd_args[*]}"
     log_to_master "Log file: $log_file"
     
     # Retry Loop
@@ -212,10 +224,10 @@ run_experiment() {
             echo "Type: $type"
             echo "Ablation: $ablation"
             echo "Attempt: $attempt/$MAX_RUN_ATTEMPTS"
-            echo "Command: python ${cmd_args[*]}"
+            echo "Command: $PYTHON_CMD ${cmd_args[*]}"
             echo "========================================" 
             echo ""
-            python "${cmd_args[@]}" 2>&1
+            $PYTHON_CMD "${cmd_args[@]}" 2>&1
             exit_code=$?
             echo ""
             echo "========================================" 

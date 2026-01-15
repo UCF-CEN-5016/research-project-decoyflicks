@@ -438,7 +438,13 @@ setup_venv() {
         log_step "Creating virtual environment"
         start_spinner "Creating venv..."
         
-        if python3 -m venv "$VENV_DIR" > /tmp/venv_create_$$.log 2>&1; then
+        # Detect Python executable (handle both python and python3)
+        local python_cmd="python3"
+        if ! command -v python3 &>/dev/null && command -v python &>/dev/null; then
+            python_cmd="python"
+        fi
+        
+        if $python_cmd -m venv "$VENV_DIR" > /tmp/venv_create_$$.log 2>&1; then
             stop_spinner
             log_success "Virtual environment created successfully"
         else
@@ -531,7 +537,11 @@ if [ $VENV_SETUP -eq 0 ] && [ $TOTAL_FAILED -eq 0 ]; then
     log_success "All setup steps completed successfully!"
     echo ""
     log_info "To activate the virtual environment, run:"
-    echo "    source $PROJECT_DIR/venv/bin/activate"
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
+        echo "    source $PROJECT_DIR/venv/Scripts/activate"
+    else
+        echo "    source $PROJECT_DIR/venv/bin/activate"
+    fi
     echo ""
     exit 0
 elif [ $VENV_SETUP -ne 0 ]; then
