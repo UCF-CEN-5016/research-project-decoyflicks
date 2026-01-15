@@ -8,7 +8,7 @@ import os
 import subprocess
 import json
 import logging
-from typing import Tuple
+from typing import Tuple, Dict, Any
 import ast
 
 # ==========================================
@@ -35,6 +35,8 @@ class ProductionFormatter(logging.Formatter):
     YELLOW = "\x1b[38;5;226m"
     RED = "\x1b[38;5;196m"
     BOLD_RED = "\x1b[31;1m"
+    MAGENTA = "\x1b[38;5;213m"
+    CYAN = "\x1b[38;5;51m"
     RESET = "\x1b[0m"
 
     def format(self, record):
@@ -42,33 +44,60 @@ class ProductionFormatter(logging.Formatter):
         dt = self.formatTime(record, "%H:%M:%S")
         timestamp = f"{self.GREY}{dt}{self.RESET}"
 
-        # Level with fixed width (9 chars) and specific color
+        # Level with color
         if record.levelno == logging.INFO:
-            level_fmt = f"{self.BLUE}[INFO   ]{self.RESET}"
+            level_fmt = f"{self.BLUE}[INFO]{self.RESET}"
         elif record.levelno == SUCCESS_LEVEL_NUM:
             level_fmt = f"{self.GREEN}[SUCCESS]{self.RESET}"
         elif record.levelno == logging.WARNING:
             level_fmt = f"{self.YELLOW}[WARNING]{self.RESET}"
         elif record.levelno == logging.ERROR:
-            level_fmt = f"{self.RED}[ERROR  ]{self.RESET}"
+            level_fmt = f"{self.RED}[ERROR]{self.RESET}"
         elif record.levelno == logging.CRITICAL:
-            level_fmt = f"{self.BOLD_RED}[CRITIC ]{self.RESET}"
+            level_fmt = f"{self.BOLD_RED}[CRITICAL]{self.RESET}"
+        elif record.levelno == logging.DEBUG:
+            level_fmt = f"{self.GREY}[DEBUG]{self.RESET}"
         else:
-            level_fmt = f"{self.GREY}[DEBUG  ]{self.RESET}"
+            level_fmt = f"{self.CYAN}[CUSTOM]{self.RESET}"
 
-        return f"{timestamp} {level_fmt} {record.getMessage()}"
+        # Add context information if available
+        context = ""
+        if hasattr(record, 'bug_id'):
+            context = f"{self.MAGENTA}[Bug {record.bug_id}]{self.RESET} "
+        if hasattr(record, 'context_num'):
+            context += f"{self.CYAN}[Ctx {record.context_num}]{self.RESET} "
+        if hasattr(record, 'attempt'):
+            context += f"{self.YELLOW}[Att {record.attempt}]{self.RESET} "
 
-def setup_logging():
+        return f"{timestamp} {level_fmt} {context}{record.getMessage()}"
+
+def setup_logging(log_level=logging.INFO, log_file=None):
+    """
+    Set up production-ready logging with optional file output.
+    """
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(log_level)
     
     # Prevent duplicate handlers
     if logger.hasHandlers():
         logger.handlers.clear()
 
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(ProductionFormatter())
-    logger.addHandler(handler)
+    # Console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(ProductionFormatter())
+    logger.addHandler(console_handler)
+    
+    # File handler (optional)
+    if log_file:
+        file_handler = logging.FileHandler(log_file, mode='a', encoding='utf-8')
+        file_formatter = logging.Formatter(
+            '%(asctime)s [%(levelname)-8s] %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
+        file_handler.setFormatter(file_formatter)
+        logger.addHandler(file_handler)
+        logger.info(f"Logging to file: {log_file}")
+    
     return logger
 
 logger = setup_logging()
@@ -100,8 +129,38 @@ GENERATION_ABLATION_MAP = {
     "no_runtime_feedback": {"no_runtime_feedback": True},
 }
 
+def query_ollama(prompt: str, model: str) -> str:
+    """
+    Sends a prompt to the local Ollama instance via subprocess.
+    Mimics the signature of query_openai_api for consistency.
+    """
+    try:
+        cmd = ['ollama', 'run', model]
+        # Use Popen to pipe input correctly
+        process = subprocess.Popen(
+            cmd,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding='utf-8'
+        )
+        stdout, stderr = process.communicate(input=prompt)
+        
+        if process.returncode != 0:
+            logger.error(f"Ollama Error ({model}): {stderr.strip()}")
+            return ""
+            
+        return stdout.strip()
+    except FileNotFoundError:
+        logger.critical("Ollama binary not found. Is it installed?")
+        return ""
+    except Exception as e:
+        logger.error(f"Ollama execution failed: {e}")
+        return ""
+
 def main():
-    parser = argparse.ArgumentParser(description="Code generation for bug reproduction")
+    parser = argparse.ArgumentParser(description="Code generation for bug reproduction (Local/Ollama)")
     parser.add_argument("--bug_id", required=True, help="Bug ID to analyze (e.g., 001)")
     
     parser.add_argument(
@@ -122,121 +181,203 @@ def main():
 
     parser.add_argument("--max-attempts", type=int, default=5,
                           help="Maximum attempts for code generation")
+    
+    parser.add_argument("--ae_dataset_path", type=str, default=None,
+                          help="Optional path to ae_dataset (uses dataset by default)")
+    
+    parser.add_argument("--log-level", type=str, default="INFO",
+                          choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+                          help="Logging level")
+    
+    parser.add_argument("--log-file", type=str, default=None,
+                          help="Optional log file path")
+    
     args = parser.parse_args()
     
-    logger.info(f"Processing Bug ID: {args.bug_id}")
-    logger.info(f"Configuration: Retrieval={args.retrieval_ablation}, Generation={args.generation_ablation}")
+    # Re-initialize logger with arguments
+    global logger
+    log_level = getattr(logging, args.log_level.upper())
+    logger = setup_logging(log_level=log_level, log_file=args.log_file)
+    
+    logger.info("=" * 60)
+    logger.info("RepGen Code Generation Pipeline (Local/Ollama) - Starting")
+    logger.info("=" * 60)
+    logger.info(f"Bug ID: {args.bug_id}", extra={'bug_id': args.bug_id})
+    logger.info(f"Retrieval Ablation: {args.retrieval_ablation}")
+    logger.info(f"Generation Ablation: {args.generation_ablation}")
+    logger.info(f"Max Attempts: {args.max_attempts}")
+    if args.ae_dataset_path:
+        logger.info(f"Custom Dataset Path: {args.ae_dataset_path}")
+    logger.info("=" * 60)
 
-    # --- Setup pipeline and flags ---
+    # Setup pipeline and flags
     ret_ablation_name = args.retrieval_ablation
     gen_ablation_name = args.generation_ablation
     
     ret_ablation_dict = RETRIEVAL_ABLATION_CONFIGS.get(ret_ablation_name, {})
     gen_flags = GENERATION_ABLATION_MAP.get(gen_ablation_name, {})
     
-    logger.info("Initializing Retrieval Pipeline...")
-    pipeline = RetrievalPipeline(
-        bug_id=args.bug_id, 
-        ablation_config=ret_ablation_dict, 
-        retrieval_ablation_name=ret_ablation_name,
-        generation_ablation_name=gen_ablation_name
-    )
+    logger.info("Initializing retrieval pipeline...", extra={'bug_id': args.bug_id})
+    try:
+        pipeline = RetrievalPipeline(
+            bug_id=args.bug_id, 
+            ablation_config=ret_ablation_dict, 
+            retrieval_ablation_name=ret_ablation_name,
+            generation_ablation_name=gen_ablation_name,
+            dataset_dir=args.ae_dataset_path
+        )
+    except Exception as e:
+        logger.error(f"Failed to initialize pipeline: {e}", exc_info=True, extra={'bug_id': args.bug_id})
+        return
     
-    result = pipeline.run_pipeline(args.bug_id)
-    logger.success(f"Retrieval pipeline finished. Result: {result}")
+    logger.info("Running retrieval pipeline...", extra={'bug_id': args.bug_id})
+    try:
+        result = pipeline.run_pipeline(args.bug_id)
+        logger.success(f"Retrieval pipeline completed: {result.get('status', 'Done')}", extra={'bug_id': args.bug_id})
+    except Exception as e:
+        logger.error(f"Retrieval pipeline failed: {e}", exc_info=True, extra={'bug_id': args.bug_id})
+        return
  
-    # --- Get all paths from config ---
+    # Get all paths from config
     config = pipeline.config
-    logger.info(f"Context Dir: {config.CONTEXT_DIR_IN}")
-    logger.info(f"Output Dir : {config.REPRODUCTION_DIR_OUT}")
+    logger.debug(f"Context Directory: {config.CONTEXT_DIR_IN}")
+    logger.debug(f"Output Directory: {config.REPRODUCTION_DIR_OUT}")
     
     # Bug report handling
     bug_report_path = config.BUG_REPORTS_DIR / f"{args.bug_id}.txt"
-    with open(bug_report_path, 'r', encoding='utf-8') as f:
-        bug_report_content = f.read()
-    logger.info(f"Loaded bug report: {bug_report_path.name}")
+    try:
+        with open(bug_report_path, 'r', encoding='utf-8') as f:
+            bug_report_content = f.read()
+        logger.info(f"Loaded bug report: {len(bug_report_content)} chars", extra={'bug_id': args.bug_id})
+    except FileNotFoundError:
+        logger.error(f"Bug report not found: {bug_report_path}", extra={'bug_id': args.bug_id})
+        return
     
     refined_report_dir = config.REFINED_BUG_REPORT_DIR_OUT
     refined_report_path = refined_report_dir / f"{args.bug_id}.txt"
     
+    # STEP 1: Bug Report Refinement
+    logger.info("─" * 60)
+    logger.info("STEP 1/3: Bug Report Refinement", extra={'bug_id': args.bug_id})
+    logger.info("─" * 60)
+    
     if not gen_flags.get("no_refine", False):
-        logger.info("Step 1/3: Refining bug report...")
+        logger.info("Refining bug report with Ollama (qwen2.5:7b)...", extra={'bug_id': args.bug_id})
         prompt_refinement = create_prompt_refinement(bug_report_content)
         
-        cmd = ['ollama', 'run', 'qwen2.5:7b', prompt_refinement]
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, bufsize=1)
-        if process.stderr:
-            for line in process.stderr:
-                if line.strip(): logger.debug(f"LLM Stderr: {line.strip()}")
-        accumulated_output = []
-        for line in iter(process.stdout.readline, ''):
-            accumulated_output.append(line.strip())
-     
-        process.stdout.close()
-        process.wait()
+        # Use query_ollama helper
+        accumulated_output = query_ollama(prompt_refinement, model='qwen2.5:7b')
         
-        with open(refined_report_path, 'w', encoding='utf-8') as f:
-            f.write('\n'.join(accumulated_output))
-        logger.success(f"Refined bug report saved to: {refined_report_path.name}")
+        if accumulated_output:
+            try:
+                with open(refined_report_path, 'w', encoding='utf-8') as f:
+                    f.write(accumulated_output)
+                logger.success(f"Refined bug report saved: {refined_report_path.name}", extra={'bug_id': args.bug_id})
+            except Exception as e:
+                logger.error(f"Failed to save refined report: {e}", extra={'bug_id': args.bug_id})
+        else:
+            logger.warning("Ollama returned empty response, using original report", extra={'bug_id': args.bug_id})
+            with open(refined_report_path, 'w', encoding='utf-8') as f:
+                f.write(bug_report_content)
     else:
-        logger.info("Skipping refinement (ablation active). Copying original report.")
+        logger.info("Refinement skipped (ablation active). Using original report.", extra={'bug_id': args.bug_id})
         with open(refined_report_path, 'w', encoding='utf-8') as f:
             f.write(bug_report_content)
     
-    # Plan generation
+    # STEP 2: Plan Generation
+    logger.info("─" * 60)
+    logger.info("STEP 2/3: Plan Generation", extra={'bug_id': args.bug_id})
+    logger.info("─" * 60)
+    
     context_dir = config.CONTEXT_DIR_IN 
     plan_dir = config.PLANS_DIR_OUT
     
-    context_files_list = os.listdir(context_dir)
-    logger.info(f"Step 2/3: Generating plans for {len(context_files_list)} context files...")
+    try:
+        context_files_list = os.listdir(context_dir)
+        logger.info(f"Found {len(context_files_list)} context files", extra={'bug_id': args.bug_id})
+    except Exception as e:
+        logger.error(f"Failed to list context files: {e}", extra={'bug_id': args.bug_id})
+        return
     
-    for context_file in context_files_list:
+    for idx, context_file in enumerate(context_files_list, 1):
         context_path = os.path.join(context_dir, context_file)
+        logger.info(f"Processing context {idx}/{len(context_files_list)}: {context_file}", extra={'bug_id': args.bug_id})
         
-        with open(context_path, 'r', encoding='utf-8') as f:
-            context_content = json.loads(f.read())
+        try:
+            with open(context_path, 'r', encoding='utf-8') as f:
+                context_content = json.loads(f.read())
+        except Exception as e:
+            logger.error(f"Failed to load context file: {e}", extra={'bug_id': args.bug_id})
+            continue
         
         prompt_plan = create_prompt_plan(bug_report_content, context_content)
-        cmd = ['ollama', 'run', 'qwen2.5-coder:7b', prompt_plan]
         
         if not gen_flags.get("no_plan", False):
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            if process.stderr:
-                for line in process.stderr:
-                    if line.strip(): logger.debug(f"LLM Error: {line.strip()}")
-            output, _ = process.communicate()
+            # Plan generation uses qwen2.5-coder:7b
+            output = query_ollama(prompt_plan, model='qwen2.5-coder:7b')
+            if not output:
+                logger.warning(f"Empty plan generated for {context_file}", extra={'bug_id': args.bug_id})
+                output = "[]"
         else:
-            output = "No plan"
+            output = "[]"
     
         plan_path = plan_dir / f"plan_{context_file.split('.')[0]}.json"
         if 'module' in plan_path.name:
             plan_path = plan_path.with_name(plan_path.name.replace('module_', ''))
         
-        with open(plan_path, 'w', encoding='utf-8') as f:
-            f.write(output)
-    
-    logger.success(f"Plans generated and saved to {plan_dir}")
+        try:
+            with open(plan_path, 'w', encoding='utf-8') as f:
+                f.write(output)
+            logger.success(f"Plan saved: {plan_path.name}", extra={'bug_id': args.bug_id})
+        except Exception as e:
+            logger.error(f"Failed to save plan: {e}", extra={'bug_id': args.bug_id})
 
-    # Code generation
-    logger.info("Step 3/3: Starting Code Generation & Verification loop")
-    refined_report_path = config.REFINED_BUG_REPORT_DIR_IN / f"{args.bug_id}.txt"
-    with open(refined_report_path, 'r', encoding='utf-8') as f:
-        refined_bug_report = f.read()
+    # STEP 3: Code Generation
+    logger.info("─" * 60)
+    logger.info("STEP 3/3: Code Generation & Verification", extra={'bug_id': args.bug_id})
+    logger.info("─" * 60)
     
-    context_files = sorted(config.CONTEXT_DIR_IN.glob("*.json"), key=lambda x: int(x.stem.split('_')[-1]))
+    refined_report_path = config.REFINED_BUG_REPORT_DIR_IN / f"{args.bug_id}.txt"
+    try:
+        with open(refined_report_path, 'r', encoding='utf-8') as f:
+            refined_bug_report = f.read()
+    except Exception as e:
+        logger.error(f"Failed to load refined report: {e}", extra={'bug_id': args.bug_id})
+        return
+    
+    try:
+        context_files = sorted(config.CONTEXT_DIR_IN.glob("*.json"), 
+                              key=lambda x: int(x.stem.split('_')[-1]))
+        logger.info(f"Processing {len(context_files)} contexts", extra={'bug_id': args.bug_id})
+    except Exception as e:
+        logger.error(f"Failed to enumerate contexts: {e}", extra={'bug_id': args.bug_id})
+        return
+    
     reproduction_dir = config.REPRODUCTION_DIR_OUT
     plan_dir = config.PLANS_DIR_IN 
     
-    for context_file in context_files:
+    for ctx_idx, context_file in enumerate(context_files, 1):
         context_num = context_file.stem.split('_')[-1]
-        logger.info(f"Targeting Context #{context_num}")
         
-        with open(context_file, 'r', encoding='utf-8') as f:
-            context_content = json.load(f)
+        logger.info("=" * 60, extra={'bug_id': args.bug_id, 'context_num': context_num})
+        logger.info(f"Processing Context {ctx_idx}/{len(context_files)} (ID: {context_num})", 
+                   extra={'bug_id': args.bug_id, 'context_num': context_num})
+        logger.info("=" * 60, extra={'bug_id': args.bug_id, 'context_num': context_num})
+        
+        try:
+            with open(context_file, 'r', encoding='utf-8') as f:
+                context_content = json.load(f)
+        except Exception as e:
+            logger.error(f"Failed to load context: {e}", extra={'bug_id': args.bug_id, 'context_num': context_num})
+            continue
         
         plan_file = plan_dir / f"plan_{args.bug_id}_{context_num}.json"
-        with open(plan_file, 'r', encoding='utf-8') as f:
-            plan_content = f.read()
+        try:
+            with open(plan_file, 'r', encoding='utf-8') as f:
+                plan_content = f.read()
+        except Exception as e:
+            logger.warning(f"Plan not found, using empty: {e}", extra={'bug_id': args.bug_id, 'context_num': context_num})
+            plan_content = "[]"
         
         prompt_code = _build_prompt(
             refined_bug_report,
@@ -245,18 +386,19 @@ def main():
         )
         
         max_attempts = args.max_attempts
+        success = False
+        
         for attempt in range(max_attempts):
-            logger.info(f"  > Attempt {attempt + 1}/{max_attempts} for Context {context_num}")
+            logger.info(f"Attempt {attempt + 1}/{max_attempts}", 
+                       extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
-            cmd = ['ollama', 'run', 'qwen2.5-coder:7b']
-            process = subprocess.Popen(
-                cmd,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True
-            )
-            stdout, stderr = process.communicate(input=prompt_code)
+            # Code generation uses qwen2.5-coder:7b
+            stdout = query_ollama(prompt_code, model='qwen2.5-coder:7b')
+            
+            if not stdout:
+                logger.error("Ollama returned empty response", 
+                           extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
+                continue
             
             output = stdout
             start_marker = "```python"
@@ -268,17 +410,24 @@ def main():
                 extracted_code = output[start_idx + len(start_marker):end_idx].strip()
             else:
                 extracted_code = output
-                logger.warning("    No markdown code block found; using full output.")
+                logger.warning("No markdown code block found; using full output.", 
+                             extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
 
             output_file = reproduction_dir / f"reproduce_{args.bug_id}_{context_num}_attempt{attempt + 1}.py"
-            with open(output_file, 'w', encoding='utf-8') as f:
-                f.write(extracted_code)
+            try:
+                with open(output_file, 'w', encoding='utf-8') as f:
+                    f.write(extracted_code)
+            except Exception as e:
+                logger.error(f"Failed to save code: {e}", extra={'bug_id': args.bug_id, 'context_num': context_num})
+                continue
 
+            # Structural Check
             if not gen_flags.get("no_compilation", False):
                 is_correct, feedback = check_structural_correctness(extracted_code)
                 
                 if not is_correct:
-                    logger.warning(f"    Structural Check Failed: {feedback.splitlines()[0]}")
+                    logger.warning(f"Structural Check Failed: {feedback.splitlines()[0]}", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
                     prompt_code = _build_prompt(
                         refined_bug_report,
                         context_content,
@@ -286,11 +435,16 @@ def main():
                         feedback=f"Code failed structural check:\n{feedback}\nPlease fix these issues."
                     )
                     continue
+                else:
+                    logger.success("Structural check passed", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
+            # Relevance Check
             if not gen_flags.get("no_relevance", False):
                 relevance_check = check_relevance(refined_bug_report, extracted_code)
                 if not relevance_check:
-                    logger.warning("    Relevance Check Failed: Code not relevant to bug.")
+                    logger.warning("Relevance Check Failed: Code not relevant.", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
                     prompt_code = _build_prompt(
                         refined_bug_report,
                         context_content,
@@ -298,34 +452,54 @@ def main():
                         feedback="Generated code is not relevant to the bug report."
                     )
                     continue
+                else:
+                    logger.success("Relevance check passed", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
+            # Static Analysis
             if not gen_flags.get("no_static_analysis", False):
                 pylint_output = analyze_with_pylint(extracted_code, output_file)
                 if pylint_output:
-                    logger.info(f"    Static Analysis found {len(pylint_output)} issues. Refactoring...")
+                    logger.info(f"Static Analysis found {len(pylint_output)} issues. Refactoring...", 
+                              extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
                     refactor_prompt = _build_refactor_prompt(
                         extracted_code,
                         "\n".join(pylint_output),
                         refined_bug_report
                     )
                     refactored_code = _run_llm_refactor(refactor_prompt)
-                    extracted_code = refactored_code
+                    if refactored_code:
+                        extracted_code = refactored_code
+                        logger.success("Code refactored successfully", 
+                                     extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
+            # Runtime Feedback
             if not gen_flags.get("no_runtime_feedback", False):
                 score, feedback = calculate_probability_of_reproduction(extracted_code, refined_bug_report)
-                logger.info(f"    Confidence Score: {score:.2f}")
+                logger.info(f"Confidence Score: {score:.2f}", 
+                          extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
             
                 if score > 0.7:
                     final_output_file = reproduction_dir / f"reproduce_{args.bug_id}.py"
-                    with open(final_output_file, 'w', encoding='utf-8') as f:
-                        f.write(extracted_code)
-                    logger.success(f"Valid reproduction found! Saved to: {final_output_file}")
-                    
-                    analysis = analyze_bug_reproduction(extracted_code, refined_bug_report)
-                    logger.info(f"Analysis Summary:\n{analysis}")
-                    return extracted_code, analysis
+                    try:
+                        with open(final_output_file, 'w', encoding='utf-8') as f:
+                            f.write(extracted_code)
+                        logger.success(f"Valid reproduction found! Saved to: {final_output_file.name}", 
+                                     extra={'bug_id': args.bug_id, 'context_num': context_num})
+                        
+                        analysis = analyze_bug_reproduction(extracted_code, refined_bug_report)
+                        if analysis:
+                            logger.info("Analysis Summary:", extra={'bug_id': args.bug_id})
+                            for line in analysis.split('\n')[:10]:
+                                logger.info(f"  {line}")
+                        
+                        success = True
+                        break
+                    except Exception as e:
+                        logger.error(f"Failed to save final file: {e}", extra={'bug_id': args.bug_id})
                 else:
-                    logger.warning(f"    Low confidence ({score}). Retrying...")
+                    logger.warning(f"Low confidence ({score}). Retrying...", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
                     prompt_code = _build_prompt(
                         refined_bug_report,
                         context_content,
@@ -334,12 +508,23 @@ def main():
                     )
             else:
                 final_output_file = reproduction_dir / f"reproduce_{args.bug_id}.py"
-                with open(final_output_file, 'w', encoding='utf-8') as f:
-                    f.write(extracted_code)          
-                logger.success(f"Code generated (No feedback mode). Saved to {final_output_file}")
-                return extracted_code, "No runtime analysis performed."
-    else:
-        logger.error(f"Failed to generate valid code for context {context_num} after {max_attempts} attempts")
+                try:
+                    with open(final_output_file, 'w', encoding='utf-8') as f:
+                        f.write(extracted_code)          
+                    logger.success(f"Code generated (No feedback mode). Saved to {final_output_file.name}", 
+                                 extra={'bug_id': args.bug_id, 'context_num': context_num})
+                    success = True
+                    break
+                except Exception as e:
+                    logger.error(f"Failed to save final file: {e}", extra={'bug_id': args.bug_id})
+        
+        if not success:
+            logger.error(f"Failed to generate valid code for context {context_num} after {max_attempts} attempts", 
+                        extra={'bug_id': args.bug_id, 'context_num': context_num})
+
+    logger.info("=" * 60)
+    logger.info("Pipeline Completed", extra={'bug_id': args.bug_id})
+    logger.info("=" * 60)
 
 def analyze_with_pylint(code: str, file_path: Path):
     result = []
@@ -361,11 +546,11 @@ def analyze_with_pylint(code: str, file_path: Path):
         for line in lines:
             if "e0" in line.lower() and "import-error" not in line.lower():
                 result.append(line.strip())
+        logger.debug(f"Pylint found {len(result)} critical errors")
         return result
     except Exception as e:
-        result = []
-    return result
-
+        logger.warning(f"Pylint analysis failed: {e}")
+        return []
 
 def analyze_bug_reproduction(code: str, bug_report: str) -> str:
     """Analyze which parts of the code are most likely to reproduce the bug."""
@@ -391,10 +576,7 @@ def analyze_bug_reproduction(code: str, bug_report: str) -> str:
       [Explanation]
     """
     
-    cmd = ['ollama', 'run', 'qwen2.5-coder:7b', prompt]
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    output, _ = process.communicate()
-    return output
+    return query_ollama(prompt, model='qwen2.5-coder:7b')
 
 def _build_refactor_prompt(code: str, issues: str, bug_report: str) -> str:
     """Build a prompt for code refactoring based on ` feedback."""
@@ -425,26 +607,9 @@ def _build_refactor_prompt(code: str, issues: str, bug_report: str) -> str:
     """
 
 def _run_llm_refactor(prompt: str) -> str:
-    """Execute the LLM to refactor code based on PyLint feedback and bug report.
-    
-    Args:
-        prompt: The complete refactoring prompt with code and issues
-        
-    Returns:
-        The refactored code extracted from LLM's response
-    """
-    
-    cmd = ['ollama', 'run', 'qwen2.5-coder:7b']
-    process = subprocess.Popen(
-        cmd,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-    )
-    
-    # Send the prompt and get response
-    stdout, stderr = process.communicate(input=prompt)
+    """Execute the LLM to refactor code based on PyLint feedback and bug report."""
+    logger.debug("Requesting code refactoring from Ollama")
+    stdout = query_ollama(prompt, model='qwen2.5-coder:7b')
     output = stdout.strip()
     
     # Extract code block if present
@@ -456,10 +621,9 @@ def _run_llm_refactor(prompt: str) -> str:
         end_idx = output.find(end_marker, start_idx + len(start_marker))
         if end_idx != -1:
             extracted_code = output[start_idx + len(start_marker):end_idx].strip()
-            logger.debug("Extracted refactored code from code block")
+            logger.debug("Extracted refactored code from markdown block")
             return extracted_code
     
-    # Fallback: return entire output if no markers found
     logger.warning("No code block markers found in refactoring output")
     return output
 
@@ -484,30 +648,32 @@ def check_relevance(bug_report: str, code: str) -> bool:
 
             Output only the JSON response with no additional commentary:"""
 
-    cmd = ['ollama', 'run', 'qwen2.5-coder:7b']
-    process = subprocess.Popen(
-        cmd,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-    )
-    stdout, stderr = process.communicate(input=prompt)
+    logger.debug("Checking code relevance with Ollama")
+    stdout = query_ollama(prompt, model='qwen2.5-coder:7b')
+    
     try:
-        response = json.loads(stdout.strip())
+        json_str = extract_json_content(stdout)
+        if not json_str:
+            json_str = stdout
+            
+        response = json.loads(json_str)
         return response.get('relevance', '').lower() == 'yes'
     except json.JSONDecodeError:
-        # Fallback if JSON parsing fails
+        logger.warning("Failed to parse JSON for relevance check")
         return 'yes' in stdout.lower()
 
 def extract_json_content(text):
-    # Find content between ```json and ``` markers
+    """Extract JSON content from markdown code blocks or raw text."""
     import re
-    pattern = r'```json\s*(.*?)\s*```'
+    pattern = r'```(?:json)?\s*(.*?)\s*```'
     match = re.search(pattern, text, re.DOTALL)
     
     if match:
         return match.group(1)
+    
+    if text.strip().startswith("{") and text.strip().endswith("}"):
+        return text.strip()
+        
     return None
 
 def calculate_probability_of_reproduction(code: str, bug_report: str) -> Tuple[float, str]:   
@@ -652,8 +818,11 @@ Format your response as JSON with:
     ],
 }}"""
 
-    analysis_result = query_llm(code_analysis_prompt)
-    analysis_result = extract_json_content(analysis_result)
+    logger.debug("Analyzing code behavior with Ollama")
+    analysis_result_raw = query_ollama(code_analysis_prompt, model='qwen2.5-coder:7b')
+    analysis_result = extract_json_content(analysis_result_raw)
+    if not analysis_result:
+        analysis_result = "{}"
 
     # Stage 2: Symptom Extraction from Bug Report
     symptom_extraction_prompt = f"""Extract technical symptoms from this bug report:
@@ -675,8 +844,11 @@ Format as JSON with:
     "error_manifestations": [str]
 }}"""
 
-    extraction_result = query_llm(symptom_extraction_prompt)
-    extraction_result = extract_json_content(extraction_result)
+    logger.debug("Extracting symptoms from bug report")
+    extraction_result_raw = query_ollama(symptom_extraction_prompt, model='qwen2.5-coder:7b')
+    extraction_result = extract_json_content(extraction_result_raw)
+    if not extraction_result:
+        extraction_result = "{}"
 
     COMPARISON_PROMPT = f"""
 Analyze the code, symptoms from the execution analysis, bug report and the actual bug report to determine if the code will reproduce the bug:
@@ -721,35 +893,21 @@ Consider these factors for matching:
 
 Return ONLY valid JSON with NO additional text:
 """
-    comparison_result = query_llm(COMPARISON_PROMPT)
-    comparison_result = extract_json_content(comparison_result)
+    logger.debug("Calculating final reproduction probability")
+    comparison_result_raw = query_ollama(COMPARISON_PROMPT, model='qwen2.5-coder:7b')
+    comparison_result_json = extract_json_content(comparison_result_raw)
+    
+    if not comparison_result_json:
+        return 0.0, "Failed to parse LLM response for score"
+        
     try:
-        comparison_result = json.loads(comparison_result)
+        comparison_result = json.loads(comparison_result_json)
         score = comparison_result.get('score', 0.0)
         feedback = comparison_result.get('feedback', "")
-        logger.info(f"    Likelihood Score: {score}, Feedback: {feedback}")
         return float(score), feedback
     except json.JSONDecodeError:
         logger.error("Failed to parse JSON response from LLM")
-
-def query_llm(prompt: str) -> str:
-    """Executes ollama query with deepseek-r1:7b"""
-    process = subprocess.Popen(
-        ['ollama', 'run', 'qwen2.5-coder:7b'],
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-    )
-    stdout, _ = process.communicate(prompt)
-    return stdout.strip()
-
-def parse_json_response(response: str, default: dict = None) -> dict:
-    """Safe JSON parsing with fallback"""
-    try:
-        return json.loads(response)
-    except json.JSONDecodeError:
-        return default or {}
+        return 0.0, "JSON Parsing Error"
 
 def check_structural_correctness(code: str) -> tuple[bool, str]:
     """
@@ -761,7 +919,7 @@ def check_structural_correctness(code: str) -> tuple[bool, str]:
         return True, ""  # Code is structurally correct
     except SyntaxError as e:
         # Capture syntax error details
-        error_msg = f"Syntax Error: {e.msg}\nLine {e.lineno}: {e.text.strip()}"
+        error_msg = f"Syntax Error: {e.msg}\nLine {e.lineno}: {e.text.strip() if e.text else 'N/A'}"
         return False, error_msg
     except Exception as e:
         return False, f"Structural Error: {str(e)}"
@@ -875,4 +1033,11 @@ REPRODUCTION STEPS
 Begin your structured analysis:"""
  
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        logger.warning("Pipeline interrupted by user")
+        sys.exit(130)
+    except Exception as e:
+        logger.critical(f"Fatal error: {e}", exc_info=True)
+        sys.exit(1)

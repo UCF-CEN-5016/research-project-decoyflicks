@@ -265,7 +265,7 @@ cd C:\path\to\file  # ❌ Wrong
 
 1. Follow either **Option 1 (Git Bash)** or **Option 2 (WSL 2)** above
 2. Once setup is complete, see [README.md](README.md) for quick start
-3. For detailed pipeline usage, see [PIPELINE.md](PIPELINE.md)
+3. For detailed pipeline usage, see [OPENAI_PIPELINE.md](OPENAI_PIPELINE.md) or [QWEN_PIPELINE.md](QWEN_PIPELINE.md)
 
 ---
 
@@ -376,7 +376,7 @@ The scripts handle platform-specific differences internally:
 
 ## Next Steps
 
-After setting up, see [PIPELINE.md](PIPELINE.md) for:
+After setting up, see [OPENAI_PIPELINE.md](OPENAI_PIPELINE.md) or [QWEN_PIPELINE.md](QWEN_PIPELINE.md) for:
 - Complete usage guide
 - All available options
 - Example workflows

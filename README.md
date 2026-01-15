@@ -28,7 +28,7 @@ bash scripts/quick-start/cloud.sh 80-82 1
 
 **⏱ Setup:** 15 min | **Speed:** 30s/bug | **💰 Cost:** $50-100 total (all 106 bugs)
 
-**→ Full Reference:** [PIPELINE.md](PIPELINE.md)  
+**→ Full Reference:** [OPENAI_PIPELINE.md](OPENAI_PIPELINE.md)  
 **→ Script Details:** [scripts/README.md](scripts/README.md#quick-start-scripts)
 
 ---
@@ -49,7 +49,7 @@ bash scripts/quick-start/local.sh 80-82 1
 
 **⏱ Setup:** 45 min | **Speed:** 3-5 min/bug | **💰 Cost:** Free
 
-**→ Full Reference:** [OLLAMA_SETUP.md](OLLAMA_SETUP.md)  
+**→ Full Reference:** [QWEN_PIPELINE.md](QWEN_PIPELINE.md)  
 **→ Script Details:** [scripts/README.md](scripts/README.md#quick-start-scripts)
 
 ---
@@ -152,8 +152,8 @@ The project includes two datasets:
 | Document | Purpose |
 |----------|---------|
 | [scripts/README.md](scripts/README.md) | **Script reference** - All available scripts, options, and workflows |
-| [PIPELINE.md](PIPELINE.md) | **Cloud (OpenAI)** - Setup, advanced options, cost, troubleshooting |
-| [OLLAMA_SETUP.md](OLLAMA_SETUP.md) | **Local (Ollama)** - Setup, model configuration, performance tips |
+| [OPENAI_PIPELINE.md](OPENAI_PIPELINE.md) | **Cloud (OpenAI)** - Setup, advanced options, cost, troubleshooting |
+| [QWEN_PIPELINE.md](QWEN_PIPELINE.md) | **Local (Qwen/Ollama)** - Setup, model configuration, performance tips |
 | [WINDOWS_SETUP.md](WINDOWS_SETUP.md) | **Windows-specific** - WSL/Git Bash setup, compatibility notes |
 
 ---
@@ -163,10 +163,10 @@ The project includes two datasets:
 ```
 ICSE26-RepGen/
 ├── README.md                  # This file
-├── PIPELINE.md               # Cloud (OpenAI) guide
-├── OLLAMA_SETUP.md           # Local (Ollama) guide
-├── WINDOWS_SETUP.md          # Windows setup
-├── requirements.txt          # Python dependencies
+├── OPENAI_PIPELINE.md         # Cloud (OpenAI) guide
+├── QWEN_PIPELINE.md           # Local (Qwen/Ollama) guide
+├── WINDOWS_SETUP.md           # Windows setup
+├── requirements.txt           # Python dependencies
 │
 ├── scripts/                  # Shell scripts (organized by purpose)
 │   ├── README.md            # Script reference guide

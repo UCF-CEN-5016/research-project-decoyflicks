@@ -251,7 +251,7 @@ bash scripts/experimental/ablations.sh 80 82
 
 ## 📚 References
 
-- **Cloud Setup:** See [PIPELINE.md](../PIPELINE.md)
-- **Local Setup:** See [OLLAMA_SETUP.md](../OLLAMA_SETUP.md)
+- **Cloud Setup:** See [OPENAI_PIPELINE.md](../OPENAI_PIPELINE.md)
+- **Local Setup:** See [QWEN_PIPELINE.md](../QWEN_PIPELINE.md)
 - **Windows Setup:** See [WINDOWS_SETUP.md](../WINDOWS_SETUP.md)
 - **Main Guide:** See [README.md](../README.md)

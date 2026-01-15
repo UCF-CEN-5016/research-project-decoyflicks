@@ -414,7 +414,7 @@ if [ "$SETUP" = true ]; then
         
         (cd "$CACHED" && find . -maxdepth 1 -type f -name ".*" ! -name ".git*" -exec cp {} "$AE_CDIR/" \; 2>/dev/null) || true
         
-        log_success "  Bug $BID setup complete"
+        log_success "Bug $BID setup complete"
         SETUP_SUCCESS=$((SETUP_SUCCESS + 1))
         echo ""
     done

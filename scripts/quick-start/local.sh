@@ -13,12 +13,12 @@
 #   4. Run this script
 #
 # Usage: 
-#   bash ollama_quick_start.sh [BUGS] [MAX_ATTEMPTS]
+#   bash scripts/quick-start/local.sh [BUGS] [MAX_ATTEMPTS]
 #
 # Examples:
-#   bash ollama_quick_start.sh 1-10 3        # Bugs 1-10, max 3 attempts
-#   bash ollama_quick_start.sh 80-82 1       # Bugs 80-82, quick test
-#   bash ollama_quick_start.sh 1-106 5       # Full paper replication
+#   bash scripts/quick-start/local.sh 1-10 3        # Bugs 1-10, max 3 attempts
+#   bash scripts/quick-start/local.sh 80-82 1       # Bugs 80-82, quick test
+#   bash scripts/quick-start/local.sh 1-106 5       # Full paper replication
 #
 # Works on: macOS, Linux, Windows (Git Bash / WSL)
 #
@@ -41,9 +41,11 @@ else
     NC='\033[0m' # No Color
 fi
 
-# Get script directory
+# Get script directory (scripts/quick-start)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# FIX: Go up two levels to reach the project root (scripts/quick-start -> scripts -> Root)
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 # Parse arguments
 BUGS="${1:-80-82}"
@@ -52,10 +54,10 @@ MAX_ATTEMPTS="${2:-1}"
 # Validate arguments
 if [ -z "$BUGS" ]; then
     echo -e "${RED}Error: BUGS not specified${NC}"
-    echo "Usage: bash ollama_quick_start.sh [BUGS] [MAX_ATTEMPTS]"
+    echo "Usage: bash local.sh [BUGS] [MAX_ATTEMPTS]"
     echo "Examples:"
-    echo "  bash ollama_quick_start.sh 80-82 1"
-    echo "  bash ollama_quick_start.sh 1-10 5"
+    echo "  bash local.sh 80-82 1"
+    echo "  bash local.sh 1-10 5"
     exit 1
 fi
 
@@ -71,8 +73,9 @@ echo ""
 echo -e "${GREEN}Configuration:${NC}"
 echo "  Bugs: $BUGS"
 echo "  Max Attempts: $MAX_ATTEMPTS"
-echo "  Dataset: dataset"
+echo "  Dataset: ae_dataset"
 echo "  Models: qwen2.5:7b, qwen2.5-coder:7b"
+echo "  Root: $PROJECT_ROOT"
 echo ""
 
 # Check if Ollama is available
@@ -113,7 +116,7 @@ fi
 
 echo -e "${YELLOW}✓ All required models are available${NC}"
 
-# Navigate to project root
+# Navigate to project root so dataset is created there
 cd "$PROJECT_ROOT"
 
 # Run pipeline with local pipeline script
@@ -121,9 +124,10 @@ echo ""
 echo -e "${BLUE}Running pipeline...${NC}"
 echo ""
 
+# Execute the pipeline script (located in scripts/pipeline/local.sh)
 bash "$SCRIPT_DIR/../pipeline/local.sh" \
     --bugs "$BUGS" \
-    --dataset dataset \
+    --dataset ae_dataset \
     --setup \
     --run \
     --max-attempts "$MAX_ATTEMPTS"
