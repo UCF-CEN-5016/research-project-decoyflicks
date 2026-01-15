@@ -12,7 +12,7 @@ set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-DATASET_PATH="$PROJECT_DIR/dataset"
+DATASET_PATH="$PROJECT_DIR/dataset_cloud"
 CACHE_DIR="$PROJECT_DIR/.code_cache"
 CSV_FILE="$PROJECT_DIR/dataset/Dataset.csv"
 

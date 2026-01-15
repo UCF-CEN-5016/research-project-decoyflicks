@@ -24,7 +24,7 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 # Default values
 BUGS=""
 TOOL_SCRIPT="$PROJECT_DIR/src/tool_openai.py"
-DATASET_PATH="$PROJECT_DIR/ae_dataset"
+DATASET_PATH="$PROJECT_DIR/dataset_cloud"
 MAX_GEN_ATTEMPTS=1
 MAX_RUN_ATTEMPTS=1
 LOG_BASE_DIR="$PROJECT_DIR/logs/ablation_study_$(date +%Y%m%d_%H%M%S)"

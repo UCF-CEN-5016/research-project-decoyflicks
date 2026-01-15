@@ -73,7 +73,7 @@ echo ""
 echo -e "${GREEN}Configuration:${NC}"
 echo "  Bugs: $BUGS"
 echo "  Max Attempts: $MAX_ATTEMPTS"
-echo "  Dataset: ae_dataset"
+echo "  Dataset: dataset_local"
 echo "  Models: qwen2.5:7b, qwen2.5-coder:7b"
 echo "  Root: $PROJECT_ROOT"
 echo ""
@@ -127,7 +127,7 @@ echo ""
 # Execute the pipeline script (located in scripts/pipeline/local.sh)
 bash "$SCRIPT_DIR/../pipeline/local.sh" \
     --bugs "$BUGS" \
-    --dataset ae_dataset \
+    --dataset dataset_local \
     --setup \
     --run \
     --max-attempts "$MAX_ATTEMPTS"

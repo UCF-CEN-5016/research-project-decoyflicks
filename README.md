@@ -1,295 +1,140 @@
-# RepGen - Bug Reproduction with LLMs
+# Imitation Game: Reproducing Deep Learning Bugs Leveraging Intelligent Agent (ICSE'26)
 
-ICSE 2026: *Reproducing Deep Learning Bugs Leveraging Intelligent Agents*
+This repository contains the artifact for the ICSE 2026 paper **"Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent"**. It includes the complete source code, the dataset of 106 real-world DL bugs, and automated scripts to replicate the paper's experiments.
 
-**What is RepGen?**  
-RepGen automatically generates bug reproduction code for deep learning systems. It uses an intelligent agent pipeline to analyze bug reports, extract relevant context, generate plans, and produce executable reproduction scripts.
+This work has been accepted for publication in the 48th ACM/IEEE International Conference on Software Engineering. The preprint can be found at https://arxiv.org/abs/2512.14990. 
 
-**How it works:**
-1. **Retrieval Phase** - Extracts relevant code context from the buggy repository
-2. **Planning Phase** - Creates execution plans based on bug description and context
-3. **Code Generation** - Generates reproduction code with feedback loops for refinement
+Abstract: Despite their wide adoption in various domains (e.g., healthcare, finance, software engineering), Deep Learning (DL)-based applications suffer from many bugs, failures, and vulnerabilities. Reproducing these bugs is essential for their resolution, but it is extremely challenging due to the inherent nondeterminism of DL models and their tight coupling with hardware and software environments. According to recent studies, only about 3% of DL bugs can be reliably reproduced using manual approaches. To address these challenges, we present RepGen, a novel, automated, and intelligent approach for reproducing deep learning bugs. RepGen constructs a learning-enhanced context from a project, develops a comprehensive plan for bug reproduction, employs an iterative generate-validate-refine mechanism, and thus generates such code using an LLM that reproduces the bug at hand. We evaluate RepGen on 106 real-world deep learning bugs and achieve a reproduction rate of 80.19%, a 19.81% improvement over the state-of-the-art measure. A developer study involving 27 participants shows that RepGen improves the success rate of DL bug reproduction by 23.35%, reduces the time to reproduce by 56.8%, and lowers participants' cognitive load. 
 
----
+Preprint: ICSE26_RepGen.pdf (in this repository), https://arxiv.org/abs/2512.14990
 
-## 🚀 Quick Start (Choose One)
+## 1. Artifact Overview
 
-### Option A: Cloud (OpenAI) - Fastest
+### Directory Structure
 
-Use OpenAI's GPT-4 models for fast, accurate inference. Best for quick tests or small batches. Requires internet connection and API credits.
-
-```bash
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-export OPENAI_API_KEY="sk-..."
-
-bash scripts/quick-start/cloud.sh 80-82 1
+```plaintext
+repgen/
+├── dataset/             # Benchmark of 106 DL bugs (001-106) and metadata
+├── figures/             # Figures and plots used in the paper (RQ1, RQ2)
+├── results/             # Raw experimental data and statistical test notebooks
+├── retrieval/           # Core retrieval module (RAG implementation)
+├── scripts/             # Automation scripts for reproduction
+│   ├── quick-start/     # Simple scripts for quickly running the artifact
+│   └── pipeline/        # Core scripts that can be used to customize the parameters
+│   └── experimental/    # Full pipelines for baselines and ablation studies
+├── src/                 # Main tool source code (generation & execution)
+├── requirements.txt     # Python dependencies
+└── README.md
 ```
 
-**⏱ Setup:** 15 min | **Speed:** 30s/bug | **💰 Cost:** $50-100 total (all 106 bugs)
+## 2. Environment Setup
 
-**→ Full Reference:** [OPENAI_PIPELINE.md](OPENAI_PIPELINE.md)  
-**→ Script Details:** [scripts/README.md](scripts/README.md#quick-start-scripts)
+This artifact supports **Linux** (Ubuntu 20.04+), **macOS** (Apple Silicon recommended), and **Windows** (via WSL2 or Git Bash).
 
----
+### Prerequisites
 
-### Option B: Local (Ollama) - Free
+* **Python:** Version 3.8 or higher.
+* **Git:** Required to clone the repository.
+* **Ollama (Local Mode Only):** Required if running inference locally without cloud APIs.
+* **macOS/Linux:** [Download](https://ollama.ai/download).
+* **Windows:** Install [Ollama for Windows](https://www.google.com/search?q=https://ollama.ai/download/windows).
 
-Run inference locally using open-source Qwen2.5 models via Ollama. No internet or API costs. Slower but completely private. Requires 16GB+ RAM.
+### Installation Steps
+
+**1. Clone the Repository**
 
 ```bash
-# Terminal 1: Start Ollama service
+git clone https://github.com/mehilshah/ICSE26-RepGen
+cd ICSE26-RepGen
+
+```
+
+**2. Install Dependencies**
+We recommend using a virtual environment.
+
+* **macOS / Linux / Windows (WSL2):**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+
+* **Windows (Git Bash):**
+```bash
+python -m venv venv
+source venv/Scripts/activate
+pip install -r requirements.txt
+```
+
+**3. Model Setup (Local Mode Only)**
+If running locally, start the Ollama service and pull the required models:
+
+```bash
+# In a separate terminal window:
 ollama serve
 
-# Terminal 2: Setup + Run (in separate terminal)
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-bash scripts/quick-start/local.sh 80-82 1
+# Pull the models:
+ollama pull qwen2.5:7b
+ollama pull qwen2.5-coder:7b
+
 ```
 
-**⏱ Setup:** 45 min | **Speed:** 3-5 min/bug | **💰 Cost:** Free
-
-**→ Full Reference:** [QWEN_PIPELINE.md](QWEN_PIPELINE.md)  
-**→ Script Details:** [scripts/README.md](scripts/README.md#quick-start-scripts)
-
----
-
-## Requirements
-
-| | |
-|---|---|
-| **Python** | 3.12+ |
-| **Shell** | Bash |
-| **For Ollama** | [Download](https://ollama.ai/download) + 16GB RAM |
-| **For Cloud** | [OpenAI API key](https://platform.openai.com/api-keys) |
-| **Windows?** | See [WINDOWS_SETUP.md](WINDOWS_SETUP.md) |
-
----
-
-## Common Commands
-
-**For first-time users:** Use quick start scripts in `scripts/quick-start/`. They handle all setup and execution automatically.
-
-### Quick Tests (Recommended for first run)
-```bash
-# Cloud: Test on 2 bugs with 1 attempt
-bash scripts/quick-start/cloud.sh 80-82 1
-
-# Local (Ollama): Test on 2 bugs with 1 attempt
-bash scripts/quick-start/local.sh 80-82 1
-```
-
-### Full Replication (Paper Results)
-```bash
-# Cloud: All 106 bugs with 5 retry attempts
-bash scripts/quick-start/cloud.sh 1-106 5
-
-# Local: All 106 bugs with 5 retry attempts
-bash scripts/quick-start/local.sh 1-106 5
-```
-
-### Advanced: Custom Ranges with Pipeline Scripts
-For more control, use pipeline scripts in `scripts/pipeline/`:
+**4. API Configuration (Cloud Mode Only)**
+If running experiments with GPT-4, Llama-3, or DeepSeek, export your API keys:
 
 ```bash
-# Cloud: Setup only (don't run yet)
-bash scripts/pipeline/cloud.sh --bugs 1-50 --dataset dataset --setup
-
-# Cloud: Run only (if already setup)
-bash scripts/pipeline/cloud.sh --bugs 1-50 --dataset dataset --run --skip-code
-
-# Cloud: Full pipeline (setup + run) with retries
-bash scripts/pipeline/cloud.sh --bugs 1-106 --dataset dataset --setup --run --max-attempts 3
-
-# Local: Same commands but with scripts/pipeline/local.sh
-bash scripts/pipeline/local.sh --bugs 1-10 --dataset ae_dataset --setup --run
+export OPENAI_API_KEY="your_key_here"
+export GROQ_API_KEY="your_key_here"
+export DEEPSEEK_API_KEY="your_key_here"
 ```
 
-### Experimental Runs
+## 3. How to Run
+
+### Option A: Quick Start (Local Inference)
+
+Run the pipeline using Qwen2.5 and Qwen2.5-Coder.
+
+* **Command:** `bash scripts/quick-start/local.sh [BUG_RANGE] [ATTEMPTS]`
+* **Example:**
 ```bash
-# Run ablation studies (requires OpenAI API)
-bash scripts/experimental/ablations.sh 80 82
-
-# Run baseline comparisons across models
-bash scripts/experimental/baseline.sh 80 82
+bash scripts/quick-start/local.sh 80-80 1
 ```
 
-**→ Full script reference:** [scripts/README.md](scripts/README.md)
+### Option B: Quick Start (Cloud Inference)
 
----
+Run the pipeline using GPT-4.1.
 
-## Dataset
-
-The project includes two datasets:
-
-### Main Dataset (`dataset/`)
-- **Bugs:** 001-106 (reproducible deep learning bugs)
-- **Structure per bug:**
-  ```
-  dataset/BUG_ID/
-  ├── bug_report/           # Original bug report text
-  ├── context/              # Relevant code context files
-  ├── plan/                 # (Generated) Execution plan
-  ├── reproduction_code/    # (Generated) Reproduction script
-  ├── refined_bug_report/   # (Generated) Refined description
-  └── ablations/            # (Experimental) Ablation results
-  ```
-
-### Evaluation Dataset (`ae_dataset/`)
-- Smaller subset for quick testing and validation
-- Used in quick-start scripts by default
-
-### Dataset Metadata
-- **dataset/Dataset.csv** - Bug metadata and attributes
-- **results/ExperimentalGroup.csv** - Results with API usage metrics
-- **results/ControlGroup.csv** - Baseline results
-- **results/Statistical_Tests_ICSE26.ipynb** - Statistical analysis
-
----
-
-## 📖 Full Documentation
-
-| Document | Purpose |
-|----------|---------|
-| [scripts/README.md](scripts/README.md) | **Script reference** - All available scripts, options, and workflows |
-| [OPENAI_PIPELINE.md](OPENAI_PIPELINE.md) | **Cloud (OpenAI)** - Setup, advanced options, cost, troubleshooting |
-| [QWEN_PIPELINE.md](QWEN_PIPELINE.md) | **Local (Qwen/Ollama)** - Setup, model configuration, performance tips |
-| [WINDOWS_SETUP.md](WINDOWS_SETUP.md) | **Windows-specific** - WSL/Git Bash setup, compatibility notes |
-
----
-
-## 🏗️ Project Structure
-
-```
-ICSE26-RepGen/
-├── README.md                  # This file
-├── OPENAI_PIPELINE.md         # Cloud (OpenAI) guide
-├── QWEN_PIPELINE.md           # Local (Qwen/Ollama) guide
-├── WINDOWS_SETUP.md           # Windows setup
-├── requirements.txt           # Python dependencies
-│
-├── scripts/                  # Shell scripts (organized by purpose)
-│   ├── README.md            # Script reference guide
-│   ├── quick-start/         # Entry point scripts
-│   │   ├── cloud.sh         # Quick test with OpenAI
-│   │   └── local.sh         # Quick test with Ollama
-│   ├── pipeline/            # Full pipeline with options
-│   │   ├── cloud.sh         # Full cloud pipeline
-│   │   └── local.sh         # Full local pipeline
-│   └── experimental/        # Ablations and baselines
-│       ├── ablations.sh     # Ablation studies
-│       └── baseline.sh      # Baseline comparisons
-│
-├── src/                     # Python source code
-│   ├── tool.py             # Main reproduction tool
-│   ├── tool_openai.py      # OpenAI-specific implementation
-│   ├── baselines.py        # Baseline implementations
-│   └── run_ablations.py    # Ablation experiment runner
-│
-├── retrieval/              # Retrieval module
-│   ├── pipeline.py         # Main retrieval pipeline
-│   ├── core/               # Core retrieval components
-│   ├── models/             # Neural ranking models
-│   └── config.py           # Configuration
-│
-├── dataset/                # Main dataset (001-106 bugs)
-│   ├── Dataset.csv        # Dataset metadata
-│   └── 001/, 002/, ...
-│
-├── figures/               # Plots and visualizations
-├── results/               # Output results and metrics
-└── .code_cache/          # (Generated) Repository cache
+* **Command:** `bash scripts/quick-start/cloud.sh [BUG_RANGE] [ATTEMPTS]`
+* **Example:**
+```bash
+bash scripts/quick-start/cloud.sh 1-3 5
 ```
 
----
+### Option C: Baseline Experiments
 
-## 🔄 Pipeline Workflow
+Reproduce the baseline comparisons (Zero-shot, Few-shot, CoT).
 
-```
-1. RETRIEVAL PHASE
-   ├── Extract relevant code files from repository
-   ├── BM25 search + ANN ranking
-   ├── Training loop detection & ranking
-   └── Dependency extraction & module analysis
-
-2. PLANNING PHASE
-   ├── Analyze bug report + code context
-   ├── Generate execution plan
-   └── Identify test case requirements
-
-3. CODE GENERATION PHASE
-   ├── Generate reproduction code
-   ├── Compilation checking
-   ├── Static analysis validation
-   └── Runtime feedback loops
-       └── Refine code if execution fails
+* **Command:** `bash scripts/pipeline/baselines.sh --bugs [RANGE]`
+* **Example:**
+```bash
+bash scripts/pipeline/baselines.sh --bugs 1-2
 ```
 
----
+### Option D: Ablation Studies
 
-## 📊 Expected Results
+Reproduce the ablation study results.
 
-After running the pipeline, check:
-- **Reproduction code:** `dataset/BUG_ID/reproduction_code/reproduce_BUG_ID.py`
-- **Execution plan:** `dataset/BUG_ID/plan/plan_BUG_ID.txt`
-- **API metrics:** `results/ExperimentalGroup.csv`
-- **Logs:** `results/logs_*.txt`
+* **Command:** `bash scripts/pipeline/ablation.sh --bugs [RANGE]`
+* **Example:**
+```bash
+bash scripts/pipeline/ablation.sh --bugs 1-2
 
----
-
-## 💡 Tips & Best Practices
-
-### Getting Started
-1. **First run?** Start with quick-start scripts: `bash scripts/quick-start/cloud.sh 80-82 1`
-2. **Test locally first** before running full dataset
-3. **Check logs** in `results/` directory for debugging
-
-### Performance
-- **Cloud:** ~30 seconds per bug (with OpenAI GPT-4)
-- **Local:** ~3-5 minutes per bug (with Qwen2.5 on CPU)
-- **Parallelization:** Scripts process bugs sequentially; use multiple machines for parallelization
-
-### Cost Management
-- **Cloud:** ~$0.50-1 per bug; budget $50-100 for full dataset
-- **Local:** Free after initial setup (~10 GB disk space)
-- **Use retries:** `--max-attempts 3` improves success rate with marginal cost increase
-
-### Debugging
-- **Add `--quiet` flag** to reduce output volume
-- **Run subset first:** Test with `--bugs 80-82` before full runs
-- **Check logs:** Pipeline creates detailed logs in `results/` directory
-- **Verify setup:** For Ollama, confirm models are loaded with `ollama list`
-
-### Windows
-- Use Git Bash or WSL2 (scripts use Bash)
-- See [WINDOWS_SETUP.md](WINDOWS_SETUP.md) for platform-specific issues
-
----
-
-## 📚 References
-
-**Paper:** Reproducing Deep Learning Bugs Leveraging Intelligent Agents (ICSE 2026)
-
-**Citation:**
-```bibtex
-[Citation to be added on publication]
 ```
+For more run commands, and possible customizations, please refer to the README file in the /scripts directory.
 
----
+## 5. Troubleshooting
 
-## ❓ Troubleshooting
-
-**Issue:** `command not found: bash scripts/quick_start.sh`  
-**Solution:** Script paths changed. Use: `bash scripts/quick-start/cloud.sh` (note: `quick-start` not `quick_start`)
-
-**Issue:** Python errors in pipeline  
-**Solution:** Check virtual environment is activated and dependencies installed: `pip install -r requirements.txt`
-
-**Issue:** Ollama connection errors  
-**Solution:** Ensure Ollama is running: `ollama serve` in separate terminal, then retry
-
-**Issue:** High API costs  
-**Solution:** Test on smaller subset first with `--bugs 80-82`, use `--max-attempts 1` instead of 5
-
-**Issue:** Out of memory  
-**Solution:** Reduce batch size or run on smaller bug ranges; for cloud, no local memory needed
+* **"Ollama service is not running"**: Run `ollama serve` in a new terminal.
+* **"Dataset not found"**: Ensure the `dataset` folder is in the root `repgen/` directory and contains numbered folders (001-106).
+* **Permission Denied**: Run `chmod +x scripts/**/*.sh`.

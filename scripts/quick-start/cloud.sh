@@ -29,7 +29,7 @@ shift 2 2>/dev/null || shift $# 2>/dev/null  # Remove first two args if they exi
 # Run pipeline with dynamic logging (pass through any extra args like --quiet)
 bash "$SCRIPT_DIR/../pipeline/cloud.sh" \
     --bugs "$BUGS" \
-    --dataset ae_dataset \
+    --dataset dataset_cloud \
     --setup \
     --run \
     --max-attempts "$MAX_ATTEMPTS" \

@@ -28,7 +28,7 @@ TOOL_SCRIPT="$PROJECT_DIR/src/baselines.py"
 LOG_BASE_DIR="$PROJECT_DIR/logs/baselines_$(date +%Y%m%d_%H%M%S)"
 SUMMARY_CSV="$LOG_BASE_DIR/summary.csv"
 MASTER_LOG="$LOG_BASE_DIR/master.log"
-DATASET_PATH="$PROJECT_DIR/ae_dataset"
+DATASET_PATH="$PROJECT_DIR/dataset_local"
 QUIET=false
 EXAMPLES=3  # Default for few-shot
 MAX_RUN_ATTEMPTS=1
@@ -41,12 +41,13 @@ FAILED_RUNS=0
 # --- Models Configuration ---
 MODELS=(
     "qwen2.5:7b"              # Ollama
-    "deepseek-r1:7b"          # Ollama
     "qwen2.5-coder:7b"        # Ollama
-    "llama3:8b"               # Ollama
-    "llama-3.3-70b-versatile" # Groq
-    "deepseek-reasoner"       # DeepSeek API
-    "gpt-4-turbo-2024-04-09"  # OpenAI
+    # Uncomment to add more models, make sure that you have the API keys, or the models installed locally.
+    # "deepseek-r1:7b"          # Ollama
+    # "llama3:8b"               # Ollama
+    # "llama-3.3-70b-versatile" # Groq
+    # "deepseek-reasoner"       # DeepSeek API
+    # "gpt-4-turbo-2024-04-09"  # OpenAI
 )
 
 TECHNIQUES=("zero_shot" "few_shot" "cot")
