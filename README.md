@@ -1,5 +1,7 @@
 # Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent (ICSE '26)
 
+[![Zenodo](https://img.shields.io/badge/Zenodo-Artifact-blue)](https://zenodo.org/records/18263581)
+
 This repository contains the official artifact for the ICSE 2026 paper **"Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent"**.
 
 It provides the complete implementation of **RepGen**, a novel automated approach for reproducing Deep Learning (DL) bugs, along with a benchmark dataset of 106 real-world bugs and scripts to replicate the experimental results.
