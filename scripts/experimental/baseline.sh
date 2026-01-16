@@ -16,11 +16,27 @@
 set -o pipefail
 
 # ==========================================
+# 0. PATH HELPERS
+# ==========================================
+
+# Platform-independent path handling (Fixes /c/Users vs C:/Users issues)
+normalize_path() {
+    local path="$1"
+    if command -v cygpath >/dev/null 2>&1; then
+        # Convert '/c/Users' to 'C:/Users' (mixed mode)
+        cygpath -m "$path"
+    else
+        echo "$path"
+    fi
+}
+
+# ==========================================
 # 1. ENVIRONMENT & CONFIGURATION
 # ==========================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+RAW_PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROJECT_DIR="$(normalize_path "$RAW_PROJECT_DIR")"
 
 # Defaults
 BUGS=""
@@ -160,18 +176,6 @@ cleanup() {
 }
 trap cleanup INT TERM EXIT
 
-# Detect Python executable (handle both python and python3)
-detect_python() {
-    if command -v python3 &>/dev/null; then
-        echo "python3"
-    elif command -v python &>/dev/null; then
-        echo "python"
-    else
-        echo "python3"  # Default fallback
-    fi
-}
-PYTHON_CMD=$(detect_python)
-
 # ==========================================
 # 3. HELPER FUNCTIONS
 # ==========================================
@@ -222,7 +226,7 @@ run_baseline() {
     
     # Log experiment start
     log_to_master "Starting baseline: Bug=$bug_id, Model=$model, Backend=$backend, Technique=$technique"
-    log_to_master "Command: $PYTHON_CMD $TOOL_SCRIPT --bug_id=$bug_id --backend=$backend --model=$model --technique=$technique --examples=$EXAMPLES --dataset_path=$DATASET_PATH"
+    log_to_master "Command: python $TOOL_SCRIPT --bug_id=$bug_id --backend=$backend --model=$model --technique=$technique --examples=$EXAMPLES --dataset_path=$DATASET_PATH"
     log_to_master "Log file: $log_file"
     
     # Retry Loop
@@ -246,10 +250,10 @@ run_baseline() {
             echo "Technique: $technique"
             echo "Examples: $EXAMPLES"
             echo "Attempt: $attempt/$MAX_RUN_ATTEMPTS"
-            echo "Command: $PYTHON_CMD $TOOL_SCRIPT --bug_id=$bug_id --backend=$backend --model=$model --technique=$technique --examples=$EXAMPLES --dataset_path=$DATASET_PATH"
+            echo "Command: python $TOOL_SCRIPT --bug_id=$bug_id --backend=$backend --model=$model --technique=$technique --examples=$EXAMPLES --dataset_path=$DATASET_PATH"
             echo "========================================" 
             echo ""
-            $PYTHON_CMD "$TOOL_SCRIPT" \
+            python "$TOOL_SCRIPT" \
                 --bug_id "$bug_id" \
                 --backend "$backend" \
                 --model "$model" \
@@ -311,7 +315,7 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         --bugs) BUGS="$2"; shift 2 ;;
         --tool-script) TOOL_SCRIPT="$2"; shift 2 ;;
-        --dataset) DATASET_PATH="$2"; shift 2 ;;
+        --dataset) DATASET_PATH="$(normalize_path "$2")"; shift 2 ;;
         --examples) EXAMPLES="$2"; shift 2 ;;
         --max-attempts) MAX_RUN_ATTEMPTS="$2"; shift 2 ;;
         --quiet) QUIET=true; shift ;;

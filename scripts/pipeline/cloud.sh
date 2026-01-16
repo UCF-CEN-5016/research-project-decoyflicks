@@ -10,8 +10,22 @@
 # Ensure pipeline fails if any part of a pipe fails (catches Python errors)
 set -o pipefail
 
+# Platform-independent path handling
+normalize_path() {
+    local path="$1"
+    if command -v cygpath >/dev/null 2>&1; then
+        # Convert '/c/Users' to 'C:/Users' (mixed mode)
+        cygpath -m "$path"
+    else
+        echo "$path"
+    fi
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+RAW_PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROJECT_DIR="$(normalize_path "$RAW_PROJECT_DIR")"
+
+# Default paths
 DATASET_PATH="$PROJECT_DIR/dataset_cloud"
 CACHE_DIR="$PROJECT_DIR/.code_cache"
 CSV_FILE="$PROJECT_DIR/dataset/Dataset.csv"
@@ -180,7 +194,7 @@ trap cleanup INT TERM
 while [[ $# -gt 0 ]]; do
     case $1 in
         --bugs) BUGS="$2"; shift 2 ;;
-        --dataset) DATASET_PATH="$2"; shift 2 ;;
+        --dataset) DATASET_PATH="$(normalize_path "$2")"; shift 2 ;;
         --setup) SETUP=true; shift ;;
         --run) RUN=true; shift ;;
         --skip-code) SKIP_CODE=true; shift ;;
@@ -261,15 +275,9 @@ get_repo_info() {
     local bug_id=$1
     local csv_line=$((bug_id + 1))
     
-    # Determine Python executable
-    local python_cmd="python3"
-    if ! command -v python3 &>/dev/null && command -v python &>/dev/null; then
-        python_cmd="python"
-    fi
-    
     if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-        local line=$($python_cmd -c "
-with open('$CSV_FILE', 'r') as f:
+        local line=$(python -c "
+with open(r'$CSV_FILE', 'r') as f:
     for i, l in enumerate(f):
         if i == $csv_line:
             print(l.strip())
@@ -483,7 +491,7 @@ if [ "$RUN" = true ]; then
     fi
     
     log_success "Environment configured successfully"
-    log_debug "Python: $(command -v python3 || command -v python)"
+    log_debug "Python: $(which python)"
     log_debug "API Key: ...${OPENAI_API_KEY: -4}"
     echo ""
     
@@ -528,12 +536,12 @@ if [ "$RUN" = true ]; then
         fi
         
         if [ "$QUIET" = false ]; then
-            python3 "${PYTHON_ARGS[@]}" 2>&1 | while IFS= read -r line; do
+            python "${PYTHON_ARGS[@]}" 2>&1 | while IFS= read -r line; do
                 echo "  ${line}"
             done
             RESULT=${PIPESTATUS[0]}
         else
-            python3 "${PYTHON_ARGS[@]}" > "$TEMP_OUTPUT" 2>&1
+            python "${PYTHON_ARGS[@]}" > "$TEMP_OUTPUT" 2>&1
             RESULT=$?
         fi
         

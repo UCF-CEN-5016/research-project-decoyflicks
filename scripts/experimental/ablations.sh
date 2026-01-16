@@ -19,11 +19,27 @@
 set -o pipefail
 
 # ==========================================
+# 0. PATH HELPERS
+# ==========================================
+
+# Platform-independent path handling
+normalize_path() {
+    local path="$1"
+    if command -v cygpath >/dev/null 2>&1; then
+        # Convert '/c/Users' to 'C:/Users' (mixed mode)
+        cygpath -m "$path"
+    else
+        echo "$path"
+    fi
+}
+
+# ==========================================
 # 1. ENVIRONMENT & CONFIGURATION
 # ==========================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+RAW_PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROJECT_DIR="$(normalize_path "$RAW_PROJECT_DIR")"
 
 # Default values
 BUGS=""
@@ -63,18 +79,6 @@ GENERATION_ABLATIONS=(
     "no_static_analysis"
     "no_runtime_feedback"
 )
-
-# Detect Python executable (handle both python and python3)
-detect_python() {
-    if command -v python3 &>/dev/null; then
-        echo "python3"
-    elif command -v python &>/dev/null; then
-        echo "python"
-    else
-        echo "python3"  # Default fallback
-    fi
-}
-PYTHON_CMD=$(detect_python)
 
 # ==========================================
 # 2. UI & LOGGING HELPERS
@@ -202,7 +206,7 @@ run_experiment() {
     
     # Log experiment start
     log_to_master "Starting experiment: Bug=$bug_id, Type=$type, Ablation=$ablation"
-    log_to_master "Command: $PYTHON_CMD ${cmd_args[*]}"
+    log_to_master "Command: python ${cmd_args[*]}"
     log_to_master "Log file: $log_file"
     
     # Retry Loop
@@ -224,10 +228,10 @@ run_experiment() {
             echo "Type: $type"
             echo "Ablation: $ablation"
             echo "Attempt: $attempt/$MAX_RUN_ATTEMPTS"
-            echo "Command: $PYTHON_CMD ${cmd_args[*]}"
+            echo "Command: python ${cmd_args[*]}"
             echo "========================================" 
             echo ""
-            $PYTHON_CMD "${cmd_args[@]}" 2>&1
+            python "${cmd_args[@]}" 2>&1
             exit_code=$?
             echo ""
             echo "========================================" 
@@ -292,7 +296,7 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         --bugs) BUGS="$2"; shift 2 ;;
         --tool-script) TOOL_SCRIPT="$2"; shift 2 ;;
-        --dataset) DATASET_PATH="$2"; shift 2 ;;
+        --dataset) DATASET_PATH="$(normalize_path "$2")"; shift 2 ;;
         --max-attempts) MAX_RUN_ATTEMPTS="$2"; shift 2 ;;
         --quiet) QUIET=true; shift ;;
         --retrieval-ablations) CUSTOM_RETRIEVAL_ABLATIONS="$2"; shift 2 ;;

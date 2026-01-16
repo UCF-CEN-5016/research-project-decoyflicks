@@ -2,6 +2,7 @@
 
 ###############################################################################
 # RepGen Setup Script - Initialize venv, install dependencies, and datasets
+# Windows-compatible version
 #
 # Usage:
 #   bash setup.sh --bugs <range> [OPTIONS]
@@ -21,10 +22,42 @@
 # Ensure pipeline fails if any part of a pipe fails
 set -o pipefail
 
+# Detect OS and set platform-specific variables
+case "$(uname -s)" in
+    MINGW*|MSYS*|CYGWIN*)
+        IS_WINDOWS=true
+        PYTHON_CMD="python"
+        PATH_SEP="\\"
+        ;;
+    *)
+        IS_WINDOWS=false
+        PYTHON_CMD="python3"
+        PATH_SEP="/"
+        ;;
+esac
+
+# Platform-independent path handling
+normalize_path() {
+    local path="$1"
+    if [ "$IS_WINDOWS" = true ] && command -v cygpath >/dev/null 2>&1; then
+        # Convert '/c/Users' to 'C:/Users' (mixed mode)
+        # This fixes the path for Python while avoiding backslash escape issues
+        cygpath -m "$path"
+    else
+        echo "$path"
+    fi
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-CACHE_DIR="$PROJECT_DIR/.code_cache"
-CSV_FILE="$PROJECT_DIR/dataset/Dataset.csv"
+CACHE_DIR="$(normalize_path "$PROJECT_DIR/.code_cache")"
+CSV_FILE="$(normalize_path "$PROJECT_DIR/dataset/Dataset.csv")"
+
+if [ "$IS_WINDOWS" = true ]; then
+    TEMP_DIR="$USERPROFILE\\AppData\\Local\\Temp"
+else
+    TEMP_DIR="/tmp"
+fi
 
 # Default parameters
 BUGS=""
@@ -41,7 +74,7 @@ if [ -t 1 ]; then
     if command -v tput >/dev/null 2>&1; then
         if [ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]; then
             USE_COLOR=true
-            if [[ "$OSTYPE" != "msys" && "$OSTYPE" != "cygwin" && "$OSTYPE" != "win32" ]]; then
+            if [ "$IS_WINDOWS" = false ]; then
                 if [[ "${LANG}" =~ [Uu][Tt][Ff]-?8 ]] || [[ "${LC_ALL}" =~ [Uu][Tt][Ff]-?8 ]]; then
                     USE_FANCY=true
                 fi
@@ -251,9 +284,10 @@ get_repo_info() {
     local bug_id=$1
     local csv_line=$((bug_id + 1))
     
-    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-        local line=$(python -c "
-with open('$CSV_FILE', 'r') as f:
+    if [ "$IS_WINDOWS" = true ]; then
+        local line=$($PYTHON_CMD -c "
+# Use 'r' to treat the path string as raw literal text
+with open(r'$CSV_FILE', 'r') as f:
     for i, l in enumerate(f):
         if i == $csv_line:
             print(l.strip())
@@ -270,6 +304,20 @@ with open('$CSV_FILE', 'r') as f:
 
 get_cache_key() {
     echo "$1" | sed 's|.*github.com/||' | sed 's|/|__|g' | sed 's|\.git||'
+}
+
+# Git operations
+clone_repo() {
+    local repo="$1"
+    local dest="$2"
+    local log_file="$3"
+    
+    if [ "$IS_WINDOWS" = true ]; then
+        # Use HTTPS instead of SSH for Windows
+        repo=$(echo "$repo" | sed 's|git@github.com:|https://github.com/|')
+    fi
+    
+    git clone --quiet "$repo" "$dest" > "$log_file" 2>&1
 }
 
 # Setup a single dataset
@@ -363,14 +411,15 @@ setup_dataset() {
             log_substep "Cloning repository: ${REPO##*/}"
             start_spinner "Cloning repository..."
             
-            if git clone --quiet "$REPO" "$CACHED" > /tmp/git_clone_$$.log 2>&1; then
+            clone_repo "$REPO" "$CACHED" "$TEMP_DIR/git_clone_$$.log"
+            if [ $? -eq 0 ]; then
                 stop_spinner
                 log_success "  Repository cloned successfully"
-                log_debug "  Clone log: /tmp/git_clone_$$.log"
+                log_debug "  Clone log: $TEMP_DIR/git_clone_$$.log"
             else
                 stop_spinner
-                log_error "  Clone failed (see /tmp/git_clone_$$.log)"
-                [ -n "$LOG_FILE" ] && cat /tmp/git_clone_$$.log >> "$LOG_FILE"
+                log_error "  Clone failed (see $TEMP_DIR/git_clone_$$.log)"
+                [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/git_clone_$$.log" >> "$LOG_FILE"
                 SETUP_FAILED=$((SETUP_FAILED + 1))
                 continue
             fi
@@ -381,12 +430,12 @@ setup_dataset() {
         log_substep "Checking out commit: ${HASH:0:8}"
         (
             cd "$CACHED"
-            git fetch --quiet origin "$HASH" > /tmp/git_fetch_$$.log 2>&1 || true
-            if git checkout --quiet "$HASH" > /tmp/git_checkout_$$.log 2>&1; then
+            git fetch --quiet origin "$HASH" > "$TEMP_DIR/git_fetch_$$.log" 2>&1 || true
+            if git checkout --quiet "$HASH" > "$TEMP_DIR/git_checkout_$$.log" 2>&1; then
                 log_debug "  Checkout successful"
             else
                 log_warning "  Checkout encountered issues (see logs)"
-                [ -n "$LOG_FILE" ] && cat /tmp/git_checkout_$$.log >> "$LOG_FILE"
+                [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/git_checkout_$$.log" >> "$LOG_FILE"
             fi
         ) || true
         
@@ -417,20 +466,16 @@ setup_dataset() {
     return $SETUP_FAILED
 }
 
-# ============================================================================
-# SETUP VENV AND DEPENDENCIES
-# ============================================================================
-
+# Setup venv and dependencies
 setup_venv() {
     echo "=========================================="
     echo -e "  ${BOLD}Setting up Virtual Environment${NC}"
     echo "=========================================="
     echo ""
     
-    VENV_DIR="$PROJECT_DIR/venv"
-    REQUIREMENTS_FILE="$PROJECT_DIR/requirements.txt"
+    VENV_DIR="$(normalize_path "$PROJECT_DIR/venv")"
+    REQUIREMENTS_FILE="$(normalize_path "$PROJECT_DIR/requirements.txt")"
     
-    # Check if venv already exists
     if [ -d "$VENV_DIR" ]; then
         log_warning "Virtual environment already exists at: $VENV_DIR"
         log_step "Skipping venv creation"
@@ -438,26 +483,19 @@ setup_venv() {
         log_step "Creating virtual environment"
         start_spinner "Creating venv..."
         
-        # Detect Python executable (handle both python and python3)
-        local python_cmd="python3"
-        if ! command -v python3 &>/dev/null && command -v python &>/dev/null; then
-            python_cmd="python"
-        fi
-        
-        if $python_cmd -m venv "$VENV_DIR" > /tmp/venv_create_$$.log 2>&1; then
+        if $PYTHON_CMD -m venv "$VENV_DIR" > "$TEMP_DIR/venv_create_$$.log" 2>&1; then
             stop_spinner
             log_success "Virtual environment created successfully"
         else
             stop_spinner
             log_error "Failed to create virtual environment"
-            [ -n "$LOG_FILE" ] && cat /tmp/venv_create_$$.log >> "$LOG_FILE"
+            [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/venv_create_$$.log" >> "$LOG_FILE"
             return 1
         fi
     fi
     
-    # Determine activation script based on OS
-    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-        ACTIVATE_SCRIPT="$VENV_DIR/Scripts/activate"
+    if [ "$IS_WINDOWS" = true ]; then
+        ACTIVATE_SCRIPT="$VENV_DIR${PATH_SEP}Scripts${PATH_SEP}activate"
     else
         ACTIVATE_SCRIPT="$VENV_DIR/bin/activate"
     fi
@@ -474,20 +512,18 @@ setup_venv() {
     }
     log_success "Virtual environment activated"
     
-    # Upgrade pip
     log_step "Upgrading pip"
     start_spinner "Upgrading pip..."
     
-    if pip install --quiet --upgrade pip > /tmp/pip_upgrade_$$.log 2>&1; then
+    if pip install --quiet --upgrade pip > "$TEMP_DIR/pip_upgrade_$$.log" 2>&1; then
         stop_spinner
         log_success "pip upgraded successfully"
     else
         stop_spinner
         log_warning "pip upgrade encountered issues"
-        [ -n "$LOG_FILE" ] && cat /tmp/pip_upgrade_$$.log >> "$LOG_FILE"
+        [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/pip_upgrade_$$.log" >> "$LOG_FILE"
     fi
     
-    # Install dependencies
     if [ ! -f "$REQUIREMENTS_FILE" ]; then
         log_error "Requirements file not found: $REQUIREMENTS_FILE"
         return 1
@@ -496,34 +532,28 @@ setup_venv() {
     log_step "Installing dependencies from requirements.txt"
     start_spinner "Installing packages..."
     
-    if pip install --quiet -r "$REQUIREMENTS_FILE" > /tmp/pip_install_$$.log 2>&1; then
+    if pip install --quiet -r "$REQUIREMENTS_FILE" > "$TEMP_DIR/pip_install_$$.log" 2>&1; then
         stop_spinner
         log_success "All dependencies installed successfully"
     else
         stop_spinner
         log_warning "Some dependencies may have failed to install (see logs)"
-        [ -n "$LOG_FILE" ] && cat /tmp/pip_install_$$.log >> "$LOG_FILE"
+        [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/pip_install_$$.log" >> "$LOG_FILE"
     fi
     
     echo ""
     return 0
 }
 
-# ============================================================================
-# MAIN SETUP
-# ============================================================================
-
+# Main setup
 TOTAL_FAILED=0
 
-# Setup venv and install dependencies
 setup_venv
 VENV_SETUP=$?
 
-# Setup dataset_local
 setup_dataset "dataset_local" "$PROJECT_DIR/dataset_local"
 TOTAL_FAILED=$((TOTAL_FAILED + $?))
 
-# Setup dataset_cloud
 setup_dataset "dataset_cloud" "$PROJECT_DIR/dataset_cloud"
 TOTAL_FAILED=$((TOTAL_FAILED + $?))
 
@@ -537,10 +567,10 @@ if [ $VENV_SETUP -eq 0 ] && [ $TOTAL_FAILED -eq 0 ]; then
     log_success "All setup steps completed successfully!"
     echo ""
     log_info "To activate the virtual environment, run:"
-    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-        echo "    source $PROJECT_DIR/venv/Scripts/activate"
+    if [ "$IS_WINDOWS" = true ]; then
+        echo "    source $VENV_DIR${PATH_SEP}Scripts${PATH_SEP}activate"
     else
-        echo "    source $PROJECT_DIR/venv/bin/activate"
+        echo "    source $VENV_DIR/bin/activate"
     fi
     echo ""
     exit 0

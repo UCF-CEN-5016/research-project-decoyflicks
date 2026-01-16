@@ -10,9 +10,23 @@
 # Ensure pipeline fails if any part of a pipe fails
 set -o pipefail
 
+# Platform-independent path handling
+normalize_path() {
+    local path="$1"
+    if command -v cygpath >/dev/null 2>&1; then
+        # Convert '/c/Users' to 'C:/Users' (mixed mode)
+        cygpath -m "$path"
+    else
+        echo "$path"
+    fi
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Go up two levels: scripts/pipeline -> scripts -> Project Root
-PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+RAW_PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROJECT_DIR="$(normalize_path "$RAW_PROJECT_DIR")"
+
+# Default paths
 DATASET_PATH="$PROJECT_DIR/dataset_local"
 CACHE_DIR="$PROJECT_DIR/.code_cache"
 CSV_FILE="$PROJECT_DIR/dataset/Dataset.csv"
@@ -181,7 +195,7 @@ trap cleanup INT TERM
 while [[ $# -gt 0 ]]; do
     case $1 in
         --bugs) BUGS="$2"; shift 2 ;;
-        --dataset) DATASET_PATH="$2"; shift 2 ;;
+        --dataset) DATASET_PATH="$(normalize_path "$2")"; shift 2 ;;
         --setup) SETUP=true; shift ;;
         --run) RUN=true; shift ;;
         --skip-code) SKIP_CODE=true; shift ;;
@@ -258,7 +272,7 @@ get_repo_info() {
     if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
         # Windows/Git Bash logic
         local line=$($python_cmd -c "
-with open('$CSV_FILE', 'r') as f:
+with open(r'$CSV_FILE', 'r') as f:
     for i, l in enumerate(f):
         if i == $csv_line:
             print(l.strip())
