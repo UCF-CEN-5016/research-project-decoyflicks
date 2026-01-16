@@ -46,42 +46,29 @@ This artifact is compatible with **Linux** (Ubuntu 20.04+), **macOS** (Apple Sil
 * [Download for macOS/Linux](https://ollama.ai/download)
 * [Download for Windows](https://www.google.com/search?q=https://ollama.ai/download/windows)
 
-### Automated Setup (Recommended)
+## Interactive Pipeline (Recommended)
 
-We provide a setup script that automates environment configuration, dependency installation, and dataset preparation:
+To facilitate reproducibility, we provide a unified interactive script that orchestrates the entire RepGen workflow—from environment initialization to ablation studies. This script handles OS detection, virtual environment management, and input validation automatically.
 
-```bash
-bash scripts/setup.sh --bugs 1-10
-```
-
-**Setup Script Options:**
-
-| Flag | Description | Example |
-| --- | --- | --- |
-| `--bugs` | **Required.** Bug IDs to set up (ranges or lists) | `1-10`, `80-82`, `1,5,10` |
-| `--skip-code` | Skip cloning code repositories (metadata only) | `--skip-code` |
-| `--force-clone` | Re-clone repositories even if they already exist | `--force-clone` |
-| `--quiet` | Suppress informational messages | `--quiet` |
-| `--log-file` | Write detailed logs to a file | `--log-file setup.log` |
-
-**Examples:**
+Run the script from the root directory:
 
 ```bash
-# Set up bugs 1-10 (recommended starting point)
-bash scripts/setup.sh --bugs 1-10
+bash scripts/RepGen.sh
+````
 
-# Set up specific bugs (80, 81, 82)
-bash scripts/setup.sh --bugs 80-82
+The script guides you through the following distinct phases. You will be prompted to confirm execution for each step, allowing for selective reproduction:
 
-# Set up all bugs with logging
-bash scripts/setup.sh --bugs 1-106 --log-file setup.log
+* **Bug Range Configuration**: Select specific bugs (e.g., `1–10`) or the full dataset (`1–106`).
 
-# Set up without cloning code (faster)
-bash scripts/setup.sh --bugs 1-10 --skip-code
+* **Environment Initialization**: Automatically sets up dependencies and clones repositories for the selected range.
 
-# Activate the environment after setup
-source venv/bin/activate
-```
+* **Local Inference (RQ1)**: Reproduces bugs using the local **Qwen2.5** model (requires **Ollama**).
+
+* **Cloud Inference (RQ1)**: Reproduces bugs using **GPT-4o** (requires `OPENAI_API_KEY`).
+
+* **Baseline Experiments (RQ2)**: Executes **Zero-shot**, **Few-shot**, and **Chain-of-Thought (CoT)** baselines.
+
+* **Ablation Studies (RQ2)**: Evaluates RepGen with disabled retrieval or generation components.
 
 ### Installation
 
@@ -253,3 +240,6 @@ If you use RepGen or the dataset in your research, please cite our ICSE 2026 pap
   url       = {https://arxiv.org/abs/2512.14990}
 }
 ```
+
+## 6. License (MIT License)
+This project is licensed under the MIT License, a permissive open-source license that allows others to use, modify, and distribute the project's code with very few restrictions. This license can benefit research by promoting collaboration and encouraging the sharing of ideas and knowledge. With this license, researchers can build on existing code to create new tools, experiments, or projects, and easily adapt and customize the code to suit their specific research needs without worrying about legal implications. The open-source nature of the MIT License can help foster a collaborative research community, leading to faster innovation and progress in their respective fields. Additionally, the license can increase the project's visibility and adoption, attracting more researchers to use and contribute to it.
