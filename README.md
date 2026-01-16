@@ -1,255 +1,147 @@
-# Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent (ICSE '26)
+# Artifact: Imitation Game - Reproducing Deep Learning Bugs
 
-This repository contains the official artifact for the ICSE 2026 paper **"Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent"**.
+**Paper Title:** Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent
 
-It provides the complete implementation of **RepGen**, a novel automated approach for reproducing Deep Learning (DL) bugs, along with a benchmark dataset of 106 real-world bugs and scripts to replicate the experimental results.
+**Venue:** ICSE 2026
 
-## Abstract
+**Authors:** Mehil B. Shah, Mohammad Masudur Rahman, Foutse Khomh
 
-Despite their wide adoption in various domains (e.g., healthcare, finance, software engineering), Deep Learning (DL)-based applications suffer from many bugs, failures, and vulnerabilities. Reproducing these bugs is essential for their resolution, but it is extremely challenging due to the inherent nondeterminism of DL models and their tight coupling with hardware and software environments. According to recent studies, only about 3% of DL bugs can be reliably reproduced using manual approaches. To address these challenges, we present RepGen, a novel, automated, and intelligent approach for reproducing deep learning bugs. RepGen constructs a learning-enhanced context from a project, develops a comprehensive plan for bug reproduction, employs an iterative generate-validate-refine mechanism, and thus generates such code using an LLM that reproduces the bug at hand. We evaluate RepGen on 106 real-world deep learning bugs and achieve a reproduction rate of 80.19%, a 19.81% improvement over the state-of-the-art measure. A developer study involving 27 participants shows that RepGen improves the success rate of DL bug reproduction by 23.35%, reduces the time to reproduce by 56.8%, and lowers participants' cognitive load. 
+## Badges Claimed
 
-## 1. Artifact Overview
+We are applying for the following badges:
 
-### Directory Structure
+1. **Available:** The artifact is permanently archived on Zenodo with a DOI.
+2. **Functional:** The artifact is documented, consistent, complete, and exercisable.
+3. **Reusable:** The artifact includes a highly automated script (`RepGen.sh`) to ensure dependency isolation, comprehensive documentation for all experimental pipelines, and modular scripts that facilitate repurposing the agent for new tasks.
 
-```plaintext
-repgen/
-├── dataset/             # Benchmark: 106 DL bugs (IDs 001-106) with metadata
-├── figures/             # Visualization assets for the paper (RQ1, RQ2)
-├── results/             # Raw experimental data and statistical analysis notebooks
-├── retrieval/           # RAG Module: Context retrieval implementation
-├── scripts/             # Automation & Experimentation Scripts
-│   ├── quick-start/     # Entry points for fast reproduction (Local/Cloud)
-│   ├── pipeline/        # Core pipeline configuration and parameters
-│   └── experimental/    # Baselines (Zero-shot, CoT) and ablation studies
-├── src/                 # Source Code: Main agent logic, generation, and execution
-├── requirements.txt     # Python project dependencies
-└── README.md            # Documentation
+## 1. Purpose
 
-```
+This artifact provides the complete implementation of **RepGen**, an automated approach for reproducing Deep Learning (DL) bugs. It allows researchers to:
 
-## 2. Environment Setup
+1. **Replicate** the experimental results presented in the paper (Table 2 and Table 3).
+2. **Reuse** the RepGen agent to attempt reproduction of new DL bugs.
+3. **Analyze** the benchmark dataset of 106 real-world DL bugs.
 
-This artifact is compatible with **Linux** (Ubuntu 20.04+), **macOS** (Apple Silicon recommended), and **Windows** (via WSL2 or Git Bash).
+The artifact contains:
 
-> **Important:** All scripts in this repository are shell scripts (`.sh` files) designed to run in Unix-based terminals. To run these scripts:
-> - **macOS/Linux:** Use the native terminal
-> - **Windows:** Use **Git Bash** (included with [Git for Windows](https://git-scm.com/download/win)) or **WSL2** (Windows Subsystem for Linux)
-> 
-> Git Bash and WSL2 are freely available on all operating systems and provide a Unix-compatible environment for running shell scripts.
+* **Source Code:** The implementation of the LLM-based agent, RAG module, and execution sandbox.
+* **Dataset:** A curated benchmark of 106 DL bugs with metadata and reproduction criteria.
+* **Scripts:** Automated pipelines to reproduce the baseline comparisons (Zero-shot, CoT) and the ablation studies.
 
-### Prerequisites
+## 2. Provenance
 
+* **Preprint:** [arXiv:2512.14990](https://arxiv.org/abs/2512.14990)
+* **Archival Repository:** https://zenodo.org/records/18263581
+* **GitHub Repository:** [https://github.com/mehilshah/ICSE26-RepGen](https://github.com/mehilshah/ICSE26-RepGen)
+
+## 3. Data
+
+The artifact includes a dataset of **106 real-world Deep Learning bugs** collected from GitHub repositories and Stack Overflow issues.
+
+* **Location:** `/dataset/`
+* **Structure:**
+* Directories `001` to `106` represent individual bugs.
+* Each directory contains `metadata.json` (bug description, faulty code snippet, expected error) and `ground_truth.py` (author-verified reproduction script).
+
+
+* **Privacy/Ethics:** All data is derived from public open-source repositories (MIT/Apache 2.0 licenses). No personal data or proprietary code is included.
+
+## 4. Setup
+
+To ensure the artifact is easy to install and isolated from your system packages, we provide an automated setup script that creates a Python virtual environment.
+
+### Hardware & OS Requirements
+
+* **Operating System:** Linux (Ubuntu 20.04+), macOS (Apple Silicon supported), or Windows (via WSL2 or Git Bash).
 * **Python:** Version 3.8 or higher.
-* **Git:** Required for version control.
-* **Ollama (Local Inference):** Required only if running without cloud APIs.
-* [Download for macOS/Linux](https://ollama.ai/download)
-* [Download for Windows](https://www.google.com/search?q=https://ollama.ai/download/windows)
+* **Disk Space:** Approx 5 GB (for dependencies and dataset).
+* **GPU (Optional):** NVIDIA GPU (16GB+ VRAM) is recommended for local inference. The tool defaults to API/CPU if no GPU is found.
 
-### Automated Setup (Recommended)
+### Installation Steps
 
-We provide a setup script that automates environment configuration, dependency installation, and dataset preparation:
-
-```bash
-bash scripts/setup.sh --bugs 1-10
-```
-
-**Setup Script Options:**
-
-| Flag | Description | Example |
-| --- | --- | --- |
-| `--bugs` | **Required.** Bug IDs to set up (ranges or lists) | `1-10`, `80-82`, `1,5,10` |
-| `--skip-code` | Skip cloning code repositories (metadata only) | `--skip-code` |
-| `--force-clone` | Re-clone repositories even if they already exist | `--force-clone` |
-| `--quiet` | Suppress informational messages | `--quiet` |
-| `--log-file` | Write detailed logs to a file | `--log-file setup.log` |
-
-**Examples:**
-
-```bash
-# Set up bugs 1-10 (recommended starting point)
-bash scripts/setup.sh --bugs 1-10
-
-# Set up specific bugs (80, 81, 82)
-bash scripts/setup.sh --bugs 80-82
-
-# Set up all bugs with logging
-bash scripts/setup.sh --bugs 1-106 --log-file setup.log
-
-# Set up without cloning code (faster)
-bash scripts/setup.sh --bugs 1-10 --skip-code
-
-# Activate the environment after setup
-source venv/bin/activate
-```
-
-### Installation
-
-**1. Clone the Repository**
-
+1. **Clone the Repository:**
 ```bash
 git clone https://github.com/mehilshah/ICSE26-RepGen
 cd ICSE26-RepGen
 ```
 
-**2. Virtual Environment Setup**
 
-We strongly recommend using a virtual environment to manage dependencies.
-
-* **macOS / Linux / Windows (WSL2):**
+2. **Run Automated Setup:**
+This script initializes the virtual environment, installs requirements, and prepares the dataset structure.
 ```bash
-python3 -m venv venv
+# This process takes approximately 5-10 minutes
+bash scripts/setup.sh --bugs 1-10
+```
+
+
+3. **Activate Environment:**
+```bash
+# Linux / macOS / WSL2
 source venv/bin/activate
-pip install -r requirements.txt
-```
 
-* **Windows (Git Bash/PowerShell):**
-```bash
-python -m venv venv
+# Windows Git Bash
 source venv/Scripts/activate
-pip install -r requirements.txt
 ```
 
-**3. Model Configuration**
 
-#### **Mode A: Local Inference (Ollama)**
-
-If using local LLMs, ensure the Ollama service is active and models are pulled:
-
-```bash
-# Start the service (in a separate terminal)
-ollama serve
-
-# Pull required models
-ollama pull qwen2.5:7b
-ollama pull qwen2.5-coder:7b
-```
-
-#### **Mode B: Cloud Inference (APIs)**
-
-If using GPT-4, Llama-3, or DeepSeek, export your API keys. You may add these to a `.env` file or export them directly:
-
+4. **Configure LLM Backend:**
+* **Option A (Local):** Install [Ollama](https://ollama.ai) and run `ollama serve` in a separate terminal.
+* **Option B (Cloud API):** If you prefer using OpenAI or DeepSeek, export your API key:
 ```bash
 export OPENAI_API_KEY="sk-..."
-export GROQ_API_KEY="gsk-..."
 export DEEPSEEK_API_KEY="sk-..."
+export GROQ_API_KEY="sk-....."
 ```
 
-## 3. Usage & Experiments
+## 5. Usage & Replication
 
-We provide scripts to run the tool in different modes. Logs and generated reproduction scripts will be saved in the `results/` directory.
+### Verify Installation (Functional Check)
 
-> **Reminder:** All commands below should be executed in a Unix-based terminal:
-> - macOS/Linux: Use the native terminal
-> - Windows: Use **Git Bash** or **WSL2** (not PowerShell or Command Prompt)
-
-### Quick Start
-
-#### Demo Script (Recommended for First-Time Users)
-
-To experience the complete RepGen pipeline, run the demo script:
+To verify the tool is functional, run the demo script on a single bug (Bug ID 1). This is a quick test to ensure the environment is valid.
 
 ```bash
-bash scripts/RepGen.sh
+bash scripts/quick-start/cloud.sh 1 1
+
 ```
 
-This interactive script guides you through the entire RepGen workflow:
+**Expected Output:** The script should generate a reproduction plan, execute Python code, and output `SUCCESS: Bug reproduced` or `FAILURE`.
 
-1. **Bug Range Selection** - Choose which bugs to process (1-106)
-2. **Environment Setup** - Automatically prepares the environment for selected bugs
-3. **API Configuration** - Optionally configure OpenAI API key for cloud inference
-4. **Local Inference** - Demonstrates bug reproduction using Qwen2.5 (via Ollama)
-5. **Cloud Inference** - Demonstrates bug reproduction using GPT-4o (if API key provided)
-6. **Baseline Experiments** - Runs zero-shot, few-shot, and CoT baselines
-7. **Ablation Studies** - Tests retrieval and generation component variations
+### Replicating Main Results (Paper Table 2)
 
-**Features:**
-- Interactive prompts with confirmation at each step
-- Skip any step you don't want to run
-- Process single bugs or ranges (e.g., bugs 1-10)
-- Color-coded output for easy tracking
-- Progress indicators for multi-bug processing
-
-**Example Usage:**
-
-For a quick test with a single bug:
-```bash
-# When prompted, enter:
-# START bug ID: 1
-# END bug ID: 1
-```
-
-For comprehensive testing:
-```bash
-# When prompted, enter:
-# START bug ID: 1
-# END bug ID: 106
-```
-
-**Note:** The demo script automatically handles:
-- Virtual environment activation
-- Repository cloning and caching
-- Model availability checks
-- Result organization and logging
-
-**Prerequisites for Demo:**
-- Ollama running locally (`ollama serve` in a separate terminal) for local inference
-- OpenAI API key (optional, for cloud-based inference)
-
-#### Individual Script Execution
-
-| Mode | Description | Command |
-| --- | --- | --- |
-| **Local** | Uses Qwen2.5 (requires Ollama) | `bash scripts/quick-start/local.sh [RANGE] [ATTEMPTS]` |
-| **Cloud** | Uses GPT-4o (requires API Key) | `bash scripts/quick-start/cloud.sh [RANGE] [ATTEMPTS]` |
-
-**Example:** Run reproduction for bug IDs 80 through 85 with 1 attempt per context:
+To reproduce the efficiency of RepGen compared to baselines (RQ1):
 
 ```bash
-bash scripts/quick-start/local.sh 80-85 1
+# Run RepGen on the full dataset (106 bugs)
+# Note: This may take several hours depending on hardware.
+bash scripts/quick-start/local.sh 1-106 1
+
+# Run Baselines (Zero-Shot and CoT) (Needs Ollama, and API Keys)
+bash scripts/experimental/baselines.sh --bugs 1-106
 ```
 
-### Replication Packages
+### Replicating Ablation Studies (Paper Table 3)
 
-#### Baseline Experiments
-
-Reproduce the comparison baselines (Zero-shot, Few-shot, Chain-of-Thought) cited in the paper.
+To reproduce the component analysis (RQ2):
 
 ```bash
-bash scripts/pipeline/baselines.sh --bugs 1-106
+bash scripts/experimental/ablations.sh --bugs 1-106
 ```
 
-#### Ablation Studies
+## 6. Directory Structure
 
-Reproduce the component analysis (e.g., RepGen without Retrieval, RepGen without Iterative Refinement).
-
-```bash
-bash scripts/pipeline/ablations.sh --bugs 1-106
+```plaintext
+repgen/
+├── dataset/             # 106 DL bugs with metadata
+├── results/             # Generated reproduction scripts and logs
+├── scripts/             # Automation for experiments
+│   ├── setup.sh         # Environment setup and dependency installation
+│   ├── quick-start/     # Scripts for running individual bugs
+│   └── pipeline/        # Replication scripts for paper results
+├── src/                 # RepGen Python source code
+├── requirements.txt     # Python dependencies
+└── README.md
 ```
 
-> **Note:** For advanced customization, refer to the documentation in `scripts/README.md`.
+## 7. License
 
-## 4. Troubleshooting
-
-* **Error: "Ollama service is not running"**
-* Ensure you have run `ollama serve` in a dedicated terminal window before executing the scripts.
-
-* **Error: "Dataset not found"**
-* Verify that the `dataset/` directory exists in the root `repgen/` folder and contains subdirectories `001` to `106`.
-
-* **Permission Denied**
-* If scripts fail to execute, grant permissions: `chmod +x scripts/**/*.sh`.
-
-## 5. Citation
-
-If you use RepGen or the dataset in your research, please cite our ICSE 2026 paper:
-
-```bibtex
-@inproceedings{shah2026repgen,
-  author    = {Shah, Mehil B and Rahman, Mohammad Masudur and Khomh, Foutse},
-  title     = {Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent},
-  booktitle = {Proceedings of the 48th International Conference on Software Engineering (ICSE)},
-  year      = {2026},
-  url       = {https://arxiv.org/abs/2512.14990}
-}
-```
+This project is licensed under the **MIT License**. See the `LICENSE` file for details. The dataset is derived from public repositories; original licenses for specific projects are respected.
