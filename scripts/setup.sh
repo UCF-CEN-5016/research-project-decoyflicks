@@ -467,14 +467,22 @@ setup_dataset() {
 }
 
 # Setup venv and dependencies
+# Setup venv and dependencies
 setup_venv() {
     echo "=========================================="
     echo -e "  ${BOLD}Setting up Virtual Environment${NC}"
     echo "=========================================="
     echo ""
     
-    VENV_DIR="$(normalize_path "$PROJECT_DIR/venv")"
-    REQUIREMENTS_FILE="$(normalize_path "$PROJECT_DIR/requirements.txt")"
+    VENV_DIR="$PROJECT_DIR/venv"
+    REQUIREMENTS_FILE="$PROJECT_DIR/requirements.txt"
+    
+    # Verify requirements.txt exists before proceeding
+    if [ ! -f "$REQUIREMENTS_FILE" ]; then
+        log_error "Requirements file not found: $REQUIREMENTS_FILE"
+        return 1
+    fi
+    log_info "Found requirements.txt at: $REQUIREMENTS_FILE"
     
     if [ -d "$VENV_DIR" ]; then
         log_warning "Virtual environment already exists at: $VENV_DIR"
@@ -489,15 +497,19 @@ setup_venv() {
         else
             stop_spinner
             log_error "Failed to create virtual environment"
+            cat "$TEMP_DIR/venv_create_$$.log"
             [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/venv_create_$$.log" >> "$LOG_FILE"
             return 1
         fi
     fi
     
+    # Set activation script path based on platform
     if [ "$IS_WINDOWS" = true ]; then
-        ACTIVATE_SCRIPT="$VENV_DIR${PATH_SEP}Scripts${PATH_SEP}activate"
+        ACTIVATE_SCRIPT="$VENV_DIR/Scripts/activate"
+        PIP_CMD="$VENV_DIR/Scripts/pip"
     else
         ACTIVATE_SCRIPT="$VENV_DIR/bin/activate"
+        PIP_CMD="$VENV_DIR/bin/pip"
     fi
     
     if [ ! -f "$ACTIVATE_SCRIPT" ]; then
@@ -512,33 +524,80 @@ setup_venv() {
     }
     log_success "Virtual environment activated"
     
-    log_step "Upgrading pip"
-    start_spinner "Upgrading pip..."
-    
-    if pip install --quiet --upgrade pip > "$TEMP_DIR/pip_upgrade_$$.log" 2>&1; then
-        stop_spinner
-        log_success "pip upgraded successfully"
-    else
-        stop_spinner
-        log_warning "pip upgrade encountered issues"
-        [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/pip_upgrade_$$.log" >> "$LOG_FILE"
-    fi
-    
-    if [ ! -f "$REQUIREMENTS_FILE" ]; then
-        log_error "Requirements file not found: $REQUIREMENTS_FILE"
+    # Verify pip is available
+    if ! command -v pip >/dev/null 2>&1; then
+        log_error "pip not found in virtual environment"
         return 1
     fi
     
-    log_step "Installing dependencies from requirements.txt"
-    start_spinner "Installing packages..."
+    log_step "Upgrading pip"
+    log_info "Running: pip install --upgrade pip"
     
-    if pip install --quiet -r "$REQUIREMENTS_FILE" > "$TEMP_DIR/pip_install_$$.log" 2>&1; then
-        stop_spinner
-        log_success "All dependencies installed successfully"
+    # Remove --quiet to see actual errors
+    if pip install --upgrade pip 2>&1 | tee "$TEMP_DIR/pip_upgrade_$$.log"; then
+        log_success "pip upgraded successfully"
     else
-        stop_spinner
-        log_warning "Some dependencies may have failed to install (see logs)"
-        [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/pip_install_$$.log" >> "$LOG_FILE"
+        log_warning "pip upgrade encountered issues"
+        cat "$TEMP_DIR/pip_upgrade_$$.log"
+        [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/pip_upgrade_$$.log" >> "$LOG_FILE"
+    fi
+    
+    log_step "Installing dependencies from requirements.txt"
+    log_info "Requirements file: $REQUIREMENTS_FILE"
+    log_info "Running: pip install -r \"$REQUIREMENTS_FILE\""
+    
+    # Show first few lines of requirements.txt for verification
+    log_debug "First 5 lines of requirements.txt:"
+    head -n 5 "$REQUIREMENTS_FILE" | while read line; do
+        log_debug "  $line"
+    done
+    
+    # Use full path and remove --quiet to see errors
+    # Use the platform-specific pip directly
+    if [ "$IS_WINDOWS" = true ]; then
+        # On Windows, explicitly use the venv pip with forward slashes
+        local req_file_win=$(cygpath -w "$REQUIREMENTS_FILE" 2>/dev/null || echo "$REQUIREMENTS_FILE")
+        if "$PIP_CMD" install -r "$req_file_win" 2>&1 | tee "$TEMP_DIR/pip_install_$$.log"; then
+            log_success "All dependencies installed successfully"
+        else
+            log_error "Failed to install dependencies"
+            echo ""
+            log_info "Showing installation log:"
+            cat "$TEMP_DIR/pip_install_$$.log"
+            [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/pip_install_$$.log" >> "$LOG_FILE"
+            echo ""
+            log_info "Attempting installation line-by-line for debugging..."
+            
+            # Try installing each package individually to identify the problem
+            while IFS= read -r package; do
+                # Skip empty lines and comments
+                [[ -z "$package" || "$package" =~ ^[[:space:]]*# ]] && continue
+                log_info "  Installing: $package"
+                if ! "$PIP_CMD" install "$package" 2>&1 | tee -a "$TEMP_DIR/pip_install_$$.log"; then
+                    log_error "    Failed: $package"
+                fi
+            done < "$REQUIREMENTS_FILE"
+            
+            return 1
+        fi
+    else
+        # On Unix-like systems
+        if pip install -r "$REQUIREMENTS_FILE" 2>&1 | tee "$TEMP_DIR/pip_install_$$.log"; then
+            log_success "All dependencies installed successfully"
+        else
+            log_error "Failed to install dependencies"
+            echo ""
+            log_info "Showing installation log:"
+            cat "$TEMP_DIR/pip_install_$$.log"
+            [ -n "$LOG_FILE" ] && cat "$TEMP_DIR/pip_install_$$.log" >> "$LOG_FILE"
+            return 1
+        fi
+    fi
+    
+    # Verify some key packages were installed
+    log_step "Verifying installation"
+    if pip list 2>&1 | head -n 20; then
+        log_success "Package verification complete"
     fi
     
     echo ""

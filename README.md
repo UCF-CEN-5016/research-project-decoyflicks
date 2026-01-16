@@ -52,10 +52,15 @@ To ensure the artifact is easy to install and isolated from your system packages
 
 ### Hardware & OS Requirements
 
-* **Operating System:** Linux (Ubuntu 20.04+), macOS (Apple Silicon supported), or Windows (via WSL2 or Git Bash).
-* **Python:** Version 3.8 or higher.
-* **Disk Space:** Approx 5 GB (for dependencies and dataset).
-* **GPU (Optional):** NVIDIA GPU (16GB+ VRAM) is recommended for local inference. The tool defaults to API/CPU if no GPU is found.
+* **Operating System:** Linux (Ubuntu 20.04+), macOS (Apple Silicon supported), or Windows via **WSL2**.
+  * *Note:* Git Bash provides a Unix-like shell but still relies on the native Windows toolchain. Some dependencies may fail to build in this environment (see Known Issues).
+
+* **Python:** Version **3.12**.
+  RepGen depends on several Python libraries (e.g., **ANNOY**) that include native C++ extensions. While Python 3.12 is the most stable target across platforms, installation on **native Windows environments** may still trigger source builds that require a fully configured Windows SDK. To ensure reproducibility and avoid platform-specific compilation issues, we recommend Linux, macOS, or Windows via **WSL2**.
+
+* **Disk Space:** Approximately 5 GB (dependencies, models, and dataset).
+
+* **GPU (Optional):** An NVIDIA GPU with **16GB+ VRAM** is recommended for local inference. If no compatible GPU is detected, RepGen automatically falls back to CPU or API-based inference.
 
 ### Installation Steps
 
@@ -145,3 +150,12 @@ repgen/
 ## 7. License
 
 This project is licensed under the **MIT License**. See the `LICENSE` file for details. The dataset is derived from public repositories; original licenses for specific projects are respected.
+
+### 8. Known Issues
+
+On native Windows installations, some dependencies (notably **ANNOY**) include C++ extensions that may be built from source if a compatible prebuilt wheel is unavailable. This requires a fully configured Windows C++ toolchain, including the Windows SDK. Even when using Git Bash, the build still relies on the native Windows compiler and may fail if the SDK is missing or misconfigured.
+
+For reliable installation and reproduction of results, we strongly recommend running RepGen on:
+- Linux (Ubuntu 20.04+),
+- macOS, or
+- Windows via **WSL2 (Ubuntu)**.
