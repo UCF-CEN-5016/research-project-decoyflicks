@@ -190,7 +190,6 @@ python src/tool.py --bug_id new_bug_id --ae_dataset_path /path/to/my_dataset
 ```bash
 python src/tool_openai.py --bug_id new_bug_id --ae_dataset_path /path/to/my_dataset
 ```
-```
 
 ## 7. License
 
