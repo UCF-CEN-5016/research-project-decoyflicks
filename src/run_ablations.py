@@ -1,3 +1,10 @@
+"""
+Script for running systematic ablation studies.
+
+Executes the reproduction pipeline (`tool.py` or `tool_openai.py`) with various
+configuration flags to test the impact of different components (retrieval, generation phases).
+"""
+
 import subprocess
 import argparse
 import logging
@@ -42,7 +49,17 @@ if not script_logger.hasHandlers():
 
 # --- 4. Retry Function ---
 def run_command_with_retry(cmd: List[str], log_file: Path, max_attempts: int = 3):
-    """Runs a command with retries and logs stdout/stderr to a file."""
+    """
+    Runs a command with retries and logs stdout/stderr to a file.
+
+    Args:
+        cmd: List of command-line arguments.
+        log_file: Path to the log file.
+        max_attempts: Maximum number of retry attempts.
+
+    Returns:
+        Exit code (0 for success, non-zero for failure).
+    """
     for attempt in range(1, max_attempts + 1):
         script_logger.info(f"Attempt {attempt} of {max_attempts}: {' '.join(cmd)}")
         
@@ -73,6 +90,13 @@ def run_command_with_retry(cmd: List[str], log_file: Path, max_attempts: int = 3
 
 # --- 5. Main Execution Logic ---
 def main():
+    """
+    Main execution function for ablation studies.
+
+    Parses arguments for bug ID range, tool script, and retry settings.
+    Iterates through bugs and ablation configurations (Retrieval, Generation),
+    executing the pipeline and logging results.
+    """
     parser = argparse.ArgumentParser(description="Systematic ablation runner for RepGen")
     parser.add_argument("--start_bug_id", required=True, type=int, help="First bug ID to process (e.g., 1)")
     parser.add_argument("--end_bug_id", required=True, type=int, help="Last bug ID to process (e.g., 10)")

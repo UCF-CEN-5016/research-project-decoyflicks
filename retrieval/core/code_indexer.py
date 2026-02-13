@@ -1,3 +1,12 @@
+"""
+Code indexing and semantic search module.
+
+This module provides the `CodeIndexer` class, which handles:
+1. Parsing code files into semantic chunks (classes, functions).
+2. Building a hybrid search index (BM25 + Dense Embeddings).
+3. Querying the index to find relevant code for a given bug report.
+"""
+
 import ast
 import os
 import time
@@ -12,11 +21,25 @@ import logging
 logger = logging.getLogger(__name__)
 
 class CodeIndexer:
+    """
+    Indexes the codebase and performs hybrid search.
+
+    Uses AST parsing to split code into semantic units and computes embeddings
+    for dense retrieval, combined with BM25 for sparse retrieval.
+    """
     def __init__(self, config):
         self.config = config
 
     def _load_file(self, file_path: Path) -> Optional[Dict[str, Any]]:
-        """Load a single file and return as document."""
+        """
+        Load a single file and return as a document dictionary.
+
+        Args:
+            file_path: Path to the file to load.
+
+        Returns:
+            Dictionary with 'page_content' and 'metadata', or None if loading fails.
+        """
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 return {
@@ -31,7 +54,15 @@ class CodeIndexer:
             return None
 
     def _semantic_chunking(self, doc: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Split code into semantic chunks (functions, classes)."""
+        """
+        Split source code into semantic chunks (functions, classes).
+
+        Args:
+            doc: Document dictionary containing 'page_content' and 'metadata'.
+
+        Returns:
+            List of chunk dictionaries with updated metadata (lines, type).
+        """
         chunks = []
         file_path = doc['metadata']['source']
         code = doc['page_content']
@@ -78,7 +109,17 @@ class CodeIndexer:
         return chunks
 
     def _process_codebase(self, code_dir: Path) -> tuple[List[Dict[str, Any]], List[List[str]]]:
-        """Process all files in the code directory."""
+        """
+        Process all Python files in the code directory.
+
+        Loads files, performs semantic chunking, and tokenizes content.
+
+        Args:
+            code_dir: Root directory of the codebase.
+
+        Returns:
+            Tuple of (list of chunk dictionaries, list of tokenized lists).
+        """
         files = [f for f in code_dir.glob("**/*.py") 
                 if "__pycache__" not in str(f) and not any(part.startswith('.') for part in f.parts)]
         
@@ -94,7 +135,18 @@ class CodeIndexer:
         return chunks, corpus
 
     def index_codebase(self, code_dir: Path) -> HybridSearchIndex:
-        """Index the codebase for hybrid search."""
+        """
+        Index the codebase for hybrid search.
+
+        If a saved index exists in `hybrid_index/`, it is loaded.
+        Otherwise, a new index is built from scratch.
+
+        Args:
+            code_dir: Root directory of the codebase.
+
+        Returns:
+            Values of the initialized HybridSearchIndex.
+        """
         start_time = time.time()
         index_dir = self.config.PROJECT_DIR / "hybrid_index"
         
@@ -118,7 +170,16 @@ class CodeIndexer:
         return hybrid_index
 
     def find_relevant_code(self, bug_report: str, hybrid_index: HybridSearchIndex) -> List[dict]:
-        """Find code relevant to the bug report."""
+        """
+        Find code relevant to the bug report using the hybrid index.
+
+        Args:
+            bug_report: Text of the bug report.
+            hybrid_index: The loaded HybridSearchIndex instance.
+
+        Returns:
+            List of top-k relevant code chunks.
+        """
         return hybrid_index.search(
             bug_report,
             top_k=self.config.SEARCH_TOP_K,

@@ -55,8 +55,8 @@ To ensure the artifact is easy to install and isolated from your system packages
 * **Operating System:** Linux (Ubuntu 20.04+), macOS (Apple Silicon supported), or Windows via **WSL2**.
   * *Note:* Git Bash provides a Unix-like shell but still relies on the native Windows toolchain. Some dependencies may fail to build in this environment (see Known Issues).
 
-* **Python:** Version **3.12**.
-  RepGen depends on several Python libraries (e.g., **ANNOY**) that include native C++ extensions. While Python 3.12 is the most stable target across platforms, installation on **native Windows environments** may still trigger source builds that require a fully configured Windows SDK. To ensure reproducibility and avoid platform-specific compilation issues, we recommend Linux, macOS, or Windows via **WSL2**.
+* **Python:** Version **3.8+** (Recommended: **3.10+**)
+  RepGen depends on several Python libraries (e.g., **ANNOY**) that include native C++ extensions. While Python 3.12 is supported, we recommend Python 3.10 for better compatibility with some older deep learning libraries. Installation on **native Windows environments** may still trigger source builds that require a fully configured Windows SDK. To ensure reproducibility and avoid platform-specific compilation issues, we recommend Linux, macOS, or Windows via **WSL2**.
 
 * **Disk Space:** Approximately 5 GB (dependencies, models, and dataset).
 
@@ -74,7 +74,9 @@ cd ICSE26-RepGen
 2. **Run Automated Setup:**
 This script initializes the virtual environment, installs requirements, and prepares the dataset structure.
 ```bash
-# This process takes approximately 5-10 minutes
+# This process takes approximately 5-10 minutes for a small number of bugs.
+# WARNING: Running with a large range of bugs (e.g., 1-106) will clone multiple repositories
+# and may take significant time and bandwidth. Plan accordingly.
 bash scripts/setup.sh --bugs 1-10
 ```
 
@@ -90,7 +92,18 @@ source venv/Scripts/activate
 
 
 4. **Configure LLM Backend:**
-* **Option A (Local):** Install [Ollama](https://ollama.ai) and run `ollama serve` in a separate terminal.
+* **Option A (Local - Recommended):** Install [Ollama](https://ollama.ai) and run `ollama serve` in a separate terminal.
+  
+  **Ollama Setup Details:**
+  1. **Install Ollama:** Follow instructions at [ollama.ai](https://ollama.ai).
+  2. **Pull and Serve Models:** RepGen uses `qwen2.5:7b` and `qwen2.5-coder:7b` by default. Run:
+     ```bash
+     ollama pull qwen2.5:7b
+     ollama pull qwen2.5-coder:7b
+     ollama serve
+     ```
+  3. **Configure:** No additional configuration is needed if running on default port 11434.
+
 * **Option B (Cloud API):** If you prefer using OpenAI or DeepSeek, export your API key:
 ```bash
 export OPENAI_API_KEY="sk-..."
@@ -121,7 +134,7 @@ To reproduce the efficiency of RepGen compared to baselines (RQ1):
 bash scripts/quick-start/local.sh 1-106 1
 
 # Run Baselines (Zero-Shot and CoT) (Needs Ollama, and API Keys)
-bash scripts/experimental/baselines.sh --bugs 1-106
+bash scripts/experimental/baseline.sh --bugs 1-106
 ```
 
 ### Replicating Ablation Studies (Paper Table 3)
@@ -138,6 +151,10 @@ bash scripts/experimental/ablations.sh --bugs 1-106
 repgen/
 ├── dataset/             # 106 DL bugs with metadata
 ├── results/             # Generated reproduction scripts and logs
+├── retrieval/           # Retrieval Augmented Generation (RAG) module
+│   ├── core/            # Core analysis modules (indexing, dependency analysis)
+│   ├── models/          # Embedding models and search logic
+│   └── pipeline.py      # Main retrieval pipeline implementation
 ├── scripts/             # Automation for experiments
 │   ├── setup.sh         # Environment setup and dependency installation
 │   ├── quick-start/     # Scripts for running individual bugs
@@ -145,13 +162,62 @@ repgen/
 ├── src/                 # RepGen Python source code
 ├── requirements.txt     # Python dependencies
 └── README.md
+
+## 7. Reusing RepGen for New Bugs
+
+RepGen is designed to be reusable for reproducing bugs in other deep learning projects. To use RepGen on your own dataset:
+
+### 1. Preparing the Data
+Create a directory structure for your new bug (e.g., `my_dataset/new_bug_id/`) with the following structure:
+```plaintext
+my_dataset/
+└── new_bug_id/
+    ├── bug_report/
+    │   └── new_bug_id.txt      # Text file containing the bug report/issue description
+    └── code/
+        └── ...                 # The source code of the project to analyze
+```
+
+### 2. Running RepGen
+Use the `--ae_dataset_path` flag to point to your custom dataset root.
+
+**Local (Ollama):**
+```bash
+python src/tool.py --bug_id new_bug_id --ae_dataset_path /path/to/my_dataset
+```
+
+**Remote (OpenAI/DeepSeek):**
+```bash
+python src/tool_openai.py --bug_id new_bug_id --ae_dataset_path /path/to/my_dataset
+```
 ```
 
 ## 7. License
 
 This project is licensed under the **MIT License**. See the `LICENSE` file for details. The dataset is derived from public repositories; original licenses for specific projects are respected.
 
-### 8. Known Issues
+### 8. Customizing RepGen
+
+RepGen is modular, allowing you to customize key components:
+
+### 1. Configuration (`retrieval/config.py`)
+Modify this file to change:
+- **Embedding Models**: `EMBEDDING_MODEL` (Default: `flax-sentence-embeddings/st-codesearch-distilroberta-base`)
+- **Reranker Models**: `RERANKER_MODEL` (Default: `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`)
+- **Search Parameters**: `SEARCH_TOP_K`, `RERANK_TOP_K`, `ALPHA` (Weight for hybrid search).
+
+### 2. Prompts (`src/tool.py` & `src/tool_openai.py`)
+The logic for prompt generation is contained within the main script files. You can modify these functions to change the agent's behavior:
+- `create_prompt_refinement`: Modifies how the bug report is summarized/refined.
+- `create_prompt_plan`: Changes how the reproduction plan is generated.
+- `_build_prompt` (in main loop): Controls the code generation prompt structure.
+- `check_relevance`: Adjusts the criteria for relevance checking.
+- `calculate_probability_of_reproduction`: Modifies the validaton logic and feedback generation.
+
+### 3. Retrieval Logic (`retrieval/models/hybrid_search.py`)
+Modify the `search` method in `HybridSearchIndex` to change how BM25 and Semantic Search scores are combined or to implement a different retrieval algorithm.
+
+## 9. Known Issues
 
 On native Windows installations, some dependencies (notably **ANNOY**) include C++ extensions that may be built from source if a compatible prebuilt wheel is unavailable. This requires a fully configured Windows C++ toolchain, including the Windows SDK. Even when using Git Bash, the build still relies on the native Windows compiler and may fail if the SDK is missing or misconfigured.
 

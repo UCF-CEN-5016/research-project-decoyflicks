@@ -1,3 +1,11 @@
+"""
+Hybrid search model combining BM25 and dense retrieval.
+
+This module implements the `HybridSearchIndex` class, which combines sparse keyword search (BM25)
+with dense semantic search (SentenceTransformers + Annoy) to retrieve relevant code chunks.
+It also supports re-ranking using a CrossEncoder.
+"""
+
 import json
 import numpy as np
 from pathlib import Path
@@ -16,6 +24,9 @@ logging.getLogger("transformers").setLevel(logging.ERROR)
 logging.getLogger("sentence_transformers").setLevel(logging.ERROR)
 
 class HybridSearchIndex:
+    """
+    Implements hybrid search using BM25 and Approximate Nearest Neighbors (Annoy).    
+    """
     def __init__(
         self,
         embedding_model: str,
@@ -35,7 +46,16 @@ class HybridSearchIndex:
         self.config = config
 
     def build_index(self, code_chunks: List[dict], corpus: List[List[str]]) -> None:
-        """Build the hybrid search index."""
+        """
+        Build the hybrid search index from code chunks.
+
+        Computes BM25 frequencies and generates dense embeddings for all chunks.
+        Builds the Annoy index for fast nearest neighbor search.
+
+        Args:
+            code_chunks: List of code snippet dictionaries.
+            corpus: Tokenized corpus for BM25.
+        """
         self.code_chunks = code_chunks
         self.bm25 = BM25Okapi(corpus)
         
@@ -46,7 +66,11 @@ class HybridSearchIndex:
         self._build_annoy_index()
 
     def _build_annoy_index(self) -> None:
-        """Build Annoy index for approximate nearest neighbor search."""
+        """
+        Build Annoy index for approximate nearest neighbor search.
+        
+        Uses Angular distance metric.
+        """
         dim = self.embeddings.shape[1]
         self.annoy_index = AnnoyIndex(dim, 'angular')
         for i, vec in enumerate(self.embeddings):
@@ -54,7 +78,14 @@ class HybridSearchIndex:
         self.annoy_index.build(n_trees=50)
 
     def save_index(self, index_dir: Path) -> None:
-        """Save the index to disk."""
+        """
+        Save the index components to disk.
+
+        Saves embeddings (npy), code chunks (json), and the Annoy index (ann).
+
+        Args:
+            index_dir: Directory path to save the index.
+        """
         index_dir.mkdir(exist_ok=True)
         
         with open(index_dir / "documents.json", 'w') as f:
@@ -64,7 +95,12 @@ class HybridSearchIndex:
         self.annoy_index.save(str(index_dir / "annoy_index.ann"))
 
     def load_index(self, index_dir: Path) -> None:
-        """Load the index from disk."""
+        """
+        Load the index components from disk.
+
+        Args:
+            index_dir: Directory path containing the saved index files.
+        """
         with open(index_dir / "documents.json", 'r') as f:
             self.code_chunks = json.load(f)
             
@@ -77,7 +113,16 @@ class HybridSearchIndex:
         self.annoy_index.load(str(index_dir / "annoy_index.ann"))
 
     def semantic_search(self, query_embedding: np.ndarray, top_k: int) -> Tuple[np.ndarray, np.ndarray]:
-        """Perform semantic search using the index."""
+        """
+        Perform semantic search using the Annoy index.
+
+        Args:
+            query_embedding: Embedding vector of the query.
+            top_k: Number of nearest neighbors to retrieve.
+
+        Returns:
+            Tuple of (indices, scores).
+        """
         indices, distances = self.annoy_index.get_nns_by_vector(
             query_embedding.flatten(), top_k, include_distances=True
         )
@@ -91,7 +136,22 @@ class HybridSearchIndex:
         rerank_top_k: int = 20,
         ann_top_k: int = 200
     ) -> List[dict]:
-        """Perform hybrid search with BM25 and semantic search."""
+        """
+        Perform hybrid search query.
+
+        Combines BM25 and Semantic search scores using the formula:
+        score = (1 - alpha) * bm25_score + alpha * semantic_score
+
+        Args:
+            query: Search query string.
+            top_k: Number of results to consider from each method (not fully used in logic but kept for interface).
+            alpha: Weight for semantic search (0.0 to 1.0).
+            rerank_top_k: Number of results to re-rank using CrossEncoder.
+            ann_top_k: Number of results to retrieve from Annoy.
+
+        Returns:
+            List of unique code chunks sorted by relevance.
+        """
         if not query or not isinstance(query, str):
             return []
 

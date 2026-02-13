@@ -1,3 +1,10 @@
+"""
+Module for detecting and ranking training code files.
+
+This module provides the `TrainingCodeDetector` class, which identifies files likely containing
+model training loops using AST analysis and ranks them by relevance to the bug report.
+"""
+
 import ast
 from pathlib import Path
 from typing import List, Dict, Tuple, Any
@@ -141,6 +148,13 @@ class TrainingLoopVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
 class TrainingCodeDetector:
+    """
+    Detects and ranks training-related code files.
+
+    Combines AST-based pattern matching (via TrainingLoopVisitor) with
+    semantic re-ranking to identify files relevant to the bug report
+    that also contain training logic.
+    """
     def __init__(self, config):
         self.config = config
         self.reranker = CrossEncoder(config.RERANKER_MODEL)
@@ -149,7 +163,15 @@ class TrainingCodeDetector:
         self.reranker.to(self.device)
 
     def contains_training(self, file_path: Path) -> bool:
-        """Check if a file contains training-related code using AST analysis."""
+        """
+        Check if a file contains training-related code using AST analysis.
+
+        Args:
+            file_path: Path to the Python file.
+
+        Returns:
+            True if training patterns are detected, False otherwise.
+        """
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 code = f.read()
@@ -163,7 +185,15 @@ class TrainingCodeDetector:
         return visitor.found_training
 
     def _get_all_files(self, module_report: Dict[str, Any]) -> List[Path]:
-        """Get all Python files from modules in the report."""
+        """
+        Get all Python files from modules in the report.
+
+        Args:
+            module_report: Dictionary containing module structure and files.
+
+        Returns:
+            List of Path objects for all found Python files.
+        """
         # --- MODIFICATION: Ablation: No Module-Centric Partitioning ---
         files = set() # Use set to avoid duplicates
 
@@ -189,7 +219,16 @@ class TrainingCodeDetector:
         return list(files)
 
     def _rank_files(self, files: List[Path], bug_report: str) -> List[Tuple[Path, float]]:
-        """Rank files by relevance to the bug report."""
+        """
+        Rank files by relevance to the bug report using a CrossEncoder.
+
+        Args:
+            files: List of files to rank.
+            bug_report: Text of the bug report.
+
+        Returns:
+            List of tuples (file_path, relevance_score), sorted by score descending.
+        """
         if not files:
             return []
             
@@ -214,7 +253,19 @@ class TrainingCodeDetector:
         return sorted(zip(files, scores), key=lambda x: x[1], reverse=True)
 
     def detect_training_code(self, module_report: Dict[str, Any], bug_report_path: Path) -> Dict[str, Any]:
-        """Detect and rank training-related code."""
+        """
+        Detect and rank training-related code.
+
+        Orchestrates the process of finding files, checking for training loops
+        (if enabled), and ranking them against the bug report.
+
+        Args:
+            module_report: Output from ModuleAnalyzer.
+            bug_report_path: Path to the bug report file.
+
+        Returns:
+            Dictionary containing the bug report and list of ranked training files.
+        """
         bug_report = bug_report_path.read_text(encoding='utf-8')
         all_files = self._get_all_files(module_report)
         

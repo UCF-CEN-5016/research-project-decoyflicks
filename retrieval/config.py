@@ -1,8 +1,21 @@
+"""
+Configuration module for the RepGen Retrieval Pipeline.
+
+This module defines the `Config` class, which manages directory paths, model configurations,
+ablation settings, and other parameters used throughout the retrieval and generation process.
+"""
+
 import os
 from pathlib import Path
 from typing import Dict, Any
 
 class Config:
+    """
+    Configuration manager for RepGen.
+
+    Handles path setup for datasets, logs, and outputs, as well as model selection
+    and ablation study toggles.
+    """
     def __init__(self, 
                  bug_id: str, 
                  ablation_config: Dict[str, Any] = None, 

@@ -1,3 +1,10 @@
+"""
+Module for analyzing file dependencies.
+
+This module provides the `DependencyAnalyzer` class to identify external dependencies
+(imports and function calls) within the codebase to understand component interactions.
+"""
+
 import ast
 import os
 from pathlib import Path
@@ -7,20 +14,39 @@ import logging
 logger = logging.getLogger(__name__)
 
 class DependencyAnalyzer:
+    """
+    Analyzes Python files to extract external dependencies.
+    """
     def __init__(self, config):
         self.config = config
         self.code_dir = Path(config.CODE_DIR).resolve()
         self.ignore_modules = {'os', 'sys', 're', 'math', 'tensorflow', 'pytorch', 'numpy', 'pandas'}
 
     def _make_relative(self, path: Path) -> str:
-        """Convert path to relative path from the code directory."""
+        """
+        Convert path to relative path from the code directory.
+
+        Args:
+            path: Absolute Path object.
+
+        Returns:
+            Relative path string.
+        """
         try:
             return str(path.relative_to(self.code_dir))
         except ValueError:
             return str(path)
 
     def _get_function_calls(self, node: ast.AST) -> Set[Tuple[str, str]]:
-        """Extract function calls from AST nodes."""
+        """
+        Extract function calls from AST nodes.
+
+        Args:
+            node: AST node to traverse.
+
+        Returns:
+            Set of tuples (module_variable, function_name).
+        """
         calls = set()
         
         if isinstance(node, ast.Call):
@@ -35,7 +61,18 @@ class DependencyAnalyzer:
         return calls
 
     def analyze_file_dependencies(self, file_path: Path) -> List[Dict[str, str]]:
-        """Analyze a file and return its external dependencies."""
+        """
+        Analyze a file and return its external dependencies.
+
+        Parses imports and function calls to identify which external modules
+        and functions are being used.
+
+        Args:
+            file_path: Path to the file to analyze.
+
+        Returns:
+            List of dictionaries identifying module and function dependencies.
+        """
         if self.config.AB_NO_DEPENDENCY_EXTRACTION:
             return [] # Skip all dependency analysis
         try:
@@ -80,7 +117,15 @@ class DependencyAnalyzer:
         return [{"module": m, "function": f} for m, f in sorted(dependencies)]
 
     def analyze_training_dependencies(self, training_report: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze dependencies for all training files."""
+        """
+        Analyze dependencies for all detected training files.
+
+        Args:
+            training_report: Output from TrainingCodeDetector.
+
+        Returns:
+            Dictionary containing bug report and dependency analysis for each file.
+        """
         report = []
         
         for entry in training_report['training_files']:

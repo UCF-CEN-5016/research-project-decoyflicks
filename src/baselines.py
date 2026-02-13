@@ -1,3 +1,10 @@
+"""
+Script for generating bug reproduction code using various baselines.
+
+Supports Zero-Shot, Few-Shot, and Chain-of-Thought prompting techniques
+with multiple LLM backends (Ollama, OpenAI, Groq, DeepSeek).
+"""
+
 import argparse
 import os
 import logging
@@ -16,7 +23,9 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 class CodeGenerator:
-    """Handles code generation using advanced prompting techniques with configurable backends"""
+    """
+    Handles code generation using advanced prompting techniques with configurable backends.
+    """
     
     def __init__(self, backend: str, model_name: str):
         self.backend = backend.lower()
@@ -50,7 +59,17 @@ class CodeGenerator:
             return ""
     
     def _build_prompt(self, bug_report: str, technique: str, n_examples: int = 3) -> str:
-        """Build optimized prompt based on technique"""
+        """
+        Build optimized prompt based on the selected technique.
+
+        Args:
+            bug_report: The bug report text.
+            technique: One of 'zero_shot', 'few_shot', 'cot'.
+            n_examples: Number of examples for few-shot learning.
+
+        Returns:
+            Formatted prompt string.
+        """
         if technique == "zero_shot":
             return self._zero_shot_prompt(bug_report)
         elif technique == "few_shot":
@@ -61,6 +80,7 @@ class CodeGenerator:
             raise ValueError(f"Unknown technique: {technique}")
     
     def _zero_shot_prompt(self, bug_report: str) -> str:
+        """Generate a zero-shot prompt requesting a minimal reproduction script."""
         return f"""Generate a minimal, self-contained Python script to reproduce this bug:
 
 Bug Report:
@@ -73,6 +93,7 @@ Requirements:
 4. Code wrapped in ```python``` block"""
 
     def _few_shot_prompt(self, bug_report: str, n_examples: int = 3) -> str:
+        """Generate a few-shot prompt with high-quality examples."""
         examples = "\n\n".join(
             f"===== EXAMPLE {i+1} =====\n"
             f"Bug Type: {ex['type']}\n"
@@ -97,6 +118,7 @@ Guidelines:
 4. Wrap the final code in ```python```"""
 
     def _cot_prompt(self, bug_report: str) -> str:
+        """Generate a Chain-of-Thought prompt encouraging step-by-step reasoning."""
         return f"""Let's analyze and reproduce this bug step by step:
 
 Bug Report:
@@ -116,6 +138,7 @@ Now generate the reproduction code:
 4. Wrap final code in ```python```"""
 
     def _get_high_quality_examples(self) -> list:
+        """Retrieve a list of curated bug reproduction examples."""
         # Full list of examples from your original file
         return [
             {
@@ -136,7 +159,15 @@ Now generate the reproduction code:
         ]
 
     def _extract_code(self, text: str) -> str:
-        """Extract Python code block from model response"""
+        """
+        Extract Python code block from model response.
+
+        Args:
+            text: Raw model output.
+
+        Returns:
+            Extracted code string, stripped of markdown fences.
+        """
         start_marker = "```python"
         end_marker = "```"
         
@@ -159,7 +190,7 @@ Now generate the reproduction code:
         return code.replace(start_marker, '').replace(end_marker, '')
 
     def _ollama_local(self, prompt: str) -> str:
-        """Generate code using local Ollama models"""
+        """Generate code using local Ollama models via subprocess."""
         cmd = ["ollama", "run", self.model_name, prompt]
         try:
             result = subprocess.run(
@@ -178,7 +209,7 @@ Now generate the reproduction code:
             return ""
     
     def _openai_api(self, prompt: str) -> str:
-        """Generate code using OpenAI API"""
+        """Generate code using OpenAI API."""
         url = "https://api.openai.com/v1/chat/completions"
         headers = {
             "Authorization": f"Bearer {os.getenv('OPENAI_API_KEY')}",
@@ -201,7 +232,7 @@ Now generate the reproduction code:
             return ""
 
     def _groq_api(self, prompt: str) -> str:
-        """Generate code using Groq Cloud API"""
+        """Generate code using Groq Cloud API."""
         url = "https://api.groq.com/openai/v1/chat/completions"
         headers = {
             "Authorization": f"Bearer {os.getenv('GROQ_API_KEY')}",
@@ -224,7 +255,7 @@ Now generate the reproduction code:
             return ""
 
     def _deepseek_api(self, prompt: str) -> str:
-        """Generate code using DeepSeek API"""
+        """Generate code using DeepSeek API."""
         url = "https://api.deepseek.com/v1/chat/completions"
         headers = {
             "Authorization": f"Bearer {os.getenv('DEEPSEEK_API_KEY')}",
@@ -247,6 +278,12 @@ Now generate the reproduction code:
             return ""
 
 def main():
+    """
+    Main function for running baseline code generation.
+
+    Parses arguments for bug ID, backend, model, technique, and dataset path,
+    then executes the generation process.
+    """
     parser = argparse.ArgumentParser(description="Advanced bug reproduction code generation")
     parser.add_argument("--bug_id", required=True, help="Bug ID to reproduce")
     
@@ -266,7 +303,7 @@ def main():
                        help="Number of examples for few-shot learning")
     
     parser.add_argument("--dataset_path", default="./dataset", 
-                        help="Root path of the dataset (default: ./dataset)")
+                        help="Root path of the dataset. Must contain '{bug_id}/bug_report/{bug_id}.txt'.")
 
     args = parser.parse_args()
     

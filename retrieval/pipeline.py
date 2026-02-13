@@ -1,3 +1,15 @@
+"""
+Main pipeline for the Retrieval-Augmented Generation (RAG) process.
+
+This module orchestrates the entire retrieval workflow:
+1. Indexing the codebase.
+2. Finding relevant code snippets (Hybrid Search).
+3. Analyzing module structure.
+4. Detecting training loops.
+5. Analyzing dependencies.
+6. Generating context files for the LLM.
+"""
+
 from pathlib import Path
 from datetime import datetime
 from typing import Optional, Dict, Any
@@ -13,7 +25,21 @@ import logging
 logger = logging.getLogger(__name__)
 
 class RetrievalPipeline:
+    """
+    Orchestrates the retrieval and context generation pipeline for a specific bug.
+    """
     def __init__(self, bug_id: str = "001", config: Config = None, ablation_config: Dict[str, Any] = None, retrieval_ablation_name: str = "full_system", generation_ablation_name: str = "all_steps", dataset_dir: str = None):
+        """
+        Initialize the pipeline.
+
+        Args:
+            bug_id: The ID of the bug to process.
+            config: Optional pre-configured Config object.
+            ablation_config: Dictionary of ablation flags.
+            retrieval_ablation_name: Name of the retrieval ablation study.
+            generation_ablation_name: Name of the generation ablation study.
+            dataset_dir: Custom path to the dataset directory.
+        """
         self.config = config or Config(bug_id=bug_id, ablation_config=ablation_config, retrieval_ablation_name=retrieval_ablation_name, generation_ablation_name=generation_ablation_name, dataset_dir=dataset_dir)
         self.bug_id = bug_id
         self.code_indexer = CodeIndexer(self.config)
@@ -22,7 +48,15 @@ class RetrievalPipeline:
         self.dependency_analyzer = DependencyAnalyzer(self.config)
 
     def run_pipeline(self, bug_id: str) -> Optional[Dict[str, Any]]:
-        """Run full pipeline for a given bug ID."""
+        """
+        Run the full retrieval pipeline for a given bug ID.
+
+        Args:
+            bug_id: The ID of the bug (redundant if set in __init__, but kept for consistency).
+
+        Returns:
+            A dictionary containing the status and output directory path, or None if failed.
+        """
         try:
             # 1. Setup paths
             bug_report_path = self.config.BUG_REPORTS_DIR / f"{bug_id}.txt"
@@ -68,6 +102,18 @@ class RetrievalPipeline:
             raise
 
     def create_context_files(self, bug_id, module_report, dependency_report):
+        """
+        Generate the final context JSON files for the LLM.
+
+        Constructs context files based on the analyzed dependencies and modules.
+        If dependencies are found, creates a context file for each top dependency.
+        Otherwise, falls back to creating context files for each module.
+
+        Args:
+            bug_id: The bug ID.
+            module_report: Result of module analysis.
+            dependency_report: Result of dependency analysis.
+        """
         bug_report = dependency_report.get('bug_report')
 
         # Create the context directory if it doesn't exist

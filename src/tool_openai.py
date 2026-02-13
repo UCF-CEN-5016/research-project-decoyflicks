@@ -1,3 +1,11 @@
+"""
+Main entry point for the RepGen reproduction pipeline (OpenAI/DeepSeek version).
+
+This script orchestrates the entire process of computing embeddings, retrieving relevant code,
+refining bug reports, generating reproduction plans, and generating/verifying reproduction scripts
+using remote LLM APIs (OpenAI, DeepSeek, Groq).
+"""
+
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -215,6 +223,13 @@ def query_openai_api(prompt: str, model: str = "gpt-4.1", temperature: float = 0
     return ""
 
 def main():
+    """
+    Main execution function.
+
+    Parses command-line arguments to configure the pipeline (bug identifiers, ablation settings,
+    logging). Initializes the retrieval pipeline, processes the bug report, and iteratively
+    generates and verifies reproduction scripts using the configured LLM backend.
+    """
     parser = argparse.ArgumentParser(description="Code generation for bug reproduction")
     parser.add_argument("--bug_id", required=True, help="Bug ID to analyze (e.g., 001)")
     
@@ -238,7 +253,7 @@ def main():
                           help="Maximum attempts for code generation")
     
     parser.add_argument("--ae_dataset_path", type=str, default=None,
-                          help="Optional path to ae_dataset (uses dataset by default)")
+                          help="Optional path to custom dataset. Must contain '{bug_id}/bug_report/{bug_id}.txt' and '{bug_id}/code/'.")
     
     parser.add_argument("--log-level", type=str, default="INFO",
                           choices=["DEBUG", "INFO", "WARNING", "ERROR"],
@@ -711,7 +726,16 @@ def _run_llm_refactor(prompt: str) -> str:
     return output
 
 def check_relevance(bug_report: str, code: str) -> bool:
-    """Check if generated code is relevant to the bug report."""
+    """
+    Check if generated code is relevant to the bug report.
+
+    Args:
+        bug_report: The refined bug report.
+        code: The generated reproduction code.
+
+    Returns:
+        True if relevant, False otherwise.
+    """
     prompt = f"""System:
             You are a helpful AI software engineer specializing in identifying
             relevant code segments given a bug report. Analyze the provided bug
@@ -768,7 +792,19 @@ def extract_json_content(text):
     return None
 
 def calculate_probability_of_reproduction(code: str, bug_report: str) -> Tuple[float, str]:
-    """Calculate probability that code will reproduce the bug."""
+    """
+    Calculate probability that code will reproduce the bug.
+
+    Analyzes the code for specific fault patterns and execution paths
+    described in the bug report.
+
+    Args:
+        code: The generated code.
+        bug_report: The refined bug report.
+
+    Returns:
+        Tuple of (confidence score, feedback string).
+    """
     
     # Stage 1: Code Behavior Prediction
     code_analysis_prompt = f"""Analyze this deep learning code systematically:

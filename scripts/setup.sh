@@ -12,6 +12,10 @@
 #   bash setup.sh --bugs 1,3,5,10-15
 #   bash setup.sh --bugs 80-82 --force-clone --log-file setup.log
 #
+# WARNING: Running this script with a large range of bugs will clone multiple 
+# repositories, which may consume significant disk space and bandwidth. 
+# Please plan accordingly.
+#
 # This script will:
 #   1. Create and activate a Python virtual environment
 #   2. Install all dependencies from requirements.txt
@@ -277,6 +281,10 @@ log_info "Force Clone: ${BOLD}${FORCE_CLONE}${NC}"
 if [ -n "$LOG_FILE" ]; then
     log_info "Log file: ${BOLD}${LOG_FILE}${NC}"
 fi
+echo ""
+echo -e "${YELLOW}${BOLD}WARNING:${NC} Running this script with a large range of bugs will clone multiple"
+echo -e "${YELLOW}${BOLD}WARNING:${NC} repositories, which may consume significant disk space and bandwidth."
+echo -e "${YELLOW}${BOLD}WARNING:${NC} Please plan accordingly."
 echo ""
 
 # Extract repo info from CSV
