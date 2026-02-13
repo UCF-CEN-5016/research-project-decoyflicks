@@ -162,6 +162,7 @@ repgen/
 ├── src/                 # RepGen Python source code
 ├── requirements.txt     # Python dependencies
 └── README.md
+```
 
 ## 7. Reusing RepGen for New Bugs
 
