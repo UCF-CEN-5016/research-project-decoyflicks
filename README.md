@@ -1,32 +1,16 @@
-# Artifact: Imitation Game - Reproducing Deep Learning Bugs
+# Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent
 
-**Paper Title:** Imitation Game: Reproducing Deep Learning Bugs Leveraging an Intelligent Agent
+**Authors**: Mehil B. Shah, Mohammad Masudur Rahman, Foutse Khomh
 
-**Venue:** ICSE 2026
+**ACM Artifact Evaluation Badges:** Available, Functional, Reusable
 
-**Authors:** Mehil B. Shah, Mohammad Masudur Rahman, Foutse Khomh
+<p align="center">
+  <img src="figures/PaperHeader.png" alt="ICSE 2026 paper header with ACM artifact badges" width="100%">
+</p>
 
-## Badges Claimed
+## Abstract
 
-We are applying for the following badges:
-
-1. **Available:** The artifact is permanently archived on Zenodo with a DOI.
-2. **Functional:** The artifact is documented, consistent, complete, and exercisable.
-3. **Reusable:** The artifact includes a highly automated script (`RepGen.sh`) to ensure dependency isolation, comprehensive documentation for all experimental pipelines, and modular scripts that facilitate repurposing the agent for new tasks.
-
-## 1. Purpose
-
-This artifact provides the complete implementation of **RepGen**, an automated approach for reproducing Deep Learning (DL) bugs. It allows researchers to:
-
-1. **Replicate** the experimental results presented in the paper (Table 2 and Table 3).
-2. **Reuse** the RepGen agent to attempt reproduction of new DL bugs.
-3. **Analyze** the benchmark dataset of 106 real-world DL bugs.
-
-The artifact contains:
-
-* **Source Code:** The implementation of the LLM-based agent, RAG module, and execution sandbox.
-* **Dataset:** A curated benchmark of 106 DL bugs with metadata and reproduction criteria.
-* **Scripts:** Automated pipelines to reproduce the baseline comparisons (Zero-shot, CoT) and the ablation studies.
+Despite their wide adoption in various domains (e.g., healthcare, finance, and software engineering), deep learning (DL)–based applications suffer from numerous bugs, failures, and vulnerabilities. Reproducing these bugs is essential for their resolution, but it is extremely challenging due to the inherent nondeterminism of DL models and their tight coupling with hardware and software environments. Prior studies report that only about 3% of DL bugs can be reliably reproduced using manual approaches. To address these challenges, we present **RepGen**, a novel automated and intelligent approach for reproducing deep learning bugs. RepGen constructs a learning-enhanced context from a project, develops a comprehensive reproduction plan, and employs an iterative generate–validate–refine mechanism in which a large language model produces executable code that reproduces the target bug. We evaluate RepGen on 106 real-world deep learning bugs and achieve a reproduction rate of 80.19%, representing a 19.81% improvement over the state of the art. A controlled developer study with 27 participants shows that RepGen improves reproduction success by 23.35%, reduces time-to-reproduce by 56.8%, and lowers participants’ cognitive load.
 
 ## 2. Provenance
 
@@ -192,11 +176,11 @@ python src/tool.py --bug_id new_bug_id --ae_dataset_path /path/to/my_dataset
 python src/tool_openai.py --bug_id new_bug_id --ae_dataset_path /path/to/my_dataset
 ```
 
-## 7. License
+## 8. License
 
 This project is licensed under the **MIT License**. See the `LICENSE` file for details. The dataset is derived from public repositories; original licenses for specific projects are respected.
 
-### 8. Customizing RepGen
+## 9. Customizing RepGen
 
 RepGen is modular, allowing you to customize key components:
 
@@ -217,7 +201,7 @@ The logic for prompt generation is contained within the main script files. You c
 ### 3. Retrieval Logic (`retrieval/models/hybrid_search.py`)
 Modify the `search` method in `HybridSearchIndex` to change how BM25 and Semantic Search scores are combined or to implement a different retrieval algorithm.
 
-## 9. Known Issues
+## 10. Known Issues
 
 On native Windows installations, some dependencies (notably **ANNOY**) include C++ extensions that may be built from source if a compatible prebuilt wheel is unavailable. This requires a fully configured Windows C++ toolchain, including the Windows SDK. Even when using Git Bash, the build still relies on the native Windows compiler and may fail if the SDK is missing or misconfigured.
 
