@@ -1,0 +1,385 @@
+      RepGen Quick Start with Ollama (Local Inference)         ║
+╚════════════════════════════════════════════════════════════════╝
+
+Configuration:
+  Bugs: 1-2
+  Max Attempts: 1
+  Dataset: dataset_local
+  Models: qwen2.5:7b, qwen2.5-coder:7b
+  Root: /home/cen5016/my-repo
+
+✓ Ollama is installed
+✓ Ollama service is running
+
+Checking required models...
+✓ All required models are available
+
+Running pipeline...
+
+
+==========================================
+  RepGen Pipeline (Local/Ollama)
+==========================================
+
+[INFO] Dataset: dataset_local
+[INFO] Bugs: 1-2 (2 total)
+[INFO] Setup: true | Run: true
+==========================================
+  Setup Phase
+==========================================
+
+[INFO] Starting setup phase
+➜ Creating custom dataset structure
+[✓] Custom dataset directory created
+Setup Progress [#########################-------------------------] 50% (1/2)
+➜ Processing Bug 001 (1/2)
+  • Using cached repository
+  • Checking out commit: 05630a75
+  • Copying code to workspace
+[✓] Bug 001 setup complete
+
+Setup Progress [##################################################] 100% (2/2)
+➜ Processing Bug 002 (2/2)
+  • Using cached repository
+  • Checking out commit: 1bdb87d9
+  • Copying code to workspace
+[✓] Bug 002 setup complete
+
+Setup Progress [##################################################] 100% (2/2)
+[✓] Setup phase complete: 2/2 successful
+
+==========================================
+  Run Phase (Local/Ollama)
+==========================================
+
+[INFO] Starting run phase
+[✓] Ollama service detected
+➜ Activating virtual environment
+Pipeline Progress [#########################-------------------------] 50% (1/2)
+➜ Running pipeline for Bug 001 (1/2)
+  15:26:24 [INFO] ============================================================
+  15:26:24 [INFO] RepGen Code Generation Pipeline (Local/Ollama) - Starting
+  15:26:24 [INFO] ============================================================
+  15:26:24 [INFO] [Bug 001] Bug ID: 001
+  15:26:24 [INFO] Retrieval Ablation: full_system
+  15:26:24 [INFO] Generation Ablation: all_steps
+  15:26:24 [INFO] Max Attempts: 1
+  15:26:24 [INFO] Custom Dataset Path: dataset_local
+  15:26:24 [INFO] ============================================================
+  15:26:24 [INFO] [Bug 001] Initializing retrieval pipeline...
+  15:26:24 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:24 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+Loading weights: 100%|██████████| 201/201 [00:00<00:00, 1190.76it/s]
+  15:26:25 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:25 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+  15:26:25 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:25 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/tokenizer_config.json "HTTP/1.1 200 OK"
+  15:26:25 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  15:26:25 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  15:26:29 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  15:26:29 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+  Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  15:26:29 [WARNING] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  15:26:29 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/README.md "HTTP/1.1 200 OK"
+  15:26:29 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  15:26:29 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:29 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+  15:26:29 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:29 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/tokenizer_config.json "HTTP/1.1 200 OK"
+  15:26:29 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  15:26:29 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  15:26:33 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  15:26:33 [INFO] [Bug 001] Running retrieval pipeline...
+  15:26:33 [INFO] Indexing codebase for bug 001
+  15:26:33 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:33 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/modules.json "HTTP/1.1 200 OK"
+  15:26:33 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:33 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/config_sentence_transformers.json "HTTP/1.1 200 OK"
+  15:26:33 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:33 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/config_sentence_transformers.json "HTTP/1.1 200 OK"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/README.md "HTTP/1.1 200 OK"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/modules.json "HTTP/1.1 200 OK"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/sentence_bert_config.json "HTTP/1.1 200 OK"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/config.json "HTTP/1.1 200 OK"
+  15:26:34 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+  15:26:34 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base "HTTP/1.1 200 OK"
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 14962.54it/s]
+  15:26:34 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/commits/main "HTTP/1.1 200 OK"
+  15:26:34 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/discussions?p=0 "HTTP/1.1 200 OK"
+  15:26:35 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:35 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/commits/refs%2Fpr%2F2 "HTTP/1.1 200 OK"
+  15:26:35 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/config.json "HTTP/1.1 200 OK"
+  15:26:35 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:35 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/refs%2Fpr%2F2/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+  15:26:35 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/tokenizer_config.json "HTTP/1.1 200 OK"
+  15:26:35 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  15:26:35 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/refs%2Fpr%2F2/model.safetensors "HTTP/1.1 302 Found"
+  15:26:35 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  15:26:35 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:35 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+  15:26:35 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base "HTTP/1.1 200 OK"
+  15:26:36 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:36 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+Loading weights: 100%|██████████| 201/201 [00:00<00:00, 2650.63it/s]
+  15:26:36 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:36 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+  15:26:36 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:36 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/tokenizer_config.json "HTTP/1.1 200 OK"
+  15:26:36 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  15:26:36 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  15:26:40 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  15:26:40 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+  15:26:40 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/README.md "HTTP/1.1 200 OK"
+  15:26:40 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  15:26:40 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:40 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+  15:26:40 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  15:26:40 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/tokenizer_config.json "HTTP/1.1 200 OK"
+  15:26:41 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  15:26:41 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  15:26:44 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  15:26:44 [INFO] Loading existing index
+  15:26:44 [INFO] Finding relevant code for bug 001
+  15:26:49 [INFO] Analyzing modules for bug 001
+  15:26:49 [INFO] Detecting training code for bug 001
+  15:26:50 [ERROR] Error parsing dataset_local/001/code/swivel/text2bin.py: multiple exception types must be parenthesized (<unknown>, line 52)
+  15:26:50 [ERROR] Error parsing dataset_local/001/code/swivel/swivel.py: Missing parentheses in call to 'print'. Did you mean print(...)? (<unknown>, line 166)
+  15:26:50 [ERROR] Error parsing dataset_local/001/code/namignizer/names.py: expected an indented block after 'if' statement on line 256 (<unknown>, line 262)
+  15:26:50 [ERROR] Error parsing dataset_local/001/code/neural_gpu/neural_gpu_trainer.py: Missing parentheses in call to 'print'. Did you mean print(...)? (<unknown>, line 444)
+  15:26:50 [ERROR] Error parsing dataset_local/001/code/syntaxnet/syntaxnet/conll2tree.py: Missing parentheses in call to 'print'. Did you mean print(...)? (<unknown>, line 84)
+  15:26:50 [ERROR] Error parsing dataset_local/001/code/swivel/nearest.py: multiple exception types must be parenthesized (<unknown>, line 27)
+  15:26:50 [ERROR] Error parsing dataset_local/001/code/swivel/wordsim.py: multiple exception types must be parenthesized (<unknown>, line 45)
+  15:26:50 [ERROR] Error parsing dataset_local/001/code/swivel/prep.py: Missing parentheses in call to 'print'. Did you mean print(...)? (<unknown>, line 121)
+  15:26:53 [INFO] Analyzing dependencies for bug 001
+  15:26:53 [INFO] Generating final context for bug 001
+  15:26:53 [SUCCESS] [Bug 001] Retrieval pipeline completed: success
+  15:26:53 [INFO] [Bug 001] Loaded bug report: 737 chars
+  15:26:53 [INFO] ────────────────────────────────────────────────────────────
+  15:26:53 [INFO] [Bug 001] STEP 1/3: Bug Report Refinement
+  15:26:53 [INFO] ────────────────────────────────────────────────────────────
+  15:26:53 [INFO] [Bug 001] Refining bug report with Ollama (qwen2.5:7b)...
+  15:27:55 [SUCCESS] [Bug 001] Refined bug report saved: 001.txt
+  15:27:55 [INFO] ────────────────────────────────────────────────────────────
+  15:27:55 [INFO] [Bug 001] STEP 2/3: Plan Generation
+  15:27:55 [INFO] ────────────────────────────────────────────────────────────
+  15:27:55 [INFO] [Bug 001] Found 5 context files
+  15:27:55 [INFO] [Bug 001] Processing context 1/5: 001_5.json
+  15:34:24 [SUCCESS] [Bug 001] Plan saved: plan_001_5.json
+  15:34:24 [INFO] [Bug 001] Processing context 2/5: 001_4.json
+  15:38:46 [SUCCESS] [Bug 001] Plan saved: plan_001_4.json
+  15:38:46 [INFO] [Bug 001] Processing context 3/5: 001_2.json
+  15:43:34 [SUCCESS] [Bug 001] Plan saved: plan_001_2.json
+  15:43:34 [INFO] [Bug 001] Processing context 4/5: 001_1.json
+  15:48:11 [SUCCESS] [Bug 001] Plan saved: plan_001_1.json
+  15:48:11 [INFO] [Bug 001] Processing context 5/5: 001_3.json
+  15:55:20 [SUCCESS] [Bug 001] Plan saved: plan_001_3.json
+  15:55:20 [INFO] ────────────────────────────────────────────────────────────
+  15:55:20 [INFO] [Bug 001] STEP 3/3: Code Generation & Verification
+  15:55:20 [INFO] ────────────────────────────────────────────────────────────
+  15:55:20 [INFO] [Bug 001] Processing 5 contexts
+  15:55:20 [INFO] [Bug 001] [Ctx 1] ============================================================
+  15:55:20 [INFO] [Bug 001] [Ctx 1] Processing Context 1/5 (ID: 1)
+  15:55:20 [INFO] [Bug 001] [Ctx 1] ============================================================
+  15:55:20 [INFO] [Bug 001] [Ctx 1] [Att 1] Attempt 1/1
+  16:05:19 [SUCCESS] [Bug 001] [Ctx 1] [Att 1] Structural check passed
+  16:07:38 [SUCCESS] [Bug 001] [Ctx 1] [Att 1] Relevance check passed
+  16:07:39 [INFO] [Bug 001] [Ctx 1] [Att 1] Static Analysis found 20 issues. Refactoring...
+  16:14:49 [SUCCESS] [Bug 001] [Ctx 1] [Att 1] Code refactored successfully
+  16:26:40 [INFO] [Bug 001] [Ctx 1] [Att 1] Confidence Score: 0.85
+  16:26:40 [SUCCESS] [Bug 001] [Ctx 1] Valid reproduction found! Saved to: reproduce_001.py
+  16:30:06 [INFO] [Bug 001] Analysis Summary:
+  16:30:06 [INFO]   - Lines 37-41: [Localisation Network Definition] (Confidence: High)
+  16:30:06 [INFO]     The localisation network is responsible for learning the spatial transformation parameters. If there are issues with this part of the model, it could lead to NaN values during training.
+  16:30:06 [INFO]   
+  16:30:06 [INFO]   - Lines 42-46: [Spatial Transformer Application] (Confidence: Medium)
+  16:30:06 [INFO]     This section applies the learned spatial transformations to the input images. Errors in this step can propagate and cause NaN loss if the transformed inputs are not handled correctly.
+  16:30:06 [INFO]   
+  16:30:06 [INFO]   - Lines 50-73: [Fully Connected Layers and Final Softmax] (Confidence: Medium)
+  16:30:06 [INFO]     The fully connected layers and the final softmax layer are critical for classification. If there's an issue with these layers, it could lead to unstable gradients and NaN loss.
+  16:30:06 [INFO]   
+  16:30:06 [INFO]   - Lines 68-72: [Gradient Computation] (Confidence: High)
+
+[✓] Bug 001 completed successfully (3841s)
+
+Pipeline Progress [##################################################] 100% (2/2)
+➜ Running pipeline for Bug 002 (2/2)
+  16:30:18 [INFO] ============================================================
+  16:30:18 [INFO] RepGen Code Generation Pipeline (Local/Ollama) - Starting
+  16:30:18 [INFO] ============================================================
+  16:30:18 [INFO] [Bug 002] Bug ID: 002
+  16:30:18 [INFO] Retrieval Ablation: full_system
+  16:30:18 [INFO] Generation Ablation: all_steps
+  16:30:18 [INFO] Max Attempts: 1
+  16:30:18 [INFO] Custom Dataset Path: dataset_local
+  16:30:18 [INFO] ============================================================
+  16:30:18 [INFO] [Bug 002] Initializing retrieval pipeline...
+  16:30:18 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  16:30:18 [WARNING] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  16:30:19 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+Loading weights: 100%|██████████| 201/201 [00:00<00:00, 3156.62it/s]
+  16:30:19 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:19 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+  16:30:19 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:19 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/tokenizer_config.json "HTTP/1.1 200 OK"
+  16:30:19 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  16:30:19 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  16:30:23 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  16:30:23 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+  16:30:23 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/README.md "HTTP/1.1 200 OK"
+  16:30:23 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  16:30:23 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:23 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+  16:30:23 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:23 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/tokenizer_config.json "HTTP/1.1 200 OK"
+  16:30:23 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  16:30:23 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  16:30:27 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  16:30:27 [INFO] [Bug 002] Running retrieval pipeline...
+  16:30:27 [INFO] Indexing codebase for bug 002
+  16:30:27 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:27 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/modules.json "HTTP/1.1 200 OK"
+  16:30:27 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:27 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/config_sentence_transformers.json "HTTP/1.1 200 OK"
+  16:30:27 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:27 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/config_sentence_transformers.json "HTTP/1.1 200 OK"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/README.md "HTTP/1.1 200 OK"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/modules.json "HTTP/1.1 200 OK"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/sentence_bert_config.json "HTTP/1.1 200 OK"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/config.json "HTTP/1.1 200 OK"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+  16:30:28 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base "HTTP/1.1 200 OK"
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 12658.99it/s]
+  16:30:28 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/commits/main "HTTP/1.1 200 OK"
+  16:30:28 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/discussions?p=0 "HTTP/1.1 200 OK"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:28 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/config.json "HTTP/1.1 200 OK"
+  16:30:28 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/commits/refs%2Fpr%2F2 "HTTP/1.1 200 OK"
+  16:30:29 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:29 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/refs%2Fpr%2F2/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+  16:30:29 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/tokenizer_config.json "HTTP/1.1 200 OK"
+  16:30:29 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/refs%2Fpr%2F2/model.safetensors "HTTP/1.1 302 Found"
+  16:30:29 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  16:30:29 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  16:30:29 [INFO] HTTP Request: HEAD https://huggingface.co/flax-sentence-embeddings/st-codesearch-distilroberta-base/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:29 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/flax-sentence-embeddings/st-codesearch-distilroberta-base/65b0f39bfa41c59993f62b57447c942e371b7135/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+  16:30:29 [INFO] HTTP Request: GET https://huggingface.co/api/models/flax-sentence-embeddings/st-codesearch-distilroberta-base "HTTP/1.1 200 OK"
+  16:30:29 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:29 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+Loading weights: 100%|██████████| 201/201 [00:00<00:00, 3112.06it/s]
+  16:30:30 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:30 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+  16:30:30 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:30 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/tokenizer_config.json "HTTP/1.1 200 OK"
+  16:30:30 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  16:30:30 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  16:30:34 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  16:30:34 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+  16:30:34 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/README.md "HTTP/1.1 200 OK"
+  16:30:34 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  16:30:34 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:34 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/config.json "HTTP/1.1 200 OK"
+  16:30:34 [INFO] HTTP Request: HEAD https://huggingface.co/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+  16:30:34 [INFO] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/1427fd652930e4ba29e8149678df786c240d8825/tokenizer_config.json "HTTP/1.1 200 OK"
+  16:30:34 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+  16:30:34 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+  16:30:38 [INFO] HTTP Request: GET https://huggingface.co/api/models/cross-encoder/mmarco-mMiniLMv2-L12-H384-v1 "HTTP/1.1 200 OK"
+  16:30:38 [INFO] Loading existing index
+  16:30:41 [INFO] Finding relevant code for bug 002
+  16:30:46 [INFO] Analyzing modules for bug 002
+  16:30:46 [INFO] Detecting training code for bug 002
+  16:30:56 [INFO] Analyzing dependencies for bug 002
+  16:30:57 [INFO] Generating final context for bug 002
+  16:30:57 [SUCCESS] [Bug 002] Retrieval pipeline completed: success
+  16:30:57 [INFO] [Bug 002] Loaded bug report: 590 chars
+  16:30:57 [INFO] ────────────────────────────────────────────────────────────
+  16:30:57 [INFO] [Bug 002] STEP 1/3: Bug Report Refinement
+  16:30:57 [INFO] ────────────────────────────────────────────────────────────
+  16:30:57 [INFO] [Bug 002] Refining bug report with Ollama (qwen2.5:7b)...
+  16:32:16 [SUCCESS] [Bug 002] Refined bug report saved: 002.txt
+  16:32:16 [INFO] ────────────────────────────────────────────────────────────
+  16:32:16 [INFO] [Bug 002] STEP 2/3: Plan Generation
+  16:32:16 [INFO] ────────────────────────────────────────────────────────────
+  16:32:16 [INFO] [Bug 002] Found 5 context files
+  16:32:16 [INFO] [Bug 002] Processing context 1/5: 002_5.json
+  16:36:44 [SUCCESS] [Bug 002] Plan saved: plan_002_5.json
+  16:36:44 [INFO] [Bug 002] Processing context 2/5: 002_2.json
+  16:44:25 [SUCCESS] [Bug 002] Plan saved: plan_002_2.json
+  16:44:25 [INFO] [Bug 002] Processing context 3/5: 002_1.json
+  16:48:52 [SUCCESS] [Bug 002] Plan saved: plan_002_1.json
+  16:48:52 [INFO] [Bug 002] Processing context 4/5: 002_4.json
+  16:56:18 [SUCCESS] [Bug 002] Plan saved: plan_002_4.json
+  16:56:18 [INFO] [Bug 002] Processing context 5/5: 002_3.json
+  17:03:58 [SUCCESS] [Bug 002] Plan saved: plan_002_3.json
+  17:03:58 [INFO] ────────────────────────────────────────────────────────────
+  17:03:58 [INFO] [Bug 002] STEP 3/3: Code Generation & Verification
+  17:03:58 [INFO] ────────────────────────────────────────────────────────────
+  17:03:58 [INFO] [Bug 002] Processing 5 contexts
+  17:03:58 [INFO] [Bug 002] [Ctx 1] ============================================================
+  17:03:58 [INFO] [Bug 002] [Ctx 1] Processing Context 1/5 (ID: 1)
+  17:03:58 [INFO] [Bug 002] [Ctx 1] ============================================================
+  17:03:58 [INFO] [Bug 002] [Ctx 1] [Att 1] Attempt 1/1
+  17:11:48 [SUCCESS] [Bug 002] [Ctx 1] [Att 1] Structural check passed
+  17:13:00 [WARNING] [Bug 002] [Ctx 1] [Att 1] Relevance Check Failed: Code not relevant.
+  17:13:00 [ERROR] [Bug 002] [Ctx 1] Failed to generate valid code for context 1 after 1 attempts
+  17:13:00 [INFO] [Bug 002] [Ctx 2] ============================================================
+  17:13:00 [INFO] [Bug 002] [Ctx 2] Processing Context 2/5 (ID: 2)
+  17:13:00 [INFO] [Bug 002] [Ctx 2] ============================================================
+  17:13:00 [INFO] [Bug 002] [Ctx 2] [Att 1] Attempt 1/1
+  17:22:17 [SUCCESS] [Bug 002] [Ctx 2] [Att 1] Structural check passed
+  17:24:11 [WARNING] [Bug 002] [Ctx 2] [Att 1] Relevance Check Failed: Code not relevant.
+  17:24:11 [ERROR] [Bug 002] [Ctx 2] Failed to generate valid code for context 2 after 1 attempts
+  17:24:11 [INFO] [Bug 002] [Ctx 3] ============================================================
+  17:24:11 [INFO] [Bug 002] [Ctx 3] Processing Context 3/5 (ID: 3)
+  17:24:11 [INFO] [Bug 002] [Ctx 3] ============================================================
+  17:24:11 [INFO] [Bug 002] [Ctx 3] [Att 1] Attempt 1/1
+  17:34:35 [SUCCESS] [Bug 002] [Ctx 3] [Att 1] Structural check passed
+  17:36:12 [WARNING] [Bug 002] [Ctx 3] [Att 1] Relevance Check Failed: Code not relevant.
+  17:36:12 [ERROR] [Bug 002] [Ctx 3] Failed to generate valid code for context 3 after 1 attempts
+  17:36:12 [INFO] [Bug 002] [Ctx 4] ============================================================
+  17:36:12 [INFO] [Bug 002] [Ctx 4] Processing Context 4/5 (ID: 4)
+  17:36:12 [INFO] [Bug 002] [Ctx 4] ============================================================
+  17:36:12 [INFO] [Bug 002] [Ctx 4] [Att 1] Attempt 1/1
+  17:46:54 [SUCCESS] [Bug 002] [Ctx 4] [Att 1] Structural check passed
+  17:48:32 [WARNING] [Bug 002] [Ctx 4] [Att 1] Relevance Check Failed: Code not relevant.
+  17:48:32 [ERROR] [Bug 002] [Ctx 4] Failed to generate valid code for context 4 after 1 attempts
+  17:48:32 [INFO] [Bug 002] [Ctx 5] ============================================================
+  17:48:32 [INFO] [Bug 002] [Ctx 5] Processing Context 5/5 (ID: 5)
+  17:48:32 [INFO] [Bug 002] [Ctx 5] ============================================================
+  17:48:32 [INFO] [Bug 002] [Ctx 5] [Att 1] Attempt 1/1
+  17:56:52 [SUCCESS] [Bug 002] [Ctx 5] [Att 1] Structural check passed
+  17:58:08 [SUCCESS] [Bug 002] [Ctx 5] [Att 1] Relevance check passed
+  18:04:31 [INFO] [Bug 002] [Ctx 5] [Att 1] Confidence Score: 0.85
+  18:04:31 [SUCCESS] [Bug 002] [Ctx 5] Valid reproduction found! Saved to: reproduce_002.py
+  18:06:59 [INFO] [Bug 002] Analysis Summary:
+  18:06:59 [INFO]   - Lines 12-14: Importing `tensorflow.contrib` and checking TensorFlow version (Confidence: High)
+  18:06:59 [INFO]     The script checks if TensorFlow is version 1.x or 2.x. However, it does not handle the transition to TensorFlow 2.x properly by using deprecated modules like `tensorflow.contrib`. This discrepancy leads to a `ModuleNotFoundError`.
+  18:06:59 [INFO]   
+  18:06:59 [INFO]   - Lines 40-43: Loading and merging the pipeline configuration (Confidence: Medium)
+  18:06:59 [INFO]     While this section is likely working correctly, it relies on the pipeline configuration being compatible with TensorFlow 2.x. If there are any deprecated API calls within this configuration file or its dependencies, it could contribute to the issue.
+  18:06:59 [INFO]   
+  18:06:59 [INFO]   - Lines 51-54: Exporting the model using `tf.saved_model.save` (Confidence: Medium)
+  18:06:59 [INFO]     This section is likely working correctly if all necessary components and APIs are compatible with TensorFlow 2.x. However, it's crucial that all dependencies and custom scripts used during exportation are updated to TensorFlow 2.x standards.
+  18:06:59 [INFO]   
+  18:06:59 [INFO]   - Lines 57-61: Running `model_main_tf2.py` script (Confidence: High)
+
+[✓] Bug 002 completed successfully (5811s)
+
+Pipeline Progress [##################################################] 100% (2/2)
+[✓] Run Summary: 2/2 Successful
+
+
+╔════════════════════════════════════════════════════════════════╗
+║                   ✅ Pipeline Completed!                       ║
+╚════════════════════════════════════════════════════════════════╝
+
