@@ -25,6 +25,23 @@ def check_disk_space():
         print(f"❌ Not enough disk space: {free_gb} GB available")
         print("👉 At least 5GB required for LLM models\n")
 
+def check_dependencies():
+    print("\nChecking Python dependencies...")
+
+    required_packages = ["numpy", "torch"]
+
+    missing = []
+
+    for pkg in required_packages:
+        try:
+            __import__(pkg)
+            print(f"✅ {pkg} is installed")
+        except ImportError:
+            print(f"❌ {pkg} is NOT installed")
+            missing.append(pkg)
+
+    return missing
+
 def main():
     print("🔍 Running Environment Pre-Check...\n")
 
@@ -50,14 +67,19 @@ def main():
         print(f"❌ Not enough disk space: {free_gb} GB available")
         success = False
 
+    # Dependencies
+    missing = check_dependencies()
+    if missing:
+        print("\n👉 Missing packages:", ", ".join(missing))
+        print("👉 Install using: pip install " + " ".join(missing))
+        success = False
+
     print("\n🎯 Pre-check complete.")
 
     if success:
         sys.exit(0)  # success
     else:
         sys.exit(1)  # failure
-
-    print("\n🎯 Pre-check complete.")
 
 if __name__ == "__main__":
     main()
