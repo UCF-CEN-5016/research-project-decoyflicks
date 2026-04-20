@@ -23,6 +23,18 @@
 # Note: Run this in a Unix-based terminal (macOS/Linux/WSL2/Git Bash)
 ###############################################################################
 
+echo "🔍 Running environment pre-check..."
+
+python3 env_check.py
+
+# Stop execution if pre-check fails
+if [ $? -ne 0 ]; then
+    echo "❌ Environment check failed. Fix issues before running RepGen."
+    exit 1
+fi
+
+echo "✅ Environment check passed. Continuing...\n"
+
 set -e  # Exit on error
 
 # Detect if running on Windows (Git Bash/MSYS)
