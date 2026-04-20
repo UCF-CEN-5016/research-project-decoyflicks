@@ -42,6 +42,29 @@ def check_dependencies():
 
     return missing
 
+def check_llm_configuration():
+    print("\nChecking LLM configuration...")
+
+    local_model_path = "./models"   # adjust if your repo uses a different path
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    local_exists = os.path.exists(local_model_path) and len(os.listdir(local_model_path)) > 0
+    api_exists = api_key is not None and api_key != ""
+
+    if local_exists:
+        print("✅ Local LLM detected (models directory found)")
+    
+    if api_exists:
+        print("✅ API key detected (OPENAI_API_KEY is set)")
+
+    if not local_exists and not api_exists:
+        print("❌ No LLM configuration found")
+        print("👉 Option 1: Add models to ./models directory")
+        print("👉 Option 2: Set OPENAI_API_KEY environment variable")
+        return False
+
+    return True
+
 def main():
     print("🔍 Running Environment Pre-Check...\n")
 
@@ -72,6 +95,10 @@ def main():
     if missing:
         print("\n👉 Missing packages:", ", ".join(missing))
         print("👉 Install using: pip install " + " ".join(missing))
+        success = False
+    
+    # LLM check
+    if not check_llm_configuration():
         success = False
 
     print("\n🎯 Pre-check complete.")
