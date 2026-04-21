@@ -65,6 +65,29 @@ def check_llm_configuration():
 
     return True
 
+def check_required_files():
+    print("\nChecking required files and paths...")
+
+    required_files = [
+        "RepGen.sh",
+        "README.md"
+    ]
+
+    missing = []
+
+    for file in required_files:
+        if os.path.exists(file):
+            print(f"✅ Found: {file}")
+        else:
+            print(f"❌ Missing: {file}")
+            missing.append(file)
+
+    if missing:
+        print("\n👉 Missing required files:", ", ".join(missing))
+        return False
+
+    return True
+
 def main():
     print("🔍 Running Environment Pre-Check...\n")
 
@@ -99,6 +122,10 @@ def main():
     
     # LLM check
     if not check_llm_configuration():
+        success = False
+
+    # Required files
+    if not check_required_files():
         success = False
 
     print("\n🎯 Pre-check complete.")
