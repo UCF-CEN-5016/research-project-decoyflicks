@@ -45,7 +45,6 @@ def update(start, end, done = 0):
         temp = str(run_output).replace("b\'", "\'").replace("\'", "")
         run_output = eval(repr(temp).replace("\\\\", "\\")).replace("\xe2\x9c\x93", "\t")
         run_output = f"=== Bug {start} ===\n" + run_output + "\n\n"
-        run_output += f"=== Bug 2 ===\n"
 
         # update progress indicators
         set_progress(done + 1, bug_count)
