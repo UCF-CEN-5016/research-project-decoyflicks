@@ -1,0 +1,56 @@
+Starting Ablation Study
+------------------------------------------------
+ Tool:         /home/cen5016/my-repo/src/tool_openai.py
+ Dataset:      /home/cen5016/my-repo/dataset_cloud
+ Logs:         /home/cen5016/my-repo/logs/ablation_study_20260420_221728
+ Summary CSV:  /home/cen5016/my-repo/logs/ablation_study_20260420_221728/summary.csv
+ Master Log:   /home/cen5016/my-repo/logs/ablation_study_20260420_221728/master.log
+ Max Attempts: 1
+------------------------------------------------
+ Retrieval Ablations: NO_BM25 NO_ANN NO_RERANKER NO_TRAINING_LOOP_EXTRACTION NO_TRAINING_LOOP_RANKING NO_MODULE_PARTITIONING NO_DEPENDENCY_EXTRACTION
+ Generation Ablations: no_refine no_plan no_compilation no_relevance no_static_analysis no_runtime_feedback
+------------------------------------------------
+
+=== Processing Bug 001 ===
+[INFO] Running Retrieval Ablations
+  ✓ Retrieval: NO_BM25 (44s)
+[SUCCESS] Bug 001 - Retrieval/NO_BM25: PASSED in 44s
+  ✓ Retrieval: NO_ANN (44s)
+[SUCCESS] Bug 001 - Retrieval/NO_ANN: PASSED in 44s
+  ✓ Retrieval: NO_RERANKER (40s)
+[SUCCESS] Bug 001 - Retrieval/NO_RERANKER: PASSED in 40s
+  ✓ Retrieval: NO_TRAINING_LOOP_EXTRACTION (56s)
+[SUCCESS] Bug 001 - Retrieval/NO_TRAINING_LOOP_EXTRACTION: PASSED in 56s
+  ✓ Retrieval: NO_TRAINING_LOOP_RANKING (48s)
+[SUCCESS] Bug 001 - Retrieval/NO_TRAINING_LOOP_RANKING: PASSED in 48s
+  ✓ Retrieval: NO_MODULE_PARTITIONING (45s)
+[SUCCESS] Bug 001 - Retrieval/NO_MODULE_PARTITIONING: PASSED in 45s
+  ✓ Retrieval: NO_DEPENDENCY_EXTRACTION (43s)
+[SUCCESS] Bug 001 - Retrieval/NO_DEPENDENCY_EXTRACTION: PASSED in 43s
+
+[INFO] Running Generation Ablations
+  ✓ Generation: no_refine (44s)
+[SUCCESS] Bug 001 - Generation/no_refine: PASSED in 44s
+  ✓ Generation: no_plan (42s)
+[SUCCESS] Bug 001 - Generation/no_plan: PASSED in 42s
+  ✓ Generation: no_compilation (42s)
+[SUCCESS] Bug 001 - Generation/no_compilation: PASSED in 42s
+  ✓ Generation: no_relevance (44s)
+[SUCCESS] Bug 001 - Generation/no_relevance: PASSED in 44s
+  ✓ Generation: no_static_analysis (44s)
+[SUCCESS] Bug 001 - Generation/no_static_analysis: PASSED in 44s
+  ✓ Generation: no_runtime_feedback (43s)
+[SUCCESS] Bug 001 - Generation/no_runtime_feedback: PASSED in 43s
+
+========================================
+           FINAL SUMMARY
+========================================
+ Total Experiments: 13
+ Successful:        13
+ Failed:            0
+
+ CSV Report:        /home/cen5016/my-repo/logs/ablation_study_20260420_221728/summary.csv
+ Master Log:        /home/cen5016/my-repo/logs/ablation_study_20260420_221728/master.log
+
+✓ All experiments completed successfully.
+[SUCCESS] All experiments completed successfully
