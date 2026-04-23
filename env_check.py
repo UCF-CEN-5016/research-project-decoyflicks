@@ -2,6 +2,8 @@ import sys
 import shutil
 import os
 
+DRY_RUN = "--dry-run" in sys.argv
+
 def check_python_version():
     print("Checking Python version...")
     version = sys.version_info
@@ -61,7 +63,8 @@ def check_llm_configuration():
         print("❌ No LLM configuration found")
         print("👉 Option 1: Add models to ./models directory")
         print("👉 Option 2: Set OPENAI_API_KEY environment variable")
-        return False
+        if not DRY_RUN:
+            return False
 
     return True
 
@@ -90,7 +93,6 @@ def check_required_files():
 
 def main():
     print("🔍 Running Environment Pre-Check...\n")
-
     success = True
 
     # Python version
@@ -100,28 +102,30 @@ def main():
         print(f"✅ Python version OK: {version.major}.{version.minor}")
     else:
         print(f"❌ Python version too low: {version.major}.{version.minor}")
-        success = False
+        if not DRY_RUN:
+            success = False
 
     # Disk space
     print("\nChecking disk space...")
     total, used, free = shutil.disk_usage("/")
     free_gb = free // (2**30)
-
     if free_gb >= 5:
         print(f"✅ sufficient disk space: {free_gb} GB available")
     else:
         print(f"❌ Not enough disk space: {free_gb} GB available")
-        success = False
+        if not DRY_RUN:
+            success = False
 
     # Dependencies
     missing = check_dependencies()
     if missing:
         print("\n👉 Missing packages:", ", ".join(missing))
         print("👉 Install using: pip install " + " ".join(missing))
-        success = False
+        if not DRY_RUN:
+            success = False
     
     # LLM check
-    if not check_llm_configuration():
+    if not check_llm_configuration() and not DRY_RUN:
         success = False
 
     # Required files
@@ -130,10 +134,11 @@ def main():
 
     print("\n🎯 Pre-check complete.")
 
+    if DRY_RUN:
+        print("\n⚡ Dry-run mode: allowing execution despite warnings")
+        sys.exit(0)
+
     if success:
         sys.exit(0)  # success
     else:
         sys.exit(1)  # failure
-
-if __name__ == "__main__":
-    main()
