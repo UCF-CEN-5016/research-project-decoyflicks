@@ -8,6 +8,7 @@ code
 *logs*
 *.DS_Store*
 *cache*
+!llm_cache.py
 ae_dataset
 dataset_cloud
 dataset_local
