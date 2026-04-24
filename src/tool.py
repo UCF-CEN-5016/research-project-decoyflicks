@@ -11,6 +11,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from retrieval import RetrievalPipeline
+from llm_cache import init_cache, get_cache
+from parallel_processor import ParallelProcessor
+from profiling import init_profiler
 import argparse
 import os
 import subprocess
@@ -111,6 +114,20 @@ def setup_logging(log_level=logging.INFO, log_file=None):
 logger = setup_logging()
 # ==========================================
 
+_llm_cache = None
+
+def init_llm_cache(cache_dir: str = ".llm_cache"):
+    global _llm_cache
+    _llm_cache = init_cache(cache_dir)
+    return _llm_cache
+
+
+def get_llm_cache():
+    global _llm_cache
+    if _llm_cache is None:
+        _llm_cache = get_cache()
+    return _llm_cache
+
 # Set environment variables at the start
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -140,8 +157,14 @@ GENERATION_ABLATION_MAP = {
 def query_ollama(prompt: str, model: str) -> str:
     """
     Sends a prompt to the local Ollama instance via subprocess.
-    Mimics the signature of query_openai_api for consistency.
+    Identical queries are cached on disk to avoid repeated LLM execution.
     """
+    cache = get_llm_cache()
+    cached_response = cache.get(prompt, model)
+    if cached_response is not None:
+        logger.info(f"LLM cache hit for model {model}")
+        return cached_response
+
     try:
         cmd = ['ollama', 'run', model]
         # Use Popen to pipe input correctly
@@ -158,8 +181,11 @@ def query_ollama(prompt: str, model: str) -> str:
         if process.returncode != 0:
             logger.error(f"Ollama Error ({model}): {stderr.strip()}")
             return ""
-            
-        return stdout.strip()
+
+        response = stdout.strip()
+        if response:
+            cache.put(prompt, model, response)
+        return response
     except FileNotFoundError:
         logger.critical("Ollama binary not found. Is it installed?")
         return ""
@@ -197,6 +223,19 @@ def main():
     parser.add_argument("--max-attempts", type=int, default=5,
                           help="Maximum attempts for code generation")
     
+    parser.add_argument("--workers", type=int, default=None,
+                          help="Number of parallel worker processes for generation")
+    
+    parser.add_argument("--cache-dir", type=str, default=".llm_cache",
+                          help="Directory for LLM query cache")
+    
+    parser.add_argument("--profile", action="store_true",
+                          help="Run the pipeline under py-spy profiling")
+    parser.add_argument("--profile-output-dir", type=str, default=".profiling",
+                          help="Directory for profiling output")
+    parser.add_argument("--profiled-child", action="store_true",
+                          help=argparse.SUPPRESS)
+    
     parser.add_argument("--ae_dataset_path", type=str, default=None,
                           help="Optional path to custom dataset. Must contain '{bug_id}/bug_report/{bug_id}.txt' and '{bug_id}/code/'.")
     
@@ -223,7 +262,26 @@ def main():
     logger.info(f"Max Attempts: {args.max_attempts}")
     if args.ae_dataset_path:
         logger.info(f"Custom Dataset Path: {args.ae_dataset_path}")
+    logger.info(f"LLM cache dir: {args.cache_dir}")
+    logger.info(f"Profile enabled: {args.profile}")
     logger.info("=" * 60)
+
+    if args.profile and not args.profiled_child:
+        profiler = init_profiler(args.profile_output_dir)
+        child_args = [
+            arg for arg in sys.argv[1:]
+            if arg not in ('--profile',)
+        ]
+        child_args += ["--profiled-child"]
+
+        flamegraph_path = profiler.profile_script(
+            script_path=str(Path(__file__).resolve()),
+            args=child_args,
+            output_prefix=f"repgen_{args.bug_id}"
+        )
+        if flamegraph_path:
+            logger.success(f"Profiling flamegraph created at: {flamegraph_path}")
+        return
 
     # Setup pipeline and flags
     ret_ablation_name = args.retrieval_ablation
@@ -232,6 +290,8 @@ def main():
     ret_ablation_dict = RETRIEVAL_ABLATION_CONFIGS.get(ret_ablation_name, {})
     gen_flags = GENERATION_ABLATION_MAP.get(gen_ablation_name, {})
     
+    init_llm_cache(args.cache_dir)
+
     logger.info("Initializing retrieval pipeline...", extra={'bug_id': args.bug_id})
     try:
         pipeline = RetrievalPipeline(
@@ -308,44 +368,37 @@ def main():
     plan_dir = config.PLANS_DIR_OUT
     
     try:
-        context_files_list = os.listdir(context_dir)
+        context_files_list = sorted(os.listdir(context_dir))
         logger.info(f"Found {len(context_files_list)} context files", extra={'bug_id': args.bug_id})
     except Exception as e:
         logger.error(f"Failed to list context files: {e}", extra={'bug_id': args.bug_id})
         return
     
+    context_data = []
     for idx, context_file in enumerate(context_files_list, 1):
         context_path = os.path.join(context_dir, context_file)
-        logger.info(f"Processing context {idx}/{len(context_files_list)}: {context_file}", extra={'bug_id': args.bug_id})
+        logger.info(f"Scheduling context {idx}/{len(context_files_list)}: {context_file}", extra={'bug_id': args.bug_id})
         
         try:
             with open(context_path, 'r', encoding='utf-8') as f:
                 context_content = json.loads(f.read())
+            context_data.append((idx, context_file, context_content))
         except Exception as e:
             logger.error(f"Failed to load context file: {e}", extra={'bug_id': args.bug_id})
-            continue
-        
-        prompt_plan = create_prompt_plan(bug_report_content, context_content)
-        
-        if not gen_flags.get("no_plan", False):
-            # Plan generation uses qwen2.5-coder:7b
-            output = query_ollama(prompt_plan, model='qwen2.5-coder:7b')
-            if not output:
-                logger.warning(f"Empty plan generated for {context_file}", extra={'bug_id': args.bug_id})
-                output = "[]"
-        else:
-            output = "[]"
+
+    parallel_processor = ParallelProcessor(num_workers=args.workers)
+    plan_results = parallel_processor.process_plans_parallel(
+        context_data=context_data,
+        bug_report=bug_report_content,
+        create_prompt_plan_fn=create_prompt_plan,
+        query_ollama_fn=query_ollama,
+        gen_flags=gen_flags,
+        bug_id=args.bug_id,
+        plan_dir=str(plan_dir)
+    )
     
-        plan_path = plan_dir / f"plan_{context_file.split('.')[0]}.json"
-        if 'module' in plan_path.name:
-            plan_path = plan_path.with_name(plan_path.name.replace('module_', ''))
-        
-        try:
-            with open(plan_path, 'w', encoding='utf-8') as f:
-                f.write(output)
-            logger.success(f"Plan saved: {plan_path.name}", extra={'bug_id': args.bug_id})
-        except Exception as e:
-            logger.error(f"Failed to save plan: {e}", extra={'bug_id': args.bug_id})
+    successful_plans = [r for r in plan_results if r.get('status') == 'success']
+    logger.success(f"Plan generation completed: {len(successful_plans)}/{len(context_data)} successful", extra={'bug_id': args.bug_id})
 
     # STEP 3: Code Generation
     logger.info("─" * 60)
@@ -371,21 +424,18 @@ def main():
     reproduction_dir = config.REPRODUCTION_DIR_OUT
     plan_dir = config.PLANS_DIR_IN 
     
+    code_contexts = []
     for ctx_idx, context_file in enumerate(context_files, 1):
         context_num = context_file.stem.split('_')[-1]
-        
-        logger.info("=" * 60, extra={'bug_id': args.bug_id, 'context_num': context_num})
-        logger.info(f"Processing Context {ctx_idx}/{len(context_files)} (ID: {context_num})", 
-                   extra={'bug_id': args.bug_id, 'context_num': context_num})
-        logger.info("=" * 60, extra={'bug_id': args.bug_id, 'context_num': context_num})
-        
+        logger.info(f"Scheduling context {ctx_idx}/{len(context_files)} (ID: {context_num})", extra={'bug_id': args.bug_id, 'context_num': context_num})
+
         try:
             with open(context_file, 'r', encoding='utf-8') as f:
                 context_content = json.load(f)
         except Exception as e:
             logger.error(f"Failed to load context: {e}", extra={'bug_id': args.bug_id, 'context_num': context_num})
             continue
-        
+
         plan_file = plan_dir / f"plan_{args.bug_id}_{context_num}.json"
         try:
             with open(plan_file, 'r', encoding='utf-8') as f:
@@ -393,149 +443,33 @@ def main():
         except Exception as e:
             logger.warning(f"Plan not found, using empty: {e}", extra={'bug_id': args.bug_id, 'context_num': context_num})
             plan_content = "[]"
-        
-        prompt_code = _build_prompt(
-            refined_bug_report,
-            context_content,
-            plan_content
-        )
-        
-        max_attempts = args.max_attempts
-        success = False
-        
-        for attempt in range(max_attempts):
-            logger.info(f"Attempt {attempt + 1}/{max_attempts}", 
-                       extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-            
-            # Code generation uses qwen2.5-coder:7b
-            stdout = query_ollama(prompt_code, model='qwen2.5-coder:7b')
-            
-            if not stdout:
-                logger.error("Ollama returned empty response", 
-                           extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-                continue
-            
-            output = stdout
-            start_marker = "```python"
-            end_marker = "```"
-            start_idx = output.find(start_marker)
-            end_idx = output.find(end_marker, start_idx + len(start_marker)) if start_idx != -1 else -1
 
-            if start_idx != -1 and end_idx != -1:
-                extracted_code = output[start_idx + len(start_marker):end_idx].strip()
-            else:
-                extracted_code = output
-                logger.warning("No markdown code block found; using full output.", 
-                             extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
+        code_contexts.append((ctx_idx, str(context_file), context_content, plan_content))
 
-            output_file = reproduction_dir / f"reproduce_{args.bug_id}_{context_num}_attempt{attempt + 1}.py"
-            try:
-                with open(output_file, 'w', encoding='utf-8') as f:
-                    f.write(extracted_code)
-            except Exception as e:
-                logger.error(f"Failed to save code: {e}", extra={'bug_id': args.bug_id, 'context_num': context_num})
-                continue
+    parallel_processor = ParallelProcessor(num_workers=args.workers)
+    code_results = parallel_processor.process_code_parallel(
+        context_data=code_contexts,
+        refined_bug_report=refined_bug_report,
+        bug_id=args.bug_id,
+        gen_flags=gen_flags,
+        max_attempts=args.max_attempts,
+        query_ollama_fn=query_ollama,
+        build_prompt_fn=_build_prompt,
+        check_structural_correctness_fn=check_structural_correctness,
+        check_relevance_fn=check_relevance,
+        analyze_with_pylint_fn=analyze_with_pylint,
+        build_refactor_prompt_fn=_build_refactor_prompt,
+        run_llm_refactor_fn=_run_llm_refactor,
+        calculate_probability_of_reproduction_fn=calculate_probability_of_reproduction,
+        reproduction_dir=str(reproduction_dir)
+    )
 
-            # Structural Check
-            if not gen_flags.get("no_compilation", False):
-                is_correct, feedback = check_structural_correctness(extracted_code)
-                
-                if not is_correct:
-                    logger.warning(f"Structural Check Failed: {feedback.splitlines()[0]}", 
-                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-                    prompt_code = _build_prompt(
-                        refined_bug_report,
-                        context_content,
-                        plan_content,
-                        feedback=f"Code failed structural check:\n{feedback}\nPlease fix these issues."
-                    )
-                    continue
-                else:
-                    logger.success("Structural check passed", 
-                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-            
-            # Relevance Check
-            if not gen_flags.get("no_relevance", False):
-                relevance_check = check_relevance(refined_bug_report, extracted_code)
-                if not relevance_check:
-                    logger.warning("Relevance Check Failed: Code not relevant.", 
-                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-                    prompt_code = _build_prompt(
-                        refined_bug_report,
-                        context_content,
-                        plan_content,
-                        feedback="Generated code is not relevant to the bug report."
-                    )
-                    continue
-                else:
-                    logger.success("Relevance check passed", 
-                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-            
-            # Static Analysis
-            if not gen_flags.get("no_static_analysis", False):
-                pylint_output = analyze_with_pylint(extracted_code, output_file)
-                if pylint_output:
-                    logger.info(f"Static Analysis found {len(pylint_output)} issues. Refactoring...", 
-                              extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-                    refactor_prompt = _build_refactor_prompt(
-                        extracted_code,
-                        "\n".join(pylint_output),
-                        refined_bug_report
-                    )
-                    refactored_code = _run_llm_refactor(refactor_prompt)
-                    if refactored_code:
-                        extracted_code = refactored_code
-                        logger.success("Code refactored successfully", 
-                                     extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-            
-            # Runtime Feedback
-            if not gen_flags.get("no_runtime_feedback", False):
-                score, feedback = calculate_probability_of_reproduction(extracted_code, refined_bug_report)
-                logger.info(f"Confidence Score: {score:.2f}", 
-                          extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-            
-                if score > 0.7:
-                    final_output_file = reproduction_dir / f"reproduce_{args.bug_id}.py"
-                    try:
-                        with open(final_output_file, 'w', encoding='utf-8') as f:
-                            f.write(extracted_code)
-                        logger.success(f"Valid reproduction found! Saved to: {final_output_file.name}", 
-                                     extra={'bug_id': args.bug_id, 'context_num': context_num})
-                        
-                        analysis = analyze_bug_reproduction(extracted_code, refined_bug_report)
-                        if analysis:
-                            logger.info("Analysis Summary:", extra={'bug_id': args.bug_id})
-                            for line in analysis.split('\n')[:10]:
-                                logger.info(f"  {line}")
-                        
-                        success = True
-                        return
-                    except Exception as e:
-                        logger.error(f"Failed to save final file: {e}", extra={'bug_id': args.bug_id})
-                else:
-                    logger.warning(f"Low confidence ({score}). Retrying...", 
-                                 extra={'bug_id': args.bug_id, 'context_num': context_num, 'attempt': attempt + 1})
-                    prompt_code = _build_prompt(
-                        refined_bug_report,
-                        context_content,
-                        plan_content,
-                        feedback=f"Code failed to reproduce the bug with the confidence score {score:.2f}. Feedback: {feedback}"
-                    )
-            else:
-                final_output_file = reproduction_dir / f"reproduce_{args.bug_id}.py"
-                try:
-                    with open(final_output_file, 'w', encoding='utf-8') as f:
-                        f.write(extracted_code)          
-                    logger.success(f"Code generated (No feedback mode). Saved to {final_output_file.name}", 
-                                 extra={'bug_id': args.bug_id, 'context_num': context_num})
-                    success = True
-                    break
-                except Exception as e:
-                    logger.error(f"Failed to save final file: {e}", extra={'bug_id': args.bug_id})
-        
-        if not success:
-            logger.error(f"Failed to generate valid code for context {context_num} after {max_attempts} attempts", 
-                        extra={'bug_id': args.bug_id, 'context_num': context_num})
+    success_count = sum(1 for r in code_results if r.get('status') == 'success')
+    logger.success(f"Code generation completed: {success_count}/{len(code_contexts)} successful", extra={'bug_id': args.bug_id})
+
+    for result in code_results:
+        if result.get('status') != 'success':
+            logger.warning(result.get('message', 'Unknown failure'), extra={'bug_id': args.bug_id})
 
     logger.info("=" * 60)
     logger.info("Pipeline Completed", extra={'bug_id': args.bug_id})
