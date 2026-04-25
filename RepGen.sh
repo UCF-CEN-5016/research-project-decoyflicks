@@ -22,6 +22,31 @@
 #
 # Note: Run this in a Unix-based terminal (macOS/Linux/WSL2/Git Bash)
 ###############################################################################
+# Parse dry-run flag FIRST so we can forward it
+DRY_RUN=false
+if [[ "$1" == "--dry-run" ]]; then
+    DRY_RUN=true
+fi
+
+echo "🔍 Running environment pre-check..."
+
+if [ "$DRY_RUN" = true ]; then
+    python3 env_check.py --dry-run
+else
+    python3 env_check.py
+fi
+
+# Stop execution if pre-check fails
+if [ $? -ne 0 ]; then
+    echo "❌ Environment check failed. Fix issues before running RepGen."
+    exit 1
+fi
+
+echo -e "✅ Environment check passed. Continuing...\n"
+
+if [ "$DRY_RUN" = true ]; then
+    echo "🧪 Running in DRY-RUN mode..."
+fi
 
 set -e  # Exit on error
 
@@ -77,6 +102,22 @@ detect_python() {
     fi
 }
 
+# Function to ask for execution confirmation (with dry-run support)
+confirm_execution() {
+    if [ "$DRY_RUN" = true ]; then
+        return 0
+    fi
+
+    while true; do
+        read -p "Do you want to execute this step? (y/n): " yn
+        case $yn in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            * ) echo "Please answer y or n.";;
+        esac
+    done
+}
+
 # Helper functions
 print_header() {
     echo -e "\n${BLUE}==================================================================${NC}"
@@ -106,18 +147,6 @@ print_bug_header() {
     echo -e "${MAGENTA}##################################################################${NC}\n"
 }
 
-# Function to ask for execution confirmation
-confirm_execution() {
-    while true; do
-        read -p "Do you want to execute this step? (y/n): " yn
-        case $yn in
-            [Yy]* ) return 0;;
-            [Nn]* ) return 1;;
-            * ) echo "Please answer y or n.";;
-        esac
-    done
-}
-
 # Function to validate bug ID
 validate_bug_id() {
     local bug_id=$1
@@ -137,62 +166,78 @@ PROJECT_DIR="$SCRIPT_DIR"
 # Change to project directory
 cd "$PROJECT_DIR"
 
-print_header "RepGen Demo Script - Bug Range Configuration"
+# =========================
+# Bug configuration
+# =========================
+if [ "$DRY_RUN" = true ]; then
 
-# ============================================================================
-# Ask for Bug Range
-# ============================================================================
-echo "This script will run experiments on a range of bugs (1-106)."
-echo ""
+    print_header "DRY-RUN MODE: Using sample configuration"
 
-# Ask for start bug ID
-while true; do
-    read -p "Enter START bug ID (1-106): " START_BUG
-    if validate_bug_id "$START_BUG"; then
-        break
-    else
-        print_error "Invalid bug ID. Please enter a number between 1 and 106."
-    fi
-done
+    START_BUG=54
+    END_BUG=54
+    TOTAL_BUGS=1
+    BUG_RANGE="54-54"
 
-# Ask for end bug ID
-while true; do
-    read -p "Enter END bug ID ($START_BUG-106): " END_BUG
-    if validate_bug_id "$END_BUG"; then
-        if [ "$END_BUG" -lt "$START_BUG" ]; then
-            print_error "End bug ID must be greater than or equal to start bug ID ($START_BUG)."
-        else
+    print_info "Dry-run configuration:"
+    echo "  - Bug ID: 54"
+
+else
+    print_header "RepGen Demo Script - Bug Range Configuration"
+
+    # ============================================================================
+    # Ask for Bug Range
+    # ============================================================================
+    echo "This script will run experiments on a range of bugs (1-106)."
+    echo ""
+
+    # Ask for start bug ID
+    while true; do
+        read -p "Enter START bug ID (1-106): " START_BUG
+        if validate_bug_id "$START_BUG"; then
             break
+        else
+            print_error "Invalid bug ID. Please enter a number between 1 and 106."
         fi
-    else
-        print_error "Invalid bug ID. Please enter a number between 1 and 106."
-    fi
-done
+    done
 
-# Calculate total bugs
-TOTAL_BUGS=$((END_BUG - START_BUG + 1))
-BUG_RANGE="${START_BUG}-${END_BUG}"
+    # Ask for end bug ID
+    while true; do
+        read -p "Enter END bug ID ($START_BUG-106): " END_BUG
+        if validate_bug_id "$END_BUG"; then
+            if [ "$END_BUG" -lt "$START_BUG" ]; then
+                print_error "End bug ID must be greater than or equal to start bug ID ($START_BUG)."
+            else
+                break
+            fi
+        else
+            print_error "Invalid bug ID. Please enter a number between 1 and 106."
+        fi
+    done
 
-echo ""
-print_info "Configuration summary:"
-echo "  - Start bug ID: $START_BUG"
-echo "  - End bug ID: $END_BUG"
-echo "  - Total bugs to process: $TOTAL_BUGS"
-echo ""
+    # Calculate total bugs
+    TOTAL_BUGS=$((END_BUG - START_BUG + 1))
+    BUG_RANGE="${START_BUG}-${END_BUG}"
 
-# Confirm the configuration
-while true; do
-    read -p "Proceed with this configuration? (y/n): " yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) 
-            print_warning "Aborting script."
-            exit 0
-            ;;
-        * ) echo "Please answer y or n.";;
-    esac
-done
+    echo ""
+    print_info "Configuration summary:"
+    echo "  - Start bug ID: $START_BUG"
+    echo "  - End bug ID: $END_BUG"
+    echo "  - Total bugs to process: $TOTAL_BUGS"
+    echo ""
 
+    # Confirm the configuration
+    while true; do
+        read -p "Proceed with this configuration? (y/n): " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) 
+                print_warning "Aborting script."
+                exit 0
+                ;;
+            * ) echo "Please answer y or n.";;
+        esac
+    done
+fi
 print_header "RepGen Demo Script - Bugs $START_BUG to $END_BUG ($TOTAL_BUGS bugs)"
 
 # ============================================================================
@@ -322,7 +367,9 @@ for BUG_NUMBER in $(seq $START_BUG $END_BUG); do
     echo "Execute this setup, if you have Ollama installed, and the Qwen2.5 and Qwen2.5-Coder models available. This may take some time..."
     echo ""
     
-    if confirm_execution; then
+    if [ "$DRY_RUN" = true ]; then
+        print_warning "Skipping baseline in dry-run"
+    elif confirm_execution; then
         if bash scripts/experimental/baseline.sh --bugs "$BUG_NUMBER"; then
             print_success "Baseline experiments completed for bug $BUG_NUMBER"
         else
@@ -343,7 +390,9 @@ for BUG_NUMBER in $(seq $START_BUG $END_BUG); do
     echo "  To customize the ablations, please change lines 305-306 in this script (RepGen.sh), to the desired configurations."
     echo ""
     
-    if confirm_execution; then
+    if [ "$DRY_RUN" = true ]; then
+        print_warning "Skipping ablation in dry-run"
+    elif confirm_execution; then
         if bash scripts/experimental/ablations.sh \
             --bugs "$BUG_NUMBER" \
             --retrieval-ablations "NO_TRAINING_LOOP_RANKING" \
